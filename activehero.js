@@ -698,7 +698,7 @@ function activeHero(index,challenger){
 					absorbPct = 0.3;
 					offensiveSpecialActivated = true;
 				}
-				else if(this.has("Sol")){
+				else if(this.hasExactly("Sol")){
 					absorbPct = 0.5;
 					offensiveSpecialActivated = true;
 				}
