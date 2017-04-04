@@ -1,0 +1,838 @@
+body{
+	background-color: #000000;
+	font-family:"Segoe UI",sans-serif;
+	color:#ffffff;
+	min-width:920px;
+}
+
+#frame_main{
+	width:910px;
+	margin: 0 auto;
+}
+
+#header{
+	width:100%;
+	position:relative;
+	display:flex;
+	justify-content:center;
+	text-align: center;
+	font-family:"Lucida Bright",serif;
+	color:#ffffff;
+	font-size:32pt;
+	font-weight:bold;
+	line-height:92px;
+	margin:10px 0;
+}
+
+#subtitle{
+	position:absolute;
+	left:400px;
+	bottom:-35px;
+	color:#ffff33;
+	font-size:11pt;
+	font-weight:normal;
+}
+
+#frame_options{
+	position: relative;
+	height:330px;
+}
+
+#frame_results{
+	position:relative;
+}
+
+#frame_challenger{
+	border-radius:4px;
+	border:2px solid #7797ff;
+	background-color: #222222;
+	position:absolute;
+	left:0;
+	top:0;
+	bottom:0;
+	width:390px;
+}
+
+#frame_enemies{
+	border-radius:4px;
+	border:2px solid #ff5165;
+	background-color: #222222;
+	position:absolute;
+	right:0;
+	top:0;
+	bottom:0;
+	width:500px;
+}
+
+#challenger_bar_top{
+	background-color: #7797ff;
+	height:34px;
+	font-size:14pt;
+	line-height:34px;
+	position:relative;
+	padding: 0 10px;
+}
+
+#frame_challenger_picture{
+	position:absolute;
+	top:34px;
+	left:0;
+	width:150px;
+	height:150px;
+	background-color: #111111;
+	border-color:#7797ff;
+	border-style: solid;
+	border-width:0 2px 2px 0;
+}
+
+#challenger_picture{
+	position:absolute;
+	top:0;
+	left:0;
+	width:150px;
+	height:150px;
+}
+
+#challenger_name{
+	display:inline-block;
+	margin:0 0 0 15px;
+}
+
+#challenger_merge{
+	width:34px;
+}
+
+#enemies_merge{
+	width:34px;
+}
+
+.frame_stats{
+	position:absolute;
+	right:0;
+	top:39px;
+	width:230px;
+	height:145px;
+	line-height:23px;
+	padding-left:20px;
+}
+
+#challenger_stats{
+	border-color:#7797ff;
+	border-style: solid;
+	border-width:0 0 2px 0;
+}
+
+.bufflabel{
+	font-size:8pt;
+	position:absolute;
+	right:60px;
+	bottom:-26px;
+}
+
+.spurlabel{
+	font-size:8pt;
+	position:absolute;
+	right:19px;
+	bottom:-26px;
+}
+
+.stat_row{
+	position:relative;
+}
+
+.stat_number{
+	position:absolute;
+	left:40px;
+	top:0;
+}
+
+.buff_input{
+	position: absolute;
+	left:140px;
+	width:36px;
+}
+
+.damage_input{
+	position: absolute;
+	left:162px;
+	top:2px;
+	width:36px;
+}
+
+.spur_input{
+	position: absolute;
+	left:184px;
+	width:36px;
+}
+
+.level_label{
+	font-size:10pt;
+}
+
+#challenger_skills{
+	position:absolute;
+	top:190px;
+	line-height:24px;
+}
+
+.skill_row{
+	margin-left:8px;
+	position: relative;
+	line-height: auto;
+}
+
+.skill_row_right{
+	position:absolute;
+	top:0;
+	font-size:10pt;
+	left:255px;
+	width:120px;
+}
+
+.skill_row_right_enemies{
+	position:absolute;
+	top:0;
+	font-size:10pt;
+	left:379px;
+	width:120px;
+}
+
+.special_precharge{
+	width:30px;
+}
+
+#challenger_specialcharge{
+	font-size:11pt;
+	font-weight:bold;
+	margin-right:6px;
+}
+
+#enemies_specialcharge{
+	font-size:11pt;
+	font-weight:bold;
+	margin-right:6px;
+}
+
+
+.skill_select{
+	position: absolute;
+	left:106px;
+	top:4px;
+	width:140px;
+}
+
+.skill_select_enemies{
+	position: absolute;
+	left:142px;
+	top:4px;
+	width:140px;
+}
+
+.skill_overwrite{
+	position: absolute;
+	left:290px;
+	top:4px;
+}
+
+.button{
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+.button:hover{
+	cursor:pointer;
+}
+
+.boonbutton{
+	padding:2px;
+	font-size:9pt;
+	height:15px;
+	line-height: 15px;
+	width:50px;
+	text-align: center;
+	position: absolute;
+	left:75px;
+	top:2px;
+	border-radius:2px;
+}
+
+.neutral{
+	background-color: #444444;
+}
+
+.neutral:hover{
+	background-color: #888888;
+}
+
+.boon{
+	background-color: #05ae80;
+}
+
+.boon:hover{
+	background-color: #06e5a9;
+}
+
+.bane{
+	background-color: #833588;
+}
+.bane:hover{
+	background-color: #ac56d4;
+}
+
+.skill_picture{
+	position: relative;
+	top:5px;
+	width:20px;
+	height:20px;
+	margin-right:6px;
+}
+
+#reset_challenger{
+	background-color: #4a6de2;
+	position:absolute;
+	right:3px;
+	bottom:3px;
+	top:3px;
+	border-radius:2px;
+	font-size:9pt;
+	width:60px;
+	text-align:center;
+	line-height:28px;
+}
+
+#reset_challenger:hover{
+	background-color: #aabefd;
+}
+
+#reset_enemies{
+	background-color: #d82a3e;
+	position:absolute;
+	right:3px;
+	bottom:3px;
+	top:3px;
+	border-radius:2px;
+	font-size:9pt;
+	width:60px;
+	text-align:center;
+	line-height:28px;
+}
+
+#reset_enemies:hover{
+	background-color: #ff8397;
+}
+
+#enemies_bar_top{
+	background-color: #ff5165;
+	height:34px;
+	font-size:14pt;
+	line-height:34px;
+	position: relative;
+	padding:0 10px;
+}
+
+#enemies_stats{
+	border-color:#ff5165;
+	border-style: solid;
+	border-width:0 0 2px 0;
+}
+
+#enemies_skills{
+	position:absolute;
+	top:190px;
+	left:8px;
+	line-height:24px;
+}
+
+#enemies_include{
+	padding-left:6px;
+	position:absolute;
+	left:0;
+	top:34px;
+	height:150px;
+	border-color:#ff5165;
+	border-style: solid;
+	border-width:0 2px 2px 0;
+}
+
+#enemies_includeheader{
+	position: relative;
+	width:254px;
+	text-align:center;
+}
+
+.includebuttons_row{
+	position:relative;
+	margin-top:1px;
+	height:23px;
+}
+
+.wideincludebutton{
+	text-align:center;
+	font-size:9pt;
+	height:21px;
+	line-height:21px;
+	width:122px;
+	display:inline-block;
+	border-radius:2px;
+}
+
+.wideincludebutton + .wideincludebutton{
+	margin-left:4px;
+}
+
+.thinincludebutton{
+	height:21px;
+	line-height:21px;
+	text-align:center;
+	width:59px;
+	font-size:9pt;
+	display:inline-block;
+	border-radius:2px;
+}
+
+.thinincludebutton + .thinincludebutton{
+	margin-left:4px;
+}
+
+.notincluded{
+	background-color: #444444;
+}
+
+.notincluded:hover{
+	background-color: #888888;
+}
+
+.included{
+	background-color: #ff5165;
+}
+
+.included:hover{
+	background-color: #ff8397;
+}
+
+.enemies_row{
+	position:relative;
+}
+
+.enemies_input{
+	position:absolute;
+	width:100px;
+	left:112px;
+	top:0;
+}
+
+/*Rules/////////////////////////////////////////////*/
+#frame_rules{
+	border:2px solid #ffffff;
+	background-color: #222222;
+	border-radius:4px;
+	margin-top:10px;
+	text-align:left;
+	height:138px;
+	position:relative;
+}
+
+#rules_bar_top{
+	text-align:center;
+	height:34px;
+	font-size:14pt;
+	line-height:34px;
+	text-align:center;
+	background-color: #000000;
+	color:#ffffff;
+}
+
+#rules_turnorder{
+	position:absolute;
+	top:34px;
+	left:6px;
+	bottom:0;
+	width:96px;
+	border-right:2px solid #000000;
+}
+
+#turnorder_label{
+	margin:0 auto;
+	text-align:center;
+	font-size:11pt;
+}
+
+.turnorder_button{
+	font-size:10pt;
+	border-radius:2px;
+	background-color: #444444;
+	width:90px;
+	text-align:center;
+	height:22px;
+	line-height:22px;
+	margin-top:4px;
+}
+
+.turnorder_button:hover{
+	background-color: #888888;
+}
+
+#turnorder_left{
+	position:absolute;
+	left:0;
+	top:10px;
+}
+
+#turnorder_right{
+	position:absolute;
+	left:104px;
+	top:6px;
+}
+
+.turn_label{
+	position:relative;
+	background-color: #333333;
+	border-radius:2px;
+	height:20px;
+	line-height:20px;
+	padding-left:6px;
+	font-size:9pt;
+	width:126px;
+}
+
+.turn_delete{
+	position:absolute;
+	top:0;
+	right:0;
+	width:16px;
+	height:16px;
+	line-height:14px;
+	margin:2px;
+	border-radius:2px;
+	background-color: #222222;
+	text-align:center;
+}
+
+.turn_delete:hover{
+	background-color: #888888;
+}
+
+.turn_label + .turn_label{
+	margin-top:4px;
+}
+
+#rules_other{
+	position:absolute;
+	top:30px;
+	bottom:0;
+	font-size:10pt;
+	line-height:22px;
+	left:270px;
+	padding:8px;
+	border-left:2px solid #000000;
+}
+
+#rules_renewal{
+	width:30px;
+}
+
+#rules_disclaimer{
+	position:absolute;
+	top:30px;
+	bottom:0;
+	font-size:8pt;
+	line-height:18px;
+	left:580px;
+	padding:8px;
+	border-left:2px solid #000000;
+}
+
+/*Results/////////////////////////////////////////////*/
+#frame_results{
+	border:2px solid #ffffff;
+	background-color: #222222;
+	border-radius:4px;
+	margin-top:10px;
+	text-align:center;
+	padding-bottom:10px;
+}
+
+#results_bar_top{
+	position:relative;
+	height:34px;
+	font-size:9pt;
+	line-height:34px;
+	padding-left:10px;
+	text-align:left;
+	background-color: #ffffff;
+	color:#000000;
+}
+
+#results_bar_right{
+	position:absolute;
+	right:10px;
+	top:0;
+	bottom:0;
+	line-height:34px;
+}
+
+#results_graph_back{
+	position:absolute;
+	background-color: #444444;
+	width:906px;
+	height:10px;
+	margin:10px auto 0 auto;
+}
+
+#results_graph_wins{
+	position:absolute;
+	left:0;
+	bottom:0;
+	top:0;
+	width:0px;
+	background-color:#7797ff; 
+}
+
+#results_graph_losses{
+	position:absolute;
+	right:0;
+	bottom:0;
+	top:0;
+	width:0px;
+	background-color:#ff5165; 
+}
+
+#winpercentages{
+	margin:30px 0 10px 0;
+}
+
+#button_calculate{
+	font-size:14pt;
+	display:inline-block;
+	position:relative;
+	top:1px;
+	width:100px;
+	height:28px;
+	line-height:28px;
+	border-radius:2px;
+	text-align:center;
+	background-color: #888888;
+	color:#ffffff;
+}
+
+#button_calculate:hover{
+	background-color: #444444;
+}
+
+.results_entry{
+	position:relative;
+	height:50px;
+	margin:0 10px;
+	background-color: #333333;
+	border-radius:4px;
+}
+
+.results_entry:hover .results_topline, .results_entry:hover .results_hplabel{
+	background-color: #777777;
+}
+
+.results_entry:hover{
+	background-color: #666666;
+}
+
+.results_entry:hover .results_enemypicture{
+	background-color: #333333;
+}
+
+.results_entry + .results_entry{
+	margin-top:8px;
+}
+
+.results_hpbox{
+	width:80px;
+	position:absolute;
+	top:0;
+	bottom:0;
+	left:0;
+	text-align: center;
+}
+
+.results_hplabel{
+	position: absolute;
+	top:0;
+	left:0;
+	right:0;
+	font-size: 8pt;
+	height:20px;
+	line-height:20px;
+	background-color: #444444;
+	border-radius:4px 0 0 0;
+}
+
+.results_hpnums{
+	position: absolute;
+	top:20px;
+	left:0;
+	right:0;
+	bottom:0;
+	line-height:30px;
+	font-size:14pt;
+	font-weight: bold;
+}
+
+.results_challengerhp{
+	color:#7797ff;
+}
+
+.results_enemyhp{
+	color:#ff5165;
+}
+
+.frame_enemypicture{
+	position:absolute;
+	left:80px;
+	top:0;
+	bottom:0;
+	width:50px;
+	height:50px;
+	background-color: #111111;
+}
+
+.results_enemypicture{
+	position:absolute;
+	left:0;
+	top:0;
+	width:50px;
+	height:50px;
+}
+
+.results_topline{
+	position: absolute;
+	left:130px;
+	top:0;
+	right:0;
+	height:20px;
+	line-height:20px;
+	font-size:10pt;
+	text-align: left;
+	background-color: #444444;
+	border-radius:0 4px 0 0;
+	padding-left:30px;
+	font-weight: bold;
+}
+
+.results_previousresult{
+	position: absolute;
+	right:10px;
+	top:0;
+	bottom:0;
+	line-height:20px;
+	font-weight:normal;
+	font-size:9pt;
+}
+
+.results_bottomline{
+	position:absolute;
+	left:130px;
+	font-size:10pt;
+	bottom:0;
+	right:0;
+	height:30px;
+	line-height:30px;
+	text-align: left;
+	padding-left:10px;
+}
+
+.results_skills{
+	position: absolute;
+	right:0;
+	top:0;
+	bottom:0;
+}
+
+.results_stat + .results_stat{
+	margin-left:15px;
+}
+
+#footer{
+	text-align: center;
+	margin:8px 0;
+}
+
+.blue{
+	color:#7797ff;
+}
+
+.red{
+	color:#ff5165;
+}
+
+.bold{
+	font-weight:bold;
+	color:#dddddd;
+}
+
+/*Tooltip///////////////////////////////////////////////////*/
+#frame_tooltip{
+	width:500px;
+	font-size:10pt;
+	position:absolute;
+	border:3px solid #eeeeee;
+	border-radius:6px;
+	background-color: #000000;
+	padding:10px 10px;
+	display:none;
+}
+
+.fight_round{
+	margin:5px 0;
+}
+
+#frame_sitead{
+	position:absolute;
+	top:0;
+	left:0;
+	height:20px;
+	line-height:20px;
+	padding: 0 5px;
+	font-size:9pt;
+	background-color: #26989c;
+	opacity:0.6;
+	color:#ffffff;
+	border-radius: 0 0 4px 0;
+}
+
+#frame_sitead:hover{
+	cursor:pointer;
+	opacity:1;
+}
+
+a{
+	color:#26989c;
+	text-decoration: none;
+	font-weight: bold;
+}
+
+a:visited{
+	color:#26989c;
+}
+
+a:hover{
+	font-weight: bold;
+	color:#262c58;
+}
+
+#weaponIcon{
+	position: absolute;
+	right:2px;
+	bottom:2px;
+	width:26px;
+	height:26px;
+}
+
+.weaponIconSmall{
+	position: absolute;
+	left:5px;
+	top:1px;
+	width:18px;
+	height:18px;
+}

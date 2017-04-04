@@ -1,0 +1,45 @@
+2017-4-3:
+	-Added code and images for bunny skills.
+	-Added bunny images.
+	-Added damage taken input.
+	-Added merge bonuses.
+	-Added option to exclude healers.
+	-Added special pre-charge.
+	-Auto-calculations now take effect half a second after you stop changing a number input.
+	-Fixed breaker skills not interacting properly with skills like quick riposte and wary fighter.
+	-Fixed AOE skills not occuring before vantage
+	-Changed database model - now base stats + growth levels = max stats instead of max stats - growth values = base stats
+	-Added more variables to store enemy information so the calculator doesn't have to grab it from inputs every time
+
+2017-3-27:
+	-Fixed +/-4 boons/banes.
+	-Added calculate button. Added auto-calculate as an option.
+	-Added previous results output.
+	-Added option to flip results sort.
+
+2017-3-26:
+	Focused on fixing bugs. Next update will be focused on adding more features.
+	-Moved activehero class to new file.
+	-Reworked a lot of code from functions of a battle to functions on a hero so it didn't have to be repeated twice
+	-Fixed damage calculation rounding
+	-Fixed "Dragon" class of specials to calculate like Glacies or Ignis
+	-Fixed special charge count not being affected by weapons on first charge
+	-Fixed HP boon/bane not affecting calculations
+	-Fixed selecting "no special" causing error
+	-Fixed when blade tome damage is added to calculation (now before WTA)
+	-Fixed daggers and pain behavior (only work when user gets an attack)
+
+2017-3-25:
+	-Fixed Threaten skills from -3/-5/-7 to -3/-4/-5.
+
+2017-3-24:
+	Finished first draft. Known issues: 
+	-Unsure of which skills healers can learn
+	-Boons and banes all 3HP, but some heroes have random 4HP boons/banes and I don't trust the sources to be accurate yet on which ones they are
+	-Rounding errors
+	-Unsure of whether Renewal acts before Defiant skills
+	-No debuffs input...mostly because I didn't realize I needed it separate from buffs until I has already made everything fit nicely!
+	-Images are terrible resolution
+
+2017-3-16:
+	Started project.
