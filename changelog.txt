@@ -1,3 +1,18 @@
+2017-4-20:
+	-Added Eckesachs.
+	-Blazed it.
+
+2017-4-16:
+	-Added rarities below 5*.
+	-Added the new skills (windsweeper, firesweep bow...)
+	-Added S skills.
+	-Added option to hide unaffecting skills from selection.
+	-Changed skill select and rules UI to fit new stuff
+	-Fixed gigantic issue with debuffs not being calculated properly that I'm astonished nobody noticed. 
+		As I understand it, debuffs are only taken off after a unit does its turn.
+		If a unit is debuffed after attacking and gets attacked on the next turn, it's still debuffed when it gets to attack again.
+	-Fixed wary fighter interactions, I think??
+
 2017-4-3:
 	-Added code and images for bunny skills.
 	-Added bunny images.

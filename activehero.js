@@ -23,8 +23,10 @@ function activeHero(index,challenger){
 		this.aIndex = challengerA;
 		this.bIndex = challengerB;
 		this.cIndex = challengerC;
+		this.sIndex = challengerS;
 
 		this.buffs = challengerBuffs;
+		this.debuffs = challengerDebuffs;
 		this.spur = challengerSpur;
 
 		this.maxHp = challengerHp;
@@ -52,8 +54,10 @@ function activeHero(index,challenger){
 		this.aIndex = enemyData[index].a;
 		this.bIndex = enemyData[index].b;
 		this.cIndex = enemyData[index].c;
+		this.sIndex = enemyData[index].s;
 
 		this.buffs = enemyBuffs;
+		this.debuffs = enemyDebuffs;
 		this.spur = enemySpur;
 
 		this.maxHp = enemyData[index].hp;
@@ -86,6 +90,9 @@ function activeHero(index,challenger){
 	}
 	if(this.cIndex != -1){
 		this.skillNames.push(skills[this.cIndex].name);
+	}
+	if(this.sIndex != -1){
+		this.skillNames.push(skills[this.sIndex].name);
 	}
 
 	//Categorize weapon
@@ -196,6 +203,12 @@ function activeHero(index,challenger){
 		if(this.has("Threaten Def")){
 			debuffDef = -this.has("Threaten Def")-2;
 			skillName = skills[this.cIndex].name;
+		}
+		if(this.has("Eckesachs")){
+			if(debuffDef > -4){
+				debuffDef = -4;
+				skillName = skills[this.weaponIndex].name;
+			}
 		}
 		if(debuffDef < enemy.combatDebuffs.def){
 			enemy.combatDebuffs.def = debuffDef;
@@ -616,21 +629,21 @@ function activeHero(index,challenger){
 
 		var damageText = "";
 
-		var effAtk = this.atk + Math.max(this.buffs.atk,this.combatBuffs.atk) + this.combatDebuffs.atk + this.spur.atk + this.combatSpur.atk;
-		var effDef = this.def + Math.max(this.buffs.def,this.combatBuffs.def) + this.combatDebuffs.def + this.spur.def + this.combatSpur.def;
-		var effRes = this.res + Math.max(this.buffs.res,this.combatBuffs.res) + this.combatDebuffs.res + this.spur.res + this.combatSpur.res;
-		var enemyEffDef = enemy.def + Math.max(enemy.buffs.def,enemy.combatBuffs.def) + enemy.combatDebuffs.def + enemy.spur.def + enemy.combatSpur.def;
-		var enemyEffRes = enemy.res + Math.max(enemy.buffs.res,enemy.combatBuffs.res) + enemy.combatDebuffs.res + enemy.spur.res + enemy.combatSpur.res;
+		var effAtk = this.atk + Math.max(this.buffs.atk,this.combatBuffs.atk) + Math.min(this.debuffs.atk,this.combatDebuffs.atk) + this.spur.atk + this.combatSpur.atk;
+		var effDef = this.def + Math.max(this.buffs.def,this.combatBuffs.def) + Math.min(this.debuffs.def,this.combatDebuffs.def) + this.spur.def + this.combatSpur.def;
+		var effRes = this.res + Math.max(this.buffs.res,this.combatBuffs.res) + Math.min(this.debuffs.res,this.combatDebuffs.res) + this.spur.res + this.combatSpur.res;
+		var enemyEffDef = enemy.def + Math.max(enemy.buffs.def,enemy.combatBuffs.def) + Math.min(enemy.debuffs.def,enemy.combatDebuffs.def) + enemy.spur.def + enemy.combatSpur.def;
+		var enemyEffRes = enemy.res + Math.max(enemy.buffs.res,enemy.combatBuffs.res) + Math.min(enemy.debuffs.res,enemy.combatDebuffs.res) + enemy.spur.res + enemy.combatSpur.res;
 
 		if(this.panicked){
-			effAtk = this.atk - Math.max(this.buffs.atk,this.combatBuffs.atk) - this.combatDebuffs.atk + this.spur.atk + this.combatSpur.atk;
-			effDef = this.def - Math.max(this.buffs.def,this.combatBuffs.def) - this.combatDebuffs.def + this.spur.def + this.combatSpur.def;
-			effRes = this.res - Math.max(this.buffs.res,this.combatBuffs.res) - this.combatDebuffs.res + this.spur.res + this.combatSpur.res;
+			effAtk = this.atk - Math.max(this.buffs.atk,this.combatBuffs.atk) - Math.min(this.debuffs.atk,this.combatDebuffs.atk) + this.spur.atk + this.combatSpur.atk;
+			effDef = this.def - Math.max(this.buffs.def,this.combatBuffs.def) - Math.min(this.debuffs.def,this.combatDebuffs.def) + this.spur.def + this.combatSpur.def;
+			effRes = this.res - Math.max(this.buffs.res,this.combatBuffs.res) - Math.min(this.debuffs.res,this.combatDebuffs.res) + this.spur.res + this.combatSpur.res;
 		}
 
 		if(enemy.panicked){
-			enemyEffDef = enemy.def - Math.max(enemy.buffs.def,enemy.combatBuffs.def) - enemy.combatDebuffs.def + enemy.spur.def + enemy.combatSpur.def;
-			enemyEffRes = enemy.res - Math.max(enemy.buffs.res,enemy.combatBuffs.res) - enemy.combatDebuffs.res + enemy.spur.res + enemy.combatSpur.res;
+			enemyEffDef = enemy.def - Math.max(enemy.buffs.def,enemy.combatBuffs.def) - Math.min(enemy.debuffs.def,enemy.combatDebuffs.def) + enemy.spur.def + enemy.combatSpur.def;
+			enemyEffRes = enemy.res - Math.max(enemy.buffs.res,enemy.combatBuffs.res) - Math.min(enemy.debuffs.res,enemy.combatDebuffs.res) + enemy.spur.res + enemy.combatSpur.res;
 		}
 
 		var relevantDef = enemyEffDef;
@@ -745,7 +758,7 @@ function activeHero(index,challenger){
 			}
 		}
 
-		//Don't do anything lse if it's just an AOE attack
+		//Don't do anything else if it's just an AOE attack
 		if(!AOE){
 		
 			//Check weapon advantage
@@ -878,7 +891,7 @@ function activeHero(index,challenger){
 			var rawDmg = (effAtk*effectiveBonus | 0) + ((effAtk*effectiveBonus | 0)*weaponAdvantageBonus | 0) + (dmgBoost | 0);
 			var reduceDmg = relevantDef + (relevantDef*enemyDefModifier | 0);
 			var dmg = (rawDmg - reduceDmg)*weaponModifier | 0;
-			dmg = (dmg*dmgMultiplier | 0)*dmgReduction | 0;
+			dmg = (dmg*dmgMultiplier | 0) - (dmg*(1-dmgReduction) | 0);
 			dmg = Math.max(dmg,0);
 			enemy.hp -= Math.min(dmg,enemy.hp );
 			damageText += this.name + " attacks " + enemy.name + " for <span class=\"bold\">" + dmg + "</span> damage.<br>";
@@ -933,6 +946,7 @@ function activeHero(index,challenger){
 	this.attack = function(enemy,turn,galeforce){
 
 		var roundText = "";//Common theme: text is returned by helper functions, so the functions are called by adding them to roundText
+		var firstTurn = (turn - startTurn == 0);
 		this.initiator = true;
 		enemy.initiator = false;
 		enemy.didAttack = false;
@@ -945,8 +959,6 @@ function activeHero(index,challenger){
 
 		//Remove certain buffs
 		this.combatBuffs = {"atk":0,"spd":0,"def":0,"res":0};
-		enemy.combatDebuffs = {"atk":0,"spd":0,"def":0,"res":0};
-		enemy.panicked = false;
 
 		//Don't do any buff crap if it's the second move of a turn (galeforce)
 		if(!galeforce){
@@ -959,10 +971,12 @@ function activeHero(index,challenger){
 			roundText += enemy.renew(turn);
 
 			//Check threaten if not first turn (unless startThreatened is on)
-			if(startThreatened || turn - startTurn > 0){
+			if((threatenRule=="Both"||threatenRule=="Attacker") && firstTurn){
+				roundText += enemy.threaten(this);
+			}
+			if((threatenRule=="Both"||threatenRule=="Defender") || !firstTurn){
 				roundText += this.threaten(enemy);
 			}
-
 		}
 
 		//Check combat effects
@@ -975,13 +989,15 @@ function activeHero(index,challenger){
 		roundText += enemy.defendBuff(relevantDefType);
 
 		//Adjust speeds
-		var thisEffSpd = this.spd + Math.max(this.buffs.spd,this.combatBuffs.spd) + this.combatDebuffs.spd + this.spur.spd + this.combatSpur.spd;
-		var enemyEffSpd = enemy.spd + Math.max(enemy.buffs.spd,enemy.combatBuffs.spd) + enemy.combatDebuffs.spd + enemy.spur.spd + enemy.combatSpur.spd;
+		var thisEffSpd = this.spd + Math.max(this.buffs.spd,this.combatBuffs.spd) + Math.min(this.debuffs.spd,this.combatDebuffs.spd) + this.spur.spd + this.combatSpur.spd;
+		var enemyEffSpd = enemy.spd + Math.max(enemy.buffs.spd,enemy.combatBuffs.spd) + Math.min(enemy.debuffs.spd,enemy.combatDebuffs.spd) + enemy.spur.spd + enemy.combatSpur.spd;
 
 		if(this.panicked){
-			thisEffSpd = this.spd - Math.max(this.buffs.spd,this.combatBuffs.spd) - this.combatDebuffs.spd + this.spur.spd + this.combatSpur.spd;
+			thisEffSpd = this.spd - Math.max(this.buffs.spd,this.combatBuffs.spd) - Math.min(this.debuffs.spd,this.combatDebuffs.spd) + this.spur.spd + this.combatSpur.spd;
 		}
-		//Enemy can't be panicked on your turn
+		if(enemy.panicked){
+			enemyEffSpd = enemy.spd - Math.max(enemy.buffs.spd,enemy.combatBuffs.spd) - Math.min(enemy.debuffs.spd,enemy.combatDebuffs.spd) + enemy.spur.spd + enemy.combatSpur.spd;
+		}
 
 		//check for any-distance counterattack
 		var anyRangeCounter = false;
@@ -1029,15 +1045,20 @@ function activeHero(index,challenger){
 
 		//Check for wary fighter
 		//Wary fighter can come from either unit
+		//But some interactions apparently depend on who has it
 		var waryFighter = false;
+		var thisWaryFighter = false;
+		var enemyWaryFighter = false;
 		if(this.has("Wary Fighter")){
 			if(this.hp/this.maxHp >= 1.1 - 0.2 * this.has("Wary Fighter")){
 				waryFighter = true;
+				thisWaryFighter = true;
 			}
 		}
 		if(enemy.has("Wary Fighter")){
 			if(enemy.hp/enemy.maxHp >= 1.1 - 0.2 * enemy.has("Wary Fighter")){
 				waryFighter = true;
+				enemyWaryFighter = true;
 			}
 		}
 
@@ -1129,20 +1150,78 @@ function activeHero(index,challenger){
 			roundText += enemy.name + " is prevented from making a follow-up attack with " + this.name + "'s breaker skill.<br>";
 		}
 
+		//Check for firesweep
+		var firesweep = false;
+		if(this.has("Firesweep Bow")){
+			firesweep = true;
+		}
+		if(enemy.has("Firesweep Bow")){
+			firesweep = true;
+		}
+
+		//check for windsweep
+		//This skill is a fucking mess
+		var windsweep = 0;
+		if(this.has("Windsweep")){
+			windsweep = this.has("Windsweep")*-2 + 7;
+		}
+
 		//Do AOE damage
 		roundText += this.doDamage(enemy,false,true);
 
 		var thisFollowUp = false;
 		var enemyCanCounter = false;
 		var enemyFollowUp = false;
-		if((thisEffSpd-enemyEffSpd >= 5 && !waryFighter && !thisBroken) || enemyBroken || brashAssault){
+
+		//I split up the follow-up rules to be less confusing, so there are extra computations
+		if(thisEffSpd-enemyEffSpd >= 5){
 			thisFollowUp = true;
 		}
-		if((thisEffSpd-enemyEffSpd <= -5 && !waryFighter && !enemyBroken) || thisBroken || quickRiposte){
+		if(thisEffSpd-enemyEffSpd <= -5){
 			enemyFollowUp = true;
 		}
-		if(this.range==enemy.range || anyRangeCounter){
-			enemyCanCounter = true;
+
+		if(waryFighter){
+			thisFollowUp = false;
+			enemyFollowUp = false;
+		}
+		if(thisBroken){
+			thisFollowUp = false;
+			if(!waryFighter || thisEffSpd-enemyEffSpd <= -5){
+				enemyFollowUp = true;
+			}
+		}
+		if(enemyBroken){
+			if(!waryFighter || thisEffSpd-enemyEffSpd >= 5){
+				thisFollowUp = true;
+			}
+			enemyFollowUp = false;
+		}
+		if(brashAssault){
+			if(!waryFighter || thisEffSpd-enemyEffSpd >= 5){
+				thisFollowUp = true;
+			}
+		}
+		if(quickRiposte){
+			if(!waryFighter || thisEffSpd-enemyEffSpd <= -5){
+				enemyFollowUp = true;
+			}
+		}
+		//A unit with Wary Fighter can never double, even in a situation where the opponent can
+		if(thisWaryFighter){	
+			thisFollowUp = false;
+		}
+		if(enemyWaryFighter){
+			enemyFollowUp = false;
+		}
+		if(windsweep){
+			thisFollowUp = false;
+		}
+
+		if(!firesweep && !(windsweep && physicalWeapons.indexOf(enemy.weaponType) != -1 && thisEffSpd-enemyEffSpd >= windsweep)){
+			if(this.range==enemy.range || anyRangeCounter){
+				enemyCanCounter = true;
+			}
 		}
 
 		//Do vantage damage
@@ -1165,8 +1244,8 @@ function activeHero(index,challenger){
 		}
 
 		//Enemy attacks, either vantage follow-up or first attack
-		if(enemy.hp > 0 && (!vantage || (vantage && enemyFollowUp && enemyCanCounter))){
-			if(this.range==enemy.range || anyRangeCounter){
+		if(enemy.hp > 0 && this.hp > 0 && (!vantage || (vantage && enemyFollowUp && enemyCanCounter))){
+			if(enemyCanCounter){
 				roundText += enemy.doDamage(this);
 			}
 		}
@@ -1174,7 +1253,7 @@ function activeHero(index,challenger){
 		//Don't do this attack if already did desperation
 		//or if broken
 		//This attacks again
-		if(this.hp>0 && enemy.hp > 0 & !desperation && thisFollowUp){
+		if(this.hp>0 && enemy.hp > 0 && !desperation && thisFollowUp){
 			roundText += this.doDamage(enemy,brave);
 		}
 
@@ -1195,6 +1274,16 @@ function activeHero(index,challenger){
 		if(this.hp>0){
 			roundText += enemy.painEnemy(this);
 			roundText += this.fury();
+		}
+
+		//Remove debuffs - if action done
+		if(enemy.didAttack){
+			enemy.combatDebuffs = {"atk":0,"spd":0,"def":0,"res":0};
+			enemy.panicked = false;
+		}
+		if(this.didAttack){
+			this.combatDebuffs = {"atk":0,"spd":0,"def":0,"res":0};
+			this.panicked = false;
 		}
 
 		//Do stuff if both aren't dead

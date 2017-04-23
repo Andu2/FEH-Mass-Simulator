@@ -124,6 +124,7 @@ while($result = $stmt->fetch()){
 			Spd Growth: <input type="textbox" name="heroadd_spdgrowth"/><br>
 			Def Growth: <input type="textbox" name="heroadd_defgrowth"/><br>
 			Res Growth: <input type="textbox" name="heroadd_resgrowth"/><br>
+			Min rarity: <input type="textbox" name="heroadd_minrarity"/><br>
 			Weapon type: <select name="heroadd_weapon">
 				<option>sword</option>
 				<option>lance</option>

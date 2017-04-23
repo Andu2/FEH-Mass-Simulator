@@ -3,7 +3,7 @@
 if (isset($_REQUEST["action"])){
 	switch($_REQUEST["action"]){
 		case "addhero"://///////////////////////////////////////////////////////////////////////////////////////////////
-			$stmt = $db->prepare("insert into hero (name,hp,atk,spd,def,res,hpgrowth,atkgrowth,spdgrowth,defgrowth,resgrowth,weapontype,movetype,color) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+			$stmt = $db->prepare("insert into hero (name,basehp,baseatk,basespd,basedef,baseres,hpgrowth,atkgrowth,spdgrowth,defgrowth,resgrowth,weapontype,movetype,color,minrarity) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 			$stmt->bindParam(1,$_REQUEST["heroadd_name"]);
 			$stmt->bindParam(2,$_REQUEST["heroadd_hp"]);
 			$stmt->bindParam(3,$_REQUEST["heroadd_atk"]);
@@ -18,6 +18,7 @@ if (isset($_REQUEST["action"])){
 			$stmt->bindParam(12,$_REQUEST["heroadd_weapon"]);
 			$stmt->bindParam(13,$_REQUEST["heroadd_move"]);
 			$stmt->bindParam(14,$_REQUEST["heroadd_color"]);
+			$stmt->bindParam(15,$_REQUEST["heroadd_minrarity"]);
 			$stmt->execute();
 		break;
 		case "addskills"://///////////////////////////////////////////////////////////////////////////////////////////////

@@ -22,6 +22,7 @@ var challengerSpecial = -1;
 var challengerA = -1;
 var challengerB = -1;
 var challengerC = -1;
+var challengerS = -1;
 var challengerBaseSkills = [];
 
 var challengerHp = 0;
@@ -42,11 +43,20 @@ var enemyDamage = 0;
 var challengerPrecharge = 0;
 var enemyPrecharge = 0;
 
+var challengerRarity = 5;
+var enemyRarity = 5;
+
 var enemiesWeapon = -1;
 var enemiesSpecial = -1;
 var enemiesA = -1;
 var enemiesB = -1;
 var enemiesC = -1;
+var enemiesS = -1;
+
+var challengerBoon = "None";
+var challengerBane = "None";
+var enemiesBoon = "None";
+var enemiesBane = "None";
 
 var enemiesReplaceWeapon = false;
 var enemiesReplaceSpecial = false;
@@ -56,17 +66,20 @@ var enemiesReplaceC = false;
 
 var heroPossibleSkills = [];
 var heroBaseSkills = [];
-var heroMaxSkills = [];
+var heroMaxSkills = [[],[],[],[],[]]; //2d array; 1st num rarity, 2nd num heroindex
 
 var challengerBuffs = {"atk":0,"spd":0,"def":0,"res":0};
 var enemyBuffs = {"atk":0,"spd":0,"def":0,"res":0};
+var challengerDebuffs = {"atk":0,"spd":0,"def":0,"res":0};
+var enemyDebuffs = {"atk":0,"spd":0,"def":0,"res":0};
 var challengerSpur = {"atk":0,"spd":0,"def":0,"res":0};
 var enemySpur = {"atk":0,"spd":0,"def":0,"res":0};
 
 var startTurn = 0;
 var useGaleforce = true;
-var startThreatened = false;
+var threatenRule = "Neither";
 var showOnlyMaxSkills = true;
+var hideUnaffecting = true;
 
 var fightResults = []; //Needs to be global variable to get info for tooltip
 var resultHTML = []; //Needs to be a global variable to flip sort order without recalculating
@@ -90,7 +103,12 @@ var enemyAvgRes = 0;
 var roundInitiators = ["Challenger initiates","Enemy initiates"];
 
 //Growth shifts of 3 are what make some banes/boons +/- 4
-var growths = [8,10,13,15,17,19,22,24,26,28,30,33];
+//growth table from https://feheroes.wiki/Stat_Growth
+var growths = [[6,8,9,11,13,14,16,18,19,21,23,24],
+[7,8,10,12,14,15,17,19,21,23,25,26],
+[7,9,11,13,15,17,19,21,23,25,27,29],
+[8,10,12,14,16,18,20,22,24,26,28,31],
+[8,10,13,15,17,19,22,24,26,28,30,33]];
 
 var skillsThatArePrereq = [];
 //Prereq exceptions are Sol, Luna, Astra, Assault
@@ -115,6 +133,7 @@ var allSpecialSkills = getValidSkills("special");
 var allASkills = getValidSkills("a");
 var allBSkills = getValidSkills("b");
 var allCSkills = getValidSkills("c");
+var allSSkills = getValidSkills("s");
 
 //Make list of all skill ids that are a strictly inferior prereq to exclude from dropdown boxes
 for(var i = 0; i < prereqs.length;i++){
@@ -127,7 +146,9 @@ for(var i = 0; i < prereqs.length;i++){
 for(var i = 0; i < heroes.length;i++){
 	heroPossibleSkills.push(getValidSkills(false,i));
 	heroBaseSkills.push(findHeroSkills(i));
-	heroMaxSkills.push(findMaxSkills(i));
+	for(var j = 0; j < 5; j++){
+		heroMaxSkills[j].push(findMaxSkills(j,i));
+	}
 }
 
 $(document).ready(function(){
@@ -158,13 +179,14 @@ $(document).ready(function(){
 			validASkills = getValidSkills("a",challengerIndex);
 			validBSkills = getValidSkills("b",challengerIndex);
 			validCSkills = getValidSkills("c",challengerIndex);
+			validSSkills = getValidSkills("s",challengerIndex);
 			setSkillOptions();
 
-			challengerWeapon = heroMaxSkills[challengerIndex].weapon;
-			challengerSpecial = heroMaxSkills[challengerIndex].special;
-			challengerA = heroMaxSkills[challengerIndex].a;
-			challengerB = heroMaxSkills[challengerIndex].b;
-			challengerC = heroMaxSkills[challengerIndex].c;
+			challengerWeapon = heroMaxSkills[challengerRarity-1][challengerIndex].weapon;
+			challengerSpecial = heroMaxSkills[challengerRarity-1][challengerIndex].special;
+			challengerA = heroMaxSkills[challengerRarity-1][challengerIndex].a;
+			challengerB = heroMaxSkills[challengerRarity-1][challengerIndex].b;
+			challengerC = heroMaxSkills[challengerRarity-1][challengerIndex].c;
 
 			$("#hero_weapon").val(challengerWeapon);
 			$("#hero_special").val(challengerSpecial);
@@ -189,15 +211,7 @@ $(document).ready(function(){
 	});
 
 	$("#challenger_merge").change(function(){
-		var newVal = parseInt($(this).val());
-		if(newVal < 0){
-			$(this).val(0);
-			newVal = 0;
-		}
-		else if(newVal > 10){
-			$(this).val(10);
-			newVal = 10;
-		}
+		var newVal = verifyNumberInput(this,0,10);
 		challengerMerge = newVal;
 		setStats();
 		setUI();
@@ -206,15 +220,7 @@ $(document).ready(function(){
 		}
 	});
 	$("#enemies_merge").change(function(){
-		var newVal = parseInt($(this).val());
-		if(newVal < 0){
-			$(this).val(0);
-			newVal = 0;
-		}
-		else if(newVal > 10){
-			$(this).val(10);
-			newVal = 10;
-		}
+		var newVal = verifyNumberInput(this,0,10);
 		enemiesMerge = newVal;
 		setEnemyStats();
 		setUI();
@@ -224,30 +230,15 @@ $(document).ready(function(){
 	});
 
 	$("#challenger_damage").change(function(){
-		var newVal = parseInt($(this).val());
-		if(newVal < 0){
-			$(this).val(0);
-			newVal = 0;
-		}
-		else if(newVal > 99){
-			$(this).val(99);
-			newVal = 99;
-		}
+		var newVal = verifyNumberInput(this,0,99);
 		challengerDamage = newVal;
+		setUI();
 		if(autoCalculate){
 			calcuWait(300);
 		}
 	});
 	$("#enemies_damage").change(function(){
-		var newVal = parseInt($(this).val());
-		if(newVal < 0){
-			$(this).val(0);
-			newVal = 0;
-		}
-		else if(newVal > 99){
-			$(this).val(99);
-			newVal = 99;
-		}
+		var newVal = verifyNumberInput(this,0,99);
 		enemyDamage = newVal;
 		if(autoCalculate){
 			calcuWait(300);
@@ -255,15 +246,7 @@ $(document).ready(function(){
 	});
 
 	$("#challenger_precharge").change(function(){
-		var newVal = parseInt($(this).val());
-		if(newVal < 0){
-			$(this).val(0);
-			newVal = 0;
-		}
-		else if(newVal > 6){
-			$(this).val(6);
-			newVal = 6;
-		}
+		var newVal = verifyNumberInput(this,0,6);
 		challengerPrecharge = newVal;
 		setUI();
 		if(autoCalculate){
@@ -271,17 +254,40 @@ $(document).ready(function(){
 		}
 	});
 	$("#enemies_precharge").change(function(){
-		var newVal = parseInt($(this).val());
-		if(newVal < 0){
-			$(this).val(0);
-			newVal = 0;
-		}
-		else if(newVal > 6){
-			$(this).val(6);
-			newVal = 6;
-		}
+		var newVal = verifyNumberInput(this,0,6);
 		setUI();
 		enemyPrecharge = newVal;
+		if(autoCalculate){
+			calcuWait(300);
+		}
+	});
+
+	$("#challenger_rarity").change(function(){
+		var newVal = verifyNumberInput(this,1,5);
+		challengerRarity = newVal;
+		setSkillOptions();
+		challengerWeapon = heroMaxSkills[challengerRarity-1][challengerIndex].weapon;
+		challengerSpecial = heroMaxSkills[challengerRarity-1][challengerIndex].special;
+		challengerA = heroMaxSkills[challengerRarity-1][challengerIndex].a;
+		challengerB = heroMaxSkills[challengerRarity-1][challengerIndex].b;
+		challengerC = heroMaxSkills[challengerRarity-1][challengerIndex].c;
+		setStats();
+		$("#hero_weapon").val(challengerWeapon);
+		$("#hero_special").val(challengerSpecial);
+		$("#hero_a").val(challengerA);
+		$("#hero_b").val(challengerB);
+		$("#hero_c").val(challengerC);
+		setUI();
+		if(autoCalculate){
+			calcuWait(300);
+		}
+	});
+	$("#enemies_rarity").change(function(){
+		var newVal = verifyNumberInput(this,1,5);
+		enemyRarity = newVal;
+		setEnemySkills();
+		setEnemyStats();
+		setUI();
 		if(autoCalculate){
 			calcuWait(300);
 		}
@@ -309,15 +315,7 @@ $(document).ready(function(){
 	});
 
 	$(".buff_input").change(function(){
-		var newVal = parseInt($(this).val());
-		if(newVal < 0){
-			$(this).val(0);
-			newVal = 0;
-		}
-		else if(newVal > 7){
-			$(this).val(7);
-			newVal = 7;
-		}
+		var newVal = verifyNumberInput(this,0,7);
 		var buffStat = this.id.substring(this.id.length-8,this.id.length-5);
 		if(this.id.substring(0,4)=="hero"){
 			challengerBuffs[buffStat] = newVal;
@@ -333,16 +331,25 @@ $(document).ready(function(){
 		}
 	});
 
+	$(".debuff_input").change(function(){
+		var newVal = verifyNumberInput(this,-7,0);
+		var debuffStat = this.id.substring(this.id.length-10,this.id.length-7);
+		if(this.id.substring(0,4)=="hero"){
+			challengerDebuffs[debuffStat] = newVal;
+		}
+		else if(this.id.substring(0,7)=="enemies"){
+			enemyDebuffs[debuffStat] = newVal;
+		}
+
+		setUI();
+
+		if(autoCalculate){
+			calcuWait(300);
+		}
+	});
+
 	$(".spur_input").change(function(){
-		var newVal = parseInt($(this).val());
-		if(newVal < 0){
-			$(this).val(0);
-			newVal = 0;
-		}
-		else if(newVal > 12){
-			$(this).val(12);
-			newVal = 12;
-		}
+		var newVal = verifyNumberInput(this,0,12);
 		var spurStat = this.id.substring(this.id.length-8,this.id.length-5);
 		if(this.id.substring(0,4)=="hero"){
 			challengerSpur[spurStat] = newVal;
@@ -355,6 +362,40 @@ $(document).ready(function(){
 
 		if(autoCalculate){
 			calcuWait(300);
+		}
+	});
+
+	$("#challenger_boon").change(function(){
+		challengerBoon = $(this).val();
+		setStats();
+		setUI();
+		if(autoCalculate){
+			calculate();
+		}
+	});
+	$("#challenger_bane").change(function(){
+		challengerBane = $(this).val();
+		setStats();
+		setUI();
+		if(autoCalculate){
+			calculate();
+		}
+	});
+
+	$("#enemies_boon").change(function(){
+		enemiesBoon = $(this).val();
+		setEnemyStats();
+		setUI();
+		if(autoCalculate){
+			calculate();
+		}
+	});
+	$("#enemies_bane").change(function(){
+		enemiesBane = $(this).val();
+		setEnemyStats();
+		setUI();
+		if(autoCalculate){
+			calculate();
 		}
 	});
 
@@ -416,6 +457,18 @@ $(document).ready(function(){
 			calculate();
 		}
 	});
+	$("#hero_s").change(function(){
+		challengerS = parseInt($(this).val());
+		if(challengerS != -1){
+			dataLayer.push({"event":"changeSkill","skill_name":"s_" + skills[challengerS].name});
+		}
+		changeSkillPic("s",challengerS);
+		setStats();
+		setUI();
+		if(autoCalculate){
+			calculate();
+		}
+	});
 
 	$("#enemies_weapon").change(function(){
 		enemiesWeapon = parseInt($(this).val());
@@ -458,6 +511,16 @@ $(document).ready(function(){
 	$("#enemies_c").change(function(){
 		enemiesC = parseInt($(this).val());
 		changeEnemiesSkillPic("c",enemiesC);
+		setEnemySkills();
+		setEnemyStats();
+		setUI();
+		if(autoCalculate){
+			calculate();
+		}
+	});
+	$("#enemies_s").change(function(){
+		enemiesS = parseInt($(this).val());
+		changeEnemiesSkillPic("s",enemiesS);
 		setEnemySkills();
 		setEnemyStats();
 		setUI();
@@ -521,14 +584,40 @@ $(document).ready(function(){
 
 	$("#rules_prereqs").change(function(){
 		if($(this).is(":checked")){
-			showOnlyMaxSkills = false;
+			showOnlyMaxSkills = true;
 			if(challengerIndex != -1){
 				setSkillOptions();
 				resetChallengerSkills();
 			}	
 		}
 		else{
-			showOnlyMaxSkills = true;
+			showOnlyMaxSkills = false;
+			if(challengerIndex != -1){
+				setSkillOptions();
+				resetChallengerSkills();
+			}
+		}
+
+		setEnemySkillOptions();
+		setEnemySkills();
+		setEnemyStats();
+		setUI();
+
+		if(autoCalculate){
+			calculate();
+		}
+	});
+
+	$("#rules_hideunaffecting").change(function(){
+		if($(this).is(":checked")){
+			hideUnaffecting = true;
+			if(challengerIndex != -1){
+				setSkillOptions();
+				resetChallengerSkills();
+			}	
+		}
+		else{
+			hideUnaffecting = false;
 			if(challengerIndex != -1){
 				setSkillOptions();
 				resetChallengerSkills();
@@ -558,27 +647,15 @@ $(document).ready(function(){
 	});
 
 	$("#rules_threaten").change(function(){
-		if($(this).is(":checked")){
-			startThreatened = true;
-		}
-		else{
-			startThreatened = false;
-		}
+		var newVal = $(this).val();
+		threatenRule = newVal;
 		if(autoCalculate){
 			calculate();
 		}
 	});
 
 	$("#rules_renewal").change(function(){
-		var newVal = parseInt($(this).val());
-		if(newVal < 0){
-			$(this).val(0);
-			newVal = 0;
-		}
-		else if(newVal > 3){
-			$(this).val(3);
-			newVal = 3;
-		}
+		var newVal = verifyNumberInput(this,0,3);
 		startTurn = newVal;
 		if(autoCalculate){
 			calcuWait(300);
@@ -597,25 +674,6 @@ $(document).ready(function(){
 
 	$("#sort_results").change(function(){
 		outputResults();
-	});
-
-
-	$(".boonbutton").click(function(){
-		if($(this).attr("data-val")==0){
-			$(this).attr("data-val",1).html("Boon").removeClass("neutral").addClass("boon");
-		}
-		else if($(this).attr("data-val")==1){
-			$(this).attr("data-val",-1).html("Bane").removeClass("boon").addClass("bane");
-		}
-		else if($(this).attr("data-val")==-1){
-			$(this).attr("data-val",0).html("Neutral").removeClass("bane").addClass("neutral");
-		}
-		setStats();
-		setEnemyStats();
-		setUI();
-		if(autoCalculate){
-			calcuWait(300);
-		}
 	});
 
 	$(document).mousemove(function(e){
@@ -667,12 +725,14 @@ function getValidSkills(slot,heroindex){
 	var validSkills = [];
 	for(var i = 0; i < skills.length; i++){
 		if(!slot || skills[i].slot == slot){
-			if(heroindex){
+			if(heroindex != undefined){
 				//console.log("Trying " + slot + ": " + skills[i].name);
 				if(skills[i].inheritrule == "unique"){
 					//can only use if hero starts with it
-					if(challengerBaseSkills.indexOf(skills[i].skill_id)!=-1){
-						validSkills.push(i);
+					for(var j = 0; j < challengerBaseSkills.length; j++){
+						if(challengerBaseSkills[j][0] == skills[i].skill_id){
+							validSkills.push(i);
+						}
 					}
 				}
 				else if(weapons.indexOf(skills[i].inheritrule)!=-1){
@@ -738,32 +798,31 @@ function getValidSkills(slot,heroindex){
 }
 
 function findHeroSkills(heroid){
+	//returns an array of arrays of skill-rarity pairs
 	var skillset = [];
 	for(var i = 0; i < heroskills.length;i++){
 		if(heroskills[i].hero_id==heroes[heroid].hero_id){
-			skillset.push(heroskills[i].skill_id);
+			var skillPair = [heroskills[i].skill_id,heroskills[i].rarity];
+			skillset.push(skillPair);
 		}
 	}
 	return skillset;
 }
 
-function findMaxSkills(heroid){
+function findMaxSkills(rarity,heroid){
+	//Finds max skills ased on rarity
+	//Gets one with highest sp cost
 	var maxskillset = {"weapon":-1,"special":-1,"a":-1,"b":-1,"c":-1};
 	for(var i = 0; i < heroBaseSkills[heroid].length;i++){
-		if(skillsThatArePrereq.indexOf(heroBaseSkills[heroid][i])==-1){
-			var skillIndex = getSkillIndexFromId(heroBaseSkills[heroid][i]);
-			var slot = skills[skillIndex].slot;
-			if(slot != "assist"){//don't give a shit about assists for duels
-				if(maxskillset[slot]!=-1){
-					//If two skills have no prereqs, pick the one that costs most SP
-					//If tie, pick new skill
-					//console.log("Looking for " + heroes[heroid].name + " max skills: " + skills[skillIndex].name + " and " + skills[maxskillset[slot]].name + " both have no prereqs");
-					if(skills[skillIndex].sp>=skills[maxskillset[slot]].sp){
-						maxskillset[slot] = skillIndex;
-					}
-				}
-				else{
-					maxskillset[slot] = skillIndex;
+		var skillIndex = getSkillIndexFromId(heroBaseSkills[heroid][i][0]);
+		var skill = skills[skillIndex];
+		if((skill.slot != "s" && skill.slot != "assist") && heroBaseSkills[heroid][i][1] <= rarity + 1){
+			if(maxskillset[skill.slot]==-1){
+				maxskillset[skill.slot] = skillIndex;
+			}
+			else{
+				if(skills[maxskillset[skill.slot]].sp < skill.sp){
+					maxskillset[skill.slot] = skillIndex;
 				}
 			}
 		}
@@ -777,7 +836,7 @@ function setSkillOptions(){
 	//Set weapon skill options
 	weaponHTML = "<option value=-1>No weapon</option>";
 	for(var i = 0; i < validWeaponSkills.length; i++){
-		if(!showOnlyMaxSkills || skillsThatArePrereq.indexOf(skills[validWeaponSkills[i]].skill_id)==-1){
+		if(((!showOnlyMaxSkills || skillsThatArePrereq.indexOf(skills[validWeaponSkills[i]].skill_id)==-1) && (!hideUnaffecting || skills[validWeaponSkills[i]].affectsduel)) || validWeaponSkills[i] == heroMaxSkills[challengerRarity-1][challengerIndex].weapon){
 			weaponHTML += "<option value=" + validWeaponSkills[i] + ">" + skills[validWeaponSkills[i]].name + "</option>";
 		}
 	}
@@ -786,7 +845,7 @@ function setSkillOptions(){
 	//Set special skill options
 	specialHTML = "<option value=-1>No special</option>";
 	for(var i = 0; i < validSpecialSkills.length; i++){
-		if(!showOnlyMaxSkills || skillsThatArePrereq.indexOf(skills[validSpecialSkills[i]].skill_id)==-1){
+		if(((!showOnlyMaxSkills || skillsThatArePrereq.indexOf(skills[validSpecialSkills[i]].skill_id)==-1) && (!hideUnaffecting || skills[validSpecialSkills[i]].affectsduel)) || validSpecialSkills[i] == heroMaxSkills[challengerRarity-1][challengerIndex].special){
 			specialHTML += "<option value=" + validSpecialSkills[i] + ">" + skills[validSpecialSkills[i]].name + "</option>";
 		}
 	}
@@ -795,7 +854,7 @@ function setSkillOptions(){
 	//Set a skill options
 	aHTML = "<option value=-1>No A passive</option>";
 	for(var i = 0; i < validASkills.length; i++){
-		if(!showOnlyMaxSkills || skillsThatArePrereq.indexOf(skills[validASkills[i]].skill_id)==-1){
+		if(((!showOnlyMaxSkills || skillsThatArePrereq.indexOf(skills[validASkills[i]].skill_id)==-1) && (!hideUnaffecting || skills[validASkills[i]].affectsduel)) || validASkills[i] == heroMaxSkills[challengerRarity-1][challengerIndex].a){
 			aHTML += "<option value=" + validASkills[i] + ">" + skills[validASkills[i]].name + "</option>";
 		}
 	}
@@ -804,7 +863,7 @@ function setSkillOptions(){
 	//Set weapon skill options
 	bHTML = "<option value=-1>No B passive</option>";
 	for(var i = 0; i < validBSkills.length; i++){
-		if(!showOnlyMaxSkills || skillsThatArePrereq.indexOf(skills[validBSkills[i]].skill_id)==-1){
+		if(((!showOnlyMaxSkills || skillsThatArePrereq.indexOf(skills[validBSkills[i]].skill_id)==-1) && (!hideUnaffecting || skills[validBSkills[i]].affectsduel)) || validBSkills[i] == heroMaxSkills[challengerRarity-1][challengerIndex].b){
 			bHTML += "<option value=" + validBSkills[i] + ">" + skills[validBSkills[i]].name + "</option>";
 		}
 	}
@@ -813,11 +872,20 @@ function setSkillOptions(){
 	//Set c skill options
 	cHTML = "<option value=-1>No C passive</option>";
 	for(var i = 0; i < validCSkills.length; i++){
-		if(!showOnlyMaxSkills || skillsThatArePrereq.indexOf(skills[validCSkills[i]].skill_id)==-1){
+		if(((!showOnlyMaxSkills || skillsThatArePrereq.indexOf(skills[validCSkills[i]].skill_id)==-1) && (!hideUnaffecting || skills[validCSkills[i]].affectsduel)) || validCSkills[i] == heroMaxSkills[challengerRarity-1][challengerIndex].c){
 			cHTML += "<option value=" + validCSkills[i] + ">" + skills[validCSkills[i]].name + "</option>";
 		}
 	}
 	$("#hero_c").html(cHTML);
+
+	//Set s skill options
+	sHTML = "<option value=-1>No S passive</option>";
+	for(var i = 0; i < validSSkills.length; i++){
+		if((!showOnlyMaxSkills || skillsThatArePrereq.indexOf(skills[validSSkills[i]].skill_id)==-1) && (!hideUnaffecting || skills[validSSkills[i]].affectsduel)){
+			sHTML += "<option value=" + validSSkills[i] + ">" + skills[validSSkills[i]].name + "</option>";
+		}
+	}
+	$("#hero_s").html(sHTML);
 
 }
 
@@ -827,7 +895,7 @@ function setEnemySkillOptions(){
 	//Set weapon skill options
 	weaponHTML = "<option value=-1>No weapon</option>";
 	for(var i = 0; i < allWeaponSkills.length; i++){
-		if(!showOnlyMaxSkills || skillsThatArePrereq.indexOf(skills[allWeaponSkills[i]].skill_id)==-1){
+		if((!showOnlyMaxSkills || skillsThatArePrereq.indexOf(skills[allWeaponSkills[i]].skill_id)==-1) && (!hideUnaffecting || skills[allWeaponSkills[i]].affectsduel)){
 			weaponHTML += "<option value=" + allWeaponSkills[i] + ">" + skills[allWeaponSkills[i]].name + "</option>";
 		}
 	}
@@ -836,7 +904,7 @@ function setEnemySkillOptions(){
 	//Set special skill options
 	specialHTML = "<option value=-1>No special</option>";
 	for(var i = 0; i < allSpecialSkills.length; i++){
-		if(!showOnlyMaxSkills || skillsThatArePrereq.indexOf(skills[allSpecialSkills[i]].skill_id)==-1){
+		if((!showOnlyMaxSkills || skillsThatArePrereq.indexOf(skills[allSpecialSkills[i]].skill_id)==-1) && (!hideUnaffecting || skills[allWeaponSkills[i]].affectsduel)){
 			specialHTML += "<option value=" + allSpecialSkills[i] + ">" + skills[allSpecialSkills[i]].name + "</option>";
 		}
 	}
@@ -845,7 +913,7 @@ function setEnemySkillOptions(){
 	//Set a skill options
 	aHTML = "<option value=-1>No A passive</option>";
 	for(var i = 0; i < allASkills.length; i++){
-		if(!showOnlyMaxSkills || skillsThatArePrereq.indexOf(skills[allASkills[i]].skill_id)==-1){
+		if((!showOnlyMaxSkills || skillsThatArePrereq.indexOf(skills[allASkills[i]].skill_id)==-1) && (!hideUnaffecting || skills[allWeaponSkills[i]].affectsduel)){
 			aHTML += "<option value=" + allASkills[i] + ">" + skills[allASkills[i]].name + "</option>";
 		}
 	}
@@ -854,7 +922,7 @@ function setEnemySkillOptions(){
 	//Set weapon skill options
 	bHTML = "<option value=-1>No B passive</option>";
 	for(var i = 0; i < allBSkills.length; i++){
-		if(!showOnlyMaxSkills || skillsThatArePrereq.indexOf(skills[allBSkills[i]].skill_id)==-1){
+		if((!showOnlyMaxSkills || skillsThatArePrereq.indexOf(skills[allBSkills[i]].skill_id)==-1) && (!hideUnaffecting || skills[allWeaponSkills[i]].affectsduel)){
 			bHTML += "<option value=" + allBSkills[i] + ">" + skills[allBSkills[i]].name + "</option>";
 		}
 	}
@@ -863,33 +931,44 @@ function setEnemySkillOptions(){
 	//Set c skill options
 	cHTML = "<option value=-1>No C passive</option>";
 	for(var i = 0; i < allCSkills.length; i++){
-		if(!showOnlyMaxSkills || skillsThatArePrereq.indexOf(skills[allCSkills[i]].skill_id)==-1){
+		if((!showOnlyMaxSkills || skillsThatArePrereq.indexOf(skills[allCSkills[i]].skill_id)==-1) && (!hideUnaffecting || skills[allWeaponSkills[i]].affectsduel)){
 			cHTML += "<option value=" + allCSkills[i] + ">" + skills[allCSkills[i]].name + "</option>";
 		}
 	}
 	$("#enemies_c").html(cHTML);
+
+	//Set s skill options
+	sHTML = "<option value=-1>No S passive</option>";
+	for(var i = 0; i < allSSkills.length; i++){
+		if((!showOnlyMaxSkills || skillsThatArePrereq.indexOf(skills[allSSkills[i]].skill_id)==-1) && (!hideUnaffecting || skills[allWeaponSkills[i]].affectsduel)){
+			sHTML += "<option value=" + allSSkills[i] + ">" + skills[allSSkills[i]].name + "</option>";
+		}
+	}
+	$("#enemies_s").html(sHTML);
 }
 
 function setStats(){
 	if(challengerIndex != -1){
-		var hpBoonVal = parseInt($("#hero_boon_hp").attr("data-val"));
-		var atkBoonVal = parseInt($("#hero_boon_atk").attr("data-val"));
-		var spdBoonVal = parseInt($("#hero_boon_spd").attr("data-val"));
-		var defBoonVal = parseInt($("#hero_boon_def").attr("data-val"));
-		var resBoonVal = parseInt($("#hero_boon_res").attr("data-val"));
+		var growthValMod = {"hp":0,"atk":0,"spd":0,"def":0,"res":0};
+		if(challengerBoon!="none"){
+			growthValMod[challengerBoon]+=1;
+		}
+		if(challengerBane!="none"){
+			growthValMod[challengerBane]-=1;
+		}
 
 		var base = {};
-		base.hp = heroes[challengerIndex].basehp + hpBoonVal;
-		base.atk = heroes[challengerIndex].baseatk + atkBoonVal;
-		base.spd = heroes[challengerIndex].basespd + spdBoonVal;
-		base.def = heroes[challengerIndex].basedef + defBoonVal;
-		base.res = heroes[challengerIndex].baseres + resBoonVal;
+		base.hp = heroes[challengerIndex].basehp + growthValMod.hp;
+		base.atk = heroes[challengerIndex].baseatk + growthValMod.atk;
+		base.spd = heroes[challengerIndex].basespd + growthValMod.spd;
+		base.def = heroes[challengerIndex].basedef + growthValMod.def;
+		base.res = heroes[challengerIndex].baseres + growthValMod.res;
 
-		challengerHp = base.hp + growths[heroes[challengerIndex].hpgrowth + hpBoonVal];
-		challengerAtk = base.atk + growths[heroes[challengerIndex].atkgrowth + atkBoonVal];
-		challengerSpd = base.spd + growths[heroes[challengerIndex].spdgrowth + spdBoonVal];
-		challengerDef = base.def + growths[heroes[challengerIndex].defgrowth + defBoonVal];
-		challengerRes = base.res + growths[heroes[challengerIndex].resgrowth + resBoonVal];
+		challengerHp = base.hp + growths[challengerRarity-1][heroes[challengerIndex].hpgrowth + growthValMod.hp];
+		challengerAtk = base.atk + growths[challengerRarity-1][heroes[challengerIndex].atkgrowth + growthValMod.atk];
+		challengerSpd = base.spd + growths[challengerRarity-1][heroes[challengerIndex].spdgrowth + growthValMod.spd];
+		challengerDef = base.def + growths[challengerRarity-1][heroes[challengerIndex].defgrowth + growthValMod.def];
+		challengerRes = base.res + growths[challengerRarity-1][heroes[challengerIndex].resgrowth + growthValMod.res];
 
 		//Add merge bonuses
 		var mergeBoost = {"hp":0,"atk":0,"spd":0,"def":0,"res":0};
@@ -919,6 +998,49 @@ function setStats(){
 			mergeBoost[mergeOrder[i%5]]++;
 		}
 
+		if(challengerRarity<5){
+			//Modify base stats based on rarity
+			//Order that base stats increase by rarity is similar to merge bonuses, except HP always happens at 3* and 5*
+			//Rarity base boosts don't taken into account boons/banes, so modify bases again and sort again
+			base.atk = base.atk - growthValMod.atk;
+			base.spd = base.spd - growthValMod.spd;
+			base.def = base.def - growthValMod.def;
+			base.res = base.res - growthValMod.res;
+
+			var rarityBaseOrder = ["atk","spd","def","res"];
+			rarityBaseOrder.sort(function(a,b){
+				if(base[a]>base[b]){
+					return -1;
+				}
+				else if(base[a]<base[b]){
+					return 1;
+				}
+				else{
+					if(boostPriority[a]>boostPriority[b]){
+						return -1;
+					}
+					else{
+						return 1;
+					}
+				}
+			});
+
+			rarityBaseOrder.push("hp");
+			var rarityBoostCount = Math.floor((challengerRarity-1) * 2.5);
+
+			//Just going to dump these stat boosts in mergeBoost
+			for(var i = 0; i < rarityBoostCount; i++){
+				mergeBoost[rarityBaseOrder[i%5]]++;
+			}
+
+			//Subtract 2 from every stat since bases are pulled in at 5*
+			mergeBoost.hp -= 2;
+			mergeBoost.atk -= 2;
+			mergeBoost.spd -= 2;
+			mergeBoost.def -= 2;
+			mergeBoost.res -= 2;
+		}
+
 		challengerHp += mergeBoost.hp;
 		challengerAtk += mergeBoost.atk;
 		challengerSpd += mergeBoost.spd;
@@ -932,13 +1054,21 @@ function setStats(){
 			challengerSpd += skills[challengerWeapon].spd;
 		}
 
-		//A-passive only one that affects stats
+		//A-passive and S only ones that affects stats
 		if(challengerA != -1){
 			challengerHp += skills[challengerA].hp;
 			challengerAtk += skills[challengerA].atk;
 			challengerSpd += skills[challengerA].spd;
 			challengerDef += skills[challengerA].def;
 			challengerRes += skills[challengerA].res;
+		}
+
+		if(challengerS != -1){
+			challengerHp += skills[challengerS].hp;
+			challengerAtk += skills[challengerS].atk;
+			challengerSpd += skills[challengerS].spd;
+			challengerDef += skills[challengerS].def;
+			challengerRes += skills[challengerS].res;
 		}
 	}
 }
@@ -990,11 +1120,12 @@ function setEnemySkills(){
 	//setEnemies() should be called before this
 	for(var i = 0; i < enemyData.length;i++){
 		//Set default skills
-		enemyData[i].weapon = heroMaxSkills[enemyData[i].index].weapon;	
-		enemyData[i].special = heroMaxSkills[enemyData[i].index].special;
-		enemyData[i].a = heroMaxSkills[enemyData[i].index].a;
-		enemyData[i].b = heroMaxSkills[enemyData[i].index].b;
-		enemyData[i].c = heroMaxSkills[enemyData[i].index].c;
+		enemyData[i].weapon = heroMaxSkills[enemyRarity-1][enemyData[i].index].weapon;	
+		enemyData[i].special = heroMaxSkills[enemyRarity-1][enemyData[i].index].special;
+		enemyData[i].a = heroMaxSkills[enemyRarity-1][enemyData[i].index].a;
+		enemyData[i].b = heroMaxSkills[enemyRarity-1][enemyData[i].index].b;
+		enemyData[i].c = heroMaxSkills[enemyRarity-1][enemyData[i].index].c;
+		enemyData[i].s = -1;
 
 		//Find if skill needs replacement based on inputs
 		if(enemiesWeapon != -1 && (enemiesReplaceWeapon || enemyData[i].weapon == -1)){
@@ -1022,6 +1153,11 @@ function setEnemySkills(){
 				enemyData[i].c = enemiesC;
 			}
 		}
+		if(enemiesS != -1){
+			if(heroPossibleSkills[enemyData[i].index].includes(enemiesS)){
+				enemyData[i].s = enemiesS;
+			}
+		}
 	}
 }
 
@@ -1035,24 +1171,26 @@ function setEnemyStats(){
 	enemyAvgRes = 0;
 
 	for(var i = 0; i < enemyData.length;i++){
-		var hpBoonVal = parseInt($("#enemies_boon_hp").attr("data-val"));
-		var atkBoonVal = parseInt($("#enemies_boon_atk").attr("data-val"));
-		var spdBoonVal = parseInt($("#enemies_boon_spd").attr("data-val"));
-		var defBoonVal = parseInt($("#enemies_boon_def").attr("data-val"));
-		var resBoonVal = parseInt($("#enemies_boon_res").attr("data-val"));
+		var growthValMod = {"hp":0,"atk":0,"spd":0,"def":0,"res":0};
+		if(enemiesBoon!="none"){
+			growthValMod[enemiesBoon]+=1;
+		}
+		if(enemiesBane!="none"){
+			growthValMod[enemiesBane]-=1;
+		}
 
 		var base = {};
-		base.hp = heroes[enemyData[i].index].basehp + hpBoonVal;
-		base.atk = heroes[enemyData[i].index].baseatk + atkBoonVal;
-		base.spd = heroes[enemyData[i].index].basespd + spdBoonVal;
-		base.def = heroes[enemyData[i].index].basedef + defBoonVal;
-		base.res = heroes[enemyData[i].index].baseres + resBoonVal;
+		base.hp = heroes[enemyData[i].index].basehp + growthValMod.hp;
+		base.atk = heroes[enemyData[i].index].baseatk + growthValMod.atk;
+		base.spd = heroes[enemyData[i].index].basespd + growthValMod.spd;
+		base.def = heroes[enemyData[i].index].basedef + growthValMod.def;
+		base.res = heroes[enemyData[i].index].baseres + growthValMod.res;
 
-		enemyData[i].hp = base.hp + growths[heroes[enemyData[i].index].hpgrowth + hpBoonVal];
-		enemyData[i].atk = base.atk + growths[heroes[enemyData[i].index].atkgrowth + atkBoonVal];
-		enemyData[i].spd = base.spd + growths[heroes[enemyData[i].index].spdgrowth + spdBoonVal];
-		enemyData[i].def = base.def + growths[heroes[enemyData[i].index].defgrowth + defBoonVal];
-		enemyData[i].res = base.res + growths[heroes[enemyData[i].index].resgrowth + resBoonVal];
+		enemyData[i].hp = base.hp + growths[enemyRarity-1][heroes[enemyData[i].index].hpgrowth + growthValMod.hp];
+		enemyData[i].atk = base.atk + growths[enemyRarity-1][heroes[enemyData[i].index].atkgrowth + growthValMod.atk];
+		enemyData[i].spd = base.spd + growths[enemyRarity-1][heroes[enemyData[i].index].spdgrowth + growthValMod.spd];
+		enemyData[i].def = base.def + growths[enemyRarity-1][heroes[enemyData[i].index].defgrowth + growthValMod.def];
+		enemyData[i].res = base.res + growths[enemyRarity-1][heroes[enemyData[i].index].resgrowth + growthValMod.res];
 
 		//Add merge bonuses
 		var mergeBoost = {"hp":0,"atk":0,"spd":0,"def":0,"res":0};
@@ -1082,6 +1220,49 @@ function setEnemyStats(){
 			mergeBoost[mergeOrder[j%5]]++;
 		}
 
+		if(enemyRarity<5){
+			//Modify base stats based on rarity
+			//Order that base stats increase by rarity is similar to merge bonuses, except HP always happens at 3* and 5*
+			//Rarity base boosts don't taken into account boons/banes, so modify bases again and sort again
+			base.atk = base.atk - growthValMod.atk;
+			base.spd = base.spd - growthValMod.spd;
+			base.def = base.def - growthValMod.def;
+			base.res = base.res - growthValMod.res;
+
+			var rarityBaseOrder = ["atk","spd","def","res"];
+			rarityBaseOrder.sort(function(a,b){
+				if(base[a]>base[b]){
+					return -1;
+				}
+				else if(base[a]<base[b]){
+					return 1;
+				}
+				else{
+					if(boostPriority[a]>boostPriority[b]){
+						return -1;
+					}
+					else{
+						return 1;
+					}
+				}
+			});
+
+			rarityBaseOrder.push("hp");
+			var rarityBoostCount = Math.floor((enemyRarity-1) * 2.5);
+
+			//Just going to dump these stat boosts in mergeBoost
+			for(var j = 0; j < rarityBoostCount; j++){
+				mergeBoost[rarityBaseOrder[i%5]]++;
+			}
+
+			//Subtract 2 from every stat since bases are pulled in at 5*
+			mergeBoost.hp -= 2;
+			mergeBoost.atk -= 2;
+			mergeBoost.spd -= 2;
+			mergeBoost.def -= 2;
+			mergeBoost.res -= 2;
+		}
+
 		enemyData[i].hp += mergeBoost.hp;
 		enemyData[i].atk += mergeBoost.atk;
 		enemyData[i].spd += mergeBoost.spd;
@@ -1095,13 +1276,21 @@ function setEnemyStats(){
 			enemyData[i].spd += skills[enemyData[i].weapon].spd;
 		}
 
-		//A-passive only one that affects stats
+		//A-passive and S only one that affects stats
 		if(enemyData[i].a != -1){
 			enemyData[i].hp += skills[enemyData[i].a].hp;
 			enemyData[i].atk += skills[enemyData[i].a].atk;
 			enemyData[i].spd += skills[enemyData[i].a].spd;
 			enemyData[i].def += skills[enemyData[i].a].def;
 			enemyData[i].res += skills[enemyData[i].a].res;
+		}
+
+		if(enemyData[i].s != -1){
+			enemyData[i].hp += skills[enemyData[i].s].hp;
+			enemyData[i].atk += skills[enemyData[i].s].atk;
+			enemyData[i].spd += skills[enemyData[i].s].spd;
+			enemyData[i].def += skills[enemyData[i].s].def;
+			enemyData[i].res += skills[enemyData[i].s].res;
 		}
 
 		enemyAvgHp += enemyData[i].hp;
@@ -1121,6 +1310,7 @@ function setUI(){
 	if(challengerIndex != -1){
 		$("#challenger_picture").attr("src","heroes/" + heroes[challengerIndex].name + ".png");
 		$("#hero_hp").html(challengerHp);
+		$("#challenger_currenthp").html(challengerHp - challengerDamage);
 		$("#hero_atk").html(challengerAtk);
 		$("#hero_spd").html(challengerSpd);
 		$("#hero_def").html(challengerDef);
@@ -1365,6 +1555,7 @@ function calculate(){
 			var aName = "noskill";
 			var bName = "noskill";
 			var cName = "noskill";
+			var sName = "noskill";
 			if(fightResults[i].enemy.weaponIndex != -1){
 				weaponName = skills[fightResults[i].enemy.weaponIndex].name;
 			}
@@ -1379,6 +1570,9 @@ function calculate(){
 			}
 			if(fightResults[i].enemy.cIndex != -1){
 				cName = skills[fightResults[i].enemy.cIndex].name.replace(/\s/g,"_");
+			}
+			if(fightResults[i].enemy.sIndex != -1){
+				sName = skills[fightResults[i].enemy.sIndex].name.replace(/\s/g,"_");
 			}
 
 			var weaponTypeName = fightResults[i].enemy.weaponType;
@@ -1399,7 +1593,7 @@ function calculate(){
 					"<div class=\"results_previousresult\">" + previousFightResults[fightResults[i].enemy.heroIndex] + "</div>",
 				"</div>",
 				"<div class=\"results_bottomline\">",
-					"<span class=\"results_stat\">HP: " + fightResults[i].enemy.maxHp + "</span><span class=\"results_stat\">Atk: " + fightResults[i].enemy.atk + "</span><span class=\"results_stat\">Spd: " + fightResults[i].enemy.spd + "</span><span class=\"results_stat\">Def: " + fightResults[i].enemy.def + "</span><span class=\"results_stat\">Res: " + fightResults[i].enemy.res + "</span><div class=\"results_skills\"><span class=\"results_stat\"><img class=\"skill_picture\" src=\"skills/weapon.png\"/>" + weaponName + "</span><span class=\"results_stat\"><img class=\"skill_picture\" src=\"skills/special.png\"/>" + specialName + "</span><span class=\"results_stat\"><img class=\"skill_picture\" src=\"skills/" + aName + ".png\"/><img class=\"skill_picture\" src=\"skills/" + bName + ".png\"/><img class=\"skill_picture\" src=\"skills/" + cName + ".png\"/></span></div>",
+					"<span class=\"results_stat\">HP: " + fightResults[i].enemy.maxHp + "</span><span class=\"results_stat\">Atk: " + fightResults[i].enemy.atk + "</span><span class=\"results_stat\">Spd: " + fightResults[i].enemy.spd + "</span><span class=\"results_stat\">Def: " + fightResults[i].enemy.def + "</span><span class=\"results_stat\">Res: " + fightResults[i].enemy.res + "</span><div class=\"results_skills\"><span class=\"results_stat\"><img class=\"skill_picture\" src=\"skills/weapon.png\"/>" + weaponName + "</span><span class=\"results_stat\"><img class=\"skill_picture\" src=\"skills/special.png\"/>" + specialName + "</span><span class=\"results_stat\"><img class=\"skill_picture\" src=\"skills/" + aName + ".png\"/><img class=\"skill_picture\" src=\"skills/" + bName + ".png\"/><img class=\"skill_picture\" src=\"skills/" + cName + ".png\"/><img class=\"skill_picture\" src=\"skills/" + sName + ".png\"/></span></div>",
 				"</div>",
 			"</div>",""].join("\n"));
 
@@ -1478,9 +1672,26 @@ function deleteTurn(initTurn){
 	}
 }
 
+function verifyNumberInput(div,min,max){
+	//contrains number between two values and returns it
+	var newVal = parseInt($(div).val());
+	if(newVal < min){
+		$(div).val(min);
+		newVal = min;
+	}
+	else if(newVal > max){
+		$(div).val(max);
+		newVal = max;
+	}
+	return newVal;
+}
+
 function resetChallenger(){
-	$("#hero_atk_buff, #hero_spd_buff, #hero_def_buff, #hero_res_buff, #hero_atk_spur, #hero_spd_spur, #hero_def_spur, #hero_res_spur, #challenger_precharge, #challenger_merge, #challenger_damage").val(0);
+	$("#hero_atk_buff, #hero_spd_buff, #hero_def_buff, #hero_res_buff, #hero_atk_debuff, #hero_spd_debuff, #hero_def_debuff, #hero_res_debuff, #hero_atk_spur, #hero_spd_spur, #hero_def_spur, #hero_res_spur, #challenger_precharge, #challenger_merge, #challenger_damage").val(0);
+	$("#challenger_rarity").val(5);
 	//Set skills to default
+	challengerRarity = 5;
+	setSkillOptions();
 	resetChallengerSkills();
 
 	$("#hero_boon_hp, #hero_boon_atk, #hero_boon_spd, #hero_boon_def, #hero_boon_res").attr("data-val",0).removeClass("bane").removeClass("boon").addClass("neutral").html("Neutral");
@@ -1489,6 +1700,7 @@ function resetChallenger(){
 	challengerPrecharge = 0;
 	challengerMerge = 0;
 	challengerBuffs = {"atk":0,"spd":0,"def":0,"res":0};
+	challengerDebuffs = {"atk":0,"spd":0,"def":0,"res":0};
 	challengerSpur = {"atk":0,"spd":0,"def":0,"res":0};
 	
 	setStats();
@@ -1501,11 +1713,11 @@ function resetChallenger(){
 
 function resetChallengerSkills(){
 	if(challengerIndex != -1){
-		challengerWeapon = heroMaxSkills[challengerIndex].weapon;
-		challengerSpecial = heroMaxSkills[challengerIndex].special;
-		challengerA = heroMaxSkills[challengerIndex].a;
-		challengerB = heroMaxSkills[challengerIndex].b;
-		challengerC = heroMaxSkills[challengerIndex].c;
+		challengerWeapon = heroMaxSkills[challengerRarity-1][challengerIndex].weapon;
+		challengerSpecial = heroMaxSkills[challengerRarity-1][challengerIndex].special;
+		challengerA = heroMaxSkills[challengerRarity-1][challengerIndex].a;
+		challengerB = heroMaxSkills[challengerRarity-1][challengerIndex].b;
+		challengerC = heroMaxSkills[challengerRarity-1][challengerIndex].c;
 	}
 	else{
 		challengerWeapon = -1;
@@ -1514,6 +1726,7 @@ function resetChallengerSkills(){
 		challengerB = -1;
 		challengerC = -1;
 	}
+	challengerS = -1;
 	
 
 	$("#hero_weapon").val(challengerWeapon);
@@ -1521,26 +1734,32 @@ function resetChallengerSkills(){
 	$("#hero_a").val(challengerA);
 	$("#hero_b").val(challengerB);
 	$("#hero_c").val(challengerC);
+	$("#hero_s").val(challengerS);
 
 	changeSkillPic("a",challengerA);
 	changeSkillPic("b",challengerB);
 	changeSkillPic("c",challengerC);
+	changeSkillPic("s",challengerS);
 
 }
 
 function resetEnemies(){
-	$("#enemies_atk_buff, #enemies_spd_buff, #enemies_def_buff, #enemies_res_buff, #enemies_atk_spur, #enemies_spd_spur, #enemies_def_spur, #enemies_res_spur, #enemies_weapon_overwrite, #enemies_special_overwrite, #enemies_a_overwrite, #enemies_b_overwrite, #enemies_c_overwrite, #enemies_merge, #enemies_damage").val(0);
+	$("#enemies_atk_buff, #enemies_spd_buff, #enemies_def_buff, #enemies_res_buff, #enemies_atk_debuff, #enemies_spd_debuff, #enemies_def_debuff, #enemies_res_debuff, #enemies_atk_spur, #enemies_spd_spur, #enemies_def_spur, #enemies_res_spur, #enemies_weapon_overwrite, #enemies_special_overwrite, #enemies_a_overwrite, #enemies_b_overwrite, #enemies_c_overwrite, #enemies_merge, #enemies_damage").val(0);
+	$("#enemies_rarity").val(5);
 	$("#enemies_weapon").val(-1);
 	$("#enemies_special").val(-1);
 	$("#enemies_a").val(-1);
 	$("#enemies_b").val(-1);
 	$("#enemies_c").val(-1);
+	$("#enemies_s").val(-1);
 
 	enemiesWeapon = -1;
 	enemiesSpecial = -1;
 	enemiesA = -1;
 	enemiesB = -1;
 	enemiesC = -1;
+	enemiesS = -1;
+	enemyRarity = 5;
 
 	$("#enemies_boon_hp, #enemies_boon_atk, #enemies_boon_spd, #enemies_boon_def, #enemies_boon_res").attr("data-val",0).removeClass("bane").removeClass("boon").addClass("neutral");
 
@@ -1548,6 +1767,7 @@ function resetEnemies(){
 	enemyPrecharge = 0;
 	enemiesMerge = 0;
 	enemyBuffs = {"atk":0,"spd":0,"def":0,"res":0};
+	enemyDebuffs = {"atk":0,"spd":0,"def":0,"res":0};
 	enemySpur = {"atk":0,"spd":0,"def":0,"res":0};
 
 	$(".wideincludebutton, .thinincludebutton").removeClass("notincluded").addClass("included");
