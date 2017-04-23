@@ -1672,15 +1672,20 @@ function deleteTurn(initTurn){
 	}
 }
 
-function verifyNumberInput(div,min,max){
+function verifyNumberInput(element,min,max){
 	//contrains number between two values and returns it
-	var newVal = parseInt($(div).val());
+	var newVal = parseInt($(element).val());
+	if(!newVal){
+		//If input is blank, make it 0
+		newVal = 0;
+		$(element).val(0);
+	}
 	if(newVal < min){
-		$(div).val(min);
+		$(element).val(min);
 		newVal = min;
 	}
 	else if(newVal > max){
-		$(div).val(max);
+		$(element).val(max);
 		newVal = max;
 	}
 	return newVal;
