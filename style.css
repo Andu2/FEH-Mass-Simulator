@@ -534,11 +534,14 @@ body{
 	font-size:13px;
 	line-height:22px;
 	left:248px;
-	padding:8px;
+	right:0;
 	border-left:2px solid #000000;
 }
 
 #rules_inputs{
+	position:absolute;
+	left:8px;
+	top:8px;
 	width:330px;
 }
 
@@ -555,7 +558,10 @@ body{
 }
 
 #rules_checks{
-	margin-top:4px;
+	position:absolute;
+	right:0;
+	top:8px;
+	width:280px;
 }
 
 .checkrule{
