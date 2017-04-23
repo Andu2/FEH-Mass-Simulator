@@ -35,6 +35,7 @@ function getData($table){
 
 <head>
 	<title>FEH Mass Duel Simulator</title>
+	<meta name="description" content="A calculator for Fire Emblem Heroes that simulates lots of one-on-one duels at once. Pick your hero, pick your skills, pick your enemies, and see how you do!"/>
 	<link href="https://fonts.googleapis.com/css?family=Merriweather" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="style.css?v=3"/>
 	<link rel="shortcut icon" href="favicon.ico" />
@@ -72,7 +73,10 @@ function getData($table){
 		<div id="frame_options">
 			<div id="frame_challenger">
 				<div id="challenger_bar_top">
-					<select id="hero_name"></select> &nbsp;<span class="level_label">Rarity:</span> <input id="challenger_rarity" type="number" class="rarityinput smallnuminput" value=5 min=1 max=5 /> <span class="level_label">Lvl 40+</span><input id="challenger_merge" class="smallnuminput" type="number" value=0 min=0 max=10 /><div class="bufflabel">Buff</div><div class="debufflabel">Debuff</div><div class="spurlabel">Spur</div><div class="button" id="reset_challenger" onclick="resetChallenger();">Reset</div>
+					<div class="bar_top_title">Challenger
+						<div class="bar_top_title_right"><div class="button button_importexport" id="import_challenger">Import</div><div class="button button_importexport" id="export_challenger">Export</div></div>
+					</div>
+					<div class="bar_top_options"><select id="hero_name"></select> &nbsp;<span class="level_label">Rarity:</span> <input id="challenger_rarity" type="number" class="rarityinput smallnuminput" value=5 min=1 max=5 /> <span class="level_label">Lvl 40+</span><input id="challenger_merge" class="smallnuminput" type="number" value=0 min=0 max=10 /><div class="bufflabel">Buff</div><div class="debufflabel">Debuff</div><div class="spurlabel">Spur</div><div class="button" id="reset_challenger" onclick="resetChallenger();">Reset</div></div>
 				</div>
 				<div id="frame_challenger_picture"><img id="challenger_picture" src="heroes/nohero.png"/><img id="weaponIcon" src="weapons/noweapon.png"/></div>
 				<div id="challenger_stats" class="frame_stats">
@@ -101,10 +105,13 @@ function getData($table){
 			</div>
 			<div id="frame_enemies">
 				<div id="enemies_bar_top">
-					<span class="valign">Enemies: <span id="enemies_count">-</span></span>&nbsp;&nbsp;&nbsp;&nbsp;<span cass="valign"><span class="level_label">Rarity:</span> <input id="enemies_rarity" type="number" class="rarityinput smallnuminput" value=5 min=1 max=5 /> <span class="level_label">Lvl 40+</span><input id="enemies_merge" class="smallnuminput" type="number" value=0 min=0 max=10 /><div class="bufflabel">Buff</div><div class="debufflabel">Debuff</div><div class="spurlabel">Spur</div><div class="button" id="reset_enemies" onclick="resetEnemies();">Reset</div></span>
+					<div class="bar_top_title">Enemies
+						<div class="bar_top_title_right"><div class="button button_importexport" id="import_enemies">Import</div><div class="button button_importexport" id="export_enemies">Export</div></div>
+					</div>
+					<div class="bar_top_options">Enemy pool: <select id="enemies_mode"><option>Everyone</option><option>Custom list</option></select><span class="level_label">Rarity:</span> <input id="enemies_rarity" type="number" class="rarityinput smallnuminput" value=5 min=1 max=5 /> <span class="level_label">Lvl 40+</span><input id="enemies_merge" class="smallnuminput" type="number" value=0 min=0 max=10 /><div class="bufflabel">Buff</div><div class="debufflabel">Debuff</div><div class="spurlabel">Spur</div><div class="button" id="reset_enemies" onclick="resetEnemies();">Reset</div></div>
 				</div>
 				<div id="enemies_include">
-					<div id="enemies_includeheader">Include:</div>
+					<div id="enemies_includeheader">Include: <span id="enemies_count">-</span></div>
 					<div class="includebuttons_row"><div class="button wideincludebutton included" id="include_melee">Melee</div><div class="button wideincludebutton included" id="include_ranged">Ranged</div></div>
 					<div class="includebuttons_row"><div class="button thinincludebutton included" id="include_red">Red</div><div class="button thinincludebutton included" id="include_blue">Blue</div><div class="button thinincludebutton included" id="include_green">Green</div><div class="button thinincludebutton included" id="include_gray">Gray</div></div>
 					<div class="includebuttons_row"><div class="button wideincludebutton included" id="include_physical">Physical</div><div class="button wideincludebutton included" id="include_magical">Magical</div></div>
@@ -168,7 +175,7 @@ function getData($table){
 		<div id="frame_results">
 			<div id="results_bar_top">
 				<div class="button" id="button_calculate" onclick="calculate();">Calculate!</div> <input type="checkbox" id="autocalculate" checked="checked"/>Auto-calculate
-				<div id="results_bar_right">Sort: <select id="sort_results"><option value=1 >Best</option><option value=-1 >Worst</option></select></div>
+				<div id="results_bar_right">View: <select id="view_results"><option value=1 >All battles</option><option value=-1 >Changed result</option></select> Sort: <select id="sort_results"><option value=1 >Best</option><option value=-1 >Worst</option></select><div class="button" id="button_exportcalc" onclick="exportCalc();">Export results</div></div>
 			</div>
 			<div id="results_graph_back">
 				<div id="results_graph_wins"></div>
@@ -197,6 +204,12 @@ function getData($table){
 	</div>
 	<div id="frame_tooltip"></div>
 	<a href="../../games"><div id="frame_sitead">&lt; Back to Games</div></a>
+	<div id="screen_fade"></div>
+	<div id="frame_import" class="challengerimport">
+		<div id="import_header"><span id="import_title"></span><div class="button" id="import_exit">x</div></div>
+		<textarea class="importinput" id="import_challenger"></textarea>
+		<div id="import_footer"><div class="button" id="button_import">Import into calculator</div></div>
+	</div>
 </body>
 
 </html>

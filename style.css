@@ -46,7 +46,7 @@ body{
 
 #frame_options{
 	position: relative;
-	height:356px;
+	height:388px;
 }
 
 #frame_results{
@@ -77,16 +77,49 @@ body{
 
 #challenger_bar_top{
 	background-color: #7797ff;
-	height:34px;
+	height:66px;
 	font-size:19px;
 	line-height:26px;
 	position:relative;
 	padding: 0 10px;
 }
 
+.bar_top_title{
+	font-family: "Merriweather";
+	font-size:19px;
+	height:34px;
+	line-height:28px;
+	position:absolute;
+	left:0;right:0;top:3px;
+	padding-left:20px;
+}
+
+.bar_top_title_right{
+	position:absolute;
+	right:0;top:0;bottom:0;
+	font-size:16px;
+	font-family:"Segoe UI", sans-serif;
+}
+
+.button_importexport{
+	display:inline-block;
+	background-color: #4a6de2;
+	border-radius:2px;
+	padding: 0 6px;
+	margin-right:4px;
+}
+
+.bar_top_options{
+	position:absolute;
+	height:30px;
+	left:0;right:0;top:34px;
+	background-color: #4a6de2;
+	border-bottom:2px solid #7797ff;
+}
+
 #frame_challenger_picture{
 	position:absolute;
-	top:34px;
+	top:66px;
 	left:0;
 	width:150px;
 	height:150px;
@@ -112,7 +145,7 @@ body{
 .frame_stats{
 	position:absolute;
 	right:0;
-	top:39px;
+	top:71px;
 	width:230px;
 	height:135px;
 	line-height:23px;
@@ -179,7 +212,7 @@ body{
 
 #challenger_skills{
 	position:absolute;
-	top:190px;
+	top:222px;
 	line-height:22px;
 	font-size:12px;
 }
@@ -218,7 +251,7 @@ body{
 
 #challenger_misc{
 	position: absolute;
-	top:186px;
+	top:218px;
 	padding-top:4px;
 	bottom:0;
 	left:194px;
@@ -230,7 +263,7 @@ body{
 
 #enemies_misc{
 	position: absolute;
-	top:186px;
+	top:218px;
 	padding-top:4px;
 	bottom:0;
 	left:280px;
@@ -333,7 +366,7 @@ body{
 
 #enemies_bar_top{
 	background-color: #ff5165;
-	height:34px;
+	height:64px;
 	font-size:19px;
 	line-height:26px;
 	position: relative;
@@ -348,7 +381,7 @@ body{
 
 #enemies_skills{
 	position:absolute;
-	top:190px;
+	top:222px;
 	left:8px;
 	line-height:24px;
 }
@@ -357,7 +390,7 @@ body{
 	padding-left:6px;
 	position:absolute;
 	left:0;
-	top:34px;
+	top:66px;
 	height:150px;
 	border-color:#ff5165;
 	border-style: solid;
@@ -658,6 +691,16 @@ body{
 	background-color: #444444;
 }
 
+#button_exportcalc{
+	display:inline-block;
+	background-color: #888888;
+	color:#ffffff;
+}
+
+#button_exportcalc:hover{
+	background-color: #444444;
+}
+
 .results_entry{
 	position:relative;
 	height:50px;
@@ -878,4 +921,97 @@ a:hover{
 	top:1px;
 	width:18px;
 	height:18px;
+}
+
+/*///////////////////Import/export*/
+#screen_fade{
+	position:fixed;
+	top:0;left:0;right:0;bottom:0;
+	background-color: #000000;
+	opacity:0.7;
+	display:none;
+}
+
+#frame_import{
+	position:fixed;
+	top:0;left:0;right:0;bottom:0;
+	width:600px;
+	height:540px;
+	margin: auto;
+	border-radius: 4px;
+	display:none;
+}
+
+.challengerimport{
+	background-color:#7797ff;
+}
+
+#import_header{
+	font-size:22px;
+	height:34px;
+	line-height:34px;
+	position:absolute;
+	top:0;
+	left:0;right:0;
+	text-align:center;
+}
+
+#import_exit{
+	position:absolute;
+	top:0;
+	bottom:0;
+	right:12px;
+	font-size:14px;
+	line-height:20px;
+	width:22px;
+	height:22px;
+	margin:auto 0;
+	border-radius:2px;
+}
+
+.challengerimport #import_exit{
+	background-color: #4a6de2; 
+}
+
+.challengerimport #import_exit:hover{
+	background-color: #aabefd;
+}
+
+.importinput{
+	position:absolute;
+	top:-15px;left:0;right:0;bottom:0;
+	width:574px;
+	height:449px;
+	margin: auto;
+	resize:none;
+}
+
+#import_footer{
+	position:absolute;
+	height:40px;
+	bottom:0;
+	left:0;
+	right:0;
+	line-height:40px;
+}
+
+#button_import{
+	position:absolute;
+	left:0;
+	top:0;
+	right:0;
+	width:200px;
+	height:30px;
+	line-height:30px;
+	margin:auto;
+	text-align:center;
+	border-radius:4px;
+}
+
+.challengerimport #button_import{
+	background-color: #4a6de2; 
+}
+
+.challengerimport #button_import:hover{
+	background-color: #aabefd;
 }

@@ -1,3 +1,9 @@
+2017-4-xx:
+	-Option to view only results that changed.
+	-Export results.
+	-Custom enemy lists
+	-Import/export challenger and enemies
+
 2017-4-20:
 	-Added Eckesachs.
 	-Blazed it.

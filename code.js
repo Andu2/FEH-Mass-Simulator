@@ -676,6 +676,10 @@ $(document).ready(function(){
 		outputResults();
 	});
 
+	$("#import_exit").click(function(){
+		hideImportDialog();
+	})
+
 	$(document).mousemove(function(e){
 		if(showingTooltip){
 			var tooltipHeight =    $("#frame_tooltip").height();
@@ -1672,15 +1676,20 @@ function deleteTurn(initTurn){
 	}
 }
 
-function verifyNumberInput(div,min,max){
+function verifyNumberInput(element,min,max){
 	//contrains number between two values and returns it
-	var newVal = parseInt($(div).val());
+	var newVal = parseInt($(element).val());
+	if(!newVal){
+		//If input is blank, make it 0
+		newVal = 0;
+		$(element).val(0);
+	}
 	if(newVal < min){
-		$(div).val(min);
+		$(element).val(min);
 		newVal = min;
 	}
 	else if(newVal > max){
-		$(div).val(max);
+		$(element).val(max);
 		newVal = max;
 	}
 	return newVal;
@@ -1782,4 +1791,33 @@ function resetEnemies(){
 	if(autoCalculate){
 		calculate();
 	}
+}
+
+function showImportDialog(side,type){
+	//side = challenger or enemies, type = import or export
+	var label = "";
+	if(type=="import"){
+		label = "Import ";
+		$("#button_import").html("Import into calculator");
+	}
+	else{
+		label = "Export ";
+		$("#button_import").html("Copy to clipboard");
+	}
+
+	if(side=="challenger"){
+		$("#frame_import").removeClass("enemiesimport").addClass("challengerimport");
+		label += "challenger";
+	}
+	else if(side=="enemies"){
+		$("#frame_import").removeClass("enemiesimport").addClass("enemiesimport");
+		label += "enemies";
+	}
+
+	$("#import_title").html(label);
+}
+
+function hideImportDialog(){
+	$("#screen_fade").hide();
+	$("#frame_import").hide();
 }
