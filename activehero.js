@@ -17,6 +17,8 @@ function activeHero(index,challenger){
 		this.challenger = true;
 		this.heroIndex = index;
 		this.name = heroes[index].name;
+		this.rarity = challengerRarity;
+		this.merge = challengerMerge;
 
 		this.weaponIndex = challengerWeapon;	
 		this.specialIndex = challengerSpecial;
@@ -48,6 +50,8 @@ function activeHero(index,challenger){
 		this.challenger = false;
 		this.heroIndex = enemyData[index].index;
 		this.name = enemyData[index].name;
+		this.rarity = enemyRarity;
+		this.merge = enemiesMerge;
 
 		this.weaponIndex = enemyData[index].weapon;	
 		this.specialIndex = enemyData[index].special;

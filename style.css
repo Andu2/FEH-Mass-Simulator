@@ -96,25 +96,66 @@ body{
 
 .bar_top_title_right{
 	position:absolute;
-	right:0;top:0;bottom:0;
+	right:0;top:-1px;bottom:0;
 	font-size:16px;
 	font-family:"Segoe UI", sans-serif;
 }
 
 .button_importexport{
 	display:inline-block;
-	background-color: #4a6de2;
+	font-size:14px;
 	border-radius:2px;
 	padding: 0 6px;
 	margin-right:4px;
+	width:54px;
+	text-align:center;
+}
+
+#frame_challenger .button_importexport{
+	background-color: #4a6de2;
+}
+
+#frame_challenger .button_importexport:hover{
+	background-color: #ffffff;
+	color:#4a6de2;
+	font-weight:bold;
+}
+
+#frame_enemies .button_importexport{
+	background-color: #d82a3e;
+}
+
+#frame_enemies .button_importexport:hover{
+	background-color: #ffffff;
+	color:#d82a3e;
+	font-weight:bold;
 }
 
 .bar_top_options{
 	position:absolute;
 	height:30px;
+	line-height:30px;
 	left:0;right:0;top:34px;
+	padding: 0 6px;
+	font-size:14px;
+}
+
+.bar_label{
+	margin-right:5px;
+}
+
+* + .bar_label{
+	margin-left:8px;
+}
+
+#frame_challenger .bar_top_options{
 	background-color: #4a6de2;
 	border-bottom:2px solid #7797ff;
+}
+
+#frame_enemies .bar_top_options{
+	background-color: #d82a3e;
+	border-bottom:2px solid #ff5165;
 }
 
 #frame_challenger_picture{
@@ -204,10 +245,6 @@ body{
 .spur_input{
 	position: absolute;
 	left:184px;
-}
-
-.level_label{
-	font-size:13px;
 }
 
 #challenger_skills{
@@ -330,38 +367,36 @@ body{
 	margin-right:6px;
 }
 
-#reset_challenger{
-	background-color: #4a6de2;
+.reset_button{
 	position:absolute;
-	right:3px;
+	right:5px;
 	bottom:3px;
 	top:3px;
 	border-radius:2px;
 	font-size:12px;
-	width:60px;
+	width:44px;
 	text-align:center;
-	line-height:28px;
+	line-height:22px;
+}
+
+#reset_challenger{
+	background-color: #7797ff;
 }
 
 #reset_challenger:hover{
-	background-color: #aabefd;
+	background-color: #ffffff;
+	color:#4a6de2;
+	font-weight:bold;
 }
 
 #reset_enemies{
-	background-color: #d82a3e;
-	position:absolute;
-	right:3px;
-	bottom:3px;
-	top:3px;
-	border-radius:2px;
-	font-size:12px;
-	width:60px;
-	text-align:center;
-	line-height:28px;
+	background-color: #ff5165;
 }
 
 #reset_enemies:hover{
-	background-color: #ff8397;
+	background-color: #ffffff;
+	color:#d82a3e;
+	font-weight:bold;
 }
 
 #enemies_bar_top{
@@ -450,7 +485,9 @@ body{
 }
 
 .included:hover{
-	background-color: #ff8397;
+	background-color: #ffffff;
+	color:#d82a3e;
+	font-weight:bold;
 }
 
 .enemies_row{
@@ -639,7 +676,7 @@ body{
 	right:10px;
 	top:0;
 	bottom:0;
-	line-height:34px;
+	line-height:32px;
 }
 
 #results_graph_back{
@@ -692,6 +729,14 @@ body{
 }
 
 #button_exportcalc{
+	position:relative;
+	border-radius:2px;
+	font-size:16px;
+	height:28px;
+	width:116px;
+	text-align:center;
+	line-height:26px;
+	margin-left:12px;
 	display:inline-block;
 	background-color: #888888;
 	color:#ffffff;
@@ -699,6 +744,7 @@ body{
 
 #button_exportcalc:hover{
 	background-color: #444444;
+	font-weight:bold;
 }
 
 .results_entry{
@@ -974,7 +1020,9 @@ a:hover{
 }
 
 .challengerimport #import_exit:hover{
-	background-color: #aabefd;
+	background-color: #ffffff;
+	color:#4a6de2;
+	font-weight:bold;
 }
 
 .importinput{
@@ -1013,5 +1061,7 @@ a:hover{
 }
 
 .challengerimport #button_import:hover{
-	background-color: #aabefd;
+	background-color: #ffffff;
+	color:#4a6de2;
+	font-weight:bold;
 }

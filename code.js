@@ -81,13 +81,16 @@ var threatenRule = "Neither";
 var showOnlyMaxSkills = true;
 var hideUnaffecting = true;
 
+var viewFilter = 0;
 var fightResults = []; //Needs to be global variable to get info for tooltip
 var resultHTML = []; //Needs to be a global variable to flip sort order without recalculating
 var previousFightResults = new Array(heroes.length); //For comparing between calculations; actually an array of html strings with index corresponding to heroes[] index
+var nextPreviousFightResults = new Array(heroes.length); //Dumb
 //.fill() doesn't work in older versions of IE
 //previousFightResults.fill("");
 for(var i = 0; i < previousFightResults.length;i++){
 	previousFightResults[i] = "";
+	nextPreviousFightResults[i] = "";
 }
 
 var showingTooltip = false;
@@ -670,6 +673,12 @@ $(document).ready(function(){
 		else{
 			autoCalculate = false;
 		}
+	});
+
+	$("#view_results").change(function(){
+		var newVal = verifyNumberInput(this,0,2);
+		viewFilter = newVal;
+		outputResults();
 	});
 
 	$("#sort_results").change(function(){
@@ -1434,6 +1443,10 @@ function calculate(){
 		var losses = 0;
 		var inconclusive = 0;
 
+		for(var i = 0; i < nextPreviousFightResults.length; i++){
+			previousFightResults[i] = nextPreviousFightResults[i];
+		}
+
 		fightResults = [];
 		resultHTML = [];
 
@@ -1601,8 +1614,8 @@ function calculate(){
 				"</div>",
 			"</div>",""].join("\n"));
 
-			//Set previous result after showing this result
-			previousFightResults[fightResults[i].enemy.heroIndex] = "Previous result: " + resultText + ", <span class=\"blue\">" + fightResults[i].challengerHp + "</span> &ndash; <span class=\"red\">" + fightResults[i].enemyHp + "</span>";
+			//Set next previous result after showing this result
+			nextPreviousFightResults[fightResults[i].enemy.heroIndex] = "Previous result: " + resultText + ", <span class=\"blue\">" + fightResults[i].challengerHp + "</span> &ndash; <span class=\"red\">" + fightResults[i].enemyHp + "</span>";
 		}
 
 		outputResults();
@@ -1627,19 +1640,68 @@ function calculate(){
 function outputResults(){
 	//function separate from calculation so user can re-sort without recalculating
 	//sortOrder is 1 or -1
+	//Hide results that aren't different if view is set to changed only
+	//viewFilter is 0 or 1
 	var sortOrder = parseInt($("#sort_results").val());
 	var outputHTML = "";
+
 	if(sortOrder==1){
 		for(var i = 0; i < resultHTML.length; i++){
-			outputHTML += resultHTML[i];
+			if(filterResult(i)){
+				outputHTML += resultHTML[i];
+			}
 		}
 	}
 	else if(sortOrder==-1){
 		for(var i = resultHTML.length-1; i >= 0; i--){
-			outputHTML += resultHTML[i];
+			if(filterResult(i)){
+				outputHTML += resultHTML[i];
+			}
 		}
 	}
 	$("#results_list").html(outputHTML);
+}
+
+//Helper function for filtering
+//Will return true if include or false if not
+function filterResult(i){
+	if(!viewFilter){
+		return true;
+	}
+	else{
+		if(previousFightResults[i]==""){
+			return false;
+		}
+
+		var enemyIndex = fightResults[i].enemy.heroIndex;
+
+		var prevWin = previousFightResults[enemyIndex].includes("win");
+		var prevLoss = previousFightResults[enemyIndex].includes("loss");
+		var prevTie = previousFightResults[enemyIndex].includes("inconclusive");
+		var sameResult = false;
+		if((fightResults[i].challengerHp==0 && prevLoss) || (fightResults[i].enemyHp==0 && prevWin) || (fightResults[i].challengerHp!=0 && fightResults[i].enemyHp!=0 && prevTie)){
+			sameResult = true;
+		}
+
+		if(viewFilter==1){//changed victor
+			return !sameResult;
+		}
+		else if(viewFilter==2){//changed rounds
+			var extractRounds =  previousFightResults[enemyIndex].match(/([1-4]) rounds?/);
+			if(extractRounds){
+				if(fightResults[i].rounds == extractRounds[1] || !sameResult){
+					return false;
+				}
+				else{
+					return true;
+				}
+			}
+			else{
+				//Don't show inconclusive because it's always max rounds
+				return false;
+			}
+		}
+	}
 }
 
 function showResultsTooltip(e,resultDiv){
@@ -1820,4 +1882,189 @@ function showImportDialog(side,type){
 function hideImportDialog(){
 	$("#screen_fade").hide();
 	$("#frame_import").hide();
+}
+
+function exportCalc(){
+	//Exports all results to csv - doesn't take filters into account
+	//If people complain, I will make it take the filters into account
+
+	if(fightResults.length>0){
+		var csvString = "data:text/csv;charset=utf-8,";
+
+		//Column headers
+		//Should take out buffs and stuff that aren't used to minimize columns?
+		csvString += "Challenger,cColor,cMovetype,cWeapontype,cRarity,cMerge,cBoon,cBane,cMaxHP,cStartHP,cAtk,cSpd,cDef,cRes,cWeapon,cSpecial,cPrecharge,cA,cB,cC,cS,cBuffAtk,cBuffSpd,cBuffDef,cBuffRes,cDebuffAtk,cDebuffSpd,cDebuffDef,cDebuffRes,cSpurAtk,cSpurSpd,cSpurDef,cSpurRes,";
+		csvString += "Enemy,eColor,eMovetype,eWeapontype,eRarity,eMerge,eBoon,eBane,eMaxHP,eStartHP,eAtk,eSpd,eDef,eRes,eWeapon,eSpecial,ePrecharge,eA,eB,eC,eS,eBuffAtk,eBuffSpd,eBuffDef,eBuffRes,eDebuffAtk,eDebuffSpd,eDebuffDef,eDebuffRes,eSpurAtk,eSpurSpd,eSpurDef,eSpurRes,";
+		csvString += "FirstTurnThreaten,StartTurn,UseGaleforce,Initiator1,Initiator2,Initiator3,Initiator4,Outcome,cEndHP,eEndHP,Rounds,BattleLog\n";
+
+		fightResults.forEach(function(result){
+			csvString += heroes[challengerIndex].name + ",";
+			csvString += heroes[challengerIndex].color + ",";
+			csvString += heroes[challengerIndex].movetype + ",";
+			csvString += heroes[challengerIndex].weapontype + ",";
+			csvString += challengerRarity + ",";
+			csvString += challengerMerge + ",";
+			csvString += challengerBoon + ",";
+			csvString += challengerBane + ",";
+			csvString += challengerHp + ",";
+			csvString += Math.max(challengerHp - challengerDamage,1) + ",";
+			csvString += challengerAtk + ",";
+			csvString += challengerSpd + ",";
+			csvString += challengerDef + ",";
+			csvString += challengerRes + ",";
+			if(challengerWeapon != -1){
+				csvString += skills[challengerWeapon].name + ",";
+			}
+			else{
+				csvString += ",";
+			}
+			if(challengerSpecial != -1){
+				csvString += skills[challengerSpecial].name + ",";
+			}
+			else{
+				csvString += ",";
+			}
+			csvString += challengerPrecharge + ",";
+			if(challengerA != -1){
+				csvString += skills[challengerA].name + ",";
+			}
+			else{
+				csvString += ",";
+			}
+			if(challengerB != -1){
+				csvString += skills[challengerB].name + ",";
+			}
+			else{
+				csvString += ",";
+			}
+			if(challengerC != -1){
+				csvString += skills[challengerC].name + ",";
+			}
+			else{
+				csvString += ",";
+			}
+			if(challengerS != -1){
+				csvString += skills[challengerS].name + ",";
+			}
+			else{
+				csvString += ",";
+			}
+			csvString += challengerBuffs.atk + ",";
+			csvString += challengerBuffs.spd + ",";
+			csvString += challengerBuffs.def + ",";
+			csvString += challengerBuffs.res + ",";
+			csvString += challengerDebuffs.atk + ",";
+			csvString += challengerDebuffs.spd + ",";
+			csvString += challengerDebuffs.def + ",";
+			csvString += challengerDebuffs.res + ",";
+			csvString += challengerSpur.atk + ",";
+			csvString += challengerSpur.spd + ",";
+			csvString += challengerSpur.def + ",";
+			csvString += challengerSpur.res + ",";
+
+			var enemy = result.enemy;
+			csvString += enemy.name + ",";
+			csvString += enemy.color + ",";
+			csvString += enemy.moveType + ",";
+			csvString += enemy.weaponType + ",";
+			csvString += enemy.rarity + ",";
+			csvString += enemy.merge + ",";
+			csvString += enemiesBoon + ",";
+			csvString += enemiesBane + ",";
+			csvString += enemy.maxHp + ",";
+			csvString += Math.max(enemy.maxHp - enemyDamage,1) + ",";
+			csvString += enemy.atk + ",";
+			csvString += enemy.spd + ",";
+			csvString += enemy.def + ",";
+			csvString += enemy.res + ",";
+			if(enemy.weaponIndex != -1){
+				csvString += skills[enemy.weaponIndex].name + ",";
+			}
+			else{
+				csvString += ",";
+			}
+			if(enemy.specialIndex != -1){
+				csvString += skills[enemy.specialIndex].name + ",";
+			}
+			else{
+				csvString += ",";
+			}
+			csvString += enemyPrecharge + ",";
+			if(enemy.aIndex != -1){
+				csvString += skills[enemy.aIndex].name + ",";
+			}
+			else{
+				csvString += ",";
+			}
+			if(enemy.bIndex != -1){
+				csvString += skills[enemy.bIndex].name + ",";
+			}
+			else{
+				csvString += ",";
+			}
+			if(enemy.cIndex != -1){
+				csvString += skills[enemy.cIndex].name + ",";
+			}
+			else{
+				csvString += ",";
+			}
+			if(enemy.sIndex != -1){
+				csvString += skills[enemy.sIndex].name + ",";
+			}
+			else{
+				csvString += ",";
+			}
+			csvString += enemy.buffs.atk + ",";
+			csvString += enemy.buffs.spd + ",";
+			csvString += enemy.buffs.def + ",";
+			csvString += enemy.buffs.res + ",";
+			csvString += enemy.debuffs.atk + ",";
+			csvString += enemy.debuffs.spd + ",";
+			csvString += enemy.debuffs.def + ",";
+			csvString += enemy.debuffs.res + ",";
+			csvString += enemy.spur.atk + ",";
+			csvString += enemy.spur.spd + ",";
+			csvString += enemy.spur.def + ",";
+			csvString += enemy.spur.res + ",";
+
+			csvString += threatenRule + ",";
+			csvString += startTurn + ",";
+			csvString += useGaleforce + ",";
+			for(var rnd = 0; rnd < 4;rnd++){
+				if(!!roundInitiators[rnd]){
+					csvString += roundInitiators[rnd].substring(0,roundInitiators[rnd].length-10) + ",";
+				}
+				else{
+					csvString += ",";
+				}
+			}
+			var outcome = "Inconclusive";
+			if(result.challengerHp==0){
+				outcome = "Loss";
+			}
+			else if(result.enemyHp==0){
+				outcome = "Win";
+			}
+			csvString += outcome + ",";
+			csvString += result.challengerHp + ",";
+			csvString += result.enemyHp + ",";
+			csvString += result.rounds + ",";
+			var deTaggedLog = result.fightText.replace(/<br\/?>/g, "; ");
+			deTaggedLog = deTaggedLog.replace(/<\/?[^>]+(>|$)/g, "");
+			csvString += "\"" + deTaggedLog + "\"";
+
+			csvString += "\n";
+		});
+
+		var encodedUri = encodeURI(csvString);
+		var fakeLink = document.createElement("a");
+		fakeLink.setAttribute("href", encodedUri);
+		var date = new Date();
+		fakeLink.setAttribute("download", "feh_simulator_" + (date.getYear()+1900) + "-" + date.getMonth() + "-" + date.getDate() + ".csv");
+		document.body.appendChild(fakeLink);
+		fakeLink.click();
+	}
+	else{
+		alert("No results!");
+	}
 }
