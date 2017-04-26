@@ -1166,6 +1166,11 @@ function activeHero(index,challenger){
 			windsweep = this.has("Windsweep")*-2 + 7;
 		}
 
+		var watersweep = 0;
+		if(this.has("Watersweep")){
+			watersweep = this.has("Watersweep")*-2 + 7;
+		}
+
 		//Do AOE damage
 		roundText += this.doDamage(enemy,false,true);
 
@@ -1214,11 +1219,11 @@ function activeHero(index,challenger){
 		if(enemyWaryFighter){
 			enemyFollowUp = false;
 		}
-		if(windsweep){
+		if(windsweep || watersweep){
 			thisFollowUp = false;
 		}
 
-		if(!firesweep && !(windsweep && physicalWeapons.indexOf(enemy.weaponType) != -1 && thisEffSpd-enemyEffSpd >= windsweep)){
+		if(!firesweep && !(windsweep && physicalWeapons.indexOf(enemy.weaponType) != -1 && thisEffSpd-enemyEffSpd >= windsweep) && !(watersweep && magicalWeapons.indexOf(enemy.weaponType) != -1 && thisEffSpd-enemyEffSpd >= watersweep)){
 			if(this.range==enemy.range || anyRangeCounter){
 				enemyCanCounter = true;
 			}
