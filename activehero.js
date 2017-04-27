@@ -618,7 +618,7 @@ function activeHero(index,challenger){
 
 	//represents one attack of combat
 	this.doDamage = function(enemy,brave,AOE){
-		//unitAttacked variable for checking daggers and pain
+		//didAttack variable for checking daggers and pain
 		this.didAttack = true;
 
 		var enemyDefModifier = 0;
@@ -629,16 +629,17 @@ function activeHero(index,challenger){
 
 		var damageText = "";
 
-		var effAtk = this.atk + Math.max(this.buffs.atk,this.combatBuffs.atk) + Math.min(this.debuffs.atk,this.combatDebuffs.atk) + this.spur.atk + this.combatSpur.atk;
-		var effDef = this.def + Math.max(this.buffs.def,this.combatBuffs.def) + Math.min(this.debuffs.def,this.combatDebuffs.def) + this.spur.def + this.combatSpur.def;
-		var effRes = this.res + Math.max(this.buffs.res,this.combatBuffs.res) + Math.min(this.debuffs.res,this.combatDebuffs.res) + this.spur.res + this.combatSpur.res;
+		var thisEffAtk = this.atk + Math.max(this.buffs.atk,this.combatBuffs.atk) + Math.min(this.debuffs.atk,this.combatDebuffs.atk) + this.spur.atk + this.combatSpur.atk;
+		var thisEffDef = this.def + Math.max(this.buffs.def,this.combatBuffs.def) + Math.min(this.debuffs.def,this.combatDebuffs.def) + this.spur.def + this.combatSpur.def;
+		var thisEffRes = this.res + Math.max(this.buffs.res,this.combatBuffs.res) + Math.min(this.debuffs.res,this.combatDebuffs.res) + this.spur.res + this.combatSpur.res;
+		var enemyEffAtk = enemy.atk + Math.max(enemy.buffs.atk,enemy.combatBuffs.atk) + Math.min(enemy.debuffs.atk,enemy.combatDebuffs.atk) + enemy.spur.atk + enemy.combatSpur.atk;
 		var enemyEffDef = enemy.def + Math.max(enemy.buffs.def,enemy.combatBuffs.def) + Math.min(enemy.debuffs.def,enemy.combatDebuffs.def) + enemy.spur.def + enemy.combatSpur.def;
 		var enemyEffRes = enemy.res + Math.max(enemy.buffs.res,enemy.combatBuffs.res) + Math.min(enemy.debuffs.res,enemy.combatDebuffs.res) + enemy.spur.res + enemy.combatSpur.res;
 
 		if(this.panicked){
-			effAtk = this.atk - Math.max(this.buffs.atk,this.combatBuffs.atk) - Math.min(this.debuffs.atk,this.combatDebuffs.atk) + this.spur.atk + this.combatSpur.atk;
-			effDef = this.def - Math.max(this.buffs.def,this.combatBuffs.def) - Math.min(this.debuffs.def,this.combatDebuffs.def) + this.spur.def + this.combatSpur.def;
-			effRes = this.res - Math.max(this.buffs.res,this.combatBuffs.res) - Math.min(this.debuffs.res,this.combatDebuffs.res) + this.spur.res + this.combatSpur.res;
+			thisEffAtk = this.atk - Math.max(this.buffs.atk,this.combatBuffs.atk) - Math.min(this.debuffs.atk,this.combatDebuffs.atk) + this.spur.atk + this.combatSpur.atk;
+			thisEffDef = this.def - Math.max(this.buffs.def,this.combatBuffs.def) - Math.min(this.debuffs.def,this.combatDebuffs.def) + this.spur.def + this.combatSpur.def;
+			thisEffRes = this.res - Math.max(this.buffs.res,this.combatBuffs.res) - Math.min(this.debuffs.res,this.combatDebuffs.res) + this.spur.res + this.combatSpur.res;
 		}
 
 		if(enemy.panicked){
@@ -660,13 +661,13 @@ function activeHero(index,challenger){
 				var AOEActivated = false;
 				var AOEDamage = 0;
 				//AOE specials don't take spur into effect
-				var AOEeffAtk = effAtk - this.spur.atk - this.combatSpur.atk;
+				var AOEthisEffAtk = thisEffAtk - this.spur.atk - this.combatSpur.atk;
 
 				if(this.has("Rising Thunder") || this.has("Rising Wind") || this.has("Rising Light") || this.has("Rising Flame") || this.has("Growing Thunder") || this.has("Growing Wind") || this.has("Growing Light") || this.has("Growing Flame")){
-					AOEDamage = AOEeffAtk - relevantDef;
+					AOEDamage = AOEthisEffAtk - relevantDef;
 				}
 				else if(this.has("Blazing Thunder") || this.has("Blazing Wind") || this.has("Blazing Light") || this.has("Blazing Flame")){
-					AOEDamage = Math.floor(1.5*(AOEeffAtk - relevantDef));
+					AOEDamage = Math.floor(1.5*(AOEthisEffAtk - relevantDef));
 				}
 
 				if(AOEDamage > 0){
@@ -692,19 +693,19 @@ function activeHero(index,challenger){
 				}
 				else if(this.has("Dragon Gaze") || this.has("Draconic Aura")){
 					//Works like Ignis and Glacies
-					dmgBoost += effAtk * 0.3;
+					dmgBoost += thisEffAtk * 0.3;
 					offensiveSpecialActivated = true;
 				}
 				else if(this.has("Dragon Fang")){
-					dmgBoost += effAtk * 0.5;
+					dmgBoost += thisEffAtk * 0.5;
 					offensiveSpecialActivated = true;
 				}
 				else if(this.has("Glowing Ember") || this.has("Bonfire")){
-					dmgBoost += effDef/2;
+					dmgBoost += thisEffDef/2;
 					offensiveSpecialActivated = true;
 				}
 				else if(this.has("Ignis")){
-					dmgBoost += effDef * 0.8;
+					dmgBoost += thisEffDef * 0.8;
 					offensiveSpecialActivated = true;
 				}
 				else if(this.has("Daylight") || this.has("Noontime")){
@@ -724,11 +725,11 @@ function activeHero(index,challenger){
 					offensiveSpecialActivated = true;
 				}
 				else if(this.has("Chilling Wind") || this.has("Iceberg")){
-					dmgBoost += effRes/2;
+					dmgBoost += thisEffRes/2;
 					offensiveSpecialActivated = true;
 				}
 				else if(this.has("Glacies")){
-					dmgBoost += effRes*0.8;
+					dmgBoost += thisEffRes*0.8;
 					offensiveSpecialActivated = true;
 				}
 				else if(this.has("Retribution") || this.has("Reprisal")){
@@ -829,7 +830,7 @@ function activeHero(index,challenger){
 				var bladeDmg = Math.max(this.buffs.atk,this.combatBuffs.atk) + Math.max(this.buffs.spd,this.combatBuffs.spd) + Math.max(this.buffs.def,this.combatBuffs.def) + Math.max(this.buffs.res,this.combatBuffs.res);
 				if(bladeDmg > 0){
 					damageText += this.name + " gets " + bladeDmg + " extra attack from a blade tome. ";
-					effAtk += bladeDmg;
+					thisEffAtk += bladeDmg;
 				}
 			}
 
@@ -888,7 +889,7 @@ function activeHero(index,challenger){
 			//use bitwise or to truncate properly
 			//Doing calculation in steps to see the formula more clearly
 			//debugger;
-			var rawDmg = (effAtk*effectiveBonus | 0) + ((effAtk*effectiveBonus | 0)*weaponAdvantageBonus | 0) + (dmgBoost | 0);
+			var rawDmg = (thisEffAtk*effectiveBonus | 0) + ((thisEffAtk*effectiveBonus | 0)*weaponAdvantageBonus | 0) + (dmgBoost | 0);
 			var reduceDmg = relevantDef + (relevantDef*enemyDefModifier | 0);
 			var dmg = (rawDmg - reduceDmg)*weaponModifier | 0;
 			dmg = (dmg*dmgMultiplier | 0) - (dmg*(1-dmgReduction) | 0);
@@ -915,10 +916,35 @@ function activeHero(index,challenger){
 
 			//Special charge does not increase if special was used on this attack
 			if(!offensiveSpecialActivated){
+				var heavyBlade = 0;
+				if(this.has("Heavy Blade")){
+					heavyBlade = this.has("Heavy Blade")*-2 + 7;
+				}
+				if(heavyBlade && thisEffAtk - enemyEffAtk >= heavyBlade){
+					this.charge++;
+				}
+
+				var guard = 0;
+				debugger;
+				if(enemy.has("Guard")){
+					guard = 1.1 - enemy.has("Guard")*0.1;
+				}
+				if(guard && enemy.combatStartHp / enemy.maxHp >= guard){
+					this.charge--;
+				}
+
 				this.charge++;
 			}
 
 			if(!defensiveSpecialActivated){
+				var guard = 0;
+				if(this.has("Guard")){
+					guard = 1.1 - this.has("Guard")*0.1;
+				}
+				if(guard && this.combatStartHp / this.maxHp >= guard){
+					enemy.charge--;
+				}
+
 				enemy.charge++;
 			}
 
@@ -950,6 +976,8 @@ function activeHero(index,challenger){
 		this.initiator = true;
 		enemy.initiator = false;
 		enemy.didAttack = false;
+		this.combatStartHp = this.hp;
+		enemy.combatStartHp = enemy.hp;
 
 		//Get relevant defense for simplified text output
 		var relevantDefType = "def";
@@ -1001,7 +1029,7 @@ function activeHero(index,challenger){
 
 		//check for any-distance counterattack
 		var anyRangeCounter = false;
-		if(enemy.has("Close Counter") || enemy.has("Distant Counter") || enemy.has("Raijinto") || enemy.has("Lightning Breath")){
+		if(enemy.has("Close Counter") || enemy.has("Distant Counter") || enemy.has("Raijinto") || enemy.has("Lightning Breath") || enemy.has("Ragnell")){
 			anyRangeCounter = true;
 		}
 
