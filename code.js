@@ -182,11 +182,7 @@ $(document).ready(function(){
 			validSSkills = getValidSkills("s",challengerIndex);
 			setSkillOptions();
 
-			challengerWeapon = heroMaxSkills[challengerRarity-1][challengerIndex].weapon;
-			challengerSpecial = heroMaxSkills[challengerRarity-1][challengerIndex].special;
-			challengerA = heroMaxSkills[challengerRarity-1][challengerIndex].a;
-			challengerB = heroMaxSkills[challengerRarity-1][challengerIndex].b;
-			challengerC = heroMaxSkills[challengerRarity-1][challengerIndex].c;
+			resetChallenger();
 
 			$("#hero_weapon").val(challengerWeapon);
 			$("#hero_special").val(challengerSpecial);

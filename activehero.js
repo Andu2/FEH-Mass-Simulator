@@ -297,7 +297,7 @@ function activeHero(index,challenger){
 
 			var defiantRes = 0;
 			if(this.has("Defiant Res")){
-				defiantRes = this.has("Resiant Res") * 2 + 1;
+				defiantRes = this.has("Defiant Res") * 2 + 1;
 				skillName = skills[this.aIndex].name;
 			}
 			if(defiantRes > this.combatBuffs.res){
@@ -885,6 +885,10 @@ function activeHero(index,challenger){
 				weaponModifier = 0.5;
 			}
 
+			if(this.has("Absorb")){
+				absorbPct = 1.0;
+			}
+
 			//Damage calculation from http://feheroes.wiki/Damage_Calculation
 			//use bitwise or to truncate properly
 			//Doing calculation in steps to see the formula more clearly
@@ -894,8 +898,9 @@ function activeHero(index,challenger){
 			var dmg = (rawDmg - reduceDmg)*weaponModifier | 0;
 			dmg = (dmg*dmgMultiplier | 0) - (dmg*(1-dmgReduction) | 0);
 			dmg = Math.max(dmg,0);
-			enemy.hp -= Math.min(dmg,enemy.hp );
 			damageText += this.name + " attacks " + enemy.name + " for <span class=\"bold\">" + dmg + "</span> damage.<br>";
+			dmg = Math.min(dmg,enemy.hp);
+			enemy.hp -= dmg;
 
 			if(enemy.hp <= 0 && miracle){
 				enemy.hp = 1;
