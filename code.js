@@ -198,11 +198,7 @@ $(document).ready(function(){
 			validSSkills = getValidSkills("s",challengerIndex);
 			setSkillOptions();
 
-			challengerWeapon = heroMaxSkills[challengerRarity-1][challengerIndex].weapon;
-			challengerSpecial = heroMaxSkills[challengerRarity-1][challengerIndex].special;
-			challengerA = heroMaxSkills[challengerRarity-1][challengerIndex].a;
-			challengerB = heroMaxSkills[challengerRarity-1][challengerIndex].b;
-			challengerC = heroMaxSkills[challengerRarity-1][challengerIndex].c;
+			resetChallenger();
 
 			$("#hero_weapon").val(challengerWeapon);
 			$("#hero_special").val(challengerSpecial);
@@ -942,7 +938,7 @@ function setEnemySkillOptions(){
 	//Set special skill options
 	specialHTML = "<option value=-1>No special</option>";
 	for(var i = 0; i < allSpecialSkills.length; i++){
-		if((!showOnlyMaxSkills || skillsThatArePrereq.indexOf(skills[allSpecialSkills[i]].skill_id)==-1) && (!hideUnaffecting || skills[allWeaponSkills[i]].affectsduel)){
+		if((!showOnlyMaxSkills || skillsThatArePrereq.indexOf(skills[allSpecialSkills[i]].skill_id)==-1) && (!hideUnaffecting || skills[allSpecialSkills[i]].affectsduel)){
 			specialHTML += "<option value=" + allSpecialSkills[i] + ">" + skills[allSpecialSkills[i]].name + "</option>";
 		}
 	}
@@ -951,7 +947,7 @@ function setEnemySkillOptions(){
 	//Set a skill options
 	aHTML = "<option value=-1>No A passive</option>";
 	for(var i = 0; i < allASkills.length; i++){
-		if((!showOnlyMaxSkills || skillsThatArePrereq.indexOf(skills[allASkills[i]].skill_id)==-1) && (!hideUnaffecting || skills[allWeaponSkills[i]].affectsduel)){
+		if((!showOnlyMaxSkills || skillsThatArePrereq.indexOf(skills[allASkills[i]].skill_id)==-1) && (!hideUnaffecting || skills[allASkills[i]].affectsduel)){
 			aHTML += "<option value=" + allASkills[i] + ">" + skills[allASkills[i]].name + "</option>";
 		}
 	}
@@ -960,7 +956,7 @@ function setEnemySkillOptions(){
 	//Set weapon skill options
 	bHTML = "<option value=-1>No B passive</option>";
 	for(var i = 0; i < allBSkills.length; i++){
-		if((!showOnlyMaxSkills || skillsThatArePrereq.indexOf(skills[allBSkills[i]].skill_id)==-1) && (!hideUnaffecting || skills[allWeaponSkills[i]].affectsduel)){
+		if((!showOnlyMaxSkills || skillsThatArePrereq.indexOf(skills[allBSkills[i]].skill_id)==-1) && (!hideUnaffecting || skills[allBSkills[i]].affectsduel)){
 			bHTML += "<option value=" + allBSkills[i] + ">" + skills[allBSkills[i]].name + "</option>";
 		}
 	}
@@ -969,7 +965,7 @@ function setEnemySkillOptions(){
 	//Set c skill options
 	cHTML = "<option value=-1>No C passive</option>";
 	for(var i = 0; i < allCSkills.length; i++){
-		if((!showOnlyMaxSkills || skillsThatArePrereq.indexOf(skills[allCSkills[i]].skill_id)==-1) && (!hideUnaffecting || skills[allWeaponSkills[i]].affectsduel)){
+		if((!showOnlyMaxSkills || skillsThatArePrereq.indexOf(skills[allCSkills[i]].skill_id)==-1) && (!hideUnaffecting || skills[allCSkills[i]].affectsduel)){
 			cHTML += "<option value=" + allCSkills[i] + ">" + skills[allCSkills[i]].name + "</option>";
 		}
 	}
@@ -978,7 +974,7 @@ function setEnemySkillOptions(){
 	//Set s skill options
 	sHTML = "<option value=-1>No S passive</option>";
 	for(var i = 0; i < allSSkills.length; i++){
-		if((!showOnlyMaxSkills || skillsThatArePrereq.indexOf(skills[allSSkills[i]].skill_id)==-1) && (!hideUnaffecting || skills[allWeaponSkills[i]].affectsduel)){
+		if((!showOnlyMaxSkills || skillsThatArePrereq.indexOf(skills[allSSkills[i]].skill_id)==-1) && (!hideUnaffecting || skills[allSSkills[i]].affectsduel)){
 			sHTML += "<option value=" + allSSkills[i] + ">" + skills[allSSkills[i]].name + "</option>";
 		}
 	}

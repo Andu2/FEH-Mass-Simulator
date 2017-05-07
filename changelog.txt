@@ -4,6 +4,16 @@
 	-Custom enemy lists
 	-Import/export challenger and enemies
 
+2017-5-7
+	-Added absorb staff back in. When did I even delete that code?
+	-Fixed healing specials healing for more than the enemy's remaining HP
+	-Fixed S skills not actually being taken off when you switch hero
+	-Fixed defiant res not working because I was looking for the skill "resiant res"
+	-Added Siegfried.
+
+2017-4-26:
+	-Added new skills: Watersweep, Ragnell, Heavy Blade, Spur Def Res, Guard
+
 2017-4-20:
 	-Added Eckesachs.
 	-Blazed it.
