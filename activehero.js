@@ -841,7 +841,7 @@ function activeHero(index,challenger){
 			if(enemy.specialIndex!=-1&&skills[enemy.specialIndex].charge<=enemy.charge){
 				//gotta check range
 				var anyRangeCounter = false;
-				if(this.has("Close Counter") || this.has("Distant Counter") || this.has("Raijinto") || this.has("Lightning Breath")){
+				if(this.has("Close Counter") || this.has("Distant Counter") || this.has("Raijinto") || this.has("Lightning Breath") || this.has("Siegfried") || this.has("Ragnell")){
 					anyRangeCounter = true;
 				}
 
@@ -886,13 +886,12 @@ function activeHero(index,challenger){
 			}
 
 			if(this.has("Absorb")){
-				absorbPct = 1.0;
+				absorbPct = 0.5;
 			}
 
 			//Damage calculation from http://feheroes.wiki/Damage_Calculation
 			//use bitwise or to truncate properly
 			//Doing calculation in steps to see the formula more clearly
-			//debugger;
 			var rawDmg = (thisEffAtk*effectiveBonus | 0) + ((thisEffAtk*effectiveBonus | 0)*weaponAdvantageBonus | 0) + (dmgBoost | 0);
 			var reduceDmg = relevantDef + (relevantDef*enemyDefModifier | 0);
 			var dmg = (rawDmg - reduceDmg)*weaponModifier | 0;
@@ -930,7 +929,6 @@ function activeHero(index,challenger){
 				}
 
 				var guard = 0;
-				debugger;
 				if(enemy.has("Guard")){
 					guard = 1.1 - enemy.has("Guard")*0.1;
 				}
@@ -1034,7 +1032,7 @@ function activeHero(index,challenger){
 
 		//check for any-distance counterattack
 		var anyRangeCounter = false;
-		if(enemy.has("Close Counter") || enemy.has("Distant Counter") || enemy.has("Raijinto") || enemy.has("Lightning Breath") || enemy.has("Ragnell")){
+		if(enemy.has("Close Counter") || enemy.has("Distant Counter") || enemy.has("Raijinto") || enemy.has("Lightning Breath") || enemy.has("Ragnell") || enemy.has("Siegfried")){
 			anyRangeCounter = true;
 		}
 
