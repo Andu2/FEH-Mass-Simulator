@@ -96,6 +96,17 @@ for(var i = 0; i < previousFightResults.length;i++){
 var showingTooltip = false;
 var calcuwaiting = false;
 var calcuwaitTime = 0;
+var customEnemyList = false;
+var enemyPrompts = {
+	"default":"Enemies to fight:",
+	"Beruka":"My target?:",
+	"Clarine":"Shall we?:",
+	"Effie":"Who to crush:",
+	"Karel":"Time to feast:",
+	"Nino":"Do my best:",
+	"Robin(M)":"Scales to tip:",
+	"Sharena":"My turn!:"
+}
 
 var enemyAvgHp = 0;
 var enemyAvgAtk = 0;
@@ -155,6 +166,8 @@ for(var i = 0; i < heroes.length;i++){
 }
 
 $(document).ready(function(){
+	$("#enemy_select_text").html(enemyPrompts.default);
+	
 	//Populate hero select options
 	heroHTML = "<option value=-1 class=\"hero_option\">Select Hero</option>";
 	for(var i = 0; i < heroes.length; i++){
@@ -203,6 +216,14 @@ $(document).ready(function(){
 
 			//Analytics
 			dataLayer.push({"event":"changeHero","hero_name":heroes[challengerIndex].name});
+
+			//Change flavor text
+			if(enemyPrompts[heroes[challengerIndex].name]){
+				$("#enemy_select_text").html(enemyPrompts[heroes[challengerIndex].name]);
+			}
+			else{
+				$("#enemy_select_text").html(enemyPrompts.default);
+			}
 		}
 
 		setStats();
@@ -687,6 +708,10 @@ $(document).ready(function(){
 
 	$("#import_exit").click(function(){
 		hideImportDialog();
+	})
+
+	$("#enemies_mode").change(function(){
+		switchEnemySelect($(this).val());
 	})
 
 	$(document).mousemove(function(e){
@@ -1882,6 +1907,18 @@ function showImportDialog(side,type){
 function hideImportDialog(){
 	$("#screen_fade").hide();
 	$("#frame_import").hide();
+}
+
+function switchEnemySelect(newVal){
+	customEnemyList = newVal;
+	if(customEnemyList==1){
+		$("#enemies_full_list").hide();
+		$("#enemies_custom_list").show();
+	}
+	else{
+		$("#enemies_custom_list").hide();
+		$("#enemies_full_list").show();
+	}
 }
 
 function exportCalc(){
