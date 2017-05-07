@@ -72,12 +72,12 @@ body{
 	right:0;
 	top:0;
 	bottom:0;
-	width:500px;
+	width:510px;
 }
 
 #challenger_bar_top{
 	background-color: #7797ff;
-	height:66px;
+	height:34px;
 	font-size:19px;
 	line-height:26px;
 	position:relative;
@@ -135,9 +135,16 @@ body{
 	position:absolute;
 	height:30px;
 	line-height:30px;
-	left:0;right:0;top:34px;
+	left:0;right:0;top:0;
 	padding: 0 6px;
 	font-size:14px;
+}
+
+.bar_top_options_right{
+	position: absolute;
+	right:0;
+	top:0;
+	bottom:0;
 }
 
 .bar_label{
@@ -158,19 +165,16 @@ body{
 	border-bottom:2px solid #ff5165;
 }
 
-#frame_challenger_picture{
+.frame_hero_picture{
 	position:absolute;
-	top:66px;
+	top:0;
 	left:0;
 	width:150px;
 	height:150px;
 	background-color: #111111;
-	border-color:#7797ff;
-	border-style: solid;
-	border-width:0 2px 2px 0;
 }
 
-#challenger_picture{
+.hero_picture{
 	position:absolute;
 	top:0;
 	left:0;
@@ -178,47 +182,59 @@ body{
 	height:150px;
 }
 
-#challenger_name{
-	display:inline-block;
-	margin:0 0 0 15px;
+.frame_hero_main{
+	position:absolute;
+	top:34px;
+	left:0;right:0;bottom:0;
+}
+
+.frame_hero_main_right{
+	position:absolute;
+	right:0;top:0;bottom:0;left:129px;
+}
+
+.frame_hero_main_top{
+	position:absolute;
+	left:0;right:0;top:32px;
+	height:150px;
+	border-bottom:2px solid #7797ff;
+}
+
+.frame_hero_main_bottom{
+	position:absolute;
+	left:0;right:0;bottom:0;top:184px;
 }
 
 .frame_stats{
 	position:absolute;
 	right:0;
-	top:71px;
+	top:0;
+	padding: 18px 0 0 8px;
 	width:220px;
-	height:135px;
+	height:132px;
 	line-height:23px;
-	padding-left:20px;
-	padding-top:10px;
-}
-
-#challenger_stats{
-	border-color:#7797ff;
-	border-style: solid;
-	border-width:0 0 2px 0;
+	border-left: 2px solid #7797ff;
 }
 
 .bufflabel{
 	font-size:11px;
 	position:absolute;
 	right:104px;
-	bottom:-26px;
+	top:-2px;
 }
 
 .debufflabel{
 	font-size:11px;
 	position:absolute;
 	right:54px;
-	bottom:-26px;
+	top:-2px;
 }
 
 .spurlabel{
 	font-size:11px;
 	position:absolute;
 	right:18px;
-	bottom:-26px;
+	top:-2px;
 }
 
 .stat_row{
@@ -247,9 +263,9 @@ body{
 	left:174px;
 }
 
-#challenger_skills{
+.hero_skills{
 	position:absolute;
-	top:222px;
+	top:4px;
 	line-height:22px;
 	font-size:12px;
 }
@@ -286,28 +302,20 @@ body{
 	top:4px;
 }
 
-#challenger_misc{
+.hero_misc{
 	position: absolute;
-	top:218px;
+	top:0px;
 	padding-top:4px;
 	bottom:0;
-	left:194px;
+	right:0;
 	border-color:#7797ff;
 	border-style: solid;
 	border-width:0 0 0 2px;
-	width:200px;
+	width:184px;
 }
 
-#enemies_misc{
-	position: absolute;
-	top:218px;
-	padding-top:4px;
-	bottom:0;
-	left:280px;
+#frame_enemies div{
 	border-color:#ff5165;
-	border-style: solid;
-	border-width:0 0 0 2px;
-	width:200px;
 }
 
 .misc_row{
@@ -368,15 +376,14 @@ body{
 }
 
 .reset_button{
-	position:absolute;
-	right:5px;
-	bottom:3px;
-	top:3px;
+	display:inline-block;
+	position:relative;
 	border-radius:2px;
 	font-size:12px;
 	width:44px;
 	text-align:center;
 	line-height:22px;
+	margin:0 4px 0 8px;
 }
 
 #reset_challenger{
@@ -389,11 +396,11 @@ body{
 	font-weight:bold;
 }
 
-#reset_enemies{
+.reset_enemies{
 	background-color: #ff5165;
 }
 
-#reset_enemies:hover{
+.reset_enemies:hover{
 	background-color: #ffffff;
 	color:#d82a3e;
 	font-weight:bold;
@@ -401,35 +408,19 @@ body{
 
 #enemies_bar_top{
 	background-color: #ff5165;
-	height:64px;
+	height:34px;
 	font-size:19px;
 	line-height:26px;
 	position: relative;
 	padding:0 10px;
 }
 
-#enemies_stats{
-	border-color:#ff5165;
-	border-style: solid;
-	border-width:0 0 2px 0;
-}
-
-#enemies_skills{
-	position:absolute;
-	top:222px;
-	left:8px;
-	line-height:24px;
-}
-
 #enemies_include{
 	padding-left:6px;
 	position:absolute;
 	left:0;
-	top:66px;
+	top:2px;
 	height:150px;
-	border-color:#ff5165;
-	border-style: solid;
-	border-width:0 2px 2px 0;
 }
 
 #enemies_includeheader{
@@ -449,7 +440,7 @@ body{
 	font-size:12px;
 	height:21px;
 	line-height:21px;
-	width:122px;
+	width:132px;
 	display:inline-block;
 	border-radius:2px;
 }
@@ -462,7 +453,7 @@ body{
 	height:21px;
 	line-height:21px;
 	text-align:center;
-	width:59px;
+	width:64px;
 	font-size:12px;
 	display:inline-block;
 	border-radius:2px;
@@ -490,10 +481,6 @@ body{
 	font-weight:bold;
 }
 
-.enemies_row{
-	position:relative;
-}
-
 .enemies_input{
 	position:absolute;
 	width:100px;
@@ -503,12 +490,13 @@ body{
 
 #cl_enemylist{
 	position:absolute;
-	top:66px;
+	top:0;
 	left:0;
 	bottom:0;
-	width:116px;
+	width:127px;
 	background-color: #111111;
-	overflow-y:scroll;
+	overflow-y:auto;
+	border-right:2px solid #000000;
 }
 
 .cl_enemy{
@@ -518,8 +506,8 @@ body{
 	margin: 3px;
 	border-radius:2px;
 	background-color: #444444;
-	height:20px;
-	line-height:20px;
+	height:22px;
+	line-height:22px;
 	padding-left:4px;
 }
 
@@ -540,6 +528,27 @@ body{
 }
 
 .cl_delete_enemy:hover{
+	cursor:pointer;
+	background-color: #888888;
+}
+
+#cl_addenemy{
+	position:relative;
+	width:86px;
+	height:14px;
+	font-size:13px;
+	line-height:12px;
+	border-radius:2px;
+	text-align:center;
+	background-color: #222222;
+	margin: 3px auto;
+}
+
+.cl_enemy + #cl_addenemy{
+	margin-top:0;
+}
+
+#cl_addenemy:hover{
 	cursor:pointer;
 	background-color: #888888;
 }

@@ -37,20 +37,20 @@ function getData($table){
 	<title>FEH Mass Duel Simulator</title>
 	<meta name="description" content="A calculator for Fire Emblem Heroes that simulates lots of one-on-one duels at once. Pick your hero, pick your skills, pick your enemies, and see how you do!"/>
 	<link href="https://fonts.googleapis.com/css?family=Merriweather" rel="stylesheet">
-	<link rel="stylesheet" type="text/css" href="style.css?v=3"/>
+	<link rel="stylesheet" type="text/css" href="style.css?v=4"/>
 	<link rel="shortcut icon" href="favicon.ico" />
 
 	<script type="text/javascript" src="/libraries/jquery.js"></script>
 
 	<script>
-		heroes = <?php echo $heroScript;?>;
-		skills = <?php echo $skillScript;?>;
-		prereqs = <?php echo $prereqScript;?>;
-		heroskills = <?php echo $heroskillScript;?>;
+		var data = {};
+		data.heroes = <?php echo $heroScript;?>;
+		data.skills = <?php echo $skillScript;?>;
+		data.prereqs = <?php echo $prereqScript;?>;
+		data.heroSkills = <?php echo $heroskillScript;?>;
 	</script>
 
-	<script type="text/javascript" src="activehero.js?v=8"></script>
-	<script type="text/javascript" src="code.js?v=8"></script>
+	<script type="text/javascript" src="code.js?v=9"></script>
 
 	<!-- Google Tag Manager -->
 	<script>
@@ -76,96 +76,120 @@ function getData($table){
 					<div class="bar_top_title">Challenger
 						<div class="bar_top_title_right"><div class="button button_importexport" id="import_challenger">Import</div><div class="button button_importexport" id="export_challenger">Export</div></div>
 					</div>
-					<div class="bar_top_options"><select id="hero_name"></select><span class="bar_label">Rarity:</span><input id="challenger_rarity" type="number" class="rarityinput smallnuminput" value=5 min=1 max=5 /><span class="bar_label">Lvl 40+</span><input id="challenger_merge" class="smallnuminput" type="number" value=0 min=0 max=10 /><div class="bufflabel">Buff</div><div class="debufflabel">Debuff</div><div class="spurlabel">Spur</div><div class="button reset_button" id="reset_challenger" onclick="resetChallenger();">Reset</div></div>
 				</div>
-				<div id="frame_challenger_picture"><img id="challenger_picture" src="heroes/nohero.png"/><img id="weaponIcon" src="weapons/noweapon.png"/></div>
-				<div id="challenger_stats" class="frame_stats">
-					<div class="stat_row">HP: <span class="stat_number" id="hero_hp">-</span></div>
-					<div class="stat_row">Atk: <span class="stat_number" id="hero_atk">-</span><input id="hero_atk_buff" class="buff_input smallnuminput" type="number" value=0 min=0 max=7 /><input id="hero_atk_debuff" class="debuff_input smallnuminput" type="number" value=0 min=-7 max=0 /><input id="hero_atk_spur" class="spur_input smallnuminput" type="number" value=0 min=0 max=12 /></div>
-					<div class="stat_row">Spd: <span class="stat_number" id="hero_spd">-</span><input id="hero_spd_buff" class="buff_input smallnuminput" type="number" value=0 min=0 max=7 /><input id="hero_spd_debuff" class="debuff_input smallnuminput" type="number" value=0 min=-7 max=0 /><input id="hero_spd_spur" class="spur_input smallnuminput" type="number" value=0 min=0 max=12 /></div>
-					<div class="stat_row">Def: <span class="stat_number" id="hero_def">-</span><input id="hero_def_buff" class="buff_input smallnuminput" type="number" value=0 min=0 max=7 /><input id="hero_def_debuff" class="debuff_input smallnuminput" type="number" value=0 min=-7 max=0 /><input id="hero_def_spur" class="spur_input smallnuminput" type="number" value=0 min=0 max=12 /></div>
-					<div class="stat_row">Res: <span class="stat_number" id="hero_res">-</span><input id="hero_res_buff" class="buff_input smallnuminput" type="number" value=0 min=0 max=7 /><input id="hero_res_debuff" class="debuff_input smallnuminput" type="number" value=0 min=-7 max=0 /><input id="hero_res_spur" class="spur_input smallnuminput" type="number" value=0 min=0 max=12 /></div>
-				</div>
-				<div id="challenger_skills">
-					<div class="skill_row"><img class="skill_picture" id="hero_weapon_picture" src="skills/weapon.png"/><select class="skill_select" id="hero_weapon"></select></div>
-					<div class="skill_row"><img class="skill_picture" id="hero_special_picture" src="skills/special.png"/><select class="skill_select" id="hero_special"></select></div>
-					<div class="skill_row"><img class="skill_picture" id="hero_a_picture" src="skills/noskill.png"/><div class="skill_letter red">A</div><select class="skill_select" id="hero_a"></select></div>
-					<div class="skill_row"><img class="skill_picture" id="hero_b_picture" src="skills/noskill.png"/><div class="skill_letter blue">B</div><select class="skill_select" id="hero_b"></select></div>
-					<div class="skill_row"><img class="skill_picture" id="hero_c_picture" src="skills/noskill.png"/><div class="skill_letter green">C</div><select class="skill_select" id="hero_c"></select></div>
-					<div class="skill_row"><img class="skill_picture" id="hero_s_picture" src="skills/noskill.png"/><div class="skill_letter yellow">S</div><select class="skill_select" id="hero_s"></select></div>
-				</div>
-				<div id="challenger_misc">
-					<div class="misc_row">Boon: <select class="misc_input" id="challenger_boon"><option value="none">None</option><option value="hp">HP</option><option value="atk">Atk</option><option value="spd">Spd</option><option value="def">Def</option><option value="res">Res</option></select></div>
-					<div class="misc_row">Bane: <select class="misc_input" id="challenger_bane"><option value="none">None</option><option value="hp">HP</option><option value="atk">Atk</option><option value="spd">Spd</option><option value="def">Def</option><option value="res">Res</option></select></div>
-					<div class="misc_row">Starting HP: <span id="challenger_currenthp" class="misc_number">0</span></div>
-					<div class="misc_row">Damage taken: <input id="challenger_damage" class="misc_input smallnuminput" type="number" value=0 min=0 max=99 /></div>
-					<div class="misc_row">Special charge: <span id="challenger_specialcharge" class="misc_number">0</span></div>
-					<div class="misc_row">Pre-charge: <input type="number" id="challenger_precharge" class="misc_input smallnuminput" value=0 min=0 max=6 /></div>
+				<div class="frame_hero_main">
+					<div class="bar_top_options"><select id="hero_name"></select><div class="bar_top_options_right"><span class="bar_label">Rarity:</span><input id="challenger_rarity" type="number" class="rarityinput smallnuminput" value=5 min=1 max=5 /><span class="bar_label">Lvl 40+</span><input id="challenger_merge" class="smallnuminput" type="number" value=0 min=0 max=10 /><div class="button reset_button" id="reset_challenger" onclick="resetChallenger();">Reset</div></div></div>
+					<div class="frame_hero_main_top">
+						<div class="frame_hero_picture"><img class="hero_picture" id="challenger_picture" src="heroes/nohero.png"/><img id="challenger_weapon_icon" src="weapons/noweapon.png"/></div>
+						<div class="frame_stats">
+							<div class="bufflabel">Buff</div><div class="debufflabel">Debuff</div><div class="spurlabel">Spur</div>
+							<div class="stat_row">HP: <span class="stat_number" id="hero_hp">-</span></div>
+							<div class="stat_row">Atk: <span class="stat_number" id="hero_atk">-</span><input id="hero_atk_buff" class="buff_input smallnuminput" type="number" value=0 min=0 max=7 /><input id="hero_atk_debuff" class="debuff_input smallnuminput" type="number" value=0 min=-7 max=0 /><input id="hero_atk_spur" class="spur_input smallnuminput" type="number" value=0 min=0 max=12 /></div>
+							<div class="stat_row">Spd: <span class="stat_number" id="hero_spd">-</span><input id="hero_spd_buff" class="buff_input smallnuminput" type="number" value=0 min=0 max=7 /><input id="hero_spd_debuff" class="debuff_input smallnuminput" type="number" value=0 min=-7 max=0 /><input id="hero_spd_spur" class="spur_input smallnuminput" type="number" value=0 min=0 max=12 /></div>
+							<div class="stat_row">Def: <span class="stat_number" id="hero_def">-</span><input id="hero_def_buff" class="buff_input smallnuminput" type="number" value=0 min=0 max=7 /><input id="hero_def_debuff" class="debuff_input smallnuminput" type="number" value=0 min=-7 max=0 /><input id="hero_def_spur" class="spur_input smallnuminput" type="number" value=0 min=0 max=12 /></div>
+							<div class="stat_row">Res: <span class="stat_number" id="hero_res">-</span><input id="hero_res_buff" class="buff_input smallnuminput" type="number" value=0 min=0 max=7 /><input id="hero_res_debuff" class="debuff_input smallnuminput" type="number" value=0 min=-7 max=0 /><input id="hero_res_spur" class="spur_input smallnuminput" type="number" value=0 min=0 max=12 /></div>
+						</div>
+					</div>
+					<div class="frame_hero_main_bottom">
+						<div class="hero_skills">
+							<div class="skill_row"><img class="skill_picture" id="hero_weapon_picture" src="skills/weapon.png"/><select class="skill_select" id="hero_weapon"></select></div>
+							<div class="skill_row"><img class="skill_picture" id="hero_special_picture" src="skills/special.png"/><select class="skill_select" id="hero_special"></select></div>
+							<div class="skill_row"><img class="skill_picture" id="hero_a_picture" src="skills/noskill.png"/><div class="skill_letter red">A</div><select class="skill_select" id="hero_a"></select></div>
+							<div class="skill_row"><img class="skill_picture" id="hero_b_picture" src="skills/noskill.png"/><div class="skill_letter blue">B</div><select class="skill_select" id="hero_b"></select></div>
+							<div class="skill_row"><img class="skill_picture" id="hero_c_picture" src="skills/noskill.png"/><div class="skill_letter green">C</div><select class="skill_select" id="hero_c"></select></div>
+							<div class="skill_row"><img class="skill_picture" id="hero_s_picture" src="skills/noskill.png"/><div class="skill_letter yellow">S</div><select class="skill_select" id="hero_s"></select></div>
+						</div>
+						<div class="hero_misc">
+							<div class="misc_row">Boon: <select class="misc_input" id="challenger_boon"><option value="none">None</option><option value="hp">HP</option><option value="atk">Atk</option><option value="spd">Spd</option><option value="def">Def</option><option value="res">Res</option></select></div>
+							<div class="misc_row">Bane: <select class="misc_input" id="challenger_bane"><option value="none">None</option><option value="hp">HP</option><option value="atk">Atk</option><option value="spd">Spd</option><option value="def">Def</option><option value="res">Res</option></select></div>
+							<div class="misc_row">Starting HP: <span id="challenger_currenthp" class="misc_number">0</span></div>
+							<div class="misc_row">Damage taken: <input id="challenger_damage" class="misc_input smallnuminput" type="number" value=0 min=0 max=99 /></div>
+							<div class="misc_row">Special charge: <span id="challenger_specialcharge" class="misc_number">0</span></div>
+							<div class="misc_row">Pre-charge: <input type="number" id="challenger_precharge" class="misc_input smallnuminput" value=0 min=0 max=6 /></div>
+						</div>
+					</div>
 				</div>
 			</div>
 			<div id="frame_enemies">
 				<div id="enemies_bar_top">
 					<div class="bar_top_title">Enemies
-						<div class="bar_top_title_right"><div class="button button_importexport" id="import_enemies">Import</div><div class="button button_importexport" id="export_enemies">Export</div></div>
-					</div>
-					<div class="bar_top_options"><span class="bar_label" id="enemy_select_text"></span><select id="enemies_mode"><option value=0>Full list</option><option value=1>Custom list</option></select><span class="bar_label">Rarity:</span><input id="enemies_rarity" type="number" class="rarityinput smallnuminput" value=5 min=1 max=5 /><span class="bar_label">Lvl 40+</span><input id="enemies_merge" class="smallnuminput" type="number" value=0 min=0 max=10 /><div class="bufflabel">Buff</div><div class="debufflabel">Debuff</div><div class="spurlabel">Spur</div><div class="button reset_button" id="reset_enemies" onclick="resetEnemies();">Reset</div></div>
-				</div>
-				<div id="enemies_full_list">
-					<div id="enemies_include">
-						<div id="enemies_includeheader">Include: <span id="enemies_count">-</span></div>
-						<div class="includebuttons_row"><div class="button wideincludebutton included" id="include_melee">Melee</div><div class="button wideincludebutton included" id="include_ranged">Ranged</div></div>
-						<div class="includebuttons_row"><div class="button thinincludebutton included" id="include_red">Red</div><div class="button thinincludebutton included" id="include_blue">Blue</div><div class="button thinincludebutton included" id="include_green">Green</div><div class="button thinincludebutton included" id="include_gray">Gray</div></div>
-						<div class="includebuttons_row"><div class="button wideincludebutton included" id="include_physical">Physical</div><div class="button wideincludebutton included" id="include_magical">Magical</div></div>
-						<div class="includebuttons_row"><div class="button thinincludebutton included" id="include_infantry">Infantry</div><div class="button thinincludebutton included" id="include_cavalry">Cavalry</div><div class="button thinincludebutton included" id="include_flying">Flying</div><div class="button thinincludebutton included" id="include_armored">Armored</div></div>
-						<div class="includebuttons_row"><div class="button wideincludebutton notincluded" id="include_staff">Healers</div><div class="button wideincludebutton included" id="include_nonstaff">Non-healers</div></div>
-					</div>
-					<div id="enemies_stats" class="frame_stats">
-						<div class="stat_row">HP: <span class="stat_number" id="enemies_hp">-</span></div>
-						<div class="stat_row">Atk: <span class="stat_number" id="enemies_atk">-</span><input id="enemies_atk_buff" class="buff_input smallnuminput" type="number" value=0 min=0 max=7 /><input id="enemies_atk_debuff" class="debuff_input smallnuminput" type="number" value=0 min=-7 max=0 /><input id="enemies_atk_spur" class="spur_input smallnuminput" type="number" value=0 min=0 max=12 /></div>
-						<div class="stat_row">Spd: <span class="stat_number" id="enemies_spd">-</span><input id="enemies_spd_buff" class="buff_input smallnuminput" type="number" value=0 min=0 max=7 /><input id="enemies_spd_debuff" class="debuff_input smallnuminput" type="number" value=0 min=-7 max=0 /><input id="enemies_spd_spur" class="spur_input smallnuminput" type="number" value=0 min=0 max=12 /></div>
-						<div class="stat_row">Def: <span class="stat_number" id="enemies_def">-</span><input id="enemies_def_buff" class="buff_input smallnuminput" type="number" value=0 min=0 max=7 /><input id="enemies_def_debuff" class="debuff_input smallnuminput" type="number" value=0 min=-7 max=0 /><input id="enemies_def_spur" class="spur_input smallnuminput" type="number" value=0 min=0 max=12 /></div>
-						<div class="stat_row">Res: <span class="stat_number" id="enemies_res">-</span><input id="enemies_res_buff" class="buff_input smallnuminput" type="number" value=0 min=0 max=7 /><input id="enemies_res_debuff" class="debuff_input smallnuminput" type="number" value=0 min=-7 max=0 /><input id="enemies_res_spur" class="spur_input smallnuminput" type="number" value=0 min=0 max=12 /></div>
-					</div>
-					<div id="enemies_skills">
-						<div class="enemies_row"><img class="skill_picture" id="enemies_weapon_picture" src="skills/weapon.png"/><select class="skill_select" id="enemies_weapon"></select><select class="skill_overwrite" id="enemies_weapon_overwrite"><option value=0>If empty</option><option value=1>Overwrite</option></select></div>
-						<div class="enemies_row"><img class="skill_picture" id="enemies_special_picture" src="skills/special.png"/><select class="skill_select" id="enemies_special"></select><select class="skill_overwrite" id="enemies_special_overwrite"><option value=0>If empty</option><option value=1>Overwrite</option></select></div>
-						<div class="enemies_row"><img class="skill_picture" id="enemies_a_picture" src="skills/noskill.png"/><div class="skill_letter red">A</div><select class="skill_select" id="enemies_a"></select><select class="skill_overwrite" id="enemies_a_overwrite"><option value=0>If empty</option><option value=1>Overwrite</option></select></div>
-						<div class="enemies_row"><img class="skill_picture" id="enemies_b_picture" src="skills/noskill.png"/><div class="skill_letter blue">B</div><select class="skill_select" id="enemies_b"></select><select class="skill_overwrite" id="enemies_b_overwrite"><option value=0>If empty</option><option value=1>Overwrite</option></select></div>
-						<div class="enemies_row"><img class="skill_picture" id="enemies_c_picture" src="skills/noskill.png"/><div class="skill_letter green">C</div><select class="skill_select" id="enemies_c"></select><select class="skill_overwrite" id="enemies_c_overwrite"><option value=0>If empty</option><option value=1>Overwrite</option></select></div>
-						<div class="enemies_row"><img class="skill_picture" id="enemies_s_picture" src="skills/noskill.png"/><div class="skill_letter yellow">S</div><select class="skill_select" id="enemies_s"></select></div>
-					</div>
-					<div id="enemies_misc">
-						<div class="misc_row_enemies">Boon: <select class="misc_input" id="enemies_boon"><option value="none">None</option><option value="hp">HP</option><option value="atk">Atk</option><option value="spd">Spd</option><option value="def">Def</option><option value="res">Res</option></select></div>
-						<div class="misc_row_enemies">Bane: <select class="misc_input" id="enemies_bane"><option value="none">None</option><option value="hp">HP</option><option value="atk">Atk</option><option value="spd">Spd</option><option value="def">Def</option><option value="res">Res</option></select></div>
-						<div class="misc_row_enemies">Damage taken: <input id="enemies_damage" class="misc_input smallnuminput" type="number" value=0 min=0 max=99 /></div>
-						<div class="misc_row_enemies">Pre-charge: <input type="number" id="enemies_precharge" class="misc_input smallnuminput" value=0 min=0 max=6 /></div>
+						<div class="bar_top_title_right"><select id="enemies_mode" class="bar_label"><option value=0>Full list</option><option value=1>Custom list</option></select><div class="button button_importexport" id="import_enemies">Import</div><div class="button button_importexport" id="export_enemies">Export</div></div>
 					</div>
 				</div>
-				<div id="enemies_custom_list" style="display:none;">
+				<div id="enemies_full_list" class="frame_hero_main">
+					<div class="bar_top_options"><span class="bar_label">Rarity:</span><input id="enemies_rarity" type="number" class="rarityinput smallnuminput" value=5 min=1 max=5 /><span class="bar_label">Lvl 40+</span><input id="enemies_merge" class="smallnuminput" type="number" value=0 min=0 max=10 /><div class="bar_top_options_right"><div class="button reset_button reset_enemies" onclick="resetEnemies();">Reset</div></div></div>
+					<div class="frame_hero_main_top">
+						<div id="enemies_include">
+							<div id="enemies_includeheader">Include: <span id="enemies_count">-</span></div>
+							<div class="includebuttons_row"><div class="button wideincludebutton included" id="include_melee">Melee</div><div class="button wideincludebutton included" id="include_ranged">Ranged</div></div>
+							<div class="includebuttons_row"><div class="button thinincludebutton included" id="include_red">Red</div><div class="button thinincludebutton included" id="include_blue">Blue</div><div class="button thinincludebutton included" id="include_green">Green</div><div class="button thinincludebutton included" id="include_gray">Gray</div></div>
+							<div class="includebuttons_row"><div class="button wideincludebutton included" id="include_physical">Physical</div><div class="button wideincludebutton included" id="include_magical">Magical</div></div>
+							<div class="includebuttons_row"><div class="button thinincludebutton included" id="include_infantry">Infantry</div><div class="button thinincludebutton included" id="include_cavalry">Cavalry</div><div class="button thinincludebutton included" id="include_flying">Flying</div><div class="button thinincludebutton included" id="include_armored">Armored</div></div>
+							<div class="includebuttons_row"><div class="button wideincludebutton notincluded" id="include_staff">Healers</div><div class="button wideincludebutton included" id="include_nonstaff">Non-healers</div></div>
+						</div>
+						<div class="frame_stats">
+							<div class="bufflabel">Buff</div><div class="debufflabel">Debuff</div><div class="spurlabel">Spur</div>
+							<div class="stat_row">HP: <span class="stat_number" id="enemies_hp">-</span></div>
+							<div class="stat_row">Atk: <span class="stat_number" id="enemies_atk">-</span><input id="enemies_atk_buff" class="buff_input smallnuminput" type="number" value=0 min=0 max=7 /><input id="enemies_atk_debuff" class="debuff_input smallnuminput" type="number" value=0 min=-7 max=0 /><input id="enemies_atk_spur" class="spur_input smallnuminput" type="number" value=0 min=0 max=12 /></div>
+							<div class="stat_row">Spd: <span class="stat_number" id="enemies_spd">-</span><input id="enemies_spd_buff" class="buff_input smallnuminput" type="number" value=0 min=0 max=7 /><input id="enemies_spd_debuff" class="debuff_input smallnuminput" type="number" value=0 min=-7 max=0 /><input id="enemies_spd_spur" class="spur_input smallnuminput" type="number" value=0 min=0 max=12 /></div>
+							<div class="stat_row">Def: <span class="stat_number" id="enemies_def">-</span><input id="enemies_def_buff" class="buff_input smallnuminput" type="number" value=0 min=0 max=7 /><input id="enemies_def_debuff" class="debuff_input smallnuminput" type="number" value=0 min=-7 max=0 /><input id="enemies_def_spur" class="spur_input smallnuminput" type="number" value=0 min=0 max=12 /></div>
+							<div class="stat_row">Res: <span class="stat_number" id="enemies_res">-</span><input id="enemies_res_buff" class="buff_input smallnuminput" type="number" value=0 min=0 max=7 /><input id="enemies_res_debuff" class="debuff_input smallnuminput" type="number" value=0 min=-7 max=0 /><input id="enemies_res_spur" class="spur_input smallnuminput" type="number" value=0 min=0 max=12 /></div>
+						</div>
+					</div>
+					<div class="frame_hero_main_bottom">
+						<div class="hero_skills">
+							<div class="skill_row"><img class="skill_picture" id="enemies_weapon_picture" src="skills/weapon.png"/><select class="skill_select" id="enemies_weapon"></select><select class="skill_overwrite" id="enemies_weapon_overwrite"><option value=0>If empty</option><option value=1>Overwrite</option></select></div>
+							<div class="skill_row"><img class="skill_picture" id="enemies_special_picture" src="skills/special.png"/><select class="skill_select" id="enemies_special"></select><select class="skill_overwrite" id="enemies_special_overwrite"><option value=0>If empty</option><option value=1>Overwrite</option></select></div>
+							<div class="skill_row"><img class="skill_picture" id="enemies_a_picture" src="skills/noskill.png"/><div class="skill_letter red">A</div><select class="skill_select" id="enemies_a"></select><select class="skill_overwrite" id="enemies_a_overwrite"><option value=0>If empty</option><option value=1>Overwrite</option></select></div>
+							<div class="skill_row"><img class="skill_picture" id="enemies_b_picture" src="skills/noskill.png"/><div class="skill_letter blue">B</div><select class="skill_select" id="enemies_b"></select><select class="skill_overwrite" id="enemies_b_overwrite"><option value=0>If empty</option><option value=1>Overwrite</option></select></div>
+							<div class="skill_row"><img class="skill_picture" id="enemies_c_picture" src="skills/noskill.png"/><div class="skill_letter green">C</div><select class="skill_select" id="enemies_c"></select><select class="skill_overwrite" id="enemies_c_overwrite"><option value=0>If empty</option><option value=1>Overwrite</option></select></div>
+							<div class="skill_row"><img class="skill_picture" id="enemies_s_picture" src="skills/noskill.png"/><div class="skill_letter yellow">S</div><select class="skill_select" id="enemies_s"></select></div>
+						</div>
+						<div class="hero_misc">
+							<div class="misc_row">Boon: <select class="misc_input" id="enemies_boon"><option value="none">None</option><option value="hp">HP</option><option value="atk">Atk</option><option value="spd">Spd</option><option value="def">Def</option><option value="res">Res</option></select></div>
+							<div class="misc_row">Bane: <select class="misc_input" id="enemies_bane"><option value="none">None</option><option value="hp">HP</option><option value="atk">Atk</option><option value="spd">Spd</option><option value="def">Def</option><option value="res">Res</option></select></div>
+							<div class="misc_row">Damage taken: <input id="enemies_damage" class="misc_input smallnuminput" type="number" value=0 min=0 max=99 /></div>
+							<div class="misc_row">Pre-charge: <input type="number" id="enemies_precharge" class="misc_input smallnuminput" value=0 min=0 max=6 /></div>
+						</div>
+					</div>
+				</div>
+				<div id="enemies_custom_list" class="frame_hero_main" style="display:none;">
 					<div id="cl_enemylist">
-						<div class="cl_enemy">Camilla (Spring)<div class="cl_delete_enemy button">x</div></div>
+						<div id="cl_enemylist_list">
+						</div>
+						<div id="cl_addenemy" onclick="addClEnemy();">+</div>
 					</div>
-					<div id="frame_cl_enemies_picture"><img id="cl_enemies_picture" src="heroes/nohero.png"/><img id="weaponIcon" src="weapons/noweapon.png"/></div>
-					<div id="cl_enemies_stats" class="frame_stats">
-						<div class="stat_row">HP: <span class="stat_number" id="cl_enemies_hp">-</span></div>
-						<div class="stat_row">Atk: <span class="stat_number" id="cl_enemies_atk">-</span><input id="cl_enemies_atk_buff" class="buff_input smallnuminput" type="number" value=0 min=0 max=7 /><input id="cl_enemies_atk_debuff" class="debuff_input smallnuminput" type="number" value=0 min=-7 max=0 /><input id="cl_enemies_atk_spur" class="spur_input smallnuminput" type="number" value=0 min=0 max=12 /></div>
-						<div class="stat_row">Spd: <span class="stat_number" id="cl_enemies_spd">-</span><input id="cl_enemies_spd_buff" class="buff_input smallnuminput" type="number" value=0 min=0 max=7 /><input id="cl_enemies_spd_debuff" class="debuff_input smallnuminput" type="number" value=0 min=-7 max=0 /><input id="cl_enemies_spd_spur" class="spur_input smallnuminput" type="number" value=0 min=0 max=12 /></div>
-						<div class="stat_row">Def: <span class="stat_number" id="cl_enemies_def">-</span><input id="cl_enemies_def_buff" class="buff_input smallnuminput" type="number" value=0 min=0 max=7 /><input id="cl_enemies_def_debuff" class="debuff_input smallnuminput" type="number" value=0 min=-7 max=0 /><input id="cl_enemies_def_spur" class="spur_input smallnuminput" type="number" value=0 min=0 max=12 /></div>
-						<div class="stat_row">Res: <span class="stat_number" id="cl_enemies_res">-</span><input id="cl_enemies_res_buff" class="buff_input smallnuminput" type="number" value=0 min=0 max=7 /><input id="cl_enemies_res_debuff" class="debuff_input smallnuminput" type="number" value=0 min=-7 max=0 /><input id="cl_enemies_res_spur" class="spur_input smallnuminput" type="number" value=0 min=0 max=12 /></div>
-					</div>
-					<div id="cl_enemies_skills">
-						<div class="cl_enemies_row"><img class="skill_picture" id="cl_enemies_weapon_picture" src="skills/weapon.png"/><select class="skill_select" id="cl_enemies_weapon"></select></div>
-						<div class="cl_enemies_row"><img class="skill_picture" id="cl_enemies_special_picture" src="skills/special.png"/><select class="skill_select" id="cl_enemies_special"></select></div>
-						<div class="cl_enemies_row"><img class="skill_picture" id="cl_enemies_a_picture" src="skills/noskill.png"/><div class="skill_letter red">A</div><select class="skill_select" id="cl_enemies_a"></select></div>
-						<div class="cl_enemies_row"><img class="skill_picture" id="cl_enemies_b_picture" src="skills/noskill.png"/><div class="skill_letter blue">B</div><select class="skill_select" id="cl_enemies_b"></select></div>
-						<div class="cl_enemies_row"><img class="skill_picture" id="cl_enemies_c_picture" src="skills/noskill.png"/><div class="skill_letter green">C</div><select class="skill_select" id="cl_enemies_c"></select></div>
-						<div class="cl_enemies_row"><img class="skill_picture" id="cl_enemies_s_picture" src="skills/noskill.png"/><div class="skill_letter yellow">S</div><select class="skill_select" id="cl_enemies_s"></select></div>
-					</div>
-					<div id="cl_enemies_misc">
-						<div class="misc_row_enemies">Boon: <select class="misc_input" id="cl_enemies_boon"><option value="none">None</option><option value="hp">HP</option><option value="atk">Atk</option><option value="spd">Spd</option><option value="def">Def</option><option value="res">Res</option></select></div>
-						<div class="misc_row_enemies">Bane: <select class="misc_input" id="cl_enemies_bane"><option value="none">None</option><option value="hp">HP</option><option value="atk">Atk</option><option value="spd">Spd</option><option value="def">Def</option><option value="res">Res</option></select></div>
-						<div class="misc_row_enemies">Damage taken: <input id="cl_enemies_damage" class="misc_input smallnuminput" type="number" value=0 min=0 max=99 /></div>
-						<div class="misc_row_enemies">Pre-charge: <input type="number" id="cl_enemies_precharge" class="misc_input smallnuminput" value=0 min=0 max=6 /></div>
+					<div class="frame_hero_main_right">
+						<div class="bar_top_options"><select id="cl_enemy_name"></select><div class="bar_top_options_right"><span class="bar_label">Rarity:</span><input id="cl_enemy_rarity" type="number" class="rarityinput smallnuminput" value=5 min=1 max=5 /><span class="bar_label">Lvl 40+</span><input id="cl_enemy_merge" class="smallnuminput" type="number" value=0 min=0 max=10 /><div class="button reset_button reset_enemies" onclick="resetClEnemy();">Reset</div></div></div>
+						<div class="frame_hero_main_top">
+							<div class="frame_hero_picture"><img class="hero_picture" id="cl_enemy_picture" src="heroes/nohero.png"/><img id="cl_enemy_weapon_icon" src="weapons/noweapon.png"/></div>
+							<div class="frame_stats">
+								<div class="bufflabel">Buff</div><div class="debufflabel">Debuff</div><div class="spurlabel">Spur</div>
+								<div class="stat_row">HP: <span class="stat_number" id="cl_enemy_hp">-</span></div>
+								<div class="stat_row">Atk: <span class="stat_number" id="cl_enemy_atk">-</span><input id="cl_enemy_atk_buff" class="buff_input smallnuminput" type="number" value=0 min=0 max=7 /><input id="cl_enemy_atk_debuff" class="debuff_input smallnuminput" type="number" value=0 min=-7 max=0 /><input id="cl_enemy_atk_spur" class="spur_input smallnuminput" type="number" value=0 min=0 max=12 /></div>
+								<div class="stat_row">Spd: <span class="stat_number" id="cl_enemy_spd">-</span><input id="cl_enemy_spd_buff" class="buff_input smallnuminput" type="number" value=0 min=0 max=7 /><input id="cl_enemy_spd_debuff" class="debuff_input smallnuminput" type="number" value=0 min=-7 max=0 /><input id="cl_enemy_spd_spur" class="spur_input smallnuminput" type="number" value=0 min=0 max=12 /></div>
+								<div class="stat_row">Def: <span class="stat_number" id="cl_enemy_def">-</span><input id="cl_enemy_def_buff" class="buff_input smallnuminput" type="number" value=0 min=0 max=7 /><input id="cl_enemy_def_debuff" class="debuff_input smallnuminput" type="number" value=0 min=-7 max=0 /><input id="cl_enemy_def_spur" class="spur_input smallnuminput" type="number" value=0 min=0 max=12 /></div>
+								<div class="stat_row">Res: <span class="stat_number" id="cl_enemy_res">-</span><input id="cl_enemy_res_buff" class="buff_input smallnuminput" type="number" value=0 min=0 max=7 /><input id="cl_enemy_res_debuff" class="debuff_input smallnuminput" type="number" value=0 min=-7 max=0 /><input id="cl_enemy_res_spur" class="spur_input smallnuminput" type="number" value=0 min=0 max=12 /></div>
+							</div>
+						</div>
+						<div class="frame_hero_main_bottom">
+							<div class="hero_skills">
+								<div class="skill_row"><img class="skill_picture" id="cl_enemy_weapon_picture" src="skills/weapon.png"/><select class="skill_select" id="cl_enemy_weapon"></select></div>
+								<div class="skill_row"><img class="skill_picture" id="cl_enemy_special_picture" src="skills/special.png"/><select class="skill_select" id="cl_enemy_special"></select></div>
+								<div class="skill_row"><img class="skill_picture" id="cl_enemy_a_picture" src="skills/noskill.png"/><div class="skill_letter red">A</div><select class="skill_select" id="cl_enemy_a"></select></div>
+								<div class="skill_row"><img class="skill_picture" id="cl_enemy_b_picture" src="skills/noskill.png"/><div class="skill_letter blue">B</div><select class="skill_select" id="cl_enemy_b"></select></div>
+								<div class="skill_row"><img class="skill_picture" id="cl_enemy_c_picture" src="skills/noskill.png"/><div class="skill_letter green">C</div><select class="skill_select" id="cl_enemy_c"></select></div>
+								<div class="skill_row"><img class="skill_picture" id="cl_enemy_s_picture" src="skills/noskill.png"/><div class="skill_letter yellow">S</div><select class="skill_select" id="cl_enemy_s"></select></div>
+							</div>
+							<div class="hero_misc">
+								<div class="misc_row">Boon: <select class="misc_input" id="cl_enemy_boon"><option value="none">None</option><option value="hp">HP</option><option value="atk">Atk</option><option value="spd">Spd</option><option value="def">Def</option><option value="res">Res</option></select></div>
+								<div class="misc_row">Bane: <select class="misc_input" id="cl_enemy_bane"><option value="none">None</option><option value="hp">HP</option><option value="atk">Atk</option><option value="spd">Spd</option><option value="def">Def</option><option value="res">Res</option></select></div>
+								<div class="misc_row">Starting HP: <span id="cl_enemy_currenthp" class="misc_number">0</span></div>
+								<div class="misc_row">Damage taken: <input id="cl_enemy_damage" class="misc_input smallnuminput" type="number" value=0 min=0 max=99 /></div>
+								<div class="misc_row">Special charge: <span id="cl_enemy_specialcharge" class="misc_number">0</span></div>
+								<div class="misc_row">Pre-charge: <input type="number" id="cl_enemy_precharge" class="misc_input smallnuminput" value=0 min=0 max=6 /></div>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
