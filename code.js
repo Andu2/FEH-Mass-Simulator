@@ -259,8 +259,7 @@ $(document).ready(function(){
 	});
 
 	$("#challenger_rarity").change(function(){
-		var newVal = verifyNumberInput(this,1,5);
-		challengerRarity = newVal;
+		var newVal = verifyNumberInput(this,1,5);Rarity = newVal;
 		setSkillOptions();
 		challengerWeapon = heroMaxSkills[challengerRarity-1][challengerIndex].weapon;
 		challengerSpecial = heroMaxSkills[challengerRarity-1][challengerIndex].special;
@@ -273,6 +272,7 @@ $(document).ready(function(){
 		$("#hero_a").val(challengerA);
 		$("#hero_b").val(challengerB);
 		$("#hero_c").val(challengerC);
+		$("#hero_s").val(challengerS);
 		setUI();
 		if(autoCalculate){
 			calcuWait(300);
