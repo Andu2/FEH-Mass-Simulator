@@ -259,7 +259,8 @@ $(document).ready(function(){
 	});
 
 	$("#challenger_rarity").change(function(){
-		var newVal = verifyNumberInput(this,1,5);Rarity = newVal;
+		var newVal = verifyNumberInput(this,1,5);
+		challengerRarity = newVal;
 		setSkillOptions();
 		challengerWeapon = heroMaxSkills[challengerRarity-1][challengerIndex].weapon;
 		challengerSpecial = heroMaxSkills[challengerRarity-1][challengerIndex].special;
