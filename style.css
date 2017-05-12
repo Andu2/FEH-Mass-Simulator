@@ -515,6 +515,10 @@ body{
 	margin-top:0;
 }
 
+.cl_enemy:hover{
+	background-color: #888888;
+}
+
 .cl_delete_enemy{
 	text-align:center;
 	position:absolute;
@@ -525,11 +529,15 @@ body{
 	line-height:16px;
 	border-radius:2px;
 	background-color: #222222;
+	color:#ffffff;
+	font-weight:normal;
 }
 
 .cl_delete_enemy:hover{
 	cursor:pointer;
-	background-color: #888888;
+	background-color: #ffffff;
+	color:#d82a3e;
+	font-weight:bold;
 }
 
 #cl_addenemy{
@@ -551,6 +559,20 @@ body{
 #cl_addenemy:hover{
 	cursor:pointer;
 	background-color: #888888;
+}
+
+.clSelected{
+	background-color: #ff5165;
+}
+
+.clSelected:hover{
+	background-color: #ffffff;
+	font-weight:bold;
+	color:#d82a3e;
+}
+
+.clSelected .cl_delete_enemy{
+	background-color: #d82a3e;
 }
 
 /*Rules/////////////////////////////////////////////*/
@@ -1005,7 +1027,7 @@ a:hover{
 	color:#262c58;
 }
 
-#weaponIcon{
+.weaponIcon{
 	position: absolute;
 	right:2px;
 	bottom:2px;

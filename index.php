@@ -37,7 +37,6 @@ function getData($table){
 	<title>FEH Mass Duel Simulator</title>
 	<meta name="description" content="A calculator for Fire Emblem Heroes that simulates lots of one-on-one duels at once. Pick your hero, pick your skills, pick your enemies, and see how you do!"/>
 	<link href="https://fonts.googleapis.com/css?family=Merriweather" rel="stylesheet">
-	<link rel="stylesheet" type="text/css" href="style.css?v=4"/>
 	<link rel="shortcut icon" href="favicon.ico" />
 
 	<script type="text/javascript" src="/libraries/jquery.js"></script>
@@ -50,6 +49,7 @@ function getData($table){
 		data.heroSkills = <?php echo $heroskillScript;?>;
 	</script>
 
+	<link rel="stylesheet" type="text/css" href="style.css?v=4"/>
 	<script type="text/javascript" src="code.js?v=9"></script>
 
 	<!-- Google Tag Manager -->
@@ -80,7 +80,7 @@ function getData($table){
 				<div class="frame_hero_main">
 					<div class="bar_top_options"><select id="hero_name"></select><div class="bar_top_options_right"><span class="bar_label">Rarity:</span><input id="challenger_rarity" type="number" class="rarityinput smallnuminput" value=5 min=1 max=5 /><span class="bar_label">Lvl 40+</span><input id="challenger_merge" class="smallnuminput" type="number" value=0 min=0 max=10 /><div class="button reset_button" id="reset_challenger" onclick="resetChallenger();">Reset</div></div></div>
 					<div class="frame_hero_main_top">
-						<div class="frame_hero_picture"><img class="hero_picture" id="challenger_picture" src="heroes/nohero.png"/><img id="challenger_weapon_icon" src="weapons/noweapon.png"/></div>
+						<div class="frame_hero_picture"><img class="hero_picture" id="challenger_picture" src="heroes/nohero.png"/><img id="challenger_weapon_icon" class="weaponIcon" src="weapons/noweapon.png"/></div>
 						<div class="frame_stats">
 							<div class="bufflabel">Buff</div><div class="debufflabel">Debuff</div><div class="spurlabel">Spur</div>
 							<div class="stat_row">HP: <span class="stat_number" id="hero_hp">-</span></div>
@@ -113,7 +113,7 @@ function getData($table){
 			<div id="frame_enemies">
 				<div id="enemies_bar_top">
 					<div class="bar_top_title">Enemies
-						<div class="bar_top_title_right"><select id="enemies_mode" class="bar_label"><option value=0>Full list</option><option value=1>Custom list</option></select><div class="button button_importexport" id="import_enemies">Import</div><div class="button button_importexport" id="export_enemies">Export</div></div>
+						<div class="bar_top_title_right"><select id="enemies_mode" class="bar_label"><option value=0>Filtered list</option><option value=1>Custom list</option></select><div class="button button_importexport" id="import_enemies">Import</div><div class="button button_importexport" id="export_enemies">Export</div></div>
 					</div>
 				</div>
 				<div id="enemies_full_list" class="frame_hero_main">

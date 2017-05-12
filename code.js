@@ -1,3 +1,11 @@
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//Initialize variables and data structure
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 var debug = false;
 
 data.weaponTypes = ["sword","lance","axe","redtome","bluetome","greentome","dragon","bow","dagger","staff"];
@@ -16,6 +24,44 @@ data.growths = [[6,8,9,11,13,14,16,18,19,21,23,24],
 [8,10,12,14,16,18,20,22,24,26,28,31],
 [8,10,13,15,17,19,22,24,26,28,30,33]];
 
+//Remember: heroes, skills, prereqs, and heroskills arrays come from PHP-created script
+
+//Sort hero array by name
+data.heroes.sort(function(a,b){
+	//console.log(a.name + ", " + b.name + ": " + a.name>b.name);
+	return (a.name>b.name)*2-1;
+})
+
+//Sort skills array by name
+data.skills.sort(function(a,b){
+	//console.log(a.name + ", " + b.name + ": " + a.name>b.name);
+	return (a.name>b.name)*2-1;
+})
+
+data.heroPossibleSkills = [];
+data.heroBaseSkills = [];
+data.heroMaxSkills = [[],[],[],[],[]]; //2d array; 1st num rarity, 2nd num heroindex
+
+data.skillsThatArePrereq = [];
+//Prereq exceptions are Sol, Luna, Astra, Assault
+data.skillPrereqExceptions = [125,162,168,170];
+
+data.allWeaponSkills = getValidSkills("weapon");
+data.allSpecialSkills = getValidSkills("special");
+data.allASkills = getValidSkills("a");
+data.allBSkills = getValidSkills("b");
+data.allCSkills = getValidSkills("c");
+data.allSSkills = getValidSkills("s");
+
+data.enemyPrompts = {
+	//Just for fun, special messages for some of my favorites ;)
+	"default":"Enemies to fight:",
+	"Effie":"Who to crush:",
+	"Karel":"Time to feast:",
+	"Nino":"Do my best:",
+	"Sharena":"My turn!:"
+}
+
 //Holder for options that aren't hero-specific
 var options = {};
 options.autoCalculate = true;
@@ -24,11 +70,20 @@ options.useGaleforce = true;
 options.threatenRule = "Neither";
 options.showOnlyMaxSkills = true;
 options.hideUnaffectingSkills = true;
+options.viewFilter = 0;
+options.customEnemyList = 0;
+options.customEnemySelected = -1;
+options.roundInitiators = ["Challenger initiates","Enemy initiates"];
 
 //Holder for challenger options and pre-calculated stats
 var challenger = {};
+
+challenger.challenger = true;
 challenger.index = -1;
-var challenger.merge = 0;
+challenger.merge = 0;
+challenger.rarity = 5;
+challenger.boon = "None";
+challenger.bane = "None";
 
 //The following 6 arrays will be set from arrays generated in the heroes array so they don't have to be re-calculated
 challenger.validWeaponSkills = [];
@@ -51,60 +106,59 @@ challenger.spd = 0;
 challenger.def = 0;
 challenger.res = 0;
 
+challenger.buffs = {"atk":0,"spd":0,"def":0,"res":0};
+challenger.debuffs = {"atk":0,"spd":0,"def":0,"res":0};
+challenger.spur = {"atk":0,"spd":0,"def":0,"res":0};
+
 challenger.damage = 0;
 challenger.precharge = 0;
 
 //Holder for enemy options and pre-calculated stats
 var enemies = {};
 enemies.fl = {}; //Full list
-enemies.cl = {}; //Custom list
+enemies.fl.list = []; //May not actually use - might be too much redundant data
 
 enemies.fl.include = {"melee":1,"ranged":1,"red":1,"blue":1,"green":1,"gray":1,"physical":1,"magical":1,"infantry":1,"cavalry":1,"flying":1,"armored":1,"staff":0,"nonstaff":1};
 
+enemies.fl.merge = 0;
+enemies.fl.rarity = 5;
+enemies.fl.boon = "None";
+enemies.fl.bane = "None";
 
-var enemies.fl.merge = 0;
+enemies.fl.avgHp = 0;
+enemies.fl.avgAtk = 0;
+enemies.fl.avgSpd = 0;
+enemies.fl.avgDef = 0;
+enemies.fl.avgRes = 0;
 
+enemies.fl.weapon = -1;
+enemies.fl.special = -1;
+enemies.fl.a = -1;
+enemies.fl.b = -1;
+enemies.fl.c = -1;
+enemies.fl.s = -1;
+enemies.fl.replaceWeapon = false;
+enemies.fl.replaceSpecial = false;
+enemies.fl.replaceA = false;
+enemies.fl.replaceB = false;
+enemies.fl.replaceC = false;
 
-var enemies.fl.damage = 0;
+enemies.fl.buffs = {"atk":0,"spd":0,"def":0,"res":0};
+enemies.fl.debuffs = {"atk":0,"spd":0,"def":0,"res":0};
+enemies.fl.spur = {"atk":0,"spd":0,"def":0,"res":0};
 
+enemies.fl.damage = 0;
+enemies.fl.precharge = 0;
 
-var enemies.fl.precharge = 0;
+enemies.cl = {}; //Custom list
+enemies.cl.list = [];
 
-var challenger.rarity = 5;
-var enemies.fl.rarity = 5;
+enemies.cl.avgHp = 0;
+enemies.cl.avgAtk = 0;
+enemies.cl.avgSpd = 0;
+enemies.cl.avgDef = 0;
+enemies.cl.avgRes = 0;
 
-var enemies.fl.weapon = -1;
-var enemies.fl.special = -1;
-var enemies.fl.a = -1;
-var enemies.b = -1;
-var enemies.c = -1;
-var enemies.s = -1;
-
-var challenger.boon = "None";
-var challenger.bane = "None";
-var enemies.fl.boon = "None";
-var enemies.fl.bane = "None";
-
-var enemies.fl.replaceWeapon = false;
-var enemies.fl.replaceSpecial = false;
-var enemies.fl.replaceA = false;
-var enemies.fl.replaceB = false;
-var enemies.fl.replaceC = false;
-
-var heroPossibleSkills = [];
-var heroBaseSkills = [];
-var heroMaxSkills = [[],[],[],[],[]]; //2d array; 1st num rarity, 2nd num heroindex
-
-var challenger.buffs = {"atk":0,"spd":0,"def":0,"res":0};
-var enemies.fl.buffs = {"atk":0,"spd":0,"def":0,"res":0};
-var challenger.debuffs = {"atk":0,"spd":0,"def":0,"res":0};
-var enemies.fl.debuffs = {"atk":0,"spd":0,"def":0,"res":0};
-var challenger.spur = {"atk":0,"spd":0,"def":0,"res":0};
-var enemies.fl.spur = {"atk":0,"spd":0,"def":0,"res":0};
-
-
-
-var viewFilter = 0;
 var fightResults = []; //Needs to be global variable to get info for tooltip
 var resultHTML = []; //Needs to be a global variable to flip sort order without recalculating
 var previousFightResults = new Array(data.heroes.length); //For comparing between calculations; actually an array of html strings with index corresponding to heroes[] index
@@ -119,67 +173,33 @@ for(var i = 0; i < previousFightResults.length;i++){
 var showingTooltip = false;
 var calcuwaiting = false;
 var calcuwaitTime = 0;
-var customEnemyList = false;
-var enemyPrompts = {
-	//Just for fun, special messages for some of my favorites ;)
-	"default":"Enemies to fight:",
-	"Effie":"Who to crush:",
-	"Karel":"Time to feast:",
-	"Nino":"Do my best:",
-	"Sharena":"My turn!:"
-}
-
-var enemyAvgHp = 0;
-var enemyAvgAtk = 0;
-var enemyAvgSpd = 0;
-var enemyAvgDef = 0;
-var enemyAvgRes = 0;
-
-var roundInitiators = ["Challenger initiates","Enemy initiates"];
-
-var skillsThatArePrereq = [];
-//Prereq exceptions are Sol, Luna, Astra, Assault
-var skillPrereqExceptions = [125,162,168,170];
-
-//Remember: heroes, skills, prereqs, and heroskills arrays come from PHP-created script
-
-//Sort hero array by name
-data.heroes.sort(function(a,b){
-	//console.log(a.name + ", " + b.name + ": " + a.name>b.name);
-	return (a.name>b.name)*2-1;
-})
-
-//Sort skills array by name
-data.skills.sort(function(a,b){
-	//console.log(a.name + ", " + b.name + ": " + a.name>b.name);
-	return (a.name>b.name)*2-1;
-})
-
-var allWeaponSkills = getValidSkills("weapon");
-var allSpecialSkills = getValidSkills("special");
-var allASkills = getValidSkills("a");
-var allBSkills = getValidSkills("b");
-var allCSkills = getValidSkills("c");
-var allSSkills = getValidSkills("s");
 
 //Make list of all skill ids that are a strictly inferior prereq to exclude from dropdown boxes
 for(var i = 0; i < data.prereqs.length;i++){
-	if(skillsThatArePrereq.indexOf(data.prereqs[i].required_id)==-1 && skillPrereqExceptions.indexOf(data.prereqs[i].required_id)==-1){
-		skillsThatArePrereq.push(data.prereqs[i].required_id);
+	if(data.skillsThatArePrereq.indexOf(data.prereqs[i].required_id)==-1 && data.skillPrereqExceptions.indexOf(data.prereqs[i].required_id)==-1){
+		data.skillsThatArePrereq.push(data.prereqs[i].required_id);
 	}
 }
 
 //Find hero skills
 for(var i = 0; i < data.heroes.length;i++){
-	heroPossibleSkills.push(getValidSkills(false,i));
-	heroBaseSkills.push(findHeroSkills(i));
+	data.heroPossibleSkills.push(getValidSkills(false,i));
+	data.heroBaseSkills.push(findHeroSkills(i));
 	for(var j = 0; j < 5; j++){
-		heroMaxSkills[j].push(findMaxSkills(j,i));
+		data.heroMaxSkills[j].push(findMaxSkills(j,i));
 	}
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//Put DOM stuff in place
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 $(document).ready(function(){
-	$("#enemy_select_text").html(enemyPrompts.default);
+	$("#enemy_select_text").html(data.enemyPrompts.default);
 	
 	//Populate hero select options
 	heroHTML = "<option value=-1 class=\"hero_option\">Select Hero</option>";
@@ -189,11 +209,11 @@ $(document).ready(function(){
 	$("#hero_name").html(heroHTML);
 	$("#cl_enemy_name").html(heroHTML);
 
-	setEnemySkillOptions();
+	setFlEnemySkillOptions();
 
-	setEnemies();
-	setEnemySkills();
-	setEnemyStats();
+	setFlEnemies();
+	setFlEnemySkills();
+	setFlEnemyStats();
 	setUI();
 
 	$("#hero_name").change(function(){
@@ -202,7 +222,7 @@ $(document).ready(function(){
 		if(challenger.index != -1){
 
 			//find hero's starting skills
-			challenger.naturalSkills = heroBaseSkills[challenger.index];
+			challenger.naturalSkills = data.heroBaseSkills[challenger.index];
 
 			challenger.validWeaponSkills = getValidSkills("weapon",challenger.index);
 			challenger.validSpecialSkills = getValidSkills("special",challenger.index);
@@ -228,11 +248,11 @@ $(document).ready(function(){
 			dataLayer.push({"event":"changeHero","hero_name":data.heroes[challenger.index].name});
 
 			//Change flavor text
-			if(enemyPrompts[data.heroes[challenger.index].name]){
-				$("#enemy_select_text").html(enemyPrompts[data.heroes[challenger.index].name]);
+			if(data.enemyPrompts[data.heroes[challenger.index].name]){
+				$("#enemy_select_text").html(data.enemyPrompts[data.heroes[challenger.index].name]);
 			}
 			else{
-				$("#enemy_select_text").html(enemyPrompts.default);
+				$("#enemy_select_text").html(data.enemyPrompts.default);
 			}
 		}
 
@@ -254,7 +274,7 @@ $(document).ready(function(){
 	$("#enemies_merge").change(function(){
 		var newVal = verifyNumberInput(this,0,10);
 		enemies.fl.merge = newVal;
-		setEnemyStats();
+		setFlEnemyStats();
 		setUI();
 		if(options.autoCalculate){
 			calcuWait(300);
@@ -298,11 +318,11 @@ $(document).ready(function(){
 		var newVal = verifyNumberInput(this,1,5);
 		challenger.rarity = newVal;
 		setSkillOptions();
-		challenger.weapon = heroMaxSkills[challenger.rarity-1][challenger.index].weapon;
-		challenger.special = heroMaxSkills[challenger.rarity-1][challenger.index].special;
-		challenger.a = heroMaxSkills[challenger.rarity-1][challenger.index].a;
-		challenger.b = heroMaxSkills[challenger.rarity-1][challenger.index].b;
-		challenger.c = heroMaxSkills[challenger.rarity-1][challenger.index].c;
+		challenger.weapon = data.heroMaxSkills[challenger.rarity-1][challenger.index].weapon;
+		challenger.special = data.heroMaxSkills[challenger.rarity-1][challenger.index].special;
+		challenger.a = data.heroMaxSkills[challenger.rarity-1][challenger.index].a;
+		challenger.b = data.heroMaxSkills[challenger.rarity-1][challenger.index].b;
+		challenger.c = data.heroMaxSkills[challenger.rarity-1][challenger.index].c;
 		setStats();
 		$("#hero_weapon").val(challenger.weapon);
 		$("#hero_special").val(challenger.special);
@@ -317,8 +337,8 @@ $(document).ready(function(){
 	$("#enemies_rarity").change(function(){
 		var newVal = verifyNumberInput(this,1,5);
 		enemies.fl.rarity = newVal;
-		setEnemySkills();
-		setEnemyStats();
+		setFlEnemySkills();
+		setFlEnemyStats();
 		setUI();
 		if(options.autoCalculate){
 			calcuWait(300);
@@ -337,9 +357,9 @@ $(document).ready(function(){
 			$(this).removeClass("notincluded");
 			$(this).addClass("included");
 		}
-		setEnemies();
-		setEnemySkills();
-		setEnemyStats();
+		setFlEnemies();
+		setFlEnemySkills();
+		setFlEnemyStats();
 		setUI();
 		calculate();
 	});
@@ -410,13 +430,13 @@ $(document).ready(function(){
 
 	$("#enemies_boon").change(function(){
 		enemies.fl.boon = $(this).val();
-		setEnemyStats();
+		setFlEnemyStats();
 		setUI();
 		calculate();
 	});
 	$("#enemies_bane").change(function(){
 		enemies.fl.bane = $(this).val();
-		setEnemyStats();
+		setFlEnemyStats();
 		setUI();
 		calculate();
 	});
@@ -482,83 +502,83 @@ $(document).ready(function(){
 
 	$("#enemies_weapon").change(function(){
 		enemies.fl.weapon = parseInt($(this).val());
-		setEnemySkills();
-		setEnemyStats();
+		setFlEnemySkills();
+		setFlEnemyStats();
 		setUI();
 		calculate();
 	});
 	$("#enemies_special").change(function(){
 		enemies.fl.special = parseInt($(this).val());
-		setEnemySkills();
-		setEnemyStats();
+		setFlEnemySkills();
+		setFlEnemyStats();
 		setUI();
 		calculate();
 	});
 	$("#enemies_a").change(function(){
 		enemies.fl.a = parseInt($(this).val());
 		changeEnemiesSkillPic("a",enemies.fl.a);
-		setEnemySkills();
-		setEnemyStats();
+		setFlEnemySkills();
+		setFlEnemyStats();
 		setUI();
 		calculate();
 	});
 	$("#enemies_b").change(function(){
-		enemies.b = parseInt($(this).val());
-		changeEnemiesSkillPic("b",enemies.b);
-		setEnemySkills();
-		setEnemyStats();
+		enemies.fl.b = parseInt($(this).val());
+		changeEnemiesSkillPic("b",enemies.fl.b);
+		setFlEnemySkills();
+		setFlEnemyStats();
 		setUI();
 		calculate();
 	});
 	$("#enemies_c").change(function(){
-		enemies.c = parseInt($(this).val());
-		changeEnemiesSkillPic("c",enemies.c);
-		setEnemySkills();
-		setEnemyStats();
+		enemies.fl.c = parseInt($(this).val());
+		changeEnemiesSkillPic("c",enemies.fl.c);
+		setFlEnemySkills();
+		setFlEnemyStats();
 		setUI();
 		calculate();
 	});
 	$("#enemies_s").change(function(){
-		enemies.s = parseInt($(this).val());
-		changeEnemiesSkillPic("s",enemies.s);
-		setEnemySkills();
-		setEnemyStats();
+		enemies.fl.s = parseInt($(this).val());
+		changeEnemiesSkillPic("s",enemies.fl.s);
+		setFlEnemySkills();
+		setFlEnemyStats();
 		setUI();
 		calculate();
 	});
 
 	$("#enemies_weapon_overwrite").change(function(){
 		enemies.fl.replaceWeapon = parseInt($(this).val());
-		setEnemySkills();
-		setEnemyStats();
+		setFlEnemySkills();
+		setFlEnemyStats();
 		setUI();
 		calculate();
 	});
 	$("#enemies_special_overwrite").change(function(){
 		enemies.fl.replaceSpecial = parseInt($(this).val());
-		setEnemySkills();
-		setEnemyStats();
+		setFlEnemySkills();
+		setFlEnemyStats();
 		setUI();
 		calculate();
 	});
 	$("#enemies_a_overwrite").change(function(){
 		enemies.fl.replaceA = parseInt($(this).val());
-		setEnemySkills();
-		setEnemyStats();
+		setFlEnemySkills();
+		setFlEnemyStats();
 		setUI();
 		calculate();
 	});
 	$("#enemies_b_overwrite").change(function(){
 		enemies.fl.replaceB = parseInt($(this).val());
-		setEnemySkills();
-		setEnemyStats();
+		setFlEnemySkills();
+		setFlEnemyStats();
 		setUI();
 		calculate();
 	});
 	$("#enemies_c_overwrite").change(function(){
 		enemies.fl.replaceC = parseInt($(this).val());
-		setEnemySkills();
-		setEnemyStats();
+		setFlEnemySkills();
+		setFlEnemyStats();
 		setUI();
 		calculate();
 	});
@@ -586,9 +606,9 @@ $(document).ready(function(){
 			}
 		}
 
-		setEnemySkillOptions();
-		setEnemySkills();
-		setEnemyStats();
+		setFlEnemySkillOptions();
+		setFlEnemySkills();
+		setFlEnemyStats();
 		setUI();
 
 		calculate();
@@ -610,9 +630,9 @@ $(document).ready(function(){
 			}
 		}
 
-		setEnemySkillOptions();
-		setEnemySkills();
-		setEnemyStats();
+		setFlEnemySkillOptions();
+		setFlEnemySkills();
+		setFlEnemyStats();
 		setUI();
 
 		calculate();
@@ -654,7 +674,7 @@ $(document).ready(function(){
 
 	$("#view_results").change(function(){
 		var newVal = verifyNumberInput(this,0,2);
-		viewFilter = newVal;
+		options.viewFilter = newVal;
 		outputResults();
 	});
 
@@ -690,27 +710,13 @@ $(document).ready(function(){
 
 });
 
-function changeSkillPic(slot,skillindex){
-	if(skillindex < 0){
-		$("#hero_" + slot + "_picture").attr("src","skills/noskill.png");
-	}
-	else{
-		var skillname = data.skills[skillindex].name;
-		skillname = skillname.replace(/\s/g,"_");
-		$("#hero_" + slot + "_picture").attr("src","skills/" + skillname + ".png");
-	}
-}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-function changeEnemiesSkillPic(slot,skillindex){
-	if(skillindex < 0){
-		$("#enemies_" + slot + "_picture").attr("src","skills/noskill.png");
-	}
-	else{
-		var skillname = data.skills[skillindex].name;
-		skillname = skillname.replace(/\s/g,"_");
-		$("#enemies_" + slot + "_picture").attr("src","skills/" + skillname + ".png");
-	}
-}
+//Data manipulating helper functions
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function getValidSkills(slot,heroindex){
 	//returns an array of indices on "skills" array for skills that heroindex can learn
@@ -807,10 +813,10 @@ function findMaxSkills(rarity,heroid){
 	//Finds max skills based on rarity
 	//Gets one with highest sp cost
 	var maxskillset = {"weapon":-1,"special":-1,"a":-1,"b":-1,"c":-1};
-	for(var i = 0; i < heroBaseSkills[heroid].length;i++){
-		var skillIndex = getSkillIndexFromId(heroBaseSkills[heroid][i][0]);
+	for(var i = 0; i < data.heroBaseSkills[heroid].length;i++){
+		var skillIndex = getSkillIndexFromId(data.heroBaseSkills[heroid][i][0]);
 		var skill = data.skills[skillIndex];
-		if((skill.slot != "s" && skill.slot != "assist") && heroBaseSkills[heroid][i][1] <= rarity + 1){
+		if((skill.slot != "s" && skill.slot != "assist") && data.heroBaseSkills[heroid][i][1] <= rarity + 1){
 			if(maxskillset[skill.slot]==-1){
 				maxskillset[skill.slot] = skillIndex;
 			}
@@ -822,123 +828,6 @@ function findMaxSkills(rarity,heroid){
 		}
 	}
 	return maxskillset;
-}
-
-function setSkillOptions(){
-	//set html for character skill select based on valid skills
-
-	//Set weapon skill options
-	weaponHTML = "<option value=-1>No weapon</option>";
-	for(var i = 0; i < challenger.validWeaponSkills.length; i++){
-		if(((!options.showOnlyMaxSkills || skillsThatArePrereq.indexOf(data.skills[challenger.validWeaponSkills[i]].skill_id)==-1) && (!options.hideUnaffectingSkills || data.skills[challenger.validWeaponSkills[i]].affectsduel)) || challenger.validWeaponSkills[i] == heroMaxSkills[challenger.rarity-1][challenger.index].weapon){
-			weaponHTML += "<option value=" + challenger.validWeaponSkills[i] + ">" + data.skills[challenger.validWeaponSkills[i]].name + "</option>";
-		}
-	}
-	$("#hero_weapon").html(weaponHTML);
-
-	//Set special skill options
-	specialHTML = "<option value=-1>No special</option>";
-	for(var i = 0; i < challenger.validSpecialSkills.length; i++){
-		if(((!options.showOnlyMaxSkills || skillsThatArePrereq.indexOf(data.skills[challenger.validSpecialSkills[i]].skill_id)==-1) && (!options.hideUnaffectingSkills || data.skills[challenger.validSpecialSkills[i]].affectsduel)) || challenger.validSpecialSkills[i] == heroMaxSkills[challenger.rarity-1][challenger.index].special){
-			specialHTML += "<option value=" + challenger.validSpecialSkills[i] + ">" + data.skills[challenger.validSpecialSkills[i]].name + "</option>";
-		}
-	}
-	$("#hero_special").html(specialHTML);
-
-	//Set a skill options
-	aHTML = "<option value=-1>No A passive</option>";
-	for(var i = 0; i < challenger.validASkills.length; i++){
-		if(((!options.showOnlyMaxSkills || skillsThatArePrereq.indexOf(data.skills[challenger.validASkills[i]].skill_id)==-1) && (!options.hideUnaffectingSkills || data.skills[challenger.validASkills[i]].affectsduel)) || challenger.validASkills[i] == heroMaxSkills[challenger.rarity-1][challenger.index].a){
-			aHTML += "<option value=" + challenger.validASkills[i] + ">" + data.skills[challenger.validASkills[i]].name + "</option>";
-		}
-	}
-	$("#hero_a").html(aHTML);
-
-	//Set weapon skill options
-	bHTML = "<option value=-1>No B passive</option>";
-	for(var i = 0; i < challenger.validBSkills.length; i++){
-		if(((!options.showOnlyMaxSkills || skillsThatArePrereq.indexOf(data.skills[challenger.validBSkills[i]].skill_id)==-1) && (!options.hideUnaffectingSkills || data.skills[challenger.validBSkills[i]].affectsduel)) || challenger.validBSkills[i] == heroMaxSkills[challenger.rarity-1][challenger.index].b){
-			bHTML += "<option value=" + challenger.validBSkills[i] + ">" + data.skills[challenger.validBSkills[i]].name + "</option>";
-		}
-	}
-	$("#hero_b").html(bHTML);
-
-	//Set c skill options
-	cHTML = "<option value=-1>No C passive</option>";
-	for(var i = 0; i < challenger.validCSkills.length; i++){
-		if(((!options.showOnlyMaxSkills || skillsThatArePrereq.indexOf(data.skills[challenger.validCSkills[i]].skill_id)==-1) && (!options.hideUnaffectingSkills || data.skills[challenger.validCSkills[i]].affectsduel)) || challenger.validCSkills[i] == heroMaxSkills[challenger.rarity-1][challenger.index].c){
-			cHTML += "<option value=" + challenger.validCSkills[i] + ">" + data.skills[challenger.validCSkills[i]].name + "</option>";
-		}
-	}
-	$("#hero_c").html(cHTML);
-
-	//Set s skill options
-	sHTML = "<option value=-1>No S passive</option>";
-	for(var i = 0; i < validSSkills.length; i++){
-		if((!options.showOnlyMaxSkills || skillsThatArePrereq.indexOf(data.skills[validSSkills[i]].skill_id)==-1) && (!options.hideUnaffectingSkills || data.skills[validSSkills[i]].affectsduel)){
-			sHTML += "<option value=" + validSSkills[i] + ">" + data.skills[validSSkills[i]].name + "</option>";
-		}
-	}
-	$("#hero_s").html(sHTML);
-
-}
-
-function setEnemySkillOptions(){
-	//set html for enemies skill select
-
-	//Set weapon skill options
-	weaponHTML = "<option value=-1>No weapon</option>";
-	for(var i = 0; i < allWeaponSkills.length; i++){
-		if((!options.showOnlyMaxSkills || skillsThatArePrereq.indexOf(data.skills[allWeaponSkills[i]].skill_id)==-1) && (!options.hideUnaffectingSkills || data.skills[allWeaponSkills[i]].affectsduel)){
-			weaponHTML += "<option value=" + allWeaponSkills[i] + ">" + data.skills[allWeaponSkills[i]].name + "</option>";
-		}
-	}
-	$("#enemies_weapon").html(weaponHTML);
-
-	//Set special skill options
-	specialHTML = "<option value=-1>No special</option>";
-	for(var i = 0; i < allSpecialSkills.length; i++){
-		if((!options.showOnlyMaxSkills || skillsThatArePrereq.indexOf(data.skills[allSpecialSkills[i]].skill_id)==-1) && (!options.hideUnaffectingSkills || data.skills[allSpecialSkills[i]].affectsduel)){
-			specialHTML += "<option value=" + allSpecialSkills[i] + ">" + data.skills[allSpecialSkills[i]].name + "</option>";
-		}
-	}
-	$("#enemies_special").html(specialHTML);
-
-	//Set a skill options
-	aHTML = "<option value=-1>No A passive</option>";
-	for(var i = 0; i < allASkills.length; i++){
-		if((!options.showOnlyMaxSkills || skillsThatArePrereq.indexOf(data.skills[allASkills[i]].skill_id)==-1) && (!options.hideUnaffectingSkills || data.skills[allASkills[i]].affectsduel)){
-			aHTML += "<option value=" + allASkills[i] + ">" + data.skills[allASkills[i]].name + "</option>";
-		}
-	}
-	$("#enemies_a").html(aHTML);
-
-	//Set weapon skill options
-	bHTML = "<option value=-1>No B passive</option>";
-	for(var i = 0; i < allBSkills.length; i++){
-		if((!options.showOnlyMaxSkills || skillsThatArePrereq.indexOf(data.skills[allBSkills[i]].skill_id)==-1) && (!options.hideUnaffectingSkills || data.skills[allBSkills[i]].affectsduel)){
-			bHTML += "<option value=" + allBSkills[i] + ">" + data.skills[allBSkills[i]].name + "</option>";
-		}
-	}
-	$("#enemies_b").html(bHTML);
-
-	//Set c skill options
-	cHTML = "<option value=-1>No C passive</option>";
-	for(var i = 0; i < allCSkills.length; i++){
-		if((!options.showOnlyMaxSkills || skillsThatArePrereq.indexOf(data.skills[allCSkills[i]].skill_id)==-1) && (!options.hideUnaffectingSkills || data.skills[allCSkills[i]].affectsduel)){
-			cHTML += "<option value=" + allCSkills[i] + ">" + data.skills[allCSkills[i]].name + "</option>";
-		}
-	}
-	$("#enemies_c").html(cHTML);
-
-	//Set s skill options
-	sHTML = "<option value=-1>No S passive</option>";
-	for(var i = 0; i < allSSkills.length; i++){
-		if((!options.showOnlyMaxSkills || skillsThatArePrereq.indexOf(data.skills[allSSkills[i]].skill_id)==-1) && (!options.hideUnaffectingSkills || data.skills[allSSkills[i]].affectsduel)){
-			sHTML += "<option value=" + allSSkills[i] + ">" + data.skills[allSSkills[i]].name + "</option>";
-		}
-	}
-	$("#enemies_s").html(sHTML);
 }
 
 function setStats(){
@@ -1067,10 +956,10 @@ function setStats(){
 	}
 }
 
-function setEnemies(){
+function setFlEnemies(){
 	//sets enemies based on includerules
 	//also updates enemy count display
-	//Must be run before setEnemyStats() or setEnemySkills();
+	//Must be run before setFlEnemyStats() or setFlEnemySkills();
 	enemies.fl.list = [];
 	for(var i = 0; i < data.heroes.length;i++){
 		var confirmed = true;
@@ -1103,66 +992,69 @@ function setEnemies(){
 			confirmed = false;
 		}
 		if(confirmed){
-			enemies.fl.list.push({"index":i,"name":data.heroes[i].name,"weapontype":data.heroes[i].weapontype,"color":data.heroes[i].color,"movetype":data.heroes[i].movetype,"hp":0,"atk":0,"spd":0,"def":0,"res":0,"weapon":-1,"special":-1,"a":-1,"b":-1,"c":-1});
+			enemies.fl.list.push({"index":i,"hp":0,"atk":0,"spd":0,"def":0,"res":0,"weapon":-1,"special":-1,"a":-1,"b":-1,"c":-1,
+				"buffs": enemies.fl.buffs, "debuffs": enemies.fl.debuffs, "spur": enemies.fl.spur, "boon": enemies.fl.boon, "bane": enemies.fl.bane,
+				"merge": enemies.fl.merge, "rarity": enemies.fl.rarity, "precharge": enemies.fl.precharge, "damage": enemies.fl.damage
+			});
 		}
 	}
 	$("#enemies_count").html(enemies.fl.list.length);
 }
 
-function setEnemySkills(){
+function setFlEnemySkills(){
 	//Sets enemy skills for easy reference during calculation
-	//setEnemies() should be called before this
+	//setFlEnemies() should be called before this
 	for(var i = 0; i < enemies.fl.list.length;i++){
 		//Set default skills
-		enemies.fl.list[i].weapon = heroMaxSkills[enemies.fl.rarity-1][enemies.fl.list[i].index].weapon;	
-		enemies.fl.list[i].special = heroMaxSkills[enemies.fl.rarity-1][enemies.fl.list[i].index].special;
-		enemies.fl.list[i].a = heroMaxSkills[enemies.fl.rarity-1][enemies.fl.list[i].index].a;
-		enemies.fl.list[i].b = heroMaxSkills[enemies.fl.rarity-1][enemies.fl.list[i].index].b;
-		enemies.fl.list[i].c = heroMaxSkills[enemies.fl.rarity-1][enemies.fl.list[i].index].c;
+		enemies.fl.list[i].weapon = data.heroMaxSkills[enemies.fl.rarity-1][enemies.fl.list[i].index].weapon;	
+		enemies.fl.list[i].special = data.heroMaxSkills[enemies.fl.rarity-1][enemies.fl.list[i].index].special;
+		enemies.fl.list[i].a = data.heroMaxSkills[enemies.fl.rarity-1][enemies.fl.list[i].index].a;
+		enemies.fl.list[i].b = data.heroMaxSkills[enemies.fl.rarity-1][enemies.fl.list[i].index].b;
+		enemies.fl.list[i].c = data.heroMaxSkills[enemies.fl.rarity-1][enemies.fl.list[i].index].c;
 		enemies.fl.list[i].s = -1;
 
 		//Find if skill needs replacement based on inputs
 		if(enemies.fl.weapon != -1 && (enemies.fl.replaceWeapon || enemies.fl.list[i].weapon == -1)){
-			if(heroPossibleSkills[enemies.fl.list[i].index].includes(enemies.fl.weapon)){
+			if(data.heroPossibleSkills[enemies.fl.list[i].index].includes(enemies.fl.weapon)){
 				enemies.fl.list[i].weapon = enemies.fl.weapon;
 			}
 		}
 		if(enemies.fl.special != -1 && (enemies.fl.replaceSpecial || enemies.fl.list[i].special == -1)){
-			if(heroPossibleSkills[enemies.fl.list[i].index].includes(enemies.fl.special)){
+			if(data.heroPossibleSkills[enemies.fl.list[i].index].includes(enemies.fl.special)){
 				enemies.fl.list[i].special = enemies.fl.special;
 			}
 		}
 		if(enemies.fl.a != -1 && (enemies.fl.replaceA || enemies.fl.list[i].a == -1)){
-			if(heroPossibleSkills[enemies.fl.list[i].index].includes(enemies.fl.a)){
+			if(data.heroPossibleSkills[enemies.fl.list[i].index].includes(enemies.fl.a)){
 				enemies.fl.list[i].a = enemies.fl.a;
 			}
 		}
-		if(enemies.b != -1 && (enemies.fl.replaceB || enemies.fl.list[i].b == -1)){
-			if(heroPossibleSkills[enemies.fl.list[i].index].includes(enemies.b)){
-				enemies.fl.list[i].b = enemies.b;
+		if(enemies.fl.b != -1 && (enemies.fl.replaceB || enemies.fl.list[i].b == -1)){
+			if(data.heroPossibleSkills[enemies.fl.list[i].index].includes(enemies.fl.b)){
+				enemies.fl.list[i].b = enemies.fl.b;
 			}
 		}
-		if(enemies.c != -1 && (enemies.fl.replaceC || enemies.fl.list[i].c == -1)){
-			if(heroPossibleSkills[enemies.fl.list[i].index].includes(enemies.c)){
-				enemies.fl.list[i].c = enemies.c;
+		if(enemies.fl.c != -1 && (enemies.fl.replaceC || enemies.fl.list[i].c == -1)){
+			if(data.heroPossibleSkills[enemies.fl.list[i].index].includes(enemies.fl.c)){
+				enemies.fl.list[i].c = enemies.fl.c;
 			}
 		}
-		if(enemies.s != -1){
-			if(heroPossibleSkills[enemies.fl.list[i].index].includes(enemies.s)){
-				enemies.fl.list[i].s = enemies.s;
+		if(enemies.fl.s != -1){
+			if(data.heroPossibleSkills[enemies.fl.list[i].index].includes(enemies.fl.s)){
+				enemies.fl.list[i].s = enemies.fl.s;
 			}
 		}
 	}
 }
 
-function setEnemyStats(){
+function setFlEnemyStats(){
 	//Get average enemy stats and set specific enemy stats
-	//setEnemySkills() should be called before this
-	enemyAvgHp = 0;
-	enemyAvgAtk = 0;
-	enemyAvgSpd = 0;
-	enemyAvgDef = 0;
-	enemyAvgRes = 0;
+	//setFlEnemySkills() should be called before this
+	enemies.fl.avgHp = 0;
+	enemies.fl.avgAtk = 0;
+	enemies.fl.avgSpd = 0;
+	enemies.fl.avgDef = 0;
+	enemies.fl.avgRes = 0;
 
 	for(var i = 0; i < enemies.fl.list.length;i++){
 		var growthValMod = {"hp":0,"atk":0,"spd":0,"def":0,"res":0};
@@ -1287,17 +1179,176 @@ function setEnemyStats(){
 			enemies.fl.list[i].res += data.skills[enemies.fl.list[i].s].res;
 		}
 
-		enemyAvgHp += enemies.fl.list[i].hp;
-		enemyAvgAtk += enemies.fl.list[i].atk;
-		enemyAvgSpd += enemies.fl.list[i].spd;
-		enemyAvgDef += enemies.fl.list[i].def;
-		enemyAvgRes += enemies.fl.list[i].res;
+		enemies.fl.avgHp += enemies.fl.list[i].hp;
+		enemies.fl.avgAtk += enemies.fl.list[i].atk;
+		enemies.fl.avgSpd += enemies.fl.list[i].spd;
+		enemies.fl.avgDef += enemies.fl.list[i].def;
+		enemies.fl.avgRes += enemies.fl.list[i].res;
 	}
-	enemyAvgHp = Math.round(enemyAvgHp/enemies.fl.list.length);
-	enemyAvgAtk = Math.round(enemyAvgAtk/enemies.fl.list.length);
-	enemyAvgSpd = Math.round(enemyAvgSpd/enemies.fl.list.length);
-	enemyAvgDef = Math.round(enemyAvgDef/enemies.fl.list.length);
-	enemyAvgRes = Math.round(enemyAvgRes/enemies.fl.list.length);
+	enemies.fl.avgHp = Math.round(enemies.fl.avgHp/enemies.fl.list.length);
+	enemies.fl.avgAtk = Math.round(enemies.fl.avgAtk/enemies.fl.list.length);
+	enemies.fl.avgSpd = Math.round(enemies.fl.avgSpd/enemies.fl.list.length);
+	enemies.fl.avgDef = Math.round(enemies.fl.avgDef/enemies.fl.list.length);
+	enemies.fl.avgRes = Math.round(enemies.fl.avgRes/enemies.fl.list.length);
+}
+
+function getSkillIndexFromId(skillid){
+	var index = -1;
+	for(var i = 0; i < data.skills.length; i++){
+		if(data.skills[i].skill_id == skillid){
+			index = i;
+			break;
+		}
+	}
+	//console.log("Looked for index of skill id " + skillid + "; found at " + index);
+	return index;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//UI Functions (mostly)
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function changeSkillPic(slot,skillindex){
+	if(skillindex < 0){
+		$("#hero_" + slot + "_picture").attr("src","skills/noskill.png");
+	}
+	else{
+		var skillname = data.skills[skillindex].name;
+		skillname = skillname.replace(/\s/g,"_");
+		$("#hero_" + slot + "_picture").attr("src","skills/" + skillname + ".png");
+	}
+}
+
+function changeEnemiesSkillPic(slot,skillindex){
+	if(skillindex < 0){
+		$("#enemies_" + slot + "_picture").attr("src","skills/noskill.png");
+	}
+	else{
+		var skillname = data.skills[skillindex].name;
+		skillname = skillname.replace(/\s/g,"_");
+		$("#enemies_" + slot + "_picture").attr("src","skills/" + skillname + ".png");
+	}
+}
+
+function setSkillOptions(){
+	//set html for character skill select based on valid skills
+
+	//Set weapon skill options
+	weaponHTML = "<option value=-1>No weapon</option>";
+	for(var i = 0; i < challenger.validWeaponSkills.length; i++){
+		if(((!options.showOnlyMaxSkills || data.skillsThatArePrereq.indexOf(data.skills[challenger.validWeaponSkills[i]].skill_id)==-1) && (!options.hideUnaffectingSkills || data.skills[challenger.validWeaponSkills[i]].affectsduel)) || challenger.validWeaponSkills[i] == data.heroMaxSkills[challenger.rarity-1][challenger.index].weapon){
+			weaponHTML += "<option value=" + challenger.validWeaponSkills[i] + ">" + data.skills[challenger.validWeaponSkills[i]].name + "</option>";
+		}
+	}
+	$("#hero_weapon").html(weaponHTML);
+
+	//Set special skill options
+	specialHTML = "<option value=-1>No special</option>";
+	for(var i = 0; i < challenger.validSpecialSkills.length; i++){
+		if(((!options.showOnlyMaxSkills || data.skillsThatArePrereq.indexOf(data.skills[challenger.validSpecialSkills[i]].skill_id)==-1) && (!options.hideUnaffectingSkills || data.skills[challenger.validSpecialSkills[i]].affectsduel)) || challenger.validSpecialSkills[i] == data.heroMaxSkills[challenger.rarity-1][challenger.index].special){
+			specialHTML += "<option value=" + challenger.validSpecialSkills[i] + ">" + data.skills[challenger.validSpecialSkills[i]].name + "</option>";
+		}
+	}
+	$("#hero_special").html(specialHTML);
+
+	//Set a skill options
+	aHTML = "<option value=-1>No A passive</option>";
+	for(var i = 0; i < challenger.validASkills.length; i++){
+		if(((!options.showOnlyMaxSkills || data.skillsThatArePrereq.indexOf(data.skills[challenger.validASkills[i]].skill_id)==-1) && (!options.hideUnaffectingSkills || data.skills[challenger.validASkills[i]].affectsduel)) || challenger.validASkills[i] == data.heroMaxSkills[challenger.rarity-1][challenger.index].a){
+			aHTML += "<option value=" + challenger.validASkills[i] + ">" + data.skills[challenger.validASkills[i]].name + "</option>";
+		}
+	}
+	$("#hero_a").html(aHTML);
+
+	//Set weapon skill options
+	bHTML = "<option value=-1>No B passive</option>";
+	for(var i = 0; i < challenger.validBSkills.length; i++){
+		if(((!options.showOnlyMaxSkills || data.skillsThatArePrereq.indexOf(data.skills[challenger.validBSkills[i]].skill_id)==-1) && (!options.hideUnaffectingSkills || data.skills[challenger.validBSkills[i]].affectsduel)) || challenger.validBSkills[i] == data.heroMaxSkills[challenger.rarity-1][challenger.index].b){
+			bHTML += "<option value=" + challenger.validBSkills[i] + ">" + data.skills[challenger.validBSkills[i]].name + "</option>";
+		}
+	}
+	$("#hero_b").html(bHTML);
+
+	//Set c skill options
+	cHTML = "<option value=-1>No C passive</option>";
+	for(var i = 0; i < challenger.validCSkills.length; i++){
+		if(((!options.showOnlyMaxSkills || data.skillsThatArePrereq.indexOf(data.skills[challenger.validCSkills[i]].skill_id)==-1) && (!options.hideUnaffectingSkills || data.skills[challenger.validCSkills[i]].affectsduel)) || challenger.validCSkills[i] == data.heroMaxSkills[challenger.rarity-1][challenger.index].c){
+			cHTML += "<option value=" + challenger.validCSkills[i] + ">" + data.skills[challenger.validCSkills[i]].name + "</option>";
+		}
+	}
+	$("#hero_c").html(cHTML);
+
+	//Set s skill options
+	sHTML = "<option value=-1>No S passive</option>";
+	for(var i = 0; i < validSSkills.length; i++){
+		if((!options.showOnlyMaxSkills || data.skillsThatArePrereq.indexOf(data.skills[validSSkills[i]].skill_id)==-1) && (!options.hideUnaffectingSkills || data.skills[validSSkills[i]].affectsduel)){
+			sHTML += "<option value=" + validSSkills[i] + ">" + data.skills[validSSkills[i]].name + "</option>";
+		}
+	}
+	$("#hero_s").html(sHTML);
+
+}
+
+function setFlEnemySkillOptions(){
+	//set html for enemies skill select
+
+	//Set weapon skill options
+	weaponHTML = "<option value=-1>No weapon</option>";
+	for(var i = 0; i < data.allWeaponSkills.length; i++){
+		if((!options.showOnlyMaxSkills || data.skillsThatArePrereq.indexOf(data.skills[data.allWeaponSkills[i]].skill_id)==-1) && (!options.hideUnaffectingSkills || data.skills[data.allWeaponSkills[i]].affectsduel)){
+			weaponHTML += "<option value=" + data.allWeaponSkills[i] + ">" + data.skills[data.allWeaponSkills[i]].name + "</option>";
+		}
+	}
+	$("#enemies_weapon").html(weaponHTML);
+
+	//Set special skill options
+	specialHTML = "<option value=-1>No special</option>";
+	for(var i = 0; i < data.allSpecialSkills.length; i++){
+		if((!options.showOnlyMaxSkills || data.skillsThatArePrereq.indexOf(data.skills[data.allSpecialSkills[i]].skill_id)==-1) && (!options.hideUnaffectingSkills || data.skills[data.allSpecialSkills[i]].affectsduel)){
+			specialHTML += "<option value=" + data.allSpecialSkills[i] + ">" + data.skills[data.allSpecialSkills[i]].name + "</option>";
+		}
+	}
+	$("#enemies_special").html(specialHTML);
+
+	//Set a skill options
+	aHTML = "<option value=-1>No A passive</option>";
+	for(var i = 0; i < data.allASkills.length; i++){
+		if((!options.showOnlyMaxSkills || data.skillsThatArePrereq.indexOf(data.skills[data.allASkills[i]].skill_id)==-1) && (!options.hideUnaffectingSkills || data.skills[data.allASkills[i]].affectsduel)){
+			aHTML += "<option value=" + data.allASkills[i] + ">" + data.skills[data.allASkills[i]].name + "</option>";
+		}
+	}
+	$("#enemies_a").html(aHTML);
+
+	//Set weapon skill options
+	bHTML = "<option value=-1>No B passive</option>";
+	for(var i = 0; i < data.allBSkills.length; i++){
+		if((!options.showOnlyMaxSkills || data.skillsThatArePrereq.indexOf(data.skills[data.allBSkills[i]].skill_id)==-1) && (!options.hideUnaffectingSkills || data.skills[data.allBSkills[i]].affectsduel)){
+			bHTML += "<option value=" + data.allBSkills[i] + ">" + data.skills[data.allBSkills[i]].name + "</option>";
+		}
+	}
+	$("#enemies_b").html(bHTML);
+
+	//Set c skill options
+	cHTML = "<option value=-1>No C passive</option>";
+	for(var i = 0; i < data.allCSkills.length; i++){
+		if((!options.showOnlyMaxSkills || data.skillsThatArePrereq.indexOf(data.skills[data.allCSkills[i]].skill_id)==-1) && (!options.hideUnaffectingSkills || data.skills[data.allCSkills[i]].affectsduel)){
+			cHTML += "<option value=" + data.allCSkills[i] + ">" + data.skills[data.allCSkills[i]].name + "</option>";
+		}
+	}
+	$("#enemies_c").html(cHTML);
+
+	//Set s skill options
+	sHTML = "<option value=-1>No S passive</option>";
+	for(var i = 0; i < data.allSSkills.length; i++){
+		if((!options.showOnlyMaxSkills || data.skillsThatArePrereq.indexOf(data.skills[data.allSSkills[i]].skill_id)==-1) && (!options.hideUnaffectingSkills || data.skills[data.allSSkills[i]].affectsduel)){
+			sHTML += "<option value=" + data.allSSkills[i] + ">" + data.skills[data.allSSkills[i]].name + "</option>";
+		}
+	}
+	$("#enemies_s").html(sHTML);
 }
 
 function setUI(){
@@ -1336,12 +1387,19 @@ function setUI(){
 		}
 	}
 
-	if(enemies.fl.list.length > 0){
-		$("#enemies_hp").html(enemyAvgHp);
-		$("#enemies_atk").html(enemyAvgAtk);
-		$("#enemies_spd").html(enemyAvgSpd);
-		$("#enemies_def").html(enemyAvgDef);
-		$("#enemies_res").html(enemyAvgRes);
+	var enemyPool = {};
+	if(options.customEnemyList == 1){
+		enemyPool = enemies.cl;
+	}
+	else{
+		enemyPool = enemies.fl;
+	}
+	if(enemyPool.list.length > 0){
+		$("#enemies_hp").html(enemyPool.avgHp);
+		$("#enemies_atk").html(enemyPool.avgAtk);
+		$("#enemies_spd").html(enemyPool.avgSpd);
+		$("#enemies_def").html(enemyPool.avgDef);
+		$("#enemies_res").html(enemyPool.avgRes);
 	}
 	else{
 		$("#enemies_hp").html("-");
@@ -1353,48 +1411,275 @@ function setUI(){
 	
 }
 
-function getSkillIndexFromId(skillid){
-	var index = -1;
-	for(var i = 0; i < data.skills.length; i++){
-		if(data.skills[i].skill_id == skillid){
-			index = i;
-			break;
-		}
-	}
-	//console.log("Looked for index of skill id " + skillid + "; found at " + index);
-	return index;
+function showResultsTooltip(e,resultDiv){
+	var resultId = resultDiv.id.substring(7);
+	showingTooltip = true;
+	$("#frame_tooltip").html(fightResults[resultId].fightText).show();
 }
+
+function hideResultsTooltip(){
+	showingTooltip = false;
+	$("#frame_tooltip").hide();
+}
+
+function addTurn(turnName){
+	if(options.roundInitiators.length < 4){
+		$("#turn_text_" + options.roundInitiators.length).html(turnName);
+		$("#turn_" + options.roundInitiators.length).show();
+		options.roundInitiators.push(turnName);
+	}
+	if(options.autoCalculate){
+		calculate();
+	}
+}
+
+function deleteTurn(initTurn){
+	//keep ids the same, shift around text
+	$("#turn_" + (options.roundInitiators.length - 1)).hide();
+	options.roundInitiators.splice(initTurn,1);
+	for(var i = 0; i < options.roundInitiators.length; i++){
+		$("#turn_text_" + i).html(options.roundInitiators[i]);
+	}
+	if(options.autoCalculate){
+		calculate();
+	}
+}
+
+function verifyNumberInput(element,min,max){
+	//contrains number between two values and returns it
+	var newVal = parseInt($(element).val());
+	if(!newVal){
+		//If input is blank, make it 0
+		newVal = 0;
+		$(element).val(0);
+	}
+	if(newVal < min){
+		$(element).val(min);
+		newVal = min;
+	}
+	else if(newVal > max){
+		$(element).val(max);
+		newVal = max;
+	}
+	return newVal;
+}
+
+function resetChallenger(){
+	$("#hero_atk_buff, #hero_spd_buff, #hero_def_buff, #hero_res_buff, #hero_atk_debuff, #hero_spd_debuff, #hero_def_debuff, #hero_res_debuff, #hero_atk_spur, #hero_spd_spur, #hero_def_spur, #hero_res_spur, #challenger_precharge, #challenger_merge, #challenger_damage").val(0);
+	$("#challenger_rarity").val(5);
+	//Set skills to default
+	challenger.rarity = 5;
+	setSkillOptions();
+	resetChallengerSkills();
+
+	$("#hero_boon_hp, #hero_boon_atk, #hero_boon_spd, #hero_boon_def, #hero_boon_res").attr("data-val",0).removeClass("bane").removeClass("boon").addClass("neutral").html("Neutral");
+
+	challenger.damage = 0;
+	challenger.precharge = 0;
+	challenger.merge = 0;
+	challenger.buffs = {"atk":0,"spd":0,"def":0,"res":0};
+	challenger.debuffs = {"atk":0,"spd":0,"def":0,"res":0};
+	challenger.spur = {"atk":0,"spd":0,"def":0,"res":0};
+	
+	setStats();
+	setUI();
+
+	if(options.autoCalculate){
+		calculate();
+	}
+}
+
+function resetChallengerSkills(){
+	if(challenger.index != -1){
+		challenger.weapon = data.heroMaxSkills[challenger.rarity-1][challenger.index].weapon;
+		challenger.special = data.heroMaxSkills[challenger.rarity-1][challenger.index].special;
+		challenger.a = data.heroMaxSkills[challenger.rarity-1][challenger.index].a;
+		challenger.b = data.heroMaxSkills[challenger.rarity-1][challenger.index].b;
+		challenger.c = data.heroMaxSkills[challenger.rarity-1][challenger.index].c;
+	}
+	else{
+		challenger.weapon = -1;
+		challenger.special = -1;
+		challenger.a = -1;
+		challenger.b = -1;
+		challenger.c = -1;
+	}
+	challenger.s = -1;
+	
+
+	$("#hero_weapon").val(challenger.weapon);
+	$("#hero_special").val(challenger.special);
+	$("#hero_a").val(challenger.a);
+	$("#hero_b").val(challenger.b);
+	$("#hero_c").val(challenger.c);
+	$("#hero_s").val(challenger.s);
+
+	changeSkillPic("a",challenger.a);
+	changeSkillPic("b",challenger.b);
+	changeSkillPic("c",challenger.c);
+	changeSkillPic("s",challenger.s);
+
+}
+
+function resetEnemies(){
+	$("#enemies_atk_buff, #enemies_spd_buff, #enemies_def_buff, #enemies_res_buff, #enemies_atk_debuff, #enemies_spd_debuff, #enemies_def_debuff, #enemies_res_debuff, #enemies_atk_spur, #enemies_spd_spur, #enemies_def_spur, #enemies_res_spur, #enemies_weapon_overwrite, #enemies_special_overwrite, #enemies_a_overwrite, #enemies_b_overwrite, #enemies_c_overwrite, #enemies_merge, #enemies_damage").val(0);
+	$("#enemies_rarity").val(5);
+	$("#enemies_weapon").val(-1);
+	$("#enemies_special").val(-1);
+	$("#enemies_a").val(-1);
+	$("#enemies_b").val(-1);
+	$("#enemies_c").val(-1);
+	$("#enemies_s").val(-1);
+
+	enemies.fl.weapon = -1;
+	enemies.fl.special = -1;
+	enemies.fl.a = -1;
+	enemies.fl.b = -1;
+	enemies.fl.c = -1;
+	enemies.fl.s = -1;
+	enemies.fl.rarity = 5;
+
+	$("#enemies_boon_hp, #enemies_boon_atk, #enemies_boon_spd, #enemies_boon_def, #enemies_boon_res").attr("data-val",0).removeClass("bane").removeClass("boon").addClass("neutral");
+
+	enemies.fl.damage = 0;
+	enemies.fl.precharge = 0;
+	enemies.fl.merge = 0;
+	enemies.fl.buffs = {"atk":0,"spd":0,"def":0,"res":0};
+	enemies.fl.debuffs = {"atk":0,"spd":0,"def":0,"res":0};
+	enemies.fl.spur = {"atk":0,"spd":0,"def":0,"res":0};
+
+	$(".wideincludebutton, .thinincludebutton").removeClass("notincluded").addClass("included");
+	include = {"melee":1,"ranged":1,"red":1,"blue":1,"green":1,"gray":1,"physical":1,"magical":1,"infantry":1,"cavalry":1,"flying":1,"armored":1,"staff":0,"nonstaff":1};
+	$("#include_staff").removeClass("included").addClass("notincluded");
+
+	setFlEnemies();
+	setFlEnemySkills();
+	setFlEnemyStats();
+	setUI();
+
+	if(options.autoCalculate){
+		calculate();
+	}
+}
+
+function showImportDialog(side,type){
+	//side = challenger or enemies, type = import or export
+	var label = "";
+	if(type=="import"){
+		label = "Import ";
+		$("#button_import").html("Import into calculator");
+	}
+	else{
+		label = "Export ";
+		$("#button_import").html("Copy to clipboard");
+	}
+
+	if(side=="challenger"){
+		$("#frame_import").removeClass("enemiesimport").addClass("challengerimport");
+		label += "challenger";
+	}
+	else if(side=="enemies"){
+		$("#frame_import").removeClass("enemiesimport").addClass("enemiesimport");
+		label += "enemies";
+	}
+
+	$("#import_title").html(label);
+}
+
+function hideImportDialog(){
+	$("#screen_fade").hide();
+	$("#frame_import").hide();
+}
+
+function switchEnemySelect(newVal){
+	options.customEnemyList = newVal;
+	if(options.customEnemyList==1){
+		$("#enemies_full_list").hide();
+		$("#enemies_custom_list").show();
+	}
+	else{
+		$("#enemies_custom_list").hide();
+		$("#enemies_full_list").show();
+	}
+	calculate();
+}
+
+function addClEnemy(){
+	var newCustomEnemyId = enemies.cl.list.length;
+	var clEnemyHTML = "<div class=\"cl_enemy button\" id=\"cl_enemy" + newCustomEnemyId + "\"><span id=\"cl_enemy" + newCustomEnemyId + "_name\">New enemy";
+	clEnemyHTML += "</span><div class=\"cl_delete_enemy button\" id=\"cl_enemy" + newCustomEnemyId + "_delete\" onclick=\"deleteClEnemy(" + newCustomEnemyId + ");\">x</div></div>";
+	$("#cl_enemylist_list").append(clEnemyHTML);
+
+	enemies.cl.list.push({
+		"index":-1,"hp":0,"atk":0,"spd":0,"def":0,"res":0,"weapon":-1,"special":-1,"a":-1,"b":-1,"c":-1,
+		"buffs": {"atk":0,"spd":0,"def":0,"res":0}, "debuffs": {"atk":0,"spd":0,"def":0,"res":0}, "spur": {"atk":0,"spd":0,"def":0,"res":0}, 
+		"boon": "None", "bane": "None", "merge":0, "rarity": 5, "precharge":0, "damage": 0
+	});
+
+	options.customEnemySelected = newCustomEnemyId;
+	updateClList();
+}
+
+function deleteClEnemy(clEnemyId){
+	//Don't fuck with renaming ids, just move the text around and hide the highest id
+}
+
+function updateClList(){
+	if(options.customEnemySelected != -1){
+		$(".clSelected").removeClass("clSelected");
+		$("#cl_enemy" + options.customEnemySelected).addClass("clSelected");
+	}
+}
+
+function updateCustomEnemy(){
+
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//Functions that get shit done
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function fight(enemyIndex){
 	//returns object with: challenger.hp, enemyHp, rounds, and enemy object for stripping skills
 
 	var fightText = "";
 
-	var challenger = new activeHero(challenger.index,true);
-	var enemy  = new activeHero(enemyIndex);
+	var ahChallenger = new activeHero(challenger);
+	var ahEnemy;
+
+	if(options.customEnemyList==1){
+		ahEnemy = new activeHero(enemies.cl.list[enemyIndex]);
+	}
+	else{
+		ahEnemy = new activeHero(enemies.fl.list[enemyIndex]);
+	}
 
 	var rounds = 0;
 
-	for(var round = 1; round <= roundInitiators.length;round++){
+	for(var round = 1; round <= options.roundInitiators.length;round++){
 		rounds = round;
 		var turn = options.startTurn + round - 1;
 		fightText += "<div class=\"fight_round\"><span class=\"bold\">Round " + round + ": ";
-		if(roundInitiators[round-1]=="Challenger initiates"){
-			fightText += challenger.name + " initiates</span><br>";
-			fightText += challenger.attack(enemy,turn);
+		if(options.roundInitiators[round-1]=="Challenger initiates"){
+			fightText += ahChallenger.name + " initiates</span><br>";
+			fightText += ahChallenger.attack(ahEnemy,turn);
 		}
 		else{
-			fightText += enemy.name + " initiates</span><br>";
-			fightText +=  enemy.attack(challenger,turn);
+			fightText += ahEnemy.name + " initiates</span><br>";
+			fightText +=  ahEnemy.attack(ahChallenger,turn);
 		}
-		if(enemy.hp <= 0 || challenger.hp <= 0){
+		if(ahEnemy.hp <= 0 || ahChallenger.hp <= 0){
 			break;
 		}
 		fightText += "</div>";
 	}
 
-	//Have to make copy of enemy object
-	return {"challenger.hp":Math.max(challenger.hp,0),"enemyHp":Math.max(enemy.hp,0),"rounds":rounds,"fightText":fightText,"enemy":$.extend({},enemy)};
+	//Have to make copy of ahEnemy object
+	return {"challengerHp":Math.max(challenger.hp,0),"enemyHp":Math.max(ahEnemy.hp,0),"rounds":rounds,"fightText":fightText,"enemy":$.extend({},ahEnemy)};
 }
 
 function calcuWait(ms){//har har har
@@ -1421,7 +1706,7 @@ function calculate(manual){
 	//manual = true if button was clicked
 	//calculates results and also adds them to page
 	if(options.autoCalculate || manual){
-		if(challenger.index!=-1 && roundInitiators.length > 0 && enemies.fl.list.length > 0){
+		if(challenger.index!=-1 && options.roundInitiators.length > 0 && enemies.fl.list.length > 0){
 			var wins = 0;
 			var losses = 0;
 			var inconclusive = 0;
@@ -1433,8 +1718,17 @@ function calculate(manual){
 			fightResults = [];
 			resultHTML = [];
 
-			for(var i = 0;i<enemies.fl.list.length;i++){
-				fightResults.push(fight(i));
+			var enemyPool = {};
+			if(options.customEnemyList == 1){
+				enemyPool = enemies.cl;
+			}
+			else{
+				enemyPool = enemies.fl;
+			}
+			for(var i = 0;i<enemyPool.list.length;i++){
+				if(enemyPool.list[i].index >= 0){
+					fightResults.push(fight(i));
+				}
 			}
 
 			fightResults.sort(function(a,b){
@@ -1453,10 +1747,10 @@ function calculate(manual){
 							comparison = 1;
 						}
 						else{
-							if(a.challenger.hp>b.challenger.hp){
+							if(a.challengerHp>b.challengerHp){
 								comparison = -1;
 							}
-							else if(a.challenger.hp<b.challenger.hp){
+							else if(a.challengerHp<b.challengerHp){
 								comparison = 1;
 							}
 							else{
@@ -1465,8 +1759,8 @@ function calculate(manual){
 						}
 					}
 				}
-				else if(a.challenger.hp==0){
-					if(b.challenger.hp!=0){
+				else if(a.challengerHp==0){
+					if(b.challengerHp!=0){
 						comparison = 1;
 					}
 					else{
@@ -1494,15 +1788,15 @@ function calculate(manual){
 					if(b.enemyHp==0){
 						comparison = 1;
 					}
-					else if(b.challenger.hp==0){
+					else if(b.challengerHp==0){
 						comparison = -1;
 					}
 					else{
 						//in a stalemate, rounds will always be max, so can't sort by rounds
-						if(a.challenger.hp>b.challenger.hp){
+						if(a.challengerHp>b.challengerHp){
 							comparison = -1;
 						}
-						else if(a.challenger.hp<b.challenger.hp){
+						else if(a.challengerHp<b.challengerHp){
 							comparison = 1;
 						}
 						else{
@@ -1525,7 +1819,7 @@ function calculate(manual){
 			for(var i = 0; i < fightResults.length;i++){
 				var resultText = "";
 
-				if(fightResults[i].challenger.hp==0){
+				if(fightResults[i].challengerHp==0){
 					losses++;
 					resultText = "<span class=\"red\">loss</span>, " + fightResults[i].rounds;
 					if(fightResults[i].rounds==1){
@@ -1584,7 +1878,7 @@ function calculate(manual){
 					"<div class=\"results_hpbox\">",
 						"<div class=\"results_hplabel\">HP</div>",
 						"<div class=\"results_hpnums\">",
-							"<span class=\"results_challengerhp\">" + fightResults[i].challenger.hp + "</span> &ndash; <span class=\"results_enemyhp\">" + fightResults[i].enemyHp + "</span>",
+							"<span class=\"results_challengerhp\">" + fightResults[i].challengerHp + "</span> &ndash; <span class=\"results_enemyhp\">" + fightResults[i].enemyHp + "</span>",
 						"</div>",
 					"</div>",
 					"<div class=\"frame_enemypicture\"><img class=\"results_enemypicture\" src=\"heroes/" + fightResults[i].enemy.name + ".png\"/></div>",
@@ -1598,7 +1892,7 @@ function calculate(manual){
 				"</div>",""].join("\n"));
 
 				//Set next previous result after showing this result
-				nextPreviousFightResults[fightResults[i].enemy.heroIndex] = "Previous result: " + resultText + ", <span class=\"blue\">" + fightResults[i].challenger.hp + "</span> &ndash; <span class=\"red\">" + fightResults[i].enemyHp + "</span>";
+				nextPreviousFightResults[fightResults[i].enemy.heroIndex] = "Previous result: " + resultText + ", <span class=\"blue\">" + fightResults[i].challengerHp + "</span> &ndash; <span class=\"red\">" + fightResults[i].enemyHp + "</span>";
 			}
 
 			outputResults();
@@ -1625,7 +1919,7 @@ function outputResults(){
 	//function separate from calculation so user can re-sort without recalculating
 	//sortOrder is 1 or -1
 	//Hide results that aren't different if view is set to changed only
-	//viewFilter is 0 or 1
+	//options.viewFilter is 0 or 1
 	var sortOrder = parseInt($("#sort_results").val());
 	var outputHTML = "";
 
@@ -1649,7 +1943,7 @@ function outputResults(){
 //Helper function for filtering
 //Will return true if include or false if not
 function filterResult(i){
-	if(!viewFilter){
+	if(!options.viewFilter){
 		return true;
 	}
 	else{
@@ -1663,14 +1957,14 @@ function filterResult(i){
 		var prevLoss = previousFightResults[enemyIndex].includes("loss");
 		var prevTie = previousFightResults[enemyIndex].includes("inconclusive");
 		var sameResult = false;
-		if((fightResults[i].challenger.hp==0 && prevLoss) || (fightResults[i].enemyHp==0 && prevWin) || (fightResults[i].challenger.hp!=0 && fightResults[i].enemyHp!=0 && prevTie)){
+		if((fightResults[i].challengerHp==0 && prevLoss) || (fightResults[i].enemyHp==0 && prevWin) || (fightResults[i].challengerHp!=0 && fightResults[i].enemyHp!=0 && prevTie)){
 			sameResult = true;
 		}
 
-		if(viewFilter==1){//changed victor
+		if(options.viewFilter==1){//changed victor
 			return !sameResult;
 		}
-		else if(viewFilter==2){//changed rounds
+		else if(options.viewFilter==2){//changed rounds
 			var extractRounds =  previousFightResults[enemyIndex].match(/([1-4]) rounds?/);
 			if(extractRounds){
 				if(fightResults[i].rounds == extractRounds[1] || !sameResult){
@@ -1685,198 +1979,6 @@ function filterResult(i){
 				return false;
 			}
 		}
-	}
-}
-
-function showResultsTooltip(e,resultDiv){
-	var resultId = resultDiv.id.substring(7);
-	showingTooltip = true;
-	$("#frame_tooltip").html(fightResults[resultId].fightText).show();
-}
-
-function hideResultsTooltip(){
-	showingTooltip = false;
-	$("#frame_tooltip").hide();
-}
-
-function addTurn(turnName){
-	if(roundInitiators.length < 4){
-		$("#turn_text_" + roundInitiators.length).html(turnName);
-		$("#turn_" + roundInitiators.length).show();
-		roundInitiators.push(turnName);
-	}
-	if(options.autoCalculate){
-		calculate();
-	}
-}
-
-function deleteTurn(initTurn){
-	//keep ids the same, shift around text
-	$("#turn_" + (roundInitiators.length - 1)).hide();
-	roundInitiators.splice(initTurn,1);
-	for(var i = 0; i < roundInitiators.length; i++){
-		$("#turn_text_" + i).html(roundInitiators[i]);
-	}
-	if(options.autoCalculate){
-		calculate();
-	}
-}
-
-function verifyNumberInput(element,min,max){
-	//contrains number between two values and returns it
-	var newVal = parseInt($(element).val());
-	if(!newVal){
-		//If input is blank, make it 0
-		newVal = 0;
-		$(element).val(0);
-	}
-	if(newVal < min){
-		$(element).val(min);
-		newVal = min;
-	}
-	else if(newVal > max){
-		$(element).val(max);
-		newVal = max;
-	}
-	return newVal;
-}
-
-function resetChallenger(){
-	$("#hero_atk_buff, #hero_spd_buff, #hero_def_buff, #hero_res_buff, #hero_atk_debuff, #hero_spd_debuff, #hero_def_debuff, #hero_res_debuff, #hero_atk_spur, #hero_spd_spur, #hero_def_spur, #hero_res_spur, #challenger_precharge, #challenger_merge, #challenger_damage").val(0);
-	$("#challenger_rarity").val(5);
-	//Set skills to default
-	challenger.rarity = 5;
-	setSkillOptions();
-	resetChallengerSkills();
-
-	$("#hero_boon_hp, #hero_boon_atk, #hero_boon_spd, #hero_boon_def, #hero_boon_res").attr("data-val",0).removeClass("bane").removeClass("boon").addClass("neutral").html("Neutral");
-
-	challenger.damage = 0;
-	challenger.precharge = 0;
-	challenger.merge = 0;
-	challenger.buffs = {"atk":0,"spd":0,"def":0,"res":0};
-	challenger.debuffs = {"atk":0,"spd":0,"def":0,"res":0};
-	challenger.spur = {"atk":0,"spd":0,"def":0,"res":0};
-	
-	setStats();
-	setUI();
-
-	if(options.autoCalculate){
-		calculate();
-	}
-}
-
-function resetChallengerSkills(){
-	if(challenger.index != -1){
-		challenger.weapon = heroMaxSkills[challenger.rarity-1][challenger.index].weapon;
-		challenger.special = heroMaxSkills[challenger.rarity-1][challenger.index].special;
-		challenger.a = heroMaxSkills[challenger.rarity-1][challenger.index].a;
-		challenger.b = heroMaxSkills[challenger.rarity-1][challenger.index].b;
-		challenger.c = heroMaxSkills[challenger.rarity-1][challenger.index].c;
-	}
-	else{
-		challenger.weapon = -1;
-		challenger.special = -1;
-		challenger.a = -1;
-		challenger.b = -1;
-		challenger.c = -1;
-	}
-	challenger.s = -1;
-	
-
-	$("#hero_weapon").val(challenger.weapon);
-	$("#hero_special").val(challenger.special);
-	$("#hero_a").val(challenger.a);
-	$("#hero_b").val(challenger.b);
-	$("#hero_c").val(challenger.c);
-	$("#hero_s").val(challenger.s);
-
-	changeSkillPic("a",challenger.a);
-	changeSkillPic("b",challenger.b);
-	changeSkillPic("c",challenger.c);
-	changeSkillPic("s",challenger.s);
-
-}
-
-function resetEnemies(){
-	$("#enemies_atk_buff, #enemies_spd_buff, #enemies_def_buff, #enemies_res_buff, #enemies_atk_debuff, #enemies_spd_debuff, #enemies_def_debuff, #enemies_res_debuff, #enemies_atk_spur, #enemies_spd_spur, #enemies_def_spur, #enemies_res_spur, #enemies_weapon_overwrite, #enemies_special_overwrite, #enemies_a_overwrite, #enemies_b_overwrite, #enemies_c_overwrite, #enemies_merge, #enemies_damage").val(0);
-	$("#enemies_rarity").val(5);
-	$("#enemies_weapon").val(-1);
-	$("#enemies_special").val(-1);
-	$("#enemies_a").val(-1);
-	$("#enemies_b").val(-1);
-	$("#enemies_c").val(-1);
-	$("#enemies_s").val(-1);
-
-	enemies.fl.weapon = -1;
-	enemies.fl.special = -1;
-	enemies.fl.a = -1;
-	enemies.b = -1;
-	enemies.c = -1;
-	enemies.s = -1;
-	enemies.fl.rarity = 5;
-
-	$("#enemies_boon_hp, #enemies_boon_atk, #enemies_boon_spd, #enemies_boon_def, #enemies_boon_res").attr("data-val",0).removeClass("bane").removeClass("boon").addClass("neutral");
-
-	enemies.fl.damage = 0;
-	enemies.fl.precharge = 0;
-	enemies.fl.merge = 0;
-	enemies.fl.buffs = {"atk":0,"spd":0,"def":0,"res":0};
-	enemies.fl.debuffs = {"atk":0,"spd":0,"def":0,"res":0};
-	enemies.fl.spur = {"atk":0,"spd":0,"def":0,"res":0};
-
-	$(".wideincludebutton, .thinincludebutton").removeClass("notincluded").addClass("included");
-	include = {"melee":1,"ranged":1,"red":1,"blue":1,"green":1,"gray":1,"physical":1,"magical":1,"infantry":1,"cavalry":1,"flying":1,"armored":1,"staff":0,"nonstaff":1};
-	$("#include_staff").removeClass("included").addClass("notincluded");
-
-	setEnemies();
-	setEnemySkills();
-	setEnemyStats();
-	setUI();
-
-	if(options.autoCalculate){
-		calculate();
-	}
-}
-
-function showImportDialog(side,type){
-	//side = challenger or enemies, type = import or export
-	var label = "";
-	if(type=="import"){
-		label = "Import ";
-		$("#button_import").html("Import into calculator");
-	}
-	else{
-		label = "Export ";
-		$("#button_import").html("Copy to clipboard");
-	}
-
-	if(side=="challenger"){
-		$("#frame_import").removeClass("enemiesimport").addClass("challengerimport");
-		label += "challenger";
-	}
-	else if(side=="enemies"){
-		$("#frame_import").removeClass("enemiesimport").addClass("enemiesimport");
-		label += "enemies";
-	}
-
-	$("#import_title").html(label);
-}
-
-function hideImportDialog(){
-	$("#screen_fade").hide();
-	$("#frame_import").hide();
-}
-
-function switchEnemySelect(newVal){
-	customEnemyList = newVal;
-	if(customEnemyList==1){
-		$("#enemies_full_list").hide();
-		$("#enemies_custom_list").show();
-	}
-	else{
-		$("#enemies_custom_list").hide();
-		$("#enemies_full_list").show();
 	}
 }
 
@@ -1965,10 +2067,10 @@ function exportCalc(){
 			csvString += enemy.weaponType + ",";
 			csvString += enemy.rarity + ",";
 			csvString += enemy.merge + ",";
-			csvString += enemies.fl.boon + ",";
-			csvString += enemies.fl.bane + ",";
+			csvString += enemy.boon + ",";
+			csvString += enemy.bane + ",";
 			csvString += enemy.maxHp + ",";
-			csvString += Math.max(enemy.maxHp - enemies.fl.damage,1) + ",";
+			csvString += Math.max(enemy.maxHp - enemy.damage,1) + ",";
 			csvString += enemy.atk + ",";
 			csvString += enemy.spd + ",";
 			csvString += enemy.def + ",";
@@ -2027,8 +2129,8 @@ function exportCalc(){
 			csvString += options.startTurn + ",";
 			csvString += options.useGaleforce + ",";
 			for(var rnd = 0; rnd < 4;rnd++){
-				if(!!roundInitiators[rnd]){
-					csvString += roundInitiators[rnd].substring(0,roundInitiators[rnd].length-10) + ",";
+				if(!!options.roundInitiators[rnd]){
+					csvString += options.roundInitiators[rnd].substring(0,options.roundInitiators[rnd].length-10) + ",";
 				}
 				else{
 					csvString += ",";
@@ -2065,24 +2167,19 @@ function exportCalc(){
 	}
 }
 
-function addClEnemy(){
-	var newCustomEnemyId = customEnemyList.length;
-	var clEnemyHTML = "<div class=\"cl_enemy\" id=\"cl_enemy" + newCustomEnemyId + "\"><span id=\"cl_enemy" + newCustomEnemyId + "_name\">New enemy";
-	clEnemyHTML += "</span><div class=\"cl_delete_enemy button\" id=\"cl_enemy" + newCustomEnemyId + "_delete\" onclick=\"deleteClEnemy(" + newCustomEnemyId + ");\">x</div></div>";
-	$("#cl_enemylist_list").append(clEnemyHTML);
-}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-function deleteClEnemy(clEnemyId){
+//activeHero
 
-}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //activeHero is a class for simulating a unit in a battle
 //This is where most of the calculations happen
 //heroIndex is the index of the hero represented
 //challenger is true if challenger, false if enemy
-function activeHero(index,challenger){
-	//If challenger, index is for heroes[]
-	//Otherwise, index is for enemyData[]
+function activeHero(heroData){
 
 	this.combatBuffs = {"atk":0,"spd":0,"def":0,"res":0};
 	this.combatDebuffs = {"atk":0,"spd":0,"def":0,"res":0};
@@ -2090,72 +2187,35 @@ function activeHero(index,challenger){
 
 	this.skillNames = [];
 
-	if(challenger){
+	this.challenger = !!heroData.challenger; //Will be undefined if not challenger
+	this.heroIndex = heroData.index;
+	this.name = data.heroes[this.heroIndex].name;
+	this.rarity = heroData.rarity;
+	this.merge = heroData.merge;
 
-		this.challenger = true;
-		this.heroIndex = index;
-		this.name = data.heroes[index].name;
-		this.rarity = challengerRarity;
-		this.merge = challengerMerge;
+	this.weaponIndex = heroData.weapon;	
+	this.specialIndex = heroData.special;
+	this.aIndex = heroData.a;
+	this.bIndex = heroData.b;
+	this.cIndex = heroData.c;
+	this.sIndex = heroData.s;
 
-		this.weaponIndex = challengerWeapon;	
-		this.specialIndex = challengerSpecial;
-		this.aIndex = challengerA;
-		this.bIndex = challengerB;
-		this.cIndex = challengerC;
-		this.sIndex = challengerS;
+	this.buffs = heroData.buffs;
+	this.debuffs = heroData.debuffs;
+	this.spur = heroData.spur;
 
-		this.buffs = challengerBuffs;
-		this.debuffs = challengerDebuffs;
-		this.spur = challengerSpur;
+	this.maxHp = heroData.hp;
+	this.atk = heroData.atk;
+	this.spd = heroData.spd;
+	this.def = heroData.def;
+	this.res = heroData.res;
 
-		this.maxHp = challengerHp;
-		this.atk = challengerAtk;
-		this.spd = challengerSpd;
-		this.def = challengerDef;
-		this.res = challengerRes;
+	this.moveType = data.heroes[this.heroIndex].movetype;
+	this.weaponType = data.heroes[this.heroIndex].weapontype;
+	this.color = data.heroes[this.heroIndex].color;
 
-		this.moveType = data.heroes[index].movetype;
-		this.weaponType = data.heroes[index].weapontype;
-		this.color = data.heroes[index].color;
-
-		this.hp = Math.max(this.maxHp - challengerDamage,1);
-		this.precharge = 0 + challengerPrecharge;
-		
-	}
-	else{
-
-		this.challenger = false;
-		this.heroIndex = enemyData[index].index;
-		this.name = enemyData[index].name;
-		this.rarity = enemyRarity;
-		this.merge = enemiesMerge;
-
-		this.weaponIndex = enemyData[index].weapon;	
-		this.specialIndex = enemyData[index].special;
-		this.aIndex = enemyData[index].a;
-		this.bIndex = enemyData[index].b;
-		this.cIndex = enemyData[index].c;
-		this.sIndex = enemyData[index].s;
-
-		this.buffs = enemyBuffs;
-		this.debuffs = enemyDebuffs;
-		this.spur = enemySpur;
-
-		this.maxHp = enemyData[index].hp;
-		this.atk = enemyData[index].atk;
-		this.spd = enemyData[index].spd;
-		this.def = enemyData[index].def;
-		this.res = enemyData[index].res;
-
-		this.moveType = enemyData[index].movetype;
-		this.weaponType = enemyData[index].weapontype;
-		this.color = enemyData[index].color;
-
-		this.hp = Math.max(this.maxHp - enemyDamage,1);
-		this.precharge = 0 + enemyPrecharge;
-
-	}
+	this.hp = Math.max(this.maxHp - heroData.damage,1);
+	this.precharge = 0 + heroData.precharge;
 
 	//Make a list of skill names for easy reference
 	if(this.weaponIndex != -1){
@@ -3057,7 +3117,7 @@ function activeHero(index,challenger){
 	this.attack = function(enemy,turn,galeforce){
 
 		var roundText = "";//Common theme: text is returned by helper functions, so the functions are called by adding them to roundText
-		var firstTurn = (turn - startTurn == 0);
+		var firstTurn = (turn - options.startTurn == 0);
 		this.initiator = true;
 		enemy.initiator = false;
 		enemy.didAttack = false;
@@ -3084,10 +3144,10 @@ function activeHero(index,challenger){
 			roundText += enemy.renew(turn);
 
 			//Check threaten if not first turn (unless startThreatened is on)
-			if((threatenRule=="Both"||threatenRule=="Attacker") && firstTurn){
+			if((options.threatenRule=="Both"||options.threatenRule=="Attacker") && firstTurn){
 				roundText += enemy.threaten(this);
 			}
-			if((threatenRule=="Both"||threatenRule=="Defender") || !firstTurn){
+			if((options.threatenRule=="Both"||options.threatenRule=="Defender") || !firstTurn){
 				roundText += this.threaten(enemy);
 			}
 		}
