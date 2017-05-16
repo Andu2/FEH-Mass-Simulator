@@ -49,8 +49,8 @@ function getData($table){
 		heroskills = <?php echo $heroskillScript;?>;
 	</script>
 
-	<script type="text/javascript" src="activehero.js?v=8"></script>
-	<script type="text/javascript" src="code.js?v=8"></script>
+	<script type="text/javascript" src="activehero.js?v=9"></script>
+	<script type="text/javascript" src="code.js?v=9"></script>
 
 	<!-- Google Tag Manager -->
 	<script>
