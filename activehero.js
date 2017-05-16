@@ -308,87 +308,123 @@ function activeHero(index,challenger){
 		return defiantText;
 	}
 
-	this.blow = function(){
-		var blowText = "";
-		var skillName = "";
+	//For buffs that act like spur and stack
+	//Must be passed enemy for Earth Boost
+	this.startCombatSpur = function(enemy){
+		var boostText = "";
 
-		var blowAtk = 0;
-		if(this.has("Death Blow")){
-			blowAtk = this.has("Death Blow") * 2;
-			skillName = skills[this.aIndex].name;
-			this.combatSpur.atk += blowAtk;
-			blowText += this.name + " gets +" + blowAtk + " atk from initiating with " + skillName + ".<br>";
-		}
-		if(this.has("Swift Sparrow")){
-			blowAtk = this.has("Swift Sparrow") * 2;
-			skillName = skills[this.aIndex].name;
-			this.combatSpur.atk += blowAtk;
-			blowText += this.name + " gets +" + blowAtk + " atk from initiating with " + skillName + ".<br>";
-		}
-		if(this.has("Durandal")){
-			this.combatSpur.atk += 4;
-			blowText += this.name + " gets +4 atk from initiating with Durandal.<br>";
+		if(!this.initiator && enemy.range == "ranged"){
+			var skillName = "";
+			var buffVal = 0;
+			if(this.has("Distant Def")){
+				buffVal = this.has("Distant Def") * 2;
+				skillName = skills[this.aIndex].name;
+				this.combatSpur.def += buffVal;
+				this.combatSpur.res += buffVal;
+				boostText += this.name + " gets +" + buffVal + " def and res from being attacked from range with " + skillName + ".<br>";
+			}
 		}
 
-		var blowSpd = 0;
-		if(this.has("Darting Blow")){
-			blowSpd = this.has("Darting Blow") * 2;
-			skillName = skills[this.aIndex].name;
-			this.combatSpur.spd += blowSpd;
-			blowText += this.name + " gets " + blowSpd + " spd from initiating with " + skillName + ".<br>";
-		}
-		if(this.has("Swift Sparrow")){
-			blowSpd = this.has("Swift Sparrow") * 2;
-			skillName = skills[this.aIndex].name;
-			this.combatSpur.spd += blowSpd;
-			blowText += this.name + " gets +" + blowSpd + " spd from initiating with " + skillName + ".<br>";
-		}
-		if(this.has("Yato")){
-			this.combatSpur.spd += 4;
-			blowText += this.name + " gets +4 spd from initiating with Yato.<br>";
+		if(this.has("Ragnarok") && this.combatStartHp / this.maxHp >= 1){
+			this.combatSpur.atk += 5;
+			this.combatSpur.spd += 5;
+			boostText += this.name + " gets +5 atk and spd from being at full health with Ragnarok.<br>";
 		}
 
-		var blowDef = 0;
-		if(this.has("Armored Blow")){
-			blowDef = this.has("Armored Blow") * 2;
-			skillName = skills[this.aIndex].name;
-			this.combatSpur.def += blowDef;
-			blowText += this.name + " gets " + blowDef + " def from initiating with " + skillName + ".<br>";
-		}
-		if(this.has("Tyrfing") && this.hp / this.maxHp <= 0.5){
-			this.combatSpur.def += 4;
-			blowText += this.name + " gets +4 def from Tyrfing.<br>";
+		if(this.hp >= enemy.hp + 3){
+			var skillName = "";
+
+			var buffVal = 0;
+			if(this.has("Earth Boost")){
+				buffVal = this.has("Earth Boost") * 2;
+				skillName = skills[this.aIndex].name;
+				this.combatSpur.def += buffVal;
+				boostText += this.name + " gets +" + buffVal + " def from having >=3 more hp than " + enemy.name + " with " + skillName + ".<br>";
+			}
 		}
 
-		var blowRes = 0;
-		if(this.has("Warding Blow")){
-			blowRes = this.has("Warding Blow") * 2;
-			skillName = skills[this.aIndex].name;
-			this.combatSpur.res += blowRes;
-			blowText += this.name + " gets " + blowRes + " res from initiating with " + skillName + ".<br>";
-		}
-		if(this.has("Parthia")){
-			this.combatSpur.res += 4;
-			blowText += this.name + " gets +4 res from initiating with Parthia.<br>";
+		//this.blow = function(){
+		if(this.initiator){
+			var skillName = "";
+
+			var buffVal = 0;
+			if(this.has("Death Blow")){
+				buffVal = this.has("Death Blow") * 2;
+				skillName = skills[this.aIndex].name;
+				this.combatSpur.atk += buffVal;
+				boostText += this.name + " gets +" + buffVal + " atk from initiating with " + skillName + ".<br>";
+			}
+			if(this.has("Swift Sparrow")){
+				buffVal = this.has("Swift Sparrow") * 2;
+				skillName = skills[this.aIndex].name;
+				this.combatSpur.atk += buffVal;
+				boostText += this.name + " gets +" + buffVal + " atk from initiating with " + skillName + ".<br>";
+			}
+			if(this.has("Durandal")){
+				this.combatSpur.atk += 4;
+				boostText += this.name + " gets +4 atk from initiating with Durandal.<br>";
+			}
+
+			var blowSpd = 0;
+			if(this.has("Darting Blow")){
+				blowSpd = this.has("Darting Blow") * 2;
+				skillName = skills[this.aIndex].name;
+				this.combatSpur.spd += blowSpd;
+				boostText += this.name + " gets " + blowSpd + " spd from initiating with " + skillName + ".<br>";
+			}
+			if(this.has("Swift Sparrow")){
+				blowSpd = this.has("Swift Sparrow") * 2;
+				skillName = skills[this.aIndex].name;
+				this.combatSpur.spd += blowSpd;
+				boostText += this.name + " gets +" + blowSpd + " spd from initiating with " + skillName + ".<br>";
+			}
+			if(this.has("Yato")){
+				this.combatSpur.spd += 4;
+				boostText += this.name + " gets +4 spd from initiating with Yato.<br>";
+			}
+
+			var blowDef = 0;
+			if(this.has("Armored Blow")){
+				blowDef = this.has("Armored Blow") * 2;
+				skillName = skills[this.aIndex].name;
+				this.combatSpur.def += blowDef;
+				boostText += this.name + " gets " + blowDef + " def from initiating with " + skillName + ".<br>";
+			}
+			if(this.has("Tyrfing") && this.hp / this.maxHp <= 0.5){
+				this.combatSpur.def += 4;
+				boostText += this.name + " gets +4 def from Tyrfing.<br>";
+			}
+
+			var blowRes = 0;
+			if(this.has("Warding Blow")){
+				blowRes = this.has("Warding Blow") * 2;
+				skillName = skills[this.aIndex].name;
+				this.combatSpur.res += blowRes;
+				boostText += this.name + " gets " + blowRes + " res from initiating with " + skillName + ".<br>";
+			}
+			if(this.has("Parthia")){
+				this.combatSpur.res += 4;
+				boostText += this.name + " gets +4 res from initiating with Parthia.<br>";
+			}
+
+			return boostText;
 		}
 
-		return blowText;
-	}
+		//this.defendBuff = function(relevantDefType){
+		if(!this.initiator){
+			//Not actually going to limit text from relevantDefType, beccause res/def may always be relevant for special attacks
+			if(this.has("Binding Blade") || this.has("Naga")){
+				this.combatSpur.def += 2;
+				this.combatSpur.res += 2;
+				boostText += this.name + " gets +2 def and res while defending with " + skills[this.weaponIndex].name + ".<br>";
+			}
+			if(this.has("Tyrfing") && this.hp / this.maxHp <= 0.5){
+				this.combatSpur.def += 4;
+				boostText += this.name + " gets +4 def from Tyrfing.<br>";
+			}
 
-	this.defendBuff = function(relevantDefType){
-		var defendBuffText = "";
-		//Not actually going to limit text from relevantDefType, beccause res/def may always be relevant for special attacks
-		if(this.has("Binding Blade") || this.has("Naga")){
-			this.combatSpur.def += 2;
-			this.combatSpur.res += 2;
-			defendBuffText += this.name + " gets +2 def and res while defending with " + skills[this.weaponIndex].name + ".<br>";
+			return boostText;
 		}
-		if(this.has("Tyrfing") && this.hp / this.maxHp <= 0.5){
-			this.combatSpur.def += 4;
-			defendBuffText += this.name + " gets +4 def from Tyrfing.<br>";
-		}
-
-		return defendBuffText;
 	}
 
 	//poison only happens when the user initiates
@@ -453,6 +489,19 @@ function activeHero(index,challenger){
 			}
 			this.hp -= furyDmg;
 			furyText += this.name + " takes " + furyDmg + " damage after combat from " + skillName + ".<br>";
+		}
+
+		//TODO: Refactor so this code doesn't have to run twice
+		var furyDmg = 0;
+		if(this.has("Ragnarok") && this.initiator){
+			furyDmg = 5;
+		}
+		if(furyDmg > 0){
+			if(this.hp - furyDmg <= 0){
+				furyDmg = this.hp - 1;
+			}
+			this.hp -= furyDmg;
+			furyText += this.name + " takes " + furyDmg + " damage after combat from attacking with Ragnarok.<br>";
 		}
 
 		return furyText;
@@ -883,6 +932,13 @@ function activeHero(index,challenger){
 			if(this.weaponType == "staff"){
 				//poor healers
 				weaponModifier = 0.5;
+
+				//But wait!
+				if(this.has("Wrathful Staff")){
+					if(this.combatStartHp / this.maxHp >= 1.5 + this.has("Wrathful Staff") * -0.5){
+						weaponModifier = 1;
+					}
+				}
 			}
 
 			if(this.has("Absorb")){
@@ -1014,10 +1070,8 @@ function activeHero(index,challenger){
 		this.combatSpur = {"atk":0,"spd":0,"def":0,"res":0};
 		enemy.combatSpur = {"atk":0,"spd":0,"def":0,"res":0};
 
-		//This blows! (initiating boost skills)
-		roundText += this.blow();
-		//Initiatee defensive spurs (Naga, Binding Blade)
-		roundText += enemy.defendBuff(relevantDefType);
+		roundText += this.startCombatSpur(enemy);
+		roundText += enemy.startCombatSpur(this);
 
 		//Adjust speeds
 		var thisEffSpd = this.spd + Math.max(this.buffs.spd,this.combatBuffs.spd) + Math.min(this.debuffs.spd,this.combatDebuffs.spd) + this.spur.spd + this.combatSpur.spd;

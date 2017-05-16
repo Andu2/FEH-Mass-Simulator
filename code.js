@@ -691,6 +691,9 @@ $(document).ready(function(){
 		}	
 	});
 
+	//Show update notice if hasn't been show for this cookie
+	doUpdateNotice();
+
 });
 
 function changeSkillPic(slot,skillindex){
@@ -1783,5 +1786,22 @@ function resetEnemies(){
 
 	if(autoCalculate){
 		calculate();
+	}
+}
+
+function hideUpdateNotice(){
+	$("#frame_updatenotice").fadeOut(300);
+}
+
+function doUpdateNotice(){
+	//If localStorage is not supported, hopefully this just throws an error on this function and doesn't break anything else
+	var currentUpdate = parseInt($("#frame_updatenotice").attr("data-update"));
+	var lastUpdate = localStorage.getItem("lastUpdateShown");
+	if(lastUpdate!=currentUpdate){
+		localStorage.setItem("lastUpdateShown",currentUpdate);
+		//Don't show the notification until the page is well-loaded
+		setTimeout(function(){
+			$("#frame_updatenotice").fadeIn(1000);
+		}, 1000);
 	}
 }

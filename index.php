@@ -70,6 +70,10 @@ function getData($table){
 <body>
 	<div id="frame_main">
 		<div id="header"><img src="logo.png" style="margin-right:20px;"/><div style="display:inline-block;">Mass Duel Simulator!</div><div id="subtitle"></div></div>
+		<div id="frame_updatenotice" data-update="0">Update notice: New heroes! (Boey, Celica, Genny, Mae)<br>New skills! (Gronnowl, Blarowl, Ragnarok, Earth Boost, Distant Def, Wrathful Staff, B Tome Exp.)
+			<div id="update_icon">!</div>
+			<div class="button" id="button_closeupdatenotice" onclick="hideUpdateNotice();">x</div>
+		</div>
 		<div id="frame_options">
 			<div id="frame_challenger">
 				<div id="challenger_bar_top">
@@ -194,7 +198,7 @@ function getData($table){
 				</div>-->
 			</div>
 		</div>
-		<div id="footer">Last <a href="changelog.txt">updated</a> 2017-4-16. <a href="https://www.reddit.com/user/anducrandu">Message me on reddit</a> if I need to fix something!</div>
+		<div id="footer">Last <a href="changelog.txt">updated</a> 2017-5-15. <a href="https://www.reddit.com/user/anducrandu">Message me on reddit</a> if I need to fix something!</div>
 	</div>
 	<div id="frame_tooltip"></div>
 	<a href="../../games"><div id="frame_sitead">&lt; Back to Games</div></a>
