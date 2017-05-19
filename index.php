@@ -70,7 +70,7 @@ function getData($table){
 <body>
 	<div id="frame_main">
 		<div id="header"><img src="logo.png" style="margin-right:20px;"/><div style="display:inline-block;">Mass Duel Simulator!</div><div id="subtitle"></div></div>
-		<div id="frame_updatenotice" data-update="0">Update notice: New heroes! (Boey, Celica, Genny, Mae)<br>New skills! (Gronnowl, Blarowl, Ragnarok, Earth Boost, Distant Def, Wrathful Staff, B Tome Exp.)
+		<div id="frame_updatenotice" data-update="1">New hero: Lloyd!<br>Also, prepare for some fun new features by Monday! (Telling everyone this so I actually get it done...)
 			<div id="update_icon">!</div>
 			<div class="button" id="button_closeupdatenotice" onclick="hideUpdateNotice();">x</div>
 		</div>

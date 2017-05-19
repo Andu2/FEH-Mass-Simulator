@@ -325,10 +325,22 @@ function activeHero(index,challenger){
 			}
 		}
 
-		if(this.has("Ragnarok") && this.combatStartHp / this.maxHp >= 1){
-			this.combatSpur.atk += 5;
-			this.combatSpur.spd += 5;
-			boostText += this.name + " gets +5 atk and spd from being at full health with Ragnarok.<br>";
+		if(this.combatStartHp / this.maxHp >= 1){
+			if(this.has("Ragnarok")){
+				//Does this take effect when defending?
+				this.combatSpur.atk += 5;
+				this.combatSpur.spd += 5;
+				boostText += this.name + " gets +5 atk and spd from being at full health with Ragnarok.<br>";
+			}
+			//assuming there will be more later
+		}
+
+		if(enemy.combatStartHp / enemy.maxHp >= 1){
+			if(this.has("Regal Blade")){
+				this.combatSpur.atk += 2;
+				this.combatSpur.spd += 2;
+				boostText += this.name + " gets +2 atk and spd from " + enemy.name + " being at full health with Regal Blade.<br>";
+			}
 		}
 
 		if(this.hp >= enemy.hp + 3){
@@ -493,7 +505,7 @@ function activeHero(index,challenger){
 
 		//TODO: Refactor so this code doesn't have to run twice
 		var furyDmg = 0;
-		if(this.has("Ragnarok") && this.initiator){
+		if(this.has("Ragnarok") && this.didAttack && this.combatStartHp / this.maxHp >= 1){
 			furyDmg = 5;
 		}
 		if(furyDmg > 0){
@@ -501,7 +513,7 @@ function activeHero(index,challenger){
 				furyDmg = this.hp - 1;
 			}
 			this.hp -= furyDmg;
-			furyText += this.name + " takes " + furyDmg + " damage after combat from attacking with Ragnarok.<br>";
+			furyText += this.name + " takes " + furyDmg + " damage after combat from doing an attack with Ragnarok.<br>";
 		}
 
 		return furyText;
