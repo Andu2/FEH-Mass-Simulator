@@ -495,8 +495,42 @@ body{
 	bottom:0;
 	width:127px;
 	background-color: #111111;
-	overflow-y:auto;
 	border-right:2px solid #000000;
+}
+
+#cl_enemylist_list{
+	position:absolute;
+	top:24px;
+	left:0;
+	right:0;
+	bottom:26px;
+	overflow-y:auto;
+}
+
+.clbutton{
+	position:absolute;
+	left:15px;
+	right:15px;
+	border-radius:2px;
+	height:16px;
+	line-height:16px;
+	font-size:11px;
+	text-align:center;
+	background-color: #222222;
+}
+
+.clbutton:hover{
+	background-color: #888888;
+	cursor:pointer;
+	font-weight:bold;
+}
+
+#cl_removeall{
+	bottom:4px;
+}
+
+#cl_addenemy{
+	top:4px;
 }
 
 .cl_enemy{
@@ -540,35 +574,12 @@ body{
 	font-weight:bold;
 }
 
-#cl_addenemy{
-	position:relative;
-	width:86px;
-	height:14px;
-	font-size:13px;
-	line-height:12px;
-	border-radius:2px;
-	text-align:center;
-	background-color: #222222;
-	margin: 3px auto;
-}
-
-.cl_enemy + #cl_addenemy{
-	margin-top:0;
-}
-
-#cl_addenemy:hover{
-	cursor:pointer;
-	background-color: #888888;
-}
-
 .clSelected{
-	background-color: #ff5165;
+	background-color: #ff5165!important;
 }
 
 .clSelected:hover{
-	background-color: #ffffff;
-	font-weight:bold;
-	color:#d82a3e;
+	cursor:default;
 }
 
 .clSelected .cl_delete_enemy{
