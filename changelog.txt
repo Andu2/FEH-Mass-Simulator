@@ -1,8 +1,16 @@
+2017-5-23:
+	-Option to view only results that changed.
+	-Export results.
+	-Custom enemy lists
+	-Import/export challenger and enemies
+	-Introduced bugs
+
 2017-5-19
 	-Added new skills: Regal Blade
 
 2017-5-15
 	-Added new skills: Ragnarok, Earth Boost, Distant Def, Wrathful Staff
+	-Added update notification
 
 2017-5-7
 	-Added absorb staff back in. When did I even delete that code?

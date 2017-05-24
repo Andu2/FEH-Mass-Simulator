@@ -89,7 +89,7 @@ body{
 
 #frame_options{
 	position: relative;
-	height:356px;
+	height:388px;
 }
 
 #frame_results{
@@ -104,7 +104,7 @@ body{
 	left:0;
 	top:0;
 	bottom:0;
-	width:390px;
+	width:380px;
 }
 
 #frame_enemies{
@@ -115,7 +115,7 @@ body{
 	right:0;
 	top:0;
 	bottom:0;
-	width:500px;
+	width:510px;
 }
 
 #challenger_bar_top{
@@ -127,19 +127,97 @@ body{
 	padding: 0 10px;
 }
 
-#frame_challenger_picture{
+.bar_top_title{
+	font-family: "Merriweather";
+	font-size:19px;
+	height:34px;
+	line-height:28px;
 	position:absolute;
-	top:34px;
+	left:0;right:0;top:3px;
+	padding-left:20px;
+}
+
+.bar_top_title_right{
+	position:absolute;
+	right:0;top:-1px;bottom:0;
+	font-size:16px;
+	font-family:"Segoe UI", sans-serif;
+}
+
+.button_importexport{
+	display:inline-block;
+	font-size:14px;
+	border-radius:2px;
+	padding: 0 6px;
+	margin-right:4px;
+	width:54px;
+	text-align:center;
+}
+
+#frame_challenger .button_importexport{
+	background-color: #4a6de2;
+}
+
+#frame_challenger .button_importexport:hover{
+	background-color: #ffffff;
+	color:#4a6de2;
+	font-weight:bold;
+}
+
+#frame_enemies .button_importexport{
+	background-color: #d82a3e;
+}
+
+#frame_enemies .button_importexport:hover{
+	background-color: #ffffff;
+	color:#d82a3e;
+	font-weight:bold;
+}
+
+.bar_top_options{
+	position:absolute;
+	height:30px;
+	line-height:30px;
+	left:0;right:0;top:0;
+	padding: 0 6px;
+	font-size:14px;
+}
+
+.bar_top_options_right{
+	position: absolute;
+	right:0;
+	top:0;
+	bottom:0;
+}
+
+.bar_label{
+	margin-right:5px;
+}
+
+* + .bar_label{
+	margin-left:8px;
+}
+
+#frame_challenger .bar_top_options{
+	background-color: #4a6de2;
+	border-bottom:2px solid #7797ff;
+}
+
+#frame_enemies .bar_top_options{
+	background-color: #d82a3e;
+	border-bottom:2px solid #ff5165;
+}
+
+.frame_hero_picture{
+	position:absolute;
+	top:0;
 	left:0;
 	width:150px;
 	height:150px;
 	background-color: #111111;
-	border-color:#7797ff;
-	border-style: solid;
-	border-width:0 2px 2px 0;
 }
 
-#challenger_picture{
+.hero_picture{
 	position:absolute;
 	top:0;
 	left:0;
@@ -147,47 +225,59 @@ body{
 	height:150px;
 }
 
-#challenger_name{
-	display:inline-block;
-	margin:0 0 0 15px;
+.frame_hero_main{
+	position:absolute;
+	top:34px;
+	left:0;right:0;bottom:0;
+}
+
+.frame_hero_main_right{
+	position:absolute;
+	right:0;top:0;bottom:0;left:129px;
+}
+
+.frame_hero_main_top{
+	position:absolute;
+	left:0;right:0;top:32px;
+	height:150px;
+	border-bottom:2px solid #7797ff;
+}
+
+.frame_hero_main_bottom{
+	position:absolute;
+	left:0;right:0;bottom:0;top:184px;
 }
 
 .frame_stats{
 	position:absolute;
 	right:0;
-	top:39px;
-	width:230px;
-	height:135px;
+	top:0;
+	padding: 18px 0 0 8px;
+	width:220px;
+	height:132px;
 	line-height:23px;
-	padding-left:20px;
-	padding-top:10px;
-}
-
-#challenger_stats{
-	border-color:#7797ff;
-	border-style: solid;
-	border-width:0 0 2px 0;
+	border-left: 2px solid #7797ff;
 }
 
 .bufflabel{
 	font-size:11px;
 	position:absolute;
 	right:104px;
-	bottom:-26px;
+	top:-2px;
 }
 
 .debufflabel{
 	font-size:11px;
 	position:absolute;
 	right:54px;
-	bottom:-26px;
+	top:-2px;
 }
 
 .spurlabel{
 	font-size:11px;
 	position:absolute;
 	right:18px;
-	bottom:-26px;
+	top:-2px;
 }
 
 .stat_row{
@@ -203,26 +293,22 @@ body{
 
 .buff_input{
 	position: absolute;
-	left:96px;
+	left:86px;
 }
 
 .debuff_input{
 	position: absolute;
-	left:140px;
+	left:130px;
 }
 
 .spur_input{
 	position: absolute;
-	left:184px;
+	left:174px;
 }
 
-.level_label{
-	font-size:13px;
-}
-
-#challenger_skills{
+.hero_skills{
 	position:absolute;
-	top:190px;
+	top:4px;
 	line-height:22px;
 	font-size:12px;
 }
@@ -259,34 +345,26 @@ body{
 	top:4px;
 }
 
-#challenger_misc{
+.hero_misc{
 	position: absolute;
-	top:186px;
+	top:0px;
 	padding-top:4px;
 	bottom:0;
-	left:194px;
+	right:0;
 	border-color:#7797ff;
 	border-style: solid;
 	border-width:0 0 0 2px;
-	width:200px;
+	width:184px;
 }
 
-#enemies_misc{
-	position: absolute;
-	top:186px;
-	padding-top:4px;
-	bottom:0;
-	left:280px;
+#frame_enemies div{
 	border-color:#ff5165;
-	border-style: solid;
-	border-width:0 0 0 2px;
-	width:200px;
 }
 
 .misc_row{
 	margin-left:8px;
 	height:26px;
-	width:180px;
+	width:170px;
 	line-height:24px;
 	position: relative;
 }
@@ -294,7 +372,7 @@ body{
 .misc_row_enemies{
 	margin-left:8px;
 	height:26px;
-	width:204px;
+	width:170px;
 	line-height:24px;
 	position: relative;
 }
@@ -340,38 +418,35 @@ body{
 	margin-right:6px;
 }
 
-#reset_challenger{
-	background-color: #4a6de2;
-	position:absolute;
-	right:3px;
-	bottom:3px;
-	top:3px;
+.reset_button{
+	display:inline-block;
+	position:relative;
 	border-radius:2px;
 	font-size:12px;
-	width:60px;
+	width:44px;
 	text-align:center;
-	line-height:28px;
+	line-height:22px;
+	margin:0 4px 0 8px;
+}
+
+#reset_challenger{
+	background-color: #7797ff;
 }
 
 #reset_challenger:hover{
-	background-color: #aabefd;
+	background-color: #ffffff;
+	color:#4a6de2;
+	font-weight:bold;
 }
 
-#reset_enemies{
-	background-color: #d82a3e;
-	position:absolute;
-	right:3px;
-	bottom:3px;
-	top:3px;
-	border-radius:2px;
-	font-size:12px;
-	width:60px;
-	text-align:center;
-	line-height:28px;
+.reset_enemies{
+	background-color: #ff5165;
 }
 
-#reset_enemies:hover{
-	background-color: #ff8397;
+.reset_enemies:hover{
+	background-color: #ffffff;
+	color:#d82a3e;
+	font-weight:bold;
 }
 
 #enemies_bar_top{
@@ -383,28 +458,12 @@ body{
 	padding:0 10px;
 }
 
-#enemies_stats{
-	border-color:#ff5165;
-	border-style: solid;
-	border-width:0 0 2px 0;
-}
-
-#enemies_skills{
-	position:absolute;
-	top:190px;
-	left:8px;
-	line-height:24px;
-}
-
 #enemies_include{
 	padding-left:6px;
 	position:absolute;
 	left:0;
-	top:34px;
+	top:2px;
 	height:150px;
-	border-color:#ff5165;
-	border-style: solid;
-	border-width:0 2px 2px 0;
 }
 
 #enemies_includeheader{
@@ -424,7 +483,7 @@ body{
 	font-size:12px;
 	height:21px;
 	line-height:21px;
-	width:122px;
+	width:132px;
 	display:inline-block;
 	border-radius:2px;
 }
@@ -437,7 +496,7 @@ body{
 	height:21px;
 	line-height:21px;
 	text-align:center;
-	width:59px;
+	width:64px;
 	font-size:12px;
 	display:inline-block;
 	border-radius:2px;
@@ -460,11 +519,9 @@ body{
 }
 
 .included:hover{
-	background-color: #ff8397;
-}
-
-.enemies_row{
-	position:relative;
+	background-color: #ffffff;
+	color:#d82a3e;
+	font-weight:bold;
 }
 
 .enemies_input{
@@ -472,6 +529,104 @@ body{
 	width:100px;
 	left:112px;
 	top:0;
+}
+
+#cl_enemylist{
+	position:absolute;
+	top:0;
+	left:0;
+	bottom:0;
+	width:127px;
+	background-color: #111111;
+	border-right:2px solid #000000;
+}
+
+#cl_enemylist_list{
+	position:absolute;
+	top:24px;
+	left:0;
+	right:0;
+	bottom:26px;
+	overflow-y:auto;
+}
+
+.clbutton{
+	position:absolute;
+	left:15px;
+	right:15px;
+	border-radius:2px;
+	height:16px;
+	line-height:16px;
+	font-size:11px;
+	text-align:center;
+	background-color: #222222;
+}
+
+.clbutton:hover{
+	background-color: #888888;
+	cursor:pointer;
+	font-weight:bold;
+}
+
+#cl_removeall{
+	bottom:4px;
+}
+
+#cl_addenemy{
+	top:4px;
+}
+
+.cl_enemy{
+	font-size:11px;
+	position:relative;
+	width:auto;
+	margin: 3px;
+	border-radius:2px;
+	background-color: #444444;
+	height:22px;
+	line-height:22px;
+	padding-left:4px;
+}
+
+.cl_enemy + .cl_enemy{
+	margin-top:0;
+}
+
+.cl_enemy:hover{
+	background-color: #888888;
+}
+
+.cl_delete_enemy{
+	text-align:center;
+	position:absolute;
+	right:2px;
+	top:2px;
+	bottom:2px;
+	width:16px;
+	line-height:16px;
+	border-radius:2px;
+	background-color: #222222;
+	color:#ffffff;
+	font-weight:normal;
+}
+
+.cl_delete_enemy:hover{
+	cursor:pointer;
+	background-color: #ffffff;
+	color:#d82a3e;
+	font-weight:bold;
+}
+
+.clSelected{
+	background-color: #ff5165!important;
+}
+
+.clSelected:hover{
+	cursor:default;
+}
+
+.clSelected .cl_delete_enemy{
+	background-color: #d82a3e;
 }
 
 /*Rules/////////////////////////////////////////////*/
@@ -649,7 +804,7 @@ body{
 	right:10px;
 	top:0;
 	bottom:0;
-	line-height:34px;
+	line-height:32px;
 }
 
 #results_graph_back{
@@ -699,6 +854,25 @@ body{
 
 #button_calculate:hover{
 	background-color: #444444;
+}
+
+#button_exportcalc{
+	position:relative;
+	border-radius:2px;
+	font-size:16px;
+	height:28px;
+	width:116px;
+	text-align:center;
+	line-height:26px;
+	margin-left:12px;
+	display:inline-block;
+	background-color: #888888;
+	color:#ffffff;
+}
+
+#button_exportcalc:hover{
+	background-color: #444444;
+	font-weight:bold;
 }
 
 .results_entry{
@@ -907,7 +1081,7 @@ a:hover{
 	color:#262c58;
 }
 
-#weaponIcon{
+.weaponIcon{
 	position: absolute;
 	right:2px;
 	bottom:2px;
@@ -921,4 +1095,139 @@ a:hover{
 	top:1px;
 	width:18px;
 	height:18px;
+}
+
+/*///////////////////Import/export*/
+#screen_fade{
+	position:fixed;
+	top:0;left:0;right:0;bottom:0;
+	background-color: #000000;
+	opacity:0.7;
+	display:none;
+}
+
+#frame_import{
+	position:fixed;
+	top:0;left:0;right:0;bottom:0;
+	width:600px;
+	height:540px;
+	margin: auto;
+	border-radius: 4px;
+	display:none;
+}
+
+.challengerimport{
+	background-color:#7797ff;
+}
+
+.enemiesimport{
+	background-color:#ff5165;
+}
+
+#import_header{
+	font-size:22px;
+	height:34px;
+	line-height:34px;
+	position:absolute;
+	top:0;
+	left:0;right:0;
+	text-align:center;
+}
+
+#import_exit{
+	position:absolute;
+	top:0;
+	bottom:0;
+	right:12px;
+	font-size:14px;
+	line-height:20px;
+	width:22px;
+	height:22px;
+	margin:auto 0;
+	border-radius:2px;
+}
+
+.challengerimport #import_exit{
+	background-color: #4a6de2; 
+}
+
+.challengerimport #import_exit:hover{
+	background-color: #ffffff;
+	color:#4a6de2;
+	font-weight:bold;
+}
+
+.enemiesimport #import_exit{
+	background-color: #d82a3e; 
+}
+
+.enemiesimport #import_exit:hover{
+	background-color: #ffffff;
+	color:#d82a3e;
+	font-weight:bold;
+}
+
+.importinput{
+	position:absolute;
+	top:-15px;left:0;right:0;bottom:0;
+	width:574px;
+	height:449px;
+	margin: auto;
+	resize:none;
+}
+
+#import_footer{
+	position:absolute;
+	height:40px;
+	bottom:0;
+	left:0;
+	right:0;
+	line-height:40px;
+}
+
+#button_import{
+	position:absolute;
+	left:0;
+	top:0;
+	right:0;
+	width:200px;
+	height:30px;
+	line-height:30px;
+	margin:auto;
+	text-align:center;
+	border-radius:4px;
+}
+
+#export_collapse{
+	position:absolute;
+	right:0px;
+	bottom:0;
+}
+#export_collapse_label{
+	position:absolute;
+	bottom:16px;
+	right:10px;
+	padding-right:22px;
+	width:60px;
+	display:none;
+}
+
+.challengerimport #button_import{
+	background-color: #4a6de2; 
+}
+
+.challengerimport #button_import:hover{
+	background-color: #ffffff;
+	color:#4a6de2;
+	font-weight:bold;
+}
+
+.enemiesimport #button_import{
+	background-color: #d82a3e; 
+}
+
+.enemiesimport #button_import:hover{
+	background-color: #ffffff;
+	color:#d82a3e;
+	font-weight:bold;
 }
