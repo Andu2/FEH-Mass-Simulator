@@ -16,6 +16,9 @@ data.magicalWeapons = ["redtome","bluetome","greentome","dragon","staff"];
 data.moveTypes = ["infantry","armored","flying","cavalry"];
 data.colors = ["red","blue","green","gray"];
 data.skillSlots = ["weapon","special","a","b","c","s"];
+data.buffTypes = ["buffs","debuffs","spur"];
+data.buffStats = ["atk","spd","def","res"];
+data.stats = ["hp","atk","spd","def","res"];
 
 //Growth shifts of 3 are what make some banes/boons +/- 4
 //growth table from https://feheroes.wiki/Stat_Growth
@@ -30,13 +33,13 @@ data.growths = [[6,8,9,11,13,14,16,18,19,21,23,24],
 //Sort hero array by name
 data.heroes.sort(function(a,b){
 	//console.log(a.name + ", " + b.name + ": " + a.name>b.name);
-	return (a.name>b.name)*2-1;
+	return (a.name.toLowerCase()>b.name.toLowerCase())*2-1;
 })
 
 //Sort skills array by name
 data.skills.sort(function(a,b){
 	//console.log(a.name + ", " + b.name + ": " + a.name>b.name);
-	return (a.name>b.name)*2-1;
+	return (a.name.toLowerCase()>b.name.toLowerCase())*2-1;
 })
 
 data.heroPossibleSkills = [];
@@ -67,7 +70,7 @@ function initOptions(){
 	options.threatenRule = "Neither";
 	options.showOnlyMaxSkills = true;
 	options.hideUnaffectingSkills = true;
-	options.viewFilter = 0;
+	options.viewFilter = "all";
 	options.customEnemyList = 0;
 	options.customEnemySelected = -1;
 	options.sortOrder = 1;
@@ -144,11 +147,11 @@ function initOptions(){
 	enemies.fl.b = -1;
 	enemies.fl.c = -1;
 	enemies.fl.s = -1;
-	enemies.fl.replaceWeapon = false;
-	enemies.fl.replaceSpecial = false;
-	enemies.fl.replaceA = false;
-	enemies.fl.replaceB = false;
-	enemies.fl.replaceC = false;
+	enemies.fl.replaceWeapon = 0;
+	enemies.fl.replaceSpecial = 0;
+	enemies.fl.replaceA = 0;
+	enemies.fl.replaceB = 0;
+	enemies.fl.replaceC = 0;
 
 	enemies.fl.buffs = {"atk":0,"spd":0,"def":0,"res":0};
 	enemies.fl.debuffs = {"atk":0,"spd":0,"def":0,"res":0};
@@ -241,9 +244,8 @@ $(document).ready(function(){
 	$("#challenger_name, #cl_enemy_name").html(heroHTML);
 
 	setSkillOptions(enemies.fl);
-	setFlEnemies();
-	setSkills(enemies.fl);
-	setStats(enemies.fl);
+	
+	initEnemyList();
 
 	updateFullUI();
 
@@ -252,8 +254,17 @@ $(document).ready(function(){
 	$("input, select").on("change", function(e){
 		var dataVar = $(this).attr("data-var");
 		if(dataVar){
-			var varsThatChangeStats = [".rarity",".merge",".boon",".bane",".weapon",".a",".s",".replaceWeapon",".replaceA"];
-			var varsThatChangeSkills = [".rarity",".replaceWeapon",".replaceSpecial",".replaceA",".replaceB",".replaceC"];
+			var varsThatChangeStats = [
+				".rarity",".merge",".boon",".bane",".weapon",".a",".s",".replaceWeapon",".replaceA"
+			];
+			var varsThatChangeSkills = [
+				".rarity",".replaceWeapon",".replaceSpecial",".replaceA",".replaceB",".replaceC","enemies.fl.weapon",
+				"enemies.fl.special","enemies.fl.a","enemies.fl.b","enemies.fl.c","enemies.fl.s"
+			];
+			var varsThatUpdateFl = [
+				".boon",".bane",".precharge",".damage",".rarity"
+			]
+
 			var newVal = $(this).val();
 			var useCalcuwait = false;
 			var blockCalculate = false;
@@ -266,6 +277,9 @@ $(document).ready(function(){
 				hero = enemies.fl;
 			}
 			else if(beginsWith(dataVar,"enemies.cl.list")){
+				if(options.customEnemySelected == -1){
+					addClEnemy();
+				}
 				hero = enemies.cl.list[options.customEnemySelected];
 			}
 
@@ -289,6 +303,7 @@ $(document).ready(function(){
 
 			//Stuff specific to changing skill
 			if(newVal != -1 && (endsWith(dataVar,".weapon") || endsWith(dataVar,".special") || endsWith(dataVar,".a") || endsWith(dataVar,".b") || endsWith(dataVar,".c") || endsWith(dataVar,".s"))){
+
 				var dataToPass = data.skills[newVal].name;
 				if(endsWith(dataVar,".s")){
 					//Rename s skills to differentate from regular skills
@@ -307,17 +322,7 @@ $(document).ready(function(){
 				if(newVal != -1){
 
 					//find hero's starting skills
-					hero.naturalSkills = data.heroBaseSkills[hero.index];
-
-					hero.validWeaponSkills = getValidSkills(hero,"weapon");
-					hero.validSpecialSkills = getValidSkills(hero,"special");
-					hero.validASkills = getValidSkills(hero,"a");
-					hero.validBSkills = getValidSkills(hero,"b");
-					hero.validCSkills = getValidSkills(hero,"c");
-					hero.validSSkills = getValidSkills(hero,"s");
-					setSkillOptions(hero);
-					setSkills(hero);
-					setStats(hero);
+					initHero(hero);
 
 					if(hero.challenger){
 
@@ -330,6 +335,28 @@ $(document).ready(function(){
 						//Analytics
 						dataLayer.push({"event":"changeEnemy","challenger_name":data.heroes[hero.index].name});
 					}
+				}
+			}
+			else if(endsWith(dataVar,".showOnlyMaxSkills") || endsWith(dataVar,".hideUnaffectingSkills")){
+				blockCalculate = true;
+				setSkillOptions(challenger);
+				if(options.customEnemySelected != -1){
+					setSkillOptions(enemies.cl.list[options.customEnemySelected]);
+				}
+			}
+			else if(endsWith(dataVar,".viewFilter") || endsWith(dataVar,".sortOrder")){
+				blockCalculate = true;
+			}
+			else if(endsWith(dataVar,".autoCalculate")){
+				if(newVal == 0){
+					blockCalculate = true;
+				}
+			}
+
+			for(var i = 0; i < varsThatUpdateFl.length; i++){
+				if(endsWith(dataVar,varsThatUpdateFl[i])){
+					updateFlEnemies();
+					break;
 				}
 			}
 
@@ -350,7 +377,7 @@ $(document).ready(function(){
 			if(hero && hero.challenger){
 				updateChallengerUI();
 			}
-			else{
+			else if(typeof hero != "undefined"){
 				updateEnemyUI();
 			}
 
@@ -383,10 +410,8 @@ $(document).ready(function(){
 			$(this).removeClass("notincluded");
 			$(this).addClass("included");
 		}
-		setFlEnemies();
-		setSkills(enemies.fl);
-		setStats(enemies.fl);
-		updateChallengerUI();
+		initEnemyList();
+		updateEnemyUI()
 		calculate();
 	});
 
@@ -395,6 +420,18 @@ $(document).ready(function(){
 	})
 	$("#add_turn_enemy").click(function(){
 		addTurn("Enemy initiates");
+	})
+
+	$(".button_importexport").click(function(){
+		var target = "challenger";
+		var type = "import";
+		if(this.id.indexOf("enemies") != -1){
+			target = "enemies";
+		}
+		if(this.id.indexOf("export") != -1){
+			type = "export";
+		}
+		showImportDialog(target,type);
 	})
 
 	$("#import_exit").click(function(){
@@ -453,6 +490,28 @@ $(document).ready(function(){
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function initHero(hero){
+	if(hero.index != -1){
+		hero.naturalSkills = data.heroBaseSkills[hero.index];
+
+		hero.validWeaponSkills = getValidSkills(hero,"weapon");
+		hero.validSpecialSkills = getValidSkills(hero,"special");
+		hero.validASkills = getValidSkills(hero,"a");
+		hero.validBSkills = getValidSkills(hero,"b");
+		hero.validCSkills = getValidSkills(hero,"c");
+		hero.validSSkills = getValidSkills(hero,"s");
+		setSkillOptions(hero);
+		setSkills(hero);
+		setStats(hero);
+	}
+}
+
+function initEnemyList(){
+	setFlEnemies();
+	setSkills(enemies.fl);
+	setStats(enemies.fl);
+}
 
 function getValidSkills(hero,slot){
 	//returns an array of indices on "skills" array for skills that hero can learn
@@ -725,7 +784,7 @@ function setSkills(hero){
 
 			//Find if skill needs replacement based on inputs
 			data.skillSlots.forEach(function(slot){
-				if(enemies.fl[slot] != -1 && (enemies.fl.replaceWeapon || enemies.fl.list[i][slot] == -1)){
+				if(enemies.fl[slot] != -1 && (enemies.fl["replace" + capitalize(slot)] == 1 || enemies.fl.list[i][slot] == -1)){
 					if(data.heroPossibleSkills[enemies.fl.list[i].index].includes(enemies.fl[slot])){
 						enemies.fl.list[i][slot] = enemies.fl[slot];
 					}
@@ -743,7 +802,7 @@ function setSkills(hero){
 	}	
 }
 
-function resetHero(hero){//also resets fl, despite singular name - pass enemies.fl
+function resetHero(hero,blockInit){//also resets fl, despite singular name - pass enemies.fl
 	hero.rarity = 5;
 	hero.merge = 0;
 
@@ -762,7 +821,7 @@ function resetHero(hero){//also resets fl, despite singular name - pass enemies.
 		updateChallengerUI();
 	}
 	else{
-		if(!options.customEnemyList){
+		if(options.customEnemyList == 0){
 			enemies.fl.weapon = -1;
 			enemies.fl.special = -1;
 			enemies.fl.a = -1;
@@ -772,9 +831,9 @@ function resetHero(hero){//also resets fl, despite singular name - pass enemies.
 
 			enemies.fl.include = {"melee":1,"ranged":1,"red":1,"blue":1,"green":1,"gray":1,"physical":1,"magical":1,"infantry":1,"cavalry":1,"flying":1,"armored":1,"staff":0,"nonstaff":1};
 
-			setFlEnemies();
-			setSkills(enemies.fl);
-			setStats(enemies.fl);
+			if(!blockInit){
+				initEnemyList();
+			}
 		}
 
 		updateEnemyUI();
@@ -793,12 +852,10 @@ function addClEnemy(index){
 	enemies.cl.list.push({
 		"index":index,"hp":0,"atk":0,"spd":0,"def":0,"res":0,"weapon":-1,"special":-1,"a":-1,"b":-1,"c":-1,"s":-1,
 		"buffs": {"atk":0,"spd":0,"def":0,"res":0}, "debuffs": {"atk":0,"spd":0,"def":0,"res":0}, "spur": {"atk":0,"spd":0,"def":0,"res":0}, 
-		"boon": "None", "bane": "None", "merge":0, "rarity": 5, "precharge":0, "damage": 0
+		"boon": "none", "bane": "none", "merge":0, "rarity": 5, "precharge":0, "damage": 0
 	});
 
 	options.customEnemySelected = newCustomEnemyId;
-	setSkills(enemies.cl.list[options.customEnemySelected]);
-	setStats(enemies.cl.list[options.customEnemySelected]);
 	updateEnemyUI();
 	updateClList();
 }
@@ -825,16 +882,25 @@ function deleteClEnemy(clEnemyId){
 function removeAllClEnemies(){
 	enemies.cl.list = [];
 	options.customEnemySelected = -1;
-	updateEnemyUI();
 	updateClList();
+	updateEnemyUI();
+	calculate();
 }
 
 function setFlEnemies(){
 	//sets enemies based on includerules
 	//also updates enemy count display
 	//Must be run before setStats(enemies.fl) or setSkills(enemies.fl);
-	enemies.fl.list = [];
+	var includeCount = 0;
+
 	for(var i = 0; i < data.heroes.length;i++){
+		if(enemies.fl.list.length-1 < i){
+			enemies.fl.list.push({"index":i,"hp":0,"atk":0,"spd":0,"def":0,"res":0,"weapon":-1,"special":-1,"a":-1,"b":-1,"c":-1,"s":-1,
+				"buffs": enemies.fl.buffs, "debuffs": enemies.fl.debuffs, "spur": enemies.fl.spur, "boon": enemies.fl.boon, "bane": enemies.fl.bane,
+				"merge": enemies.fl.merge, "rarity": enemies.fl.rarity, "precharge": enemies.fl.precharge, "damage": enemies.fl.damage
+			});
+		}
+
 		var confirmed = true;
 		//check color
 		if(!enemies.fl.include[data.heroes[i].color]){
@@ -865,13 +931,28 @@ function setFlEnemies(){
 			confirmed = false;
 		}
 		if(confirmed){
-			enemies.fl.list.push({"index":i,"hp":0,"atk":0,"spd":0,"def":0,"res":0,"weapon":-1,"special":-1,"a":-1,"b":-1,"c":-1,"s":-1,
-				"buffs": enemies.fl.buffs, "debuffs": enemies.fl.debuffs, "spur": enemies.fl.spur, "boon": enemies.fl.boon, "bane": enemies.fl.bane,
-				"merge": enemies.fl.merge, "rarity": enemies.fl.rarity, "precharge": enemies.fl.precharge, "damage": enemies.fl.damage
-			});
+			enemies.fl.list[i].included = true;
+			includeCount++;
+		}
+		else{
+			enemies.fl.list[i].included = false;
 		}
 	}
-	$("#enemies_count").html(enemies.fl.list.length);
+	$("#enemies_count").html(includeCount);
+}
+
+function updateFlEnemies(){
+	//Updates stuff that's not stats or skills
+	for(var i = 0; i < enemies.fl.list.length; i++){
+		enemies.fl.list[i].buffs =  enemies.fl.buffs;
+		enemies.fl.list[i].debuffs =  enemies.fl.debuffs;
+		enemies.fl.list[i].spur =  enemies.fl.spur;
+		enemies.fl.list[i].boon =  enemies.fl.boon;
+		enemies.fl.list[i].bane =  enemies.fl.bane;
+		enemies.fl.list[i].merge =  enemies.fl.merge;
+		enemies.fl.list[i].precharge =  enemies.fl.precharge;
+		enemies.fl.list[i].damage =  enemies.fl.damage;
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -898,8 +979,8 @@ function setSkillOptions(hero){
 	//set html for character skill select based on valid skills
 
 	var htmlPrefix = "challenger_";
-	var maxSkills = {};
-	if(typeof hero.index != "undefined"){
+	var maxSkills = {"weapon":-1,"special":-1,"a":-1,"b":-1,"c":-1,"s":-1};
+	if(typeof hero.index != "undefined" && hero.index != -1){
 		maxSkills = data.heroMaxSkills[hero.rarity-1][hero.index];
 	}
 
@@ -958,125 +1039,133 @@ function updateEnemyUI(){
 function updateHeroUI(hero){
 	//Shared elements between challenger and custom enemy
 
-	if(hero){
-		var htmlPrefix = getHtmlPrefix(hero);
-		
-		//Global stuff
-		$("#" + htmlPrefix + "damage").val(hero.damage);
-		$("#" + htmlPrefix + "precharge").val(hero.precharge);
-
-		$("#" + htmlPrefix + "merge").val(hero.merge);
-		$("#" + htmlPrefix + "rarity").val(hero.rarity);
-
-		setSkillOptions(hero);
-		$("#" + htmlPrefix + "weapon").val(hero.weapon);
-		$("#" + htmlPrefix + "special").val(hero.special);
-		$("#" + htmlPrefix + "a").val(hero.a);
-		$("#" + htmlPrefix + "b").val(hero.b);
-		$("#" + htmlPrefix + "c").val(hero.c);
-		$("#" + htmlPrefix + "s").val(hero.s);
-		changeSkillPic(hero,"a");
-		changeSkillPic(hero,"b");
-		changeSkillPic(hero,"c");
-		changeSkillPic(hero,"s");
-
-		if(hero.buffs){
-			$("#" + htmlPrefix + "atk_buff").val(hero.buffs.atk);
-			$("#" + htmlPrefix + "spd_buff").val(hero.buffs.spd);
-			$("#" + htmlPrefix + "def_buff").val(hero.buffs.def);
-			$("#" + htmlPrefix + "res_buff").val(hero.buffs.res);
-			$("#" + htmlPrefix + "atk_debuff").val(hero.debuffs.atk);
-			$("#" + htmlPrefix + "spd_debuff").val(hero.debuffs.spd);
-			$("#" + htmlPrefix + "def_debuff").val(hero.debuffs.def);
-			$("#" + htmlPrefix + "res_debuff").val(hero.debuffs.res);
-			$("#" + htmlPrefix + "atk_spur").val(hero.spur.atk);
-			$("#" + htmlPrefix + "spd_spur").val(hero.spur.spd);
-			$("#" + htmlPrefix + "def_spur").val(hero.spur.def);
-			$("#" + htmlPrefix + "res_spur").val(hero.spur.res);
+	if(!hero){
+		//Make a dummy hero
+		hero = {
+			"index":-1,"hp":0,"atk":0,"spd":0,"def":0,"res":0,"weapon":-1,"special":-1,"a":-1,"b":-1,"c":-1,"s":-1,
+			"buffs": {"atk":0,"spd":0,"def":0,"res":0}, "debuffs": {"atk":0,"spd":0,"def":0,"res":0}, "spur": {"atk":0,"spd":0,"def":0,"res":0}, 
+			"boon": "none", "bane": "none", "merge":0, "rarity": 5, "precharge":0, "damage": 0
 		}
+	}
+	var htmlPrefix = getHtmlPrefix(hero);
+	
+	//Global stuff
+	$("#" + htmlPrefix + "damage").val(hero.damage);
+	$("#" + htmlPrefix + "precharge").val(hero.precharge);
 
-		$("#" + htmlPrefix + "boon").val(hero.boon);
-		$("#" + htmlPrefix + "bane").val(hero.bane);
+	$("#" + htmlPrefix + "merge").val(hero.merge);
+	$("#" + htmlPrefix + "rarity").val(hero.rarity);
 
-		if(typeof hero.index!= "undefined" && hero.index != -1){ //cl/challenger-specific stuff
-			$("#" + htmlPrefix + "picture").attr("src","heroes/" + data.heroes[hero.index].name + ".png");
-			$("#" + htmlPrefix + "hp").html(hero.hp);
-			$("#" + htmlPrefix + "currenthp").html(hero.hp - hero.damage);
-			$("#" + htmlPrefix + "atk").html(hero.atk);
-			$("#" + htmlPrefix + "spd").html(hero.spd);
-			$("#" + htmlPrefix + "def").html(hero.def);
-			$("#" + htmlPrefix + "res").html(hero.res);
-			if(data.heroes[hero.index].weapontype != "dragon"){
-				$("#" + htmlPrefix + "weapon_icon").attr("src","weapons/" + data.heroes[hero.index].weapontype + ".png");
-			}
-			else{
-				$("#" + htmlPrefix + "weapon_icon").attr("src","weapons/" + data.heroes[hero.index].color + "dragon.png");
-			}
+	setSkillOptions(hero);
+	$("#" + htmlPrefix + "weapon").val(hero.weapon);
+	$("#" + htmlPrefix + "special").val(hero.special);
+	$("#" + htmlPrefix + "a").val(hero.a);
+	$("#" + htmlPrefix + "b").val(hero.b);
+	$("#" + htmlPrefix + "c").val(hero.c);
+	$("#" + htmlPrefix + "s").val(hero.s);
+	changeSkillPic(hero,"a");
+	changeSkillPic(hero,"b");
+	changeSkillPic(hero,"c");
+	changeSkillPic(hero,"s");
 
-			if(hero.special != -1){
-				var specialCharge = data.skills[hero.special].charge;
-				if(hero.weapon != -1){
-					var weaponName = data.skills[hero.weapon].name;
-					if(weaponName.includes("Killer") || weaponName.includes("Killing") || weaponName.includes("Mystletainn") || weaponName.includes("Hauteclere")){
-						specialCharge -= 1;
-					}
-					else if(weaponName.includes("Raudrblade") || weaponName.includes("Lightning Breath") || weaponName.includes("Blarblade") || weaponName.includes("Gronnblade")){
-						specialCharge += 1;
-					}
-					specialCharge -= hero.precharge;
-					specialCharge = Math.max(0,specialCharge);
-				}
-				$("#" + htmlPrefix + "specialcharge").html(specialCharge);
-			}
-			else{
-				$("#" + htmlPrefix + "specialcharge").html("-");
-			}
+	if(hero.buffs){
+		$("#" + htmlPrefix + "atk_buff").val(hero.buffs.atk);
+		$("#" + htmlPrefix + "spd_buff").val(hero.buffs.spd);
+		$("#" + htmlPrefix + "def_buff").val(hero.buffs.def);
+		$("#" + htmlPrefix + "res_buff").val(hero.buffs.res);
+		$("#" + htmlPrefix + "atk_debuff").val(hero.debuffs.atk);
+		$("#" + htmlPrefix + "spd_debuff").val(hero.debuffs.spd);
+		$("#" + htmlPrefix + "def_debuff").val(hero.debuffs.def);
+		$("#" + htmlPrefix + "res_debuff").val(hero.debuffs.res);
+		$("#" + htmlPrefix + "atk_spur").val(hero.spur.atk);
+		$("#" + htmlPrefix + "spd_spur").val(hero.spur.spd);
+		$("#" + htmlPrefix + "def_spur").val(hero.spur.def);
+		$("#" + htmlPrefix + "res_spur").val(hero.spur.res);
+	}
+
+	$("#" + htmlPrefix + "boon").val(hero.boon);
+	$("#" + htmlPrefix + "bane").val(hero.bane);
+
+	if(typeof hero.index!= "undefined" && hero.index != -1){ //cl/challenger-specific stuff
+		$("#" + htmlPrefix + "name").val(hero.index);
+		$("#" + htmlPrefix + "picture").attr("src","heroes/" + data.heroes[hero.index].name + ".png");
+		$("#" + htmlPrefix + "hp").html(hero.hp);
+		$("#" + htmlPrefix + "currenthp").html(hero.hp - hero.damage);
+		$("#" + htmlPrefix + "atk").html(hero.atk);
+		$("#" + htmlPrefix + "spd").html(hero.spd);
+		$("#" + htmlPrefix + "def").html(hero.def);
+		$("#" + htmlPrefix + "res").html(hero.res);
+		if(data.heroes[hero.index].weapontype != "dragon"){
+			$("#" + htmlPrefix + "weapon_icon").attr("src","weapons/" + data.heroes[hero.index].weapontype + ".png");
 		}
 		else{
-			if(hero.isFl){
-				//Do fl-specific stuff here (no heroIndex)
-				$("#" + htmlPrefix + "weapon_overwrite").val(hero.replaceWeapon);
-				$("#" + htmlPrefix + "special_overwrite").val(hero.replaceSpecial);
-				$("#" + htmlPrefix + "a_overwrite").val(hero.replaceA);
-				$("#" + htmlPrefix + "b_overwrite").val(hero.replaceB);
-				$("#" + htmlPrefix + "c_overwrite").val(hero.replaceC);
+			$("#" + htmlPrefix + "weapon_icon").attr("src","weapons/" + data.heroes[hero.index].color + "dragon.png");
+		}
 
-				if(enemies.fl.list.length > 0){
-					$("#" + htmlPrefix + "hp").html(enemies.fl.avgHp);
-					$("#" + htmlPrefix + "atk").html(enemies.fl.avgAtk);
-					$("#" + htmlPrefix + "spd").html(enemies.fl.avgSpd);
-					$("#" + htmlPrefix + "def").html(enemies.fl.avgDef);
-					$("#" + htmlPrefix + "res").html(enemies.fl.avgRes);
+		if(hero.special != -1){
+			var specialCharge = data.skills[hero.special].charge;
+			if(hero.weapon != -1){
+				var weaponName = data.skills[hero.weapon].name;
+				if(weaponName.includes("Killer") || weaponName.includes("Killing") || weaponName.includes("Mystletainn") || weaponName.includes("Hauteclere")){
+					specialCharge -= 1;
 				}
-				else{
-					$("#" + htmlPrefix + "hp").html("-");
-					$("#" + htmlPrefix + "atk").html("-");
-					$("#" + htmlPrefix + "spd").html("-");
-					$("#" + htmlPrefix + "def").html("-");
-					$("#" + htmlPrefix + "res").html("-");
+				else if(weaponName.includes("Raudrblade") || weaponName.includes("Lightning Breath") || weaponName.includes("Blarblade") || weaponName.includes("Gronnblade")){
+					specialCharge += 1;
 				}
+				specialCharge -= hero.precharge;
+				specialCharge = Math.max(0,specialCharge);
+			}
+			$("#" + htmlPrefix + "specialcharge").html(specialCharge);
+		}
+		else{
+			$("#" + htmlPrefix + "specialcharge").html("-");
+		}
+	}
+	else{
+		if(hero.isFl){
+			//Do fl-specific stuff here (no heroIndex)
+			$("#" + htmlPrefix + "weapon_overwrite").val(hero.replaceWeapon);
+			$("#" + htmlPrefix + "special_overwrite").val(hero.replaceSpecial);
+			$("#" + htmlPrefix + "a_overwrite").val(hero.replaceA);
+			$("#" + htmlPrefix + "b_overwrite").val(hero.replaceB);
+			$("#" + htmlPrefix + "c_overwrite").val(hero.replaceC);
 
-				for(var attribute in hero.include){
-					if(hero.include[attribute]){
-						$("#include_" + attribute).removeClass("notincluded").addClass("included");
-					}
-					else{
-						$("#include_" + attribute).removeClass("included").addClass("notincluded");
-					}
-				}
+			if(enemies.fl.list.length > 0){
+				$("#" + htmlPrefix + "hp").html(enemies.fl.avgHp);
+				$("#" + htmlPrefix + "atk").html(enemies.fl.avgAtk);
+				$("#" + htmlPrefix + "spd").html(enemies.fl.avgSpd);
+				$("#" + htmlPrefix + "def").html(enemies.fl.avgDef);
+				$("#" + htmlPrefix + "res").html(enemies.fl.avgRes);
 			}
 			else{
-				//Custom enemy unselected
-				$("#" + htmlPrefix + "picture").attr("src","heroes/nohero.png");
 				$("#" + htmlPrefix + "hp").html("-");
-				$("#" + htmlPrefix + "currenthp").html("-");
 				$("#" + htmlPrefix + "atk").html("-");
 				$("#" + htmlPrefix + "spd").html("-");
 				$("#" + htmlPrefix + "def").html("-");
 				$("#" + htmlPrefix + "res").html("-");
-				$("#" + htmlPrefix + "weapon_icon").attr("src","weapons/noweapon.png");
-				$("#" + htmlPrefix + "specialcharge").html("-");
 			}
+
+			for(var attribute in hero.include){
+				if(hero.include[attribute]){
+					$("#include_" + attribute).removeClass("notincluded").addClass("included");
+				}
+				else{
+					$("#include_" + attribute).removeClass("included").addClass("notincluded");
+				}
+			}
+		}
+		else{
+			//Custom enemy unselected
+			$("#" + htmlPrefix + "name").val(hero.index);
+			$("#" + htmlPrefix + "picture").attr("src","heroes/nohero.png");
+			$("#" + htmlPrefix + "hp").html("-");
+			$("#" + htmlPrefix + "currenthp").html("-");
+			$("#" + htmlPrefix + "atk").html("-");
+			$("#" + htmlPrefix + "spd").html("-");
+			$("#" + htmlPrefix + "def").html("-");
+			$("#" + htmlPrefix + "res").html("-");
+			$("#" + htmlPrefix + "weapon_icon").attr("src","weapons/noweapon.png");
+			$("#" + htmlPrefix + "specialcharge").html("-");
 		}
 	}
 }
@@ -1116,11 +1205,18 @@ function showImportDialog(side,type){
 	var label = "";
 	if(type=="import"){
 		label = "Import ";
-		$("#button_import").html("Import into calculator");
+		$("#export_collapse_label").hide();
+		$("#importinput").val("");
+		setTimeout(function(){
+			$("#importinput")[0].focus();
+		}, 10); //Because focus will be immediately lost from click
+		$("#button_import").html("Import into calculator").off("click").on("click",function(){importText(side)});
 	}
 	else{
 		label = "Export ";
-		$("#button_import").html("Copy to clipboard");
+		$("#button_import").html("Copy to clipboard").off("click").on("click",function(){copyExportText()});
+		$("#export_collapse_label").show().off("click").on("click",function(){$("#importinput").val(getExportText(side))});
+		$("#importinput").val(getExportText(side));
 	}
 
 	if(side=="challenger"){
@@ -1133,6 +1229,9 @@ function showImportDialog(side,type){
 	}
 
 	$("#import_title").html(label);
+
+	$("#screen_fade").show();
+	$("#frame_import").show();
 }
 
 function hideImportDialog(){
@@ -1140,7 +1239,470 @@ function hideImportDialog(){
 	$("#frame_import").hide();
 }
 
+function importText(side){
+	var errorMsg = "";
+
+	var text = $("#importinput").val();
+	text = removeDiacritics(text); //Fuckin rauðrblade
+	var importSplit = trySplit(text,["  \n",";"])
+
+	var importMode = "none";
+	if(includesLike(importSplit[0],"ENEMIES - CUSTOM LIST")){
+		importMode = "cl";
+		options.customEnemyList = "1";
+		removeAllClEnemies();
+		var clBlocks = importSplit.slice(1).join("!!!").replace(/!!!!!![!]+/g,"!!!!!!").split("!!!!!!");
+		for(var clIndex = 0; clIndex < clBlocks.length; clIndex++){
+			var clLines = clBlocks[clIndex].split("!!!");
+			if(clLines[0].length > 2){
+				parseHero(clLines);
+			}
+		}
+		updateClList();
+		updateEnemyUI();
+	}
+	else if(includesLike(importSplit[0],"ENEMIES - FILTERED FULL LIST")){
+		importMode = "fl";
+		options.customEnemyList = "0";
+		resetHero(enemies.fl,true);
+		var hero = enemies.fl;
+		var flLines = importSplit.slice(1);
+		for(var flLine = 0; flLine < flLines.length; flLine++){
+			var lineData = parseAttributeLine(flLines[flLine]);
+			for(var key in lineData){
+				hero[key] = lineData[key];
+			}
+		}
+		initEnemyList();
+		updateEnemyUI();
+	}
+	else{
+		var firstLine = parseFirstLine(importSplit[0]);
+		if(firstLine.index){
+			importMode = "challenger";
+			challenger.index = -1;
+			resetHero(challenger);
+			parseHero(importSplit,firstLine);
+			updateChallengerUI();
+		}
+		else{
+			errorMsg = "Couldn't figure out whether importing challenger, custom enemy list, or full filtered enemy list.";
+		}
+	}
+
+	function parseHero(lines,firstLine){
+		//challenger will pass first line because it needs to parse it to see if it's a challenger
+		firstLine = firstLine || parseFirstLine(lines[0]);
+
+		var hero;
+		if(importMode == "challenger"){
+			hero = challenger;
+		}
+		else{
+			enemies.cl.list.push({
+				"index":-1,"hp":0,"atk":0,"spd":0,"def":0,"res":0,"weapon":-1,"special":-1,"a":-1,"b":-1,"c":-1,"s":-1,
+				"buffs": {"atk":0,"spd":0,"def":0,"res":0}, "debuffs": {"atk":0,"spd":0,"def":0,"res":0}, "spur": {"atk":0,"spd":0,"def":0,"res":0}, 
+				"boon": "none", "bane": "none", "merge":0, "rarity": 5, "precharge":0, "damage": 0
+			});
+			hero = enemies.cl.list[enemies.cl.list.length-1];
+		}
+
+		hero.index = firstLine.index;
+		if(firstLine.rarity){
+			hero.rarity = firstLine.rarity;
+		}
+		else{
+			hero.rarity = 5;
+		}
+
+		if(firstLine.merge){
+			hero.merge = firstLine.merge;
+		}
+
+		if(firstLine.boon){
+			hero.boon = firstLine.boon;
+		}
+		if(firstLine.bane){
+			hero.bane = firstLine.bane;
+		}
+
+		for(var line = 1; line < lines.length; line++){
+			var lineData = parseAttributeLine(lines[line]);
+			for(var key in lineData){
+				hero[key] = lineData[key];
+			}
+		}
+
+		initHero(hero);
+	}
+
+	function parseFirstLine(line){
+		var dataFound = {};
+		//Try all lengths up to 20 characters to find hero name
+		for(var tryLength = 2; tryLength <= 20; tryLength++){
+			var tryString = removeEdgeJunk(line.slice(0,tryLength));
+			var tryIndex = getIndexFromName(tryString,data.heroes);
+			if(tryIndex != -1){
+				dataFound.index = tryIndex;
+				//break; Don't break in case there is a hero with a name that is the beginning of another hero's name
+			}
+		}
+
+		var tryRarityIndex = line.indexOf("★");
+		if(tryRarityIndex == -1){
+			tryRarityIndex = line.indexOf("*");
+		}
+		if(tryRarityIndex != -1){
+			var tryRarity = parseInt(line.slice(tryRarityIndex - 1, tryRarityIndex)); //Try left side
+			if(tryRarity >= 1 && tryRarity <= 5){
+				dataFound.rarity = tryRarity;
+			}
+			else{
+				tryRarity = parseInt(line.slice(tryRarityIndex + 1, tryRarityIndex+2)); //Try right side
+				if(tryRarity >= 1 && tryRarity <= 5){
+					dataFound.rarity = tryRarity;
+				}
+			}
+		}
+
+		var plusSplit = line.split("+");
+		for(var plusLine = 0; plusLine < plusSplit.length; plusLine++){
+			plusSplit[plusLine] = removeEdgeJunk(plusSplit[plusLine]).toLowerCase();
+
+			var tryMerge = parseInt(plusSplit[plusLine].slice(0,2));
+			if(tryMerge >= 1 && tryMerge <= 10){
+				dataFound.merge = tryMerge;
+			}
+			else{
+				tryMerge = parseInt(plusSplit[plusLine].slice(-2));
+				if(tryMerge >= 1 && tryMerge <= 10){
+					dataFound.merge = tryMerge;
+				}
+			}
+
+			data.stats.forEach(function(stat){
+				if(plusSplit[plusLine].slice(0,stat.length) == stat || plusSplit[plusLine].slice(-stat.length) == stat){
+					dataFound.boon = stat;
+				}
+			});
+		}
+
+		var minusSplit = line.split("+");
+		for(var minusLine = 0; minusLine < minusSplit.length; minusLine++){
+			minusSplit[minusLine] = removeEdgeJunk(minusSplit[minusLine]).toLowerCase();
+
+			data.stats.forEach(function(stat){
+				if(minusSplit[minusLine].slice(0,stat.length) == stat || minusSplit[minusLine].slice(-stat.length) == stat){
+					dataFound.bane = stat;
+				}
+			});
+		}
+
+		return dataFound;
+	}
+
+	function parseAttributeLine(line){
+		var dataFound = {};
+
+		var keyValue = trySplit(line,[":","-","="]);
+		if(keyValue.length==1){
+			keyValue[1] = "";
+		}
+		keyValue[1] =keyValue[1].toLowerCase();
+		var key = "";
+		var value;
+		var buffObject = false;
+		var skillName = false;
+		var includeObject = false;
+
+		if(includesLike(keyValue[0],"debuff")){ //do debuff first, because buff is contained in it
+			key = "debuffs";
+			buffObject = true;
+		}
+		else if(includesLike(keyValue[0],"buff")){
+			key = "buffs";
+			buffObject = true;
+		}
+		else if(includesLike(keyValue[0],"spur")){
+			key = "spur";
+			buffObject = true;
+		}
+		else if(includesLike(keyValue[0],"charge")){
+			key = "precharge";
+		}
+		else if(includesLike(keyValue[0],"damage")){
+			key = "damage";
+		}
+		else if(includesLike(keyValue[0],"include")){
+			key = "include";
+			includeObject = true;
+		}
+		else if(includesLike(keyValue[0],"weapon")){
+			if(includesLike(keyValue[0],"replace")){
+				key = "replaceWeapon";
+			}
+			else{
+				key = "weapon";
+				skillName = true;
+			}
+		}
+		else if(includesLike(keyValue[0],"special")){
+			if(includesLike(keyValue[0],"replace")){
+				key = "replaceSpecial";
+			}
+			else{
+				key = "special";
+				skillName = true;
+			}
+		}
+		else if(includesLike(keyValue[0],"passive a") || keyValue[0].toLowerCase() == "a"){
+			if(includesLike(keyValue[0],"replace")){
+				key = "replaceA";
+			}
+			else{
+				key = "a";
+				skillName = true;
+			}
+		}
+		else if(includesLike(keyValue[0],"passive b") || keyValue[0].toLowerCase() == "b"){
+			if(includesLike(keyValue[0],"replace")){
+				key = "replaceB";
+			}
+			else{
+				key = "b";
+				skillName = true;
+			}
+		}
+		else if(includesLike(keyValue[0],"passive c") || keyValue[0].toLowerCase() == "c"){
+			if(includesLike(keyValue[0],"replace")){
+				key = "replaceC";
+			}
+			else{
+				key = "c";
+				skillName = true;
+			}
+		}
+		else if(includesLike(keyValue[0],"passive s") || keyValue[0].toLowerCase() == "s"){
+			key = "s";
+			skillName = true;
+		}
+
+		if(buffObject){
+			var value = {"atk":0,"spd":0,"def":0,"res":0};
+			var splitBuffs = trySplit(keyValue[1],[","," "]);
+			for(var i = 0; i < splitBuffs.length; i++){
+				data.buffStats.forEach(function(stat){
+					if(includesLike(splitBuffs[i],stat)){
+						var numMatch = splitBuffs[i].match(/-?\d/);
+						if(numMatch){
+							value[stat] = numMatch[0];
+						}
+					}
+				});
+			}
+		}
+		else if(skillName){
+			value = getIndexFromName(removeEdgeJunk(keyValue[1]),data.skills)
+		}
+		else if(includeObject){
+			var value = {"melee":0,"ranged":0,"red":0,"blue":0,"green":0,"gray":0,"physical":0,"magical":0,"infantry":0,"cavalry":0,"flying":0,"armored":0,"staff":0,"nonstaff":0};
+			var splitInclude = trySplit(keyValue[1],[","," "]);
+			for(var i = 0; i < splitInclude.length; i++){
+				for(var includeKey in value){
+					if(removeEdgeJunk(splitInclude[i]) == includeKey){
+						value[includeKey] = 1;
+					}
+				}
+			}
+		}
+		else{
+			//Make all numbers
+			keyValue[1].replace("true",1);
+			keyValue[1].replace("false",0);
+			var numMatch = keyValue[1].match(/-?\d/);
+			if(numMatch){
+				value = numMatch[0];
+			}
+		}
+
+		if(key && value){
+			dataFound[key] = value;
+		}
+
+		return dataFound;
+	}
+
+	if(errorMsg){
+		alert("Error: " + errorMsg);
+	}
+
+	hideImportDialog();
+	calculate();
+}
+
+function removeEdgeJunk(string){
+	return string.replace(/^[\s\._\-]+/, "").replace(/[\s\._\-]+$/, "");
+}
+
+//Try to find a string in mainText that's sorta like findText
+function includesLike(mainText,findText){
+	mainText = mainText.toLowerCase().replace(/[\s\._\-]+/g, "");
+	findText = findText.toLowerCase().replace(/[\s\._\-]+/g, "");
+	return mainText.indexOf(findText) != -1;
+}
+
+function trySplit(string,splits){
+	for(var i = 0; i < splits.length; i++){
+		var stringSplit = string.split(splits[i]);
+		if(stringSplit.length > 1){
+			return stringSplit;
+		}
+	}
+
+	return [string];
+}
+
+function getExportText(side){
+	var delimiter = "  \n";
+	if($("#export_collapse").is(":checked")){
+		delimiter = ";";
+	}
+
+	var exportText = "";
+	if(side=="challenger"){
+		exportText = getHeroExportText(challenger);
+	}
+	else if(options.customEnemyList==1){
+		if(enemies.cl.list.length){
+			exportText = "ENEMIES - CUSTOM LIST" + delimiter;
+			for(var i = 0; i < enemies.cl.list.length; i++){
+				exportText += getHeroExportText(enemies.cl.list[i]) + delimiter;
+			}
+		}
+	}
+	else{
+		exportText = "ENEMIES - FILTERED FULL LIST" + delimiter;
+		var includeList = [];
+		for(var key in enemies.fl.include){
+			if(enemies.fl.include[key]){
+				includeList.push(key);
+			}
+		}
+		exportText += "Include: " + includeList.join(", ") + delimiter;
+
+		exportText += "Rarity: " + enemies.fl.rarity + "★" + delimiter;
+		if(enemies.fl.merge > 0){
+			exportText += "Merge: +" + enemies.fl.merge + delimiter;
+		}
+		if(enemies.fl.boon != "none"){
+			exportText += "Boon: +" + enemies.fl.boon + delimiter;
+		}
+		if(enemies.fl.bane != "none"){
+			exportText += "Bane: -" + enemies.fl.bane + delimiter;
+		}
+
+		data.skillSlots.forEach(function(slot){
+			if(enemies.fl[slot] != -1){
+				exportText += capitalize(slot) + ": " + data.skills[enemies.fl[slot]].name + delimiter;
+				exportText += "Replace " + capitalize(slot) + ": " + !!parseInt(enemies.fl["replace" + capitalize(slot)]) + delimiter;
+			}
+		});
+
+		var statusText = "";
+		data.buffTypes.forEach(function(buffType){
+			var notZero = [];
+			data.buffStats.forEach(function(stat){
+				if(enemies.fl[buffType][stat] != 0){
+					notZero.push(stat + " " + enemies.fl[buffType][stat]);
+				}
+			});
+			if(notZero.length){
+				statusText += capitalize(buffType) + ": " + notZero.join(", ") + delimiter;
+			}
+		});
+
+		if(enemies.fl.damage != 0){
+			statusText += "Damage: " + enemies.fl.damage + delimiter;
+		}
+		if(enemies.fl.precharge != 0){
+			statusText += "Charge: " + enemies.fl.precharge + delimiter;
+		}
+
+		if(statusText){
+			exportText += ":::Status" + delimiter+statusText;
+		}
+	}
+
+	//Helper function for single heroes
+	function getHeroExportText(hero){
+		var heroExportText = "";
+		if(hero.index != -1){
+			heroExportText += data.heroes[hero.index].name + " (" + hero.rarity + "★";
+			if(hero.merge > 0){
+				heroExportText += "+" + hero.merge;
+			}
+			if(hero.boon != "none"){
+				heroExportText += " +" + hero.boon;
+			}
+			if(hero.bane != "none"){
+				heroExportText += " -" + hero.bane;
+			}
+			heroExportText += ")" + delimiter;
+
+			//Might not do it this way because order is not guaranteed
+			data.skillSlots.forEach(function(slot){
+				if(hero[slot] != -1){
+					heroExportText += capitalize(slot) + ": " + data.skills[hero[slot]].name + delimiter;
+				}
+			});
+
+			var statusText = "";
+			data.buffTypes.forEach(function(buffType){
+				var notZero = [];
+				data.buffStats.forEach(function(stat){
+					if(hero[buffType][stat] != 0){
+						notZero.push(stat + " " + hero[buffType][stat]);
+					}
+				});
+				if(notZero.length){
+					statusText += capitalize(buffType) + ": " + notZero.join(", ") + delimiter;
+				}
+			});
+
+			if(hero.damage != 0){
+				statusText += "Damage: " + hero.damage + delimiter;
+			}
+			if(hero.precharge != 0){
+				statusText += "Charge: " + hero.precharge + delimiter;
+			}
+
+			if(statusText){
+				heroExportText += ":::Status" + delimiter+statusText;
+			}
+		}
+		return heroExportText;
+	}
+
+	if(!exportText){
+		//Rude comment if nothing is exported
+		exportText = "Nothing. You've exported nothing.";
+	}
+	return exportText;
+}
+
+function copyExportText(){
+	$("#importinput")[0].select();
+	var successful = document.execCommand('copy');
+	if(!successful){
+		$("#button_import").html("Ctrl+C to finish the job")
+	}
+}
+
 function switchEnemySelect(newVal){
+	var willCalculate = false;
+	if(newVal != options.customEnemyList){
+		willCalculate = true;
+	}
 	options.customEnemyList = newVal;
 	if(options.customEnemyList==1){
 		$("#enemies_full_list").hide();
@@ -1151,14 +1713,47 @@ function switchEnemySelect(newVal){
 		$("#enemies_full_list").show();
 	}
 
-	calculate();
+	if(willCalculate){
+		calculate();
+	}	
 }
 
 //changedNumber: Whether the number of enemies has changed - must do more intensive updating if this is the case
 function updateClList(){
-	//if(changedNumber){
 	var lastEnemy = enemies.cl.list.length - 1;
-	for(var clIndex = 0; clIndex <= lastEnemy; clIndex++){
+	//Set selected enemy if there are enemies but none is selected
+	if(lastEnemy != -1 && options.customEnemySelected == -1){
+		options.customEnemySelected = lastEnemy;
+	}
+	var lastElement = -1;
+	var enemyElements = $(".cl_enemy");
+	$(".clSelected").removeClass("clSelected");
+	//Show/hide existing elements based on number currently in list
+	for(var element = 0; element < enemyElements.length; element++){
+		var clIndex = parseInt($(enemyElements[element]).attr("data-clindex"));
+		if(clIndex > lastElement){
+			lastElement = clIndex;
+		}
+		if(clIndex <= lastEnemy){
+			//Update the text of the items in the list
+			var enemyIndex = enemies.cl.list[clIndex].index;
+			var enemyName = "New enemy";
+			if(enemyIndex >= 0){
+				enemyName = data.heroes[enemyIndex].name;
+			}
+			$("#cl_enemy" + clIndex + "_name").html(enemyName);
+			if(clIndex == options.customEnemySelected){
+				$("#cl_enemy" + clIndex).addClass("clSelected");
+			}
+			$(enemyElements[element]).show();
+		}
+		else{
+			$(enemyElements[element]).hide();
+		}
+	}
+
+	//Create new elements if needed
+	for(var clIndex = lastElement + 1; clIndex <= lastEnemy; clIndex++){
 		//Update the text of the items in the list
 		var enemyIndex = enemies.cl.list[clIndex].index;
 		var enemyName = "New enemy";
@@ -1166,42 +1761,12 @@ function updateClList(){
 			enemyName = data.heroes[enemyIndex].name;
 		}
 
-		if($("#cl_enemy" + clIndex + "_name").length > 0){
-			$("#cl_enemy" + clIndex + "_name").html(enemyName).show();
-		}
-		else{
-			//Need to create a new element - the list is not pre-populated with hidden elements
-			var clEnemyHTML = "<div class=\"cl_enemy button\" id=\"cl_enemy" + clIndex + "\" onclick=\"selectClEnemy(" + clIndex + ")\"><span id=\"cl_enemy" + clIndex + "_name\">" + enemyName;
-			clEnemyHTML += "</span><div class=\"cl_delete_enemy button\" id=\"cl_enemy" + clIndex + "_delete\" onclick=\"deleteClEnemy(" + clIndex + ");\">x</div></div>";
-			$("#cl_enemylist_list").append(clEnemyHTML);
-		}
-
-		if(options.customEnemySelected != -1){
-			$(".clSelected").removeClass("clSelected");
-			$("#cl_enemy" + options.customEnemySelected).addClass("clSelected");
-		}
-		else if(enemies.cl.list.length > 0){
-			//Set the selected enemy if the list is longer than 1 - there should always be a selected enemy?
-			options.customEnemySelected = enemies.cl.list.length - 1;
-		}
-		
+		//Need to create a new element - the list is not pre-populated with hidden elements
+		var clEnemyHTML = "<div class=\"cl_enemy button\" id=\"cl_enemy" + clIndex + "\" data-clindex=\"" + clIndex + "\" onclick=\"selectClEnemy(" + clIndex + ")\"><span id=\"cl_enemy" + clIndex + "_name\">" + enemyName;
+		clEnemyHTML += "</span><div class=\"cl_delete_enemy button\" id=\"cl_enemy" + clIndex + "_delete\" onclick=\"deleteClEnemy(" + clIndex + ");\">x</div></div>";
+		$("#cl_enemylist_list").append(clEnemyHTML);
 	}
-
-	//Hide lastEnemy+1 in case one was deleted
-	$("#cl_enemy" + (lastEnemy + 1)).hide();
 }
-
-// function updateEnemyUI(){
-// 	updateEnemyUI();
-// 	if(options.customEnemySelected == -1 || !enemies.cl.list[options.customEnemySelected] || enemies.cl.list[options.customEnemySelected].index == -1){
-// 		//defaults
-// 		$("#cl_enemy_name").val(-1);
-// 	}
-// 	else{
-// 		$("#cl_enemy_name").val(enemies.cl.list[options.customEnemySelected].index);
-// 		setSkillOptions(enemies.cl.list[options.customEnemySelected]);
-// 	}
-// }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1211,7 +1776,8 @@ function updateClList(){
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-function fight(enemyIndex){
+function fight(enemyIndex,resultIndex){
+	//passed resultIndex for tooltip
 	//returns object with: challenger.hp, enemyHp, rounds, and enemy object for stripping skills
 
 	var fightText = "";
@@ -1219,12 +1785,15 @@ function fight(enemyIndex){
 	var ahChallenger = new activeHero(challenger);
 	var ahEnemy;
 
+	var enemyList = [];
 	if(options.customEnemyList==1){
-		ahEnemy = new activeHero(enemies.cl.list[enemyIndex]);
+		enemyList = enemies.cl.list;
 	}
 	else{
-		ahEnemy = new activeHero(enemies.fl.list[enemyIndex]);
+		enemyList = enemies.fl.list;
 	}
+
+	ahEnemy = new activeHero(enemyList[enemyIndex]);
 
 	var rounds = 0;
 
@@ -1246,8 +1815,119 @@ function fight(enemyIndex){
 		fightText += "</div>";
 	}
 
-	//Have to make copy of ahEnemy object
-	return {"challengerHp":Math.max(ahChallenger.hp,0),"enemyHp":Math.max(ahEnemy.hp,0),"rounds":rounds,"fightText":fightText,"enemy":$.extend({},ahEnemy)};
+	var outcome = "";
+	var resultText = "";
+	if(ahChallenger.hp<=0){
+		outcome = "loss";
+		resultText += "<span class=\"red\">loss</span>, " + rounds;
+	}
+	else if(ahEnemy.hp<=0){
+		outcome = "win";
+		resultText += "<span class=\"blue\">win</span>, " + rounds;
+	}
+	else{
+		outcome = "inconclusive";
+		resultText += "inconclusive";
+	}
+
+	if(outcome != "inconclusive"){
+		if(rounds==1){
+			resultText += " round";
+		}
+		else{
+			resultText += " rounds";
+		}
+	}
+
+	var weaponName = "None";
+	var specialName = "None";
+	var aName = "noskill";
+	var bName = "noskill";
+	var cName = "noskill";
+	var sName = "noskill";
+	if(ahEnemy.weaponIndex != -1){
+		weaponName = data.skills[ahEnemy.weaponIndex].name;
+	}
+	if(ahEnemy.specialIndex != -1){
+		specialName = data.skills[ahEnemy.specialIndex].name;
+	}
+	if(ahEnemy.aIndex != -1){
+		aName = data.skills[ahEnemy.aIndex].name.replace(/\s/g,"_");
+	}
+	if(ahEnemy.bIndex != -1){
+		bName = data.skills[ahEnemy.bIndex].name.replace(/\s/g,"_");
+	}
+	if(ahEnemy.cIndex != -1){
+		cName = data.skills[ahEnemy.cIndex].name.replace(/\s/g,"_");
+	}
+	if(ahEnemy.sIndex != -1){
+		sName = data.skills[ahEnemy.sIndex].name.replace(/\s/g,"_");
+	}
+
+	var weaponTypeName = ahEnemy.weaponType;
+	if(weaponTypeName == "dragon"){
+		weaponTypeName = ahEnemy.color + "dragon";
+	}
+
+	if(typeof enemyList[enemyIndex].lastFightResult == "undefined"){
+		enemyList[enemyIndex].lastFightResult = "";
+	}
+
+	var passFilters = ["all"];
+
+	if(enemyList[enemyIndex].lastFightResult){
+	var prevResult = "";
+	if(enemyList[enemyIndex].lastFightResult.indexOf("win") > -1){
+			prevResult = "win";
+		}
+		else if(enemyList[enemyIndex].lastFightResult.indexOf("loss") > -1){
+			prevResult = "loss";
+		}
+		else if(enemyList[enemyIndex].lastFightResult.indexOf("inconclusive") > -1){
+			prevResult = "inconclusive";
+		}
+
+		if(outcome != prevResult){
+			passFilters.push("changeVictor");
+		}
+
+		var prevRounds = previousFightResults[enemyIndex].match(/([1-4]) rounds?/);
+		if(prevRounds){
+			if(rounds != prevRounds[1] && outcome == prevResult && outcome != "inconclusive"){
+				passFilters.push("changeRounds");
+			}
+		}
+	}
+
+	fightHTML = ["<div class=\"results_entry\" id=\"result_" + resultIndex + "\" onmouseover=\"showResultsTooltip(event,this);\" onmouseout=\"hideResultsTooltip();\">",
+		"<div class=\"results_hpbox\">",
+			"<div class=\"results_hplabel\">HP</div>",
+			"<div class=\"results_hpnums\">",
+				"<span class=\"results_challengerhp\">" + ahChallenger.hp + "</span> &ndash; <span class=\"results_enemyhp\">" + ahEnemy.hp + "</span>",
+			"</div>",
+		"</div>",
+		"<div class=\"frame_enemypicture\"><img class=\"results_enemypicture\" src=\"heroes/" + ahEnemy.name + ".png\"/></div>",
+		"<div class=\"results_topline\">",
+			"<img class=\"weaponIconSmall\" src=\"weapons/" + weaponTypeName + ".png\"/><span class=\"results_enemyname\">" + ahEnemy.name + "</span> (<span class=\"results_outcome\">" + resultText + "</span>)",
+			"<div class=\"results_previousresult\">" + enemyList[enemyIndex].lastFightResult + "</div>",
+		"</div>",
+		"<div class=\"results_bottomline\">",
+			"<span class=\"results_stat\">HP: " + ahEnemy.maxHp + "</span><span class=\"results_stat\">Atk: " + ahEnemy.atk + "</span><span class=\"results_stat\">Spd: " + ahEnemy.spd + "</span><span class=\"results_stat\">Def: " + ahEnemy.def + "</span><span class=\"results_stat\">Res: " + ahEnemy.res + "</span><div class=\"results_skills\"><span class=\"results_stat\"><img class=\"skill_picture\" src=\"skills/weapon.png\"/>" + weaponName + "</span><span class=\"results_stat\"><img class=\"skill_picture\" src=\"skills/special.png\"/>" + specialName + "</span><span class=\"results_stat\"><img class=\"skill_picture\" src=\"skills/" + aName + ".png\"/><img class=\"skill_picture\" src=\"skills/" + bName + ".png\"/><img class=\"skill_picture\" src=\"skills/" + cName + ".png\"/><img class=\"skill_picture\" src=\"skills/" + sName + ".png\"/></span></div>",
+		"</div>",
+	"</div>",""].join("\n");
+
+	enemyList[enemyIndex].lastFightResult = "Previous result: " + resultText + ", <span class=\"blue\">" + ahChallenger.hp + "</span> &ndash; <span class=\"red\">" + ahEnemy.hp + "</span>";
+
+	return {
+		"challengerHp":Math.max(ahChallenger.hp,0),
+		"enemyHp":Math.max(ahEnemy.hp,0),
+		"rounds":rounds,
+		"fightText":fightText,
+		"enemy":ahEnemy,
+		"outcome":outcome,
+		"fightHTML":fightHTML,
+		"passFilters":passFilters
+	};
 }
 
 function calcuWait(ms){//har har har
@@ -1271,6 +1951,7 @@ function calcuwaitTimer(){
 }
 
 function calculate(manual){
+	//console.log("calculated");
 	//manual = true if button was clicked
 	//calculates results and also adds them to page
 	if(options.autoCalculate || manual){
@@ -1279,189 +1960,49 @@ function calculate(manual){
 			var losses = 0;
 			var inconclusive = 0;
 
-			for(var i = 0; i < nextPreviousFightResults.length; i++){
-				previousFightResults[i] = nextPreviousFightResults[i];
-			}
-
 			fightResults = [];
 			resultHTML = [];
 
-			var enemyPool = {};
+			var enemyList = [];
+			var mustConfirm = false;
 			if(options.customEnemyList == 1){
-				enemyPool = enemies.cl;
+				enemyList = enemies.cl.list;
 			}
 			else{
-				enemyPool = enemies.fl;
+				enemyList = enemies.fl.list;
+				mustConfirm = true;
 			}
-			for(var i = 0;i<enemyPool.list.length;i++){
-				if(enemyPool.list[i].index >= 0){
-					fightResults.push(fight(i));
+			for(var i = 0;i<enemyList.length;i++){
+				if(enemyList[i].index >= 0 && !mustConfirm || enemyList[i].included){
+					fightResults.push(fight(i,fightResults.length));
 				}
 			}
-
-			fightResults.sort(function(a,b){
-				//sort fights from best wins to worst losses
-				//first by win, then by rounds, then by hp
-				var comparison = 0;
-				if(a.enemyHp==0){
-					if(b.enemyHp!=0){
-						comparison = -1;
-					}
-					else{
-						if(a.rounds<b.rounds){
-							comparison = -1;
-						}
-						else if(a.rounds>b.rounds){
-							comparison = 1;
-						}
-						else{
-							if(a.challengerHp>b.challengerHp){
-								comparison = -1;
-							}
-							else if(a.challengerHp<b.challengerHp){
-								comparison = 1;
-							}
-							else{
-								comparison = 0;
-							}
-						}
-					}
-				}
-				else if(a.challengerHp==0){
-					if(b.challengerHp!=0){
-						comparison = 1;
-					}
-					else{
-						if(a.rounds<b.rounds){
-							comparison = 1;
-						}
-						else if(a.rounds>b.rounds){
-							comparison = -1;
-						}
-						else{
-							//sort by enemy hp taken instead of challenger hp
-							if(a.enemy.maxHp-a.enemyHp>b.enemy.maxHp-b.enemyHp){
-								comparison = -1;
-							}
-							else if(a.enemy.maxHp-a.enemyHp<b.enemy.maxHp-b.enemyHp){
-								comparison = 1;
-							}
-							else{
-								comparison = 0;
-							}
-						}
-					}
-				}
-				else{
-					if(b.enemyHp==0){
-						comparison = 1;
-					}
-					else if(b.challengerHp==0){
-						comparison = -1;
-					}
-					else{
-						//in a stalemate, rounds will always be max, so can't sort by rounds
-						if(a.challengerHp>b.challengerHp){
-							comparison = -1;
-						}
-						else if(a.challengerHp<b.challengerHp){
-							comparison = 1;
-						}
-						else{
-							if(a.enemyHp<b.enemyHp){
-								comparison = -1;
-							}
-							else if(a.enemyHp>b.enemyHp){
-								comparison = 1;
-							}
-							else{
-								comparison = 0;
-							}
-						}
-					}
-				}
-
-				return comparison;
-			});
 
 			for(var i = 0; i < fightResults.length;i++){
-				var resultText = "";
 
-				if(fightResults[i].challengerHp==0){
+				if(fightResults[i].outcome=="loss"){
 					losses++;
-					resultText = "<span class=\"red\">loss</span>, " + fightResults[i].rounds;
-					if(fightResults[i].rounds==1){
-						resultText += " round";
-					}
-					else{
-						resultText += " rounds";
-					}
 				}
-				else if(fightResults[i].enemyHp==0){
+				else if(fightResults[i].outcome=="win"){
 					wins++;
-					resultText = "<span class=\"blue\">win</span>, " + fightResults[i].rounds;
-					if(fightResults[i].rounds==1){
-						resultText += " round";
-					}
-					else{
-						resultText += " rounds";
-					}
 				}
 				else{
 					inconclusive++;
-					resultText = "inconclusive";
 				}
 
-				var weaponName = "None";
-				var specialName = "None";
-				var aName = "noskill";
-				var bName = "noskill";
-				var cName = "noskill";
-				var sName = "noskill";
-				if(fightResults[i].enemy.weaponIndex != -1){
-					weaponName = data.skills[fightResults[i].enemy.weaponIndex].name;
-				}
-				if(fightResults[i].enemy.specialIndex != -1){
-					specialName = data.skills[fightResults[i].enemy.specialIndex].name;
-				}
-				if(fightResults[i].enemy.aIndex != -1){
-					aName = data.skills[fightResults[i].enemy.aIndex].name.replace(/\s/g,"_");
-				}
-				if(fightResults[i].enemy.bIndex != -1){
-					bName = data.skills[fightResults[i].enemy.bIndex].name.replace(/\s/g,"_");
-				}
-				if(fightResults[i].enemy.cIndex != -1){
-					cName = data.skills[fightResults[i].enemy.cIndex].name.replace(/\s/g,"_");
-				}
-				if(fightResults[i].enemy.sIndex != -1){
-					sName = data.skills[fightResults[i].enemy.sIndex].name.replace(/\s/g,"_");
-				}
-
-				var weaponTypeName = fightResults[i].enemy.weaponType;
-				if(weaponTypeName == "dragon"){
-					weaponTypeName = fightResults[i].enemy.color + "dragon";
-				}
-
-				resultHTML.push(["<div class=\"results_entry\" id=\"result_" + i + "\" onmouseover=\"showResultsTooltip(event,this);\" onmouseout=\"hideResultsTooltip();\">",
-					"<div class=\"results_hpbox\">",
-						"<div class=\"results_hplabel\">HP</div>",
-						"<div class=\"results_hpnums\">",
-							"<span class=\"results_challengerhp\">" + fightResults[i].challengerHp + "</span> &ndash; <span class=\"results_enemyhp\">" + fightResults[i].enemyHp + "</span>",
-						"</div>",
-					"</div>",
-					"<div class=\"frame_enemypicture\"><img class=\"results_enemypicture\" src=\"heroes/" + fightResults[i].enemy.name + ".png\"/></div>",
-					"<div class=\"results_topline\">",
-						"<img class=\"weaponIconSmall\" src=\"weapons/" + weaponTypeName + ".png\"/><span class=\"results_enemyname\">" + fightResults[i].enemy.name + "</span> (<span class=\"results_outcome\">" + resultText + "</span>)",
-						"<div class=\"results_previousresult\">" + previousFightResults[fightResults[i].enemy.heroIndex] + "</div>",
-					"</div>",
-					"<div class=\"results_bottomline\">",
-						"<span class=\"results_stat\">HP: " + fightResults[i].enemy.maxHp + "</span><span class=\"results_stat\">Atk: " + fightResults[i].enemy.atk + "</span><span class=\"results_stat\">Spd: " + fightResults[i].enemy.spd + "</span><span class=\"results_stat\">Def: " + fightResults[i].enemy.def + "</span><span class=\"results_stat\">Res: " + fightResults[i].enemy.res + "</span><div class=\"results_skills\"><span class=\"results_stat\"><img class=\"skill_picture\" src=\"skills/weapon.png\"/>" + weaponName + "</span><span class=\"results_stat\"><img class=\"skill_picture\" src=\"skills/special.png\"/>" + specialName + "</span><span class=\"results_stat\"><img class=\"skill_picture\" src=\"skills/" + aName + ".png\"/><img class=\"skill_picture\" src=\"skills/" + bName + ".png\"/><img class=\"skill_picture\" src=\"skills/" + cName + ".png\"/><img class=\"skill_picture\" src=\"skills/" + sName + ".png\"/></span></div>",
-					"</div>",
-				"</div>",""].join("\n"));
-
-				//Set next previous result after showing this result
-				nextPreviousFightResults[fightResults[i].enemy.heroIndex] = "Previous result: " + resultText + ", <span class=\"blue\">" + fightResults[i].challengerHp + "</span> &ndash; <span class=\"red\">" + fightResults[i].enemyHp + "</span>";
+				resultHTML.push({sortWeight:getComparisonWeight(fightResults[i]), html:fightResults[i].fightHTML, passFilters:fightResults[i].passFilters});
 			}
+
+			resultHTML.sort(function(a,b){
+				//sort fights from best wins to worst losses
+				//first by win, then by rounds, then by hp
+				if(a.sortWeight == b.sortWeight){
+					return 0;
+				}
+				else{
+					return (a.sortWeight < b.sortWeight)*2-1;
+				}
+			});
 
 			outputResults();
 
@@ -1483,24 +2024,43 @@ function calculate(manual){
 	}
 }
 
+function getComparisonWeight(fightResult){
+	var weight = 0;
+	if(fightResult.enemyHp <= 0){
+		weight += 100;
+	}
+	else{
+		weight += (1 - (fightResult.enemyHp / fightResult.enemy.maxHp)) * 40;
+	}
+	if(fightResult.challengerHp <= 0){
+		weight -= 100;
+	}
+	else{
+		weight -= (1 - (fightResult.challengerHp / challenger.hp)) * 40;
+	}
+	weight /= fightResult.rounds;
+	//console.log(fightResult.challengerHp + " - " + fightResult.enemyHp + ", " + fightResult.rounds + "rnd: " + weight);
+	return weight;
+}
+
 function outputResults(){
 	//function separate from calculation so user can re-sort without recalculating
 	//options.sortOrder is 1 or -1
 	//Hide results that aren't different if view is set to changed only
-	//options.viewFilter is 0 or 1
+	//options.viewFilter is 0 or 1 or 2
 	var outputHTML = "";
 
 	if(options.sortOrder==1){
 		for(var i = 0; i < resultHTML.length; i++){
 			if(filterResult(i)){
-				outputHTML += resultHTML[i];
+				outputHTML += resultHTML[i].html;
 			}
 		}
 	}
 	else if(options.sortOrder==-1){
 		for(var i = resultHTML.length-1; i >= 0; i--){
 			if(filterResult(i)){
-				outputHTML += resultHTML[i];
+				outputHTML += resultHTML[i].html;
 			}
 		}
 	}
@@ -1510,43 +2070,8 @@ function outputResults(){
 //Helper function for filtering
 //Will return true if include or false if not
 function filterResult(i){
-	if(!options.viewFilter){
-		return true;
-	}
-	else{
-		if(previousFightResults[i]==""){
-			return false;
-		}
-
-		var enemyIndex = fightResults[i].enemy.heroIndex;
-
-		var prevWin = previousFightResults[enemyIndex].includes("win");
-		var prevLoss = previousFightResults[enemyIndex].includes("loss");
-		var prevTie = previousFightResults[enemyIndex].includes("inconclusive");
-		var sameResult = false;
-		if((fightResults[i].challengerHp==0 && prevLoss) || (fightResults[i].enemyHp==0 && prevWin) || (fightResults[i].challengerHp!=0 && fightResults[i].enemyHp!=0 && prevTie)){
-			sameResult = true;
-		}
-
-		if(options.viewFilter==1){//changed victor
-			return !sameResult;
-		}
-		else if(options.viewFilter==2){//changed rounds
-			var extractRounds =  previousFightResults[enemyIndex].match(/([1-4]) rounds?/);
-			if(extractRounds){
-				if(fightResults[i].rounds == extractRounds[1] || !sameResult){
-					return false;
-				}
-				else{
-					return true;
-				}
-			}
-			else{
-				//Don't show inconclusive because it's always max rounds
-				return false;
-			}
-		}
-	}
+	//console.log(resultHTML[i].passFilters.indexOf(options.viewFilter));
+	return resultHTML[i].passFilters.indexOf(options.viewFilter) > -1;
 }
 
 function exportCalc(){
@@ -1704,14 +2229,14 @@ function exportCalc(){
 				}
 			}
 			var outcome = "Inconclusive";
-			if(result.challenger.hp==0){
+			if(result.challengerHp==0){
 				outcome = "Loss";
 			}
 			else if(result.enemyHp==0){
 				outcome = "Win";
 			}
 			csvString += outcome + ",";
-			csvString += result.challenger.hp + ",";
+			csvString += result.challengerHp + ",";
 			csvString += result.enemyHp + ",";
 			csvString += result.rounds + ",";
 			var deTaggedLog = result.fightText.replace(/<br\/?>/g, "; ");
@@ -1767,6 +2292,10 @@ function activeHero(hero){
 	this.cIndex = hero.c;
 	this.sIndex = hero.s;
 
+	this.boon = hero.boon;
+	this.bane = hero.bane;
+	this.damage = hero.damage;
+
 	this.buffs = hero.buffs;
 	this.debuffs = hero.debuffs;
 	this.spur = hero.spur;
@@ -1782,7 +2311,7 @@ function activeHero(hero){
 	this.color = data.heroes[this.heroIndex].color;
 
 	this.hp = Math.max(this.maxHp - hero.damage,1);
-	this.precharge = 0 + hero.precharge;
+	this.precharge = hero.precharge;
 
 	//Make a list of skill names for easy reference
 	if(this.weaponIndex != -1){
@@ -3118,11 +3647,11 @@ function changeDataVar(dataVar,newVal){
 }
 
 function beginsWith(fullString, substring){
-    return (fullString.slice(0, substring.length) == substring);
+	return (fullString.slice(0, substring.length) == substring);
 }
 
 function endsWith(fullString, substring){
-    return (fullString.slice(-substring.length) == substring);
+	return (fullString.slice(-substring.length) == substring);
 }
 
 function getHtmlPrefix(hero){
@@ -3153,6 +3682,33 @@ function getSkillIndexFromId(skillid){
 	return index;
 }
 
+function getIndexFromName(name,dataList){
+	//Skill/hero array is sorted by name!
+	name = name.toLowerCase();
+	var leftBound = 0;
+	var rightBound = dataList.length - 1;
+	var checkingIndex;
+	var testName;
+	var found = -1;
+	do{
+		checkingIndex = Math.round((rightBound - leftBound) / 2 + leftBound);
+		testName = dataList[checkingIndex].name.toLowerCase();
+		if(testName == name){
+			found = checkingIndex;
+			break;
+		}
+		else if(testName > name){
+			rightBound = checkingIndex - 1;
+		}
+		else{
+			leftBound = checkingIndex + 1;
+		}
+	}
+	while(leftBound <= rightBound);
+
+	return found;
+}
+
 function verifyNumberInput(element,min,max){
 	//contrains number between two values and returns it
 	newVal = parseInt($(element).val());
@@ -3170,4 +3726,103 @@ function verifyNumberInput(element,min,max){
 		newVal = max;
 	}
 	return newVal;
+}
+
+function removeDiacritics (str) {
+	//Copied from
+	//https://stackoverflow.com/questions/18123501/replacing-accented-characters-with-plain-ascii-ones
+	//ð added to d
+	var defaultDiacriticsRemovalMap = [
+		{'base':'A', 'letters':/[\u0041\u24B6\uFF21\u00C0\u00C1\u00C2\u1EA6\u1EA4\u1EAA\u1EA8\u00C3\u0100\u0102\u1EB0\u1EAE\u1EB4\u1EB2\u0226\u01E0\u00C4\u01DE\u1EA2\u00C5\u01FA\u01CD\u0200\u0202\u1EA0\u1EAC\u1EB6\u1E00\u0104\u023A\u2C6F]/g},
+		{'base':'AA','letters':/[\uA732]/g},
+		{'base':'AE','letters':/[\u00C6\u01FC\u01E2]/g},
+		{'base':'AO','letters':/[\uA734]/g},
+		{'base':'AU','letters':/[\uA736]/g},
+		{'base':'AV','letters':/[\uA738\uA73A]/g},
+		{'base':'AY','letters':/[\uA73C]/g},
+		{'base':'B', 'letters':/[\u0042\u24B7\uFF22\u1E02\u1E04\u1E06\u0243\u0182\u0181]/g},
+		{'base':'C', 'letters':/[\u0043\u24B8\uFF23\u0106\u0108\u010A\u010C\u00C7\u1E08\u0187\u023B\uA73E]/g},
+		{'base':'D', 'letters':/[\u0044\u24B9\uFF24\u1E0A\u010E\u1E0C\u1E10\u1E12\u1E0E\u0110\u018B\u018A\u0189\uA779]/g},
+		{'base':'DZ','letters':/[\u01F1\u01C4]/g},
+		{'base':'Dz','letters':/[\u01F2\u01C5]/g},
+		{'base':'E', 'letters':/[\u0045\u24BA\uFF25\u00C8\u00C9\u00CA\u1EC0\u1EBE\u1EC4\u1EC2\u1EBC\u0112\u1E14\u1E16\u0114\u0116\u00CB\u1EBA\u011A\u0204\u0206\u1EB8\u1EC6\u0228\u1E1C\u0118\u1E18\u1E1A\u0190\u018E]/g},
+		{'base':'F', 'letters':/[\u0046\u24BB\uFF26\u1E1E\u0191\uA77B]/g},
+		{'base':'G', 'letters':/[\u0047\u24BC\uFF27\u01F4\u011C\u1E20\u011E\u0120\u01E6\u0122\u01E4\u0193\uA7A0\uA77D\uA77E]/g},
+		{'base':'H', 'letters':/[\u0048\u24BD\uFF28\u0124\u1E22\u1E26\u021E\u1E24\u1E28\u1E2A\u0126\u2C67\u2C75\uA78D]/g},
+		{'base':'I', 'letters':/[\u0049\u24BE\uFF29\u00CC\u00CD\u00CE\u0128\u012A\u012C\u0130\u00CF\u1E2E\u1EC8\u01CF\u0208\u020A\u1ECA\u012E\u1E2C\u0197]/g},
+		{'base':'J', 'letters':/[\u004A\u24BF\uFF2A\u0134\u0248]/g},
+		{'base':'K', 'letters':/[\u004B\u24C0\uFF2B\u1E30\u01E8\u1E32\u0136\u1E34\u0198\u2C69\uA740\uA742\uA744\uA7A2]/g},
+		{'base':'L', 'letters':/[\u004C\u24C1\uFF2C\u013F\u0139\u013D\u1E36\u1E38\u013B\u1E3C\u1E3A\u0141\u023D\u2C62\u2C60\uA748\uA746\uA780]/g},
+		{'base':'LJ','letters':/[\u01C7]/g},
+		{'base':'Lj','letters':/[\u01C8]/g},
+		{'base':'M', 'letters':/[\u004D\u24C2\uFF2D\u1E3E\u1E40\u1E42\u2C6E\u019C]/g},
+		{'base':'N', 'letters':/[\u004E\u24C3\uFF2E\u01F8\u0143\u00D1\u1E44\u0147\u1E46\u0145\u1E4A\u1E48\u0220\u019D\uA790\uA7A4]/g},
+		{'base':'NJ','letters':/[\u01CA]/g},
+		{'base':'Nj','letters':/[\u01CB]/g},
+		{'base':'O', 'letters':/[\u004F\u24C4\uFF2F\u00D2\u00D3\u00D4\u1ED2\u1ED0\u1ED6\u1ED4\u00D5\u1E4C\u022C\u1E4E\u014C\u1E50\u1E52\u014E\u022E\u0230\u00D6\u022A\u1ECE\u0150\u01D1\u020C\u020E\u01A0\u1EDC\u1EDA\u1EE0\u1EDE\u1EE2\u1ECC\u1ED8\u01EA\u01EC\u00D8\u01FE\u0186\u019F\uA74A\uA74C]/g},
+		{'base':'OI','letters':/[\u01A2]/g},
+		{'base':'OO','letters':/[\uA74E]/g},
+		{'base':'OU','letters':/[\u0222]/g},
+		{'base':'P', 'letters':/[\u0050\u24C5\uFF30\u1E54\u1E56\u01A4\u2C63\uA750\uA752\uA754]/g},
+		{'base':'Q', 'letters':/[\u0051\u24C6\uFF31\uA756\uA758\u024A]/g},
+		{'base':'R', 'letters':/[\u0052\u24C7\uFF32\u0154\u1E58\u0158\u0210\u0212\u1E5A\u1E5C\u0156\u1E5E\u024C\u2C64\uA75A\uA7A6\uA782]/g},
+		{'base':'S', 'letters':/[\u0053\u24C8\uFF33\u1E9E\u015A\u1E64\u015C\u1E60\u0160\u1E66\u1E62\u1E68\u0218\u015E\u2C7E\uA7A8\uA784]/g},
+		{'base':'T', 'letters':/[\u0054\u24C9\uFF34\u1E6A\u0164\u1E6C\u021A\u0162\u1E70\u1E6E\u0166\u01AC\u01AE\u023E\uA786]/g},
+		{'base':'TZ','letters':/[\uA728]/g},
+		{'base':'U', 'letters':/[\u0055\u24CA\uFF35\u00D9\u00DA\u00DB\u0168\u1E78\u016A\u1E7A\u016C\u00DC\u01DB\u01D7\u01D5\u01D9\u1EE6\u016E\u0170\u01D3\u0214\u0216\u01AF\u1EEA\u1EE8\u1EEE\u1EEC\u1EF0\u1EE4\u1E72\u0172\u1E76\u1E74\u0244]/g},
+		{'base':'V', 'letters':/[\u0056\u24CB\uFF36\u1E7C\u1E7E\u01B2\uA75E\u0245]/g},
+		{'base':'VY','letters':/[\uA760]/g},
+		{'base':'W', 'letters':/[\u0057\u24CC\uFF37\u1E80\u1E82\u0174\u1E86\u1E84\u1E88\u2C72]/g},
+		{'base':'X', 'letters':/[\u0058\u24CD\uFF38\u1E8A\u1E8C]/g},
+		{'base':'Y', 'letters':/[\u0059\u24CE\uFF39\u1EF2\u00DD\u0176\u1EF8\u0232\u1E8E\u0178\u1EF6\u1EF4\u01B3\u024E\u1EFE]/g},
+		{'base':'Z', 'letters':/[\u005A\u24CF\uFF3A\u0179\u1E90\u017B\u017D\u1E92\u1E94\u01B5\u0224\u2C7F\u2C6B\uA762]/g},
+		{'base':'a', 'letters':/[\u0061\u24D0\uFF41\u1E9A\u00E0\u00E1\u00E2\u1EA7\u1EA5\u1EAB\u1EA9\u00E3\u0101\u0103\u1EB1\u1EAF\u1EB5\u1EB3\u0227\u01E1\u00E4\u01DF\u1EA3\u00E5\u01FB\u01CE\u0201\u0203\u1EA1\u1EAD\u1EB7\u1E01\u0105\u2C65\u0250]/g},
+		{'base':'aa','letters':/[\uA733]/g},
+		{'base':'ae','letters':/[\u00E6\u01FD\u01E3]/g},
+		{'base':'ao','letters':/[\uA735]/g},
+		{'base':'au','letters':/[\uA737]/g},
+		{'base':'av','letters':/[\uA739\uA73B]/g},
+		{'base':'ay','letters':/[\uA73D]/g},
+		{'base':'b', 'letters':/[\u0062\u24D1\uFF42\u1E03\u1E05\u1E07\u0180\u0183\u0253]/g},
+		{'base':'c', 'letters':/[\u0063\u24D2\uFF43\u0107\u0109\u010B\u010D\u00E7\u1E09\u0188\u023C\uA73F\u2184]/g},
+		{'base':'d', 'letters':/[\u0064\u24D3\uFF44\u1E0B\u010F\u1E0D\u1E11\u1E13\u1E0F\u0111\u018C\u0256\u0257\uA77A\u00F0]/g},
+		{'base':'dz','letters':/[\u01F3\u01C6]/g},
+		{'base':'e', 'letters':/[\u0065\u24D4\uFF45\u00E8\u00E9\u00EA\u1EC1\u1EBF\u1EC5\u1EC3\u1EBD\u0113\u1E15\u1E17\u0115\u0117\u00EB\u1EBB\u011B\u0205\u0207\u1EB9\u1EC7\u0229\u1E1D\u0119\u1E19\u1E1B\u0247\u025B\u01DD]/g},
+		{'base':'f', 'letters':/[\u0066\u24D5\uFF46\u1E1F\u0192\uA77C]/g},
+		{'base':'g', 'letters':/[\u0067\u24D6\uFF47\u01F5\u011D\u1E21\u011F\u0121\u01E7\u0123\u01E5\u0260\uA7A1\u1D79\uA77F]/g},
+		{'base':'h', 'letters':/[\u0068\u24D7\uFF48\u0125\u1E23\u1E27\u021F\u1E25\u1E29\u1E2B\u1E96\u0127\u2C68\u2C76\u0265]/g},
+		{'base':'hv','letters':/[\u0195]/g},
+		{'base':'i', 'letters':/[\u0069\u24D8\uFF49\u00EC\u00ED\u00EE\u0129\u012B\u012D\u00EF\u1E2F\u1EC9\u01D0\u0209\u020B\u1ECB\u012F\u1E2D\u0268\u0131]/g},
+		{'base':'j', 'letters':/[\u006A\u24D9\uFF4A\u0135\u01F0\u0249]/g},
+		{'base':'k', 'letters':/[\u006B\u24DA\uFF4B\u1E31\u01E9\u1E33\u0137\u1E35\u0199\u2C6A\uA741\uA743\uA745\uA7A3]/g},
+		{'base':'l', 'letters':/[\u006C\u24DB\uFF4C\u0140\u013A\u013E\u1E37\u1E39\u013C\u1E3D\u1E3B\u017F\u0142\u019A\u026B\u2C61\uA749\uA781\uA747]/g},
+		{'base':'lj','letters':/[\u01C9]/g},
+		{'base':'m', 'letters':/[\u006D\u24DC\uFF4D\u1E3F\u1E41\u1E43\u0271\u026F]/g},
+		{'base':'n', 'letters':/[\u006E\u24DD\uFF4E\u01F9\u0144\u00F1\u1E45\u0148\u1E47\u0146\u1E4B\u1E49\u019E\u0272\u0149\uA791\uA7A5]/g},
+		{'base':'nj','letters':/[\u01CC]/g},
+		{'base':'o', 'letters':/[\u006F\u24DE\uFF4F\u00F2\u00F3\u00F4\u1ED3\u1ED1\u1ED7\u1ED5\u00F5\u1E4D\u022D\u1E4F\u014D\u1E51\u1E53\u014F\u022F\u0231\u00F6\u022B\u1ECF\u0151\u01D2\u020D\u020F\u01A1\u1EDD\u1EDB\u1EE1\u1EDF\u1EE3\u1ECD\u1ED9\u01EB\u01ED\u00F8\u01FF\u0254\uA74B\uA74D\u0275]/g},
+		{'base':'oi','letters':/[\u01A3]/g},
+		{'base':'ou','letters':/[\u0223]/g},
+		{'base':'oo','letters':/[\uA74F]/g},
+		{'base':'p','letters':/[\u0070\u24DF\uFF50\u1E55\u1E57\u01A5\u1D7D\uA751\uA753\uA755]/g},
+		{'base':'q','letters':/[\u0071\u24E0\uFF51\u024B\uA757\uA759]/g},
+		{'base':'r','letters':/[\u0072\u24E1\uFF52\u0155\u1E59\u0159\u0211\u0213\u1E5B\u1E5D\u0157\u1E5F\u024D\u027D\uA75B\uA7A7\uA783]/g},
+		{'base':'s','letters':/[\u0073\u24E2\uFF53\u00DF\u015B\u1E65\u015D\u1E61\u0161\u1E67\u1E63\u1E69\u0219\u015F\u023F\uA7A9\uA785\u1E9B]/g},
+		{'base':'t','letters':/[\u0074\u24E3\uFF54\u1E6B\u1E97\u0165\u1E6D\u021B\u0163\u1E71\u1E6F\u0167\u01AD\u0288\u2C66\uA787]/g},
+		{'base':'tz','letters':/[\uA729]/g},
+		{'base':'u','letters':/[\u0075\u24E4\uFF55\u00F9\u00FA\u00FB\u0169\u1E79\u016B\u1E7B\u016D\u00FC\u01DC\u01D8\u01D6\u01DA\u1EE7\u016F\u0171\u01D4\u0215\u0217\u01B0\u1EEB\u1EE9\u1EEF\u1EED\u1EF1\u1EE5\u1E73\u0173\u1E77\u1E75\u0289]/g},
+		{'base':'v','letters':/[\u0076\u24E5\uFF56\u1E7D\u1E7F\u028B\uA75F\u028C]/g},
+		{'base':'vy','letters':/[\uA761]/g},
+		{'base':'w','letters':/[\u0077\u24E6\uFF57\u1E81\u1E83\u0175\u1E87\u1E85\u1E98\u1E89\u2C73]/g},
+		{'base':'x','letters':/[\u0078\u24E7\uFF58\u1E8B\u1E8D]/g},
+		{'base':'y','letters':/[\u0079\u24E8\uFF59\u1EF3\u00FD\u0177\u1EF9\u0233\u1E8F\u00FF\u1EF7\u1E99\u1EF5\u01B4\u024F\u1EFF]/g},
+		{'base':'z','letters':/[\u007A\u24E9\uFF5A\u017A\u1E91\u017C\u017E\u1E93\u1E95\u01B6\u0225\u0240\u2C6C\uA763]/g}
+	];
+
+	for(var i=0; i<defaultDiacriticsRemovalMap.length; i++) {
+		str = str.replace(defaultDiacriticsRemovalMap[i].letters, defaultDiacriticsRemovalMap[i].base);
+	}
+
+	return str;
+
 }

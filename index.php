@@ -149,7 +149,7 @@ function getData($table){
 							<div class="misc_row">Boon: <select class="misc_input" data-var="enemies.fl.boon" id="enemies_boon"><option value="none">None</option><option value="hp">HP</option><option value="atk">Atk</option><option value="spd">Spd</option><option value="def">Def</option><option value="res">Res</option></select></div>
 							<div class="misc_row">Bane: <select class="misc_input" data-var="enemies.fl.bane" id="enemies_bane"><option value="none">None</option><option value="hp">HP</option><option value="atk">Atk</option><option value="spd">Spd</option><option value="def">Def</option><option value="res">Res</option></select></div>
 							<div class="misc_row">Damage taken: <input id="enemies_damage" data-var="enemies.fl.damage" class="misc_input smallnuminput" type="number" value=0 min=0 max=99 /></div>
-							<div class="misc_row">Pre-charge: <input type="number" id="enemies_precharge" data-var="enemies.fl.damage" class="misc_input smallnuminput" value=0 min=0 max=6 /></div>
+							<div class="misc_row">Pre-charge: <input type="number" id="enemies_precharge" data-var="enemies.fl.precharge" class="misc_input smallnuminput" value=0 min=0 max=6 /></div>
 						</div>
 					</div>
 				</div>
@@ -157,8 +157,8 @@ function getData($table){
 					<div id="cl_enemylist">
 						<div id="cl_enemylist_list">
 						</div>
-						<div id="cl_addenemy" class="clbutton" onclick="addClEnemy();">+Add one</div>
-						<div id="cl_removeall" class="clbutton" onclick="removeAllClEnemies();">-Clear all</div>
+						<div id="cl_addenemy" class="clbutton button" onclick="addClEnemy();">+Add one</div>
+						<div id="cl_removeall" class="clbutton button" onclick="removeAllClEnemies();">-Clear all</div>
 					</div>
 					<div class="frame_hero_main_right">
 						<div class="bar_top_options"><select id="cl_enemy_name" data-var="enemies.cl.list.index"></select><div class="bar_top_options_right"><span class="bar_label">Rarity:</span><input id="cl_enemy_rarity" data-var="enemies.cl.list.rarity" type="number" class="rarityinput smallnuminput" value=5 min=1 max=5 /><span class="bar_label">Lvl 40+</span><input id="cl_enemy_merge" data-var="enemies.cl.list.merge" class="smallnuminput" type="number" value=0 min=0 max=10 /><div class="button reset_button reset_enemies" id="reset_cl_enemy">Reset</div></div></div>
@@ -229,7 +229,7 @@ function getData($table){
 		<div id="frame_results">
 			<div id="results_bar_top">
 				<div class="button" id="button_calculate" onclick="calculate();">Calculate!</div> <input type="checkbox" data-var="options.autoCalculate" id="autocalculate" checked="checked"/>Auto-calculate
-				<div id="results_bar_right"><span class="bar_label">View:</span><select id="view_results" data-var="options.viewFilter"><option value=0 >All battles</option><option value=1 >Changed victor</option><option value=2 >Changed rounds</option></select><span class="bar_label">Sort:</span><select id="sort_results" data-var="options.sortOrder"><option value=1 >Best</option><option value=-1 >Worst</option></select><div class="button" id="button_exportcalc" onclick="exportCalc();">Export results</div></div>
+				<div id="results_bar_right"><span class="bar_label">View:</span><select id="view_results" data-var="options.viewFilter"><option value="all" >All battles</option><option value="changeVictor" >Changed victor</option><option value="changeRounds" >Changed rounds</option></select><span class="bar_label">Sort:</span><select id="sort_results" data-var="options.sortOrder"><option value=1 >Best</option><option value=-1 >Worst</option></select><div class="button" id="button_exportcalc" onclick="exportCalc();">Export results</div></div>
 			</div>
 			<div id="results_graph_back">
 				<div id="results_graph_wins"></div>
@@ -261,8 +261,9 @@ function getData($table){
 	<div id="screen_fade"></div>
 	<div id="frame_import" class="challengerimport">
 		<div id="import_header"><span id="import_title"></span><div class="button" id="import_exit">x</div></div>
-		<textarea class="importinput" id="import_challenger"></textarea>
+		<textarea class="importinput" id="importinput" tabindex="-1" ></textarea>
 		<div id="import_footer"><div class="button" id="button_import">Import into calculator</div></div>
+		<label id="export_collapse_label"><input type="checkbox" id="export_collapse" />Collapse</label>
 	</div>
 </body>
 
