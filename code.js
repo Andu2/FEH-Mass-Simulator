@@ -187,15 +187,7 @@ function initOptions(){
 initOptions();
 
 var fightResults = []; //Needs to be global variable to get info for tooltip
-var resultHTML = []; //Needs to be a global variable to flip sort order without recalculating
-var previousFightResults = new Array(data.heroes.length); //For comparing between calculations; actually an array of html strings with index corresponding to heroes[] index
-var nextPreviousFightResults = new Array(data.heroes.length); //Dumb
-//.fill() doesn't work in older versions of IE
-//previousFightResults.fill("");
-for(var i = 0; i < previousFightResults.length;i++){
-	previousFightResults[i] = "";
-	nextPreviousFightResults[i] = "";
-}
+var resultHTML = []; //Needs to be a global variable to flip sort order without 
 
 var showingTooltip = false;
 var calcuwaiting = false;
@@ -262,7 +254,7 @@ $(document).ready(function(){
 				"enemies.fl.special","enemies.fl.a","enemies.fl.b","enemies.fl.c","enemies.fl.s"
 			];
 			var varsThatUpdateFl = [
-				".boon",".bane",".precharge",".damage",".rarity"
+				".boon",".bane",".precharge",".damage",".rarity",".merge"
 			]
 
 			var newVal = $(this).val();
@@ -297,6 +289,12 @@ $(document).ready(function(){
 			}
 			else if(inputType=="checkbox"){
 				newVal = $(this).is(":checked");
+			}
+
+			//Change val to numeric if it looks numeric
+			//All numbers used by this program are ints
+			if($.isNumeric(newVal)){
+				newVal = parseInt(newVal);
 			}
 
 			changeDataVar(dataVar,newVal);
@@ -339,10 +337,9 @@ $(document).ready(function(){
 			}
 			else if(endsWith(dataVar,".showOnlyMaxSkills") || endsWith(dataVar,".hideUnaffectingSkills")){
 				blockCalculate = true;
-				setSkillOptions(challenger);
-				if(options.customEnemySelected != -1){
-					setSkillOptions(enemies.cl.list[options.customEnemySelected]);
-				}
+				updateChallengerUI();
+				updateEnemyUI();
+				//Not hero so won't automatically update uis
 			}
 			else if(endsWith(dataVar,".viewFilter") || endsWith(dataVar,".sortOrder")){
 				blockCalculate = true;
@@ -494,7 +491,7 @@ $(document).ready(function(){
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-function initHero(hero){
+function initHero(hero,alreadyHasSkills){
 	if(hero.index != -1){
 		hero.naturalSkills = data.heroBaseSkills[hero.index];
 
@@ -504,8 +501,21 @@ function initHero(hero){
 		hero.validBSkills = getValidSkills(hero,"b");
 		hero.validCSkills = getValidSkills(hero,"c");
 		hero.validSSkills = getValidSkills(hero,"s");
+		if(!alreadyHasSkills){
+			setSkills(hero);
+		}
+		else{
+			//validate that the skills it already has are okay
+			if(!hero.rarity){
+				hero.rarity = 5;
+			}
+			data.skillSlots.forEach(function(slot){
+				if(hero["valid" + capitalize(slot) + "Skills"].indexOf(hero[slot]) == -1){
+					hero[slot] = -1;
+				}
+			});
+		}
 		setSkillOptions(hero);
-		setSkills(hero);
 		setStats(hero);
 	}
 }
@@ -639,20 +649,28 @@ function setStats(hero){
 		enemies.fl.avgDef = 0;
 		enemies.fl.avgRes = 0;
 
-		for(var i = 0; i < enemies.fl.list.length;i++){
-			setStats(enemies.fl.list[i]);
+		var numIncluded = 0;
 
-			enemies.fl.avgHp += enemies.fl.list[i].hp;
-			enemies.fl.avgAtk += enemies.fl.list[i].atk;
-			enemies.fl.avgSpd += enemies.fl.list[i].spd;
-			enemies.fl.avgDef += enemies.fl.list[i].def;
-			enemies.fl.avgRes += enemies.fl.list[i].res;
+		for(var i = 0; i < enemies.fl.list.length;i++){
+			if(enemies.fl.list[i].included){
+				setStats(enemies.fl.list[i]);
+
+				enemies.fl.avgHp += enemies.fl.list[i].hp;
+				enemies.fl.avgAtk += enemies.fl.list[i].atk;
+				enemies.fl.avgSpd += enemies.fl.list[i].spd;
+				enemies.fl.avgDef += enemies.fl.list[i].def;
+				enemies.fl.avgRes += enemies.fl.list[i].res;
+
+				numIncluded++;
+			}
 		}
-		enemies.fl.avgHp = Math.round(enemies.fl.avgHp/enemies.fl.list.length);
-		enemies.fl.avgAtk = Math.round(enemies.fl.avgAtk/enemies.fl.list.length);
-		enemies.fl.avgSpd = Math.round(enemies.fl.avgSpd/enemies.fl.list.length);
-		enemies.fl.avgDef = Math.round(enemies.fl.avgDef/enemies.fl.list.length);
-		enemies.fl.avgRes = Math.round(enemies.fl.avgRes/enemies.fl.list.length);
+		if(numIncluded > 0){
+			enemies.fl.avgHp = Math.round(enemies.fl.avgHp/numIncluded);
+			enemies.fl.avgAtk = Math.round(enemies.fl.avgAtk/numIncluded);
+			enemies.fl.avgSpd = Math.round(enemies.fl.avgSpd/numIncluded);
+			enemies.fl.avgDef = Math.round(enemies.fl.avgDef/numIncluded);
+			enemies.fl.avgRes = Math.round(enemies.fl.avgRes/numIncluded);
+		}
 	}
 	else if(typeof hero.index != "undefined" && hero.index != -1){
 		var growthValMod = {"hp":0,"atk":0,"spd":0,"def":0,"res":0};
@@ -788,7 +806,7 @@ function setSkills(hero){
 			//Find if skill needs replacement based on inputs
 			data.skillSlots.forEach(function(slot){
 				if(enemies.fl[slot] != -1 && (enemies.fl["replace" + capitalize(slot)] == 1 || enemies.fl.list[i][slot] == -1)){
-					if(data.heroPossibleSkills[enemies.fl.list[i].index].includes(enemies.fl[slot])){
+					if(data.heroPossibleSkills[enemies.fl.list[i].index].indexOf(enemies.fl[slot]) != -1){
 						enemies.fl.list[i][slot] = enemies.fl[slot];
 					}
 				}
@@ -808,6 +826,8 @@ function setSkills(hero){
 function resetHero(hero,blockInit){//also resets fl, despite singular name - pass enemies.fl
 	hero.rarity = 5;
 	hero.merge = 0;
+	hero.boon = "none";
+	hero.bane = "none";
 
 	hero.damage = 0;
 	hero.precharge = 0;
@@ -825,14 +845,20 @@ function resetHero(hero,blockInit){//also resets fl, despite singular name - pas
 	}
 	else{
 		if(options.customEnemyList == 0){
-			enemies.fl.weapon = -1;
-			enemies.fl.special = -1;
-			enemies.fl.a = -1;
-			enemies.fl.b = -1;
-			enemies.fl.c = -1;
-			enemies.fl.s = -1;
+			hero.weapon = -1;
+			hero.special = -1;
+			hero.a = -1;
+			hero.b = -1;
+			hero.c = -1;
+			hero.s = -1;
+			hero.replaceWeapon = 0;
+			hero.replaceSpecial = 0;
+			hero.replaceA = 0;
+			hero.replaceB = 0;
+			hero.replaceC = 0;
+			hero.replaceS = 0;
 
-			enemies.fl.include = {"melee":1,"ranged":1,"red":1,"blue":1,"green":1,"gray":1,"physical":1,"magical":1,"infantry":1,"cavalry":1,"flying":1,"armored":1,"staff":0,"nonstaff":1};
+			hero.include = {"melee":1,"ranged":1,"red":1,"blue":1,"green":1,"gray":1,"physical":1,"magical":1,"infantry":1,"cavalry":1,"flying":1,"armored":1,"staff":0,"nonstaff":1};
 
 			if(!blockInit){
 				initEnemyList();
@@ -872,7 +898,7 @@ function selectClEnemy(clEnemyId){
 	}
 }
 
-function deleteClEnemy(clEnemyId){
+function deleteClEnemy(event,clEnemyId){
 	//Don't fuck with renaming ids, just move the text around and hide the highest id
 	enemies.cl.list.splice(clEnemyId,1);
 	if(options.customEnemySelected >= enemies.cl.list.length){
@@ -880,6 +906,7 @@ function deleteClEnemy(clEnemyId){
 	}
 	updateEnemyUI();
 	updateClList();
+	event.stopPropagation();
 }
 
 function removeAllClEnemies(){
@@ -953,9 +980,12 @@ function updateFlEnemies(){
 		enemies.fl.list[i].boon =  enemies.fl.boon;
 		enemies.fl.list[i].bane =  enemies.fl.bane;
 		enemies.fl.list[i].merge =  enemies.fl.merge;
+		enemies.fl.list[i].rarity =  enemies.fl.rarity;
 		enemies.fl.list[i].precharge =  enemies.fl.precharge;
 		enemies.fl.list[i].damage =  enemies.fl.damage;
 	}
+	setSkills(enemies.fl);
+	setStats(enemies.fl);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1007,7 +1037,7 @@ function setSkillOptions(hero){
 		var validSkills = hero["valid" + capitalize(slot) + "Skills"];
 		if(validSkills){
 			for(var i = 0; i < validSkills.length; i++){
-				if(((!options.showOnlyMaxSkills || data.skillsThatArePrereq.indexOf(data.skills[validSkills[i]].skill_id)==-1) && (!options.hideUnaffectingSkills || data.skills[validSkills[i]].affectsduel)) || validSkills[i] == maxSkills[slot]){
+				if(((!options.showOnlyMaxSkills || data.skillsThatArePrereq.indexOf(data.skills[validSkills[i]].skill_id)==-1) && (!options.hideUnaffectingSkills || data.skills[validSkills[i]].affectsduel)) || validSkills[i] == maxSkills[slot] || validSkills[i] == hero[slot]){
 					slotHTML += "<option value=" + validSkills[i] + ">" + data.skills[validSkills[i]].name + "</option>";
 				}
 			}
@@ -1247,7 +1277,7 @@ function importText(side){
 
 	var text = $("#importinput").val();
 	text = removeDiacritics(text); //Fuckin rauðrblade
-	var importSplit = trySplit(text,["  \n",";"])
+	var importSplit = trySplit(text,["  \n","\n",";"])
 
 	var importMode = "none";
 	if(includesLike(importSplit[0],"ENEMIES - CUSTOM LIST")){
@@ -1277,6 +1307,7 @@ function importText(side){
 			}
 		}
 		initEnemyList();
+		updateFlEnemies();
 		updateEnemyUI();
 	}
 	else{
@@ -1329,6 +1360,14 @@ function importText(side){
 			hero.bane = firstLine.bane;
 		}
 
+		//Reset skills - they won't be reset with setSkills
+		hero.weapon = -1;
+		hero.special = -1;
+		hero.a = -1;
+		hero.b = -1;
+		hero.c = -1;
+		hero.s = -1;
+
 		for(var line = 1; line < lines.length; line++){
 			var lineData = parseAttributeLine(lines[line]);
 			for(var key in lineData){
@@ -1336,7 +1375,7 @@ function importText(side){
 			}
 		}
 
-		initHero(hero);
+		initHero(hero,true);
 	}
 
 	function parseFirstLine(line){
@@ -1369,36 +1408,40 @@ function importText(side){
 		}
 
 		var plusSplit = line.split("+");
-		for(var plusLine = 0; plusLine < plusSplit.length; plusLine++){
-			plusSplit[plusLine] = removeEdgeJunk(plusSplit[plusLine]).toLowerCase();
+		if(plusSplit.length > 1){ //Don't check if there's no pluses
+			for(var plusLine = 0; plusLine < plusSplit.length; plusLine++){
+				plusSplit[plusLine] = removeEdgeJunk(plusSplit[plusLine]).toLowerCase();
 
-			var tryMerge = parseInt(plusSplit[plusLine].slice(0,2));
-			if(tryMerge >= 1 && tryMerge <= 10){
-				dataFound.merge = tryMerge;
-			}
-			else{
-				tryMerge = parseInt(plusSplit[plusLine].slice(-2));
+				var tryMerge = parseInt(plusSplit[plusLine].slice(0,2));
 				if(tryMerge >= 1 && tryMerge <= 10){
 					dataFound.merge = tryMerge;
 				}
-			}
-
-			data.stats.forEach(function(stat){
-				if(plusSplit[plusLine].slice(0,stat.length) == stat || plusSplit[plusLine].slice(-stat.length) == stat){
-					dataFound.boon = stat;
+				else{
+					tryMerge = parseInt(plusSplit[plusLine].slice(-2));
+					if(tryMerge >= 1 && tryMerge <= 10){
+						dataFound.merge = tryMerge;
+					}
 				}
-			});
+
+				data.stats.forEach(function(stat){
+					if(plusSplit[plusLine].slice(0,stat.length) == stat || plusSplit[plusLine].slice(-stat.length) == stat){
+						dataFound.boon = stat;
+					}
+				});
+			}
 		}
 
 		var minusSplit = line.split("+");
-		for(var minusLine = 0; minusLine < minusSplit.length; minusLine++){
-			minusSplit[minusLine] = removeEdgeJunk(minusSplit[minusLine]).toLowerCase();
+		if(minusSplit.length > 1){ //Don't check if there's no minuses
+			for(var minusLine = 0; minusLine < minusSplit.length; minusLine++){
+				minusSplit[minusLine] = removeEdgeJunk(minusSplit[minusLine]).toLowerCase();
 
-			data.stats.forEach(function(stat){
-				if(minusSplit[minusLine].slice(0,stat.length) == stat || minusSplit[minusLine].slice(-stat.length) == stat){
-					dataFound.bane = stat;
-				}
-			});
+				data.stats.forEach(function(stat){
+					if(minusSplit[minusLine].slice(0,stat.length) == stat || minusSplit[minusLine].slice(-stat.length) == stat){
+						dataFound.bane = stat;
+					}
+				});
+			}
 		}
 
 		return dataFound;
@@ -1408,10 +1451,11 @@ function importText(side){
 		var dataFound = {};
 
 		var keyValue = trySplit(line,[":","-","="]);
+		keyValue[0] = removeEdgeJunk(keyValue[0]);
 		if(keyValue.length==1){
 			keyValue[1] = "";
 		}
-		keyValue[1] =keyValue[1].toLowerCase();
+		keyValue[1] = removeEdgeJunk(keyValue[1].toLowerCase());
 		var key = "";
 		var value;
 		var buffObject = false;
@@ -1436,63 +1480,55 @@ function importText(side){
 		else if(includesLike(keyValue[0],"damage")){
 			key = "damage";
 		}
+		else if(includesLike(keyValue[0],"rarity")){
+			key = "rarity";
+		}
+		else if(includesLike(keyValue[0],"merge")){
+			key = "merge";
+		}
+		else if(includesLike(keyValue[0],"boon")){
+			key = "boon";
+		}
+		else if(includesLike(keyValue[0],"bane")){
+			key = "bane";
+		}
 		else if(includesLike(keyValue[0],"include")){
 			key = "include";
 			includeObject = true;
 		}
 		else if(includesLike(keyValue[0],"weapon")){
-			if(includesLike(keyValue[0],"replace")){
-				key = "replaceWeapon";
-			}
-			else{
-				key = "weapon";
-				skillName = true;
-			}
+			key = "weapon";
+			skillName = true;
 		}
 		else if(includesLike(keyValue[0],"special")){
-			if(includesLike(keyValue[0],"replace")){
-				key = "replaceSpecial";
-			}
-			else{
-				key = "special";
-				skillName = true;
-			}
+			key = "special";
+			skillName = true;
 		}
-		else if(includesLike(keyValue[0],"passive a") || keyValue[0].toLowerCase() == "a"){
-			if(includesLike(keyValue[0],"replace")){
-				key = "replaceA";
-			}
-			else{
-				key = "a";
-				skillName = true;
-			}
+		else if(includesLike(keyValue[0],"passive a") || keyValue[0].toLowerCase().slice(-1) == "a"){
+			key = "a";
+			skillName = true;
 		}
-		else if(includesLike(keyValue[0],"passive b") || keyValue[0].toLowerCase() == "b"){
-			if(includesLike(keyValue[0],"replace")){
-				key = "replaceB";
-			}
-			else{
-				key = "b";
-				skillName = true;
-			}
+		else if(includesLike(keyValue[0],"passive b") || keyValue[0].toLowerCase().slice(-1) == "b"){
+			key = "b";
+			skillName = true;
 		}
-		else if(includesLike(keyValue[0],"passive c") || keyValue[0].toLowerCase() == "c"){
-			if(includesLike(keyValue[0],"replace")){
-				key = "replaceC";
-			}
-			else{
-				key = "c";
-				skillName = true;
-			}
+		else if(includesLike(keyValue[0],"passive c") || keyValue[0].toLowerCase().slice(-1) == "c"){
+			key = "c";
+			skillName = true;
 		}
-		else if(includesLike(keyValue[0],"passive s") || keyValue[0].toLowerCase() == "s"){
+		else if(includesLike(keyValue[0],"passive s") || keyValue[0].toLowerCase().slice(-1) == "s"){
 			key = "s";
 			skillName = true;
+		}
+		
+		if(includesLike(keyValue[0],"replace") && skillName){
+			key = "replace" + capitalize(key);
+			skillName = false;
 		}
 
 		if(buffObject){
 			var value = {"atk":0,"spd":0,"def":0,"res":0};
-			var splitBuffs = trySplit(keyValue[1],[","," "]);
+			var splitBuffs = trySplit(keyValue[1],[","]);
 			for(var i = 0; i < splitBuffs.length; i++){
 				data.buffStats.forEach(function(stat){
 					if(includesLike(splitBuffs[i],stat)){
@@ -1505,7 +1541,15 @@ function importText(side){
 			}
 		}
 		else if(skillName){
-			value = getIndexFromName(removeEdgeJunk(keyValue[1]),data.skills)
+			value = getIndexFromName(removeEdgeJunk(keyValue[1]),data.skills);
+			//console.log("Looking for " + key + ", found " + value);
+		}
+		else if(key=="boon" || key=="bane"){
+			data.stats.forEach(function(stat){
+				if(keyValue[1].indexOf(stat) != -1){
+					value = stat;
+				}
+			});
 		}
 		else if(includeObject){
 			var value = {"melee":0,"ranged":0,"red":0,"blue":0,"green":0,"gray":0,"physical":0,"magical":0,"infantry":0,"cavalry":0,"flying":0,"armored":0,"staff":0,"nonstaff":0};
@@ -1520,13 +1564,15 @@ function importText(side){
 		}
 		else{
 			//Make all numbers
-			keyValue[1].replace("true",1);
-			keyValue[1].replace("false",0);
+			keyValue[1] = keyValue[1].replace("true","1");
+			keyValue[1] = keyValue[1].replace("false","0");
 			var numMatch = keyValue[1].match(/-?\d/);
 			if(numMatch){
-				value = numMatch[0];
+				value = parseInt(numMatch[0]);
 			}
 		}
+
+		//console.log(key + ": " + value + " (from " + keyValue[1] + ")");
 
 		if(key && value){
 			dataFound[key] = value;
@@ -1539,6 +1585,7 @@ function importText(side){
 		alert("Error: " + errorMsg);
 	}
 
+	validateNumberInputs()
 	hideImportDialog();
 	calculate();
 }
@@ -1766,9 +1813,31 @@ function updateClList(){
 
 		//Need to create a new element - the list is not pre-populated with hidden elements
 		var clEnemyHTML = "<div class=\"cl_enemy button\" id=\"cl_enemy" + clIndex + "\" data-clindex=\"" + clIndex + "\" onclick=\"selectClEnemy(" + clIndex + ")\"><span id=\"cl_enemy" + clIndex + "_name\">" + enemyName;
-		clEnemyHTML += "</span><div class=\"cl_delete_enemy button\" id=\"cl_enemy" + clIndex + "_delete\" onclick=\"deleteClEnemy(" + clIndex + ");\">x</div></div>";
+		clEnemyHTML += "</span><div class=\"cl_delete_enemy button\" id=\"cl_enemy" + clIndex + "_delete\" onclick=\"deleteClEnemy(event," + clIndex + ");\" onmouseover=\"undoClStyle(this)\" onmouseout=\"redoClStyle(this)\">x</div></div>";
 		$("#cl_enemylist_list").append(clEnemyHTML);
 	}
+}
+
+function undoClStyle(element){
+	$(element).parent().addClass("cl_destyled");
+}
+
+function redoClStyle(element){
+	$(element).parent().removeClass("cl_destyled");
+}
+
+function validateNumberInputs(){
+	//For import function
+	$("input[type=number]").toArray().forEach(function(element){
+		var min = $(element).attr("min");
+		var max = $(element).attr("max");
+		if(typeof min != "undefined" && typeof max != "undefined"){
+			var newVal = verifyNumberInput(element,min,max);
+			var dataVar = $(element).attr("data-var");
+			changeDataVar(dataVar, newVal);
+			$(element).val(newVal);
+		}
+	});
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1894,7 +1963,7 @@ function fight(enemyIndex,resultIndex){
 			passFilters.push("changeVictor");
 		}
 
-		var prevRounds = previousFightResults[enemyIndex].match(/([1-4]) rounds?/);
+		var prevRounds = enemyList[enemyIndex].lastFightResult.match(/([1-4]) rounds?/);
 		if(prevRounds){
 			if(rounds != prevRounds[1] && outcome == prevResult && outcome != "inconclusive"){
 				passFilters.push("changeRounds");
@@ -3476,18 +3545,6 @@ function activeHero(hero){
 			enemyBroken = true;
 		}
 
-		if(thisBroken && enemyBroken){
-			roundText += "Both units have breaker skills, so they cancel out.";
-			thisBroken = false;
-			enemyBroken = false;
-		}
-		else if(thisBroken){
-			roundText += this.name + " is prevented from making a follow-up attack with " + enemy.name + "'s breaker skill.<br>";
-		}
-		else if(enemyBroken){
-			roundText += enemy.name + " is prevented from making a follow-up attack with " + this.name + "'s breaker skill.<br>";
-		}
-
 		//Check for firesweep
 		var firesweep = false;
 		if(this.has("Firesweep Bow")){
@@ -3517,48 +3574,71 @@ function activeHero(hero){
 		var enemyFollowUp = false;
 
 		//I split up the follow-up rules to be less confusing, so there are extra computations
-		if(thisEffSpd-enemyEffSpd >= 5){
-			thisFollowUp = true;
-		}
-		if(thisEffSpd-enemyEffSpd <= -5){
-			enemyFollowUp = true;
-		}
+		var preventEnemyFollow = false;
+		var preventThisFollow = false;
+		var enemyAutoFollow = false;
+		var thisAutoFollow = false;
+		var thisOutspeeds = false;
+		var enemyOutspeeds = false;
 
 		if(waryFighter){
-			thisFollowUp = false;
-			enemyFollowUp = false;
+			preventEnemyFollow = true;
+			preventThisFollow = true;
 		}
 		if(thisBroken){
-			thisFollowUp = false;
-			if(!waryFighter || thisEffSpd-enemyEffSpd <= -5){
-				enemyFollowUp = true;
-			}
+			preventThisFollow = true;
+			enemyAutoFollow = true;
 		}
 		if(enemyBroken){
-			if(!waryFighter || thisEffSpd-enemyEffSpd >= 5){
-				thisFollowUp = true;
-			}
-			enemyFollowUp = false;
+			preventEnemyFollow = true;
+			thisAutoFollow = true;
 		}
 		if(brashAssault){
-			if(!waryFighter || thisEffSpd-enemyEffSpd >= 5){
-				thisFollowUp = true;
-			}
+			thisAutoFollow = true;
 		}
 		if(quickRiposte){
-			if(!waryFighter || thisEffSpd-enemyEffSpd <= -5){
-				enemyFollowUp = true;
-			}
-		}
-		//A unit with Wary Fighter can never double, even in a situation where the opponent can
-		if(thisWaryFighter){	
-			thisFollowUp = false;
-		}
-		if(enemyWaryFighter){
-			enemyFollowUp = false;
+			enemyAutoFollow = true;
 		}
 		if(windsweep || watersweep){
-			thisFollowUp = false;
+			preventThisFollow = true;
+		}
+		if(thisEffSpd-enemyEffSpd >= 5){
+			thisOutspeeds = true;
+		}
+		else if(thisEffSpd-enemyEffSpd <= -5){
+			enemyOutspeeds = true;
+		}
+
+		//Cancel things out
+		if(preventThisFollow && thisAutoFollow){
+			preventThisFollow = false;
+			thisAutoFollow = false;
+			roundText += this.name + " is affected by conflicting follow-up skills, which cancel out.<br>";
+		}
+		if(preventEnemyFollow && enemyAutoFollow){
+			preventEnemyFollow = false;
+			enemyAutoFollow = false;
+			roundText += enemy.name + " is affected by conflicting follow-up skills, which cancel out.<br>";
+		}
+
+		if(thisAutoFollow){
+			roundText += this.name + " can make an automatic follow-up attack.<br>";
+		}
+		if(enemyAutoFollow){
+			roundText += enemy.name + " can make an automatic follow-up attack.<br>";
+		}
+		if(preventThisFollow){
+			roundText += this.name + " is prevented from making a follow-up attack.<br>";
+		}
+		if(preventEnemyFollow){
+			roundText += enemy.name + " is prevented from making a follow-up attack.<br>";
+		}
+
+		if((thisOutspeeds || thisAutoFollow) && !preventThisFollow){
+			thisFollowUp = true;
+		}
+		if((enemyOutspeeds || enemyAutoFollow) && !preventEnemyFollow){
+			enemyFollowUp = true;
 		}
 
 		if(!firesweep && !(windsweep && data.physicalWeapons.indexOf(enemy.weaponType) != -1 && thisEffSpd-enemyEffSpd >= windsweep) && !(watersweep && data.magicalWeapons.indexOf(enemy.weaponType) != -1 && thisEffSpd-enemyEffSpd >= watersweep)){

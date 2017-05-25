@@ -1,3 +1,7 @@
+2017-5-24:
+	-Fixed stuff, I forgot what.
+	-Results loading is a little slow. Maybe looking into using React for that portion.
+
 2017-5-23:
 	-Option to view only results that changed.
 	-Export results.

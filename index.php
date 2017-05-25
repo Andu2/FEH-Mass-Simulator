@@ -39,7 +39,9 @@ function getData($table){
 	<link href="https://fonts.googleapis.com/css?family=Merriweather" rel="stylesheet">
 	<link rel="shortcut icon" href="favicon.ico" />
 
-	<script type="text/javascript" src="/libraries/jquery.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<!--<script src="https://unpkg.com/react@15/dist/react.js"></script>
+	<script src="https://unpkg.com/react-dom@15/dist/react-dom.js"></script>-->
 
 	<script>
 		var data = {};
@@ -70,7 +72,7 @@ function getData($table){
 <body>
 	<div id="frame_main">
 		<div id="header"><img src="logo.png" style="margin-right:20px;"/><div style="display:inline-block;">Mass Duel Simulator!</div><div id="subtitle"></div></div>
-		<div id="frame_updatenotice" data-update="2"><b>Major update: Import/export and custom enemy lists!</b><br>Now you can test your challenger against a custom set of enemies that you or someone else creates!<br>There are going to be a lot of bugs because I changed a lot of code. I will continue to work on things over the next few days!
+		<div id="frame_updatenotice" data-update="2"><b>Major update: Import/export and custom enemy lists!</b><br>Now you can test your challenger against a custom set of enemies that you or someone else creates!<br>There are going to be a lot of bugs because I changed a lot of code. I will continue to work on things over the next few days!<br>After that, it's on to the next major update: Advanced metrics!
 			<div id="update_icon">!</div>
 			<div class="button" id="button_closeupdatenotice" onclick="hideUpdateNotice();">x</div>
 		</div>
@@ -258,7 +260,7 @@ function getData($table){
 				</div>-->
 			</div>
 		</div>
-		<div id="footer">Last <a href="changelog.txt">updated</a> 2017-5-23. <a href="https://www.reddit.com/user/anducrandu">Message me on reddit</a> if I need to fix something!</div>
+		<div id="footer">Last <a href="changelog.txt">updated</a> 2017-5-24. <a href="https://www.reddit.com/user/anducrandu">Message me on reddit</a> if I need to fix something!</div>
 	</div>
 	<div id="frame_tooltip"></div>
 	<a href="../../games"><div id="frame_sitead">&lt; Back to Games</div></a>

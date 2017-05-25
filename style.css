@@ -596,6 +596,10 @@ body{
 	background-color: #888888;
 }
 
+.cl_destyled{
+	background-color: #444444!important;
+}
+
 .cl_delete_enemy{
 	text-align:center;
 	position:absolute;
@@ -612,8 +616,7 @@ body{
 
 .cl_delete_enemy:hover{
 	cursor:pointer;
-	background-color: #ffffff;
-	color:#d82a3e;
+	background-color: #888888;
 	font-weight:bold;
 }
 
@@ -627,6 +630,11 @@ body{
 
 .clSelected .cl_delete_enemy{
 	background-color: #d82a3e;
+}
+
+.clSelected .cl_delete_enemy:hover{
+	background-color: #ffffff;
+	color:#d82a3e;
 }
 
 /*Rules/////////////////////////////////////////////*/
