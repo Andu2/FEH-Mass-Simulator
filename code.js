@@ -33,13 +33,13 @@ data.growths = [[6,8,9,11,13,14,16,18,19,21,23,24],
 //Sort hero array by name
 data.heroes.sort(function(a,b){
 	//console.log(a.name + ", " + b.name + ": " + a.name>b.name);
-	return (a.name.toLowerCase()>b.name.toLowerCase())*2-1;
+	return (a.name.toLowerCase() > b.name.toLowerCase())*2-1;
 })
 
 //Sort skills array by name
 data.skills.sort(function(a,b){
 	//console.log(a.name + ", " + b.name + ": " + a.name>b.name);
-	return (a.name.toLowerCase()>b.name.toLowerCase())*2-1;
+	return (a.name.toLowerCase() + a.slot > b.name.toLowerCase() + b.slot)*2-1;
 })
 
 data.heroPossibleSkills = [];
@@ -325,13 +325,13 @@ $(document).ready(function(){
 					if(hero.challenger){
 
 						//Analytics
-						dataLayer.push({"event":"changeHero","challenger_name":data.heroes[hero.index].name});
+						dataLayer.push({"event":"changeHero","challenger_name":data.heroes[newVal].name});
 					}
 					else{
 						updateClList();
 
 						//Analytics
-						dataLayer.push({"event":"changeEnemy","challenger_name":data.heroes[hero.index].name});
+						dataLayer.push({"event":"changeEnemy","challenger_name":data.heroes[newVal].name});
 					}
 				}
 			}
@@ -1139,10 +1139,10 @@ function updateHeroUI(hero){
 			var specialCharge = data.skills[hero.special].charge;
 			if(hero.weapon != -1){
 				var weaponName = data.skills[hero.weapon].name;
-				if(weaponName.includes("Killer") || weaponName.includes("Killing") || weaponName.includes("Mystletainn") || weaponName.includes("Hauteclere")){
+				if(weaponName.indexOf("Killer") != -1 || weaponName.indexOf("Killing") != -1 || weaponName.indexOf("Mystletainn") != -1 || weaponName.indexOf("Hauteclere") != -1){
 					specialCharge -= 1;
 				}
-				else if(weaponName.includes("Raudrblade") || weaponName.includes("Lightning Breath") || weaponName.includes("Blarblade") || weaponName.includes("Gronnblade")){
+				else if(weaponName.indexOf("Raudrblade") != -1 || weaponName.indexOf("Lightning Breath") != -1 || weaponName.indexOf("Blarblade") != -1 || weaponName.indexOf("Gronnblade") != -1){
 					specialCharge += 1;
 				}
 				specialCharge -= hero.precharge;
@@ -1280,39 +1280,52 @@ function importText(side){
 	var importSplit = trySplit(text,["  \n","\n",";"])
 
 	var importMode = "none";
-	if(includesLike(importSplit[0],"ENEMIES - CUSTOM LIST")){
-		importMode = "cl";
-		options.customEnemyList = "1";
-		removeAllClEnemies();
-		var clBlocks = importSplit.slice(1).join("!!!").replace(/!!!!!![!]+/g,"!!!!!!").split("!!!!!!");
-		for(var clIndex = 0; clIndex < clBlocks.length; clIndex++){
-			var clLines = clBlocks[clIndex].split("!!!");
-			if(clLines[0].length > 2){
-				parseHero(clLines);
+	if(side=="enemies"){
+		var firstLine = parseFirstLine(importSplit[0]);
+		var firstLineHero = (typeof firstLine.index != "undefined")
+		if(includesLike(importSplit[0],"CUSTOM LIST") || firstLineHero){
+			var startLine = 1;
+			if(firstLineHero){
+				startLine = 0;
 			}
-		}
-		updateClList();
-		updateEnemyUI();
-	}
-	else if(includesLike(importSplit[0],"ENEMIES - FILTERED FULL LIST")){
-		importMode = "fl";
-		options.customEnemyList = "0";
-		resetHero(enemies.fl,true);
-		var hero = enemies.fl;
-		var flLines = importSplit.slice(1);
-		for(var flLine = 0; flLine < flLines.length; flLine++){
-			var lineData = parseAttributeLine(flLines[flLine]);
-			for(var key in lineData){
-				hero[key] = lineData[key];
+			importMode = "cl";
+			options.customEnemyList = "1";
+			removeAllClEnemies();
+			var clBlocks = importSplit.slice(startLine).join("!!!").replace(/!!!!!![!]+/g,"!!!!!!").split("!!!!!!");
+			for(var clIndex = 0; clIndex < clBlocks.length; clIndex++){
+				var clLines = clBlocks[clIndex].split("!!!");
+				if(clLines[0].length > 2){
+					parseHero(clLines);
+				}
 			}
+			updateClList();
+			updateEnemyUI();
 		}
-		initEnemyList();
-		updateFlEnemies();
-		updateEnemyUI();
+		//else if(includesLike(importSplit[0],"ENEMIES - FILTERED FULL LIST")){
+		else{
+			var startLine = 0;
+			if(includesLike(importSplit[0],"FILTERED")){
+				startLine = 1;
+			}
+			importMode = "fl";
+			options.customEnemyList = "0";
+			resetHero(enemies.fl,true);
+			var hero = enemies.fl;
+			var flLines = importSplit.slice(startLine);
+			for(var flLine = 0; flLine < flLines.length; flLine++){
+				var lineData = parseAttributeLine(flLines[flLine]);
+				for(var key in lineData){
+					hero[key] = lineData[key];
+				}
+			}
+			initEnemyList();
+			updateFlEnemies();
+			updateEnemyUI();
+		}
 	}
 	else{
 		var firstLine = parseFirstLine(importSplit[0]);
-		if(firstLine.index){
+		if(typeof firstLine.index != "undefined"){
 			importMode = "challenger";
 			challenger.index = -1;
 			resetHero(challenger);
@@ -1320,7 +1333,7 @@ function importText(side){
 			updateChallengerUI();
 		}
 		else{
-			errorMsg = "Couldn't figure out whether importing challenger, custom enemy list, or full filtered enemy list.";
+			errorMsg = "Import challenger failed.";
 		}
 	}
 
@@ -1369,9 +1382,17 @@ function importText(side){
 		hero.s = -1;
 
 		for(var line = 1; line < lines.length; line++){
-			var lineData = parseAttributeLine(lines[line]);
-			for(var key in lineData){
-				hero[key] = lineData[key];
+			//Check if the line looks like a firstline; If yes, start parsing a new hero
+			var firstLine = parseFirstLine(lines[line]);
+			if(typeof firstLine.index != "undefined"){
+				parseHero(lines.slice(line));
+				break;
+			}
+			else{
+				var lineData = parseAttributeLine(lines[line]);
+				for(var key in lineData){
+					hero[key] = lineData[key];
+				}
 			}
 		}
 
@@ -1385,6 +1406,7 @@ function importText(side){
 			var tryString = removeEdgeJunk(line.slice(0,tryLength));
 			var tryIndex = getIndexFromName(tryString,data.heroes);
 			if(tryIndex != -1){
+				//console.log(tryString);
 				dataFound.index = tryIndex;
 				//break; Don't break in case there is a hero with a name that is the beginning of another hero's name
 			}
@@ -1399,12 +1421,12 @@ function importText(side){
 			if(tryRarity >= 1 && tryRarity <= 5){
 				dataFound.rarity = tryRarity;
 			}
-			else{
-				tryRarity = parseInt(line.slice(tryRarityIndex + 1, tryRarityIndex+2)); //Try right side
-				if(tryRarity >= 1 && tryRarity <= 5){
-					dataFound.rarity = tryRarity;
-				}
-			}
+			// else{
+			// 	tryRarity = parseInt(line.slice(tryRarityIndex + 1, tryRarityIndex+2)); //Try right side
+			// 	if(tryRarity >= 1 && tryRarity <= 5){
+			// 		dataFound.rarity = tryRarity;
+			// 	}
+			// }
 		}
 
 		var plusSplit = line.split("+");
@@ -1416,28 +1438,28 @@ function importText(side){
 				if(tryMerge >= 1 && tryMerge <= 10){
 					dataFound.merge = tryMerge;
 				}
-				else{
-					tryMerge = parseInt(plusSplit[plusLine].slice(-2));
-					if(tryMerge >= 1 && tryMerge <= 10){
-						dataFound.merge = tryMerge;
-					}
-				}
+				// else{
+				// 	tryMerge = parseInt(plusSplit[plusLine].slice(-2));
+				// 	if(tryMerge >= 1 && tryMerge <= 10){
+				// 		dataFound.merge = tryMerge;
+				// 	}
+				// }
 
 				data.stats.forEach(function(stat){
-					if(plusSplit[plusLine].slice(0,stat.length) == stat || plusSplit[plusLine].slice(-stat.length) == stat){
+					if(plusSplit[plusLine].slice(0,stat.length) == stat){
 						dataFound.boon = stat;
 					}
 				});
 			}
 		}
 
-		var minusSplit = line.split("+");
+		var minusSplit = line.split("-");
 		if(minusSplit.length > 1){ //Don't check if there's no minuses
 			for(var minusLine = 0; minusLine < minusSplit.length; minusLine++){
 				minusSplit[minusLine] = removeEdgeJunk(minusSplit[minusLine]).toLowerCase();
 
 				data.stats.forEach(function(stat){
-					if(minusSplit[minusLine].slice(0,stat.length) == stat || minusSplit[minusLine].slice(-stat.length) == stat){
+					if(minusSplit[minusLine].slice(0,stat.length) == stat){
 						dataFound.bane = stat;
 					}
 				});
@@ -1541,7 +1563,7 @@ function importText(side){
 			}
 		}
 		else if(skillName){
-			value = getIndexFromName(removeEdgeJunk(keyValue[1]),data.skills);
+			value = getIndexFromName(removeEdgeJunk(keyValue[1]),data.skills,key);
 			//console.log("Looking for " + key + ", found " + value);
 		}
 		else if(key=="boon" || key=="bane"){
@@ -1850,7 +1872,7 @@ function validateNumberInputs(){
 
 function fight(enemyIndex,resultIndex){
 	//passed resultIndex for tooltip
-	//returns object with: challenger.hp, enemyHp, rounds, and enemy object for stripping skills
+	//returns object with: rounds, fightText, enemy, challenger,outcome, fightHTML, and passFilters
 
 	var fightText = "";
 
@@ -1911,6 +1933,12 @@ function fight(enemyIndex,resultIndex){
 		}
 	}
 
+	if(outcome == "win" || outcome == "loss"){
+		if(ahEnemy.overkill){
+			resultText += ", overkill: " + ahEnemy.overkill;
+		}
+	}
+
 	var weaponName = "None";
 	var specialName = "None";
 	var aName = "noskill";
@@ -1946,10 +1974,11 @@ function fight(enemyIndex,resultIndex){
 	}
 
 	var passFilters = ["all"];
+	passFilters.push(outcome);
 
 	if(enemyList[enemyIndex].lastFightResult){
-	var prevResult = "";
-	if(enemyList[enemyIndex].lastFightResult.indexOf("win") > -1){
+		var prevResult = "";
+		if(enemyList[enemyIndex].lastFightResult.indexOf("win") > -1){
 			prevResult = "win";
 		}
 		else if(enemyList[enemyIndex].lastFightResult.indexOf("loss") > -1){
@@ -1991,11 +2020,10 @@ function fight(enemyIndex,resultIndex){
 	enemyList[enemyIndex].lastFightResult = "Previous result: " + resultText + ", <span class=\"blue\">" + ahChallenger.hp + "</span> &ndash; <span class=\"red\">" + ahEnemy.hp + "</span>";
 
 	return {
-		"challengerHp":Math.max(ahChallenger.hp,0),
-		"enemyHp":Math.max(ahEnemy.hp,0),
 		"rounds":rounds,
 		"fightText":fightText,
 		"enemy":ahEnemy,
+		"challenger":ahChallenger,
 		"outcome":outcome,
 		"fightHTML":fightHTML,
 		"passFilters":passFilters
@@ -2098,20 +2126,20 @@ function calculate(manual){
 
 function getComparisonWeight(fightResult){
 	var weight = 0;
-	if(fightResult.enemyHp <= 0){
+	if(fightResult.enemy.hp <= 0){
 		weight += 100;
 	}
 	else{
-		weight += (1 - (fightResult.enemyHp / fightResult.enemy.maxHp)) * 40;
+		weight += (1 - (fightResult.enemy.hp / fightResult.enemy.maxHp)) * 40;
 	}
-	if(fightResult.challengerHp <= 0){
+	if(fightResult.challenger.hp <= 0){
 		weight -= 100;
 	}
 	else{
-		weight -= (1 - (fightResult.challengerHp / challenger.hp)) * 40;
+		weight -= (1 - (fightResult.challenger.hp / challenger.hp)) * 40;
 	}
 	weight /= fightResult.rounds;
-	//console.log(fightResult.challengerHp + " - " + fightResult.enemyHp + ", " + fightResult.rounds + "rnd: " + weight);
+	//console.log(fightResult.challenger.hp + " - " + fightResult.enemy.hp + ", " + fightResult.rounds + "rnd: " + weight);
 	return weight;
 }
 
@@ -2143,6 +2171,7 @@ function outputResults(){
 //Will return true if include or false if not
 function filterResult(i){
 	//console.log(resultHTML[i].passFilters.indexOf(options.viewFilter));
+	console.log(resultHTML[i].passFilters);
 	return resultHTML[i].passFilters.indexOf(options.viewFilter) > -1;
 }
 
@@ -2157,7 +2186,7 @@ function exportCalc(){
 		//Should take out buffs and stuff that aren't used to minimize columns?
 		csvString += "Challenger,cColor,cMovetype,cWeapontype,cRarity,cMerge,cBoon,cBane,cMaxHP,cStartHP,cAtk,cSpd,cDef,cRes,cWeapon,cSpecial,cPrecharge,cA,cB,cC,cS,cBuffAtk,cBuffSpd,cBuffDef,cBuffRes,cDebuffAtk,cDebuffSpd,cDebuffDef,cDebuffRes,cSpurAtk,cSpurSpd,cSpurDef,cSpurRes,";
 		csvString += "Enemy,eColor,eMovetype,eWeapontype,eRarity,eMerge,eBoon,eBane,eMaxHP,eStartHP,eAtk,eSpd,eDef,eRes,eWeapon,eSpecial,ePrecharge,eA,eB,eC,eS,eBuffAtk,eBuffSpd,eBuffDef,eBuffRes,eDebuffAtk,eDebuffSpd,eDebuffDef,eDebuffRes,eSpurAtk,eSpurSpd,eSpurDef,eSpurRes,";
-		csvString += "FirstTurnThreaten,StartTurn,UseGaleforce,Initiator1,Initiator2,Initiator3,Initiator4,Outcome,cEndHP,eEndHP,Rounds,BattleLog\n";
+		csvString += "FirstTurnThreaten,StartTurn,UseGaleforce,Initiator1,Initiator2,Initiator3,Initiator4,Outcome,cEndHP,eEndHP,Rounds,Overkill,BattleLog\n";
 
 		fightResults.forEach(function(result){
 			csvString += data.heroes[challenger.index].name + ",";
@@ -2301,16 +2330,20 @@ function exportCalc(){
 				}
 			}
 			var outcome = "Inconclusive";
-			if(result.challengerHp==0){
+			var overkill = 0;
+			if(result.challenger.hp==0){
 				outcome = "Loss";
+				overkill = result.challenger.overkill;
 			}
-			else if(result.enemyHp==0){
+			else if(result.enemy.hp==0){
 				outcome = "Win";
+				overkill = result.enemy.overkill;
 			}
 			csvString += outcome + ",";
-			csvString += result.challengerHp + ",";
-			csvString += result.enemyHp + ",";
+			csvString += result.challenger.hp + ",";
+			csvString += result.enemy.hp + ",";
 			csvString += result.rounds + ",";
+			csvString += overkill + ",";
 			var deTaggedLog = result.fightText.replace(/<br\/?>/g, "; ");
 			deTaggedLog = deTaggedLog.replace(/<\/?[^>]+(>|$)/g, "");
 			csvString += "\"" + deTaggedLog + "\"";
@@ -2322,7 +2355,7 @@ function exportCalc(){
 		var fakeLink = document.createElement("a");
 		fakeLink.setAttribute("href", encodedUri);
 		var date = new Date();
-		fakeLink.setAttribute("download", "feh_simulator_" + (date.getYear()+1900) + "-" + date.getMonth() + "-" + date.getDate() + ".csv");
+		fakeLink.setAttribute("download", "feh_simulator_" + (date.getYear()+1900) + "-" + (date.getMonth()+1) + "-" + date.getDate() + "_" + data.heroes[challenger.index].name + ".csv");
 		document.body.appendChild(fakeLink);
 		fakeLink.click();
 	}
@@ -2431,7 +2464,7 @@ function activeHero(hero){
 		var index = -1;
 
 		for(var i = 0; i < this.skillNames.length; i++){
-			if(this.skillNames[i].includes(skill)){
+			if(this.skillNames[i].indexOf(skill) != -1){
 				index = i;
 			}
 		}
@@ -2662,6 +2695,12 @@ function activeHero(hero){
 				skillName = data.skills[this.aIndex].name;
 				this.combatSpur.def += buffVal;
 				boostText += this.name + " gets +" + buffVal + " def from having >=3 more hp than " + enemy.name + " with " + skillName + ".<br>";
+			}
+			if(this.has("Wind Boost")){
+				buffVal = this.has("Wind Boost") * 2;
+				skillName = data.skills[this.aIndex].name;
+				this.combatSpur.spd += buffVal;
+				boostText += this.name + " gets +" + buffVal + " spd from having >=3 more hp than " + enemy.name + " with " + skillName + ".<br>";
 			}
 		}
 
@@ -3174,7 +3213,7 @@ function activeHero(hero){
 
 			//Check weapon effective against
 			var effectiveBonus = 1;
-			if(!(enemy.has("Svalinn Shield") || enemy.has("Iote's Shield"))){
+			if(!(enemy.has("Svalinn Shield") || enemy.has("Iote's Shield") || enemy.has("Grani's Shield"))){
 				if(enemy.moveType == "armored" && (this.has("Hammer") || this.has("Armorslayer") || this.has("Heavy Spear"))){
 					effectiveBonus = 1.5;
 				}
@@ -3212,7 +3251,7 @@ function activeHero(hero){
 			if(enemy.specialIndex!=-1&&data.skills[enemy.specialIndex].charge<=enemy.charge){
 				//gotta check range
 				var anyRangeCounter = false;
-				if(this.has("Close Counter") || this.has("Distant Counter") || this.has("Raijinto") || this.has("Lightning Breath") || this.has("Siegfried") || this.has("Ragnell")){
+				if(this.has("Close Counter") || this.has("Distant Counter") || this.has("Raijinto") || this.has("Lightning Breath") || this.has("Siegfried") || this.has("Ragnell") || this.has("Gradivus")){
 					anyRangeCounter = true;
 				}
 
@@ -3276,15 +3315,19 @@ function activeHero(hero){
 			dmg = (dmg*dmgMultiplier | 0) - (dmg*(1-dmgReduction) | 0);
 			dmg = Math.max(dmg,0);
 			damageText += this.name + " attacks " + enemy.name + " for <span class=\"bold\">" + dmg + "</span> damage.<br>";
-			dmg = Math.min(dmg,enemy.hp);
-			enemy.hp -= dmg;
-
-			if(enemy.hp <= 0 && miracle){
-				enemy.hp = 1;
-				defensiveSpecialActivated = true;
-				enemy.resetCharge();
-				damageText += enemy.name + " survives with 1HP with Miracle.<br>";
+			if(dmg > enemy.hp){
+				if(miracle){
+					dmg = enemy.hp - 1;
+					defensiveSpecialActivated = true;
+					enemy.resetCharge();
+					damageText += enemy.name + " survives with 1HP with Miracle.<br>";
+				}
+				else{
+					enemy.overkill = dmg - enemy.hp;
+					dmg = Math.min(dmg,enemy.hp);
+				}
 			}
+			enemy.hp -= dmg;
 
 			//add absorbed hp
 			var absorbHp = dmg*absorbPct | 0;
@@ -3357,8 +3400,6 @@ function activeHero(hero){
 		this.initiator = true;
 		enemy.initiator = false;
 		enemy.didAttack = false;
-		this.combatStartHp = this.hp;
-		enemy.combatStartHp = enemy.hp;
 
 		//Get relevant defense for simplified text output
 		var relevantDefType = "def";
@@ -3388,6 +3429,10 @@ function activeHero(hero){
 			}
 		}
 
+		//Set after renewal
+		this.combatStartHp = this.hp;
+		enemy.combatStartHp = enemy.hp;
+
 		//Check combat effects
 		this.combatSpur = {"atk":0,"spd":0,"def":0,"res":0};
 		enemy.combatSpur = {"atk":0,"spd":0,"def":0,"res":0};
@@ -3408,7 +3453,7 @@ function activeHero(hero){
 
 		//check for any-distance counterattack
 		var anyRangeCounter = false;
-		if(enemy.has("Close Counter") || enemy.has("Distant Counter") || enemy.has("Raijinto") || enemy.has("Lightning Breath") || enemy.has("Ragnell") || enemy.has("Siegfried")){
+		if(enemy.has("Close Counter") || enemy.has("Distant Counter") || enemy.has("Raijinto") || enemy.has("Lightning Breath") || enemy.has("Ragnell") || enemy.has("Siegfried") || enemy.has("Gradivus")){
 			anyRangeCounter = true;
 		}
 
@@ -3609,29 +3654,45 @@ function activeHero(hero){
 			enemyOutspeeds = true;
 		}
 
+		if(!firesweep && !(windsweep && data.physicalWeapons.indexOf(enemy.weaponType) != -1 && thisEffSpd-enemyEffSpd >= windsweep) && !(watersweep && data.magicalWeapons.indexOf(enemy.weaponType) != -1 && thisEffSpd-enemyEffSpd >= watersweep)){
+			if(this.range==enemy.range || anyRangeCounter){
+				enemyCanCounter = true;
+			}
+		}
+
+		//TODO: refactor these ifs and above ifs
+		if(this.has("Dazzling Staff") && enemyCanCounter){
+			if(this.combatStartHp / this.maxHp >= 1.5 + this.has("Dazzling Staff") * -0.5){
+				roundText += this.name + " prevents " + enemy.name + " from counterattacking with Dazzling Staff.<br>";
+				enemyCanCounter = false;
+			}
+		}
+
 		//Cancel things out
 		if(preventThisFollow && thisAutoFollow){
 			preventThisFollow = false;
 			thisAutoFollow = false;
 			roundText += this.name + " is affected by conflicting follow-up skills, which cancel out.<br>";
 		}
-		if(preventEnemyFollow && enemyAutoFollow){
-			preventEnemyFollow = false;
-			enemyAutoFollow = false;
-			roundText += enemy.name + " is affected by conflicting follow-up skills, which cancel out.<br>";
-		}
-
 		if(thisAutoFollow){
 			roundText += this.name + " can make an automatic follow-up attack.<br>";
-		}
-		if(enemyAutoFollow){
-			roundText += enemy.name + " can make an automatic follow-up attack.<br>";
 		}
 		if(preventThisFollow){
 			roundText += this.name + " is prevented from making a follow-up attack.<br>";
 		}
-		if(preventEnemyFollow){
-			roundText += enemy.name + " is prevented from making a follow-up attack.<br>";
+		
+		if(enemyCanCounter){ //Don't show this text if the enemy can't counter anyway
+			if(preventEnemyFollow && enemyAutoFollow){
+				preventEnemyFollow = false;
+				enemyAutoFollow = false;
+				roundText += enemy.name + " is affected by conflicting follow-up skills, which cancel out.<br>";
+			}
+			if(enemyAutoFollow){
+				roundText += enemy.name + " can make an automatic follow-up attack.<br>";
+			}
+			if(preventEnemyFollow){
+				roundText += enemy.name + " is prevented from making a follow-up attack.<br>";
+			}
 		}
 
 		if((thisOutspeeds || thisAutoFollow) && !preventThisFollow){
@@ -3639,12 +3700,6 @@ function activeHero(hero){
 		}
 		if((enemyOutspeeds || enemyAutoFollow) && !preventEnemyFollow){
 			enemyFollowUp = true;
-		}
-
-		if(!firesweep && !(windsweep && data.physicalWeapons.indexOf(enemy.weaponType) != -1 && thisEffSpd-enemyEffSpd >= windsweep) && !(watersweep && data.magicalWeapons.indexOf(enemy.weaponType) != -1 && thisEffSpd-enemyEffSpd >= watersweep)){
-			if(this.range==enemy.range || anyRangeCounter){
-				enemyCanCounter = true;
-			}
 		}
 
 		//Do vantage damage
@@ -3831,22 +3886,27 @@ function getSkillIndexFromId(skillid){
 	return index;
 }
 
-function getIndexFromName(name,dataList){
-	//Skill/hero array is sorted by name!
+function getIndexFromName(name,dataList,slot){
+	//Skill/hero array is sorted by name + slot! (only name in case of heroes)
 	name = name.toLowerCase();
+	slot = slot || "";
+
 	var leftBound = 0;
 	var rightBound = dataList.length - 1;
 	var checkingIndex;
 	var testName;
+	var testSlot;
+	var testIsS;
 	var found = -1;
 	do{
 		checkingIndex = Math.round((rightBound - leftBound) / 2 + leftBound);
 		testName = dataList[checkingIndex].name.toLowerCase();
-		if(testName == name){
+		testSlot = dataList[checkingIndex].slot || "";
+		if(testName + testSlot == name + slot){
 			found = checkingIndex;
 			break;
 		}
-		else if(testName > name){
+		else if(testName + testSlot > name + slot){
 			rightBound = checkingIndex - 1;
 		}
 		else{
