@@ -1145,9 +1145,17 @@ function updateHeroUI(hero){
 				else if(weaponName.indexOf("Raudrblade") != -1 || weaponName.indexOf("Lightning Breath") != -1 || weaponName.indexOf("Blarblade") != -1 || weaponName.indexOf("Gronnblade") != -1){
 					specialCharge += 1;
 				}
-				specialCharge -= hero.precharge;
-				specialCharge = Math.max(0,specialCharge);
 			}
+			if(hero.s != -1){
+				var sName = data.skills[hero.s].name;
+				if(sName.indexOf("Quickened Pulse") != -1){
+					specialCharge -= 1;
+				}
+			}
+
+			specialCharge -= hero.precharge;
+			specialCharge = Math.max(0,specialCharge);
+
 			$("#" + htmlPrefix + "specialcharge").html(specialCharge);
 		}
 		else{
@@ -1937,6 +1945,9 @@ function fight(enemyIndex,resultIndex){
 		if(ahEnemy.overkill){
 			resultText += ", overkill: " + ahEnemy.overkill;
 		}
+		if(ahChallenger.overkill){
+			resultText += ", overkill: " + ahChallenger.overkill;
+		}
 	}
 
 	var weaponName = "None";
@@ -2455,6 +2466,7 @@ function activeHero(hero){
 	this.charge = 0;
 	this.initiator = false;
 	this.panicked = false;
+	this.lit = false;
 	this.didAttack = false;
 
 	this.has = function(skill){
@@ -2510,6 +2522,10 @@ function activeHero(hero){
 	//Set charge at beginning
 	this.resetCharge();
 	this.charge += this.precharge;
+
+	if(this.has("Quickened Pulse")){
+		this.charge++;
+	}
 
 	this.threaten = function(enemy){
 		//Thhhhhhhhrreats!
@@ -2793,24 +2809,26 @@ function activeHero(hero){
 		var poisonEnemyText ="";
 		var skillName = "";
 
-		var poison = 0;
-		if(this.has("Poison Strike")){
-			poison = this.has("Poison Strike")*3+1;
-			skillName = data.skills[this.bIndex].name;
-			if(enemy.hp - poison <= 0){
-				poison = enemy.hp - 1;
+		if(!enemy.has("Embla's Ward")){
+			var poison = 0;
+			if(this.has("Poison Strike")){
+				poison = this.has("Poison Strike")*3+1;
+				skillName = data.skills[this.bIndex].name;
+				if(enemy.hp - poison <= 0){
+					poison = enemy.hp - 1;
+				}
+				enemy.hp -= poison;
+				poisonEnemyText += enemy.name + " takes " + poison + " damage after combat from " + skillName + ".<br>";
 			}
-			enemy.hp -= poison;
-			poisonEnemyText += enemy.name + " takes " + poison + " damage after combat from " + skillName + ".<br>";
-		}
-		if(this.has("Deathly Dagger")){
-			poison = 7;
-			skillName = data.skills[this.weaponIndex].name;
-			if(enemy.hp - poison <= 0){
-				poison = enemy.hp - 1;
+			if(this.has("Deathly Dagger")){
+				poison = 7;
+				skillName = data.skills[this.weaponIndex].name;
+				if(enemy.hp - poison <= 0){
+					poison = enemy.hp - 1;
+				}
+				enemy.hp -= poison;
+				poisonEnemyText += enemy.name + " takes " + poison + " damage after combat from " + skillName + ".<br>";
 			}
-			enemy.hp -= poison;
-			poisonEnemyText += enemy.name + " takes " + poison + " damage after combat from " + skillName + ".<br>";
 		}
 
 		return poisonEnemyText;
@@ -2821,14 +2839,16 @@ function activeHero(hero){
 	this.painEnemy = function(enemy){
 		var painEnemyText = "";
 
-		//Pain only takes place when the unit performs an attack in the round
-		if(this.has("Pain") && this.didAttack){
-			var painDmg = 10;
-			if(enemy.hp - painDmg <= 0){
-				painDmg = enemy.hp - 1;
+		if(!enemy.has("Embla's Ward")){
+			//Pain only takes place when the unit performs an attack in the round
+			if(this.has("Pain") && this.didAttack){
+				var painDmg = 10;
+				if(enemy.hp - painDmg <= 0){
+					painDmg = enemy.hp - 1;
+				}
+				enemy.hp -= painDmg;
+				painEnemyText += enemy.name + " takes " + painDmg + " damage after combat from Pain.<br>";
 			}
-			enemy.hp -= painDmg;
-			painEnemyText += enemy.name + " takes " + painDmg + " damage after combat from Pain.<br>";
 		}
 
 		return painEnemyText;
@@ -2837,32 +2857,34 @@ function activeHero(hero){
 	this.fury = function(){
 		var furyText = "";
 
-		var skillName = "";
+		if(!this.has("Embla's Ward")){
+			var skillName = "";
 
-		var furyDmg = 0;
-		if(this.has("Fury")){
-			furyDmg = this.has("Fury") * 2;
-			skillName = data.skills[this.aIndex].name;
-		}
-		if(furyDmg > 0){
-			if(this.hp - furyDmg <= 0){
-				furyDmg = this.hp - 1;
+			var furyDmg = 0;
+			if(this.has("Fury")){
+				furyDmg = this.has("Fury") * 2;
+				skillName = data.skills[this.aIndex].name;
 			}
-			this.hp -= furyDmg;
-			furyText += this.name + " takes " + furyDmg + " damage after combat from " + skillName + ".<br>";
-		}
+			if(furyDmg > 0){
+				if(this.hp - furyDmg <= 0){
+					furyDmg = this.hp - 1;
+				}
+				this.hp -= furyDmg;
+				furyText += this.name + " takes " + furyDmg + " damage after combat from " + skillName + ".<br>";
+			}
 
-		//TODO: Refactor so this code doesn't have to run twice
-		var furyDmg = 0;
-		if(this.has("Ragnarok") && this.didAttack && this.combatStartHp / this.maxHp >= 1){
-			furyDmg = 5;
-		}
-		if(furyDmg > 0){
-			if(this.hp - furyDmg <= 0){
-				furyDmg = this.hp - 1;
+			//TODO: Refactor so this code doesn't have to run twice
+			var furyDmg = 0;
+			if(this.has("Ragnarok") && this.didAttack && this.combatStartHp / this.maxHp >= 1){
+				furyDmg = 5;
 			}
-			this.hp -= furyDmg;
-			furyText += this.name + " takes " + furyDmg + " damage after combat from doing an attack with Ragnarok.<br>";
+			if(furyDmg > 0){
+				if(this.hp - furyDmg <= 0){
+					furyDmg = this.hp - 1;
+				}
+				this.hp -= furyDmg;
+				furyText += this.name + " takes " + furyDmg + " damage after combat from doing an attack with Ragnarok.<br>";
+			}
 		}
 
 		return furyText;
@@ -3026,6 +3048,10 @@ function activeHero(hero){
 		return postCombatHealText;
 	}
 
+	this.takeDamage = function(dmg){
+		//TODO
+	}
+
 	//represents one attack of combat
 	this.doDamage = function(enemy,brave,AOE){
 		//didAttack variable for checking daggers and pain
@@ -3047,14 +3073,14 @@ function activeHero(hero){
 		var enemyEffRes = enemy.res + Math.max(enemy.buffs.res,enemy.combatBuffs.res) + Math.min(enemy.debuffs.res,enemy.combatDebuffs.res) + enemy.spur.res + enemy.combatSpur.res;
 
 		if(this.panicked){
-			thisEffAtk = this.atk - Math.max(this.buffs.atk,this.combatBuffs.atk) - Math.min(this.debuffs.atk,this.combatDebuffs.atk) + this.spur.atk + this.combatSpur.atk;
-			thisEffDef = this.def - Math.max(this.buffs.def,this.combatBuffs.def) - Math.min(this.debuffs.def,this.combatDebuffs.def) + this.spur.def + this.combatSpur.def;
-			thisEffRes = this.res - Math.max(this.buffs.res,this.combatBuffs.res) - Math.min(this.debuffs.res,this.combatDebuffs.res) + this.spur.res + this.combatSpur.res;
+			thisEffAtk = this.atk - Math.max(this.buffs.atk,this.combatBuffs.atk) + Math.min(this.debuffs.atk,this.combatDebuffs.atk) + this.spur.atk + this.combatSpur.atk;
+			thisEffDef = this.def - Math.max(this.buffs.def,this.combatBuffs.def) + Math.min(this.debuffs.def,this.combatDebuffs.def) + this.spur.def + this.combatSpur.def;
+			thisEffRes = this.res - Math.max(this.buffs.res,this.combatBuffs.res) + Math.min(this.debuffs.res,this.combatDebuffs.res) + this.spur.res + this.combatSpur.res;
 		}
 
 		if(enemy.panicked){
-			enemyEffDef = enemy.def - Math.max(enemy.buffs.def,enemy.combatBuffs.def) - Math.min(enemy.debuffs.def,enemy.combatDebuffs.def) + enemy.spur.def + enemy.combatSpur.def;
-			enemyEffRes = enemy.res - Math.max(enemy.buffs.res,enemy.combatBuffs.res) - Math.min(enemy.debuffs.res,enemy.combatDebuffs.res) + enemy.spur.res + enemy.combatSpur.res;
+			enemyEffDef = enemy.def - Math.max(enemy.buffs.def,enemy.combatBuffs.def) + Math.min(enemy.debuffs.def,enemy.combatDebuffs.def) + enemy.spur.def + enemy.combatSpur.def;
+			enemyEffRes = enemy.res - Math.max(enemy.buffs.res,enemy.combatBuffs.res) + Math.min(enemy.debuffs.res,enemy.combatDebuffs.res) + enemy.spur.res + enemy.combatSpur.res;
 		}
 
 		var relevantDef = enemyEffDef;
@@ -3081,11 +3107,15 @@ function activeHero(hero){
 				}
 
 				if(AOEDamage > 0){
+					this.resetCharge();
 					AOEActivated = true;
+					if(enemy.has("Embla's Ward")){
+						AOEDamage = 0;
+					}
 					if(enemy.hp - AOEDamage < 1){
 						AOEDamage = enemy.hp - 1;
 					}
-					this.resetCharge();
+					
 					enemy.hp -= AOEDamage;
 					damageText += "Before combat, " + this.name + " hits with " + data.skills[this.specialIndex].name + " for " + AOEDamage + ".<br>";
 				}
@@ -3314,6 +3344,9 @@ function activeHero(hero){
 			var dmg = (rawDmg - reduceDmg)*weaponModifier | 0;
 			dmg = (dmg*dmgMultiplier | 0) - (dmg*(1-dmgReduction) | 0);
 			dmg = Math.max(dmg,0);
+			if(enemy.has("Embla's Ward")){
+				dmg = 0;
+			}
 			damageText += this.name + " attacks " + enemy.name + " for <span class=\"bold\">" + dmg + "</span> damage.<br>";
 			if(dmg > enemy.hp){
 				if(miracle){
@@ -3445,10 +3478,10 @@ function activeHero(hero){
 		var enemyEffSpd = enemy.spd + Math.max(enemy.buffs.spd,enemy.combatBuffs.spd) + Math.min(enemy.debuffs.spd,enemy.combatDebuffs.spd) + enemy.spur.spd + enemy.combatSpur.spd;
 
 		if(this.panicked){
-			thisEffSpd = this.spd - Math.max(this.buffs.spd,this.combatBuffs.spd) - Math.min(this.debuffs.spd,this.combatDebuffs.spd) + this.spur.spd + this.combatSpur.spd;
+			thisEffSpd = this.spd - Math.max(this.buffs.spd,this.combatBuffs.spd) + Math.min(this.debuffs.spd,this.combatDebuffs.spd) + this.spur.spd + this.combatSpur.spd;
 		}
 		if(enemy.panicked){
-			enemyEffSpd = enemy.spd - Math.max(enemy.buffs.spd,enemy.combatBuffs.spd) - Math.min(enemy.debuffs.spd,enemy.combatDebuffs.spd) + enemy.spur.spd + enemy.combatSpur.spd;
+			enemyEffSpd = enemy.spd - Math.max(enemy.buffs.spd,enemy.combatBuffs.spd) + Math.min(enemy.debuffs.spd,enemy.combatDebuffs.spd) + enemy.spur.spd + enemy.combatSpur.spd;
 		}
 
 		//check for any-distance counterattack
@@ -3667,6 +3700,10 @@ function activeHero(hero){
 				enemyCanCounter = false;
 			}
 		}
+		if(enemy.lit && enemyCanCounter){
+			roundText += enemy.name + " cannot counterattack because they're still distracted by the candle.<br>";
+			enemyCanCounter = false;
+		}
 
 		//Cancel things out
 		if(preventThisFollow && thisAutoFollow){
@@ -3754,15 +3791,10 @@ function activeHero(hero){
 			roundText += this.fury();
 		}
 
-		//Remove debuffs - if action done
-		if(enemy.didAttack){
-			enemy.combatDebuffs = {"atk":0,"spd":0,"def":0,"res":0};
-			enemy.panicked = false;
-		}
-		if(this.didAttack){
-			this.combatDebuffs = {"atk":0,"spd":0,"def":0,"res":0};
-			this.panicked = false;
-		}
+		//Remove debuffs - action done
+		this.combatDebuffs = {"atk":0,"spd":0,"def":0,"res":0};
+		this.panicked = false;
+		this.lit = false;
 
 		//Do stuff if both aren't dead
 		if(this.hp > 0 && enemy.hp > 0){
@@ -3784,6 +3816,16 @@ function activeHero(hero){
 			if(enemy.has("Panic")){
 				this.panicked = true;
 				roundText += enemy.name + " panics " + this.name + ".<br>";
+			}
+
+			//candlelight
+			if(this.has("Candlelight")){
+				enemy.lit = true;
+				roundText += this.name + " inflicts " + enemy.name + " with an inability to make counterattacks.<br>";
+			}
+			if(enemy.has("Candlelight")){
+				this.lit = true;
+				roundText += enemy.name + " inflicts " + this.name + " with an inability to make counterattacks.<br>";
 			}
 
 			//Finally, Galeforce!

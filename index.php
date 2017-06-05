@@ -35,7 +35,7 @@ function getData($table){
 
 <head>
 	<title>FEH Mass Duel Simulator</title>
-	<meta name="description" content="A calculator for Fire Emblem Heroes that simulates lots of one-on-one duels at once. Pick your hero, pick your skills, pick your enemies, and see how you do!"/>
+	<meta name="description" content="A calculator for Fire Emblem Heroes that simulates lots of one-on-one duels at once. Pick your hero, pick your enemies, and see how you do!"/>
 	<link href="https://fonts.googleapis.com/css?family=Merriweather" rel="stylesheet">
 	<link rel="shortcut icon" href="favicon.ico" />
 
@@ -52,7 +52,7 @@ function getData($table){
 	</script>
 
 	<link rel="stylesheet" type="text/css" href="style.css?v=11"/>
-	<script type="text/javascript" src="code.js?v=17"></script>
+	<script type="text/javascript" src="code.js?v=19"></script>
 
 	<!-- Google Tag Manager -->
 	<script>
