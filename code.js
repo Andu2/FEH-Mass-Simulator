@@ -2182,7 +2182,7 @@ function outputResults(){
 //Will return true if include or false if not
 function filterResult(i){
 	//console.log(resultHTML[i].passFilters.indexOf(options.viewFilter));
-	console.log(resultHTML[i].passFilters);
+	//console.log(resultHTML[i].passFilters);
 	return resultHTML[i].passFilters.indexOf(options.viewFilter) > -1;
 }
 
@@ -2671,223 +2671,172 @@ function activeHero(hero){
 	//Must be passed enemy for Earth Boost
 	this.startCombatSpur = function(enemy){
 		var boostText = "";
+		var skillNames = [];
+		var boost = {atk:0,spd:0,def:0,res:0};
 
-		if(!this.initiator && enemy.range == "ranged"){
-			var skillName = "";
-			var buffVal = 0;
-			if(this.has("Distant Def")){
-				buffVal = this.has("Distant Def") * 2;
-				skillName = data.skills[this.aIndex].name;
-				this.combatSpur.def += buffVal;
-				this.combatSpur.res += buffVal;
-				boostText += this.name + " gets +" + buffVal + " def and res from being attacked from range with " + skillName + ".<br>";
-			}
-		}
-
+		//Full health at combat start spurs
 		if(this.combatStartHp / this.maxHp >= 1){
 			if(this.has("Ragnarok")){
 				//Does this take effect when defending?
-				this.combatSpur.atk += 5;
-				this.combatSpur.spd += 5;
-				boostText += this.name + " gets +5 atk and spd from being at full health with Ragnarok.<br>";
+				boost.atk += 5;
+				boost.spd += 5;
+				skillNames.push("Ragnarok");
 			}
-			//assuming there will be more later
 		}
 
+		//Enemy full health at combat start spurs
 		if(enemy.combatStartHp / enemy.maxHp >= 1){
 			if(this.has("Regal Blade")){
-				this.combatSpur.atk += 2;
-				this.combatSpur.spd += 2;
-				boostText += this.name + " gets +2 atk and spd from " + enemy.name + " being at full health with Regal Blade.<br>";
+				boost.atk += 2;
+				boost.spd += 2;
+				skillNames.push("Regal Blade");
 			}
 		}
 
+		//More HP than enemy spurs
 		if(this.hp >= enemy.hp + 3){
-			var skillName = "";
-
-			var buffVal = 0;
 			if(this.has("Earth Boost")){
-				buffVal = this.has("Earth Boost") * 2;
-				skillName = data.skills[this.aIndex].name;
-				this.combatSpur.def += buffVal;
-				boostText += this.name + " gets +" + buffVal + " def from having >=3 more hp than " + enemy.name + " with " + skillName + ".<br>";
+				boost.def += this.has("Earth Boost") * 2;
+				skillNames.push(data.skills[this.aIndex].name);
 			}
 			if(this.has("Wind Boost")){
-				buffVal = this.has("Wind Boost") * 2;
-				skillName = data.skills[this.aIndex].name;
-				this.combatSpur.spd += buffVal;
-				boostText += this.name + " gets +" + buffVal + " spd from having >=3 more hp than " + enemy.name + " with " + skillName + ".<br>";
+				boost.spd += this.has("Wind Boost") * 2;
+				skillNames.push(data.skills[this.aIndex].name);
 			}
 		}
 
-		//this.blow = function(){
-		if(this.initiator){
-			var skillName = "";
+		//Less than half health spurs
+		if(this.hp / this.maxHp <= 0.5){
+			if(this.has("Tyrfing")){
+				boost.def += 4;
+				skillNames.push("Tyrfing");
+			}
+		}
 
-			var buffVal = 0;
+		//Initiator spurs
+		if(this.initiator){
 			if(this.has("Death Blow")){
-				buffVal = this.has("Death Blow") * 2;
-				skillName = data.skills[this.aIndex].name;
-				this.combatSpur.atk += buffVal;
-				boostText += this.name + " gets +" + buffVal + " atk from initiating with " + skillName + ".<br>";
+				boost.atk += this.has("Death Blow") * 2;
+				skillNames.push(data.skills[this.aIndex].name);
 			}
 			if(this.has("Swift Sparrow")){
 				buffVal = this.has("Swift Sparrow") * 2;
-				skillName = data.skills[this.aIndex].name;
-				this.combatSpur.atk += buffVal;
-				boostText += this.name + " gets +" + buffVal + " atk from initiating with " + skillName + ".<br>";
+				boost.atk += buffVal;
+				boost.spd += buffVal;
+				skillNames.push(data.skills[this.aIndex].name);
 			}
 			if(this.has("Durandal")){
-				this.combatSpur.atk += 4;
-				boostText += this.name + " gets +4 atk from initiating with Durandal.<br>";
+				boost.atk += 4;
+				skillNames.push("Durandal");
 			}
-
-			var blowSpd = 0;
 			if(this.has("Darting Blow")){
-				blowSpd = this.has("Darting Blow") * 2;
-				skillName = data.skills[this.aIndex].name;
-				this.combatSpur.spd += blowSpd;
-				boostText += this.name + " gets " + blowSpd + " spd from initiating with " + skillName + ".<br>";
-			}
-			if(this.has("Swift Sparrow")){
-				blowSpd = this.has("Swift Sparrow") * 2;
-				skillName = data.skills[this.aIndex].name;
-				this.combatSpur.spd += blowSpd;
-				boostText += this.name + " gets +" + blowSpd + " spd from initiating with " + skillName + ".<br>";
+				boost.spd += this.has("Darting Blow") * 2;
+				skillNames.push(data.skills[this.aIndex].name);
 			}
 			if(this.has("Yato")){
-				this.combatSpur.spd += 4;
-				boostText += this.name + " gets +4 spd from initiating with Yato.<br>";
+				boost.spd += 4;
+				skillNames.push("Yato");
 			}
-
-			var blowDef = 0;
 			if(this.has("Armored Blow")){
-				blowDef = this.has("Armored Blow") * 2;
-				skillName = data.skills[this.aIndex].name;
-				this.combatSpur.def += blowDef;
-				boostText += this.name + " gets " + blowDef + " def from initiating with " + skillName + ".<br>";
+				boost.def += this.has("Armored Blow") * 2;
+				skillNames.push(data.skills[this.aIndex].name);
 			}
-			if(this.has("Tyrfing") && this.hp / this.maxHp <= 0.5){
-				this.combatSpur.def += 4;
-				boostText += this.name + " gets +4 def from Tyrfing.<br>";
-			}
-
-			var blowRes = 0;
 			if(this.has("Warding Blow")){
-				blowRes = this.has("Warding Blow") * 2;
-				skillName = data.skills[this.aIndex].name;
-				this.combatSpur.res += blowRes;
-				boostText += this.name + " gets " + blowRes + " res from initiating with " + skillName + ".<br>";
+				boost.res += this.has("Warding Blow") * 2;
+				skillNames.push(data.skills[this.aIndex].name);
 			}
 			if(this.has("Parthia")){
-				this.combatSpur.res += 4;
-				boostText += this.name + " gets +4 res from initiating with Parthia.<br>";
+				boost.res += 4;
+				skillNames.push("Parthia");
 			}
-
-			return boostText;
 		}
 
-		//this.defendBuff = function(relevantDefType){
+		//Defense spurs
 		if(!this.initiator){
-			//Not actually going to limit text from relevantDefType, beccause res/def may always be relevant for special attacks
+
+			//Ranged defense spurs
+			if(enemy.range == "ranged"){
+				if(this.has("Distant Def")){
+					buffVal = this.has("Distant Def") * 2;
+					boost.def += buffVal;
+					boost.res += buffVal;
+					skillNames.push(data.skills[this.aIndex].name);
+				}
+			}
+
 			if(this.has("Binding Blade") || this.has("Naga")){
-				this.combatSpur.def += 2;
-				this.combatSpur.res += 2;
-				boostText += this.name + " gets +2 def and res while defending with " + data.skills[this.weaponIndex].name + ".<br>";
+				boost.def += 2;
+				boost.res += 2;
+				skillNames.push(data.skills[this.weaponIndex].name);
 			}
-			if(this.has("Tyrfing") && this.hp / this.maxHp <= 0.5){
-				this.combatSpur.def += 4;
-				boostText += this.name + " gets +4 def from Tyrfing.<br>";
-			}
-
-			return boostText;
 		}
+
+		var boostStats = [];
+		for(var stat in boost){
+			if(boost[stat] > 0){
+				this.combatSpur[stat] += boost[stat];
+				boostStats.push("+" + boost[stat] + " " + stat);
+			}
+		}
+
+		if(boostStats.length > 0){
+			boostText += this.name + " gains " + boostStats.join(", ") + " from " + skillNames.join(", ") + ".<br>";
+		}
+
+		return boostText;
 	}
 
-	//poison only happens when the user initiates
-	this.poisonEnemy = function(enemy){	
-		var poisonEnemyText ="";
-		var skillName = "";
+	this.postCombatDamage = function(enemy){
+		var postCombatDamageText = "";
+		var skillNames = [];
+		var dmg = 0;
 
-		if(!enemy.has("Embla's Ward")){
-			var poison = 0;
-			if(this.has("Poison Strike")){
-				poison = this.has("Poison Strike")*3+1;
-				skillName = data.skills[this.bIndex].name;
-				if(enemy.hp - poison <= 0){
-					poison = enemy.hp - 1;
-				}
-				enemy.hp -= poison;
-				poisonEnemyText += enemy.name + " takes " + poison + " damage after combat from " + skillName + ".<br>";
+		//Poison - only if initiator
+		if(enemy.initiator){
+			if(enemy.has("Poison Strike")){
+				dmg += enemy.has("Poison Strike")*3+1;
+				skillNames.push(data.skills[enemy.bIndex].name);
 			}
-			if(this.has("Deathly Dagger")){
-				poison = 7;
-				skillName = data.skills[this.weaponIndex].name;
-				if(enemy.hp - poison <= 0){
-					poison = enemy.hp - 1;
-				}
-				enemy.hp -= poison;
-				poisonEnemyText += enemy.name + " takes " + poison + " damage after combat from " + skillName + ".<br>";
+			if(enemy.has("Deathly Dagger")){
+				dmg += 7;
+				skillNames.push("Deathly Dagger");
 			}
 		}
 
-		return poisonEnemyText;
-	}
-
-	//Pain and fury happen after every combat regardless of initiator
-	//They could be put into one function, but separating them is easier to make sense of
-	this.painEnemy = function(enemy){
-		var painEnemyText = "";
-
-		if(!enemy.has("Embla's Ward")){
-			//Pain only takes place when the unit performs an attack in the round
-			if(this.has("Pain") && this.didAttack){
-				var painDmg = 10;
-				if(enemy.hp - painDmg <= 0){
-					painDmg = enemy.hp - 1;
-				}
-				enemy.hp -= painDmg;
-				painEnemyText += enemy.name + " takes " + painDmg + " damage after combat from Pain.<br>";
+		//Pain - every combat where enemy did attack
+		if(enemy.didAttack){
+			if(enemy.has("Pain")){
+				dmg += 10;
+				skillNames.push("Pain");
 			}
 		}
 
-		return painEnemyText;
-	}
-
-	this.fury = function(){
-		var furyText = "";
-
-		if(!this.has("Embla's Ward")){
-			var skillName = "";
-
-			var furyDmg = 0;
-			if(this.has("Fury")){
-				furyDmg = this.has("Fury") * 2;
-				skillName = data.skills[this.aIndex].name;
-			}
-			if(furyDmg > 0){
-				if(this.hp - furyDmg <= 0){
-					furyDmg = this.hp - 1;
-				}
-				this.hp -= furyDmg;
-				furyText += this.name + " takes " + furyDmg + " damage after combat from " + skillName + ".<br>";
-			}
-
-			//TODO: Refactor so this code doesn't have to run twice
-			var furyDmg = 0;
-			if(this.has("Ragnarok") && this.didAttack && this.combatStartHp / this.maxHp >= 1){
-				furyDmg = 5;
-			}
-			if(furyDmg > 0){
-				if(this.hp - furyDmg <= 0){
-					furyDmg = this.hp - 1;
-				}
-				this.hp -= furyDmg;
-				furyText += this.name + " takes " + furyDmg + " damage after combat from doing an attack with Ragnarok.<br>";
+		//Ragnarok - combat where user did attack
+		if(this.didAttack){
+			if(this.has("Ragnarok") && this.combatStartHp / this.maxHp >= 1){
+				dmg += 5;
+				skillNames.push("Ragnarok");
 			}
 		}
 
-		return furyText;
+		//Fury - every combat
+		if(this.has("Fury")){
+			dmg += this.has("Fury") * 2;
+			skillNames.push(data.skills[this.aIndex].name);
+		}
+
+		if(this.has("Embla's Ward")){
+			dmg = 0;
+		}
+		if(dmg > 0){
+			if(this.hp - dmg <= 0){
+				dmg = this.hp - 1;
+			}
+			this.hp -= dmg;
+			postCombatDamageText += this.name + " takes " + dmg + " damage after combat from " + skillNames.join(", ") + ".<br>";
+		}
+
+		return postCombatDamageText;
 	}
 
 	this.seal = function(enemy){
@@ -3048,7 +2997,7 @@ function activeHero(hero){
 		return postCombatHealText;
 	}
 
-	this.takeDamage = function(dmg){
+	this.takeDamage = function(dmg, lethal){
 		//TODO
 	}
 
@@ -3242,31 +3191,14 @@ function activeHero(hero){
 			}
 
 			//Check weapon effective against
-			var effectiveBonus = 1;
-			if(!(enemy.has("Svalinn Shield") || enemy.has("Iote's Shield") || enemy.has("Grani's Shield"))){
-				if(enemy.moveType == "armored" && (this.has("Hammer") || this.has("Armorslayer") || this.has("Heavy Spear"))){
-					effectiveBonus = 1.5;
-				}
-				else if(enemy.moveType == "flying" && (this.has("Excalibur") || this.weaponType=="bow")){
-					effectiveBonus = 1.5;
-				}
-				else if(enemy.moveType == "infantry" && (this.has("Poison Dagger"))){
-					effectiveBonus = 1.5;
-				}
-				else if(enemy.moveType == "cavalry" && (this.has("Raudrwolf") || this.has("Blarwolf") || this.has("Gronnwolf"))){
-					effectiveBonus = 1.5;
-				}
-				else if(enemy.weaponType == "dragon" && (this.has("Falchion") || this.has("Naga"))){
-					effectiveBonus = 1.5;
-				}
+			var effectiveBonus = getEffectiveBonus(this,enemy);
 
-				if(effectiveBonus > 1 ){
-					damageText += this.name + "'s attack is multiplied by " + effectiveBonus + " from weapon effectiveness. ";
-				}
+			if(effectiveBonus > 1 ){
+				damageText += this.name + "'s attack is multiplied by " + effectiveBonus + " from weapon effectiveness. ";
 			}
 
 			//blade tomes
-			if(this.has("Raudrblade") || this.has("Blarblade") || this.has("Gronnblade")){
+			if(hasBlade(this)){
 				var bladeDmg = Math.max(this.buffs.atk,this.combatBuffs.atk) + Math.max(this.buffs.spd,this.combatBuffs.spd) + Math.max(this.buffs.def,this.combatBuffs.def) + Math.max(this.buffs.res,this.combatBuffs.res);
 				if(bladeDmg > 0){
 					damageText += this.name + " gets " + bladeDmg + " extra attack from a blade tome. ";
@@ -3280,10 +3212,7 @@ function activeHero(hero){
 			var miracle = false;
 			if(enemy.specialIndex!=-1&&data.skills[enemy.specialIndex].charge<=enemy.charge){
 				//gotta check range
-				var anyRangeCounter = false;
-				if(this.has("Close Counter") || this.has("Distant Counter") || this.has("Raijinto") || this.has("Lightning Breath") || this.has("Siegfried") || this.has("Ragnell") || this.has("Gradivus")){
-					anyRangeCounter = true;
-				}
+				var anyRangeCounter = canAnyRangeCounter(this);
 
 				if(this.range == "melee" || (!this.initiator && enemy.range == "melee" && anyRangeCounter)){
 					if(enemy.has("Buckler") || enemy.has("Escutcheon")){
@@ -3485,10 +3414,7 @@ function activeHero(hero){
 		}
 
 		//check for any-distance counterattack
-		var anyRangeCounter = false;
-		if(enemy.has("Close Counter") || enemy.has("Distant Counter") || enemy.has("Raijinto") || enemy.has("Lightning Breath") || enemy.has("Ragnell") || enemy.has("Siegfried") || enemy.has("Gradivus")){
-			anyRangeCounter = true;
-		}
+		var anyRangeCounter = canAnyRangeCounter(enemy);
 
 		//check for vantage before beginning combat
 		var vantage = false;
@@ -3549,79 +3475,11 @@ function activeHero(hero){
 
 		//check for brave
 		//brave will be passed to this.doDamage
-		var brave = false;
-		if(this.has("Brave Sword") || this.has("Brave Lance") || this.has("Brave Axe") || this.has("Brave Bow") || this.has("Dire Thunder")){
-			brave = true;
-		}
+		var brave = isBrave(this);
 
 		//check for breaker skills
-		//Need to rdo this code to avoid repeating twice...
-		var thisBroken = false;
-		var thisBreakLevel = 2; // hp threshold
-		if(this.weaponType=="sword" && enemy.has("Swordbreaker")){
-			thisBreakLevel = 1.1 - enemy.has("Swordbreaker") * 0.2;
-		}
-		else if(this.weaponType=="lance" && enemy.has("Lancebreaker")){
-			thisBreakLevel = 1.1 - enemy.has("Lancebreaker") * 0.2;
-		}
-		else if(this.weaponType=="axe" && enemy.has("Axebreaker")){
-			thisBreakLevel = 1.1 - enemy.has("Axebreaker") * 0.2;
-		}
-		else if(this.weaponType=="redtome" && enemy.has("R Tomebreaker")){
-			thisBreakLevel = 1.1 - enemy.has("R Tomebreaker") * 0.2;
-		}
-		else if(this.weaponType=="bluetome" && enemy.has("B Tomebreaker")){
-			thisBreakLevel = 1.1 - enemy.has("B Tomebreaker") * 0.2;
-		}
-		else if(this.weaponType=="greentome" && enemy.has("G Tomebreaker")){
-			thisBreakLevel = 1.1 - enemy.has("G Tomebreaker") * 0.2;
-		}
-		else if(this.weaponType=="bow" && enemy.has("Bowbreaker")){
-			thisBreakLevel = 1.1 - enemy.has("Bowbreaker") * 0.2;
-		}
-		else if(this.weaponType=="dagger" && enemy.has("Daggerbreaker")){
-			thisBreakLevel = 1.1 - enemy.has("Daggerbreaker") * 0.2;
-		}
-		else if(this.weaponType=="dagger" && enemy.has("Assassin's Bow")){
-			thisBreakLevel = 0;
-		}
-
-		var enemyBroken = false;
-		var enemyBreakLevel = 2; // hp threshold
-		if(enemy.weaponType=="sword" && this.has("Swordbreaker")){
-			enemyBreakLevel = 1.1 - this.has("Swordbreaker") * 0.2;
-		}
-		else if(enemy.weaponType=="lance" && this.has("Lancebreaker")){
-			enemyBreakLevel = 1.1 - this.has("Lancebreaker") * 0.2;
-		}
-		else if(enemy.weaponType=="axe" && this.has("Axebreaker")){
-			enemyBreakLevel = 1.1 - this.has("Axebreaker") * 0.2;
-		}
-		else if(enemy.weaponType=="redtome" && this.has("R Tomebreaker")){
-			enemyBreakLevel = 1.1 - this.has("R Tomebreaker") * 0.2;
-		}
-		else if(enemy.weaponType=="bluetome" && this.has("B Tomebreaker")){
-			enemyBreakLevel = 1.1 - this.has("B Tomebreaker") * 0.2;
-		}
-		else if(enemy.weaponType=="greentome" && this.has("G Tomebreaker")){
-			enemyBreakLevel = 1.1 - this.has("G Tomebreaker") * 0.2;
-		}
-		else if(enemy.weaponType=="bow" && this.has("Bowbreaker")){
-			enemyBreakLevel = 1.1 - this.has("Bowbreaker") * 0.2;
-		}
-		else if(enemy.weaponType=="dagger" && this.has("Daggerbreaker")){
-			enemyBreakLevel = 1.1 - this.has("Daggerbreaker") * 0.2;
-		}
-		else if(enemy.weaponType=="dagger" && this.has("Assassin's Bow")){
-			enemyBreakLevel = 0;
-		}
-
-		if(enemy.hp / this.maxHp >= thisBreakLevel){
-			thisBroken = true;
-		}
-		if(this.hp / this.maxHp >= enemyBreakLevel){
-			enemyBroken = true;
-		}
+		var thisBroken = isBrokenBy(this, enemy);
+		var enemyBroken = isBrokenBy(enemy, this);
 
 		//Check for firesweep
 		var firesweep = false;
@@ -3632,16 +3490,26 @@ function activeHero(hero){
 			firesweep = true;
 		}
 
-		//check for windsweep
-		//This skill is a fucking mess
-		var windsweep = 0;
-		if(this.has("Windsweep")){
-			windsweep = this.has("Windsweep")*-2 + 7;
+		//check for other sweep
+		var sweepSpd = 0;
+		var windsweep = false;
+		if(this.has("Windsweep") && data.physicalWeapons.indexOf(enemy.weaponType) != -1){
+			windsweep = true;
+			sweepSpd = this.has("Windsweep")*-2 + 7;
 		}
 
-		var watersweep = 0;
-		if(this.has("Watersweep")){
-			watersweep = this.has("Watersweep")*-2 + 7;
+		var watersweep = false;
+		if(this.has("Watersweep") && data.magicalWeapons.indexOf(enemy.weaponType) != -1){
+			watersweep = true;
+			sweepSpd = this.has("Watersweep")*-2 + 7;
+		}
+
+		var enemySwept = false;
+		if(sweepSpd && thisEffSpd-enemyEffSpd >= sweepSpd){
+			enemySwept = true;
+		}
+		if(firesweep){
+			enemySwept = true;
 		}
 
 		//Do AOE damage
@@ -3687,22 +3555,22 @@ function activeHero(hero){
 			enemyOutspeeds = true;
 		}
 
-		if(!firesweep && !(windsweep && data.physicalWeapons.indexOf(enemy.weaponType) != -1 && thisEffSpd-enemyEffSpd >= windsweep) && !(watersweep && data.magicalWeapons.indexOf(enemy.weaponType) != -1 && thisEffSpd-enemyEffSpd >= watersweep)){
-			if(this.range==enemy.range || anyRangeCounter){
-				enemyCanCounter = true;
-			}
-		}
-
-		//TODO: refactor these ifs and above ifs
-		if(this.has("Dazzling Staff") && enemyCanCounter){
-			if(this.combatStartHp / this.maxHp >= 1.5 + this.has("Dazzling Staff") * -0.5){
-				roundText += this.name + " prevents " + enemy.name + " from counterattacking with Dazzling Staff.<br>";
+		if(this.range==enemy.range || anyRangeCounter){
+			enemyCanCounter = true;
+			if(enemySwept){
+				roundText += enemy.name + " cannot counterattack because of a sweep skill.<br>";
 				enemyCanCounter = false;
 			}
-		}
-		if(enemy.lit && enemyCanCounter){
-			roundText += enemy.name + " cannot counterattack because they're still distracted by the candle.<br>";
-			enemyCanCounter = false;
+			else if(enemy.lit){
+				roundText += enemy.name + " cannot counterattack because they're still distracted by the candle.<br>";
+				enemyCanCounter = false;
+			}
+			else if(this.has("Dazzling Staff")){
+				if(this.combatStartHp / this.maxHp >= 1.5 + this.has("Dazzling Staff") * -0.5){
+					roundText += this.name + " prevents " + enemy.name + " from counterattacking with Dazzling Staff.<br>";
+					enemyCanCounter = false;
+				}
+			}
 		}
 
 		//Cancel things out
@@ -3735,7 +3603,7 @@ function activeHero(hero){
 		if((thisOutspeeds || thisAutoFollow) && !preventThisFollow){
 			thisFollowUp = true;
 		}
-		if((enemyOutspeeds || enemyAutoFollow) && !preventEnemyFollow){
+		if(enemyCanCounter && ((enemyOutspeeds || enemyAutoFollow) && !preventEnemyFollow)){
 			enemyFollowUp = true;
 		}
 
@@ -3766,7 +3634,6 @@ function activeHero(hero){
 		}
 
 		//Don't do this attack if already did desperation
-		//or if broken
 		//This attacks again
 		if(this.hp>0 && enemy.hp > 0 && !desperation && thisFollowUp){
 			roundText += this.doDamage(enemy,brave);
@@ -3779,16 +3646,12 @@ function activeHero(hero){
 
 		//Do post-combat damage to enemy if enemy isn't dead	
 		if(enemy.hp>0){
-			roundText += this.poisonEnemy(enemy);
-			roundText += this.painEnemy(enemy);
-			roundText += enemy.fury();
+			roundText += enemy.postCombatDamage(this);
 		}
 
 		//Do post-combat damage to this if this isn't dead
-		//No poison because this initiated
 		if(this.hp>0){
-			roundText += enemy.painEnemy(this);
-			roundText += this.fury();
+			roundText += this.postCombatDamage(enemy);
 		}
 
 		//Remove debuffs - action done
@@ -3838,6 +3701,98 @@ function activeHero(hero){
 
 		return roundText;
 	}
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//Calculation utility
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function canAnyRangeCounter(hero){
+	return hero.has("Close Counter") || hero.has("Distant Counter") || hero.has("Raijinto") || hero.has("Lightning Breath") || hero.has("Ragnell") || hero.has("Siegfried") || hero.has("Gradivus");
+}
+
+function isBrave(hero){
+	return hero.has("Brave Sword") || hero.has("Brave Lance") || hero.has("Brave Axe") || hero.has("Brave Bow") || hero.has("Dire Thunder");
+}
+
+function isBrokenBy(hero, enemy){
+	var breakLevel = 2; // pct hp threshold
+	if(hero.weaponType=="sword" && enemy.has("Swordbreaker")){
+		breakLevel = 1.1 - enemy.has("Swordbreaker") * 0.2;
+	}
+	else if(hero.weaponType=="lance" && enemy.has("Lancebreaker")){
+		breakLevel = 1.1 - enemy.has("Lancebreaker") * 0.2;
+	}
+	else if(hero.weaponType=="axe" && enemy.has("Axebreaker")){
+		breakLevel = 1.1 - enemy.has("Axebreaker") * 0.2;
+	}
+	else if(hero.weaponType=="redtome" && enemy.has("R Tomebreaker")){
+		breakLevel = 1.1 - enemy.has("R Tomebreaker") * 0.2;
+	}
+	else if(hero.weaponType=="bluetome" && enemy.has("B Tomebreaker")){
+		breakLevel = 1.1 - enemy.has("B Tomebreaker") * 0.2;
+	}
+	else if(hero.weaponType=="greentome" && enemy.has("G Tomebreaker")){
+		breakLevel = 1.1 - enemy.has("G Tomebreaker") * 0.2;
+	}
+	else if(hero.weaponType=="bow" && enemy.has("Bowbreaker")){
+		breakLevel = 1.1 - enemy.has("Bowbreaker") * 0.2;
+	}
+	else if(hero.weaponType=="dagger" && enemy.has("Daggerbreaker")){
+		breakLevel = 1.1 - enemy.has("Daggerbreaker") * 0.2;
+	}
+	else if(hero.weaponType=="dagger" && enemy.has("Assassin's Bow")){
+		breakLevel = 0;
+	}
+
+	return enemy.hp / enemy.maxHp >= breakLevel;
+}
+
+function getEffectiveBonus(hero,enemy){
+	var effectiveBonus = 1;
+	if(!isResistantToEffective(enemy)){
+		var effectiveTypes = getEffectiveTypes(hero);
+		for(var i = 0; i < effectiveTypes.length; i++){
+			if(effectiveTypes[i] == enemy.moveType || effectiveTypes[i] == enemy.weaponType){
+				effectiveBonus += 0.5; //assuming additive?
+			}
+		}		
+	}
+	return effectiveBonus;
+}
+
+function isResistantToEffective(hero){
+	return hero.has("Svalinn Shield") || hero.has("Iote's Shield") || hero.has("Grani's Shield");
+}
+
+function getEffectiveTypes(hero){
+	//Not currently possible to be effective against multiple types, but you never know
+	var types = [];
+	if(hero.has("Hammer") || hero.has("Armorslayer") || hero.has("Heavy Spear")){
+		types.push("armored");
+	}
+	if(hero.has("Excalibur") || hero.weaponType=="bow"){
+		types.push("flying");
+	}
+	if(hero.has("Poison Dagger")){
+		types.push("infantry");
+	}
+	if(hero.has("Raudrwolf") || hero.has("Blarwolf") || hero.has("Gronnwolf")){
+		types.push("cavalry");
+	}
+	if(hero.has("Falchion") || hero.has("Naga")){
+		types.push("dragon");
+	}
+
+	return types;
+}
+
+function hasBlade(hero){
+	return hero.has("Raudrblade") || hero.has("Blarblade") || hero.has("Gronnblade");
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
