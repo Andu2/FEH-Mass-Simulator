@@ -52,7 +52,7 @@ function getData($table){
 	</script>
 
 	<link rel="stylesheet" type="text/css" href="style.css?v=11"/>
-	<script type="text/javascript" src="code.js?v=19"></script>
+	<script type="text/javascript" src="code.js?v=22"></script>
 
 	<!-- Google Tag Manager -->
 	<script>
@@ -72,9 +72,7 @@ function getData($table){
 <body>
 	<div id="frame_main">
 		<div id="header"><img src="logo.png" style="margin-right:20px;"/><div style="display:inline-block;">Mass Duel Simulator!</div><div id="subtitle"></div></div>
-		<div id="frame_updatenotice" data-update="3">Heroes added: Caeda (Bride), Charlotte (Bride), Cordelia (Bride), Lyn (Bride), Camus (Husbando)<br>
-			Note that Camus's stats are guessed - they may be wrong.<br>
-			Skils added: Blessed Bouquet, Attack Res, Gradivus, Grani's Shield, First Bite, Wind Boost, Cupid Arrow, Candlelight, Dazzling Staff
+		<div id="frame_updatenotice" data-update="0">Disregard this
 			<div id="update_icon">!</div>
 			<div class="button" id="button_closeupdatenotice" onclick="hideUpdateNotice();">x</div>
 		</div>
@@ -237,7 +235,7 @@ function getData($table){
 		<div id="frame_results">
 			<div id="results_bar_top">
 				<div class="button" id="button_calculate" onclick="calculate();">Calculate!</div> <input type="checkbox" data-var="options.autoCalculate" id="autocalculate" checked="checked"/>Auto-calculate
-				<div id="results_bar_right"><span class="bar_label">View:</span><select id="view_results" data-var="options.viewFilter"><option value="all" >All battles</option><option value="changeVictor" >Changed victor</option><option value="changeRounds" >Changed rounds</option><option value="win" >Wins</option><option value="loss" >Losses</option><option value="inconclusive" >Inconclusive</option></select><span class="bar_label">Sort:</span><select id="sort_results" data-var="options.sortOrder"><option value=1 >Best</option><option value=-1 >Worst</option></select><div class="button" id="button_exportcalc" onclick="exportCalc();">Export results</div></div>
+				<div id="results_bar_right"><span class="bar_label">View:</span><select id="view_results" data-var="options.viewFilter"><option value="all" >All battles</option><option value="changeVictor" >Changed victor</option><option value="changeRounds" >Changed rounds</option><option value="changeDamage" >Changed damage</option><option value="win" >Wins</option><option value="loss" >Losses</option><option value="inconclusive" >Inconclusive</option></select><span class="bar_label">Sort:</span><select id="sort_results" data-var="options.sortOrder"><option value=1 >Best</option><option value=-1 >Worst</option></select><div class="button" id="button_exportcalc" onclick="exportCalc();">Export results</div></div>
 			</div>
 			<div id="results_graph_back">
 				<div id="results_graph_wins"></div>
@@ -262,7 +260,7 @@ function getData($table){
 				</div>-->
 			</div>
 		</div>
-		<div id="footer">Last <a href="changelog.txt">updated</a> 2017-5-30. <a href="https://www.reddit.com/user/anducrandu">Message me on reddit</a> if I need to fix something!</div>
+		<div id="footer">Last <a href="changelog.txt">updated</a> 2017-6-6. <a href="https://www.reddit.com/user/anducrandu">Message me on reddit</a> if I need to fix something!</div>
 	</div>
 	<div id="frame_tooltip"></div>
 	<a href="../../games"><div id="frame_sitead">&lt; Back to Games</div></a>

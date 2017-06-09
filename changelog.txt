@@ -1,3 +1,10 @@
+2017-6-6:
+	-Can now filter on changed damage, but same rounds and victor
+
+2017-6-4:
+	-Added Embla's Ward and Quickened Pulse
+	-Fixed Panic causing debuffs to become buffs (this whole time I thought that was how it worked)
+
 2017-5-30:
 	-Added logic for new skills: Gradivus, Dazzling Staff, Wind Boost, Grani's Shield
 	-Can now see overkill

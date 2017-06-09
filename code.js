@@ -594,7 +594,7 @@ function getValidSkills(hero,slot){
 				}
 				else{
 					//shouldn't get here
-					console.log("Issue finding logic for inheritrule " + data.skills[i].inheritrule);
+					//console.log("Issue finding logic for inheritrule " + data.skills[i].inheritrule);
 				}
 			}
 			else{
@@ -1562,9 +1562,9 @@ function importText(side){
 			for(var i = 0; i < splitBuffs.length; i++){
 				data.buffStats.forEach(function(stat){
 					if(includesLike(splitBuffs[i],stat)){
-						var numMatch = splitBuffs[i].match(/-?\d/);
+						var numMatch = splitBuffs[i].match(/-?[0-9]+/);
 						if(numMatch){
-							value[stat] = numMatch[0];
+							value[stat] = parseInt(numMatch[0]);
 						}
 					}
 				});
@@ -1604,7 +1604,7 @@ function importText(side){
 
 		//console.log(key + ": " + value + " (from " + keyValue[1] + ")");
 
-		if(key && value){
+		if(key && typeof value != "undefined"){
 			dataFound[key] = value;
 		}
 
@@ -1943,10 +1943,10 @@ function fight(enemyIndex,resultIndex){
 
 	if(outcome == "win" || outcome == "loss"){
 		if(ahEnemy.overkill){
-			resultText += ", overkill: " + ahEnemy.overkill;
+			resultText += ", <span class=\"purple\">" + ahEnemy.overkill + "</span> overkill";
 		}
-		if(ahChallenger.overkill){
-			resultText += ", overkill: " + ahChallenger.overkill;
+		else if(ahChallenger.overkill){
+			resultText += ", <span class=\"purple\">" + ahChallenger.overkill + "</span> overkill";
 		}
 	}
 
@@ -2003,11 +2003,51 @@ function fight(enemyIndex,resultIndex){
 			passFilters.push("changeVictor");
 		}
 
-		var prevRounds = enemyList[enemyIndex].lastFightResult.match(/([1-4]) rounds?/);
-		if(prevRounds){
-			if(rounds != prevRounds[1] && outcome == prevResult && outcome != "inconclusive"){
-				passFilters.push("changeRounds");
+		var prevRoundsMatch = enemyList[enemyIndex].lastFightResult.match(/([1-4]) rounds?/);
+		var prevRounds = 0;
+		if(prevRoundsMatch){
+			prevRounds = prevRoundsMatch[1];
+		}
+
+		if(rounds != prevRounds && outcome == prevResult && outcome != "inconclusive"){
+			//changeRounds means rounds changed but not result
+			passFilters.push("changeRounds");
+		}
+
+		var prevHealthMatch = enemyList[enemyIndex].lastFightResult.match(/([0-9]+)<\/span> &ndash; <span class="red">([0-9]+)/);
+		var prevOverkillMatch = enemyList[enemyIndex].lastFightResult.match(/([0-9]+)<\/span> overkill/);
+		var prevChallengerEndHealth;
+		var prevEnemyEndHealth;
+		var prevOverkill;
+
+		var currentChallengerEndHealth = ahChallenger.hp;
+		var currentEnemyEndHealth = ahEnemy.hp;
+		if(ahEnemy.overkill){
+			currentEnemyEndHealth -= ahEnemy.overkill;
+		}
+		else if(ahChallenger.overkill){
+			currentChallengerEndHealth -= ahChallenger.overkill;
+		}
+
+		if(prevHealthMatch){
+			prevChallengerEndHealth = parseInt(prevHealthMatch[1]);
+			prevEnemyEndHealth = parseInt(prevHealthMatch[2]);
+		}
+
+		if(prevOverkillMatch){
+			prevOverkill = parseInt(prevOverkillMatch[1]);
+
+			if(prevChallengerEndHealth == 0){
+				prevChallengerEndHealth -= prevOverkill;
 			}
+			else if(prevEnemyEndHealth == 0){
+				prevEnemyEndHealth -= prevOverkill;
+			}
+			
+		}
+
+		if(rounds == prevRounds && outcome == prevResult && (currentChallengerEndHealth != prevChallengerEndHealth || currentEnemyEndHealth != prevEnemyEndHealth)){
+			passFilters.push("changeDamage");
 		}
 	}
 
@@ -2182,7 +2222,7 @@ function outputResults(){
 //Will return true if include or false if not
 function filterResult(i){
 	//console.log(resultHTML[i].passFilters.indexOf(options.viewFilter));
-	console.log(resultHTML[i].passFilters);
+	//console.log(resultHTML[i].passFilters);
 	return resultHTML[i].passFilters.indexOf(options.viewFilter) > -1;
 }
 
@@ -4084,8 +4124,8 @@ function hideUpdateNotice(){
 function doUpdateNotice(){
 	//If localStorage is not supported, hopefully this just throws an error on this function and doesn't break anything else
 	var currentUpdate = parseInt($("#frame_updatenotice").attr("data-update"));
-	var lastUpdate = localStorage.getItem("lastUpdateShown");
-	if(lastUpdate!=currentUpdate){
+	var lastUpdate = localStorage.getItem("lastUpdateShown") || 0;
+	if(lastUpdate<currentUpdate){
 		localStorage.setItem("lastUpdateShown",currentUpdate);
 		//Don't show the notification until the page is well-loaded
 		setTimeout(function(){
