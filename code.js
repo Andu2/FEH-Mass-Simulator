@@ -536,6 +536,8 @@ function getValidSkills(hero,slot){
 		var inheritRules = data.skills[i].inheritrule.split(","); //Thanks Galeforce (melee,physical)
 		if(!slot || data.skills[i].slot == slot){
 			if(hero.index != undefined){
+				var attackType = getAttackTypeFromWeapon(data.heroes[hero.index].weapontype);
+				var inheritRuleMatches = 0;
 				for(var ruleNum = 0; ruleNum < inheritRules.length; ruleNum++){
 					//console.log("Trying " + slot + ": " + data.skills[i].name);
 					if(inheritRules[ruleNum] == "unique"){
@@ -543,60 +545,68 @@ function getValidSkills(hero,slot){
 						if(hero.naturalSkills){
 							for(var j = 0; j < hero.naturalSkills.length; j++){
 								if(hero.naturalSkills[j][0] == data.skills[i].skill_id){
-									validSkills.push(i);
+									inheritRuleMatches++;
 								}
 							}
 						}
 					}
+					else if(attackType == inheritRules[ruleNum]){
+						//inherit if weapon is right attacking type
+						inheritRuleMatches++;
+					}
 					else if(data.weaponTypes.indexOf(inheritRules[ruleNum])!=-1){
 						//inherit if weapon is right
 						if(data.heroes[hero.index].weapontype==inheritRules[ruleNum]){
-							validSkills.push(i);
+							inheritRuleMatches++;
 						}
 					}
 					else if(data.moveTypes.indexOf(inheritRules[ruleNum])!=-1){
 						//inherit if movetype is right
 						if(data.heroes[hero.index].movetype==inheritRules[ruleNum]){
-							validSkills.push(i);
+							inheritRuleMatches++;
 						}
 					}
 					else if(data.weaponTypes.indexOf(inheritRules[ruleNum].replace("non",""))!=-1){
 						//inherit if not a certain weapon
 						if(data.heroes[hero.index].weapontype!=inheritRules[ruleNum].replace("non","")){
-							validSkills.push(i);
+							inheritRuleMatches++;
 						}
 					}
 					else if(data.moveTypes.indexOf(inheritRules[ruleNum].replace("non",""))!=-1){
 						//inherit if not a certain movement type
 						if(data.heroes[hero.index].movetype!=inheritRules[ruleNum].replace("non","")){
-							validSkills.push(i);
+							inheritRuleMatches++;
 						}
 					}
 					else if(data.colors.indexOf(inheritRules[ruleNum].replace("non",""))!=-1){
 						//inherit if not a certain color
 						if(data.heroes[hero.index].color!=inheritRules[ruleNum].replace("non","")){
-							validSkills.push(i);
+							inheritRuleMatches++;
 						}
 					}
 					else if(inheritRules[ruleNum]=="ranged"){
 						//inherit if weapon type in ranged group
 						if(data.rangedWeapons.indexOf(data.heroes[hero.index].weapontype) != -1){
-							validSkills.push(i);
+							inheritRuleMatches++;
 						}
 					}
 					else if(inheritRules[ruleNum]=="melee"){
 						//inherit if weapon type in melee group
 						if(data.meleeWeapons.indexOf(data.heroes[hero.index].weapontype) != -1){
-							validSkills.push(i);
+							inheritRuleMatches++;
 						}
 					}
 					else if(inheritRules[ruleNum]==""){
 						//everyone can inherit!
-						validSkills.push(i);
+						inheritRuleMatches++;
 					}
 					else{
 						//shouldn't get here
 						//console.log("Issue finding logic for inheritrule " + inheritRules[ruleNum]);
+					}
+
+					if(inheritRuleMatches == inheritRules.length){
+						validSkills.push(i);
 					}
 				}
 			}
@@ -4001,6 +4011,18 @@ function getIndexFromName(name,dataList,slot){
 	while(leftBound <= rightBound);
 
 	return found;
+}
+
+function getAttackTypeFromWeapon(weaponType){
+	if(data.physicalWeapons.indexOf(weaponType) != -1){
+		return "physical";
+	}
+	else if(data.magicalWeapons.indexOf(weaponType) != -1){
+		return "magical";
+	}
+	else{
+		return "unknown";
+	}
 }
 
 function verifyNumberInput(element,min,max){
