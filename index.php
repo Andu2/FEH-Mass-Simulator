@@ -52,7 +52,7 @@ function getData($table){
 	</script>
 
 	<link rel="stylesheet" type="text/css" href="style.css?v=11"/>
-	<script type="text/javascript" src="code.js?v=22"></script>
+	<script type="text/javascript" src="code.js?v=23"></script>
 
 	<!-- Google Tag Manager -->
 	<script>
