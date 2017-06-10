@@ -306,6 +306,12 @@ body{
 	left:174px;
 }
 
+.customstatinput{
+	position:absolute;
+	left:36px;
+	top:0;
+}
+
 .hero_skills{
 	position:absolute;
 	top:4px;

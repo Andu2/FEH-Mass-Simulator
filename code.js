@@ -229,11 +229,13 @@ $(document).ready(function(){
 	}
 	
 	//Populate hero select options
-	heroHTML = "<option value=-1 class=\"hero_option\">Select Hero</option>";
+	var heroHTML = "<option value=-1 class=\"hero_option\">Select Hero</option>";
 	for(var i = 0; i < data.heroes.length; i++){
 		heroHTML += "<option value=" + i + " class=\"hero_option\">" + data.heroes[i].name + "</option>";
 	}
-	$("#challenger_name, #cl_enemy_name").html(heroHTML);
+	var enemyHTML = heroHTML + "<option value=-2 class=\"hero_option\">Custom</option>";
+	$("#challenger_name").html(heroHTML);
+	$("#cl_enemy_name").html(enemyHTML);
 
 	setSkillOptions(enemies.fl);
 	
@@ -291,6 +293,14 @@ $(document).ready(function(){
 				newVal = $(this).is(":checked");
 			}
 
+			if(endsWith(dataVar,".customWeapon")){
+				//Get color
+				changeDataVar("enemies.cl.list.customColor",getColorFromWeapon(newVal));
+				if(endsWith(newVal,"dragon")){
+					newVal = "dragon";
+				}
+			}
+
 			//Change val to numeric if it looks numeric
 			//All numbers used by this program are ints
 			if($.isNumeric(newVal)){
@@ -322,16 +332,24 @@ $(document).ready(function(){
 					//find hero's starting skills
 					initHero(hero);
 
+					var name = "error";
+					if(newVal == -2){
+						name = "Custom";
+					}
+					else{
+						name = data.heroes[newVal].name;
+					}
+
 					if(hero.challenger){
 
 						//Analytics
-						dataLayer.push({"event":"changeHero","challenger_name":data.heroes[newVal].name});
+						dataLayer.push({"event":"changeHero","challenger_name":name});
 					}
 					else{
 						updateClList();
 
 						//Analytics
-						dataLayer.push({"event":"changeEnemy","challenger_name":data.heroes[newVal].name});
+						dataLayer.push({"event":"changeEnemy","challenger_name":name});
 					}
 				}
 			}
@@ -493,7 +511,12 @@ $(document).ready(function(){
 
 function initHero(hero,alreadyHasSkills){
 	if(hero.index != -1){
-		hero.naturalSkills = data.heroBaseSkills[hero.index];
+		if(hero.index == -2){ //custom enemy
+			hero.naturalSkills = [];
+		}
+		else{
+			hero.naturalSkills = data.heroBaseSkills[hero.index];
+		}
 
 		hero.validWeaponSkills = getValidSkills(hero,"weapon");
 		hero.validSpecialSkills = getValidSkills(hero,"special");
@@ -535,6 +558,21 @@ function getValidSkills(hero,slot){
 	for(var i = 0; i < data.skills.length; i++){
 		if(!slot || data.skills[i].slot == slot){
 			if(hero.index != undefined){
+
+				var weaponType = "none";
+				var moveType = "none";
+				var color = "none";
+
+				if(hero.index >= 0){
+					weaponType = data.heroes[hero.index].weapontype;
+					moveType = data.heroes[hero.index].movetype;
+				}
+				else if(hero.index == -2){
+					weaponType = hero.customWeapon;
+					moveType = hero.customMove;
+					color = hero.customColor;
+				}
+
 				//console.log("Trying " + slot + ": " + data.skills[i].name);
 				if(data.skills[i].inheritrule == "unique"){
 					//can only use if hero starts with it
@@ -548,43 +586,43 @@ function getValidSkills(hero,slot){
 				}
 				else if(data.weaponTypes.indexOf(data.skills[i].inheritrule)!=-1){
 					//inherit if weapon is right
-					if(data.heroes[hero.index].weapontype==data.skills[i].inheritrule){
+					if(weaponType==data.skills[i].inheritrule){
 						validSkills.push(i);
 					}
 				}
 				else if(data.moveTypes.indexOf(data.skills[i].inheritrule)!=-1){
 					//inherit if movetype is right
-					if(data.heroes[hero.index].movetype==data.skills[i].inheritrule){
+					if(moveType==data.skills[i].inheritrule){
 						validSkills.push(i);
 					}
 				}
 				else if(data.weaponTypes.indexOf(data.skills[i].inheritrule.replace("non",""))!=-1){
 					//inherit if not a certain weapon
-					if(data.heroes[hero.index].weapontype!=data.skills[i].inheritrule.replace("non","")){
+					if(weaponType!=data.skills[i].inheritrule.replace("non","")){
 						validSkills.push(i);
 					}
 				}
 				else if(data.moveTypes.indexOf(data.skills[i].inheritrule.replace("non",""))!=-1){
 					//inherit if not a certain movement type
-					if(data.heroes[hero.index].movetype!=data.skills[i].inheritrule.replace("non","")){
+					if(moveType!=data.skills[i].inheritrule.replace("non","")){
 						validSkills.push(i);
 					}
 				}
 				else if(data.colors.indexOf(data.skills[i].inheritrule.replace("non",""))!=-1){
 					//inherit if not a certain color
-					if(data.heroes[hero.index].color!=data.skills[i].inheritrule.replace("non","")){
+					if(color!=data.skills[i].inheritrule.replace("non","")){
 						validSkills.push(i);
 					}
 				}
 				else if(data.skills[i].inheritrule=="ranged"){
 					//inherit if weapon type in ranged group
-					if(data.rangedWeapons.indexOf(data.heroes[hero.index].weapontype) != -1){
+					if(data.rangedWeapons.indexOf(weaponType) != -1){
 						validSkills.push(i);
 					}
 				}
 				else if(data.skills[i].inheritrule=="melee"){
 					//inherit if weapon type in melee group
-					if(data.meleeWeapons.indexOf(data.heroes[hero.index].weapontype) != -1){
+					if(data.meleeWeapons.indexOf(weaponType) != -1){
 						validSkills.push(i);
 					}
 				}
@@ -672,7 +710,14 @@ function setStats(hero){
 			enemies.fl.avgRes = Math.round(enemies.fl.avgRes/numIncluded);
 		}
 	}
-	else if(typeof hero.index != "undefined" && hero.index != -1){
+	else if(typeof hero.index != "undefined" && hero.index == -2){
+		hero.hp = hero.customhp;
+		hero.atk = hero.customatk;
+		hero.spd = hero.customspd;
+		hero.def = hero.customdef;
+		hero.res = hero.customres;
+	}
+	else if(typeof hero.index != "undefined" && hero.index >= 0){
 		var growthValMod = {"hp":0,"atk":0,"spd":0,"def":0,"res":0};
 		if(hero.boon!="none"){
 			growthValMod[hero.boon]+=1;
@@ -814,11 +859,20 @@ function setSkills(hero){
 		}
 	}
 	else if(typeof hero.index != "undefined" && hero.index != -1){
-		hero.weapon = data.heroMaxSkills[hero.rarity-1][hero.index].weapon;
-		hero.special = data.heroMaxSkills[hero.rarity-1][hero.index].special;
-		hero.a = data.heroMaxSkills[hero.rarity-1][hero.index].a;
-		hero.b = data.heroMaxSkills[hero.rarity-1][hero.index].b;
-		hero.c = data.heroMaxSkills[hero.rarity-1][hero.index].c;
+		if(hero.index == -2){
+			hero.weapon = -1;
+			hero.special = -1;
+			hero.a = -1;
+			hero.b = -1;
+			hero.c = -1;
+		}
+		else{
+			hero.weapon = data.heroMaxSkills[hero.rarity-1][hero.index].weapon;
+			hero.special = data.heroMaxSkills[hero.rarity-1][hero.index].special;
+			hero.a = data.heroMaxSkills[hero.rarity-1][hero.index].a;
+			hero.b = data.heroMaxSkills[hero.rarity-1][hero.index].b;
+			hero.c = data.heroMaxSkills[hero.rarity-1][hero.index].c;
+		}
 		hero.s = -1;
 	}	
 }
@@ -1013,7 +1067,7 @@ function setSkillOptions(hero){
 
 	var htmlPrefix = "challenger_";
 	var maxSkills = {"weapon":-1,"special":-1,"a":-1,"b":-1,"c":-1,"s":-1};
-	if(typeof hero.index != "undefined" && hero.index != -1){
+	if(typeof hero.index != "undefined" && hero.index >= 0){
 		maxSkills = data.heroMaxSkills[hero.rarity-1][hero.index];
 	}
 
@@ -1119,20 +1173,41 @@ function updateHeroUI(hero){
 	$("#" + htmlPrefix + "boon").val(hero.boon);
 	$("#" + htmlPrefix + "bane").val(hero.bane);
 
-	if(typeof hero.index!= "undefined" && hero.index != -1){ //cl/challenger-specific stuff
+	if(typeof hero.index != "undefined" && hero.index != -1){ //cl/challenger-specific stuff
+		var name = "error";
+		var weaponType = "error";
+		var color = "error";
+		if(hero.index == -2){
+			$("#enemies_custom_list .customstatinput").show();
+			$("#enemies_custom_list .customattribute").show();
+			$("#enemies_custom_list .stat_number").hide();
+			$("#enemies_custom_list .hero_picture").hide();
+			name = "Custom";
+			weaponType = hero.customWeapon;
+			color = hero.customColor;
+		}
+		else{
+			$("#enemies_custom_list .customstatinput").hide();
+			$("#enemies_custom_list .customattribute").hide();
+			$("#enemies_custom_list .stat_number").show();
+			$("#enemies_custom_list .hero_picture").show();
+			name = data.heroes[hero.index].name;
+			weaponType = data.heroes[hero.index].weapontype;
+			color = data.heroes[hero.index].color;
+		}
 		$("#" + htmlPrefix + "name").val(hero.index);
-		$("#" + htmlPrefix + "picture").attr("src","heroes/" + data.heroes[hero.index].name + ".png");
+		$("#" + htmlPrefix + "picture").attr("src","heroes/" + name + ".png");
 		$("#" + htmlPrefix + "hp").html(hero.hp);
 		$("#" + htmlPrefix + "currenthp").html(hero.hp - hero.damage);
 		$("#" + htmlPrefix + "atk").html(hero.atk);
 		$("#" + htmlPrefix + "spd").html(hero.spd);
 		$("#" + htmlPrefix + "def").html(hero.def);
 		$("#" + htmlPrefix + "res").html(hero.res);
-		if(data.heroes[hero.index].weapontype != "dragon"){
-			$("#" + htmlPrefix + "weapon_icon").attr("src","weapons/" + data.heroes[hero.index].weapontype + ".png");
+		if(weaponType != "dragon"){
+			$("#" + htmlPrefix + "weapon_icon").attr("src","weapons/" + weaponType + ".png");
 		}
 		else{
-			$("#" + htmlPrefix + "weapon_icon").attr("src","weapons/" + data.heroes[hero.index].color + "dragon.png");
+			$("#" + htmlPrefix + "weapon_icon").attr("src","weapons/" + color + "dragon.png");
 		}
 
 		if(hero.special != -1){
@@ -2124,7 +2199,7 @@ function calculate(manual){
 				mustConfirm = true;
 			}
 			for(var i = 0;i<enemyList.length;i++){
-				if(enemyList[i].index >= 0 && !mustConfirm || enemyList[i].included){
+				if(enemyList[i].index != -1 && !mustConfirm || enemyList[i].included){
 					fightResults.push(fight(i,fightResults.length));
 				}
 			}
@@ -2437,7 +2512,20 @@ function activeHero(hero){
 
 	this.challenger = !!hero.challenger; //Will be undefined if not challenger
 	this.heroIndex = hero.index;
-	this.name = data.heroes[this.heroIndex].name;
+
+	if(this.heroIndex == -2){
+		this.name = "Custom";
+		this.moveType = hero.customMove;
+		this.weaponType = hero.customWeapon;
+		this.color = hero.customColor;
+	}
+	else{
+		this.name = data.heroes[this.heroIndex].name;
+		this.moveType = data.heroes[this.heroIndex].movetype;
+		this.weaponType = data.heroes[this.heroIndex].weapontype;
+		this.color = data.heroes[this.heroIndex].color;
+	}
+	
 	this.rarity = hero.rarity;
 	this.merge = hero.merge;
 
@@ -2461,10 +2549,6 @@ function activeHero(hero){
 	this.spd = hero.spd;
 	this.def = hero.def;
 	this.res = hero.res;
-
-	this.moveType = data.heroes[this.heroIndex].movetype;
-	this.weaponType = data.heroes[this.heroIndex].weapontype;
-	this.color = data.heroes[this.heroIndex].color;
 
 	this.hp = Math.max(this.maxHp - hero.damage,1);
 	this.precharge = hero.precharge;
@@ -3972,6 +4056,21 @@ function verifyNumberInput(element,min,max){
 		newVal = max;
 	}
 	return newVal;
+}
+
+function getColorFromWeapon(weaponType){
+	if(weaponType == "sword" || weaponType == "redtome" || weaponType == "reddragon"){
+		return "red";
+	}
+	else if(weaponType == "lance" || weaponType == "bluetome" || weaponType == "bluedragon"){
+		return "blue";
+	}
+	else if(weaponType == "axe" || weaponType == "greentome" || weaponType == "greendragon"){
+		return "green";
+	}
+	else{
+		return "gray";
+	}
 }
 
 function removeDiacritics (str) {

@@ -169,14 +169,40 @@ function getData($table){
 					<div class="frame_hero_main_right">
 						<div class="bar_top_options"><select id="cl_enemy_name" data-var="enemies.cl.list.index"></select><div class="bar_top_options_right"><span class="bar_label">Rarity:</span><input id="cl_enemy_rarity" data-var="enemies.cl.list.rarity" type="number" class="rarityinput smallnuminput" value=5 min=1 max=5 /><span class="bar_label">Lvl 40+</span><input id="cl_enemy_merge" data-var="enemies.cl.list.merge" class="smallnuminput" type="number" value=0 min=0 max=10 /><div class="button reset_button reset_enemies" id="reset_cl_enemy">Reset</div></div></div>
 						<div class="frame_hero_main_top">
-							<div class="frame_hero_picture"><img class="hero_picture" id="cl_enemy_picture" src="heroes/nohero.png"/><img id="cl_enemy_weapon_icon" class="weaponIcon" src="weapons/noweapon.png"/></div>
+							<div class="frame_hero_picture"><img class="hero_picture" id="cl_enemy_picture" src="heroes/nohero.png"/><img id="cl_enemy_weapon_icon" class="weaponIcon" src="weapons/noweapon.png"/>
+								<div class="customattribute_row">Weapon type: 
+									<select id="cl_enemy_customweapon" data-var="enemies.cl.list.customWeapon">
+										<option value="sword">Sword</option>
+										<option value="lance">Lance</option>
+										<option value="axe">Axe</option>
+										<option value="bow">Bow</option>
+										<option value="dagger">Dagger</option>
+										<option value="redtome">Red Tome</option>
+										<option value="bluetome">Blue Tome</option>
+										<option value="greentome">Green Tome</option>
+										<option value="staff">Staff</option>
+										<option value="reddragon">Red Dragon</option>
+										<option value="bluedragon">Blue Dragon</option>
+										<option value="greendragon">Green Dragon</option>
+									</select>
+								</div>
+								<div class="customattribute_row">Move type: 
+									<select id="cl_enemy_customweapon" data-var="enemies.cl.list.customMove">
+										<option value="sword">Infantry</option>
+										<option value="cavalry">Cavalry</option>
+										<option value="flying">Flying</option>
+										<option value="armored">Armored</option>
+		
+									</select>
+								</div>
+							</div>
 							<div class="frame_stats">
 								<div class="bufflabel">Buff</div><div class="debufflabel">Debuff</div><div class="spurlabel">Spur</div>
-								<div class="stat_row">HP: <span class="stat_number" id="cl_enemy_hp">-</span></div>
-								<div class="stat_row">Atk: <span class="stat_number" id="cl_enemy_atk">-</span><input id="cl_enemy_atk_buff" data-var="enemies.cl.list.buffs.atk" class="buff_input smallnuminput" type="number" value=0 min=0 max=7 /><input id="cl_enemy_atk_debuff" data-var="enemies.cl.list.debuffs.atk" class="debuff_input smallnuminput" type="number" value=0 min=-7 max=0 /><input id="cl_enemy_atk_spur" data-var="enemies.cl.list.spur.atk" class="spur_input smallnuminput" type="number" value=0 min=0 max=24 /></div>
-								<div class="stat_row">Spd: <span class="stat_number" id="cl_enemy_spd">-</span><input id="cl_enemy_spd_buff" data-var="enemies.cl.list.buffs.spd" class="buff_input smallnuminput" type="number" value=0 min=0 max=7 /><input id="cl_enemy_spd_debuff" data-var="enemies.cl.list.debuffs.spd" class="debuff_input smallnuminput" type="number" value=0 min=-7 max=0 /><input id="cl_enemy_spd_spur" data-var="enemies.cl.list.spur.spd" class="spur_input smallnuminput" type="number" value=0 min=0 max=24 /></div>
-								<div class="stat_row">Def: <span class="stat_number" id="cl_enemy_def">-</span><input id="cl_enemy_def_buff" data-var="enemies.cl.list.buffs.def" class="buff_input smallnuminput" type="number" value=0 min=0 max=7 /><input id="cl_enemy_def_debuff" data-var="enemies.cl.list.debuffs.def" class="debuff_input smallnuminput" type="number" value=0 min=-7 max=0 /><input id="cl_enemy_def_spur" data-var="enemies.cl.list.spur.def" class="spur_input smallnuminput" type="number" value=0 min=0 max=24 /></div>
-								<div class="stat_row">Res: <span class="stat_number" id="cl_enemy_res">-</span><input id="cl_enemy_res_buff" data-var="enemies.cl.list.buffs.res" class="buff_input smallnuminput" type="number" value=0 min=0 max=7 /><input id="cl_enemy_res_debuff" data-var="enemies.cl.list.debuffs.res" class="debuff_input smallnuminput" type="number" value=0 min=-7 max=0 /><input id="cl_enemy_res_spur" data-var="enemies.cl.list.spur.res" class="spur_input smallnuminput" type="number" value=0 min=0 max=24 /></div>
+								<div class="stat_row">HP: <span class="stat_number" id="cl_enemy_hp">-</span><input id="cl_enemy_inputhp" class="smallnuminput customstatinput" type="number" value=30 min=0 data-var="enemies.cl.list.customhp" /></div>
+								<div class="stat_row">Atk: <span class="stat_number" id="cl_enemy_atk">-</span><input id="cl_enemy_inputatk" class="smallnuminput customstatinput" type="number" value=30 min=0 data-var="enemies.cl.list.customatk" /><input id="cl_enemy_atk_buff" data-var="enemies.cl.list.buffs.atk" class="buff_input smallnuminput" type="number" value=0 min=0 max=7 /><input id="cl_enemy_atk_debuff" data-var="enemies.cl.list.debuffs.atk" class="debuff_input smallnuminput" type="number" value=0 min=-7 max=0 /><input id="cl_enemy_atk_spur" data-var="enemies.cl.list.spur.atk" class="spur_input smallnuminput" type="number" value=0 min=0 max=24 /></div>
+								<div class="stat_row">Spd: <span class="stat_number" id="cl_enemy_spd">-</span><input id="cl_enemy_inputspd" class="smallnuminput customstatinput" type="number" value=30 min=0 data-var="enemies.cl.list.customspd" /><input id="cl_enemy_spd_buff" data-var="enemies.cl.list.buffs.spd" class="buff_input smallnuminput" type="number" value=0 min=0 max=7 /><input id="cl_enemy_spd_debuff" data-var="enemies.cl.list.debuffs.spd" class="debuff_input smallnuminput" type="number" value=0 min=-7 max=0 /><input id="cl_enemy_spd_spur" data-var="enemies.cl.list.spur.spd" class="spur_input smallnuminput" type="number" value=0 min=0 max=24 /></div>
+								<div class="stat_row">Def: <span class="stat_number" id="cl_enemy_def">-</span><input id="cl_enemy_inputdef" class="smallnuminput customstatinput" type="number" value=30 min=0 data-var="enemies.cl.list.customdef" /><input id="cl_enemy_def_buff" data-var="enemies.cl.list.buffs.def" class="buff_input smallnuminput" type="number" value=0 min=0 max=7 /><input id="cl_enemy_def_debuff" data-var="enemies.cl.list.debuffs.def" class="debuff_input smallnuminput" type="number" value=0 min=-7 max=0 /><input id="cl_enemy_def_spur" data-var="enemies.cl.list.spur.def" class="spur_input smallnuminput" type="number" value=0 min=0 max=24 /></div>
+								<div class="stat_row">Res: <span class="stat_number" id="cl_enemy_res">-</span><input id="cl_enemy_inputres" class="smallnuminput customstatinput" type="number" value=30 min=0 data-var="enemies.cl.list.customres" /><input id="cl_enemy_res_buff" data-var="enemies.cl.list.buffs.res" class="buff_input smallnuminput" type="number" value=0 min=0 max=7 /><input id="cl_enemy_res_debuff" data-var="enemies.cl.list.debuffs.res" class="debuff_input smallnuminput" type="number" value=0 min=-7 max=0 /><input id="cl_enemy_res_spur" data-var="enemies.cl.list.spur.res" class="spur_input smallnuminput" type="number" value=0 min=0 max=24 /></div>
 							</div>
 						</div>
 						<div class="frame_hero_main_bottom">
