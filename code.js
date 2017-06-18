@@ -187,7 +187,7 @@ function initOptions(){
 initOptions();
 
 var fightResults = []; //Needs to be global variable to get info for tooltip
-var resultHTML = []; //Needs to be a global variable to flip sort order without 
+var resultHTML = []; //Needs to be a global variable to flip sort order without
 
 var showingTooltip = false;
 var calcuwaiting = false;
@@ -227,7 +227,7 @@ $(document).ready(function(){
 		console.log("Unsupported JavaScript");
 		$("#update_text").html("Your browser does not appear to support some of the code this app uses (JavaScript ES5). The app probably won't work.");
 	}
-	
+
 	//Populate hero select options
 	heroHTML = "<option value=-1 class=\"hero_option\">Select Hero</option>";
 	for(var i = 0; i < data.heroes.length; i++){
@@ -236,7 +236,7 @@ $(document).ready(function(){
 	$("#challenger_name, #cl_enemy_name").html(heroHTML);
 
 	setSkillOptions(enemies.fl);
-	
+
 	initEnemyList();
 
 	updateFullUI();
@@ -467,8 +467,8 @@ $(document).ready(function(){
 					"left": e.pageX + 20 + "px",
 					"top": e.pageY - (tooltipHeight/2) + "px"
 				});
-			}	
-		}	
+			}
+		}
 	});
 
 	// $(window).unload(function(){
@@ -605,7 +605,7 @@ function getValidSkills(hero,slot){
 			}
 		}
 	}
-	return validSkills;	
+	return validSkills;
 }
 
 function getHeroSkills(heroIndex){
@@ -820,7 +820,7 @@ function setSkills(hero){
 		hero.b = data.heroMaxSkills[hero.rarity-1][hero.index].b;
 		hero.c = data.heroMaxSkills[hero.rarity-1][hero.index].c;
 		hero.s = -1;
-	}	
+	}
 }
 
 function resetHero(hero,blockInit){//also resets fl, despite singular name - pass enemies.fl
@@ -834,7 +834,7 @@ function resetHero(hero,blockInit){//also resets fl, despite singular name - pas
 	hero.buffs = {"atk":0,"spd":0,"def":0,"res":0};
 	hero.debuffs = {"atk":0,"spd":0,"def":0,"res":0};
 	hero.spur = {"atk":0,"spd":0,"def":0,"res":0};
-	
+
 	if(hero.index){
 		setSkills(hero);
 		setStats(hero);
@@ -880,7 +880,7 @@ function addClEnemy(index){
 
 	enemies.cl.list.push({
 		"index":index,"hp":0,"atk":0,"spd":0,"def":0,"res":0,"weapon":-1,"special":-1,"a":-1,"b":-1,"c":-1,"s":-1,
-		"buffs": {"atk":0,"spd":0,"def":0,"res":0}, "debuffs": {"atk":0,"spd":0,"def":0,"res":0}, "spur": {"atk":0,"spd":0,"def":0,"res":0}, 
+		"buffs": {"atk":0,"spd":0,"def":0,"res":0}, "debuffs": {"atk":0,"spd":0,"def":0,"res":0}, "spur": {"atk":0,"spd":0,"def":0,"res":0},
 		"boon": "none", "bane": "none", "merge":0, "rarity": 5, "precharge":0, "damage": 0
 	});
 
@@ -937,7 +937,7 @@ function setFlEnemies(){
 			confirmed = false;
 		}
 		//check move type
-		else if(!enemies.fl.include[data.heroes[i].movetype]){		
+		else if(!enemies.fl.include[data.heroes[i].movetype]){
 			confirmed = false;
 		}
 		//check weapon range
@@ -1076,12 +1076,12 @@ function updateHeroUI(hero){
 		//Make a dummy hero
 		hero = {
 			"index":-1,"hp":0,"atk":0,"spd":0,"def":0,"res":0,"weapon":-1,"special":-1,"a":-1,"b":-1,"c":-1,"s":-1,
-			"buffs": {"atk":0,"spd":0,"def":0,"res":0}, "debuffs": {"atk":0,"spd":0,"def":0,"res":0}, "spur": {"atk":0,"spd":0,"def":0,"res":0}, 
+			"buffs": {"atk":0,"spd":0,"def":0,"res":0}, "debuffs": {"atk":0,"spd":0,"def":0,"res":0}, "spur": {"atk":0,"spd":0,"def":0,"res":0},
 			"boon": "none", "bane": "none", "merge":0, "rarity": 5, "precharge":0, "damage": 0
 		}
 	}
 	var htmlPrefix = getHtmlPrefix(hero);
-	
+
 	//Global stuff
 	$("#" + htmlPrefix + "damage").val(hero.damage);
 	$("#" + htmlPrefix + "precharge").val(hero.precharge);
@@ -1356,7 +1356,7 @@ function importText(side){
 		else{
 			enemies.cl.list.push({
 				"index":-1,"hp":0,"atk":0,"spd":0,"def":0,"res":0,"weapon":-1,"special":-1,"a":-1,"b":-1,"c":-1,"s":-1,
-				"buffs": {"atk":0,"spd":0,"def":0,"res":0}, "debuffs": {"atk":0,"spd":0,"def":0,"res":0}, "spur": {"atk":0,"spd":0,"def":0,"res":0}, 
+				"buffs": {"atk":0,"spd":0,"def":0,"res":0}, "debuffs": {"atk":0,"spd":0,"def":0,"res":0}, "spur": {"atk":0,"spd":0,"def":0,"res":0},
 				"boon": "none", "bane": "none", "merge":0, "rarity": 5, "precharge":0, "damage": 0
 			});
 			hero = enemies.cl.list[enemies.cl.list.length-1];
@@ -1550,7 +1550,7 @@ function importText(side){
 			key = "s";
 			skillName = true;
 		}
-		
+
 		if(includesLike(keyValue[0],"replace") && skillName){
 			key = "replace" + capitalize(key);
 			skillName = false;
@@ -1795,7 +1795,7 @@ function switchEnemySelect(newVal){
 
 	if(willCalculate){
 		calculate();
-	}	
+	}
 }
 
 //changedNumber: Whether the number of enemies has changed - must do more intensive updating if this is the case
@@ -2401,7 +2401,7 @@ function activeHero(hero){
 	this.rarity = hero.rarity;
 	this.merge = hero.merge;
 
-	this.weaponIndex = hero.weapon;	
+	this.weaponIndex = hero.weapon;
 	this.specialIndex = hero.special;
 	this.aIndex = hero.a;
 	this.bIndex = hero.b;
@@ -2584,7 +2584,7 @@ function activeHero(hero){
 			threatenText += this.name + " activates " + skillName + ", giving " + enemy.name + " " + enemy.combatDebuffs.res + " res.<br>";
 		}
 
-		return threatenText;	
+		return threatenText;
 	}
 
 	this.renew = function(turn){
@@ -2805,7 +2805,7 @@ function activeHero(hero){
 	}
 
 	//poison only happens when the user initiates
-	this.poisonEnemy = function(enemy){	
+	this.poisonEnemy = function(enemy){
 		var poisonEnemyText ="";
 		var skillName = "";
 
@@ -3031,7 +3031,7 @@ function activeHero(hero){
 
 		if(this.initiator){
 			var skillname = "";
-			
+
 			if(this.has("Blue Egg") || this.has("Green Egg") || this.has("Carrot Axe") || this.has("Carrot Lance")){
 				skillName = data.skills[this.weaponIndex].name;
 				var healAmount = 4;
@@ -3115,7 +3115,7 @@ function activeHero(hero){
 					if(enemy.hp - AOEDamage < 1){
 						AOEDamage = enemy.hp - 1;
 					}
-					
+
 					enemy.hp -= AOEDamage;
 					damageText += "Before combat, " + this.name + " hits with " + data.skills[this.specialIndex].name + " for " + AOEDamage + ".<br>";
 				}
@@ -3201,7 +3201,7 @@ function activeHero(hero){
 
 		//Don't do anything else if it's just an AOE attack
 		if(!AOE){
-		
+
 			//Check weapon advantage
 			//0 is no advantage, 1 is attacker advantage, -1 is defender advantage
 			var weaponAdvantage = 0;
@@ -3232,11 +3232,11 @@ function activeHero(hero){
 					if(enemy.has("Triangle Adept")){
 						extraWeaponAdvantage = Math.max(extraWeaponAdvantage,0.05 + 0.05 * enemy.has("Triangle Adept"));
 					}
-				}	
+				}
 			}
 
 			var weaponAdvantageBonus = (0.2 + extraWeaponAdvantage) * weaponAdvantage;
-			
+
 			if(weaponAdvantage != 0){
 				damageText += this.name + "'s attack is multiplied by " + Math.round((1+weaponAdvantageBonus)*10)/10 + " because of weapon advantage. ";
 			}
@@ -3413,7 +3413,7 @@ function activeHero(hero){
 			else{
 				damageText += enemy.name + " <span class=\"blue\">" + enemy.hp + "</span> : " + this.name + " <span class=\"red\">" + this.hp + "</span><br>";
 			}
-		
+
 
 			//do damage again if brave weapon
 			if(brave && enemy.hp > 0){
@@ -3717,7 +3717,7 @@ function activeHero(hero){
 		if(preventThisFollow){
 			roundText += this.name + " is prevented from making a follow-up attack.<br>";
 		}
-		
+
 		if(enemyCanCounter){ //Don't show this text if the enemy can't counter anyway
 			if(preventEnemyFollow && enemyAutoFollow){
 				preventEnemyFollow = false;
@@ -3777,7 +3777,7 @@ function activeHero(hero){
 			roundText += enemy.doDamage(this);
 		}
 
-		//Do post-combat damage to enemy if enemy isn't dead	
+		//Do post-combat damage to enemy if enemy isn't dead
 		if(enemy.hp>0){
 			roundText += this.poisonEnemy(enemy);
 			roundText += this.painEnemy(enemy);
