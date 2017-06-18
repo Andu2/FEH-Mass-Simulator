@@ -1285,7 +1285,9 @@ function importText(side){
 
 	var text = $("#importinput").val();
 	text = removeDiacritics(text); //Fuckin rauðrblade
-	var importSplit = trySplit(text,["  \n","\n",";"])
+	var importSplit = text.split(/\n|;/).map(function (line) {
+		return line.trim();
+	});
 
 	var importMode = "none";
 	if(side=="enemies"){
