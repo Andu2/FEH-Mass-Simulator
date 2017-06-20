@@ -68,6 +68,7 @@ function initOptions(){
 	options.startTurn = 0;
 	options.useGaleforce = true;
 	options.threatenRule = "Neither";
+	options.ployBehavior = "Diagonal";
 	options.showOnlyMaxSkills = true;
 	options.hideUnaffectingSkills = true;
 	options.viewFilter = "all";
@@ -2584,57 +2585,63 @@ function activeHero(hero){
 		//Thhhhhhhhrreats!
 		var threatenText = "";
 		var skillName = "";
+		var threatDebuffs = {"atk":0,"spd":0,"def":0,"res":0};
+		var skillNames = [];
 
-		var debuffAtk = 0;
+		//Only do ploys if not facing ranged diagonally-oriented asshats
+		if(enemy.range == "melee" || options.ployBehavior != "Diagonal"){
+			if(this.has("Atk Ploy") && this.res > enemy.res){ //TODO: check if buffs affect comparison
+				threatDebuffs.atk = Math.min(threatDebuffs.atk,-this.has("Atk Ploy")-2);
+				skillNames.push(data.skills[this.cIndex].name);
+			}
+
+			if(this.has("Panic Ploy") && this.hp > enemy.hp + 6 - this.has("Panic Ploy") * 2){
+				var skillName = data.skills[this.cIndex].name;
+				enemy.panicked = true;
+				threatenText += this.name + " activates " + skillName + ", inflicting panic on " + enemy.name + ".<br>";
+			}
+		}
+
 		if(this.has("Threaten Atk")){
-			debuffAtk = -this.has("Threaten Atk")-2;
-			skillName = data.skills[this.cIndex].name;
+			threatDebuffs.atk = Math.min(threatDebuffs.atk,-this.has("Threaten Atk")-2);
+			skillNames.push(data.skills[this.cIndex].name);
 		}
 		if(this.has("Fensalir")){
-			if(debuffAtk > -4){
-				debuffAtk = -4;
-				skillName = data.skills[this.weaponIndex].name;
-			}
-		}
-		if(debuffAtk < enemy.combatDebuffs.atk){
-			enemy.combatDebuffs.atk = debuffAtk;
-			threatenText += this.name + " activates " + skillName + ", giving " + enemy.name + " " + enemy.combatDebuffs.atk + " atk.<br>";
+			threatDebuffs.atk = Math.min(threatDebuffs.atk,-4);
+			skillNames.push("Fensalir");
 		}
 
-		var debuffSpd = 0;
 		if(this.has("Threaten Spd")){
-			debuffSpd = -this.has("Threaten Spd")-2;
-			skillName = data.skills[this.cIndex].name;
-		}
-		if(debuffSpd < enemy.combatDebuffs.spd){
-			enemy.combatDebuffs.spd = debuffSpd;
-			threatenText += this.name + " activates " + skillName + ", giving " + enemy.name + " " + enemy.combatDebuffs.spd + " spd.<br>";
+			threatDebuffs.spd = Math.min(threatDebuffs.spd,-this.has("Threaten Spd")-2);
+			skillNames.push(data.skills[this.cIndex].name);
 		}
 
-		var debuffDef = 0;
 		if(this.has("Threaten Def")){
-			debuffDef = -this.has("Threaten Def")-2;
-			skillName = data.skills[this.cIndex].name;
+			threatDebuffs.def = Math.min(threatDebuffs.def,-this.has("Threaten Def")-2);
+			skillNames.push(data.skills[this.cIndex].name);
 		}
 		if(this.has("Eckesachs")){
-			if(debuffDef > -4){
-				debuffDef = -4;
-				skillName = data.skills[this.weaponIndex].name;
-			}
-		}
-		if(debuffDef < enemy.combatDebuffs.def){
-			enemy.combatDebuffs.def = debuffDef;
-			threatenText += this.name + " activates " + skillName + ", giving " + enemy.name + " " + enemy.combatDebuffs.def + " def.<br>";
+			threatDebuffs.def = Math.min(threatDebuffs.def,-4);
+			skillNames.push("Eckesachs");
 		}
 
-		var debuffRes = 0;
 		if(this.has("Threaten Res")){
-			debuffRes = -this.has("Threaten Res")-2;
-			skillName = data.skills[this.cIndex].name;
+			threatDebuffs.res = Math.min(threatDebuffs.res,-this.has("Threaten Res")-2);
+			skillNames.push(data.skills[this.cIndex].name);
 		}
-		if(debuffRes < enemy.combatDebuffs.res){
-			enemy.combatDebuffs.res = debuffRes;
-			threatenText += this.name + " activates " + skillName + ", giving " + enemy.name + " " + enemy.combatDebuffs.res + " res.<br>";
+
+		if(skillNames.length > 0){
+			var statChanges = [];
+			for(var stat in threatDebuffs){
+				if(threatDebuffs[stat] < Math.min(enemy.debuffs[stat], enemy.combatDebuffs[stat])){
+					enemy.combatDebuffs[stat] = threatDebuffs[stat];
+					statChanges.push(stat + " " + threatDebuffs[stat]);
+				}
+			}
+
+			if(statChanges.length > 0){
+				threatenText += this.name + " has turn-start debuffing skills: " + skillNames.join(", ") + ". Effect on " + enemy.name + ": " + statChanges.join(", ") + "<br>";
+			}
 		}
 
 		return threatenText;	
@@ -2771,6 +2778,12 @@ function activeHero(hero){
 				this.combatSpur.spd += buffVal;
 				boostText += this.name + " gets +" + buffVal + " spd from having >=3 more hp than " + enemy.name + " with " + skillName + ".<br>";
 			}
+			if(this.has("Fire Boost")){
+				buffVal = this.has("Fire Boost") * 2;
+				skillName = data.skills[this.aIndex].name;
+				this.combatSpur.atk += buffVal;
+				boostText += this.name + " gets +" + buffVal + " atk from having >=3 more hp than " + enemy.name + " with " + skillName + ".<br>";
+			}
 		}
 
 		//this.blow = function(){
@@ -2786,6 +2799,12 @@ function activeHero(hero){
 			}
 			if(this.has("Swift Sparrow")){
 				buffVal = this.has("Swift Sparrow") * 2;
+				skillName = data.skills[this.aIndex].name;
+				this.combatSpur.atk += buffVal;
+				boostText += this.name + " gets +" + buffVal + " atk from initiating with " + skillName + ".<br>";
+			}
+			if(this.has("Sturdy Blow")){
+				buffVal = this.has("Sturdy Blow") * 2;
 				skillName = data.skills[this.aIndex].name;
 				this.combatSpur.atk += buffVal;
 				boostText += this.name + " gets +" + buffVal + " atk from initiating with " + skillName + ".<br>";
@@ -2819,6 +2838,12 @@ function activeHero(hero){
 				skillName = data.skills[this.aIndex].name;
 				this.combatSpur.def += blowDef;
 				boostText += this.name + " gets " + blowDef + " def from initiating with " + skillName + ".<br>";
+			}
+			if(this.has("Sturdy Blow")){
+				blowDef = this.has("Sturdy Blow") * 2;
+				skillName = data.skills[this.aIndex].name;
+				this.combatSpur.def += blowDef;
+				boostText += this.name + " gets +" + blowDef + " def from initiating with " + skillName + ".<br>";
 			}
 			if(this.has("Tyrfing") && this.hp / this.maxHp <= 0.5){
 				this.combatSpur.def += 4;
@@ -3141,6 +3166,13 @@ function activeHero(hero){
 			relevantDef = enemyEffRes;
 		}
 
+		//blade tomes add atk
+		var bladeAtk = 0;
+		if(this.has("Raudrblade") || this.has("Blarblade") || this.has("Gronnblade")){
+			bladeAtk = Math.max(this.buffs.atk,this.combatBuffs.atk) + Math.max(this.buffs.spd,this.combatBuffs.spd) + Math.max(this.buffs.def,this.combatBuffs.def) + Math.max(this.buffs.res,this.combatBuffs.res);
+			thisEffAtk += bladeAtk;
+		}
+
 		var offensiveSpecialActivated = false;
 
 		if(this.specialIndex!=-1&&data.skills[this.specialIndex].charge<=this.charge){
@@ -3315,15 +3347,6 @@ function activeHero(hero){
 
 				if(effectiveBonus > 1 ){
 					damageText += this.name + "'s attack is multiplied by " + effectiveBonus + " from weapon effectiveness. ";
-				}
-			}
-
-			//blade tomes
-			if(this.has("Raudrblade") || this.has("Blarblade") || this.has("Gronnblade")){
-				var bladeDmg = Math.max(this.buffs.atk,this.combatBuffs.atk) + Math.max(this.buffs.spd,this.combatBuffs.spd) + Math.max(this.buffs.def,this.combatBuffs.def) + Math.max(this.buffs.res,this.combatBuffs.res);
-				if(bladeDmg > 0){
-					damageText += this.name + " gets " + bladeDmg + " extra attack from a blade tome. ";
-					thisEffAtk += bladeDmg;
 				}
 			}
 
@@ -3678,10 +3701,10 @@ function activeHero(hero){
 
 		//Check for firesweep
 		var firesweep = false;
-		if(this.has("Firesweep Bow")){
+		if(this.has("Firesweep")){
 			firesweep = true;
 		}
-		if(enemy.has("Firesweep Bow")){
+		if(enemy.has("Firesweep")){
 			firesweep = true;
 		}
 
@@ -3862,11 +3885,11 @@ function activeHero(hero){
 			roundText += this.postCombatHeal();
 
 			//panic
-			if(this.has("Panic")){
+			if(this.hasExactly("Panic") || this.has("Legion's Axe")){
 				enemy.panicked = true;
 				roundText += this.name + " panics " + enemy.name + ".<br>";
 			}
-			if(enemy.has("Panic")){
+			if(enemy.hasExactly("Panic") || enemy.has("Legion's Axe")){
 				this.panicked = true;
 				roundText += enemy.name + " panics " + this.name + ".<br>";
 			}
