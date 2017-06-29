@@ -52,7 +52,7 @@ function getData($table){
 	</script>
 
 	<link rel="stylesheet" type="text/css" href="style.css?v=11"/>
-	<script type="text/javascript" src="code.js?v=22"></script>
+	<script type="text/javascript" src="code.js?v=25"></script>
 
 	<!-- Google Tag Manager -->
 	<script>
@@ -247,10 +247,13 @@ function getData($table){
 			<div id="rules_other">
 				<div id="rules_inputs">
 					<div class="rules_inputs_line">
-						On first turn, threaten skills are debuffing: <div class="rules_inputs_lineright"><select id="rules_threaten" data-var="options.threatenRule"><option>Both</option><option>Attacker</option><option>Defender</option><option selected="selected">Neither</option></select></div>
+						On first turn, threaten/ploy skills affect: <div class="rules_inputs_lineright"><select id="rules_threaten" data-var="options.threatenRule"><option>Both</option><option>Attacker</option><option>Defender</option><option selected="selected">Neither</option></select></div>
 					</div>
 					<div class="rules_inputs_line">
 						Starting turn (for renewal): <div class="rules_inputs_lineright"><input type="number" data-var="options.startTurn" min=0 max=3 id="rules_renewal" class="smallnuminput" value=0 /></div>
+					</div>
+					<div class="rules_inputs_line">
+						Ranged attack angle (for ploy): <div class="rules_inputs_lineright"><select id="rules_ploy" data-var="options.ployBehavior"><option>Diagonal</option><option>Orthogonal</option></select></div>
 					</div>
 				</div>
 				<div id="rules_checks">

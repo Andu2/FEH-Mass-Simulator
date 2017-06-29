@@ -1,3 +1,6 @@
+2017-6-15
+	-New skills added: Atk ploy, sturdy blow, firesweep lance, fire boost, panic ploy
+
 2017-6-6:
 	-Can now filter on changed damage, but same rounds and victor
 
