@@ -234,7 +234,7 @@ $(document).ready(function(){
 	for(var i = 0; i < data.heroes.length; i++){
 		heroHTML += "<option value=" + i + " class=\"hero_option\">" + data.heroes[i].name + "</option>";
 	}
-	$("#challenger_name, #cl_enemy_name").html(heroHTML);
+	$("#challenger_name, #cl_enemy_name").html(heroHTML).select2();
 
 	setSkillOptions(enemies.fl);
 	
@@ -1040,7 +1040,6 @@ function setSkillOptions(hero){
 		}
 	}
 
-	//Set weapon skill options
 	data.skillSlots.forEach(function(slot){
 		var slotFriendlyText = slot;
 		if(slot.length==1){
@@ -2590,9 +2589,15 @@ function activeHero(hero){
 
 		//Only do ploys if not facing ranged diagonally-oriented asshats
 		if(enemy.range == "melee" || options.ployBehavior != "Diagonal"){
-			if(this.has("Atk Ploy") && this.res > enemy.res){ //TODO: check if buffs affect comparison
-				threatDebuffs.atk = Math.min(threatDebuffs.atk,-this.has("Atk Ploy")-2);
-				skillNames.push(data.skills[this.cIndex].name);
+			if(this.res > enemy.res){
+				if(this.has("Atk Ploy")){
+					threatDebuffs.atk = Math.min(threatDebuffs.atk,-this.has("Atk Ploy")-2);
+					skillNames.push(data.skills[this.cIndex].name);
+				}
+				if(this.has("Def Ploy")){
+					threatDebuffs.def = Math.min(threatDebuffs.def,-this.has("Def Ploy")-2);
+					skillNames.push(data.skills[this.cIndex].name);
+				}
 			}
 
 			if(this.has("Panic Ploy") && this.hp > enemy.hp + 6 - this.has("Panic Ploy") * 2){
@@ -2744,14 +2749,33 @@ function activeHero(hero){
 			}
 		}
 
+		if(!this.initiator && enemy.range == "melee"){
+			var skillName = "";
+			var buffVal = 0;
+			if(this.has("Close Def")){
+				buffVal = this.has("Close Def") * 2;
+				skillName = data.skills[this.aIndex].name;
+				this.combatSpur.def += buffVal;
+				this.combatSpur.res += buffVal;
+				boostText += this.name + " gets +" + buffVal + " def and res from being attacked from melee with " + skillName + ".<br>";
+			}
+		}
+
 		if(this.combatStartHp / this.maxHp >= 1){
 			if(this.has("Ragnarok")){
-				//Does this take effect when defending?
+				//Does this take effect when defending? Answer: yes
 				this.combatSpur.atk += 5;
 				this.combatSpur.spd += 5;
 				boostText += this.name + " gets +5 atk and spd from being at full health with Ragnarok.<br>";
 			}
-			//assuming there will be more later
+
+			if(this.has("Seashell") || this.has("Refreshing Bolt") || this.has("Deft Harpoon") || this.has("Melon Crusher")){
+				this.combatSpur.atk += 2;
+				this.combatSpur.spd += 2;
+				this.combatSpur.def += 2;
+				this.combatSpur.res += 2;
+				boostText += this.name + " gets +2 in all stats from being at full health with " + data.skills[this.weaponIndex].name + ".<br>";
+			}
 		}
 
 		if(enemy.combatStartHp / enemy.maxHp >= 1){
@@ -2953,15 +2977,23 @@ function activeHero(hero){
 
 			//TODO: Refactor so this code doesn't have to run twice
 			var furyDmg = 0;
-			if(this.has("Ragnarok") && this.didAttack && this.combatStartHp / this.maxHp >= 1){
-				furyDmg = 5;
+			var skillName = "???";
+			if(this.didAttack && this.combatStartHp / this.maxHp >= 1){
+				if(this.has("Ragnarok")){
+					furyDmg = 5;
+					skillName = "Ragnarok";
+				}
+				if(this.has("Seashell") || this.has("Refreshing Bolt") || this.has("Deft Harpoon") || this.has("Melon Crusher")){
+					furyDmg = 2;
+					skillName = data.skills[this.weaponIndex].name;
+				}
 			}
 			if(furyDmg > 0){
 				if(this.hp - furyDmg <= 0){
 					furyDmg = this.hp - 1;
 				}
 				this.hp -= furyDmg;
-				furyText += this.name + " takes " + furyDmg + " damage after combat from doing an attack with Ragnarok.<br>";
+				furyText += this.name + " takes " + furyDmg + " damage after combat from doing an attack with " + skillName + ".<br>";
 			}
 		}
 
@@ -2974,7 +3006,7 @@ function activeHero(hero){
 		var skillName = "";
 
 		var sealAtk = 0;
-		if(this.has("Seal Atk")){
+		if(this.has("Seal Atk")){ //Will count for seal atk speed as well
 			sealAtk = -this.has("Seal Atk") * 2 - 1;
 			skillName = data.skills[this.bIndex].name;
 		}
@@ -2990,6 +3022,10 @@ function activeHero(hero){
 		var sealSpd = 0;
 		if(this.has("Seal Spd")){
 			sealSpd = -this.has("Seal Spd") * 2 - 1;
+			skillName = data.skills[this.bIndex].name;
+		}
+		if(this.has("Seal Atk Spd")){
+			sealSpd = -this.has("Seal Atk Spd") * 2 - 1;
 			skillName = data.skills[this.bIndex].name;
 		}
 		if(this.has("Slow") && sealSpd > -6){
@@ -3008,11 +3044,11 @@ function activeHero(hero){
 		}
 		//Daggers only take effect if the unit performed an attack
 		if(this.didAttack){
-			if((this.hasExactly("Silver Dagger+") || this.hasExactly("Deathly Dagger")) && sealDef > -7){
+			if((this.hasExactly("Silver Dagger+") || this.hasExactly("Deathly Dagger") || this.hasExactly("Seashell+")) && sealDef > -7){
 				sealDef = -7;
 				skillName = data.skills[this.weaponIndex].name;
 			}
-			else if((this.hasExactly("Silver Dagger") || this.hasExactly("Rogue Dagger+")) && sealDef > -5){
+			else if((this.hasExactly("Silver Dagger") || this.hasExactly("Rogue Dagger+") || this.hasExactly("Seashell")) && sealDef > -5){
 				sealDef = -5;
 				skillName = data.skills[this.weaponIndex].name;
 			}
@@ -3041,11 +3077,11 @@ function activeHero(hero){
 		}
 		//Daggers only take effect if the unit performed an attack
 		if(this.didAttack){
-			if((this.hasExactly("Silver Dagger+") || this.hasExactly("Deathly Dagger")) && sealRes > -7){
+			if((this.hasExactly("Silver Dagger+") || this.hasExactly("Deathly Dagger") || this.hasExactly("Seashell+")) && sealRes > -7){
 				sealRes = -7;
 				skillName = data.skills[this.weaponIndex].name;
 			}
-			else if((this.hasExactly("Silver Dagger") || this.hasExactly("Rogue Dagger+")) && sealRes > -5){
+			else if((this.hasExactly("Silver Dagger") || this.hasExactly("Rogue Dagger+") || this.hasExactly("Seashell")) && sealRes > -5){
 				sealRes = -5;
 				skillName = data.skills[this.weaponIndex].name;
 			}
