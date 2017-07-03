@@ -1,4 +1,8 @@
-2017-6-15
+2017-7-3:
+	-New skill logic added: Summer weapons (Seashell, refresing bolt, deft harpoon, melon crusher), Seal atk spd, def ploy, close def
+	-Changed hero select box to typeahead input
+
+2017-6-15:
 	-New skills added: Atk ploy, sturdy blow, firesweep lance, fire boost, panic ploy
 
 2017-6-6:

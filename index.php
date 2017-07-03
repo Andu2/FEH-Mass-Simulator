@@ -43,6 +43,9 @@ function getData($table){
 	<!--<script src="https://unpkg.com/react@15/dist/react.js"></script>
 	<script src="https://unpkg.com/react-dom@15/dist/react-dom.js"></script>-->
 
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+
 	<script>
 		var data = {};
 		data.heroes = <?php echo $heroScript;?>;
@@ -51,8 +54,8 @@ function getData($table){
 		data.heroSkills = <?php echo $heroskillScript;?>;
 	</script>
 
-	<link rel="stylesheet" type="text/css" href="style.css?v=11"/>
-	<script type="text/javascript" src="code.js?v=25"></script>
+	<link rel="stylesheet" type="text/css" href="style.css?v=12"/>
+	<script type="text/javascript" src="code.js?v=26"></script>
 
 	<!-- Google Tag Manager -->
 	<script>
@@ -289,10 +292,9 @@ function getData($table){
 				</div>-->
 			</div>
 		</div>
-		<div id="footer">Last <a href="changelog.txt">updated</a> 2017-6-6. <a href="https://www.reddit.com/user/anducrandu">Message me on reddit</a> if I need to fix something!</div>
+		<div id="footer">Last <a href="changelog.txt">updated</a> 2017-7-3. <a href="https://www.reddit.com/user/anducrandu">Message me on reddit</a> if I need to fix something!</div>
 	</div>
 	<div id="frame_tooltip"></div>
-	<a href="../../games"><div id="frame_sitead">&lt; Back to Games</div></a>
 	<div id="screen_fade"></div>
 	<div id="frame_import" class="challengerimport">
 		<div id="import_header"><span id="import_title"></span><div class="button" id="import_exit">x</div></div>

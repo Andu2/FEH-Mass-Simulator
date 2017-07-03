@@ -127,6 +127,28 @@ body{
 	padding: 0 10px;
 }
 
+.select2-container{
+	color:#000000;
+}
+
+.select2-selection{
+	margin-top:-1px;
+	height:22px!important;
+}
+
+.select2-selection__rendered{
+	line-height:20px!important;
+}
+
+.select2-selection__arrow{
+	height:18px!important;
+}
+
+.bar_top_options .select2{
+	width:128px!important;
+	height:22px!important;
+}
+
 .bar_top_title{
 	font-family: "Merriweather";
 	font-size:19px;
