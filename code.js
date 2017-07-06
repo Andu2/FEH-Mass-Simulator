@@ -198,13 +198,12 @@ $(document).ready(function(){
 	
 	//Populate hero select options
 	var heroHTML = "<option value=-1 class=\"hero_option\">Select Hero</option>";
+	heroHTML += "<option value=-2 class=\"hero_option\">Custom</option>";
 	for(var i = 0; i < data.heroes.length; i++){
 		heroHTML += "<option value=" + i + " class=\"hero_option\">" + data.heroes[i].name + "</option>";
 	}
 
-	var enemyHTML = heroHTML + "<option value=-2 class=\"hero_option\">Custom</option>";
-	$("#challenger_name").html(heroHTML).select2();
-	$("#cl_enemy_name").html(enemyHTML).select2();
+	$("#challenger_name, #cl_enemy_name").html(heroHTML).select2();
 
 	setSkillOptions(enemies.fl);
 	
@@ -262,9 +261,12 @@ $(document).ready(function(){
 				newVal = $(this).is(":checked");
 			}
 
-			if(endsWith(dataVar,".customWeapon")){
+			if(endsWith(dataVar,".weaponType")){
 				//Get color
-				changeDataVar("enemies.cl.list.customColor",getColorFromWeapon(newVal));
+				var colorDataVar = dataVar.split(".").pop();
+				colorDataVar = colorDataVar.push("color");
+				colorDataVar = colorDataVar.join(".");
+				changeDataVar(colorDataVar, getColorFromWeapon(newVal));
 				if(endsWith(newVal,"dragon")){
 					newVal = "dragon";
 				}
@@ -297,9 +299,6 @@ $(document).ready(function(){
 			//Stuff specific to changing hero
 			if(endsWith(dataVar,".index")){
 				if(newVal != -1){
-
-					//find hero's starting skills
-					initHero(hero);
 
 					var name = "error";
 					if(newVal == -2){
@@ -361,7 +360,7 @@ $(document).ready(function(){
 			if(hero && hero.challenger){
 				updateChallengerUI();
 			}
-			else if(typeof hero != "undefined"){
+			else if(typeof hero != "undefined" || dataVar == "options.customEnemyList"){
 				updateEnemyUI();
 			}
 
@@ -477,39 +476,39 @@ $(document).ready(function(){
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-function initHero(hero,alreadyHasSkills){
-	if(hero.index != -1){
-		if(hero.index == -2){ //custom enemy
-			hero.naturalSkills = [];
-		}
-		else{
-			hero.naturalSkills = data.heroBaseSkills[hero.index];
-		}
+// function initHero(hero,alreadyHasSkills){
+// 	if(hero.index != -1){
+// 		if(hero.index == -2){ //custom enemy
+// 			hero.naturalSkills = [];
+// 		}
+// 		else{
+// 			hero.naturalSkills = data.heroBaseSkills[hero.index];
+// 		}
 
-		hero.validWeaponSkills = getValidSkills(hero,"weapon");
-		hero.validSpecialSkills = getValidSkills(hero,"special");
-		hero.validASkills = getValidSkills(hero,"a");
-		hero.validBSkills = getValidSkills(hero,"b");
-		hero.validCSkills = getValidSkills(hero,"c");
-		hero.validSSkills = getValidSkills(hero,"s");
-		if(!alreadyHasSkills){
-			setSkills(hero);
-		}
-		else{
-			//validate that the skills it already has are okay
-			if(!hero.rarity){
-				hero.rarity = 5;
-			}
-			data.skillSlots.forEach(function(slot){
-				if(hero["valid" + capitalize(slot) + "Skills"].indexOf(hero[slot]) == -1){
-					hero[slot] = -1;
-				}
-			});
-		}
-		setSkillOptions(hero);
-		hero.setStats();
-	}
-}
+// 		hero.validWeaponSkills = getValidSkills(hero,"weapon");
+// 		hero.validSpecialSkills = getValidSkills(hero,"special");
+// 		hero.validASkills = getValidSkills(hero,"a");
+// 		hero.validBSkills = getValidSkills(hero,"b");
+// 		hero.validCSkills = getValidSkills(hero,"c");
+// 		hero.validSSkills = getValidSkills(hero,"s");
+// 		if(!alreadyHasSkills){
+// 			setSkills(hero);
+// 		}
+// 		else{
+// 			//validate that the skills it already has are okay
+// 			if(!hero.rarity){
+// 				hero.rarity = 5;
+// 			}
+// 			data.skillSlots.forEach(function(slot){
+// 				if(hero["valid" + capitalize(slot) + "Skills"].indexOf(hero[slot]) == -1){
+// 					hero[slot] = -1;
+// 				}
+// 			});
+// 		}
+// 		setSkillOptions(hero);
+// 		hero.setStats();
+// 	}
+// }
 
 function initEnemyList(){
 	setFlEnemies();
@@ -520,112 +519,130 @@ function initEnemyList(){
 function getValidSkills(hero,slot){
 	//returns an array of indices on "skills" array for skills that hero can learn
 	//If hero has no index, returns all skills in slot except unique
-	//if not given slot, gives all
+	//if not given slot, gives all slots
 
 	var validSkills = [];
 	for(var i = 0; i < data.skills.length; i++){
-		var inheritRules = data.skills[i].inheritrule.split(","); //Thanks Galeforce (melee,physical)
 		if(!slot || data.skills[i].slot == slot){
-			if(hero.index != undefined){
-
-				var weaponType = "none";
-				var moveType = "none";
-				var color = "none";
-
-				if(hero.index >= 0){
-					weaponType = data.heroes[hero.index].weapontype;
-					moveType = data.heroes[hero.index].movetype;
-				}
-				else if(hero.index == -2){
-					weaponType = hero.customWeapon;
-					moveType = hero.customMove;
-					color = hero.customColor;
-				}
-
-				var attackType = getAttackTypeFromWeapon(data.heroes[hero.index].weapontype);
-				var inheritRuleMatches = 0;
-
-				for(var ruleNum = 0; ruleNum < inheritRules.length; ruleNum++){
-					//console.log("Trying " + slot + ": " + data.skills[i].name);
-					if(inheritRules[ruleNum] == "unique"){
-						//can only use if hero starts with it
-						if(hero.naturalSkills){
-							for(var j = 0; j < hero.naturalSkills.length; j++){
-								if(hero.naturalSkills[j][0] == data.skills[i].skill_id){
-									inheritRuleMatches++;
-								}
-							}
-						}
-					}
-					else if(attackType == inheritRules[ruleNum]){
-						//inherit if weapon is right attacking type
-						inheritRuleMatches++;
-					}
-					else if(data.weaponTypes.indexOf(inheritRules[ruleNum])!=-1){
-						//inherit if weapon is right
-						if(weaponType==inheritRules[ruleNum]){
-							inheritRuleMatches++;
-						}
-					}
-					else if(data.moveTypes.indexOf(inheritRules[ruleNum])!=-1){
-						//inherit if movetype is right
-						if(moveType==inheritRules[ruleNum]){
-							inheritRuleMatches++;
-						}
-					}
-					else if(data.weaponTypes.indexOf(inheritRules[ruleNum].replace("non",""))!=-1){
-						//inherit if not a certain weapon
-						if(weaponType!=inheritRules[ruleNum].replace("non","")){
-							inheritRuleMatches++;
-						}
-					}
-					else if(data.moveTypes.indexOf(inheritRules[ruleNum].replace("non",""))!=-1){
-						//inherit if not a certain movement type
-						if(moveType!=inheritRules[ruleNum].replace("non","")){
-							inheritRuleMatches++;
-						}
-					}
-					else if(data.colors.indexOf(inheritRules[ruleNum].replace("non",""))!=-1){
-						//inherit if not a certain color
-						if(color!=inheritRules[ruleNum].replace("non","")){
-							inheritRuleMatches++;
-						}
-					}
-					else if(inheritRules[ruleNum]=="ranged"){
-						//inherit if weapon type in ranged group
-						if(data.rangedWeapons.indexOf(weaponType) != -1){
-							inheritRuleMatches++;
-						}
-					}
-					else if(inheritRules[ruleNum]=="melee"){
-						//inherit if weapon type in melee group
-						if(data.meleeWeapons.indexOf(weaponType) != -1){
-							inheritRuleMatches++;
-						}
-					}
-					else if(inheritRules[ruleNum]==""){
-						//everyone can inherit!
-						inheritRuleMatches++;
-					}
-					else{
-						//shouldn't get here
-						//console.log("Issue finding logic for inheritrule " + inheritRules[ruleNum]);
-					}
-
-					if(inheritRuleMatches == inheritRules.length){
-						validSkills.push(i);
-					}
-				}
-			}
-			else{
-				//It's the right slot, not given hero.index, so it's valid unless unique
-				if(inheritRules[0] != "unique"){
-					validSkills.push(i);
-				}
+			var canLearn = canLearnSkill(hero, i);
+			if(canLearn){
+				validSkills.push(i);
 			}
 		}
 	}
 	return validSkills;	
+}
+
+//Returns true or false
+//hero should be of type Hero
+function canLearnSkill(hero, skillIndex){
+	if(hero.index != undefined){
+
+		var inheritRules = data.skills[skillIndex].inheritrule.split(","); //Thanks Galeforce (melee,physical)
+
+		var weaponType = "none";
+		var moveType = "none";
+		var color = "none";
+		var attackType = "none";
+
+		if(hero.index >= 0){
+			weaponType = data.heroes[hero.index].weapontype;
+			moveType = data.heroes[hero.index].movetype;
+			attackType = getAttackTypeFromWeapon(data.heroes[hero.index].weapontype);
+		}
+		else if(hero.index == -2){
+			//If these are not set, no effect, because they will be "none"
+			weaponType = hero.weaponType;
+			moveType = hero.moveType;
+			color = hero.color;
+		}
+
+		var inheritRuleMatches = 0;
+
+		for(var ruleNum = 0; ruleNum < inheritRules.length; ruleNum++){
+			//console.log("Trying " + slot + ": " + data.skills[i].name);
+			if(inheritRules[ruleNum] == "unique"){
+				//can only use if hero starts with it or if custom hero
+				if(hero.index == -2){
+					inheritRuleMatches++;
+				}
+				else if(hero.naturalSkills){
+					for(var j = 0; j < hero.naturalSkills.length; j++){
+						if(hero.naturalSkills[j][0] == data.skills[i].skill_id){
+							inheritRuleMatches++;
+						}
+					}
+				}
+			}
+			else if(attackType == inheritRules[ruleNum]){
+				//inherit if weapon is right attacking type
+				inheritRuleMatches++;
+			}
+			else if(data.weaponTypes.indexOf(inheritRules[ruleNum])!=-1){
+				//inherit if weapon is right
+				if(weaponType==inheritRules[ruleNum]){
+					inheritRuleMatches++;
+				}
+			}
+			else if(data.moveTypes.indexOf(inheritRules[ruleNum])!=-1){
+				//inherit if movetype is right
+				if(moveType==inheritRules[ruleNum]){
+					inheritRuleMatches++;
+				}
+			}
+			else if(data.weaponTypes.indexOf(inheritRules[ruleNum].replace("non",""))!=-1){
+				//inherit if not a certain weapon
+				if(weaponType!=inheritRules[ruleNum].replace("non","")){
+					inheritRuleMatches++;
+				}
+			}
+			else if(data.moveTypes.indexOf(inheritRules[ruleNum].replace("non",""))!=-1){
+				//inherit if not a certain movement type
+				if(moveType!=inheritRules[ruleNum].replace("non","")){
+					inheritRuleMatches++;
+				}
+			}
+			else if(data.colors.indexOf(inheritRules[ruleNum].replace("non",""))!=-1){
+				//inherit if not a certain color
+				if(color!=inheritRules[ruleNum].replace("non","")){
+					inheritRuleMatches++;
+				}
+			}
+			else if(inheritRules[ruleNum]=="ranged"){
+				//inherit if weapon type in ranged group
+				if(data.rangedWeapons.indexOf(weaponType) != -1){
+					inheritRuleMatches++;
+				}
+			}
+			else if(inheritRules[ruleNum]=="melee"){
+				//inherit if weapon type in melee group
+				if(data.meleeWeapons.indexOf(weaponType) != -1){
+					inheritRuleMatches++;
+				}
+			}
+			else if(inheritRules[ruleNum]==""){
+				//everyone can inherit!
+				inheritRuleMatches++;
+			}
+			else{
+				//shouldn't get here
+				console.warn("Issue finding logic for inheritrule \"" + inheritRules[ruleNum] + "\"");
+			}
+
+			if(inheritRuleMatches == inheritRules.length){
+				return true;
+			}
+			else{
+				return false;
+			}
+		}
+	}
+	// else{
+	// 	//It's the right slot, not given hero.index, so it's valid unless unique
+	// 	if(inheritRules[0] != "unique"){
+	// 		validSkills.push(i);
+	// 	}
+	// }
 }
 
 function getHeroSkills(heroIndex){
@@ -673,7 +690,7 @@ function setStats(hero){
 
 		for(var i = 0; i < enemies.fl.list.length;i++){
 			if(enemies.fl.list[i].included){
-				setStats(enemies.fl.list[i]);
+				//setStats(enemies.fl.list[i]);
 
 				enemies.fl.avgHp += enemies.fl.list[i].hp;
 				enemies.fl.avgAtk += enemies.fl.list[i].atk;
@@ -692,13 +709,13 @@ function setStats(hero){
 			enemies.fl.avgRes = Math.round(enemies.fl.avgRes/numIncluded);
 		}
 	}
-	else if(typeof hero.index != "undefined" && hero.index == -2){
-		hero.hp = hero.customhp;
-		hero.atk = hero.customatk;
-		hero.spd = hero.customspd;
-		hero.def = hero.customdef;
-		hero.res = hero.customres;
-	}
+	// else if(typeof hero.index != "undefined" && hero.index == -2){
+	// 	hero.hp = hero.customhp;
+	// 	hero.atk = hero.customatk;
+	// 	hero.spd = hero.customspd;
+	// 	hero.def = hero.customdef;
+	// 	hero.res = hero.customres;
+	// }
 }
 
 function setSkills(hero){
@@ -717,23 +734,6 @@ function setSkills(hero){
 			});
 		}
 	}
-	else if(typeof hero.index != "undefined" && hero.index != -1){
-		if(hero.index == -2){
-			hero.weapon = -1;
-			hero.special = -1;
-			hero.a = -1;
-			hero.b = -1;
-			hero.c = -1;
-		}
-		else{
-			hero.weapon = data.heroMaxSkills[hero.rarity-1][hero.index].weapon;
-			hero.special = data.heroMaxSkills[hero.rarity-1][hero.index].special;
-			hero.a = data.heroMaxSkills[hero.rarity-1][hero.index].a;
-			hero.b = data.heroMaxSkills[hero.rarity-1][hero.index].b;
-			hero.c = data.heroMaxSkills[hero.rarity-1][hero.index].c;
-		}
-		hero.s = -1;
-	}	
 }
 
 function resetHero(hero,blockInit){//also resets fl, despite singular name - pass enemies.fl
@@ -1023,41 +1023,41 @@ function updateHeroUI(hero){
 	$("#" + htmlPrefix + "boon").val(hero.boon);
 	$("#" + htmlPrefix + "bane").val(hero.bane);
 
-	if(typeof hero.index != "undefined" && hero.index != -1){ //cl/challenger-specific stuff
-		var name = "error";
-		var weaponType = "error";
-		var color = "error";
-		if(hero.index == -2){
-			$("#enemies_custom_list .customstatinput").show();
-			$("#enemies_custom_list .customattribute").show();
-			$("#enemies_custom_list .stat_number").hide();
-			$("#enemies_custom_list .hero_picture").hide();
-			name = "Custom";
-			weaponType = hero.customWeapon;
-			color = hero.customColor;
-		}
-		else{
-			$("#enemies_custom_list .customstatinput").hide();
-			$("#enemies_custom_list .customattribute").hide();
-			$("#enemies_custom_list .stat_number").show();
-			$("#enemies_custom_list .hero_picture").show();
-			name = data.heroes[hero.index].name;
-			weaponType = data.heroes[hero.index].weapontype;
-			color = data.heroes[hero.index].color;
-		}
+	if(hero.index == -2){
+		$("." + htmlPrefix + "customhero").show();
+		$("." + htmlPrefix + "standardhero").hide();
+	}
+	else{
+		$("." + htmlPrefix + "customhero").hide();
+		$("." + htmlPrefix + "standardhero").show();
+	}
+
+	if(typeof hero.index != "undefined"){ //cl/challenger-specific stuff
+
 		$("#" + htmlPrefix + "name").val(hero.index);
-		$("#" + htmlPrefix + "picture").attr("src","heroes/" + name + ".png");
+		$("#" + htmlPrefix + "picture").attr("src","heroes/" + hero.name + ".png");
 		$("#" + htmlPrefix + "hp").html(hero.hp);
-		$("#" + htmlPrefix + "currenthp").html(hero.hp - hero.damage);
 		$("#" + htmlPrefix + "atk").html(hero.atk);
 		$("#" + htmlPrefix + "spd").html(hero.spd);
 		$("#" + htmlPrefix + "def").html(hero.def);
 		$("#" + htmlPrefix + "res").html(hero.res);
-		if(weaponType != "dragon"){
-			$("#" + htmlPrefix + "weapon_icon").attr("src","weapons/" + weaponType + ".png");
+
+		$("#" + htmlPrefix + "inputhp").val(hero.hp);
+		$("#" + htmlPrefix + "inputatk").val(hero.atk);
+		$("#" + htmlPrefix + "inputspd").val(hero.spd);
+		$("#" + htmlPrefix + "inputdef").val(hero.def);
+		$("#" + htmlPrefix + "inputres").val(hero.res);
+
+		$("#" + htmlPrefix + "customweapon").val(hero.weaponType);
+		$("#" + htmlPrefix + "custommove").val(hero.moveType);
+
+		$("#" + htmlPrefix + "currenthp").html(hero.hp - hero.damage);
+
+		if(hero.weaponType != "dragon"){
+			$("#" + htmlPrefix + "weapon_icon").attr("src","weapons/" + hero.weaponType + ".png");
 		}
 		else{
-			$("#" + htmlPrefix + "weapon_icon").attr("src","weapons/" + color + "dragon.png");
+			$("#" + htmlPrefix + "weapon_icon").attr("src","weapons/" + hero.color + "dragon.png");
 		}
 
 		if(hero.special != -1){
@@ -1324,8 +1324,6 @@ function importText(side){
 				}
 			}
 		}
-
-		initHero(hero,true);
 	}
 
 	function parseFirstLine(line){
@@ -1843,9 +1841,10 @@ function calculate(manual){
 			}
 			for(var i = 0;i<enemyList.length;i++){
 				if(enemyList[i].index != -1 && !mustConfirm || enemyList[i].included){
+					var battleId = battles.length;
 					var fight = new Battle(challenger, enemyList[i], {
 						roundInitiators: options.roundInitiators,
-						id: i
+						id: battleId
 					});
 					battles.push(fight);
 				}
@@ -2192,6 +2191,12 @@ function Battle(challenger, enemy, options){
 		this[key] = options[key];
 	}
 
+	//Do pre-battle calculations
+	this.challenger.weaponAdvantageBonus = this.challenger.getWeaponAdvantage(this.enemy);
+	this.enemy.weaponAdvantageBonus = this.enemy.getWeaponAdvantage(this.challenger);
+	this.challenger.effectiveBonus = this.challenger.getEffectiveBonus(this.enemy);
+	this.enemy.effectiveBonus = this.enemy.getEffectiveBonus(this.challenger);
+
 	for(var round = 1; round <= this.roundInitiators.length; round++){
 		this.rounds = round;
 		this.turn = this.startTurn + round - 1;
@@ -2214,6 +2219,10 @@ function Battle(challenger, enemy, options){
 			winner = this.enemy.name;
 			this.outcome = "loss";
 		}
+		else{
+			this.outcome = "inconclusive";
+		}
+
 		if(winner){
 			var winMessages = [
 				"Good job",
@@ -2228,7 +2237,14 @@ function Battle(challenger, enemy, options){
 				"Expertly done,",
 				"Yaaaaaaay",
 				"Let's go",
-				"You can get dat booty,"
+				"You can get dat booty,",
+				"Wow,",
+				"Incredible performance,",
+				"Fantastic,",
+				"Outstanding,",
+				"The winner is",
+				"Victor:",
+				"Winner:"
 			];
 			this.fightText += winMessages[Math.floor(Math.random() * winMessages.length)] + " " + winner + "!";
 			break;
@@ -2250,7 +2266,7 @@ function Battle(challenger, enemy, options){
 			roundPlural = " round";
 		}
 
-		this.resultText += "<span class=\"red\">loss</span>, " + this.rounds + roundPlural;
+		this.resultText += spanClass + this.rounds + roundPlural;
 	}
 
 	//FILTERS
@@ -2395,13 +2411,26 @@ function Hero(options){
 
 	//Start with defaults
 	var heroBaseAttributes = {
-		"index":-1,"hp":1,"atk":1,"spd":1,"def":1,"res":1,"weapon":-1,"special":-1,"a":-1,"b":-1,"c":-1,"s":-1,
+		"index":-1,"name":"Error Hero","hp":1,"atk":1,"spd":1,"def":1,"res":1,"weapon":-1,"special":-1,"a":-1,"b":-1,"c":-1,"s":-1,
 		"buffs": getBlankBuffStats(), "debuffs": getBlankBuffStats(), "spur": getBlankBuffStats(), 
 		"boon": "none", "bane": "none", "merge":0, "rarity": 5, "precharge":0, "damage": 0, "challenger": false,
-		validSkills: getAllArrayIndices(data.skills)
+		validSkills: getAllArrayIndices(data.skills), //todo: deprecate validSkills on hero
+		"moveType": "infantry", "weaponType": "sword", "color": "red"
 	};
 	for(var key in heroBaseAttributes){
 		this[key] = heroBaseAttributes[key];
+	}
+
+	//Get the data required to initialize an exact duplicate
+	this.getInitData = function(){
+		return {
+			"index":this.index,"hp":this.hp,"atk":this.atk,"spd":this.spd,"def":this.def,"res":this.res,
+			"weapon":this.weapon,"special":this.special,"a":this.a,"b":this.b,"c":this.c,"s":this.s,
+			"buffs": this.buffs, "debuffs": this.debuffs, "spur": this.spur, 
+			"boon": this.boon, "bane": this.bane, "merge":this.merge, "rarity": this.rarity, 
+			"precharge":this.precharge, "damage": this.damage, "challenger": this.challenger,
+			"moveType":this.moveType, "weaponType": this.weaponType, "color": this.color
+		}
 	}
 
 	this.setName = function(){
@@ -2538,39 +2567,106 @@ function Hero(options){
 
 	//Gets the value of a stat from base/merge/growth/rarity, NOT the value of the stat set on the hero
 	this.getStatValues = function(){
-		var stats = addStats(this.getBaseStats(), this.getSkillBonuses());
-		var growthBonuses = getBlankStats();
-		for(var stat in growthBonuses){
-			growthBonuses[stat] = this.getGrowthBonus(stat);
+		if(this.index == -2){
+			if(this.skillStats){
+				var oldSkillStats = this.skillStats;
+				var newSkillStats = this.getSkillBonuses();
+				this.skillStats = newSkillStats;
+				var oldStats = {"hp":this.hp,"atk":this.atk,"spd":this.spd,"def":this.def,"res":this.res};
+				return addStats(oldStats,subtractStats(newSkillStats,oldSkillStats));
+			}
+			else{
+				console.warn("Tried to get custom hero stats without knowing how much was originally contributed by skills");
+			}
 		}
-		return addStats(stats,growthBonuses);
+		else if(this.index >= 0){
+			var stats = addStats(this.getBaseStats(), this.getSkillBonuses());
+			var growthBonuses = getBlankStats();
+			for(var stat in growthBonuses){
+				growthBonuses[stat] = this.getGrowthBonus(stat);
+			}
+			return addStats(stats,growthBonuses);
+		}
+		else{
+			return {"hp":1,"atk":1,"spd":1,"def":1,"res":1};
+		}
 	}
 
 	//Actually set stats on self
 	this.setStats = function(){
-		if(this.index >= 0){
-			var statValues = this.getStatValues()
-			for(var key in statValues){
-				this[key] = statValues[key];
+		var statValues = this.getStatValues()
+		for(var key in statValues){
+			this[key] = statValues[key];
+		}
+	}
+
+	this.setAttributes = function(){
+		if(this.index == -2){
+			if(typeof this.weaponType == "undefined" || this.weaponType == "none"){
+				this.weaponType = "sword";
 			}
+			if(typeof this.moveType == "undefined" || this.moveType == "none"){
+				this.moveType = "infantry";
+			}
+			if(typeof this.color == "undefined" || this.color == "none"){
+				this.color = "red";
+			}
+		}
+		else if(this.index >= 0){
+			this.weaponType = data.heroes[this.index].weapontype;
+			this.moveType = data.heroes[this.index].movetype;
+			this.color = data.heroes[this.index].color;
+		}
+		else{
+			this.weaponType = "none";
+			this.moveType = "none";
+			this.color = "none";
 		}
 	}
 
 	//Take inputs and set own data to inputs and do stuff if needed
-	this.modify = function(data){
+	this.modify = function(modData){
 		var changeStatVars = ["index","boon", "bane", "merge", "rarity", "a", "s", "weapon"];
 		var changeNameVars = ["index"];
+		var changeAttributeVars = ["index"];
 		var mustChangeStats = false;
 		var mustChangeName = false;
+		var mustChangeAttributes = false;
 
-		for(var key in data){
-			this[key] = data[key];
+		if(modData.index == -2){
+			this.skillStats = this.getSkillBonuses();
+			if(this.index == -1){
+				//If used to be undefined index, set to default stats
+				this.hp = this.skillStats.hp + 40;
+				this.atk = this.skillStats.atk + 30;
+				this.spd = this.skillStats.spd + 30;
+				this.def = this.skillStats.def + 25;
+				this.res = this.skillStats.res + 25;
+			}
+		}
+
+		for(var key in modData){
+			this[key] = modData[key];
 			if(changeStatVars.indexOf(key) != -1){
 				mustChangeStats = true;
 			}
 			if(changeNameVars.indexOf(key) != -1){
 				mustChangeName = true;
 			}
+			if(changeAttributeVars.indexOf(key) != -1){
+				mustChangeAttributes = true;
+			}
+		}
+
+		if(modData.index >= 0){
+			//reset skills
+			var thisAlias = this;
+			data.skillSlots.forEach(function(slot){
+				var defaultSkill = data.heroMaxSkills[thisAlias.rarity-1][thisAlias.index][slot];
+				if(typeof defaultSkill != "undefined"){
+					thisAlias[slot] = defaultSkill;
+				}
+			});
 		}
 
 		if(mustChangeStats){
@@ -2578,6 +2674,9 @@ function Hero(options){
 		}
 		if(mustChangeName){
 			this.setName();
+		}
+		if(mustChangeAttributes){
+			this.setAttributes();
 		}
 	}
 
@@ -2621,9 +2720,9 @@ function ActiveHero(hero, battle){
 	}
 	else if(this.heroIndex == -2){
 		this.name = "Custom";
-		this.moveType = hero.customMove;
-		this.weaponType = hero.customWeapon;
-		this.color = hero.customColor;
+		this.moveType = hero.moveType;
+		this.weaponType = hero.weaponType;
+		this.color = hero.color;
 	}
 	else{
 		this.name = data.heroes[this.heroIndex].name || "Error " + ["Waifu","Boy","Lord","Husbando","Lady","Girl"][Math.floor(Math.random() * 6)];
@@ -2662,8 +2761,8 @@ function ActiveHero(hero, battle){
 	//Make a list of skill names for easy reference
 	var thisAlias = this;
 	data.skillSlots.forEach(function(slot){
-		if(this[slot+"Index"] > -1){
-			this.skillNames.push(data.skills[this[slot+"Index"]].name);
+		if(thisAlias[slot+"Index"] > -1){
+			thisAlias.skillNames.push(data.skills[thisAlias[slot+"Index"]].name);
 		}
 	});
 
@@ -3262,7 +3361,7 @@ function ActiveHero(hero, battle){
 			var bladeAtk = 0;
 			if(hasBlade(this)){
 				bladeAtk = Math.max(this.buffs.atk,this.combatBuffs.atk) + Math.max(this.buffs.spd,this.combatBuffs.spd) + Math.max(this.buffs.def,this.combatBuffs.def) + Math.max(this.buffs.res,this.combatBuffs.res);
-				console.log("Adding blade..." + bladeAtk);
+				//console.log("Adding blade..." + bladeAtk);
 				effStat += bladeAtk;
 			}
 		}
@@ -3332,7 +3431,36 @@ function ActiveHero(hero, battle){
 		var extraWeaponAdvantage = this.getExtraWeaponAdvantage(enemy);
 
 		var weaponAdvantageBonus = (0.2 + extraWeaponAdvantage) * weaponAdvantage;
+
+		//Show text, but only from challenger's perspective
+		if(this.challenger){
+			var enemyMult = 1 - weaponAdvantageBonus;
+			var advantageNoun = "advantage";
+			if(weaponAdvantage < 0){
+				advantageNoun = "disadvantage";
+			}
+			if(weaponAdvantage != 0){
+				this.battle.fightText += this.name + " has weapon " + advantageNoun + ". " + this.name + "'s attacks are multiplied by " + (1+weaponAdvantageBonus) + " and " + enemy.name + "'s attacks are multiplied by " + enemyMult + ".<br>";
+			}
+		}
+
 		return weaponAdvantageBonus;
+	}
+
+	this.getEffectiveBonus = function(enemy){
+		var effectiveBonus = 1;
+		if(!isResistantToEffective(enemy)){
+			var effectiveTypes = getEffectiveTypes(this);
+			for(var i = 0; i < effectiveTypes.length; i++){
+				if(effectiveTypes[i] == enemy.moveType || effectiveTypes[i] == enemy.weaponType){
+					effectiveBonus += 0.5; //assuming additive?
+				}
+			}		
+		}
+		if(effectiveBonus > 1){
+			this.battle.fightText += this.name + " has weapon effectiveness on " + this.name + ", multiplying attack by " + effectiveBonus + ".<br>";
+		}
+		return effectiveBonus;
 	}
 
 	this.takeDamage = function(dmg,nonlethal){
@@ -3373,7 +3501,7 @@ function ActiveHero(hero, battle){
 
 				//AOE specials don't take spur into effect
 				var AOEAtk = this.effStats.atk - this.spur.atk - this.combatSpur.atk;
-				var AOEdamage = (AOEAtk - relevantDef) * AOEmult | 0;
+				var AOEDamage = (AOEAtk - relevantDef) * AOEmult | 0;
 				AOEDamage = Math.max(AOEDamage, 0)
 
 				enemy.takeDamage(AOEDamage, true);
@@ -3402,6 +3530,14 @@ function ActiveHero(hero, battle){
 		if(typeof enemy.effStats == "undefined"){
 			enemy.effStats = enemy.getAllEffectiveStats();
 			console.warn("Effective stats were not defined for enemy before doing damage");
+		}
+		if(typeof this.weaponAdvantageBonus == "undefined"){
+			this.weaponAdvantageBonus = 1;
+			console.warn("Tried to do damage without knowing weapon advantage");
+		}
+		if(typeof this.effectiveBonus == "undefined"){
+			this.effectiveBonus = 1;
+			console.warn("Tried to do damage without knowing weapon effectiveness");
 		}
 
 		var relevantDef = enemy.effStats.def;
@@ -3488,19 +3624,6 @@ function ActiveHero(hero, battle){
 				}
 			}
 		}
-		
-		var weaponAdvantageBonus = this.getWeaponAdvantage(enemy);
-		
-		if(weaponAdvantageBonus != 0){
-			this.battle.fightText += this.name + "'s attack is multiplied by " + Math.round((1+weaponAdvantageBonus)*10)/10 + " because of weapon advantage. ";
-		}
-
-		//Check weapon effective against
-		var effectiveBonus = getEffectiveBonus(this,enemy);
-
-		if(effectiveBonus > 1 ){
-			this.battle.fightText += this.name + "'s attack is multiplied by " + effectiveBonus + " from weapon effectiveness. ";
-		}
 
 		//Check damage reducing specials
 		var defensiveSpecialActivated = false;
@@ -3564,7 +3687,7 @@ function ActiveHero(hero, battle){
 		//Damage calculation from http://feheroes.wiki/Damage_Calculation
 		//use bitwise or to truncate properly
 		//Doing calculation in steps to see the formula more clearly
-		var rawDmg = (this.effStats.atk*effectiveBonus | 0) + ((this.effStats.atk*effectiveBonus | 0)*weaponAdvantageBonus | 0) + (dmgBoost | 0);
+		var rawDmg = (this.effStats.atk*effectiveBonus | 0) + ((this.effStats.atk*effectiveBonus | 0)*this.weaponAdvantageBonus | 0) + (dmgBoost | 0);
 		var reduceDmg = relevantDef + (relevantDef*enemyDefModifier | 0);
 		var dmg = (rawDmg - reduceDmg)*weaponModifier | 0;
 		dmg = (dmg*dmgMultiplier | 0) - (dmg*(1-dmgReduction) | 0);
@@ -4038,19 +4161,6 @@ function isBrokenBy(hero, enemy){
 	return enemy.hp / enemy.maxHp >= breakLevel;
 }
 
-function getEffectiveBonus(hero,enemy){
-	var effectiveBonus = 1;
-	if(!isResistantToEffective(enemy)){
-		var effectiveTypes = getEffectiveTypes(hero);
-		for(var i = 0; i < effectiveTypes.length; i++){
-			if(effectiveTypes[i] == enemy.moveType || effectiveTypes[i] == enemy.weaponType){
-				effectiveBonus += 0.5; //assuming additive?
-			}
-		}		
-	}
-	return effectiveBonus;
-}
-
 function isResistantToEffective(hero){
 	return hero.has("Svalinn Shield") || hero.has("Iote's Shield") || hero.has("Grani's Shield");
 }
@@ -4126,6 +4236,16 @@ function addStats(stats1, stats2){
 	return newStats;
 }
 
+function subtractStats(stats1, stats2){
+	var newStats = {};
+	for(var key in stats1){
+		if(typeof stats2[key] != "undefined"){
+			newStats[key] = stats1[key] - stats2[key];
+		}
+	}
+	return newStats;
+}
+
 //Gets highest magnitude (absolute value)
 function maxMagStats(stats1, stats2){
 	var newStats = {};
@@ -4174,7 +4294,14 @@ function changeDataVar(dataVar,newVal){
 		else{
 			if(level == dataSplit.length-1){
 				//Last run - set the variable
-				parsedVar[dataSplit[level]] = newVal;
+				if(parsedVar instanceof Hero){
+					var modData = {};
+					modData[dataSplit[level]] = newVal;
+					parsedVar.modify(modData);
+				}
+				else{
+					parsedVar[dataSplit[level]] = newVal;
+				}
 			}
 			else{
 				parsedVar = parsedVar[dataSplit[level]];
