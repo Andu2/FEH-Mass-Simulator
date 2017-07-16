@@ -75,9 +75,8 @@ function getData($table){
 <body>
 	<div id="frame_main">
 		<div id="header"><img src="logo.png" style="margin-right:20px;"/><div style="display:inline-block;">Mass Duel Simulator!</div><div id="subtitle"></div></div>
-		<div id="frame_updatenotice" data-update="20170703">Heroes added: Clarisse, Frederick (Summer), Gaius (Summer), Robin(F) (Summer), Tiki(A) (Summer)<br>
-			New skills added: Clarisse's Bow, Seashell, Seal Atk Spd, Refreshing Bolt, Def Ploy, Deft Harpoon, Lance Valor, Melon Crusher, HP Def, Close Def, Axe Valor<br>
-			Sorry for slowness! I bought Stardew Valley in the Steam summer sale and it may have been a mistake
+		<div id="frame_updatenotice" data-update="20170716">Update 2017-07-16: I haven't played the game in a couple months and I'm struggling to keep this thing up-to-date.<br>Expect very occasional updates.<br>
+			If anyone would like to try to build on this app, <a href="https://github.com/Andu2/FEH-Mass-Simulator">here</a> is the code and <a href="fehmds-database.sql">here</a> is the SQL for the database.
 			<div id="update_icon">!</div>
 			<div class="button" id="button_closeupdatenotice" onclick="hideUpdateNotice();">x</div>
 		</div>
