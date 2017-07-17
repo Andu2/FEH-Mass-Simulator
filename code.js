@@ -1150,8 +1150,12 @@ function updateHeroUI(hero){
 
 		if(hero.special != -1){
 			var specialCharge = data.skills[hero.special].charge;
+			var specialName = data.skills[hero.special].name;
+			
+			//Weapon Skill
 			if(hero.weapon != -1){
 				var weaponName = data.skills[hero.weapon].name;
+				
 				if(weaponName.indexOf("Killer") != -1 || weaponName.indexOf("Killing") != -1 || weaponName.indexOf("Slaying") != -1 || weaponName.indexOf("Mystletainn") != -1 || weaponName.indexOf("Hauteclere") != -1){
 					specialCharge -= 1;
 				}
@@ -1159,13 +1163,31 @@ function updateHeroUI(hero){
 					specialCharge += 1;
 				}
 			}
+			
+			//Special Item
 			if(hero.s != -1){
 				var sName = data.skills[hero.s].name;
+				
+				//Quicken Pulse effects
 				if(sName.indexOf("Quickened Pulse") != -1){
 					specialCharge -= 1;
 				}
+			}			
+						
+			//B Skill
+			if(hero.b != -1){
+				var bName = data.skills[hero.b].name;
+				
+				//Shield Pulse effects
+				if(specialName.indexOf("Miracle") != -1 || specialName.indexOf("Aegis") != -1 || specialName.indexOf("Buckler") != -1 || specialName.indexOf("Escutcheon") != -1 || specialName.indexOf("Holy Vestments") != -1 || specialName.indexOf("Pavise") != -1 || specialName.indexOf("Sacred Cowl")!= -1){		
+					if(bName.indexOf("Shield Pulse 3") != -1){
+						specialCharge -= 2;
+					} else if(bName.indexOf("Shield Pulse 1") != -1 || bName.indexOf("Shield Pulse 2") != -1){
+						specialCharge -= 1;
+					}
+				}
 			}
-
+			
 			specialCharge -= hero.precharge;
 			specialCharge = Math.max(0,specialCharge);
 
@@ -2581,6 +2603,15 @@ function activeHero(hero){
 	if(this.has("Quickened Pulse")){
 		this.charge++;
 	}
+	
+	//Shield Pulse charge at beginning
+	if(this.has("Miracle") || this.has("Aegis") || this.has("Buckler") || this.has("Escutcheon") || this.has("Holy Vestments") || this.has("Pavise") || this.has("Sacred Cowl")){
+		if(this.has("Shield Pulse 3")){
+			this.charge += 2;
+		} else if(this.has("Shield Pulse 1") || this.has("Shield Pulse 2")){
+			this.charge++;
+		}
+	}
 
 	this.threaten = function(enemy){
 		//Thhhhhhhhrreats!
@@ -3363,6 +3394,16 @@ function activeHero(hero){
 			if(weaponAdvantage != 0){
 				if(this.has("Ruby Sword") || this.has("Sapphire Lance") || this.has("Emerald Axe") || enemy.has("Ruby Sword") || enemy.has("Sapphire Lance") || enemy.has("Emerald Axe")){
 					extraWeaponAdvantage = 0.2;
+					
+					if (enemy.has("Cancel Affinity 1")){
+						
+					} else if (enemy.has("Cancel Affinity 2")){
+						
+					} else if (enemy.has("Cancel Affinity 3")){
+						
+					}
+					
+					
 				}
 				else{
 					if(this.has("Triangle Adept")){
@@ -3377,7 +3418,7 @@ function activeHero(hero){
 			var weaponAdvantageBonus = (0.2 + extraWeaponAdvantage) * weaponAdvantage;
 
 			if(weaponAdvantage != 0){
-				damageText += this.name + "'s attack is multiplied by " + Math.round((1+weaponAdvantageBonus)*10)/10 + " because of weapon advantage. ";
+				damageText += this.name + "'s attack is multiplied by " + Math.round((1+weaponAdvantageBonus)*10)/10 + " because of weapon advantage.<br>";
 			}
 
 			//Check weapon effective against
