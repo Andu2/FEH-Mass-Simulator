@@ -2600,6 +2600,10 @@ function activeHero(hero){
 					threatDebuffs.def = Math.min(threatDebuffs.def,-this.has("Def Ploy")-2);
 					skillNames.push(data.skills[this.cIndex].name);
 				}
+				if(this.has("Res Ploy")){
+					threatDebuffs.def = Math.min(threatDebuffs.res,-this.has("Res Ploy")-2);
+					skillNames.push(data.skills[this.cIndex].name);
+				}
 			}
 
 			if(this.has("Panic Ploy") && this.hp > enemy.hp + 6 - this.has("Panic Ploy") * 2){
