@@ -2891,13 +2891,13 @@ function activeHero(hero){
 				blowRes = this.has("Warding Blow") * 2;
 				skillName = data.skills[this.aIndex].name;
 				this.combatSpur.res += blowRes;
-				boostText += this.name + " gets " + blowRes + " res from initiating with " + skillName + ".<br>";
+				boostText += this.name + " gets +" + blowRes + " res from initiating with " + skillName + ".<br>";
 			}
 			if(this.has("Mirror Strike")){
 				blowRes = this.has("Mirror Strike") * 2;
 				skillName = data.skills[this.aIndex].name;
 				this.combatSpur.res += blowRes;
-				boostText += this.name + " gets " + blowRes + " res from initiating with " + skillName + ".<br>";
+				boostText += this.name + " gets +" + blowRes + " res from initiating with " + skillName + ".<br>";
 			}
 			if(this.has("Parthia")){
 				this.combatSpur.res += 4;
