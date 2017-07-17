@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jul 16, 2017 at 11:42 PM
+-- Generation Time: Jul 17, 2017 at 01:12 AM
 -- Server version: 10.0.31-MariaDB
 -- PHP Version: 5.6.30
 
@@ -203,7 +203,9 @@ INSERT INTO `hero` (`hero_id`, `name`, `basehp`, `baseatk`, `basespd`, `basedef`
 (148, 'Tiki(A) (Summer)', 18, 8, 6, 8, 7, 0, 0, 0, 0, 0, 4, 9, 7, 7, 4, 'green', 'axe', 'infantry', 5),
 (149, 'Tobin', 18, 7, 5, 5, 4, 46, 31, 27, 33, 26, 9, 7, 6, 9, 6, 'red', 'sword', 'infantry', 4),
 (150, 'Delthea', 16, 10, 8, 3, 7, 33, 36, 34, 13, 31, 4, 8, 8, 1, 7, 'blue', 'bluetome', 'infantry', 5),
-(151, 'Sonya', 17, 7, 7, 5, 8, 36, 33, 31, 15, 32, 5, 8, 7, 1, 7, 'green', 'greentome', 'infantry', 5);
+(151, 'Sonya', 17, 7, 7, 5, 8, 36, 33, 31, 15, 32, 5, 8, 7, 1, 7, 'green', 'greentome', 'infantry', 5),
+(152, 'Gray', 17, 7, 6, 6, 3, 43, 35, 32, 30, 22, 8, 9, 8, 7, 5, 'red', 'sword', 'infantry', 5),
+(153, 'Leon', 17, 8, 6, 8, 5, 39, 34, 30, 30, 15, 6, 8, 7, 6, 1, 'gray', 'bow', 'infantry', 5);
 
 -- --------------------------------------------------------
 
@@ -1873,7 +1875,15 @@ INSERT INTO `hero_skill` (`hero_id`, `skill_id`, `rarity`) VALUES
 (151, 169, 5),
 (151, 525, 5),
 (151, 527, 5),
-(151, 530, 5);
+(151, 530, 5),
+(152, 144, 5),
+(152, 460, 5),
+(152, 532, 5),
+(152, 535, 5),
+(153, 166, 5),
+(153, 210, 5),
+(153, 427, 5),
+(153, 537, 5);
 
 -- --------------------------------------------------------
 
@@ -2431,7 +2441,14 @@ INSERT INTO `skill` (`skill_id`, `name`, `slot`, `sp`, `description`, `hp`, `atk
 (527, 'Mirror Strike 2', 'a', 240, 'Grants Atk/Res+4 during combat if unit initiates combat.', 0, 0, 0, 0, 0, 0, 'nonstaff', 1),
 (528, 'Res Ploy 1', 'c', 60, 'At start of turn, all foes in cardinal directions with Res 1 or more lower than unit suffer Res-3 until the end of foe\'s next action.', 0, 0, 0, 0, 0, 0, '', 1),
 (529, 'Res Ploy 2', 'c', 120, 'At start of turn, all foes in cardinal directions with Res 1 or more lower than unit suffer Res-4 until the end of foe\'s next action.', 0, 0, 0, 0, 0, 0, '', 1),
-(530, 'Res Ploy 3', 'c', 240, 'At start of turn, all foes in cardinal directions with Res 1 or more lower than unit suffer Res-5 until the end of foe\'s next action.', 0, 0, 0, 0, 0, 0, '', 1);
+(530, 'Res Ploy 3', 'c', 240, 'At start of turn, all foes in cardinal directions with Res 1 or more lower than unit suffer Res-5 until the end of foe\'s next action.', 0, 0, 0, 0, 0, 0, '', 1),
+(531, 'Zanbato', 'weapon', 200, 'Effective against cavalry units.', 0, 10, 0, 0, 0, 0, 'sword', 1),
+(532, 'Zanbato+', 'weapon', 300, 'Effective against cavalry units.', 0, 14, 0, 0, 0, 0, 'sword', 1),
+(533, 'Sword Valor 1', 'c', 30, 'If unit survives and uses a sword, unit gets 1.5x SP. (If similar skill effects also used, only highest multiplier applied.)', 0, 0, 0, 0, 0, 0, 'sword', 0),
+(534, 'Sword Valor 2', 'c', 60, 'If unit survives and uses a sword, unit gets 1.5x SP. (If similar skill effects also used, only highest multiplier applied.)', 0, 0, 0, 0, 0, 0, 'sword', 0),
+(535, 'Sword Valor 3', 'c', 120, 'If unit survives and uses a sword, unit gets 2x SP. (If similar skill effects also used, only highest multiplier applied.)', 0, 0, 0, 0, 0, 0, 'sword', 0),
+(536, 'Slaying Bow', 'weapon', 200, 'Effective against flying units. Accelerates Special trigger (cooldown count-1).', 0, 8, 0, 0, 0, 0, 'bow', 1),
+(537, 'Slaying Bow+', 'weapon', 300, 'Effective against flying units. Accelerates Special trigger (cooldown count-1).', 0, 12, 0, 0, 0, 0, 'bow', 1);
 
 -- --------------------------------------------------------
 
@@ -2857,7 +2874,18 @@ INSERT INTO `skill_prereq` (`skill_id`, `required_id`) VALUES
 (521, 520),
 (522, 83),
 (523, 340),
-(524, 523);
+(524, 523),
+(525, 58),
+(526, 232),
+(527, 526),
+(529, 528),
+(530, 529),
+(531, 2),
+(532, 531),
+(534, 533),
+(535, 534),
+(536, 103),
+(537, 536);
 
 --
 -- Indexes for dumped tables
