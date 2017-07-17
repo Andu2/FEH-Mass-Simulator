@@ -1152,7 +1152,7 @@ function updateHeroUI(hero){
 			var specialCharge = data.skills[hero.special].charge;
 			if(hero.weapon != -1){
 				var weaponName = data.skills[hero.weapon].name;
-				if(weaponName.indexOf("Killer") != -1 || weaponName.indexOf("Killing") != -1 || weaponName.indexOf("Mystletainn") != -1 || weaponName.indexOf("Hauteclere") != -1){
+				if(weaponName.indexOf("Killer") != -1 || weaponName.indexOf("Killing") != -1 || weaponName.indexOf("Slaying") != -1 || weaponName.indexOf("Mystletainn") != -1 || weaponName.indexOf("Hauteclere") != -1){
 					specialCharge -= 1;
 				}
 				else if(weaponName.indexOf("Raudrblade") != -1 || weaponName.indexOf("Lightning Breath") != -1 || weaponName.indexOf("Blarblade") != -1 || weaponName.indexOf("Gronnblade") != -1){
@@ -2563,7 +2563,7 @@ function activeHero(hero){
 
 	this.resetCharge = function(){
 		//resets charge based on weapon
-		if(this.has("Killing Edge") || this.has("Killer Axe") || this.has("Killer Lance") || this.has("Mystletainn") || this.has("Hauteclere") || this.has("Killer Bow")){
+		if(this.has("Killing Edge") || this.has("Killer Axe") || this.has("Killer Lance") || this.has("Mystletainn") || this.has("Hauteclere") || this.has("Killer Bow") || this.has("Slaying Bow") || this.has("Slaying Edge")){
 			this.charge = 1;
 		}
 		else if(this.has("Raudrblade") || this.has("Lightning Breath") || this.has("Blarblade") || this.has("Gronnblade")){
@@ -2598,10 +2598,6 @@ function activeHero(hero){
 				}
 				if(this.has("Def Ploy")){
 					threatDebuffs.def = Math.min(threatDebuffs.def,-this.has("Def Ploy")-2);
-					skillNames.push(data.skills[this.cIndex].name);
-				}
-				if(this.has("Res Ploy")){
-					threatDebuffs.def = Math.min(threatDebuffs.res,-this.has("Res Ploy")-2);
 					skillNames.push(data.skills[this.cIndex].name);
 				}
 			}
@@ -2839,12 +2835,6 @@ function activeHero(hero){
 				this.combatSpur.atk += buffVal;
 				boostText += this.name + " gets +" + buffVal + " atk from initiating with " + skillName + ".<br>";
 			}
-			if(this.has("Mirror Strike")){
-				buffVal = this.has("Mirror Strike") * 2;
-				skillName = data.skills[this.aIndex].name;
-				this.combatSpur.atk += buffVal;
-				boostText += this.name + " gets +" + buffVal + " atk from initiating with " + skillName + ".<br>";
-			}
 			if(this.has("Durandal")){
 				this.combatSpur.atk += 4;
 				boostText += this.name + " gets +4 atk from initiating with Durandal.<br>";
@@ -2891,13 +2881,7 @@ function activeHero(hero){
 				blowRes = this.has("Warding Blow") * 2;
 				skillName = data.skills[this.aIndex].name;
 				this.combatSpur.res += blowRes;
-				boostText += this.name + " gets +" + blowRes + " res from initiating with " + skillName + ".<br>";
-			}
-			if(this.has("Mirror Strike")){
-				blowRes = this.has("Mirror Strike") * 2;
-				skillName = data.skills[this.aIndex].name;
-				this.combatSpur.res += blowRes;
-				boostText += this.name + " gets +" + blowRes + " res from initiating with " + skillName + ".<br>";
+				boostText += this.name + " gets " + blowRes + " res from initiating with " + skillName + ".<br>";
 			}
 			if(this.has("Parthia")){
 				this.combatSpur.res += 4;
@@ -3330,9 +3314,9 @@ function activeHero(hero){
 				this.resetCharge();
 				damageText += this.name + " activates " + data.skills[this.specialIndex].name + ". ";
 
-				if(this.has("Wo Dao") || this.has("Dark Excalibur")){
+				if(this.has("Wo Dao")){
 					dmgBoost += 10;
-					damageText += this.name + " gains 10 damage from weapon effect. ";
+					damageText += this.name + " gains 10 damage from Wo Dao. ";
 					//Does damage boost on AOE skills take effect on attack or AOE?
 				}
 			}
@@ -3392,7 +3376,7 @@ function activeHero(hero){
 				else if(enemy.moveType == "infantry" && (this.has("Poison Dagger"))){
 					effectiveBonus = 1.5;
 				}
-				else if(enemy.moveType == "cavalry" && (this.has("Raudrwolf") || this.has("Blarwolf") || this.has("Gronnwolf"))){
+				else if(enemy.moveType == "cavalry" && (this.has("Raudrwolf") || this.has("Blarwolf") || this.has("Gronnwolf") || this.has("Zanbato") || this.has("Ridersbane"))){
 					effectiveBonus = 1.5;
 				}
 				else if(enemy.weaponType == "dragon" && (this.has("Falchion") || this.has("Naga"))){
