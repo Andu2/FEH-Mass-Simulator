@@ -3328,7 +3328,7 @@ function activeHero(hero){
 
 			if(offensiveSpecialActivated){
 				this.resetCharge();
-				damageText += this.name + " activates " + data.skills[this.specialIndex].name + ". ";
+				damageText += this.name + " activates " + data.skills[this.specialIndex].name + ".<br>";
 
 				if(this.has("Wo Dao") || this.has("Dark Excalibur")){
 					dmgBoost += 10;
@@ -3443,8 +3443,12 @@ function activeHero(hero){
 
 			if(defensiveSpecialActivated){
 				if(dmgReduction < 1){
-					damageText += enemy.name + " multiplies damage by " + dmgReduction + " with " + data.skills[enemy.specialIndex].name + ". ";
-				}
+					damageText += data.skills[enemy.specialIndex].name + " reduces " + this.name + "'s damage by " + ((1 - dmgReduction) * 100 | 0) + "%.<br>"
+					
+					if (enemy.has("Shield Pulse 2") || enemy.has("Shield Pulse 3")){
+						damageText += "Shield Pulse reduces " + this.name + "'s damage by an additional 5.<br>";
+					}				
+				}				
 				enemy.resetCharge();
 			}
 
@@ -3473,6 +3477,12 @@ function activeHero(hero){
 			var reduceDmg = relevantDef + (relevantDef*enemyDefModifier | 0);
 			var dmg = (rawDmg - reduceDmg)*weaponModifier | 0;
 			dmg = (dmg*dmgMultiplier | 0) - (dmg*(1-dmgReduction) | 0);
+			
+			//Pushing Shield check
+			if (defensiveSpecialActivated && (enemy.has("Shield Pulse 2") || enemy.has("Shield Pulse 3"))){
+				dmg -= 5;
+			}
+			
 			dmg = Math.max(dmg,0);
 			if(enemy.has("Embla's Ward")){
 				dmg = 0;
