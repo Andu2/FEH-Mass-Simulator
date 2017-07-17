@@ -2600,6 +2600,10 @@ function activeHero(hero){
 					threatDebuffs.def = Math.min(threatDebuffs.def,-this.has("Def Ploy")-2);
 					skillNames.push(data.skills[this.cIndex].name);
 				}
+				if(this.has("Res Ploy")){
+					threatDebuffs.def = Math.min(threatDebuffs.res,-this.has("Res Ploy")-2);
+					skillNames.push(data.skills[this.cIndex].name);
+				}
 			}
 
 			if(this.has("Panic Ploy") && this.hp > enemy.hp + 6 - this.has("Panic Ploy") * 2){
@@ -2835,6 +2839,12 @@ function activeHero(hero){
 				this.combatSpur.atk += buffVal;
 				boostText += this.name + " gets +" + buffVal + " atk from initiating with " + skillName + ".<br>";
 			}
+			if(this.has("Mirror Strike")){
+				buffVal = this.has("Mirror Strike") * 2;
+				skillName = data.skills[this.aIndex].name;
+				this.combatSpur.atk += buffVal;
+				boostText += this.name + " gets +" + buffVal + " atk from initiating with " + skillName + ".<br>";
+			}
 			if(this.has("Durandal")){
 				this.combatSpur.atk += 4;
 				boostText += this.name + " gets +4 atk from initiating with Durandal.<br>";
@@ -2881,7 +2891,13 @@ function activeHero(hero){
 				blowRes = this.has("Warding Blow") * 2;
 				skillName = data.skills[this.aIndex].name;
 				this.combatSpur.res += blowRes;
-				boostText += this.name + " gets " + blowRes + " res from initiating with " + skillName + ".<br>";
+				boostText += this.name + " gets +" + blowRes + " res from initiating with " + skillName + ".<br>";
+			}
+			if(this.has("Mirror Strike")){
+				blowRes = this.has("Mirror Strike") * 2;
+				skillName = data.skills[this.aIndex].name;
+				this.combatSpur.res += blowRes;
+				boostText += this.name + " gets +" + blowRes + " res from initiating with " + skillName + ".<br>";
 			}
 			if(this.has("Parthia")){
 				this.combatSpur.res += 4;
@@ -3314,9 +3330,9 @@ function activeHero(hero){
 				this.resetCharge();
 				damageText += this.name + " activates " + data.skills[this.specialIndex].name + ". ";
 
-				if(this.has("Wo Dao")){
+				if(this.has("Wo Dao") || this.has("Dark Excalibur")){
 					dmgBoost += 10;
-					damageText += this.name + " gains 10 damage from Wo Dao. ";
+					damageText += this.name + " gains 10 damage from weapon effect. ";
 					//Does damage boost on AOE skills take effect on attack or AOE?
 				}
 			}
