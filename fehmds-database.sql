@@ -3,8 +3,8 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jul 16, 2017 at 02:35 PM
--- Server version: 10.0.31-MariaDB-cll-lve
+-- Generation Time: Jul 16, 2017 at 09:56 PM
+-- Server version: 10.0.31-MariaDB
 -- PHP Version: 5.6.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -17,7 +17,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `fireemblemheroes`
+-- Database: `cubichel_fireemblemheroes`
 --
 
 -- --------------------------------------------------------
@@ -200,7 +200,8 @@ INSERT INTO `hero` (`hero_id`, `name`, `basehp`, `baseatk`, `basespd`, `basedef`
 (145, 'Frederick (Summer)', 18, 8, 7, 6, 5, 0, 0, 0, 0, 0, 6, 7, 7, 6, 2, 'gray', 'dagger', 'infantry', 5),
 (146, 'Gaius (Summer)', 17, 8, 9, 4, 6, 0, 0, 0, 0, 0, 4, 6, 9, 3, 6, 'gray', 'bow', 'infantry', 5),
 (147, 'Robin(F) (Summer)', 18, 8, 8, 6, 7, 0, 0, 0, 0, 0, 4, 7, 8, 6, 6, 'blue', 'lance', 'infantry', 5),
-(148, 'Tiki(A) (Summer)', 18, 8, 6, 8, 7, 0, 0, 0, 0, 0, 4, 9, 7, 7, 4, 'green', 'axe', 'infantry', 5);
+(148, 'Tiki(A) (Summer)', 18, 8, 6, 8, 7, 0, 0, 0, 0, 0, 4, 9, 7, 7, 4, 'green', 'axe', 'infantry', 5),
+(149, 'Tobin', 18, 7, 5, 5, 4, 46, 31, 27, 33, 26, 9, 7, 6, 9, 6, 'red', 'sword', 'infantry', 4);
 
 -- --------------------------------------------------------
 
@@ -1855,7 +1856,13 @@ INSERT INTO `hero_skill` (`hero_id`, `skill_id`, `rarity`) VALUES
 (148, 518, 5),
 (148, 519, 3),
 (148, 520, 3),
-(148, 521, 4);
+(148, 521, 4),
+(149, 5, 4),
+(149, 6, 5),
+(149, 140, 4),
+(149, 207, 4),
+(149, 257, 4),
+(149, 258, 5);
 
 -- --------------------------------------------------------
 
@@ -2865,7 +2872,7 @@ ALTER TABLE `skill_prereq`
 -- AUTO_INCREMENT for table `hero`
 --
 ALTER TABLE `hero`
-  MODIFY `hero_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=149;
+  MODIFY `hero_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=150;
 --
 -- AUTO_INCREMENT for table `skill`
 --
