@@ -2835,6 +2835,12 @@ function activeHero(hero){
 				this.combatSpur.atk += buffVal;
 				boostText += this.name + " gets +" + buffVal + " atk from initiating with " + skillName + ".<br>";
 			}
+			if(this.has("Mirror Strike")){
+				buffVal = this.has("Mirror Strike") * 2;
+				skillName = data.skills[this.aIndex].name;
+				this.combatSpur.atk += buffVal;
+				boostText += this.name + " gets +" + buffVal + " atk from initiating with " + skillName + ".<br>";
+			}
 			if(this.has("Durandal")){
 				this.combatSpur.atk += 4;
 				boostText += this.name + " gets +4 atk from initiating with Durandal.<br>";
@@ -2879,6 +2885,12 @@ function activeHero(hero){
 			var blowRes = 0;
 			if(this.has("Warding Blow")){
 				blowRes = this.has("Warding Blow") * 2;
+				skillName = data.skills[this.aIndex].name;
+				this.combatSpur.res += blowRes;
+				boostText += this.name + " gets " + blowRes + " res from initiating with " + skillName + ".<br>";
+			}
+			if(this.has("Mirror Strike")){
+				blowRes = this.has("Mirror Strike") * 2;
 				skillName = data.skills[this.aIndex].name;
 				this.combatSpur.res += blowRes;
 				boostText += this.name + " gets " + blowRes + " res from initiating with " + skillName + ".<br>";
@@ -3314,9 +3326,9 @@ function activeHero(hero){
 				this.resetCharge();
 				damageText += this.name + " activates " + data.skills[this.specialIndex].name + ". ";
 
-				if(this.has("Wo Dao")){
+				if(this.has("Wo Dao") || this.has("Dark Excalibur")){
 					dmgBoost += 10;
-					damageText += this.name + " gains 10 damage from Wo Dao. ";
+					damageText += this.name + " gains 10 damage from weapon effect. ";
 					//Does damage boost on AOE skills take effect on attack or AOE?
 				}
 			}
