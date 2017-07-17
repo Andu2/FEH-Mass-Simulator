@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jul 17, 2017 at 01:12 AM
+-- Generation Time: Jul 17, 2017 at 03:35 AM
 -- Server version: 10.0.31-MariaDB
 -- PHP Version: 5.6.30
 
@@ -17,7 +17,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `cubichel_fireemblemheroes`
+-- Database: `fireemblemheroes`
 --
 
 -- --------------------------------------------------------
@@ -205,7 +205,8 @@ INSERT INTO `hero` (`hero_id`, `name`, `basehp`, `baseatk`, `basespd`, `basedef`
 (150, 'Delthea', 16, 10, 8, 3, 7, 33, 36, 34, 13, 31, 4, 8, 8, 1, 7, 'blue', 'bluetome', 'infantry', 5),
 (151, 'Sonya', 17, 7, 7, 5, 8, 36, 33, 31, 15, 32, 5, 8, 7, 1, 7, 'green', 'greentome', 'infantry', 5),
 (152, 'Gray', 17, 7, 6, 6, 3, 43, 35, 32, 30, 22, 8, 9, 8, 7, 5, 'red', 'sword', 'infantry', 5),
-(153, 'Leon', 17, 8, 6, 8, 5, 39, 34, 30, 30, 15, 6, 8, 7, 6, 1, 'gray', 'bow', 'infantry', 5);
+(153, 'Leon', 17, 8, 6, 8, 5, 39, 34, 30, 30, 15, 6, 8, 7, 6, 1, 'gray', 'bow', 'infantry', 5),
+(154, 'Saber', 18, 7, 9, 8, 5, 40, 31, 33, 32, 22, 6, 7, 7, 7, 4, 'red', 'sword', 'infantry', 5);
 
 -- --------------------------------------------------------
 
@@ -1883,7 +1884,11 @@ INSERT INTO `hero_skill` (`hero_id`, `skill_id`, `rarity`) VALUES
 (153, 166, 5),
 (153, 210, 5),
 (153, 427, 5),
-(153, 537, 5);
+(153, 537, 5),
+(154, 194, 5),
+(154, 539, 5),
+(154, 541, 5),
+(154, 544, 5);
 
 -- --------------------------------------------------------
 
@@ -1903,7 +1908,7 @@ CREATE TABLE `skill` (
   `def` int(11) DEFAULT NULL,
   `res` int(11) DEFAULT NULL,
   `charge` int(11) DEFAULT NULL,
-  `inheritrule` varchar(20) DEFAULT NULL,
+  `inheritrule` varchar(50) DEFAULT NULL,
   `affectsduel` tinyint(1) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -2448,7 +2453,14 @@ INSERT INTO `skill` (`skill_id`, `name`, `slot`, `sp`, `description`, `hp`, `atk
 (534, 'Sword Valor 2', 'c', 60, 'If unit survives and uses a sword, unit gets 1.5x SP. (If similar skill effects also used, only highest multiplier applied.)', 0, 0, 0, 0, 0, 0, 'sword', 0),
 (535, 'Sword Valor 3', 'c', 120, 'If unit survives and uses a sword, unit gets 2x SP. (If similar skill effects also used, only highest multiplier applied.)', 0, 0, 0, 0, 0, 0, 'sword', 0),
 (536, 'Slaying Bow', 'weapon', 200, 'Effective against flying units. Accelerates Special trigger (cooldown count-1).', 0, 8, 0, 0, 0, 0, 'bow', 1),
-(537, 'Slaying Bow+', 'weapon', 300, 'Effective against flying units. Accelerates Special trigger (cooldown count-1).', 0, 12, 0, 0, 0, 0, 'bow', 1);
+(537, 'Slaying Bow+', 'weapon', 300, 'Effective against flying units. Accelerates Special trigger (cooldown count-1).', 0, 12, 0, 0, 0, 0, 'bow', 1),
+(538, 'Slaying Edge', 'weapon', 200, 'Accelerates Special trigger (cooldown count-1).', 0, 10, 0, 0, 0, 0, 'sword', 1),
+(539, 'Slaying Edge+', 'weapon', 300, 'Accelerates Special trigger (cooldown count-1).', 0, 14, 0, 0, 0, 0, 'sword', 1),
+(540, 'HP Spd 1', 'a', 100, 'Grants HP+3, Spd+1.', 3, 0, 1, 0, 0, 0, '', 1),
+(541, 'HP Spd 2', 'a', 200, 'Grants HP+4, Spd+2.', 4, 0, 2, 0, 0, 0, '', 1),
+(542, 'Shield Pulse 1', 'b', 60, 'If unit\'s Special triggers based on a foe\'s attack, Special cooldown count-1 at start of turn 1.', 0, 0, 0, 0, 0, 0, 'melee,noncavalry,nonflying', 1),
+(543, 'Shield Pulse 2', 'b', 120, 'If unit\'s Special triggers based on a foe\'s attack, Special cooldown count-1 at start of turn 1. Unit takes 5 less damage when Special triggers.', 0, 0, 0, 0, 0, 0, 'melee,noncavalry,nonflying', 1),
+(544, 'Shield Pulse 3', 'b', 240, 'If unit\'s Special triggers based on a foe\'s attack, Special cooldown count-2 at start of turn 1. Unit takes 5 less damage when Special triggers.', 0, 0, 0, 0, 0, 0, 'melee,noncavalry,nonflying', 1);
 
 -- --------------------------------------------------------
 
@@ -2885,7 +2897,13 @@ INSERT INTO `skill_prereq` (`skill_id`, `required_id`) VALUES
 (534, 533),
 (535, 534),
 (536, 103),
-(537, 536);
+(537, 536),
+(538, 2),
+(539, 538),
+(540, 202),
+(541, 540),
+(543, 542),
+(544, 543);
 
 --
 -- Indexes for dumped tables
