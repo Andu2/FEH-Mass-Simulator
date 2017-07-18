@@ -3399,18 +3399,18 @@ function activeHero(hero){
 				
 				Defender with:
 					Advantaged Gem Weapon or Triangle Adept:									(Base -20%)
-						Cancel Affinity 1 = negate extra disadvantage 	(Extra -20% to 0%) 		(Total -20%)
-						Cancel Affinity 2 = negate extra disadvantage 	(Extra -20% to 0%) 		(Total -20%)
-						Cancel Affinity 3 = reverse extra disadvantage 	(Extra -20% to +20%) 	(Total 0%)					
+						Cancel Affinity 1 = negate extra disadvantage	(Extra -20% to 0%)		(Total -20%)
+						Cancel Affinity 2 = negate extra disadvantage	(Extra -20% to 0%)		(Total -20%)
+						Cancel Affinity 3 = reverse extra disadvantage	(Extra -20% to +20%)	(Total 0%)
 					Disadvantarged Gem Weapon or Triangle Adept:								(Base +20%)
-						Cancel Affinity 1 = negate extra advantage 		(Extra +20% to 0%) 		(Total +20%)
-						Cancel Affinity 2 = keep extra advantage 		(Extra +20% to +20%) 	(Total +40%)
-						Cancel Affinity 3 = keep extra advantage 		(Extra +20% to +20%) 	(Total +40%)
+						Cancel Affinity 1 = negate extra advantage		(Extra +20% to 0%)		(Total +20%)
+						Cancel Affinity 2 = keep extra advantage		(Extra +20% to +20%)	(Total +40%)
+						Cancel Affinity 3 = keep extra advantage		(Extra +20% to +20%)	(Total +40%)
 				
 				Attacker with -raven Tome against Gray Defender:								(Base +20%)
-					Attacker with Triangle Adept = no extra advantage or disadvantage 			(Total +20%)
+					Attacker with Triangle Adept = no extra advantage or disadvantage			(Total +20%)
 					Defender with Triangle Adept:
-						Cancel Affinity 1 = negate extra advantage 		(Extra +20% to 0%)		(Total +20%)
+						Cancel Affinity 1 = negate extra advantage		(Extra +20% to 0%)		(Total +20%)
 						Cancel Affinity 2 = keep extra advantage		(Extra +20% to +20%)	(Total +40%)
 						Cancel Affinity 3 = keep extra advantage		(Extra +20% to +20%)	(Total +40%)
 						
@@ -3418,23 +3418,23 @@ function activeHero(hero){
 			Defender with Cancel Affinity:				
 				Attacker with:
 					Advantaged Gem Weapon or Triangle Adept:									(Base +20%)
-						Cancel Affinity 1 = negate extra disadvantage 	(Extra +20% to 0%)		(Total +20%)
-						Cancel Affinity 2 = negate extra disadvantage 	(Extra +20% to 0%)		(Total +20%)
-						Cancel Affinity 3 = reverse extra disadvantage 	(Extra +20% to -20%)	(Total 0%)					
+						Cancel Affinity 1 = negate extra disadvantage	(Extra +20% to 0%)		(Total +20%)
+						Cancel Affinity 2 = negate extra disadvantage	(Extra +20% to 0%)		(Total +20%)
+						Cancel Affinity 3 = reverse extra disadvantage	(Extra +20% to -20%)	(Total 0%)
 					Disadvantaged Gem Weapon or Triangle Adept:									(Base -20%)
-						Cancel Affinity 1 = negate extra advantage 		(Extra -20% to 0%)		(Total -20%)
-						Cancel Affinity 2 = keep extra advantage 		(Extra -20% to -20%)	(Total -40%)
+						Cancel Affinity 1 = negate extra advantage		(Extra -20% to 0%)		(Total -20%)
+						Cancel Affinity 2 = keep extra advantage		(Extra -20% to -20%)	(Total -40%)
 						Cancel Affinity 3 = keep extra advantage		(Extra -20% to -20%)	(Total -40%)
 				
 				Defender with Gem Weapon or Triangle Adept = no extra advantage or disadvantage
 				
-				Attacker with -raven Tome against Gray Defender:								(Base +20%)						
+				Attacker with -raven Tome against Gray Defender:								(Base +20%)
 					Attacker with Triangle Adept:
 						Cancel Affinity 1 = negate extra disadvantage	(Extra +20% to 0%)		(Total +20%)
 						Cancel Affinity 2 = negate extra disadvantage	(Extra +20% to 0%)		(Total +20%)
 						Cancel Affinity 3 = reverse extra disadvantage	(Extra +20% to -20%)	(Total 0%)
-					Defender with Triangle Adept = no extra advantage or disadvantage 			(Total +20%)
-						
+					Defender with Triangle Adept = no extra advantage or disadvantage			(Total +20%)
+				
 			Attacker and Defender with Cancel Affinity:
 				Attacker with Gem Weapon or Triangle Adept = no extra advantage or disadvantage
 				Defender with Gem Weapon or Triangle Adept = no extra advantage or disadvantage
@@ -3513,7 +3513,9 @@ function activeHero(hero){
 								} else{
 									extraWeaponAdvantage = (0.05 + 0.05 * this.has("Triangle Adept")) * -1;
 								}
-							}
+							} else{
+								extraWeaponAdvantage = 0;
+							}							
 						}
 						//Attacker at disadvantage: Cancel Affinity 1 = negate, Cancel Affinity 2 = keep, Cancel Affinity 3 = keep
 						else{
@@ -3551,7 +3553,12 @@ function activeHero(hero){
 			var weaponAdvantageBonus = (0.2 + extraWeaponAdvantage) * weaponAdvantage;
 
 			if(weaponAdvantage != 0){
-				damageText += this.name + "'s attack is multiplied by " + Math.round((1+weaponAdvantageBonus)*10)/10 + " because of weapon advantage.<br>";
+				if (weaponAdvantageBonus == 0){
+					damageText += this.name + "'s weapon " + ((weaponAdvantage == 1) ? "advantage" : "disadvantage") + " is negated by Cancel Affinity.<br>";
+				}
+				else{
+					damageText += this.name + "'s attack is multiplied by " + Math.round((1+weaponAdvantageBonus)*10)/10 + " because of weapon advantage.<br>";
+				}
 			}
 
 			//Check weapon effective against
