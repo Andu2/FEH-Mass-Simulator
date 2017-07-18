@@ -3363,7 +3363,7 @@ function activeHero(hero){
 
 				if(this.has("Wo Dao") || this.has("Dark Excalibur")){
 					dmgBoost += 10;
-					damageText += this.name + " gains 10 damage from weapon effect. ";
+					damageText += this.name + " gains 10 damage from " + data.skills[hero.weapon].name + ".<br>";
 					//Does damage boost on AOE skills take effect on attack or AOE?
 				}
 			}
@@ -3442,7 +3442,7 @@ function activeHero(hero){
 			
 			var extraWeaponAdvantage = 0;
 			
-			//If weapon advantage is not netural and Attacker and Defender do not both have Cancel Affinity
+			//If weapon advantage is not netural, and Attacker and Defender do not both have Cancel Affinity
 			if (weaponAdvantage !=0 && !(this.has("Cancel Affinity") && enemy.has("Cancel Affinity"))){
 				
 				//Calculate base weapon advantage bonus
@@ -3557,7 +3557,7 @@ function activeHero(hero){
 					damageText += this.name + "'s weapon " + ((weaponAdvantage == 1) ? "advantage" : "disadvantage") + " is negated by Cancel Affinity.<br>";
 				}
 				else{
-					damageText += this.name + "'s attack is multiplied by " + Math.round((1+weaponAdvantageBonus)*10)/10 + " because of weapon advantage.<br>";
+					damageText += this.name + "'s attack is multiplied by " + Math.round((1+weaponAdvantageBonus)*10)/10 + " because of weapon " + ((weaponAdvantage == 1) ? "advantage" : "disadvantage") + ".<br>";
 				}
 			}
 
@@ -3567,7 +3567,7 @@ function activeHero(hero){
 				if(enemy.moveType == "armored" && (this.has("Hammer") || this.has("Armorslayer") || this.has("Heavy Spear"))){
 					effectiveBonus = 1.5;
 				}
-				else if(enemy.moveType == "flying" && (this.has("Excalibur") || this.weaponType=="bow")){
+				else if(enemy.moveType == "flying" && (this.has("Excalibur") || this.weaponType=="bow") && !(this.has("Dark Excalibur"))){
 					effectiveBonus = 1.5;
 				}
 				else if(enemy.moveType == "infantry" && (this.has("Poison Dagger"))){
@@ -3581,7 +3581,7 @@ function activeHero(hero){
 				}
 
 				if(effectiveBonus > 1 ){
-					damageText += this.name + "'s attack is multiplied by " + effectiveBonus + " from weapon effectiveness. ";
+					damageText += this.name + "'s attack is multiplied by " + effectiveBonus + " from weapon effectiveness.<br>";
 				}
 			}
 
