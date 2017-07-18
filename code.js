@@ -3390,20 +3390,154 @@ function activeHero(hero){
 			}
 
 			//Extra weapon advantage is apparently limited to 0.2 more (doesn't stack)
+			
+			/*
+			Cancel Affinity Rules for Attacker
+				
+			Attacker with Cancel Affinity:				
+				Attacker with Gem Weapon or Triangle Adept = no extra advantage or disadvantage
+				
+				Defender with:
+					Advantaged Gem Weapon or Triangle Adept:									(Base -20%)
+						Cancel Affinity 1 = negate extra disadvantage	(Extra -20% to 0%)		(Total -20%)
+						Cancel Affinity 2 = negate extra disadvantage	(Extra -20% to 0%)		(Total -20%)
+						Cancel Affinity 3 = reverse extra disadvantage	(Extra -20% to +20%)	(Total 0%)
+					Disadvantarged Gem Weapon or Triangle Adept:								(Base +20%)
+						Cancel Affinity 1 = negate extra advantage		(Extra +20% to 0%)		(Total +20%)
+						Cancel Affinity 2 = keep extra advantage		(Extra +20% to +20%)	(Total +40%)
+						Cancel Affinity 3 = keep extra advantage		(Extra +20% to +20%)	(Total +40%)
+				
+				Attacker with -raven Tome against Gray Defender:								(Base +20%)
+					Attacker with Triangle Adept = no extra advantage or disadvantage			(Total +20%)
+					Defender with Triangle Adept:
+						Cancel Affinity 1 = negate extra advantage		(Extra +20% to 0%)		(Total +20%)
+						Cancel Affinity 2 = keep extra advantage		(Extra +20% to +20%)	(Total +40%)
+						Cancel Affinity 3 = keep extra advantage		(Extra +20% to +20%)	(Total +40%)
+						
+				
+			Defender with Cancel Affinity:				
+				Attacker with:
+					Advantaged Gem Weapon or Triangle Adept:									(Base +20%)
+						Cancel Affinity 1 = negate extra disadvantage	(Extra +20% to 0%)		(Total +20%)
+						Cancel Affinity 2 = negate extra disadvantage	(Extra +20% to 0%)		(Total +20%)
+						Cancel Affinity 3 = reverse extra disadvantage	(Extra +20% to -20%)	(Total 0%)
+					Disadvantaged Gem Weapon or Triangle Adept:									(Base -20%)
+						Cancel Affinity 1 = negate extra advantage		(Extra -20% to 0%)		(Total -20%)
+						Cancel Affinity 2 = keep extra advantage		(Extra -20% to -20%)	(Total -40%)
+						Cancel Affinity 3 = keep extra advantage		(Extra -20% to -20%)	(Total -40%)
+				
+				Defender with Gem Weapon or Triangle Adept = no extra advantage or disadvantage
+				
+				Attacker with -raven Tome against Gray Defender:								(Base +20%)
+					Attacker with Triangle Adept:
+						Cancel Affinity 1 = negate extra disadvantage	(Extra +20% to 0%)		(Total +20%)
+						Cancel Affinity 2 = negate extra disadvantage	(Extra +20% to 0%)		(Total +20%)
+						Cancel Affinity 3 = reverse extra disadvantage	(Extra +20% to -20%)	(Total 0%)
+					Defender with Triangle Adept = no extra advantage or disadvantage			(Total +20%)
+				
+			Attacker and Defender with Cancel Affinity:
+				Attacker with Gem Weapon or Triangle Adept = no extra advantage or disadvantage
+				Defender with Gem Weapon or Triangle Adept = no extra advantage or disadvantage
+			*/
+			
 			var extraWeaponAdvantage = 0;
+			
+			//If weapon advantage is not netural and Attacker and Defender do not both have Cancel Affinity
+			if (weaponAdvantage !=0 && !(this.has("Cancel Affinity") && enemy.has("Cancel Affinity"))){
+				
+				//Calculate base weapon advantage bonus
+				if(this.has("Ruby Sword") || this.has("Sapphire Lance") || this.has("Emerald Axe") || enemy.has("Ruby Sword") || enemy.has("Sapphire Lance") || enemy.has("Emerald Axe")){
+					extraWeaponAdvantage = 0.2;
+				}
+				else{
+					if(this.has("Triangle Adept")){
+						extraWeaponAdvantage = 0.05 + 0.05 * this.has("Triangle Adept");
+					}
+					if(enemy.has("Triangle Adept")){
+						extraWeaponAdvantage = Math.max(extraWeaponAdvantage,0.05 + 0.05 * enemy.has("Triangle Adept"));
+					}
+				}
+				
+				//If Attacker has Cancel Affinity
+				if (this.has("Cancel Affinity")){
+					
+					//Attacker with Gem Weapon or Triangle Adept: No extra advantage or disadvantage					
+					if(this.has("Ruby Sword") || this.has("Sapphire Lance") || this.has("Emerald Axe") || this.has("Triangle Adept")){
+						extraWeaponAdvantage = 0;
+					}					
+					
+					//Defender with Gem Weapon or Triangle Adept
+					if (enemy.has("Ruby Sword") || enemy.has("Sapphire Lance") || enemy.has("Emerald Axe") || enemy.has("Triangle Adept")){
+						//Defender at disadvantage: Cancel Affinity 1 = negate, Cancel Affinity 2 = keep, Cancel Affinity 3 = keep 
+						if (weaponAdvantage == 1){
+							if (this.has("Cancel Affinity 1")){
+								extraWeaponAdvantage = 0;
+							} else{
+								if (enemy.has("Ruby Sword") || enemy.has("Sapphire Lance") || enemy.has("Emerald Axe")){
+									extraWeaponAdvantage = 0.2;
+								} else{
+									extraWeaponAdvantage = 0.05 + 0.05 * enemy.has("Triangle Adept");
+								}
+							}
+						}
+						//Defender at advantage: Cancel Affinity 1 = negate, Cancel Affinity 2 = negate, Cancel Affinity 3 = reverse 
+						//***Note the double negative for weaponAdvantageBonus formula***
+						else{
+							if (this.has("Cancel Affinity 3")){
+								if (enemy.has("Ruby Sword") || enemy.has("Sapphire Lance") || enemy.has("Emerald Axe")){
+									extraWeaponAdvantage = -0.2;
+								} else{
+									extraWeaponAdvantage = (0.05 + 0.05 * enemy.has("Triangle Adept")) * -1;
+								}
+							} else{
+								extraWeaponAdvantage = 0;
+							}
+						}				
+					}					
+				}
+				//If Defender has Cancel Affinity
+				else if (enemy.has("Cancel Affinity")){
+					
+					//Defender with Gem Weapon or Triangle Adept: No extra advantage or disadvantage					
+					if(enemy.has("Ruby Sword") || enemy.has("Sapphire Lance") || enemy.has("Emerald Axe") || enemy.has("Triangle Adept")){
+						extraWeaponAdvantage = 0;
+					}	
+					
+					//Attacker with Gem Weapon or Triangle Adept				
+					if(this.has("Ruby Sword") || this.has("Sapphire Lance") || this.has("Emerald Axe") || this.has("Triangle Adept")){
+						//Attacker at advantage: Cancel Affinity 1 = negate, Cancel Affinity 2 = negate, Cancel Affinity 3 = reverse
+						if (weaponAdvantage == 1){
+							if (enemy.has("Cancel Affinity 3")){
+								if (this.has("Ruby Sword") || this.has("Sapphire Lance") || this.has("Emerald Axe")){
+									extraWeaponAdvantage = -0.2;
+								} else{
+									extraWeaponAdvantage = (0.05 + 0.05 * this.has("Triangle Adept")) * -1;
+								}
+							} else{
+								extraWeaponAdvantage = 0;
+							}							
+						}
+						//Attacker at disadvantage: Cancel Affinity 1 = negate, Cancel Affinity 2 = keep, Cancel Affinity 3 = keep
+						else{
+							if (enemy.has("Cancel Affinity 1")){
+								extraWeaponAdvantage = 0;
+							} else{
+								if (this.has("Ruby Sword") || this.has("Sapphire Lance") || this.has("Emerald Axe")){
+									extraWeaponAdvantage = 0.2;
+								} else{
+									extraWeaponAdvantage = 0.05 + 0.05 * this.has("Triangle Adept");
+								}
+							}
+						}
+					}
+				}
+			}
+			
+			/* 
+			***Old Weapon Advantage Script***
 			if(weaponAdvantage != 0){
 				if(this.has("Ruby Sword") || this.has("Sapphire Lance") || this.has("Emerald Axe") || enemy.has("Ruby Sword") || enemy.has("Sapphire Lance") || enemy.has("Emerald Axe")){
 					extraWeaponAdvantage = 0.2;
-					
-					if (enemy.has("Cancel Affinity 1")){
-						
-					} else if (enemy.has("Cancel Affinity 2")){
-						
-					} else if (enemy.has("Cancel Affinity 3")){
-						
-					}
-					
-					
 				}
 				else{
 					if(this.has("Triangle Adept")){
@@ -3414,11 +3548,17 @@ function activeHero(hero){
 					}
 				}
 			}
+			*/
 
 			var weaponAdvantageBonus = (0.2 + extraWeaponAdvantage) * weaponAdvantage;
 
 			if(weaponAdvantage != 0){
-				damageText += this.name + "'s attack is multiplied by " + Math.round((1+weaponAdvantageBonus)*10)/10 + " because of weapon advantage.<br>";
+				if (weaponAdvantageBonus == 0){
+					damageText += this.name + "'s weapon " + ((weaponAdvantage == 1) ? "advantage" : "disadvantage") + " is negated by Cancel Affinity.<br>";
+				}
+				else{
+					damageText += this.name + "'s attack is multiplied by " + Math.round((1+weaponAdvantageBonus)*10)/10 + " because of weapon advantage.<br>";
+				}
 			}
 
 			//Check weapon effective against
