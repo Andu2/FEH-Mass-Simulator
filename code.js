@@ -3617,7 +3617,7 @@ function activeHero(hero){
 					}
 				}
 
-				if(enemy.has("Miracle") && enemy.hp >= 1){
+				if(enemy.has("Miracle") && enemy.hp > 1){
 					miracle = true;
 				}
 			}
