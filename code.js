@@ -3669,12 +3669,12 @@ function activeHero(hero){
 				dmg = 0;
 			}
 			damageText += this.name + " attacks " + enemy.name + " for <span class=\"bold\">" + dmg + "</span> damage.<br>";
-			if(dmg > enemy.hp){
+			if(dmg >= enemy.hp){
 				if(miracle){
 					dmg = enemy.hp - 1;
 					defensiveSpecialActivated = true;
 					enemy.resetCharge();
-					damageText += enemy.name + " survives with 1HP with Miracle.<br>";
+					damageText += enemy.name + " survives with 1 HP with Miracle.<br>";
 				}
 				else{
 					enemy.overkill = dmg - enemy.hp;
