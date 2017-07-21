@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jul 17, 2017 at 03:37 PM
+-- Generation Time: Jul 20, 2017 at 05:40 AM
 -- Server version: 10.0.31-MariaDB
 -- PHP Version: 5.6.30
 
@@ -207,7 +207,8 @@ INSERT INTO `hero` (`hero_id`, `name`, `basehp`, `baseatk`, `basespd`, `basedef`
 (152, 'Gray', 17, 7, 6, 6, 3, 43, 35, 32, 30, 22, 8, 9, 8, 7, 5, 'red', 'sword', 'infantry', 5),
 (153, 'Leon', 17, 8, 6, 8, 5, 39, 34, 30, 30, 15, 6, 8, 7, 6, 1, 'gray', 'bow', 'infantry', 5),
 (154, 'Saber', 18, 7, 9, 8, 5, 40, 31, 33, 32, 22, 6, 7, 7, 7, 4, 'red', 'sword', 'infantry', 5),
-(155, 'Mathilda', 16, 7, 8, 7, 8, 35, 29, 32, 24, 34, 5, 6, 7, 4, 8, 'blue', 'lance', 'cavalry', 5);
+(155, 'Mathilda', 16, 7, 8, 7, 8, 35, 29, 32, 24, 34, 5, 6, 7, 4, 8, 'blue', 'lance', 'cavalry', 5),
+(156, 'Berkut', 19, 8, 5, 7, 7, 43, 34, 22, 31, 24, 7, 8, 4, 7, 4, 'blue', 'lance', 'cavalry', 3);
 
 -- --------------------------------------------------------
 
@@ -1893,7 +1894,17 @@ INSERT INTO `hero_skill` (`hero_id`, `skill_id`, `rarity`) VALUES
 (155, 135, 5),
 (155, 330, 5),
 (155, 546, 5),
-(155, 549, 5);
+(155, 549, 5),
+(156, 68, 3),
+(156, 180, 3),
+(156, 188, 4),
+(156, 350, 3),
+(156, 381, 4),
+(156, 550, 4),
+(156, 551, 5),
+(156, 552, 3),
+(156, 553, 4),
+(156, 554, 5);
 
 -- --------------------------------------------------------
 
@@ -2444,8 +2455,8 @@ INSERT INTO `skill` (`skill_id`, `name`, `slot`, `sp`, `description`, `hp`, `atk
 (520, 'Axe Valor 2', 'c', 60, '', 0, 0, 0, 0, 0, 0, '', 0),
 (521, 'Axe Valor 3', 'c', 120, '', 0, 0, 0, 0, 0, 0, '', 0),
 (522, 'Dark Aura', 'weapon', 400, 'Grants adjacent allies who use swords, axes, lances, or dragonstones Atk+6 through their next actions at the start of each turn.', 0, 14, 0, 0, 0, 0, 'unique', 1),
-(523, 'Drive Atk 1', 'c', 120, 'Grants allies within 2 spaces Atk+2 during combat.', 0, 0, 0, 0, 0, 0, '', 1),
-(524, 'Drive Atk 2', 'c', 240, 'Grants allies within 2 spaces Atk+3 during combat.', 0, 0, 0, 0, 0, 0, '', 1),
+(523, 'Drive Atk 1', 'c', 120, 'Grants allies within 2 spaces Atk+2 during combat.', 0, 0, 0, 0, 0, 0, '', 0),
+(524, 'Drive Atk 2', 'c', 240, 'Grants allies within 2 spaces Atk+3 during combat.', 0, 0, 0, 0, 0, 0, '', 0),
 (525, 'Dark Excalibur', 'weapon', 400, 'Grants +10 to damage when special triggers.', 0, 14, 0, 0, 0, 0, 'unique', 1),
 (526, 'Mirror Strike 1', 'a', 120, 'Grants Atk/Res+2 during combat if unit initiates combat.', 0, 0, 0, 0, 0, 0, 'nonstaff', 1),
 (527, 'Mirror Strike 2', 'a', 240, 'Grants Atk/Res+4 during combat if unit initiates combat.', 0, 0, 0, 0, 0, 0, 'nonstaff', 1),
@@ -2470,7 +2481,12 @@ INSERT INTO `skill` (`skill_id`, `name`, `slot`, `sp`, `description`, `hp`, `atk
 (546, 'Ridersbane+', 'weapon', 300, 'Effective against cavalry units.', 0, 14, 0, 0, 0, 0, 'lance', 1),
 (547, 'Cancel Affinity 1', 'b', 50, 'Any weapon triangle affinity granted by unit\'s skills is negated. Also negates any weapon triangle affinity granted by foe\'s skills.', 0, 0, 0, 0, 0, 0, 'nonstaff,nonredtome,nonbluetome,nongreentome', 1),
 (548, 'Cancel Affinity 2', 'b', 100, 'Any weapon triangle affinity granted by unit\'s skills is negated. If affinity disadvantage exists, weapon triangle affinity granted by foe\'s skills is negated.', 0, 0, 0, 0, 0, 0, 'nonstaff,nonredtome,nonbluetome,nongreentome', 1),
-(549, 'Cancel Affinity 3', 'b', 200, 'Any weapon triangle affinity granted by unit\'s skills is negated. If affinity disadvantage exists, weapon triangle affinity granted by foe\'s skills is reversed', 0, 0, 0, 0, 0, 0, 'nonstaff,nonredtome,nonbluetome,nongreentome', 1);
+(549, 'Cancel Affinity 3', 'b', 200, 'Any weapon triangle affinity granted by unit\'s skills is negated. If affinity disadvantage exists, weapon triangle affinity granted by foe\'s skills is reversed', 0, 0, 0, 0, 0, 0, 'nonstaff,nonredtome,nonbluetome,nongreentome', 1),
+(550, 'Kerkut\'s Lance', 'weapon', 200, 'Grants Res+4 when the unit is under attack.', 0, 10, 0, 0, 0, 0, 'lance', 1),
+(551, 'Kerkut\'s Lance+', 'weapon', 300, 'Grants Res+4 when the unit is under attack.', 0, 14, 0, 0, 0, 0, 'lance', 1),
+(552, 'Water Boost 1', 'a', 50, 'If unit has at least 3 more HP than enemy at the start of combat, unit receives Res+2 during combat', 0, 0, 0, 0, 0, 0, '', 1),
+(553, 'Water Boost 2', 'a', 100, 'If unit has at least 3 more HP than enemy at the start of combat, unit receives Res+4 during combat', 0, 0, 0, 0, 0, 0, '', 1),
+(554, 'Water Boost 3', 'a', 200, 'If unit has at least 3 more HP than enemy at the start of combat, unit receives Res+6 during combat', 0, 0, 0, 0, 0, 0, '', 1);
 
 -- --------------------------------------------------------
 
@@ -2917,7 +2933,11 @@ INSERT INTO `skill_prereq` (`skill_id`, `required_id`) VALUES
 (545, 68),
 (546, 545),
 (548, 547),
-(549, 548);
+(549, 548),
+(550, 68),
+(551, 550),
+(553, 552),
+(554, 553);
 
 --
 -- Indexes for dumped tables
@@ -2955,12 +2975,12 @@ ALTER TABLE `skill_prereq`
 -- AUTO_INCREMENT for table `hero`
 --
 ALTER TABLE `hero`
-  MODIFY `hero_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=156;
+  MODIFY `hero_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=157;
 --
 -- AUTO_INCREMENT for table `skill`
 --
 ALTER TABLE `skill`
-  MODIFY `skill_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=550;
+  MODIFY `skill_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=555;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

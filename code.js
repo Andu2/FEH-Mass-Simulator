@@ -2845,6 +2845,12 @@ function activeHero(hero){
 				this.combatSpur.atk += buffVal;
 				boostText += this.name + " gets +" + buffVal + " atk from having >=3 more hp than " + enemy.name + " with " + skillName + ".<br>";
 			}
+			if(this.has("Water Boost")){
+				buffVal = this.has("Water Boost") * 2;
+				skillName = data.skills[this.aIndex].name;
+				this.combatSpur.res += buffVal;
+				boostText += this.name + " gets +" + buffVal + " res from having >=3 more hp than " + enemy.name + " with " + skillName + ".<br>";
+			}
 		}
 
 		//this.blow = function(){
@@ -2949,6 +2955,10 @@ function activeHero(hero){
 			if(this.has("Tyrfing") && this.hp / this.maxHp <= 0.5){
 				this.combatSpur.def += 4;
 				boostText += this.name + " gets +4 def from Tyrfing.<br>";
+			}
+			if(this.has("Kerkut's Lance")){
+				this.combatSpur.res += 4;
+				boostText += this.name + " gets +4 res while defending with " + data.skills[this.weaponIndex].name + ".<br>";
 			}
 
 			return boostText;
