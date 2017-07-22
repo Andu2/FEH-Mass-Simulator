@@ -2956,7 +2956,7 @@ function activeHero(hero){
 				this.combatSpur.def += 4;
 				boostText += this.name + " gets +4 def from Tyrfing.<br>";
 			}
-			if(this.has("Kerkut's Lance")){
+			if(this.has("Berkut's Lance")){
 				this.combatSpur.res += 4;
 				boostText += this.name + " gets +4 res while defending with " + data.skills[this.weaponIndex].name + ".<br>";
 			}
@@ -3967,12 +3967,12 @@ function activeHero(hero){
 		//This skill is a fucking mess
 		var windsweep = 0;
 		if(this.has("Windsweep")){
-			windsweep = this.has("Windsweep")*-2 + 7;
+			windsweep = this.has("Windsweep")*-2 + 7 + (this.has("Phantom Spd 1") ? -5 : 0);
 		}
 
 		var watersweep = 0;
 		if(this.has("Watersweep")){
-			watersweep = this.has("Watersweep")*-2 + 7;
+			watersweep = this.has("Watersweep")*-2 + 7 + (this.has("Phantom Spd 1") ? -5 : 0);
 		}
 
 		//Do AOE damage
