@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jul 20, 2017 at 05:40 AM
+-- Generation Time: Jul 22, 2017 at 04:21 PM
 -- Server version: 10.0.31-MariaDB
 -- PHP Version: 5.6.30
 
@@ -2482,11 +2482,12 @@ INSERT INTO `skill` (`skill_id`, `name`, `slot`, `sp`, `description`, `hp`, `atk
 (547, 'Cancel Affinity 1', 'b', 50, 'Any weapon triangle affinity granted by unit\'s skills is negated. Also negates any weapon triangle affinity granted by foe\'s skills.', 0, 0, 0, 0, 0, 0, 'nonstaff,nonredtome,nonbluetome,nongreentome', 1),
 (548, 'Cancel Affinity 2', 'b', 100, 'Any weapon triangle affinity granted by unit\'s skills is negated. If affinity disadvantage exists, weapon triangle affinity granted by foe\'s skills is negated.', 0, 0, 0, 0, 0, 0, 'nonstaff,nonredtome,nonbluetome,nongreentome', 1),
 (549, 'Cancel Affinity 3', 'b', 200, 'Any weapon triangle affinity granted by unit\'s skills is negated. If affinity disadvantage exists, weapon triangle affinity granted by foe\'s skills is reversed', 0, 0, 0, 0, 0, 0, 'nonstaff,nonredtome,nonbluetome,nongreentome', 1),
-(550, 'Kerkut\'s Lance', 'weapon', 200, 'Grants Res+4 when the unit is under attack.', 0, 10, 0, 0, 0, 0, 'lance', 1),
-(551, 'Kerkut\'s Lance+', 'weapon', 300, 'Grants Res+4 when the unit is under attack.', 0, 14, 0, 0, 0, 0, 'lance', 1),
+(550, 'Berkut\'s Lance', 'weapon', 200, 'Grants Res+4 when the unit is under attack.', 0, 10, 0, 0, 0, 0, 'lance', 1),
+(551, 'Berkut\'s Lance+', 'weapon', 300, 'Grants Res+4 when the unit is under attack.', 0, 14, 0, 0, 0, 0, 'lance', 1),
 (552, 'Water Boost 1', 'a', 50, 'If unit has at least 3 more HP than enemy at the start of combat, unit receives Res+2 during combat', 0, 0, 0, 0, 0, 0, '', 1),
 (553, 'Water Boost 2', 'a', 100, 'If unit has at least 3 more HP than enemy at the start of combat, unit receives Res+4 during combat', 0, 0, 0, 0, 0, 0, '', 1),
-(554, 'Water Boost 3', 'a', 200, 'If unit has at least 3 more HP than enemy at the start of combat, unit receives Res+6 during combat', 0, 0, 0, 0, 0, 0, '', 1);
+(554, 'Water Boost 3', 'a', 200, 'If unit has at least 3 more HP than enemy at the start of combat, unit receives Res+6 during combat', 0, 0, 0, 0, 0, 0, '', 1),
+(555, 'Phantom Spd 1', 's', 0, 'When any skill compares this unit\'s Spd stat to another unit\'s, this unit\'s Spd stat is counted as +5 over actual value.', 0, 0, 0, 0, 0, 0, '', 1);
 
 -- --------------------------------------------------------
 
@@ -2980,7 +2981,7 @@ ALTER TABLE `hero`
 -- AUTO_INCREMENT for table `skill`
 --
 ALTER TABLE `skill`
-  MODIFY `skill_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=555;
+  MODIFY `skill_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=556;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
