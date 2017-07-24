@@ -1,35 +1,3 @@
-<?php
-
-//Get entire database to javascript
-$heroScript = getData("hero");
-$skillScript = getData("skill");
-$prereqScript = getData("skill_prereq");
-$heroskillScript = getData("hero_skill");
-
-function getData($table){
-	require("dbHeroes.php");
-	$stmt = $db->prepare("select * from " . $table);
-	$stmt->execute();
-
-	$js = "[";
-	while($result = $stmt->fetch()){
-		$js .= "{";
-		foreach ($result as $var => $value) {
-			if(!is_numeric($var)){
-				if(!is_numeric($value)){
-					$value = str_replace("\"", "\\\"", $value);
-					$value = "\"" . $value . "\"";
-				}
-				$js .= "\"" . $var . "\":" . $value . ",";
-			}
-		}
-		$js = trim($js,",") . "},";
-	}
-	$js = trim($js,",") . "]";
-	return $js;
-}
-?>
-
 <!doctype html>
 <html>
 
@@ -46,37 +14,17 @@ function getData($table){
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
 
-	<script>
-		var data = {};
-		data.heroes = <?php echo $heroScript;?>;
-		data.skills = <?php echo $skillScript;?>;
-		data.prereqs = <?php echo $prereqScript;?>;
-		data.heroSkills = <?php echo $heroskillScript;?>;
-	</script>
-
 	<link rel="stylesheet" type="text/css" href="style.css?v=12"/>
+	<script type="text/javascript" src="db.js?v=0"></script>
 	<script type="text/javascript" src="code.js?v=26"></script>
-
-	<!-- Google Tag Manager -->
-	<script>
-	dataLayer = [{
-		"pageType":"app"
-	}];
-
-	(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-	new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-	j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-	'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-	})(window,document,'script','dataLayer','GTM-TWPWXN5');</script>
-	<!-- End Google Tag Manager -->
 
 </head>
 
 <body>
 	<div id="frame_main">
 		<div id="header"><img src="logo.png" style="margin-right:20px;"/><div style="display:inline-block;">Mass Duel Simulator!</div><div id="subtitle"></div></div>
-		<div id="frame_updatenotice" data-update="20170716">Update 2017-07-16: I haven't played the game in a couple months and I'm struggling to keep this thing up-to-date.<br>Expect very occasional updates.<br>
-			If anyone would like to try to build on this app, <a href="https://github.com/Andu2/FEH-Mass-Simulator">here</a> is the code and <a href="https://github.com/Andu2/FEH-Mass-Simulator/blob/master/fehmds-database.sql">here</a> is the SQL for the database.
+		<div id="frame_updatenotice" data-update="20170723">App now hosted in GitHub Pages for communal development. Nice!<br/>
+			You can help out <a href="https://github.com/Andu2/FEH-Mass-Simulator">here</a>!
 			<div id="update_icon">!</div>
 			<div class="button" id="button_closeupdatenotice" onclick="hideUpdateNotice();">x</div>
 		</div>
@@ -251,7 +199,7 @@ function getData($table){
 			<div id="winpercentages"><span class="results_stat">Wins: <span id="win_pct">-</span></span><span class="results_stat">Losses: <span id="lose_pct">-</span></span><span class="results_stat">Inconclusive: <span id="inconclusive_pct">-</span></span></div>
 			<div id="results_list"></div>
 		</div>
-		<div id="footer">Last <a href="changelog.txt">updated</a> 2017-7-3.</div>
+		<div id="footer">Code found <a href="https://github.com/Andu2/FEH-Mass-Simulator">here</a>. Last <a href="changelog.txt">updated</a> 2017-7-3.</div>
 	</div>
 	<div id="frame_tooltip"></div>
 	<div id="screen_fade"></div>

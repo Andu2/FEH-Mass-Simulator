@@ -308,12 +308,6 @@ $(document).ready(function(){
 					//Rename s skills to differentate from regular skills
 					dataToPass = "s_" + dataToPass;
 				}
-				if(hero.challenger){
-					dataLayer.push({"event":"changeSkill","skill_name":dataToPass});
-				}
-				else{
-					dataLayer.push({"event":"changeEnemySkill","skill_name":dataToPass});
-				}
 			}
 
 			//Stuff specific to changing hero
@@ -325,14 +319,9 @@ $(document).ready(function(){
 
 					if(hero.challenger){
 
-						//Analytics
-						dataLayer.push({"event":"changeHero","challenger_name":data.heroes[newVal].name});
 					}
 					else{
 						updateClList();
-
-						//Analytics
-						dataLayer.push({"event":"changeEnemy","challenger_name":data.heroes[newVal].name});
 					}
 				}
 			}
