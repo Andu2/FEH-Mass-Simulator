@@ -1,16 +1,18 @@
-###FEH Mass Duel Simulator
+#FEH Mass Duel Simulator
 
 Now hosted on [GitHub Pages](https://andu2.github.io/FEH-Mass-Simulator/) so anyone can do the developing!
 
-##Instructions and Stuff
+#About
 
 The entire code (UI and logic mixed, unfortunately) is in code.js. The JSON data transferred from my personal MySQL database is in db.js.
+
+When this project used PHP and MySQL, I had a database updating tool. Perhaps something similar can be created for the JSON-based data. The tool is found under the "database-add" folder.
 
 This project uses jQuery and [Select2](https://select2.github.io/).
 
 Remember to change the query string parameter "v=#" on the script tags on index.html to break the cache when you push a new update.
 
-##Notes from Andy
+#Notes from Andy
 
 Here are some things I wanted to do before I stopped updating. I'm not saying that these have to be developed, because I'm not in charge of the project anymore. They're just fun ideas!
 
