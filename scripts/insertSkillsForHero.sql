@@ -3,26 +3,26 @@ select hero_id, skill_id, 5
 from (
 	(
 		select skill_id
-    from skill
-    where slot != 's'
-    and (
-			skill.name = 'Thunder'
-			or skill.name = 'Elthunder'
-			or skill.name = 'Sealife Tome'
-			or skill.name = 'Sealife Tome+'
-			or skill.name = 'Dragon Gaze'
-      or skill.name = 'Dragon Fang'
-      or skill.name = 'Darting BLow 1'
-      or skill.name = 'Swift Strike 1'
-      or skill.name = 'Swift Strike 2'
-      or skill.name = 'Fortify Res 1'
-      or skill.name = 'Fortify Res 2'
-      or skill.name = 'Fortify Fliers'
+		from skill
+		where slot != 's'
+		and (
+			skill.name = 'Wind'
+			or skill.name = 'Elwind'
+			or skill.name = 'Hibiscus Tome'
+			or skill.name = 'Hibiscus Tome+'
+			or skill.name = 'Rally Attack'
+			or skill.name = 'Rally Attack Resistance'
+			or skill.name = 'Speed 1'
+			or skill.name = 'Spd Res 1'
+			or skill.name = 'Spd Res 2'
+			or skill.name = 'Green Tome Valor 1'
+			or skill.name = 'Green Tome Valor 2'
+			or skill.name = 'Green Tome Valor 3'
 		)
 	) skills join
-  (
+	(
 		select hero_id
-    from heroes
-    where heroes.name = 'Summer Corrin'
+		from heroes
+		where heroes.name = 'Summer Elise'
 	) hero
 )
