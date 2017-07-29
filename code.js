@@ -1140,11 +1140,11 @@ function updateHeroUI(hero){
 		if(hero.special != -1){
 			var specialCharge = data.skills[hero.special].charge;
 			var specialName = data.skills[hero.special].name;
-			
+
 			//Weapon Skill
 			if(hero.weapon != -1){
 				var weaponName = data.skills[hero.weapon].name;
-				
+
 				if(weaponName.indexOf("Killer") != -1 || weaponName.indexOf("Killing") != -1 || weaponName.indexOf("Slaying") != -1 || weaponName.indexOf("Mystletainn") != -1 || weaponName.indexOf("Hauteclere") != -1){
 					specialCharge -= 1;
 				}
@@ -1152,23 +1152,23 @@ function updateHeroUI(hero){
 					specialCharge += 1;
 				}
 			}
-			
+
 			//Special Item
 			if(hero.s != -1){
 				var sName = data.skills[hero.s].name;
-				
+
 				//Quicken Pulse effects
 				if(sName.indexOf("Quickened Pulse") != -1){
 					specialCharge -= 1;
 				}
-			}			
-						
+			}
+
 			//B Skill
 			if(hero.b != -1){
 				var bName = data.skills[hero.b].name;
-				
+
 				//Shield Pulse effects
-				if(specialName.indexOf("Miracle") != -1 || specialName.indexOf("Aegis") != -1 || specialName.indexOf("Buckler") != -1 || specialName.indexOf("Escutcheon") != -1 || specialName.indexOf("Holy Vestments") != -1 || specialName.indexOf("Pavise") != -1 || specialName.indexOf("Sacred Cowl")!= -1){		
+				if(specialName.indexOf("Miracle") != -1 || specialName.indexOf("Aegis") != -1 || specialName.indexOf("Buckler") != -1 || specialName.indexOf("Escutcheon") != -1 || specialName.indexOf("Holy Vestments") != -1 || specialName.indexOf("Pavise") != -1 || specialName.indexOf("Sacred Cowl")!= -1){
 					if(bName.indexOf("Shield Pulse 3") != -1){
 						specialCharge -= 2;
 					} else if(bName.indexOf("Shield Pulse 1") != -1 || bName.indexOf("Shield Pulse 2") != -1){
@@ -1176,7 +1176,7 @@ function updateHeroUI(hero){
 					}
 				}
 			}
-			
+
 			specialCharge -= hero.precharge;
 			specialCharge = Math.max(0,specialCharge);
 
@@ -2069,7 +2069,7 @@ function fight(enemyIndex,resultIndex){
 			else if(prevEnemyEndHealth == 0){
 				prevEnemyEndHealth -= prevOverkill;
 			}
-			
+
 		}
 
 		if(rounds == prevRounds && outcome == prevResult && (currentChallengerEndHealth != prevChallengerEndHealth || currentEnemyEndHealth != prevEnemyEndHealth)){
@@ -2592,7 +2592,7 @@ function activeHero(hero){
 	if(this.has("Quickened Pulse")){
 		this.charge++;
 	}
-	
+
 	//Shield Pulse charge at beginning
 	if(this.has("Miracle") || this.has("Aegis") || this.has("Buckler") || this.has("Escutcheon") || this.has("Holy Vestments") || this.has("Pavise") || this.has("Sacred Cowl")){
 		if(this.has("Shield Pulse 3")){
@@ -2889,6 +2889,12 @@ function activeHero(hero){
 				this.combatSpur.spd += blowSpd;
 				boostText += this.name + " gets +" + blowSpd + " spd from initiating with " + skillName + ".<br>";
 			}
+			if(this.has("Swift Strike")){
+				blowSpd = this.has("Swift Strike") * 2;
+				skillName = data.skills[this.aIndex].name;
+				this.combatSpur.spd += blowSpd;
+				boostText += this.name + " gets +" + blowSpd + " spd from initiating with " + skillName + ".<br>";
+			}
 			if(this.has("Yato")){
 				this.combatSpur.spd += 4;
 				boostText += this.name + " gets +4 spd from initiating with Yato.<br>";
@@ -2921,6 +2927,12 @@ function activeHero(hero){
 			}
 			if(this.has("Mirror Strike")){
 				blowRes = this.has("Mirror Strike") * 2;
+				skillName = data.skills[this.aIndex].name;
+				this.combatSpur.res += blowRes;
+				boostText += this.name + " gets +" + blowRes + " res from initiating with " + skillName + ".<br>";
+			}
+			if(this.has("Swift Strike")){
+				blowRes = this.has("Swift Strike") * 2;
 				skillName = data.skills[this.aIndex].name;
 				this.combatSpur.res += blowRes;
 				boostText += this.name + " gets +" + blowRes + " res from initiating with " + skillName + ".<br>";
@@ -3389,13 +3401,13 @@ function activeHero(hero){
 			}
 
 			//Extra weapon advantage is apparently limited to 0.2 more (doesn't stack)
-			
+
 			/*
 			Cancel Affinity Rules for Attacker
-				
-			Attacker with Cancel Affinity:				
+
+			Attacker with Cancel Affinity:
 				Attacker with Gem Weapon or Triangle Adept = no extra advantage or disadvantage
-				
+
 				Defender with:
 					Advantaged Gem Weapon or Triangle Adept:									(Base -20%)
 						Cancel Affinity 1 = negate extra disadvantage	(Extra -20% to 0%)		(Total -20%)
@@ -3405,16 +3417,16 @@ function activeHero(hero){
 						Cancel Affinity 1 = negate extra advantage		(Extra +20% to 0%)		(Total +20%)
 						Cancel Affinity 2 = keep extra advantage		(Extra +20% to +20%)	(Total +40%)
 						Cancel Affinity 3 = keep extra advantage		(Extra +20% to +20%)	(Total +40%)
-				
+
 				Attacker with -raven Tome against Gray Defender:								(Base +20%)
 					Attacker with Triangle Adept = no extra advantage or disadvantage			(Total +20%)
 					Defender with Triangle Adept:
 						Cancel Affinity 1 = negate extra advantage		(Extra +20% to 0%)		(Total +20%)
 						Cancel Affinity 2 = keep extra advantage		(Extra +20% to +20%)	(Total +40%)
 						Cancel Affinity 3 = keep extra advantage		(Extra +20% to +20%)	(Total +40%)
-						
-				
-			Defender with Cancel Affinity:				
+
+
+			Defender with Cancel Affinity:
 				Attacker with:
 					Advantaged Gem Weapon or Triangle Adept:									(Base +20%)
 						Cancel Affinity 1 = negate extra disadvantage	(Extra +20% to 0%)		(Total +20%)
@@ -3424,26 +3436,26 @@ function activeHero(hero){
 						Cancel Affinity 1 = negate extra advantage		(Extra -20% to 0%)		(Total -20%)
 						Cancel Affinity 2 = keep extra advantage		(Extra -20% to -20%)	(Total -40%)
 						Cancel Affinity 3 = keep extra advantage		(Extra -20% to -20%)	(Total -40%)
-				
+
 				Defender with Gem Weapon or Triangle Adept = no extra advantage or disadvantage
-				
+
 				Attacker with -raven Tome against Gray Defender:								(Base +20%)
 					Attacker with Triangle Adept:
 						Cancel Affinity 1 = negate extra disadvantage	(Extra +20% to 0%)		(Total +20%)
 						Cancel Affinity 2 = negate extra disadvantage	(Extra +20% to 0%)		(Total +20%)
 						Cancel Affinity 3 = reverse extra disadvantage	(Extra +20% to -20%)	(Total 0%)
 					Defender with Triangle Adept = no extra advantage or disadvantage			(Total +20%)
-				
+
 			Attacker and Defender with Cancel Affinity:
 				Attacker with Gem Weapon or Triangle Adept = no extra advantage or disadvantage
 				Defender with Gem Weapon or Triangle Adept = no extra advantage or disadvantage
 			*/
-			
+
 			var extraWeaponAdvantage = 0;
-			
+
 			//If weapon advantage is not netural, and Attacker and Defender do not both have Cancel Affinity
 			if (weaponAdvantage !=0 && !(this.has("Cancel Affinity") && enemy.has("Cancel Affinity"))){
-				
+
 				//Calculate base weapon advantage bonus
 				if(this.has("Ruby Sword") || this.has("Sapphire Lance") || this.has("Emerald Axe") || enemy.has("Ruby Sword") || enemy.has("Sapphire Lance") || enemy.has("Emerald Axe")){
 					extraWeaponAdvantage = 0.2;
@@ -3456,18 +3468,18 @@ function activeHero(hero){
 						extraWeaponAdvantage = Math.max(extraWeaponAdvantage,0.05 + 0.05 * enemy.has("Triangle Adept"));
 					}
 				}
-				
+
 				//If Attacker has Cancel Affinity
 				if (this.has("Cancel Affinity")){
-					
-					//Attacker with Gem Weapon or Triangle Adept: No extra advantage or disadvantage					
+
+					//Attacker with Gem Weapon or Triangle Adept: No extra advantage or disadvantage
 					if(this.has("Ruby Sword") || this.has("Sapphire Lance") || this.has("Emerald Axe") || this.has("Triangle Adept")){
 						extraWeaponAdvantage = 0;
-					}					
-					
+					}
+
 					//Defender with Gem Weapon or Triangle Adept
 					if (enemy.has("Ruby Sword") || enemy.has("Sapphire Lance") || enemy.has("Emerald Axe") || enemy.has("Triangle Adept")){
-						//Defender at disadvantage: Cancel Affinity 1 = negate, Cancel Affinity 2 = keep, Cancel Affinity 3 = keep 
+						//Defender at disadvantage: Cancel Affinity 1 = negate, Cancel Affinity 2 = keep, Cancel Affinity 3 = keep
 						if (weaponAdvantage == 1){
 							if (this.has("Cancel Affinity 1")){
 								extraWeaponAdvantage = 0;
@@ -3479,7 +3491,7 @@ function activeHero(hero){
 								}
 							}
 						}
-						//Defender at advantage: Cancel Affinity 1 = negate, Cancel Affinity 2 = negate, Cancel Affinity 3 = reverse 
+						//Defender at advantage: Cancel Affinity 1 = negate, Cancel Affinity 2 = negate, Cancel Affinity 3 = reverse
 						//***Note the double negative for weaponAdvantageBonus formula***
 						else{
 							if (this.has("Cancel Affinity 3")){
@@ -3491,18 +3503,18 @@ function activeHero(hero){
 							} else{
 								extraWeaponAdvantage = 0;
 							}
-						}				
-					}					
+						}
+					}
 				}
 				//If Defender has Cancel Affinity
 				else if (enemy.has("Cancel Affinity")){
-					
-					//Defender with Gem Weapon or Triangle Adept: No extra advantage or disadvantage					
+
+					//Defender with Gem Weapon or Triangle Adept: No extra advantage or disadvantage
 					if(enemy.has("Ruby Sword") || enemy.has("Sapphire Lance") || enemy.has("Emerald Axe") || enemy.has("Triangle Adept")){
 						extraWeaponAdvantage = 0;
-					}	
-					
-					//Attacker with Gem Weapon or Triangle Adept				
+					}
+
+					//Attacker with Gem Weapon or Triangle Adept
 					if(this.has("Ruby Sword") || this.has("Sapphire Lance") || this.has("Emerald Axe") || this.has("Triangle Adept")){
 						//Attacker at advantage: Cancel Affinity 1 = negate, Cancel Affinity 2 = negate, Cancel Affinity 3 = reverse
 						if (weaponAdvantage == 1){
@@ -3514,7 +3526,7 @@ function activeHero(hero){
 								}
 							} else{
 								extraWeaponAdvantage = 0;
-							}							
+							}
 						}
 						//Attacker at disadvantage: Cancel Affinity 1 = negate, Cancel Affinity 2 = keep, Cancel Affinity 3 = keep
 						else{
@@ -3531,8 +3543,8 @@ function activeHero(hero){
 					}
 				}
 			}
-			
-			/* 
+
+			/*
 			***Old Weapon Advantage Script***
 			if(weaponAdvantage != 0){
 				if(this.has("Ruby Sword") || this.has("Sapphire Lance") || this.has("Emerald Axe") || enemy.has("Ruby Sword") || enemy.has("Sapphire Lance") || enemy.has("Emerald Axe")){
@@ -3624,11 +3636,11 @@ function activeHero(hero){
 			if(defensiveSpecialActivated){
 				if(dmgReduction < 1){
 					damageText += data.skills[enemy.specialIndex].name + " reduces " + this.name + "'s damage by " + ((1 - dmgReduction) * 100 | 0) + "%.<br>"
-					
+
 					if (enemy.has("Shield Pulse 2") || enemy.has("Shield Pulse 3")){
 						damageText += "Shield Pulse reduces " + this.name + "'s damage by an additional 5.<br>";
-					}				
-				}				
+					}
+				}
 				enemy.resetCharge();
 			}
 
@@ -3657,12 +3669,12 @@ function activeHero(hero){
 			var reduceDmg = relevantDef + (relevantDef*enemyDefModifier | 0);
 			var dmg = (rawDmg - reduceDmg)*weaponModifier | 0;
 			dmg = (dmg*dmgMultiplier | 0) - (dmg*(1-dmgReduction) | 0);
-			
+
 			//Pushing Shield check
 			if (defensiveSpecialActivated && (enemy.has("Shield Pulse 2") || enemy.has("Shield Pulse 3"))){
 				dmg -= 5;
 			}
-			
+
 			dmg = Math.max(dmg,0);
 			if(enemy.has("Embla's Ward")){
 				dmg = 0;
