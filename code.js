@@ -2574,7 +2574,7 @@ function activeHero(hero){
 
 	this.resetCharge = function(){
 		//resets charge based on weapon
-		if(this.has("Killing Edge") || this.has("Killer Axe") || this.has("Killer Lance") || this.has("Mystletainn") || this.has("Hauteclere") || this.has("Killer Bow") || this.has("Slaying Bow") || this.has("Slaying Edge")){
+		if(this.has("Killing Edge") || this.has("Killer Axe") || this.has("Killer Lance") || this.has("Mystletainn") || this.has("Hauteclere") || this.has("Killer Bow") || this.has("Slaying Bow") || this.has("Slaying Edge") || this.has("Slaying Axe")){
 			this.charge = 1;
 		}
 		else if(this.has("Raudrblade") || this.has("Lightning Breath") || this.has("Blarblade") || this.has("Gronnblade")){
@@ -2953,6 +2953,10 @@ function activeHero(hero){
 				this.combatSpur.res += 2;
 				boostText += this.name + " gets +2 def and res while defending with " + data.skills[this.weaponIndex].name + ".<br>";
 			}
+			if(this.has("Vidofnir") && (enemy.weaponType == "axe" || enemy.weaponType == "sword" ||enemy.weaponType == "lance" )){
+				this.combatSpur.def += 7;
+				boostText += this.name + " gets +7 def while defending with " + data.skills[this.weaponIndex].name + ".<br>";
+			}
 			if(this.has("Tyrfing") && this.hp / this.maxHp <= 0.5){
 				this.combatSpur.def += 4;
 				boostText += this.name + " gets +4 def from Tyrfing.<br>";
@@ -3064,7 +3068,8 @@ function activeHero(hero){
 		var sealText = "";
 
 		var skillName = "";
-
+		
+		//Seal Atk
 		var sealAtk = 0;
 		if(this.has("Seal Atk")){ //Will count for seal atk speed as well
 			sealAtk = -this.has("Seal Atk") * 2 - 1;
@@ -3078,7 +3083,8 @@ function activeHero(hero){
 			enemy.combatDebuffs.atk = sealAtk;
 			sealText += this.name + " lowers " + enemy.name + "'s atk by " + (-sealAtk) + " after combat with " + skillName + ".<br>";
 		}
-
+		
+		//Seal Spd
 		var sealSpd = 0;
 		if(this.has("Seal Spd")){
 			sealSpd = -this.has("Seal Spd") * 2 - 1;
@@ -3096,10 +3102,15 @@ function activeHero(hero){
 			enemy.combatDebuffs.spd = sealSpd;
 			sealText += this.name + " lowers " + enemy.name + "'s spd by " + (-sealSpd) + " after combat with " + skillName + ".<br>";
 		}
-
+		
+		//Seal Def
 		var sealDef = 0;
 		if(this.has("Seal Def")){
 			sealDef = -this.has("Seal Def") * 2 - 1;
+			skillName = data.skills[this.bIndex].name;
+		}
+		if(this.has("Seal Atk Def")){
+			sealDef = -this.has("Seal Atk Def") * 2 - 1;
 			skillName = data.skills[this.bIndex].name;
 		}
 		//Daggers only take effect if the unit performed an attack
@@ -3129,7 +3140,8 @@ function activeHero(hero){
 			enemy.combatDebuffs.def = sealDef;
 			sealText += this.name + " lowers " + enemy.name + "'s def by " + (-sealDef) + " after combat with " + skillName + ".<br>";
 		}
-
+		
+		//Seal Res
 		var sealRes = 0;
 		if(this.has("Seal Res")){
 			sealRes = -this.has("Seal Res") * 2 - 1;
