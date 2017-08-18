@@ -12402,7 +12402,7 @@ window.data.prereqs = [{
 		"required_id": 132
 	}, {
 		"skill_id": 573,
-		"required_id": 403
+		"required_id": 208
 	}, {
 		"skill_id": 574,
 		"required_id": 573
