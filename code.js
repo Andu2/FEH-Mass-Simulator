@@ -13,7 +13,7 @@ data.rangedWeapons = ["redtome","bluetome","greentome","bow","dagger","staff"];
 data.meleeWeapons = ["sword","lance","axe","dragon"];
 data.physicalWeapons = ["sword","lance","axe","bow","dagger"];
 data.magicalWeapons = ["redtome","bluetome","greentome","dragon","staff"];
-data.moveTypes = ["infantry","armored","flying","cavalry"];
+data.moveTypes = ["infantry","armored","flying","cavalry","mounted"];
 data.colors = ["red","blue","green","gray"];
 data.skillSlots = ["weapon","special","a","b","c","s"];
 data.buffTypes = ["buffs","debuffs","spur"];
@@ -552,8 +552,15 @@ function getValidSkills(hero,slot){
 					}
 					else if(data.moveTypes.indexOf(inheritRules[ruleNum])!=-1){
 						//inherit if movetype is right
-						if(data.heroes[hero.index].movetype==inheritRules[ruleNum]){
-							inheritRuleMatches++;
+						if(inheritRules[ruleNum] === "mounted"){
+							if(data.heroes[hero.index].movetype == "cavalry" || data.heroes[hero.index].movetype == "flying"){
+								inheritRuleMatches++;
+							}
+						}
+						else{
+							if(data.heroes[hero.index].movetype==inheritRules[ruleNum]){
+								inheritRuleMatches++;
+							}
 						}
 					}
 					else if(data.weaponTypes.indexOf(inheritRules[ruleNum].replace("non",""))!=-1){
@@ -564,8 +571,15 @@ function getValidSkills(hero,slot){
 					}
 					else if(data.moveTypes.indexOf(inheritRules[ruleNum].replace("non",""))!=-1){
 						//inherit if not a certain movement type
-						if(data.heroes[hero.index].movetype!=inheritRules[ruleNum].replace("non","")){
-							inheritRuleMatches++;
+						if(inheritRules[ruleNum] === "nonmounted"){
+							if(data.heroes[hero.index].movetype != "cavalry" && data.heroes[hero.index].movetype != "flying"){
+								inheritRuleMatches++;
+							}
+						}
+						else{
+							if(data.heroes[hero.index].movetype!=inheritRules[ruleNum].replace("non","")){
+								inheritRuleMatches++;
+							}
 						}
 					}
 					else if(data.colors.indexOf(inheritRules[ruleNum].replace("non",""))!=-1){
