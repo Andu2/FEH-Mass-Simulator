@@ -2681,8 +2681,8 @@ window.data.heroes = [{
 		"spdgrowth": 7,
 		"defgrowth": 9,
 		"resgrowth": 1,
-		"color": "red",
-		"weapontype": "redtome",
+		"color": "green",
+		"weapontype": "axe",
 		"movetype": "infantry",
 		"minrarity": 5
 	}, {
