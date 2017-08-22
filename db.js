@@ -2787,7 +2787,23 @@ window.data.heroes = [{
 		"weapontype": "lance",
 		"movetype": "flying",
 		"minrarity": 3
-	}
+	}, {
+		"hero_id": 166,
+		"name": "Clive",
+		"basehp": 19,
+		"baseatk": 9,
+		"basespd": 6,
+		"basedef": 8,
+		"baseres": 4,
+		"hpgrowth": 8,
+		"atkgrowth": 7,
+		"spdgrowth": 5,
+		"defgrowth": 7,
+		"resgrowth": 3,
+		"color": "blue",
+		"weapontype": "lance",
+		"movetype": "cavalry",
+		"minrarity": 4
 ];
 
 //SKILLS TABLE
@@ -19495,5 +19511,21 @@ window.data.heroSkills = [{
 		"hero_id": 165,
 		"skill_id": 592,
 		"rarity": 5
+	}, {
+		"hero_id": 166,
+		"skill_id": 69,
+		"rarity": 4
+	}, {
+		"hero_id": 166,
+		"skill_id": 70,
+		"rarity": 5
+	}, {
+		"hero_id": 166,
+		"skill_id": 213,
+		"rarity": 4
+	}, {
+		"hero_id": 166,
+		"skill_id": 408,
+		"rarity": 4
 	}
 ];
