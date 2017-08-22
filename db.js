@@ -2771,22 +2771,22 @@ window.data.heroes = [{
 		"movetype": "cavalry",
 		"minrarity": 5
 	}, {
-		"hero_id": "165",
+		"hero_id": 165,
 		"name": "Valter",
-		"basehp": "18",
-		"baseatk": "8",
-		"basespd": "9",
-		"basedef": "8",
-		"baseres": "4",
-		"hpgrowth": "7",
-		"atkgrowth": "7",
-		"spdgrowth": "6",
-		"defgrowth": "8",
-		"resgrowth": "3",
+		"basehp": 18,
+		"baseatk": 8,
+		"basespd": 9,
+		"basedef": 8,
+		"baseres": 4,
+		"hpgrowth": 7,
+		"atkgrowth": 7,
+		"spdgrowth": 6,
+		"defgrowth": 8,
+		"resgrowth": 3,
 		"color": "blue",
 		"weapontype": "lance",
 		"movetype": "flying",
-		"minrarity": "3"
+		"minrarity": 3
 	}
 ];
 
@@ -11060,19 +11060,19 @@ window.data.skills = [{
 		"inheritrule": "nonstaff",
 		"affectsduel": 1
 	}, {
-		"skill_id": "592",
+		"skill_id": 592,
 		"name": "Cursed Lance",
 		"slot": "weapon",
-		"sp": "400",
+		"sp": 400,
 		"description": "Grants Atk\/Spd+2 and accelerates Special trigger (cooldown count-1). Unit takes 4 damage after combat.",
-		"hp": "0",
-		"atk": "18",
-		"spd": "2",
-		"def": "0",
-		"res": "0",
-		"charge": "0",
+		"hp": 0,
+		"atk": 18,
+		"spd": 2,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
 		"inheritrule": "unique",
-		"affectsduel": "1"
+		"affectsduel": 1
 	}
 ];
 
@@ -12477,8 +12477,8 @@ window.data.prereqs = [{
 		"skill_id": 591,
 		"required_id": 590
 	}, {
-		"skill_id": "592",
-		"required_id": "69"
+		"skill_id": 592,
+		"required_id": 69
 	}
 ];
 
@@ -19464,36 +19464,36 @@ window.data.heroSkills = [{
 		"skill_id": 591,
 		"rarity": 5
 	}, {
-		"hero_id": "165",
-		"skill_id": "68",
-		"rarity": "3"
+		"hero_id": 165,
+		"skill_id": 68,
+		"rarity": 3
 	}, {
-		"hero_id": "165",
-		"skill_id": "69",
-		"rarity": "4"
+		"hero_id": 165,
+		"skill_id": 69,
+		"rarity": 4
 	}, {
-		"hero_id": "165",
-		"skill_id": "158",
-		"rarity": "3"
+		"hero_id": 165,
+		"skill_id": 158,
+		"rarity": 3
 	}, {
-		"hero_id": "165",
-		"skill_id": "170",
-		"rarity": "4"
+		"hero_id": 165,
+		"skill_id": 170,
+		"rarity": 4
 	}, {
-		"hero_id": "165",
-		"skill_id": "228",
-		"rarity": "4"
+		"hero_id": 165,
+		"skill_id": 228,
+		"rarity": 4
 	}, {
-		"hero_id": "165",
-		"skill_id": "492",
-		"rarity": "4"
+		"hero_id": 165,
+		"skill_id": 492,
+		"rarity": 4
 	}, {
-		"hero_id": "165",
-		"skill_id": "493",
-		"rarity": "5"
+		"hero_id": 165,
+		"skill_id": 493,
+		"rarity": 5
 	}, {
-		"hero_id": "165",
-		"skill_id": "592",
-		"rarity": "5"
+		"hero_id": 165,
+		"skill_id": 592,
+		"rarity": 5
 	}
 ];
