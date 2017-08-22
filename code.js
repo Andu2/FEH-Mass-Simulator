@@ -1159,7 +1159,8 @@ function updateHeroUI(hero){
 			if(hero.weapon != -1){
 				var weaponName = data.skills[hero.weapon].name;
 
-				if(weaponName.indexOf("Killer") != -1 || weaponName.indexOf("Killing") != -1 || weaponName.indexOf("Slaying") != -1 || weaponName.indexOf("Mystletainn") != -1 || weaponName.indexOf("Hauteclere") != -1){
+				if(weaponName.indexOf("Killer") != -1 || weaponName.indexOf("Killing") != -1 || weaponName.indexOf("Slaying") != -1 
+					|| weaponName.indexOf("Mystletainn") != -1 || weaponName.indexOf("Hauteclere") != -1 || weaponName.indexOf("Cursed Lance") != -1){
 					specialCharge -= 1;
 				}
 				else if(weaponName.indexOf("Raudrblade") != -1 || weaponName.indexOf("Lightning Breath") != -1 || weaponName.indexOf("Blarblade") != -1 || weaponName.indexOf("Gronnblade") != -1){
@@ -2588,7 +2589,8 @@ function activeHero(hero){
 
 	this.resetCharge = function(){
 		//resets charge based on weapon
-		if(this.has("Killing Edge") || this.has("Killer Axe") || this.has("Killer Lance") || this.has("Mystletainn") || this.has("Hauteclere") || this.has("Killer Bow") || this.has("Slaying Bow") || this.has("Slaying Edge") || this.has("Slaying Axe")){
+		if(this.has("Killing Edge") || this.has("Killer Axe") || this.has("Killer Lance") || this.has("Mystletainn") || this.has("Hauteclere") || this.has("Cursed Lance")
+			|| this.has("Killer Bow") || this.has("Slaying Bow") || this.has("Slaying Edge") || this.has("Slaying Axe")){
 			this.charge = 1;
 		}
 		else if(this.has("Raudrblade") || this.has("Lightning Breath") || this.has("Blarblade") || this.has("Gronnblade")){
@@ -3014,6 +3016,7 @@ function activeHero(hero){
 		return poisonEnemyText;
 	}
 
+
 	//Pain and fury happen after every combat regardless of initiator
 	//They could be put into one function, but separating them is easier to make sense of
 	this.painEnemy = function(enemy){
@@ -3033,49 +3036,56 @@ function activeHero(hero){
 
 		return painEnemyText;
 	}
+	
+	//Damage after combat
+	this.endCombatDamage = function(){
+		var damageText = "";
+		var skillName = "";
+		var damage = 0;
+		var totalDamage = 0;
 
-	this.fury = function(){
-		var furyText = "";
+		if(!this.has("Embla's Ward")){		
 
-		if(!this.has("Embla's Ward")){
-			var skillName = "";
-
-			var furyDmg = 0;
+			//Fury		
 			if(this.has("Fury")){
-				furyDmg = this.has("Fury") * 2;
+				damage = this.has("Fury") * 2;
 				skillName = data.skills[this.aIndex].name;
-			}
-			if(furyDmg > 0){
-				if(this.hp - furyDmg <= 0){
-					furyDmg = this.hp - 1;
-				}
-				this.hp -= furyDmg;
-				furyText += this.name + " takes " + furyDmg + " damage after combat from " + skillName + ".<br>";
+				damageText += this.name + " takes " + damage + " damage after combat from " + skillName + ".<br>";
+				totalDamage += damage;
 			}
 
-			//TODO: Refactor so this code doesn't have to run twice
-			var furyDmg = 0;
-			var skillName = "???";
+			//Cursed Lance
+			if(this.has("Cursed Lance")){
+				damage = 4;
+				skillName = data.skills[this.weaponIndex].name;
+				damageText += this.name + " takes " + damage + " damage after combat from " + skillName + ".<br>";
+				totalDamage += damage;
+			}
+			
+			//Activate only when attacking
 			if(this.didAttack && this.combatStartHp / this.maxHp >= 1){
-				if(this.has("Ragnarok")){
-					furyDmg = 5;
-					skillName = "Ragnarok";
-				}
-				if(this.has("Seashell") || this.has("Refreshing Bolt") || this.has("Deft Harpoon") || this.has("Melon Crusher")){
-					furyDmg = 2;
+				//Weapons
+				if(this.has("Ragnarok") || this.has("Seashell") || this.has("Refreshing Bolt") || this.has("Deft Harpoon") || this.has("Melon Crusher")){
+					if (data.skills[this.weaponIndex].name == "Ragnarok"){
+						damage = 5;
+					} else{
+						damage = 2;
+					}					
 					skillName = data.skills[this.weaponIndex].name;
+					damageText += this.name + " takes " + damage + " damage after combat from attacking with " + skillName + ".<br>";
+					totalDamage += damage;
 				}
 			}
-			if(furyDmg > 0){
-				if(this.hp - furyDmg <= 0){
-					furyDmg = this.hp - 1;
+			
+			//Total
+			if(totalDamage > 0){
+				if(this.hp - totalDamage <= 0){
+					totalDamage = this.hp - 1;
 				}
-				this.hp -= furyDmg;
-				furyText += this.name + " takes " + furyDmg + " damage after combat from doing an attack with " + skillName + ".<br>";
+				this.hp -= totalDamage;
 			}
 		}
-
-		return furyText;
+		return damageText;
 	}
 
 	this.seal = function(enemy){
@@ -4139,14 +4149,14 @@ function activeHero(hero){
 		if(enemy.hp>0){
 			roundText += this.poisonEnemy(enemy);
 			roundText += this.painEnemy(enemy);
-			roundText += enemy.fury();
+			roundText += enemy.endCombatDamage();
 		}
 
 		//Do post-combat damage to this if this isn't dead
 		//No poison because this initiated
 		if(this.hp>0){
 			roundText += enemy.painEnemy(this);
-			roundText += this.fury();
+			roundText += this.endCombatDamage();
 		}
 
 		//Remove debuffs - action done
