@@ -2804,6 +2804,7 @@ window.data.heroes = [{
 		"weapontype": "lance",
 		"movetype": "cavalry",
 		"minrarity": 4
+	}
 ];
 
 //SKILLS TABLE
