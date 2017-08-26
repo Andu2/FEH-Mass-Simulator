@@ -11130,7 +11130,7 @@ window.data.skills = [{
 		"def": 0,
 		"res": 0,
 		"charge": 0,
-		"inheritrule": 0,
+		"inheritrule": "",
 		"affectsduel": 1
 	}
 ];
