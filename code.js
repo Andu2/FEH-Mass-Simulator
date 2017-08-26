@@ -3866,6 +3866,12 @@ function activeHero(hero){
 			}
 		}
 
+		if(enemy.has("Valaskjalf")){
+			if(enemy.hp/enemy.maxHp <= .50){
+				vantage = true;
+			}
+		}		
+		
 		//check for desperation before beginning combat
 		var desperation = false;
 		if(this.has("Desperation")){
@@ -3877,6 +3883,12 @@ function activeHero(hero){
 			desperation = true;
 		}
 
+		//Check for Hardy Bearing 1, affects all skills that change attack priority
+		if(this.has("Hardy Bearing 1") || (enemy.has("Hardy Bearing 1") && (enemy.combatStartHp / enemy.maxHp >= 1))){
+			vantage = false;
+			desperation = false;
+		}		
+		
 		//Check for quick riposte
 		var quickRiposte = false;
 		if(enemy.has("Quick Riposte")){
