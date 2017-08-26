@@ -8431,6 +8431,20 @@ window.data.skills = [{
 		"inheritrule": "",
 		"affectsduel": 1
 	}, {
+		"skill_id": 402,
+		"name": "Resistance 1",
+		"slot": "s",
+		"sp": 0,
+		"description": "Res +1",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 1,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 1
+	}, {
 		"skill_id": 403,
 		"name": "Speed 1",
 		"slot": "s",
@@ -11089,6 +11103,34 @@ window.data.skills = [{
 		"res": 0,
 		"charge": 0,
 		"inheritrule": "unique",
+		"affectsduel": 1
+	}, {
+		"skill_id": 593,
+		"name": "Defense 1",
+		"slot": "s",
+		"sp": 0,
+		"description": "Def +1",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 1,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 1
+	}, {
+		"skill_id": 594,
+		"name": "Hardy Bearing 1",
+		"slot": "s",
+		"sp": 0,
+		"description": "Disables skills that change unit's attack priority. If unit has 100% HP at start of battle, enemy skills that change attack priority are also disabled.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": 0,
 		"affectsduel": 1
 	}
 ];
