@@ -2694,26 +2694,34 @@ function activeHero(hero){
 		return threatenText;
 	}
 
+	//Turn counting is complicated due to mix & matching turn order, will revisit later if necessary.
+	//Currently only heals on first turn since there's only 4 combat rounds in this simulator.
 	this.renew = function(turn){
-		var renewText = "";
-		var renewalTurn = 0;
-		if(this.has("Renewal")){
-			renewalTurn = 5 - this.has("Renewal");
-		}
-		if(this.has("Falchion") && renewalTurn > 3){
-			renewalTurn = 3;
-		}
+		var renewText = "";	
 
-		if(renewalTurn != 0){
-			if(turn % renewalTurn == 0){
-				var renewalHp = 10;
-				if(this.hp + renewalHp > this.maxHp){
-					renewalHp = this.maxHp - this.hp;
+		if(this.has("Renewal")){
+			//if(turn % (5 - this.has("Renewal")) * 2 == 0){
+			if(turn == 0){
+				if(this.hp + 10 > this.maxHp){
+					this.hp = this.maxHp;
+				} else{
+					this.hp += 10;
 				}
-				this.hp += renewalHp;
-				renewText += "Renewal: " + this.name + " heals " + renewalHp + "HP.<br>";
-			}
+				renewText += this.name + " heals 10 HP due to Renewal.<br>";
+			}	
 		}
+		
+		if(this.has("Falchion")){
+			//if(turn % 6 == 0){
+			if(turn == 0){
+				if(this.hp + 10 > this.maxHp){
+					this.hp = this.maxHp;
+				} else{
+					this.hp += 10;
+				}
+				renewText += this.name + " heals 10 HP due to Falchion.<br>";
+			}	
+		}		
 
 		return renewText;
 	}
@@ -3099,7 +3107,7 @@ function activeHero(hero){
 			sealAtk = -this.has("Seal Atk") * 2 - 1;
 			skillName = data.skills[this.bIndex].name;
 		}
-		if(this.has("Fear") && sealAtk > -6){
+		if(this.didAttack && this.has("Fear") && sealAtk > -6){
 			sealAtk = -6;
 			skillName = data.skills[this.weaponIndex].name;
 		}
@@ -3118,7 +3126,7 @@ function activeHero(hero){
 			sealSpd = -this.has("Seal Atk Spd") * 2 - 1;
 			skillName = data.skills[this.bIndex].name;
 		}
-		if(this.has("Slow") && sealSpd > -6){
+		if(this.didAttack && this.has("Slow") && sealSpd > -6){
 			sealSpd = -6;
 			skillName = data.skills[this.weaponIndex].name;
 		}
@@ -3322,8 +3330,13 @@ function activeHero(hero){
 				else if(this.has("Blazing Thunder") || this.has("Blazing Wind") || this.has("Blazing Light") || this.has("Blazing Flame")){
 					AOEDamage = Math.floor(1.5*(AOEthisEffAtk - relevantDef));
 				}
+				
+				if(this.has("Wo Dao") || this.has("Dark Excalibur")){
+					AOEDamage += 10;
+					damageText += this.name + " gains 10 damage from " + data.skills[hero.weapon].name + ".<br>";
+				}
 
-				if(AOEDamage > 0){
+				if(AOEDamage >= 0){
 					this.resetCharge();
 					AOEActivated = true;
 					if(enemy.has("Embla's Ward")){
@@ -3411,7 +3424,6 @@ function activeHero(hero){
 				if(this.has("Wo Dao") || this.has("Dark Excalibur")){
 					dmgBoost += 10;
 					damageText += this.name + " gains 10 damage from " + data.skills[hero.weapon].name + ".<br>";
-					//Does damage boost on AOE skills take effect on attack or AOE?
 				}
 			}
 		}
@@ -3900,14 +3912,6 @@ function activeHero(hero){
 			quickRiposte = true;
 		}
 
-		//Check for brash assault
-		var brashAssault = false;
-		if(this.has("Brash Assault") && (this.range==enemy.range || anyRangeCounter)){
-			if(this.hp/this.maxHp <= .2 + this.has("Brash Assault") * 0.1){
-				brashAssault = true;
-			}
-		}
-
 		//Check for wary fighter
 		//Wary fighter can come from either unit
 		//But some interactions apparently depend on who has it
@@ -4051,9 +4055,7 @@ function activeHero(hero){
 			preventEnemyFollow = true;
 			thisAutoFollow = true;
 		}
-		if(brashAssault){
-			thisAutoFollow = true;
-		}
+		
 		if(quickRiposte){
 			enemyAutoFollow = true;
 		}
@@ -4083,6 +4085,13 @@ function activeHero(hero){
 		if(enemy.lit && enemyCanCounter){
 			roundText += enemy.name + " cannot counterattack because they're still distracted by the candle.<br>";
 			enemyCanCounter = false;
+		}
+
+		//Check for brash assault
+		if(this.has("Brash Assault") && (this.range==enemy.range || anyRangeCounter) && enemyCanCounter){
+			if(this.hp/this.maxHp <= .2 + this.has("Brash Assault") * 0.1){
+				thisAutoFollow = true;
+			}
 		}
 
 		//Cancel things out
