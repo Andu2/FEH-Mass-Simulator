@@ -3669,7 +3669,7 @@ function activeHero(hero){
 			//Check Urvan damage reduction, currently occurs before damage reducing special
 			//***May need to revise due to Shield Pulse's if calculation order is different***
 			if (enemy.has("Urvan") && lastAttacker == this.name){
-				dmg = dmg*0.8;
+				dmg = dmg*0.2;
 				damageText += "Urvan reduces " + this.name + "'s damage by 80%.<br>"
 			}
 			
