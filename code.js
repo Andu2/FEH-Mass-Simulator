@@ -3326,19 +3326,20 @@ function activeHero(hero){
 
 				if(this.has("Rising Thunder") || this.has("Rising Wind") || this.has("Rising Light") || this.has("Rising Flame") || this.has("Growing Thunder") || this.has("Growing Wind") || this.has("Growing Light") || this.has("Growing Flame")){
 					AOEDamage = AOEthisEffAtk - relevantDef;
+					AOEActivated = true;
 				}
 				else if(this.has("Blazing Thunder") || this.has("Blazing Wind") || this.has("Blazing Light") || this.has("Blazing Flame")){
 					AOEDamage = Math.floor(1.5*(AOEthisEffAtk - relevantDef));
+					AOEActivated = true;
 				}
 				
-				if(this.has("Wo Dao") || this.has("Dark Excalibur")){
-					AOEDamage += 10;
-					damageText += this.name + " gains 10 damage from " + data.skills[hero.weapon].name + ".<br>";
-				}
-
-				if(AOEDamage >= 0){
+				if(AOEActivated){
 					this.resetCharge();
-					AOEActivated = true;
+					
+					if(this.has("Wo Dao") || this.has("Dark Excalibur")){
+						AOEDamage += 10;
+						damageText += this.name + " gains 10 damage from " + data.skills[hero.weapon].name + ".<br>";
+					}					
 					if(enemy.has("Embla's Ward")){
 						AOEDamage = 0;
 					}
