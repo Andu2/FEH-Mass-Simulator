@@ -3771,33 +3771,33 @@ function activeHero(hero){
 
 			//Special charge does not increase if special was used on this attack
 			if(!offensiveSpecialActivated){
-				var heavyBlade = 0;
 				if(this.has("Heavy Blade")){
-					heavyBlade = this.has("Heavy Blade")*-2 + 7;
+					if(thisEffAtk - enemyEffAtk >= this.has("Heavy Blade")*-2 + 7){
+						this.charge++;
+					}
+				}				
+				
+				if(this.has("Blazing Durandal")){
+					if(thisEffAtk - enemyEffAtk >= 1){
+						this.charge++;
+					}
 				}
-				if(heavyBlade && thisEffAtk - enemyEffAtk >= heavyBlade){
-					this.charge++;
-				}
-
-				var guard = 0;
+				
 				if(enemy.has("Guard")){
-					guard = 1.1 - enemy.has("Guard")*0.1;
+					if(enemy.combatStartHp / enemy.maxHp >= 1.1 - enemy.has("Guard")*0.1){
+						this.charge--;
+					}
 				}
-				if(guard && enemy.combatStartHp / enemy.maxHp >= guard){
-					this.charge--;
-				}
-
+				
 				this.charge++;
 			}
 
 			if(!defensiveSpecialActivated){
-				var guard = 0;
 				if(this.has("Guard")){
-					guard = 1.1 - this.has("Guard")*0.1;
-				}
-				if(guard && this.combatStartHp / this.maxHp >= guard){
-					enemy.charge--;
-				}
+					if(this.combatStartHp / this.maxHp >= 1.1 - this.has("Guard")*0.1){
+						enemy.charge--;
+					}
+				}				
 
 				enemy.charge++;
 			}
@@ -4109,7 +4109,7 @@ function activeHero(hero){
 		}
 		
 		if(enemy.lit && enemyCanCounter){
-			roundText += enemy.name + " cannot counterattack because they're still blinded by Candlelight.<br>";
+			roundText += enemy.name + " cannot counterattack because " + enemy.name + " is still blinded by Candlelight.<br>";
 			enemyCanCounter = false;
 		}
 		
