@@ -2469,6 +2469,11 @@ function exportCalc(){
 //This is where most of the calculations happen
 //heroIndex is the index of the hero represented
 //challenger is true if challenger, false if enemy
+
+//Variable for keeping track of attacker for Urvan
+//***Currently does not including aoe damage in consequtive damage check, revise if required***
+var lastAttacker = "none";
+
 function activeHero(hero){
 
 	this.combatBuffs = {"atk":0,"spd":0,"def":0,"res":0};
@@ -3661,6 +3666,13 @@ function activeHero(hero){
 				}
 			}
 
+			//Check Urvan damage reduction, currently occurs before damage reducing special
+			//***May need to revise due to Shield Pulse's if calculation order is different***
+			if (enemy.has("Urvan") && lastAttacker == this.name){
+				dmg = dmg*0.8;
+				damageText += "Urvan reduces " + this.name + "'s damage by 80%.<br>"
+			}
+			
 			//Check damage reducing specials
 			var defensiveSpecialActivated = false;
 			var dmgReduction = 1.0;
@@ -3738,8 +3750,8 @@ function activeHero(hero){
 			//Pushing Shield check
 			if (defensiveSpecialActivated && (enemy.has("Shield Pulse 2") || enemy.has("Shield Pulse 3"))){
 				dmg -= 5;
-			}
-
+			}			
+			
 			dmg = Math.max(dmg,0);
 			if(enemy.has("Embla's Ward")){
 				dmg = 0;
@@ -3758,7 +3770,10 @@ function activeHero(hero){
 				}
 			}
 			enemy.hp -= dmg;
-
+			
+			//Set this attacker as last attacker for Urvan check
+			lastAttacker = this.name;
+			
 			//add absorbed hp
 			var absorbHp = dmg*absorbPct | 0;
 			if(this.hp + absorbHp > this.maxHp){
@@ -3775,9 +3790,7 @@ function activeHero(hero){
 					if(thisEffAtk - enemyEffAtk >= this.has("Heavy Blade")*-2 + 7){
 						this.charge++;
 					}
-				}				
-				
-				if(this.has("Blazing Durandal")){
+				} else if(this.has("Blazing Durandal")){
 					if(thisEffAtk - enemyEffAtk >= 1){
 						this.charge++;
 					}
@@ -3789,6 +3802,10 @@ function activeHero(hero){
 					}
 				}
 				
+				if(enemy.has("Steady Breath")){
+					enemy.charge++;
+				}
+				
 				this.charge++;
 			}
 
@@ -3797,7 +3814,7 @@ function activeHero(hero){
 					if(this.combatStartHp / this.maxHp >= 1.1 - this.has("Guard")*0.1){
 						enemy.charge--;
 					}
-				}				
+				}	
 
 				enemy.charge++;
 			}
@@ -3823,7 +3840,10 @@ function activeHero(hero){
 	}
 
 	//represents a full round of combat
-	this.attack = function(enemy,turn,galeforce){
+	this.attack = function(enemy,turn,galeforce){		
+				
+		//Initialize last attacker
+		lastAttacker = "none";
 
 		var roundText = "";//Common theme: text is returned by helper functions, so the functions are called by adding them to roundText
 		var firstTurn = (turn - options.startTurn == 0);
