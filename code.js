@@ -3378,7 +3378,7 @@ function activeHero(hero){
 				if(AOEActivated){
 					this.resetCharge();
 					
-					if(this.hasExactly("Wo Dao") || this.hasExactly("Dark Excalibur")){
+					if(this.has("Wo Dao") || this.hasExactly("Dark Excalibur")){
 						AOEDamage += 10;
 						damageText += this.name + " gains 10 damage from " + data.skills[hero.weapon].name + ".<br>";
 					}					
@@ -3464,7 +3464,7 @@ function activeHero(hero){
 				this.resetCharge();
 				damageText += this.name + " activates " + data.skills[this.specialIndex].name + ".<br>";
 
-				if(this.hasExactly("Wo Dao") || this.hasExactly("Dark Excalibur")){
+				if(this.has("Wo Dao") || this.hasExactly("Dark Excalibur")){
 					dmgBoost += 10;
 					damageText += this.name + " gains 10 damage from " + data.skills[hero.weapon].name + ".<br>";
 				}
