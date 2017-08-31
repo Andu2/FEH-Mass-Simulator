@@ -3011,9 +3011,15 @@ function activeHero(hero){
 				this.combatSpur.res += 4;
 				boostText += this.name + " gets +4 res while defending with " + data.skills[this.weaponIndex].name + ".<br>";
 			}
+			if(this.has("Steady Stance")){
+				stanceDef = this.has("Steady Stance") * 2;
+				skillName = data.skills[this.aIndex].name;
+				this.combatSpur.def += stanceDef;
+				boostText += this.name + " gets +" + stanceDef + " def from defending with " + skillName + ".<br>";
+			}
 			if(this.has("Steady Breath")){
 				this.combatSpur.def += 4;
-				boostText += this.name + " gets +4 def from Steady Breath.<br>";
+				boostText += this.name + " gets +4 def from defending with Steady Breath.<br>";
 			}
 			return boostText;
 		}
@@ -3696,7 +3702,7 @@ function activeHero(hero){
 			
 			//Check Urvan damage reduction, currently occurs before damage reducing special
 			//***May need to revise due to Shield Pulse's if calculation order is different***
-			if (enemy.has("Urvan") && lastAttacker == this.name){
+			if (enemy.has("Urvan") && lastAttacker == (this.initiator ? "Initiator: " + this.name : "Defender: " + this.name)){
 				dmgReduction *= 0.2;
 				damageText += "Urvan reduces " + this.name + "'s consecutive damage by 80%.<br>"
 			}			
@@ -3811,7 +3817,8 @@ function activeHero(hero){
 			}
 			
 			//Set this attacker as last attacker for Urvan check
-			lastAttacker = this.name;
+			//Divide into initiator vs defender for mirror match differentiation
+			lastAttacker = (this.initiator ? "Initiator: " + this.name : "Defender: " + this.name);
 			
 			//add absorbed hp
 			var absorbHp = dmg*absorbPct | 0;
