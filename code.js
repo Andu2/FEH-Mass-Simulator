@@ -3011,9 +3011,15 @@ function activeHero(hero){
 				this.combatSpur.res += 4;
 				boostText += this.name + " gets +4 res while defending with " + data.skills[this.weaponIndex].name + ".<br>";
 			}
+			if(this.has("Steady Stance")){
+				stanceDef = this.has("Steady Stance") * 2;
+				skillName = data.skills[this.aIndex].name;
+				this.combatSpur.def += stanceDef;
+				boostText += this.name + " gets +" + stanceDef + " def from defending with " + skillName + ".<br>";
+			}
 			if(this.has("Steady Breath")){
 				this.combatSpur.def += 4;
-				boostText += this.name + " gets +4 def from Steady Breath.<br>";
+				boostText += this.name + " gets +4 def from defending with Steady Breath.<br>";
 			}
 			return boostText;
 		}
@@ -3323,7 +3329,7 @@ function activeHero(hero){
 			thisEffRes = this.res - Math.max(this.buffs.res,this.combatBuffs.res) + Math.min(this.debuffs.res,this.combatDebuffs.res) + this.spur.res + this.combatSpur.res;
 			if(!AOE){damageText += this.name + "'s buffs are reversed by debuff.<br>";}
 		} else if((enemy.has("Beorc's Blessing") && (this.moveType == "cavalry" || this.moveType == "flying"))
-			|| (enemy.has("Mulagir") && this.attackType == "magical")){
+			|| (enemy.has("Mulagir") && (this.weaponType == "redtome" || this.weaponType == "bluetome" || this.weaponType == "greentome"))){
 			thisEffAtk = this.atk + Math.min(this.debuffs.atk,this.combatDebuffs.atk) + this.spur.atk + this.combatSpur.atk;
 			thisEffDef = this.def + Math.min(this.debuffs.def,this.combatDebuffs.def) + this.spur.def + this.combatSpur.def;
 			thisEffRes = this.res + Math.min(this.debuffs.res,this.combatDebuffs.res) + this.spur.res + this.combatSpur.res;
@@ -3336,7 +3342,7 @@ function activeHero(hero){
 			enemyEffRes = enemy.res - Math.max(enemy.buffs.res,enemy.combatBuffs.res) + Math.min(enemy.debuffs.res,enemy.combatDebuffs.res) + enemy.spur.res + enemy.combatSpur.res;
 			if(!AOE){damageText += enemy.name + "'s buffs are reversed by debuff.<br>";}
 		} else if((this.has("Beorc's Blessing") && (enemy.moveType == "cavalry" || enemy.moveType == "flying"))
-			|| (this.has("Mulagir") && enemy.attackType == "magical")){
+			|| (this.has("Mulagir") && (enemy.weaponType == "redtome" || enemy.weaponType == "bluetome" || enemy.weaponType == "greentome"))){
 			enemyEffAtk = enemy.atk + Math.min(enemy.debuffs.atk,enemy.combatDebuffs.atk) + enemy.spur.atk + enemy.combatSpur.atk;
 			enemyEffDef = enemy.def + Math.min(enemy.debuffs.def,enemy.combatDebuffs.def) + enemy.spur.def + enemy.combatSpur.def;
 			enemyEffRes = enemy.res + Math.min(enemy.debuffs.res,enemy.combatDebuffs.res) + enemy.spur.res + enemy.combatSpur.res;
@@ -3696,7 +3702,7 @@ function activeHero(hero){
 			
 			//Check Urvan damage reduction, currently occurs before damage reducing special
 			//***May need to revise due to Shield Pulse's if calculation order is different***
-			if (enemy.has("Urvan") && lastAttacker == this.name){
+			if (enemy.has("Urvan") && lastAttacker == (this.initiator ? "Initiator: " + this.name : "Defender: " + this.name)){
 				dmgReduction *= 0.2;
 				damageText += "Urvan reduces " + this.name + "'s consecutive damage by 80%.<br>"
 			}			
@@ -3800,13 +3806,19 @@ function activeHero(hero){
 			enemy.hp -= dmg;
 			
 			//Increase enemy charge when dealing non-aoe damage
-			//***May require revision, does it work when damage is 0? ***
-			if(enemy.has("Steady Breath")){
+			//***May require revision, does it work when damage is 0?***
+			//***It also works when attacking as the defender?***
+			if(this.initiator && enemy.has("Steady Breath")){
 				enemy.charge++;
+				damageText += enemy.name + " gains an extra charge with Steady Breath.<br>";
+			}else if(!this.initiator && this.has("Steady Breath")){
+				this.charge++;
+				damageText += this.name + " gains an extra charge with Steady Breath.<br>";
 			}
 			
 			//Set this attacker as last attacker for Urvan check
-			lastAttacker = this.name;
+			//Divide into initiator vs defender for mirror match differentiation
+			lastAttacker = (this.initiator ? "Initiator: " + this.name : "Defender: " + this.name);
 			
 			//add absorbed hp
 			var absorbHp = dmg*absorbPct | 0;
@@ -3933,14 +3945,14 @@ function activeHero(hero){
 		if(this.panicked){
 			thisEffSpd = this.spd - Math.max(this.buffs.spd,this.combatBuffs.spd) + Math.min(this.debuffs.spd,this.combatDebuffs.spd) + this.spur.spd + this.combatSpur.spd;
 		} else if((enemy.has("Beorc's Blessing") && (this.moveType == "cavalry" || this.moveType == "flying"))
-			|| (enemy.has("Mulagir") && this.attackType == "magical")){
+			|| (enemy.has("Mulagir") && (this.weaponType == "redtome" || this.weaponType == "bluetome" || this.weaponType == "greentome"))){
 			thisEffSpd = this.spd + Math.min(this.debuffs.spd,this.combatDebuffs.spd) + this.spur.spd + this.combatSpur.spd;
 		}
 
 		if(enemy.panicked){
 			enemyEffSpd = enemy.spd - Math.max(enemy.buffs.spd,enemy.combatBuffs.spd) + Math.min(enemy.debuffs.spd,enemy.combatDebuffs.spd) + enemy.spur.spd + enemy.combatSpur.spd;
-		} else if((enemy.has("Beorc's Blessing") && (this.moveType == "cavalry" || this.moveType == "flying"))
-			|| (enemy.has("Mulagir") && this.attackType == "magical")){
+		} else if((this.has("Beorc's Blessing") && (enemy.moveType == "cavalry" || enemy.moveType == "flying"))
+			|| (this.has("Mulagir") && (enemy.weaponType == "redtome" || enemy.weaponType == "bluetome" || enemy.weaponType == "greentome"))){
 			enemyEffSpd = enemy.spd + Math.min(enemy.debuffs.spd,enemy.combatDebuffs.spd) + enemy.spur.spd + enemy.combatSpur.spd;
 		}
 		

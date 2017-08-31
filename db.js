@@ -11257,7 +11257,7 @@ window.data.skills = [{
 		"def": 0,
 		"res": 0,
 		"charge": 0,
-		"inheritrule": "",
+		"inheritrule": "melee,noncavalry,nonflying",
 		"affectsduel": 1
 	}, {
 		"skill_id": 599,
@@ -11313,8 +11313,8 @@ window.data.skills = [{
 		"def": 0,
 		"res": 0,
 		"charge": 0,
-		"inheritrule": "",
-		"affectsduel": 1
+		"inheritrule": "nonstaff",
+		"affectsduel": 0
 	}, {
 		"skill_id": 603,
 		"name": "Atk Smoke 2",
@@ -11327,8 +11327,8 @@ window.data.skills = [{
 		"def": 0,
 		"res": 0,
 		"charge": 0,
-		"inheritrule": "",
-		"affectsduel": 1
+		"inheritrule": "nonstaff",
+		"affectsduel": 0
 	}, {
 		"skill_id": 604,
 		"name": "Atk Smoke 3",
@@ -11341,8 +11341,8 @@ window.data.skills = [{
 		"def": 0,
 		"res": 0,
 		"charge": 0,
-		"inheritrule": "",
-		"affectsduel": 1
+		"inheritrule": "nonstaff",
+		"affectsduel": 0
 	}, {
 		"skill_id": 605,
 		"name": "Geirskogul",
@@ -11370,7 +11370,7 @@ window.data.skills = [{
 		"res": 0,
 		"charge": 0,
 		"inheritrule": "",
-		"affectsduel": 1
+		"affectsduel": 0
 	}, {
 		"skill_id": 607,
 		"name": "Drive Spd 2",
@@ -11384,7 +11384,7 @@ window.data.skills = [{
 		"res": 0,
 		"charge": 0,
 		"inheritrule": "",
-		"affectsduel": 1
+		"affectsduel": 0
 	}, {
 		"skill_id": 608,
 		"name": "Blazing Durandal",
@@ -11411,7 +11411,7 @@ window.data.skills = [{
 		"def": 0,
 		"res": 0,
 		"charge": 0,
-		"inheritrule": "",
+		"inheritrule": "nonstaff",
 		"affectsduel": 1
 	}, {
 		"skill_id": 610,
@@ -11425,7 +11425,7 @@ window.data.skills = [{
 		"def": 0,
 		"res": 0,
 		"charge": 0,
-		"inheritrule": "",
+		"inheritrule": "nonstaff",
 		"affectsduel": 1
 	}
 ];
