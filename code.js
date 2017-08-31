@@ -3801,8 +3801,9 @@ function activeHero(hero){
 			
 			//Increase enemy charge when dealing non-aoe damage
 			//***May require revision, does it work when damage is 0? ***
-			if(this.initiator || enemy.has("Steady Breath")){
+			if(this.initiator && enemy.has("Steady Breath")){
 				enemy.charge++;
+				damageText += enemy.name + " gains an extra charge with Steady Breath.<br>";
 			}
 			
 			//Set this attacker as last attacker for Urvan check
