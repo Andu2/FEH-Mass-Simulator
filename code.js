@@ -2997,7 +2997,10 @@ function activeHero(hero){
 				this.combatSpur.res += 4;
 				boostText += this.name + " gets +4 res while defending with " + data.skills[this.weaponIndex].name + ".<br>";
 			}
-
+			if(this.has("Steady Breath")){
+				this.combatSpur.def += 4;
+				boostText += this.name + " gets +4 def from Steady Breath.<br>";
+			}
 			return boostText;
 		}
 	}
@@ -3348,19 +3351,20 @@ function activeHero(hero){
 
 				if(this.has("Rising Thunder") || this.has("Rising Wind") || this.has("Rising Light") || this.has("Rising Flame") || this.has("Growing Thunder") || this.has("Growing Wind") || this.has("Growing Light") || this.has("Growing Flame")){
 					AOEDamage = AOEthisEffAtk - relevantDef;
+					AOEActivated = true;
 				}
 				else if(this.has("Blazing Thunder") || this.has("Blazing Wind") || this.has("Blazing Light") || this.has("Blazing Flame")){
 					AOEDamage = Math.floor(1.5*(AOEthisEffAtk - relevantDef));
+					AOEActivated = true;
 				}
 				
-				if(this.has("Wo Dao") || this.has("Dark Excalibur")){
-					AOEDamage += 10;
-					damageText += this.name + " gains 10 damage from " + data.skills[hero.weapon].name + ".<br>";
-				}
-
-				if(AOEDamage >= 0){
+				if(AOEActivated){
 					this.resetCharge();
-					AOEActivated = true;
+					
+					if(this.has("Wo Dao") || this.has("Dark Excalibur")){
+						AOEDamage += 10;
+						damageText += this.name + " gains 10 damage from " + data.skills[hero.weapon].name + ".<br>";
+					}					
 					if(enemy.has("Embla's Ward")){
 						AOEDamage = 0;
 					}
@@ -3666,17 +3670,20 @@ function activeHero(hero){
 				}
 			}
 
-			//Check Urvan damage reduction, currently occurs before damage reducing special
-			//***May need to revise due to Shield Pulse's if calculation order is different***
-			if (enemy.has("Urvan") && lastAttacker == this.name){
-				dmg = dmg*0.2;
-				damageText += "Urvan reduces " + this.name + "'s damage by 80%.<br>"
-			}
+			
 			
 			//Check damage reducing specials
 			var defensiveSpecialActivated = false;
 			var dmgReduction = 1.0;
 			var miracle = false;
+			
+			//Check Urvan damage reduction, currently occurs before damage reducing special
+			//***May need to revise due to Shield Pulse's if calculation order is different***
+			if (enemy.has("Urvan") && lastAttacker == this.name){
+				dmgReduction *= 0.2;
+				damageText += "Urvan reduces " + this.name + "'s consecutive damage by 80%.<br>"
+			}			
+			
 			if(enemy.specialIndex!=-1&&data.skills[enemy.specialIndex].charge<=enemy.charge){
 				//gotta check range
 				var anyRangeCounter = false;
@@ -3686,22 +3693,26 @@ function activeHero(hero){
 
 				if(this.range == "melee" || (!this.initiator && enemy.range == "melee" && anyRangeCounter)){
 					if(enemy.has("Buckler") || enemy.has("Escutcheon")){
-						dmgReduction = 0.7;
+						dmgReduction *= 0.7;
 						defensiveSpecialActivated = true;
+						damageText += data.skills[enemy.specialIndex].name + " reduces " + this.name + "'s damage by 30%.<br>"
 					}
 					else if(enemy.has("Pavise")){
-						dmgReduction = 0.5;
+						dmgReduction *= 0.5;
 						defensiveSpecialActivated = true;
+						damageText += data.skills[enemy.specialIndex].name + " reduces " + this.name + "'s damage by 50%.<br>"
 					}
 				}
 				else if(this.range == "ranged" || (!this.initiator && enemy.range == "ranged" && anyRangeCounter)){
 					if(enemy.has("Holy Vestments") || enemy.has("Sacred Cowl")){
-						dmgReduction = 0.7;
+						dmgReduction *= 0.7;
 						defensiveSpecialActivated = true;
+						damageText += data.skills[enemy.specialIndex].name + " reduces " + this.name + "'s damage by 30%.<br>"
 					}
 					else if(enemy.has("Aegis")){
-						dmgReduction = 0.5;
+						dmgReduction *= 0.5;
 						defensiveSpecialActivated = true;
+						damageText += data.skills[enemy.specialIndex].name + " reduces " + this.name + "'s damage by 50%.<br>"
 					}
 				}
 
@@ -3712,7 +3723,7 @@ function activeHero(hero){
 
 			if(defensiveSpecialActivated){
 				if(dmgReduction < 1){
-					damageText += data.skills[enemy.specialIndex].name + " reduces " + this.name + "'s damage by " + ((1 - dmgReduction) * 100 | 0) + "%.<br>"
+					//damageText += data.skills[enemy.specialIndex].name + " reduces " + this.name + "'s damage by " + ((1 - dmgReduction) * 100 | 0) + "%.<br>"
 
 					if (enemy.has("Shield Pulse 2") || enemy.has("Shield Pulse 3")){
 						damageText += "Shield Pulse reduces " + this.name + "'s damage by an additional 5.<br>";
@@ -3771,6 +3782,12 @@ function activeHero(hero){
 			}
 			enemy.hp -= dmg;
 			
+			//Increase enemy charge when dealing non-aoe damage
+			//***May require revision, does it work when damage is 0? ***
+			if(enemy.has("Steady Breath")){
+				enemy.charge++;
+			}
+			
 			//Set this attacker as last attacker for Urvan check
 			lastAttacker = this.name;
 			
@@ -3800,10 +3817,6 @@ function activeHero(hero){
 					if(enemy.combatStartHp / enemy.maxHp >= 1.1 - enemy.has("Guard")*0.1){
 						this.charge--;
 					}
-				}
-				
-				if(enemy.has("Steady Breath")){
-					enemy.charge++;
 				}
 				
 				this.charge++;
@@ -4072,7 +4085,7 @@ function activeHero(hero){
 			watersweep = this.has("Watersweep")*-2 + 7 + (this.has("Phantom Spd 1") ? -5 : 0);
 		}
 		
-		//Do AOE damage
+		//Check for AOE special activation
 		roundText += this.doDamage(enemy,false,true);
 
 		var thisFollowUp = false;
