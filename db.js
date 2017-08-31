@@ -19891,7 +19891,7 @@ window.data.heroSkills = [{
 		"rarity": 5
 	}, {
 		"hero_id": 166,
-		"skill_id": 354,
+		"skill_id": 360,
 		"rarity": 5
 	}, {
 		"hero_id": 166,
