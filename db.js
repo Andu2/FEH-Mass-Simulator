@@ -11257,7 +11257,7 @@ window.data.skills = [{
 		"def": 0,
 		"res": 0,
 		"charge": 0,
-		"inheritrule": "",
+		"inheritrule": "melee,noncavalry,nonflying",
 		"affectsduel": 1
 	}, {
 		"skill_id": 599,
