@@ -789,10 +789,12 @@ function setStats(hero){
 		hero.res += mergeBoost.res;
 
 		//Add stats based on skills
-		//Weapons only affect spd and atk right now
 		if(hero.weapon != -1){
+			hero.hp += data.skills[hero.weapon].hp;
 			hero.atk += data.skills[hero.weapon].atk;
 			hero.spd += data.skills[hero.weapon].spd;
+			hero.def += data.skills[hero.weapon].def;
+			hero.res += data.skills[hero.weapon].res;
 		}
 
 		//A-passive and S only ones that affects stats
@@ -1160,7 +1162,8 @@ function updateHeroUI(hero){
 				var weaponName = data.skills[hero.weapon].name;
 
 				if(weaponName.indexOf("Killer") != -1 || weaponName.indexOf("Killing") != -1 || weaponName.indexOf("Slaying") != -1 
-					|| weaponName.indexOf("Mystletainn") != -1 || weaponName.indexOf("Hauteclere") != -1 || weaponName.indexOf("Cursed Lance") != -1){
+					|| weaponName.indexOf("Mystletainn") != -1 || weaponName.indexOf("Hauteclere") != -1 || weaponName.indexOf("Cursed Lance") != -1
+					|| weaponName.indexOf("Urvan") != -1){
 					specialCharge -= 1;
 				}
 				else if(weaponName.indexOf("Raudrblade") != -1 || weaponName.indexOf("Lightning Breath") != -1 || weaponName.indexOf("Blarblade") != -1 || weaponName.indexOf("Gronnblade") != -1){
@@ -2468,6 +2471,11 @@ function exportCalc(){
 //This is where most of the calculations happen
 //heroIndex is the index of the hero represented
 //challenger is true if challenger, false if enemy
+
+//Variable for keeping track of attacker for Urvan
+//***Currently does not including aoe damage in consequtive damage check, revise if required***
+var lastAttacker = "none";
+
 function activeHero(hero){
 
 	this.combatBuffs = {"atk":0,"spd":0,"def":0,"res":0};
@@ -2589,8 +2597,10 @@ function activeHero(hero){
 
 	this.resetCharge = function(){
 		//resets charge based on weapon
-		if(this.has("Killing Edge") || this.has("Killer Axe") || this.has("Killer Lance") || this.has("Mystletainn") || this.has("Hauteclere") || this.has("Cursed Lance")
-			|| this.has("Killer Bow") || this.has("Slaying Bow") || this.has("Slaying Edge") || this.has("Slaying Axe")){
+		if(this.has("Killing Edge") || this.has("Killer Axe") || this.has("Killer Lance") || this.has("Killer Bow")
+			|| this.has("Slaying Bow") || this.has("Slaying Edge") || this.has("Slaying Axe")
+			|| this.has("Cursed Lance")|| this.has("Mystletainn") || this.has("Hauteclere") 
+			|| this.has("Urvan")){
 			this.charge = 1;
 		}
 		else if(this.has("Raudrblade") || this.has("Lightning Breath") || this.has("Blarblade") || this.has("Gronnblade")){
@@ -2895,7 +2905,7 @@ function activeHero(hero){
 				this.combatSpur.atk += buffVal;
 				boostText += this.name + " gets +" + buffVal + " atk from initiating with " + skillName + ".<br>";
 			}
-			if(this.has("Durandal")){
+			if(this.hasExactly("Durandal")){
 				this.combatSpur.atk += 4;
 				boostText += this.name + " gets +4 atk from initiating with Durandal.<br>";
 			}
@@ -2903,6 +2913,12 @@ function activeHero(hero){
 			var blowSpd = 0;
 			if(this.has("Darting Blow")){
 				blowSpd = this.has("Darting Blow") * 2;
+				skillName = data.skills[this.aIndex].name;
+				this.combatSpur.spd += blowSpd;
+				boostText += this.name + " gets " + blowSpd + " spd from initiating with " + skillName + ".<br>";
+			}
+			if(this.has("Steady Blow")){
+				blowSpd = this.has("Steady Blow") * 2;
 				skillName = data.skills[this.aIndex].name;
 				this.combatSpur.spd += blowSpd;
 				boostText += this.name + " gets " + blowSpd + " spd from initiating with " + skillName + ".<br>";
@@ -2927,6 +2943,12 @@ function activeHero(hero){
 			var blowDef = 0;
 			if(this.has("Armored Blow")){
 				blowDef = this.has("Armored Blow") * 2;
+				skillName = data.skills[this.aIndex].name;
+				this.combatSpur.def += blowDef;
+				boostText += this.name + " gets " + blowDef + " def from initiating with " + skillName + ".<br>";
+			}
+			if(this.has("Steady Blow")){
+				blowDef = this.has("Steady Blow") * 2;
 				skillName = data.skills[this.aIndex].name;
 				this.combatSpur.def += blowDef;
 				boostText += this.name + " gets " + blowDef + " def from initiating with " + skillName + ".<br>";
@@ -2989,7 +3011,10 @@ function activeHero(hero){
 				this.combatSpur.res += 4;
 				boostText += this.name + " gets +4 res while defending with " + data.skills[this.weaponIndex].name + ".<br>";
 			}
-
+			if(this.has("Steady Breath")){
+				this.combatSpur.def += 4;
+				boostText += this.name + " gets +4 def from Steady Breath.<br>";
+			}
 			return boostText;
 		}
 	}
@@ -3289,17 +3314,34 @@ function activeHero(hero){
 		var enemyEffAtk = enemy.atk + Math.max(enemy.buffs.atk,enemy.combatBuffs.atk) + Math.min(enemy.debuffs.atk,enemy.combatDebuffs.atk) + enemy.spur.atk + enemy.combatSpur.atk;
 		var enemyEffDef = enemy.def + Math.max(enemy.buffs.def,enemy.combatBuffs.def) + Math.min(enemy.debuffs.def,enemy.combatDebuffs.def) + enemy.spur.def + enemy.combatSpur.def;
 		var enemyEffRes = enemy.res + Math.max(enemy.buffs.res,enemy.combatBuffs.res) + Math.min(enemy.debuffs.res,enemy.combatDebuffs.res) + enemy.spur.res + enemy.combatSpur.res;
-
+		
+		//Buff cancellation and reversion - Atk, Def, Res calculations
+		//***May require change depending on order of application between Panic and null skills***		
 		if(this.panicked){
 			thisEffAtk = this.atk - Math.max(this.buffs.atk,this.combatBuffs.atk) + Math.min(this.debuffs.atk,this.combatDebuffs.atk) + this.spur.atk + this.combatSpur.atk;
 			thisEffDef = this.def - Math.max(this.buffs.def,this.combatBuffs.def) + Math.min(this.debuffs.def,this.combatDebuffs.def) + this.spur.def + this.combatSpur.def;
 			thisEffRes = this.res - Math.max(this.buffs.res,this.combatBuffs.res) + Math.min(this.debuffs.res,this.combatDebuffs.res) + this.spur.res + this.combatSpur.res;
+			if(!AOE){damageText += this.name + "'s buffs are reversed by debuff.<br>";}
+		} else if((enemy.has("Beorc's Blessing") && (this.moveType == "cavalry" || this.moveType == "flying"))
+			|| (enemy.has("Mulagir") && this.attackType == "magical")){
+			thisEffAtk = this.atk + Math.min(this.debuffs.atk,this.combatDebuffs.atk) + this.spur.atk + this.combatSpur.atk;
+			thisEffDef = this.def + Math.min(this.debuffs.def,this.combatDebuffs.def) + this.spur.def + this.combatSpur.def;
+			thisEffRes = this.res + Math.min(this.debuffs.res,this.combatDebuffs.res) + this.spur.res + this.combatSpur.res;
+			if(!AOE){damageText += this.name + "'s buffs are nullified by opponent's skill.<br>";}			
 		}
 
 		if(enemy.panicked){
+			enemyEffAtk = enemy.atk - Math.max(enemy.buffs.atk,enemy.combatBuffs.atk) + Math.min(enemy.debuffs.atk,enemy.combatDebuffs.atk) + enemy.spur.atk + enemy.combatSpur.atk;
 			enemyEffDef = enemy.def - Math.max(enemy.buffs.def,enemy.combatBuffs.def) + Math.min(enemy.debuffs.def,enemy.combatDebuffs.def) + enemy.spur.def + enemy.combatSpur.def;
 			enemyEffRes = enemy.res - Math.max(enemy.buffs.res,enemy.combatBuffs.res) + Math.min(enemy.debuffs.res,enemy.combatDebuffs.res) + enemy.spur.res + enemy.combatSpur.res;
-		}
+			if(!AOE){damageText += enemy.name + "'s buffs are reversed by debuff.<br>";}
+		} else if((this.has("Beorc's Blessing") && (enemy.moveType == "cavalry" || enemy.moveType == "flying"))
+			|| (this.has("Mulagir") && enemy.attackType == "magical")){
+			enemyEffAtk = enemy.atk + Math.min(enemy.debuffs.atk,enemy.combatDebuffs.atk) + enemy.spur.atk + enemy.combatSpur.atk;
+			enemyEffDef = enemy.def + Math.min(enemy.debuffs.def,enemy.combatDebuffs.def) + enemy.spur.def + enemy.combatSpur.def;
+			enemyEffRes = enemy.res + Math.min(enemy.debuffs.res,enemy.combatDebuffs.res) + enemy.spur.res + enemy.combatSpur.res;
+			if(!AOE){damageText += enemy.name + "'s buffs are nullified by opponent's skill.<br>";}
+		}		
 
 		var relevantDef = enemyEffDef;
 		if(this.attackType=="magical"){
@@ -3336,7 +3378,7 @@ function activeHero(hero){
 				if(AOEActivated){
 					this.resetCharge();
 					
-					if(this.has("Wo Dao") || this.has("Dark Excalibur")){
+					if(this.has("Wo Dao") || this.hasExactly("Dark Excalibur")){
 						AOEDamage += 10;
 						damageText += this.name + " gains 10 damage from " + data.skills[hero.weapon].name + ".<br>";
 					}					
@@ -3422,7 +3464,7 @@ function activeHero(hero){
 				this.resetCharge();
 				damageText += this.name + " activates " + data.skills[this.specialIndex].name + ".<br>";
 
-				if(this.has("Wo Dao") || this.has("Dark Excalibur")){
+				if(this.has("Wo Dao") || this.hasExactly("Dark Excalibur")){
 					dmgBoost += 10;
 					damageText += this.name + " gains 10 damage from " + data.skills[hero.weapon].name + ".<br>";
 				}
@@ -3627,7 +3669,7 @@ function activeHero(hero){
 				if(enemy.moveType == "armored" && (this.has("Hammer") || this.has("Armorslayer") || this.has("Heavy Spear"))){
 					effectiveBonus = 1.5;
 				}
-				else if(enemy.moveType == "flying" && (this.has("Excalibur") || this.weaponType=="bow") && !(this.has("Dark Excalibur"))){
+				else if(enemy.moveType == "flying" && (this.hasExactly("Excalibur") || this.weaponType=="bow")){
 					effectiveBonus = 1.5;
 				}
 				else if(enemy.moveType == "infantry" && (this.has("Poison Dagger"))){
@@ -3645,10 +3687,20 @@ function activeHero(hero){
 				}
 			}
 
+			
+			
 			//Check damage reducing specials
 			var defensiveSpecialActivated = false;
 			var dmgReduction = 1.0;
 			var miracle = false;
+			
+			//Check Urvan damage reduction, currently occurs before damage reducing special
+			//***May need to revise due to Shield Pulse's if calculation order is different***
+			if (enemy.has("Urvan") && lastAttacker == this.name){
+				dmgReduction *= 0.2;
+				damageText += "Urvan reduces " + this.name + "'s consecutive damage by 80%.<br>"
+			}			
+			
 			if(enemy.specialIndex!=-1&&data.skills[enemy.specialIndex].charge<=enemy.charge){
 				//gotta check range
 				var anyRangeCounter = false;
@@ -3658,22 +3710,26 @@ function activeHero(hero){
 
 				if(this.range == "melee" || (!this.initiator && enemy.range == "melee" && anyRangeCounter)){
 					if(enemy.has("Buckler") || enemy.has("Escutcheon")){
-						dmgReduction = 0.7;
+						dmgReduction *= 0.7;
 						defensiveSpecialActivated = true;
+						damageText += data.skills[enemy.specialIndex].name + " reduces " + this.name + "'s damage by 30%.<br>"
 					}
 					else if(enemy.has("Pavise")){
-						dmgReduction = 0.5;
+						dmgReduction *= 0.5;
 						defensiveSpecialActivated = true;
+						damageText += data.skills[enemy.specialIndex].name + " reduces " + this.name + "'s damage by 50%.<br>"
 					}
 				}
 				else if(this.range == "ranged" || (!this.initiator && enemy.range == "ranged" && anyRangeCounter)){
 					if(enemy.has("Holy Vestments") || enemy.has("Sacred Cowl")){
-						dmgReduction = 0.7;
+						dmgReduction *= 0.7;
 						defensiveSpecialActivated = true;
+						damageText += data.skills[enemy.specialIndex].name + " reduces " + this.name + "'s damage by 30%.<br>"
 					}
 					else if(enemy.has("Aegis")){
-						dmgReduction = 0.5;
+						dmgReduction *= 0.5;
 						defensiveSpecialActivated = true;
+						damageText += data.skills[enemy.specialIndex].name + " reduces " + this.name + "'s damage by 50%.<br>"
 					}
 				}
 
@@ -3684,7 +3740,7 @@ function activeHero(hero){
 
 			if(defensiveSpecialActivated){
 				if(dmgReduction < 1){
-					damageText += data.skills[enemy.specialIndex].name + " reduces " + this.name + "'s damage by " + ((1 - dmgReduction) * 100 | 0) + "%.<br>"
+					//damageText += data.skills[enemy.specialIndex].name + " reduces " + this.name + "'s damage by " + ((1 - dmgReduction) * 100 | 0) + "%.<br>"
 
 					if (enemy.has("Shield Pulse 2") || enemy.has("Shield Pulse 3")){
 						damageText += "Shield Pulse reduces " + this.name + "'s damage by an additional 5.<br>";
@@ -3722,8 +3778,8 @@ function activeHero(hero){
 			//Pushing Shield check
 			if (defensiveSpecialActivated && (enemy.has("Shield Pulse 2") || enemy.has("Shield Pulse 3"))){
 				dmg -= 5;
-			}
-
+			}			
+			
 			dmg = Math.max(dmg,0);
 			if(enemy.has("Embla's Ward")){
 				dmg = 0;
@@ -3742,7 +3798,16 @@ function activeHero(hero){
 				}
 			}
 			enemy.hp -= dmg;
-
+			
+			//Increase enemy charge when dealing non-aoe damage
+			//***May require revision, does it work when damage is 0? ***
+			if(enemy.has("Steady Breath")){
+				enemy.charge++;
+			}
+			
+			//Set this attacker as last attacker for Urvan check
+			lastAttacker = this.name;
+			
 			//add absorbed hp
 			var absorbHp = dmg*absorbPct | 0;
 			if(this.hp + absorbHp > this.maxHp){
@@ -3755,33 +3820,35 @@ function activeHero(hero){
 
 			//Special charge does not increase if special was used on this attack
 			if(!offensiveSpecialActivated){
-				var heavyBlade = 0;
 				if(this.has("Heavy Blade")){
-					heavyBlade = this.has("Heavy Blade")*-2 + 7;
+					if(thisEffAtk - enemyEffAtk >= this.has("Heavy Blade")*-2 + 7){
+						this.charge++;
+						damageText += this.name + " gains an extra charge with Heavy Blade.<br>";
+					}
+				} else if(this.hasExactly("Blazing Durandal")){
+					if(thisEffAtk - enemyEffAtk >= 1){
+						this.charge++;
+						damageText += this.name + " gains an extra charge with Blazing Durandal.<br>";
+					}
 				}
-				if(heavyBlade && thisEffAtk - enemyEffAtk >= heavyBlade){
-					this.charge++;
-				}
-
-				var guard = 0;
+				
 				if(enemy.has("Guard")){
-					guard = 1.1 - enemy.has("Guard")*0.1;
+					if(enemy.combatStartHp / enemy.maxHp >= 1.1 - enemy.has("Guard")*0.1){
+						this.charge--;
+						damageText += this.name + " loses a charge due to opponent's Guard.<br>";
+					}
 				}
-				if(guard && enemy.combatStartHp / enemy.maxHp >= guard){
-					this.charge--;
-				}
-
+				
 				this.charge++;
 			}
 
 			if(!defensiveSpecialActivated){
-				var guard = 0;
 				if(this.has("Guard")){
-					guard = 1.1 - this.has("Guard")*0.1;
-				}
-				if(guard && this.combatStartHp / this.maxHp >= guard){
-					enemy.charge--;
-				}
+					if(this.combatStartHp / this.maxHp >= 1.1 - this.has("Guard")*0.1){
+						enemy.charge--;
+						damageText += enemy.name + " loses a charge due to opponent's Guard.<br>";
+					}
+				}	
 
 				enemy.charge++;
 			}
@@ -3807,7 +3874,10 @@ function activeHero(hero){
 	}
 
 	//represents a full round of combat
-	this.attack = function(enemy,turn,galeforce){
+	this.attack = function(enemy,turn,galeforce){		
+				
+		//Initialize last attacker
+		lastAttacker = "none";
 
 		var roundText = "";//Common theme: text is returned by helper functions, so the functions are called by adding them to roundText
 		var firstTurn = (turn - options.startTurn == 0);
@@ -3858,13 +3928,22 @@ function activeHero(hero){
 		var thisEffSpd = this.spd + Math.max(this.buffs.spd,this.combatBuffs.spd) + Math.min(this.debuffs.spd,this.combatDebuffs.spd) + this.spur.spd + this.combatSpur.spd;
 		var enemyEffSpd = enemy.spd + Math.max(enemy.buffs.spd,enemy.combatBuffs.spd) + Math.min(enemy.debuffs.spd,enemy.combatDebuffs.spd) + enemy.spur.spd + enemy.combatSpur.spd;
 
+		//Buff cancellation and reversion - Spd calculations
+		//***May require change depending on order of application between Panic and null skills***		
 		if(this.panicked){
 			thisEffSpd = this.spd - Math.max(this.buffs.spd,this.combatBuffs.spd) + Math.min(this.debuffs.spd,this.combatDebuffs.spd) + this.spur.spd + this.combatSpur.spd;
-		}
-		if(enemy.panicked){
-			enemyEffSpd = enemy.spd - Math.max(enemy.buffs.spd,enemy.combatBuffs.spd) + Math.min(enemy.debuffs.spd,enemy.combatDebuffs.spd) + enemy.spur.spd + enemy.combatSpur.spd;
+		} else if((enemy.has("Beorc's Blessing") && (this.moveType == "cavalry" || this.moveType == "flying"))
+			|| (enemy.has("Mulagir") && this.attackType == "magical")){
+			thisEffSpd = this.spd + Math.min(this.debuffs.spd,this.combatDebuffs.spd) + this.spur.spd + this.combatSpur.spd;
 		}
 
+		if(enemy.panicked){
+			enemyEffSpd = enemy.spd - Math.max(enemy.buffs.spd,enemy.combatBuffs.spd) + Math.min(enemy.debuffs.spd,enemy.combatDebuffs.spd) + enemy.spur.spd + enemy.combatSpur.spd;
+		} else if((enemy.has("Beorc's Blessing") && (this.moveType == "cavalry" || this.moveType == "flying"))
+			|| (enemy.has("Mulagir") && this.attackType == "magical")){
+			enemyEffSpd = enemy.spd + Math.min(enemy.debuffs.spd,enemy.combatDebuffs.spd) + enemy.spur.spd + enemy.combatSpur.spd;
+		}
+		
 		//check for any-distance counterattack
 		var anyRangeCounter = false;
 		if(enemy.has("Close Counter") || enemy.has("Distant Counter") || enemy.has("Raijinto") || enemy.has("Lightning Breath") || enemy.has("Ragnell") || enemy.has("Siegfried") || enemy.has("Gradivus")){
@@ -4008,28 +4087,26 @@ function activeHero(hero){
 			enemyBroken = true;
 		}
 
-		//Check for firesweep
+		//Counterattack cancellation
+		//***Mind the split location for various sweep calculations***
 		var firesweep = false;
+		var windsweep = 0;
+		var watersweep = 0;
+		
 		if(this.has("Firesweep")){
 			firesweep = true;
-		}
+		}		
 		if(enemy.has("Firesweep")){
 			firesweep = true;
-		}
-
-		//check for windsweep
-		//This skill is a fucking mess
-		var windsweep = 0;
+		}	
 		if(this.has("Windsweep")){
 			windsweep = this.has("Windsweep")*-2 + 7 + (this.has("Phantom Spd 1") ? -5 : 0);
 		}
-
-		var watersweep = 0;
 		if(this.has("Watersweep")){
 			watersweep = this.has("Watersweep")*-2 + 7 + (this.has("Phantom Spd 1") ? -5 : 0);
 		}
-
-		//Do AOE damage
+		
+		//Check for AOE special activation
 		roundText += this.doDamage(enemy,false,true);
 
 		var thisFollowUp = false;
@@ -4070,7 +4147,8 @@ function activeHero(hero){
 			enemyOutspeeds = true;
 		}
 
-		if(!firesweep && !(windsweep && data.physicalWeapons.indexOf(enemy.weaponType) != -1 && thisEffSpd-enemyEffSpd >= windsweep) && !(watersweep && data.magicalWeapons.indexOf(enemy.weaponType) != -1 && thisEffSpd-enemyEffSpd >= watersweep)){
+		if(!firesweep && !(windsweep && data.physicalWeapons.indexOf(enemy.weaponType) != -1 && thisEffSpd-enemyEffSpd >= windsweep) 
+			&& !(watersweep && data.magicalWeapons.indexOf(enemy.weaponType) != -1 && thisEffSpd-enemyEffSpd >= watersweep)){
 			if(this.range==enemy.range || anyRangeCounter){
 				enemyCanCounter = true;
 			}
@@ -4079,15 +4157,21 @@ function activeHero(hero){
 		//TODO: refactor these ifs and above ifs
 		if(this.has("Dazzling Staff") && enemyCanCounter){
 			if(this.combatStartHp / this.maxHp >= 1.5 + this.has("Dazzling Staff") * -0.5){
-				roundText += this.name + " prevents " + enemy.name + " from counterattacking with Dazzling Staff.<br>";
+				roundText += enemy.name + " cannot counterattack because of Dazzling Staff.<br>";
 				enemyCanCounter = false;
 			}
 		}
+		
 		if(enemy.lit && enemyCanCounter){
-			roundText += enemy.name + " cannot counterattack because they're still distracted by the candle.<br>";
+			roundText += enemy.name + " cannot counterattack because " + enemy.name + " is still blinded by Candlelight.<br>";
 			enemyCanCounter = false;
 		}
-
+		
+		if(this.has("Sacae's Blessing") && (enemy.weaponType == "axe" || enemy.weaponType == "sword" ||enemy.weaponType == "lance")){
+			roundText += enemy.name + " cannot counterattack because of Sacae's Blessing.<br>";
+			enemyCanCounter = false;
+		}
+		
 		//Check for brash assault
 		if(this.has("Brash Assault") && (this.range==enemy.range || anyRangeCounter) && enemyCanCounter){
 			if(this.hp/this.maxHp <= .2 + this.has("Brash Assault") * 0.1){

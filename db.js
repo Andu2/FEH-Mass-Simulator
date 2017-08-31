@@ -5,8 +5,11 @@ window.data = {};
 //SKILL PREREQS TABLE
 //HERO SKILLS TABLE
 
-//Replace String to Int: Expression "(\-{0,1}[0-9]+(\.[0-9]+){0,1})" Replace \1
-
+/*
+*	To fix SQL export, use find all and replace to replace String to Int: 
+*	Expression: "(\-{0,1}[0-9]+(\.[0-9]+){0,1})" 
+*	Replace: \1
+*/
 
 //HEROES TABLE
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2789,6 +2792,74 @@ window.data.heroes = [{
 		"minrarity": 3
 	}, {
 		"hero_id": 166,
+		"name": "Ike (Brave Heroes)",
+		"basehp": 17,
+		"baseatk": 10,
+		"basespd": 6,
+		"basedef": 9,
+		"baseres": 5,
+		"hpgrowth": 8,
+		"atkgrowth": 8,
+		"spdgrowth": 6,
+		"defgrowth": 8,
+		"resgrowth": 3,
+		"color": "green",
+		"weapontype": "axe",
+		"movetype": "infantry",
+		"minrarity": 5
+	}, {
+		"hero_id": 167,
+		"name": "Lyn (Brave Heroes)",
+		"basehp": 16,
+		"baseatk": 7,
+		"basespd": 9,
+		"basedef": 5,
+		"baseres": 6,
+		"hpgrowth": 5,
+		"atkgrowth": 8,
+		"spdgrowth": 8,
+		"defgrowth": 2,
+		"resgrowth": 6,
+		"color": "gray",
+		"weapontype": "bow",
+		"movetype": "cavalry",
+		"minrarity": 5
+	}, {
+		"hero_id": 168,
+		"name": "Lucina (Brave Heroes)",
+		"basehp": 17,
+		"baseatk": 8,
+		"basespd": 10,
+		"basedef": 8,
+		"baseres": 4,
+		"hpgrowth": 7,
+		"atkgrowth": 8,
+		"spdgrowth": 8,
+		"defgrowth": 5,
+		"resgrowth": 3,
+		"color": "blue",
+		"weapontype": "lance",
+		"movetype": "infantry",
+		"minrarity": 5
+	}, {
+		"hero_id": 169,
+		"name": "Roy (Brave Heroes)",
+		"basehp": 16,
+		"baseatk": 8,
+		"basespd": 8,
+		"basedef": 7,
+		"baseres": 7,
+		"hpgrowth": 6,
+		"atkgrowth": 7,
+		"spdgrowth": 8,
+		"defgrowth": 5,
+		"resgrowth": 4,
+		"color": "red",
+		"weapontype": "sword",
+		"movetype": "cavalry",
+		"minrarity": 5
+	}, {
+		"hero_id": 170,
 		"name": "Clive",
 		"basehp": 19,
 		"baseatk": 9,
@@ -11132,6 +11203,230 @@ window.data.skills = [{
 		"charge": 0,
 		"inheritrule": "",
 		"affectsduel": 1
+	}, {
+		"skill_id": 595,
+		"name": "Urvan",
+		"slot": "weapon",
+		"sp": 400,
+		"description": "Accelerates Special trigger (cooldown count-1). If unit receives consecutive attacks, damage from second attack onward reduced by 80%.",
+		"hp": 0,
+		"atk": 16,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "unique",
+		"affectsduel": 1
+	}, {
+		"skill_id": 596,
+		"name": "Steady Stance 1",
+		"slot": "a",
+		"sp": 50,
+		"description": "Grants Def+2 during combat when this unit is attacked.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 1
+	}, {
+		"skill_id": 597,
+		"name": "Steady Stance 2",
+		"slot": "a",
+		"sp": 100,
+		"description": "Grants Def+4 during combat when this unit is attacked.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 1
+	}, {
+		"skill_id": 598,
+		"name": "Steady Breath",
+		"slot": "a",
+		"sp": 240,
+		"description": "If attacked, unit granted Def+4 during combat; also gains Special cooldown charge +1. (If using other similar skill, only highest value applied.)",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 1
+	}, {
+		"skill_id": 599,
+		"name": "Beorc's Blessing",
+		"slot": "b",
+		"sp": 300,
+		"description": "Foe's bonuses (from skills like Fortify, Rally, etc.) are nullified during combat. (Skill cannot be inherited.)",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "unique",
+		"affectsduel": 1
+	}, {
+		"skill_id": 600,
+		"name": "Mulagir",
+		"slot": "weapon",
+		"sp": 400,
+		"description": "Effective against flying units. Grants Spd+3. If foe is magic user, foe's bonuses (from skills like Fortify, Rally, etc.) are nullified during combat.",
+		"hp": 0,
+		"atk": 14,
+		"spd": 3,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "unique",
+		"affectsduel": 1
+	}, {
+		"skill_id": 601,
+		"name": "Sacae's Blessing",
+		"slot": "b",
+		"sp": 300,
+		"description": "If foe has sword, lance, or axe, foe cannot counterattack. (Skill cannot be inherited.)",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "unique",
+		"affectsduel": 1
+	}, {
+		"skill_id": 602,
+		"name": "Atk Smoke 1",
+		"slot": "c",
+		"sp": 60,
+		"description": "After combat, inflicts Atk-3 on foes within 2 spaces of target through their next actions.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 1
+	}, {
+		"skill_id": 603,
+		"name": "Atk Smoke 2",
+		"slot": "c",
+		"sp": 120,
+		"description": "After combat, inflicts Atk-5 on foes within 2 spaces of target through their next actions.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 1
+	}, {
+		"skill_id": 604,
+		"name": "Atk Smoke 3",
+		"slot": "c",
+		"sp": 240,
+		"description": "After combat, inflicts Atk-7 on foes within 2 spaces of target through their next actions.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 1
+	}, {
+		"skill_id": 605,
+		"name": "Geirskogul",
+		"slot": "weapon",
+		"sp": 400,
+		"description": "Grants Def+3. Grants allies with sword, lance, axe, bow, or dagger within 2 spaces Atk\/Spd+3 during combat.",
+		"hp": 0,
+		"atk": 16,
+		"spd": 0,
+		"def": 3,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "unique",
+		"affectsduel": 1
+	}, {
+		"skill_id": 606,
+		"name": "Drive Spd 1",
+		"slot": "c",
+		"sp": 120,
+		"description": "Grants allies within 2 spaces Spd+2 during combat.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 1
+	}, {
+		"skill_id": 607,
+		"name": "Drive Spd 2",
+		"slot": "c",
+		"sp": 240,
+		"description": "Grants allies within 2 spaces Spd+3 during combat.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 1
+	}, {
+		"skill_id": 608,
+		"name": "Blazing Durandal",
+		"slot": "weapon",
+		"sp": 400,
+		"description": "Grants Atk+3. If unit's Atk > foe's, unit gains Special cooldown charge +1. (If using other similar skill, only highest value applied.)",
+		"hp": 0,
+		"atk": 19,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "unique",
+		"affectsduel": 1
+	}, {
+		"skill_id": 609,
+		"name": "Steady Blow 1",
+		"slot": "a",
+		"sp": 120,
+		"description": "If unit initiates combat, unit granted Spd\/Def+2 during battle.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 1
+	}, {
+		"skill_id": 610,
+		"name": "Steady Blow 2",
+		"slot": "a",
+		"sp": 240,
+		"description": "If unit initiates combat, unit granted Spd\/Def+4 during battle.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 1
 	}
 ];
 
@@ -12538,6 +12833,42 @@ window.data.prereqs = [{
 	}, {
 		"skill_id": 592,
 		"required_id": 69
+	}, {
+		"skill_id": 595,
+		"required_id": 43
+	}, {
+		"skill_id": 597,
+		"required_id": 596
+	}, {
+		"skill_id": 598,
+		"required_id": 597
+	}, {
+		"skill_id": 600,
+		"required_id": 104
+	}, {
+		"skill_id": 603,
+		"required_id": 602
+	}, {
+		"skill_id": 604,
+		"required_id": 603
+	}, {
+		"skill_id": 605,
+		"required_id": 69
+	}, {
+		"skill_id": 606,
+		"required_id": 343
+	}, {
+		"skill_id": 607,
+		"required_id": 606
+	}, {
+		"skill_id": 608,
+		"required_id": 3
+	}, {
+		"skill_id": 609,
+		"required_id": 226
+	}, {
+		"skill_id": 610,
+		"required_id": 609
 	}
 ];
 
@@ -19556,18 +19887,94 @@ window.data.heroSkills = [{
 		"rarity": 5
 	}, {
 		"hero_id": 166,
-		"skill_id": 69,
-		"rarity": 4
-	}, {
-		"hero_id": 166,
-		"skill_id": 70,
+		"skill_id": 176,
 		"rarity": 5
 	}, {
 		"hero_id": 166,
+		"skill_id": 354,
+		"rarity": 5
+	}, {
+		"hero_id": 166,
+		"skill_id": 595,
+		"rarity": 5
+	}, {
+		"hero_id": 166,
+		"skill_id": 598,
+		"rarity": 5
+	}, {
+		"hero_id": 166,
+		"skill_id": 599,
+		"rarity": 5
+	}, {
+		"hero_id": 167,
+		"skill_id": 163,
+		"rarity": 5
+	}, {
+		"hero_id": 167,
+		"skill_id": 385,
+		"rarity": 5
+	}, {
+		"hero_id": 167,
+		"skill_id": 600,
+		"rarity": 5
+	}, {
+		"hero_id": 167,
+		"skill_id": 601,
+		"rarity": 5
+	}, {
+		"hero_id": 167,
+		"skill_id": 604,
+		"rarity": 5
+	}, {
+		"hero_id": 168,
+		"skill_id": 176,
+		"rarity": 5
+	}, {
+		"hero_id": 168,
+		"skill_id": 479,
+		"rarity": 5
+	}, {
+		"hero_id": 168,
+		"skill_id": 605,
+		"rarity": 5
+	}, {
+		"hero_id": 168,
+		"skill_id": 607,
+		"rarity": 5
+	}, {
+		"hero_id": 169,
+		"skill_id": 175,
+		"rarity": 5
+	}, {
+		"hero_id": 169,
+		"skill_id": 288,
+		"rarity": 5
+	}, {
+		"hero_id": 169,
+		"skill_id": 608,
+		"rarity": 5
+	}, {
+		"hero_id": 169,
+		"skill_id": 610,
+		"rarity": 5
+	}, {
+		"hero_id": 170,
+		"skill_id": 69,
+		"rarity": 4
+	}, {
+		"hero_id": 170,
+		"skill_id": 70,
+		"rarity": 5
+	}, {
+		"hero_id": 170,
+		"skill_id": 191,
+		"rarity": 4
+	}, {
+		"hero_id": 170,
 		"skill_id": 213,
 		"rarity": 4
 	}, {
-		"hero_id": 166,
+		"hero_id": 170,
 		"skill_id": 408,
 		"rarity": 4
 	}
