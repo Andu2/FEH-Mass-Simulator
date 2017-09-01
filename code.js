@@ -3011,6 +3011,7 @@ function activeHero(hero){
 				this.combatSpur.res += 4;
 				boostText += this.name + " gets +4 res while defending with " + data.skills[this.weaponIndex].name + ".<br>";
 			}
+			var stanceDef = 0;
 			if(this.has("Steady Stance")){
 				stanceDef = this.has("Steady Stance") * 2;
 				skillName = data.skills[this.aIndex].name;
@@ -3962,6 +3963,9 @@ function activeHero(hero){
 			anyRangeCounter = true;
 		}
 
+		//Check for AOE special activation
+		roundText += this.doDamage(enemy,false,true);
+		
 		//check for vantage before beginning combat
 		var vantage = false;
 		if(enemy.has("Vantage")){
@@ -3969,7 +3973,6 @@ function activeHero(hero){
 				vantage = true;
 			}
 		}
-
 		if(enemy.has("Valaskjalf")){
 			if(enemy.hp/enemy.maxHp <= .50){
 				vantage = true;
@@ -4117,9 +4120,6 @@ function activeHero(hero){
 		if(this.has("Watersweep")){
 			watersweep = this.has("Watersweep")*-2 + 7 + (this.has("Phantom Spd 1") ? -5 : 0);
 		}
-		
-		//Check for AOE special activation
-		roundText += this.doDamage(enemy,false,true);
 
 		var thisFollowUp = false;
 		var enemyCanCounter = false;
