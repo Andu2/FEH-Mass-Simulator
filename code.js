@@ -1954,7 +1954,7 @@ function fight(enemyIndex,resultIndex){
 			fightText += ahChallenger.attack(ahEnemy, round, challengerRound == 1, false);			
 		}
 		else{
-			fightText += (ahEnemy.name != ahChallenger.name ? ahEnemy.name : ahEnemy.name + "*") + " initiates</span><br>";			
+			fightText += ahEnemy.name + " initiates</span><br>";			
 			if (round >= options.startTurn) enemyRound++;
 			fightText +=  ahEnemy.attack(ahChallenger, round, enemyRound == 1, false);			
 		}
@@ -2701,7 +2701,7 @@ function activeHero(hero){
 			}
 
 			if(statChanges.length > 0){
-				threatenText += this.name + " has turn-start debuffing skills: " + skillNames.join(", ") + ". Effect on " + enemy.name + ": " + statChanges.join(", ") + "<br>";
+				threatenText += this.name + " has turn-start debuffing skills: " + skillNames.join(", ") + ".<br>" + enemy.name + " gains: " + statChanges.join(", ") + ".<br>";
 			}
 		}
 
@@ -3703,9 +3703,9 @@ function activeHero(hero){
 			
 			//Check Urvan damage reduction, currently occurs before damage reducing special
 			//***May need to revise due to Shield Pulse's if calculation order is different***
-			if (enemy.has("Urvan") && lastAttacker == (this.initiator ? "Initiator: " + this.name : "Defender: " + this.name)){
+			if (enemy.has("Urvan") && lastAttacker == this.name){
 				dmgReduction *= 0.2;
-				damageText += "Urvan reduces " + this.name + "'s consecutive damage by 80%.<br>"
+				damageText += enemy.name + "'s Urvan reduces " + this.name + "'s consecutive damage by 80%.<br>"; 
 			}			
 			
 			if(enemy.specialIndex!=-1&&data.skills[enemy.specialIndex].charge<=enemy.charge){
@@ -3719,24 +3719,24 @@ function activeHero(hero){
 					if(enemy.has("Buckler") || enemy.has("Escutcheon")){
 						dmgReduction *= 0.7;
 						defensiveSpecialActivated = true;
-						damageText += data.skills[enemy.specialIndex].name + " reduces " + this.name + "'s damage by 30%.<br>"
+						damageText += enemy.name + " activates " + data.skills[enemy.specialIndex].name + " and reduces " + this.name + "'s damage by 30%.<br>";
 					}
 					else if(enemy.has("Pavise")){
 						dmgReduction *= 0.5;
 						defensiveSpecialActivated = true;
-						damageText += data.skills[enemy.specialIndex].name + " reduces " + this.name + "'s damage by 50%.<br>"
+						damageText += enemy.name + " activates " + data.skills[enemy.specialIndex].name + " and reduces " + this.name + "'s damage by 50%.<br>";
 					}
 				}
 				else if(this.range == "ranged" || (!this.initiator && enemy.range == "ranged" && anyRangeCounter)){
 					if(enemy.has("Holy Vestments") || enemy.has("Sacred Cowl")){
 						dmgReduction *= 0.7;
 						defensiveSpecialActivated = true;
-						damageText += data.skills[enemy.specialIndex].name + " reduces " + this.name + "'s damage by 30%.<br>"
+						damageText += enemy.name + " activates " + data.skills[enemy.specialIndex].name + " and reduces " + this.name + "'s damage by 30%.<br>";
 					}
 					else if(enemy.has("Aegis")){
 						dmgReduction *= 0.5;
 						defensiveSpecialActivated = true;
-						damageText += data.skills[enemy.specialIndex].name + " reduces " + this.name + "'s damage by 50%.<br>"
+						damageText += enemy.name + " activates " + data.skills[enemy.specialIndex].name + " and reduces " + this.name + "'s damage by 50%.<br>";
 					}
 				}
 
@@ -3750,7 +3750,7 @@ function activeHero(hero){
 					//damageText += data.skills[enemy.specialIndex].name + " reduces " + this.name + "'s damage by " + ((1 - dmgReduction) * 100 | 0) + "%.<br>"
 
 					if (enemy.has("Shield Pulse 2") || enemy.has("Shield Pulse 3")){
-						damageText += "Shield Pulse reduces " + this.name + "'s damage by an additional 5.<br>";
+						damageText += enemy.name + "'s Shield Pulse reduces " + this.name + "'s damage by an additional 5.<br>";
 					}
 				}
 				enemy.resetCharge();
@@ -3819,7 +3819,7 @@ function activeHero(hero){
 			
 			//Set this attacker as last attacker for Urvan check
 			//Divide into initiator vs defender for mirror match differentiation
-			lastAttacker = (this.initiator ? "Initiator: " + this.name : "Defender: " + this.name);
+			lastAttacker = this.name;
 			
 			//add absorbed hp
 			var absorbHp = dmg*absorbPct | 0;
@@ -4314,10 +4314,10 @@ function activeHero(hero){
 			}
 
 			//Finally, Galeforce!
-			if(this.has("Galeforce") && data.skills[this.specialIndex].charge<=this.charge && options.useGaleforce){
+			if(this.has("Galeforce") && data.skills[this.specialIndex].charge <= this.charge && options.useGaleforce){
 				roundText += this.name + " initiates again with Galeforce!<br>";
 				this.resetCharge();
-				roundText += this.attack(enemy,turn,false,true);
+				roundText += this.attack(enemy,round,false,true);
 			}
 		}
 
