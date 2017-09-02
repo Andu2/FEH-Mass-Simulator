@@ -65,7 +65,7 @@ function initOptions(){
 	//Holder for options that aren't hero-specific
 	options = {};
 	options.autoCalculate = true;
-	options.startTurn = 0;
+	options.startTurn = 1;
 	options.useGaleforce = true;
 	options.threatenRule = "Neither";
 	options.ployBehavior = "Diagonal";
@@ -1940,20 +1940,23 @@ function fight(enemyIndex,resultIndex){
 	}
 
 	ahEnemy = new activeHero(enemyList[enemyIndex]);
-
+	
 	var rounds = 0;
-
+	var challengerRound = 0;
+	var enemyRound = 0;
+	
 	for(var round = 1; round <= options.roundInitiators.length;round++){
-		rounds = round;
-		var turn = options.startTurn + round - 1;
+		this.rounds = round
 		fightText += "<div class=\"fight_round\"><span class=\"bold\">Round " + round + ": ";
 		if(options.roundInitiators[round-1]=="Challenger initiates"){
-			fightText += ahChallenger.name + " initiates</span><br>";
-			fightText += ahChallenger.attack(ahEnemy,turn);
+			fightText += ahChallenger.name + " initiates</span><br>";		
+			if (round >= options.startTurn) challengerRound++;
+			fightText += ahChallenger.attack(ahEnemy, round, challengerRound == 1, false);			
 		}
 		else{
-			fightText += ahEnemy.name + " initiates</span><br>";
-			fightText +=  ahEnemy.attack(ahChallenger,turn);
+			fightText += (ahEnemy.name != ahChallenger.name ? ahEnemy.name : ahEnemy.name + "*") + " initiates</span><br>";			
+			if (round >= options.startTurn) enemyRound++;
+			fightText +=  ahEnemy.attack(ahChallenger, round, enemyRound == 1, false);			
 		}
 		if(ahEnemy.hp <= 0 || ahChallenger.hp <= 0){
 			break;
@@ -2102,9 +2105,9 @@ function fight(enemyIndex,resultIndex){
 				"<span class=\"results_challengerhp\">" + ahChallenger.hp + "</span> &ndash; <span class=\"results_enemyhp\">" + ahEnemy.hp + "</span>",
 			"</div>",
 		"</div>",
-		"<div class=\"frame_enemypicture\"><img class=\"results_enemypicture\" src=\"heroes/" + ahEnemy.name + ".png\"/></div>",
+		"<div class=\"frame_enemypicture\"><img class=\"results_enemypicture\" src=\"heroes/" + ahEnemy.realName + ".png\"/></div>",
 		"<div class=\"results_topline\">",
-			"<img class=\"weaponIconSmall\" src=\"weapons/" + weaponTypeName + ".png\"/><span class=\"results_enemyname\">" + ahEnemy.name + "</span> (<span class=\"results_outcome\">" + resultText + "</span>)",
+			"<img class=\"weaponIconSmall\" src=\"weapons/" + weaponTypeName + ".png\"/><span class=\"results_enemyname\">" + ahEnemy.realName + "</span> (<span class=\"results_outcome\">" + resultText + "</span>)",
 			"<div class=\"results_previousresult\">" + enemyList[enemyIndex].lastFightResult + "</div>",
 		"</div>",
 		"<div class=\"results_bottomline\">",
@@ -2486,7 +2489,8 @@ function activeHero(hero){
 
 	this.challenger = !!hero.challenger; //Will be undefined if not challenger
 	this.heroIndex = hero.index;
-	this.name = data.heroes[this.heroIndex].name;
+	this.realName = data.heroes[this.heroIndex].name;
+	this.name = (this.challenger ? "<span class=\"lightblue\">" + this.realName + "</span>" : "<span class=\"pink\">" + this.realName + "</span>");	
 	this.rarity = hero.rarity;
 	this.merge = hero.merge;
 
@@ -2517,7 +2521,7 @@ function activeHero(hero){
 
 	this.hp = Math.max(this.maxHp - hero.damage,1);
 	this.precharge = hero.precharge;
-
+	
 	//Make a list of skill names for easy reference
 	if(this.weaponIndex != -1){
 		this.skillNames.push(data.skills[this.weaponIndex].name);
@@ -2705,32 +2709,28 @@ function activeHero(hero){
 	}
 
 	//Turn counting is complicated due to mix & matching turn order, will revisit later if necessary.
-	//Currently only heals on first turn since there's only 4 combat rounds in this simulator.
-	this.renew = function(turn){
+	//Currently repeat effects are not applied since there are only 4 rounds (2 exchanges max) in this simulator
+	this.renew = function(){
 		var renewText = "";	
 
 		if(this.has("Renewal")){
-			//if(turn % (5 - this.has("Renewal")) * 2 == 0){
-			if(turn == 0){
-				if(this.hp + 10 > this.maxHp){
-					this.hp = this.maxHp;
-				} else{
-					this.hp += 10;
-				}
-				renewText += this.name + " heals 10 HP due to Renewal.<br>";
-			}	
+			//if(turn % (5 - this.has("Renewal")) == 0){
+			if(this.hp + 10 > this.maxHp){
+				this.hp = this.maxHp;
+			} else{
+				this.hp += 10;
+			}
+			renewText += this.name + " heals 10 HP due to Renewal.<br>";
 		}
 		
 		if(this.has("Falchion")){
-			//if(turn % 6 == 0){
-			if(turn == 0){
-				if(this.hp + 10 > this.maxHp){
-					this.hp = this.maxHp;
-				} else{
-					this.hp += 10;
-				}
-				renewText += this.name + " heals 10 HP due to Falchion.<br>";
-			}	
+			//if(turn % 3 == 0){
+			if(this.hp + 10 > this.maxHp){
+				this.hp = this.maxHp;
+			} else{
+				this.hp += 10;
+			}
+			renewText += this.name + " heals 10 HP due to Falchion.<br>";
 		}		
 
 		return renewText;
@@ -3887,13 +3887,12 @@ function activeHero(hero){
 	}
 
 	//represents a full round of combat
-	this.attack = function(enemy,turn,galeforce){		
+	this.attack = function(enemy,round,renew,galeforce){		
 				
 		//Initialize last attacker
 		lastAttacker = "none";
 
 		var roundText = "";//Common theme: text is returned by helper functions, so the functions are called by adding them to roundText
-		var firstTurn = (turn - options.startTurn == 0);
 		this.initiator = true;
 		enemy.initiator = false;
 		enemy.didAttack = false;
@@ -3903,7 +3902,7 @@ function activeHero(hero){
 		if(enemy.attackType=="magical"){
 			relevantDefType = "res";
 		}
-
+		
 		//Remove certain buffs
 		this.combatBuffs = {"atk":0,"spd":0,"def":0,"res":0};
 
@@ -3912,16 +3911,16 @@ function activeHero(hero){
 			//Check self buffs (defiant skills)
 			roundText += this.defiant();
 
-			//check turn for renewal
-			//Does renewal happen before defiant?
-			roundText += this.renew(turn);
-			roundText += enemy.renew(turn);
+			//Check for renewal effects
+			if (renew){
+				roundText += this.renew();
+			}			
 
 			//Check threaten if not first turn (unless startThreatened is on)
-			if((options.threatenRule=="Both"||options.threatenRule=="Attacker") && firstTurn){
+			if((options.threatenRule=="Both"||options.threatenRule=="Attacker") && (round == 1)){
 				roundText += enemy.threaten(this);
 			}
-			if((options.threatenRule=="Both"||options.threatenRule=="Defender") || !firstTurn){
+			if((options.threatenRule=="Both"||options.threatenRule=="Defender") || (round != 1)){
 				roundText += this.threaten(enemy);
 			}
 		}
@@ -4318,7 +4317,7 @@ function activeHero(hero){
 			if(this.has("Galeforce") && data.skills[this.specialIndex].charge<=this.charge && options.useGaleforce){
 				roundText += this.name + " initiates again with Galeforce!<br>";
 				this.resetCharge();
-				roundText += this.attack(enemy,turn,true);
+				roundText += this.attack(enemy,turn,false,true);
 			}
 		}
 
