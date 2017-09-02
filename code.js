@@ -1152,6 +1152,7 @@ function updateHeroUI(hero){
 		else{
 			$("#" + htmlPrefix + "weapon_icon").attr("src","weapons/" + data.heroes[hero.index].color + "dragon.png");
 		}
+		$("#" + htmlPrefix + "movement_icon").attr("src","weapons/" + data.heroes[hero.index].movetype + ".png");
 
 		if(hero.special != -1){
 			var specialCharge = data.skills[hero.special].charge;
@@ -2105,7 +2106,7 @@ function fight(enemyIndex,resultIndex){
 				"<span class=\"results_challengerhp\">" + ahChallenger.hp + "</span> &ndash; <span class=\"results_enemyhp\">" + ahEnemy.hp + "</span>",
 			"</div>",
 		"</div>",
-		"<div class=\"frame_enemypicture\"><img class=\"results_enemypicture\" src=\"heroes/" + ahEnemy.realName + ".png\"/></div>",
+		"<div class=\"frame_enemypicture\"><img class=\"results_enemypicture\" src=\"heroes/" + ahEnemy.realName + ".png\"/><img class=\"movementIconSmall\" src=\"weapons/" + ahEnemy.moveType + ".png\"/></div>",
 		"<div class=\"results_topline\">",
 			"<img class=\"weaponIconSmall\" src=\"weapons/" + weaponTypeName + ".png\"/><span class=\"results_enemyname\">" + ahEnemy.realName + "</span> (<span class=\"results_outcome\">" + resultText + "</span>)",
 			"<div class=\"results_previousresult\">" + enemyList[enemyIndex].lastFightResult + "</div>",
@@ -2701,7 +2702,7 @@ function activeHero(hero){
 			}
 
 			if(statChanges.length > 0){
-				threatenText += this.name + " has turn-start debuffing skills: " + skillNames.join(", ") + ".<br>" + enemy.name + " gains: " + statChanges.join(", ") + ".<br>";
+				threatenText += this.name + " has turn-start skills: " + skillNames.join(", ") + ".<br>" + enemy.name + " receives the following: " + statChanges.join(", ") + ".<br>";
 			}
 		}
 
