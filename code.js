@@ -1946,7 +1946,7 @@ function fight(enemyIndex,resultIndex){
 	var enemyRound = 0;
 	
 	for(var round = 1; round <= options.roundInitiators.length;round++){
-		this.rounds = round
+		rounds = round;
 		fightText += "<div class=\"fight_round\"><span class=\"bold\">Round " + round + ": ";
 		if(options.roundInitiators[round-1]=="Challenger initiates"){
 			fightText += ahChallenger.name + " initiates</span><br>";		
