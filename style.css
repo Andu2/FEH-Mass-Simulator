@@ -14,6 +14,7 @@ body{
 	font-family:"Segoe UI",sans-serif;
 	color:#ffffff;
 	min-width:920px;
+	font-size: 18px;
 }
 
 #frame_main{
@@ -484,7 +485,7 @@ body{
 	padding-left:6px;
 	position:absolute;
 	left:0;
-	top:2px;
+	top:1px;
 	height:150px;
 }
 
@@ -497,14 +498,14 @@ body{
 .includebuttons_row{
 	position:relative;
 	margin-top:1px;
-	height:23px;
+	height:22px;
 }
 
 .wideincludebutton{
 	text-align:center;
 	font-size:12px;
-	height:21px;
-	line-height:21px;
+	height:20px;
+	line-height:20px;
 	width:132px;
 	display:inline-block;
 	border-radius:2px;
@@ -515,8 +516,8 @@ body{
 }
 
 .thinincludebutton{
-	height:21px;
-	line-height:21px;
+	height:20px;
+	line-height:20px;
 	text-align:center;
 	width:64px;
 	font-size:12px;
@@ -1045,7 +1046,7 @@ body{
 }
 
 .pink{
-	color:#FFDFDD
+	color:#ffc7c4
 }
 
 .blue{
@@ -1071,6 +1072,11 @@ body{
 .bold{
 	font-weight:bold;
 	color:#dddddd;
+}
+
+.highlight{
+	font-weight:bold;
+	color:#fefec8;
 }
 
 /*Tooltip///////////////////////////////////////////////////*/
