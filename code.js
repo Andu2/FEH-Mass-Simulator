@@ -65,7 +65,7 @@ function initOptions(){
 	//Holder for options that aren't hero-specific
 	options = {};
 	options.autoCalculate = true;
-	options.startTurn = 0;
+	options.startTurn = 1;
 	options.useGaleforce = true;
 	options.threatenRule = "Neither";
 	options.ployBehavior = "Diagonal";
@@ -1152,6 +1152,7 @@ function updateHeroUI(hero){
 		else{
 			$("#" + htmlPrefix + "weapon_icon").attr("src","weapons/" + data.heroes[hero.index].color + "dragon.png");
 		}
+		$("#" + htmlPrefix + "movement_icon").attr("src","weapons/" + data.heroes[hero.index].movetype + ".png");
 
 		if(hero.special != -1){
 			var specialCharge = data.skills[hero.special].charge;
@@ -1940,20 +1941,23 @@ function fight(enemyIndex,resultIndex){
 	}
 
 	ahEnemy = new activeHero(enemyList[enemyIndex]);
-
+	
 	var rounds = 0;
-
+	var challengerRound = 0;
+	var enemyRound = 0;
+	
 	for(var round = 1; round <= options.roundInitiators.length;round++){
 		rounds = round;
-		var turn = options.startTurn + round - 1;
 		fightText += "<div class=\"fight_round\"><span class=\"bold\">Round " + round + ": ";
 		if(options.roundInitiators[round-1]=="Challenger initiates"){
-			fightText += ahChallenger.name + " initiates</span><br>";
-			fightText += ahChallenger.attack(ahEnemy,turn);
+			fightText += ahChallenger.name + " initiates</span><br>";		
+			if (round >= options.startTurn) challengerRound++;
+			fightText += ahChallenger.attack(ahEnemy, round, challengerRound == 1, false);			
 		}
 		else{
-			fightText += ahEnemy.name + " initiates</span><br>";
-			fightText +=  ahEnemy.attack(ahChallenger,turn);
+			fightText += ahEnemy.name + " initiates</span><br>";			
+			if (round >= options.startTurn) enemyRound++;
+			fightText +=  ahEnemy.attack(ahChallenger, round, enemyRound == 1, false);			
 		}
 		if(ahEnemy.hp <= 0 || ahChallenger.hp <= 0){
 			break;
@@ -2102,9 +2106,9 @@ function fight(enemyIndex,resultIndex){
 				"<span class=\"results_challengerhp\">" + ahChallenger.hp + "</span> &ndash; <span class=\"results_enemyhp\">" + ahEnemy.hp + "</span>",
 			"</div>",
 		"</div>",
-		"<div class=\"frame_enemypicture\"><img class=\"results_enemypicture\" src=\"heroes/" + ahEnemy.name + ".png\"/></div>",
+		"<div class=\"frame_enemypicture\"><img class=\"results_enemypicture\" src=\"heroes/" + ahEnemy.realName + ".png\"/><img class=\"movementIconSmall\" src=\"weapons/" + ahEnemy.moveType + ".png\"/></div>",
 		"<div class=\"results_topline\">",
-			"<img class=\"weaponIconSmall\" src=\"weapons/" + weaponTypeName + ".png\"/><span class=\"results_enemyname\">" + ahEnemy.name + "</span> (<span class=\"results_outcome\">" + resultText + "</span>)",
+			"<img class=\"weaponIconSmall\" src=\"weapons/" + weaponTypeName + ".png\"/><span class=\"results_enemyname\">" + ahEnemy.realName + "</span> (<span class=\"results_outcome\">" + resultText + "</span>)",
 			"<div class=\"results_previousresult\">" + enemyList[enemyIndex].lastFightResult + "</div>",
 		"</div>",
 		"<div class=\"results_bottomline\">",
@@ -2486,7 +2490,8 @@ function activeHero(hero){
 
 	this.challenger = !!hero.challenger; //Will be undefined if not challenger
 	this.heroIndex = hero.index;
-	this.name = data.heroes[this.heroIndex].name;
+	this.realName = data.heroes[this.heroIndex].name;
+	this.name = (this.challenger ? "<span class=\"lightblue\">" + this.realName + "</span>" : "<span class=\"pink\">" + this.realName + "</span>");	
 	this.rarity = hero.rarity;
 	this.merge = hero.merge;
 
@@ -2517,7 +2522,7 @@ function activeHero(hero){
 
 	this.hp = Math.max(this.maxHp - hero.damage,1);
 	this.precharge = hero.precharge;
-
+	
 	//Make a list of skill names for easy reference
 	if(this.weaponIndex != -1){
 		this.skillNames.push(data.skills[this.weaponIndex].name);
@@ -2582,7 +2587,7 @@ function activeHero(hero){
 			return 0;
 		}
 	}
-
+	
 	this.hasExactly = function(skill){
 		//finds if hero has a skill with an exact name
 		//returns true if found
@@ -2591,9 +2596,44 @@ function activeHero(hero){
 				return true;
 			}
 		}
-
 		return false;
 	}
+	
+	
+	//Finds hero skill with specific skill type and returns skill tier
+	this.hasAtIndex = function(skill, index){
+		if(index != -1){
+			var skillName = data.skills[index].name;
+			//If skill ends with a number, compare skill without the number
+			if($.isNumeric(skillName.charAt(skillName.length-1))){
+				if (skillName.substring(0,skillName.length-2) == skill){
+					return parseInt(skillName.charAt(skillName.length-1));
+				} else{
+					return 0;
+				}
+			}
+			//Else just check if skill matches
+			else{
+				return (skillName == skill ? 1 : 0);				
+			}			
+		} else{
+			return 0;
+		}
+	}
+		
+	//Finds hero skill with specific skill type and returns boolean
+	this.hasExactlyAtIndex = function(skill, index){
+		if(index != -1){
+			if (data.skills[index].name == skill){
+				return true;
+			} else{
+				return false;
+			}
+		} else{
+			return false;
+		}
+	}
+	
 
 	this.resetCharge = function(){
 		//resets charge based on weapon
@@ -2697,7 +2737,7 @@ function activeHero(hero){
 			}
 
 			if(statChanges.length > 0){
-				threatenText += this.name + " has turn-start debuffing skills: " + skillNames.join(", ") + ". Effect on " + enemy.name + ": " + statChanges.join(", ") + "<br>";
+				threatenText += this.name + " has turn-start skills: " + skillNames.join(", ") + ".<br>" + enemy.name + " receives the following: " + statChanges.join(", ") + ".<br>";
 			}
 		}
 
@@ -2705,32 +2745,28 @@ function activeHero(hero){
 	}
 
 	//Turn counting is complicated due to mix & matching turn order, will revisit later if necessary.
-	//Currently only heals on first turn since there's only 4 combat rounds in this simulator.
-	this.renew = function(turn){
+	//Currently repeat effects are not applied since there are only 4 rounds (2 exchanges max) in this simulator
+	this.renew = function(){
 		var renewText = "";	
 
 		if(this.has("Renewal")){
-			//if(turn % (5 - this.has("Renewal")) * 2 == 0){
-			if(turn == 0){
-				if(this.hp + 10 > this.maxHp){
-					this.hp = this.maxHp;
-				} else{
-					this.hp += 10;
-				}
-				renewText += this.name + " heals 10 HP due to Renewal.<br>";
-			}	
+			//if(turn % (5 - this.has("Renewal")) == 0){
+			if(this.hp + 10 > this.maxHp){
+				this.hp = this.maxHp;
+			} else{
+				this.hp += 10;
+			}
+			renewText += this.name + " heals 10 HP due to Renewal.<br>";
 		}
 		
 		if(this.has("Falchion")){
-			//if(turn % 6 == 0){
-			if(turn == 0){
-				if(this.hp + 10 > this.maxHp){
-					this.hp = this.maxHp;
-				} else{
-					this.hp += 10;
-				}
-				renewText += this.name + " heals 10 HP due to Falchion.<br>";
-			}	
+			//if(turn % 3 == 0){
+			if(this.hp + 10 > this.maxHp){
+				this.hp = this.maxHp;
+			} else{
+				this.hp += 10;
+			}
+			renewText += this.name + " heals 10 HP due to Falchion.<br>";
 		}		
 
 		return renewText;
@@ -2800,13 +2836,20 @@ function activeHero(hero){
 		if(!this.initiator && enemy.range == "ranged"){
 			var skillName = "";
 			var buffVal = 0;
-			if(this.has("Distant Def")){
-				buffVal = this.has("Distant Def") * 2;
+			if(this.hasAtIndex("Distant Def", this.aIndex)){
+				buffVal = this.hasAtIndex("Distant Def", this.aIndex) * 2;
 				skillName = data.skills[this.aIndex].name;
 				this.combatSpur.def += buffVal;
 				this.combatSpur.res += buffVal;
 				boostText += this.name + " gets +" + buffVal + " def and res from being attacked from range with " + skillName + ".<br>";
-			}
+			}			
+			if(this.hasExactlyAtIndex("Distant Def 1 (S)", this.sIndex)){
+				buffVal = 2;
+				skillName = data.skills[this.sIndex].name;
+				this.combatSpur.def += buffVal;
+				this.combatSpur.res += buffVal;
+				boostText += this.name + " gets +" + buffVal + " def and res from being attacked from range with " + skillName + ".<br>";
+			}			
 		}
 
 		if(!this.initiator && enemy.range == "melee"){
@@ -3011,6 +3054,7 @@ function activeHero(hero){
 				this.combatSpur.res += 4;
 				boostText += this.name + " gets +4 res while defending with " + data.skills[this.weaponIndex].name + ".<br>";
 			}
+			var stanceDef = 0;
 			if(this.has("Steady Stance")){
 				stanceDef = this.has("Steady Stance") * 2;
 				skillName = data.skills[this.aIndex].name;
@@ -3702,9 +3746,9 @@ function activeHero(hero){
 			
 			//Check Urvan damage reduction, currently occurs before damage reducing special
 			//***May need to revise due to Shield Pulse's if calculation order is different***
-			if (enemy.has("Urvan") && lastAttacker == (this.initiator ? "Initiator: " + this.name : "Defender: " + this.name)){
+			if (enemy.has("Urvan") && lastAttacker == this.name){
 				dmgReduction *= 0.2;
-				damageText += "Urvan reduces " + this.name + "'s consecutive damage by 80%.<br>"
+				damageText += enemy.name + "'s Urvan reduces " + this.name + "'s consecutive damage by 80%.<br>"; 
 			}			
 			
 			if(enemy.specialIndex!=-1&&data.skills[enemy.specialIndex].charge<=enemy.charge){
@@ -3718,24 +3762,24 @@ function activeHero(hero){
 					if(enemy.has("Buckler") || enemy.has("Escutcheon")){
 						dmgReduction *= 0.7;
 						defensiveSpecialActivated = true;
-						damageText += data.skills[enemy.specialIndex].name + " reduces " + this.name + "'s damage by 30%.<br>"
+						damageText += enemy.name + " activates " + data.skills[enemy.specialIndex].name + " and reduces " + this.name + "'s damage by 30%.<br>";
 					}
 					else if(enemy.has("Pavise")){
 						dmgReduction *= 0.5;
 						defensiveSpecialActivated = true;
-						damageText += data.skills[enemy.specialIndex].name + " reduces " + this.name + "'s damage by 50%.<br>"
+						damageText += enemy.name + " activates " + data.skills[enemy.specialIndex].name + " and reduces " + this.name + "'s damage by 50%.<br>";
 					}
 				}
 				else if(this.range == "ranged" || (!this.initiator && enemy.range == "ranged" && anyRangeCounter)){
 					if(enemy.has("Holy Vestments") || enemy.has("Sacred Cowl")){
 						dmgReduction *= 0.7;
 						defensiveSpecialActivated = true;
-						damageText += data.skills[enemy.specialIndex].name + " reduces " + this.name + "'s damage by 30%.<br>"
+						damageText += enemy.name + " activates " + data.skills[enemy.specialIndex].name + " and reduces " + this.name + "'s damage by 30%.<br>";
 					}
 					else if(enemy.has("Aegis")){
 						dmgReduction *= 0.5;
 						defensiveSpecialActivated = true;
-						damageText += data.skills[enemy.specialIndex].name + " reduces " + this.name + "'s damage by 50%.<br>"
+						damageText += enemy.name + " activates " + data.skills[enemy.specialIndex].name + " and reduces " + this.name + "'s damage by 50%.<br>";
 					}
 				}
 
@@ -3749,7 +3793,7 @@ function activeHero(hero){
 					//damageText += data.skills[enemy.specialIndex].name + " reduces " + this.name + "'s damage by " + ((1 - dmgReduction) * 100 | 0) + "%.<br>"
 
 					if (enemy.has("Shield Pulse 2") || enemy.has("Shield Pulse 3")){
-						damageText += "Shield Pulse reduces " + this.name + "'s damage by an additional 5.<br>";
+						damageText += enemy.name + "'s Shield Pulse reduces " + this.name + "'s damage by an additional 5.<br>";
 					}
 				}
 				enemy.resetCharge();
@@ -3790,7 +3834,7 @@ function activeHero(hero){
 			if(enemy.has("Embla's Ward")){
 				dmg = 0;
 			}
-			damageText += this.name + " attacks " + enemy.name + " for <span class=\"bold\">" + dmg + "</span> damage.<br>";
+			damageText += this.name + " attacks " + enemy.name + " for <span class=\"highlight\">" + dmg + "</span> damage.<br>";
 			if(dmg >= enemy.hp){
 				if(miracle){
 					dmg = enemy.hp - 1;
@@ -3818,7 +3862,7 @@ function activeHero(hero){
 			
 			//Set this attacker as last attacker for Urvan check
 			//Divide into initiator vs defender for mirror match differentiation
-			lastAttacker = (this.initiator ? "Initiator: " + this.name : "Defender: " + this.name);
+			lastAttacker = this.name;
 			
 			//add absorbed hp
 			var absorbHp = dmg*absorbPct | 0;
@@ -3886,13 +3930,12 @@ function activeHero(hero){
 	}
 
 	//represents a full round of combat
-	this.attack = function(enemy,turn,galeforce){		
+	this.attack = function(enemy,round,renew,galeforce){		
 				
 		//Initialize last attacker
 		lastAttacker = "none";
 
 		var roundText = "";//Common theme: text is returned by helper functions, so the functions are called by adding them to roundText
-		var firstTurn = (turn - options.startTurn == 0);
 		this.initiator = true;
 		enemy.initiator = false;
 		enemy.didAttack = false;
@@ -3902,7 +3945,7 @@ function activeHero(hero){
 		if(enemy.attackType=="magical"){
 			relevantDefType = "res";
 		}
-
+		
 		//Remove certain buffs
 		this.combatBuffs = {"atk":0,"spd":0,"def":0,"res":0};
 
@@ -3911,16 +3954,16 @@ function activeHero(hero){
 			//Check self buffs (defiant skills)
 			roundText += this.defiant();
 
-			//check turn for renewal
-			//Does renewal happen before defiant?
-			roundText += this.renew(turn);
-			roundText += enemy.renew(turn);
+			//Check for renewal effects
+			if (renew){
+				roundText += this.renew();
+			}			
 
 			//Check threaten if not first turn (unless startThreatened is on)
-			if((options.threatenRule=="Both"||options.threatenRule=="Attacker") && firstTurn){
+			if((options.threatenRule=="Both"||options.threatenRule=="Attacker") && (round == 1)){
 				roundText += enemy.threaten(this);
 			}
-			if((options.threatenRule=="Both"||options.threatenRule=="Defender") || !firstTurn){
+			if((options.threatenRule=="Both"||options.threatenRule=="Defender") || (round != 1)){
 				roundText += this.threaten(enemy);
 			}
 		}
@@ -3962,6 +4005,9 @@ function activeHero(hero){
 			anyRangeCounter = true;
 		}
 
+		//Check for AOE special activation
+		roundText += this.doDamage(enemy,false,true);
+		
 		//check for vantage before beginning combat
 		var vantage = false;
 		if(enemy.has("Vantage")){
@@ -3969,7 +4015,6 @@ function activeHero(hero){
 				vantage = true;
 			}
 		}
-
 		if(enemy.has("Valaskjalf")){
 			if(enemy.hp/enemy.maxHp <= .50){
 				vantage = true;
@@ -4117,9 +4162,6 @@ function activeHero(hero){
 		if(this.has("Watersweep")){
 			watersweep = this.has("Watersweep")*-2 + 7 + (this.has("Phantom Spd 1") ? -5 : 0);
 		}
-		
-		//Check for AOE special activation
-		roundText += this.doDamage(enemy,false,true);
 
 		var thisFollowUp = false;
 		var enemyCanCounter = false;
@@ -4315,10 +4357,10 @@ function activeHero(hero){
 			}
 
 			//Finally, Galeforce!
-			if(this.has("Galeforce") && data.skills[this.specialIndex].charge<=this.charge && options.useGaleforce){
+			if(this.has("Galeforce") && data.skills[this.specialIndex].charge <= this.charge && options.useGaleforce){
 				roundText += this.name + " initiates again with Galeforce!<br>";
 				this.resetCharge();
-				roundText += this.attack(enemy,turn,true);
+				roundText += this.attack(enemy,round,false,true);
 			}
 		}
 
