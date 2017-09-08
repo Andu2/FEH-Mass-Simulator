@@ -11427,6 +11427,20 @@ window.data.skills = [{
 		"charge": 0,
 		"inheritrule": "nonstaff",
 		"affectsduel": 1
+	}, {
+		"skill_id": 611,
+		"name": "Distance Def 1 (S)",
+		"slot": "s",
+		"sp": 0,
+		"description": "If unit is attacked by foe using bow, daggers, magic, or staff, unit receives Def\/Res+2 during combat.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 1
 	}
 ];
 
