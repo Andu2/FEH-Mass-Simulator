@@ -2587,7 +2587,7 @@ function activeHero(hero){
 			return 0;
 		}
 	}
-
+	
 	this.hasExactly = function(skill){
 		//finds if hero has a skill with an exact name
 		//returns true if found
@@ -2596,9 +2596,44 @@ function activeHero(hero){
 				return true;
 			}
 		}
-
 		return false;
 	}
+	
+	
+	//Finds hero skill with specific skill type and returns skill tier
+	this.hasAtIndex = function(skill, index){
+		if(index != -1){
+			var skillName = data.skills[index].name;
+			//If skill ends with a number, compare skill without the number
+			if($.isNumeric(skillName.charAt(skillName.length-1))){
+				if (skillName.substring(0,skillName.length-2) == skill){
+					return parseInt(skillName.charAt(skillName.length-1));
+				} else{
+					return 0;
+				}
+			}
+			//Else just check if skill matches
+			else{
+				return (skillName == skill ? 1 : 0);				
+			}			
+		} else{
+			return 0;
+		}
+	}
+		
+	//Finds hero skill with specific skill type and returns boolean
+	this.hasExactlyAtIndex = function(skill, index){
+		if(index != -1){
+			if (data.skills[index].name == skill){
+				return true;
+			} else{
+				return false;
+			}
+		} else{
+			return false;
+		}
+	}
+	
 
 	this.resetCharge = function(){
 		//resets charge based on weapon
@@ -2801,13 +2836,20 @@ function activeHero(hero){
 		if(!this.initiator && enemy.range == "ranged"){
 			var skillName = "";
 			var buffVal = 0;
-			if(this.has("Distant Def")){
-				buffVal = this.has("Distant Def") * 2;
+			if(this.hasAtIndex("Distant Def", this.aIndex)){
+				buffVal = this.hasAtIndex("Distant Def", this.aIndex) * 2;
 				skillName = data.skills[this.aIndex].name;
 				this.combatSpur.def += buffVal;
 				this.combatSpur.res += buffVal;
 				boostText += this.name + " gets +" + buffVal + " def and res from being attacked from range with " + skillName + ".<br>";
-			}
+			}			
+			if(this.hasExactlyAtIndex("Distant Def 1 (S)", this.sIndex)){
+				buffVal = 2;
+				skillName = data.skills[this.sIndex].name;
+				this.combatSpur.def += buffVal;
+				this.combatSpur.res += buffVal;
+				boostText += this.name + " gets +" + buffVal + " def and res from being attacked from range with " + skillName + ".<br>";
+			}			
 		}
 
 		if(!this.initiator && enemy.range == "melee"){
@@ -3792,7 +3834,7 @@ function activeHero(hero){
 			if(enemy.has("Embla's Ward")){
 				dmg = 0;
 			}
-			damageText += this.name + " attacks " + enemy.name + " for <span class=\"bold\">" + dmg + "</span> damage.<br>";
+			damageText += this.name + " attacks " + enemy.name + " for <span class=\"highlight\">" + dmg + "</span> damage.<br>";
 			if(dmg >= enemy.hp){
 				if(miracle){
 					dmg = enemy.hp - 1;
