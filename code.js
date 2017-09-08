@@ -1455,7 +1455,7 @@ function importText(side){
 	function parseFirstLine(line){
 		var dataFound = {};
 		//Try all lengths up to 20 characters to find hero name
-		for(var tryLength = 2; tryLength <= 20; tryLength++){
+		for(var tryLength = 2; tryLength <= 30; tryLength++){
 			var tryString = removeEdgeJunk(line.slice(0,tryLength));
 			var tryIndex = getIndexFromName(tryString,data.heroes);
 			if(tryIndex != -1){
