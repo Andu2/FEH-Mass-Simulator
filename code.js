@@ -1455,7 +1455,7 @@ function importText(side){
 	function parseFirstLine(line){
 		var dataFound = {};
 		//Try all lengths up to 20 characters to find hero name
-		for(var tryLength = 2; tryLength <= 20; tryLength++){
+		for(var tryLength = 2; tryLength <= 30; tryLength++){
 			var tryString = removeEdgeJunk(line.slice(0,tryLength));
 			var tryIndex = getIndexFromName(tryString,data.heroes);
 			if(tryIndex != -1){
@@ -2599,15 +2599,14 @@ function activeHero(hero){
 		return false;
 	}
 	
-	
 	//Finds hero skill with specific skill type and returns skill tier
 	this.hasAtIndex = function(skill, index){
 		if(index != -1){
 			var skillName = data.skills[index].name;
 			//If skill ends with a number, compare skill without the number
-			if($.isNumeric(skillName.charAt(skillName.length-1))){
-				if (skillName.substring(0,skillName.length-2) == skill){
-					return parseInt(skillName.charAt(skillName.length-1));
+			if($.isNumeric(skillName.charAt(skillName.length - 1))){
+				if (skillName.substring(0, skillName.length - 2) == skill){
+					return parseInt(skillName.charAt(skillName.length - 1));
 				} else{
 					return 0;
 				}
@@ -2843,12 +2842,12 @@ function activeHero(hero){
 				this.combatSpur.res += buffVal;
 				boostText += this.name + " gets +" + buffVal + " def and res from being attacked from range with " + skillName + ".<br>";
 			}			
-			if(this.hasExactlyAtIndex("Distant Def 1 (S)", this.sIndex)){
-				buffVal = 2;
+			if(this.hasAtIndex("Distant Def", this.sIndex)){
+				buffVal = this.hasAtIndex("Distant Def", this.sIndex) * 2;
 				skillName = data.skills[this.sIndex].name;
 				this.combatSpur.def += buffVal;
 				this.combatSpur.res += buffVal;
-				boostText += this.name + " gets +" + buffVal + " def and res from being attacked from range with " + skillName + ".<br>";
+				boostText += this.name + " gets +" + buffVal + " def and res from being attacked from range with " + skillName + " (Seal).<br>";
 			}			
 		}
 

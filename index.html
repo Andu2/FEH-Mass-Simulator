@@ -14,7 +14,7 @@
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
 
-	<link rel="stylesheet" type="text/css" href="style.css?v=12"/>
+	<link rel="stylesheet" type="text/css" href="style.css?v=13"/>
 	<script type="text/javascript" src="db.js?v=0"></script>
 	<script type="text/javascript" src="code.js?v=26"></script>
 
@@ -38,7 +38,7 @@
 				<div class="frame_hero_main">
 					<div class="bar_top_options"><select id="challenger_name" data-var="challenger.index"></select><div class="bar_top_options_right"><span class="bar_label">Rarity:</span><input id="challenger_rarity" data-var="challenger.rarity" type="number" class="rarityinput smallnuminput" value=5 min=1 max=5 /><span class="bar_label">Lvl 40+</span><input id="challenger_merge" data-var="challenger.merge" class="smallnuminput" type="number" value=0 min=0 max=10 /><div class="button reset_button" id="reset_challenger">Reset</div></div></div>
 					<div class="frame_hero_main_top">
-						<div class="frame_hero_picture"><img class="hero_picture" id="challenger_picture" src="heroes/nohero.png"/><img id="challenger_weapon_icon" class="weaponIcon" src="weapons/noweapon.png"/></div>
+						<div class="frame_hero_picture"><img class="hero_picture" id="challenger_picture" src="heroes/nohero.png"/><img id="challenger_weapon_icon" class="weaponIcon" src="weapons/noweapon.png"/><img id="challenger_movement_icon" class="movementIcon" src="weapons/noweapon.png"/></div>
 						<div class="frame_stats">
 							<div class="bufflabel">Buff</div><div class="debufflabel">Debuff</div><div class="spurlabel">Spur</div>
 							<div class="stat_row">HP: <span class="stat_number" id="challenger_hp">-</span></div>
@@ -121,7 +121,7 @@
 					<div class="frame_hero_main_right">
 						<div class="bar_top_options"><select id="cl_enemy_name" data-var="enemies.cl.list.index"></select><div class="bar_top_options_right"><span class="bar_label">Rarity:</span><input id="cl_enemy_rarity" data-var="enemies.cl.list.rarity" type="number" class="rarityinput smallnuminput" value=5 min=1 max=5 /><span class="bar_label">Lvl 40+</span><input id="cl_enemy_merge" data-var="enemies.cl.list.merge" class="smallnuminput" type="number" value=0 min=0 max=10 /><div class="button reset_button reset_enemies" id="reset_cl_enemy">Reset</div></div></div>
 						<div class="frame_hero_main_top">
-							<div class="frame_hero_picture"><img class="hero_picture" id="cl_enemy_picture" src="heroes/nohero.png"/><img id="cl_enemy_weapon_icon" class="weaponIcon" src="weapons/noweapon.png"/></div>
+							<div class="frame_hero_picture"><img class="hero_picture" id="cl_enemy_picture" src="heroes/nohero.png"/><img id="cl_enemy_weapon_icon" class="weaponIcon" src="weapons/noweapon.png"/><img id="cl_enemy_movement_icon" class="movementIcon" src="weapons/noweapon.png"/></div>
 							<div class="frame_stats">
 								<div class="bufflabel">Buff</div><div class="debufflabel">Debuff</div><div class="spurlabel">Spur</div>
 								<div class="stat_row">HP: <span class="stat_number" id="cl_enemy_hp">-</span></div>
@@ -176,7 +176,7 @@
 						On first turn, threaten/ploy skills affect: <div class="rules_inputs_lineright"><select id="rules_threaten" data-var="options.threatenRule"><option>Both</option><option>Attacker</option><option>Defender</option><option selected="selected">Neither</option></select></div>
 					</div>
 					<div class="rules_inputs_line">
-						Starting turn (for renewal): <div class="rules_inputs_lineright"><input type="number" data-var="options.startTurn" min=0 max=3 id="rules_renewal" class="smallnuminput" value=0 /></div>
+						Round to start Renewal effects: <div class="rules_inputs_lineright"><input type="number" data-var="options.startTurn" min=1 max=5 id="rules_renewal" class="smallnuminput" value=1 /></div>
 					</div>
 					<div class="rules_inputs_line">
 						Ranged attack angle (for ploy): <div class="rules_inputs_lineright"><select id="rules_ploy" data-var="options.ployBehavior"><option>Diagonal</option><option>Orthogonal</option></select></div>

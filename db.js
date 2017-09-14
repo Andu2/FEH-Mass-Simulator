@@ -11429,7 +11429,7 @@ window.data.skills = [{
 		"affectsduel": 1
 	}, {
 		"skill_id": 611,
-		"name": "Distant Def 1 (S)",
+		"name": "Distant Def 1",
 		"slot": "s",
 		"sp": 0,
 		"description": "If unit is attacked by foe using bow, daggers, magic, or staff, unit receives Def\/Res+2 during combat.",
