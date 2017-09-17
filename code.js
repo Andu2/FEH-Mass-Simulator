@@ -1201,12 +1201,7 @@ function updateHeroUI(hero){
 						
 				//Else if special is offensive
 				}else{
-					//Wrath
-					if(bName.indexOf("Wrath") != -1){
-						if(hero.damage/hero.hp >= 1 - (parseInt(bName.charAt(bName.length - 1)) * .25)){
-							specialCharge -= 1;
-						}			
-					}
+
 				}
 			}
 
@@ -2794,6 +2789,30 @@ function activeHero(hero){
 		return renewText;
 	}
 
+	//Turn start charge effects
+	this.charging = function(){
+		var chargingText = "";
+		
+		//If special is defensive
+		if(this.has("Miracle") || this.has("Aegis") || this.has("Buckler") || this.has("Escutcheon")
+			|| this.has("Holy Vestments") || this.has("Pavise") || this.has("Sacred Cowl")){
+		//Else if special is supportive
+		}else if(this.has("Heavenly Light") || this.has("Imbue") || this.has("Kindled-Fire Balm")
+			|| this.has("Solid-Earth Balm") || this.has("Still-Water Balm") || this.has("Swift-Winds Balm")){				
+		//Else if special is offensive
+		}else{
+			//Wrath
+			if(this.has("Wrath")){
+				if(this.hp/this.maxHp <= .25 * this.has("Wrath")){
+					this.charge++;
+					chargingText += this.name + " gains an extra charge with " + data.skills[this.bIndex].name + ".<br>";
+				}
+			}
+		}
+		
+		return chargingText;
+	}
+	
 	this.defiant = function(){
 		var defiantText = "";
 
@@ -3431,7 +3450,7 @@ function activeHero(hero){
 		} else if(enemy.has("Raudrblade") || enemy.has("Blarblade") || enemy.has("Gronnblade")){
 			var bladebonus = Math.max(this.buffs.atk,this.combatBuffs.atk) + Math.max(this.buffs.spd,this.combatBuffs.spd) + Math.max(this.buffs.def,this.combatBuffs.def) + Math.max(this.buffs.res,this.combatBuffs.res);
 			enemyEffAtk += bladebonus;
-		}
+		}	
 		
 		//Specials
 		var offensiveSpecialActivated = false;
@@ -3777,9 +3796,7 @@ function activeHero(hero){
 				if(effectiveBonus > 1 ){
 					damageText += this.name + "'s attack is multiplied by " + effectiveBonus + " from weapon effectiveness.<br>";
 				}
-			}
-
-			
+			}			
 			
 			//Check damage reducing specials
 			var defensiveSpecialActivated = false;
@@ -4008,6 +4025,9 @@ function activeHero(hero){
 			if((options.threatenRule=="Both"||options.threatenRule=="Defender") || (round != 1)){
 				roundText += this.threaten(enemy);
 			}
+			
+			//Check for charge effects
+			roundText += this.charging();
 		}
 
 		//Set after renewal
