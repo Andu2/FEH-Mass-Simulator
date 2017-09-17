@@ -1176,7 +1176,7 @@ function updateHeroUI(hero){
 			if(hero.s != -1){
 				var sName = data.skills[hero.s].name;
 
-				//Quicken Pulse effects
+				//Quicken Pulse
 				if(sName.indexOf("Quickened Pulse") != -1){
 					specialCharge -= 1;
 				}
@@ -1186,12 +1186,26 @@ function updateHeroUI(hero){
 			if(hero.b != -1){
 				var bName = data.skills[hero.b].name;
 
-				//Shield Pulse effects
-				if(specialName.indexOf("Miracle") != -1 || specialName.indexOf("Aegis") != -1 || specialName.indexOf("Buckler") != -1 || specialName.indexOf("Escutcheon") != -1 || specialName.indexOf("Holy Vestments") != -1 || specialName.indexOf("Pavise") != -1 || specialName.indexOf("Sacred Cowl")!= -1){
+				//If special is defensive
+				if(specialName.indexOf("Miracle") != -1 || specialName.indexOf("Aegis") != -1 || specialName.indexOf("Buckler") != -1 || specialName.indexOf("Escutcheon") != -1
+					|| specialName.indexOf("Holy Vestments") != -1 || specialName.indexOf("Pavise") != -1 || specialName.indexOf("Sacred Cowl")!= -1){
+					//Shield Pulse
 					if(bName.indexOf("Shield Pulse 3") != -1){
 						specialCharge -= 2;
 					} else if(bName.indexOf("Shield Pulse 1") != -1 || bName.indexOf("Shield Pulse 2") != -1){
 						specialCharge -= 1;
+					}
+				//Else if special is supportive
+				}else if(specialName.indexOf("Heavenly Light") != -1 || specialName.indexOf("Imbue") != -1 || specialName.indexOf("Kindled-Fire Balm") != -1
+					|| specialName.indexOf("Solid-Earth Balm") != -1 || specialName.indexOf("Still-Water Balm") != -1 || specialName.indexOf("Swift-Winds Balm") != -1){
+						
+				//Else if special is offensive
+				}else{
+					//Wrath
+					if(bName.indexOf("Wrath") != -1){
+						if(hero.damage/hero.hp >= 1 - (parseInt(bName.charAt(bName.length - 1)) * .25)){
+							specialCharge -= 1;
+						}			
 					}
 				}
 			}
@@ -2599,7 +2613,8 @@ function activeHero(hero){
 		return false;
 	}
 	
-	//Finds hero skill with specific skill type and returns skill tier
+	//Checks if skill name matches skill index and returns skill tier
+	//eg. this.hasAtIndex("Skill Name", this.aIndex)
 	this.hasAtIndex = function(skill, index){
 		if(index != -1){
 			var skillName = data.skills[index].name;
@@ -2620,7 +2635,8 @@ function activeHero(hero){
 		}
 	}
 		
-	//Finds hero skill with specific skill type and returns boolean
+	//Checks if skill name matches skill index exactly and returns boolean
+	//eg. this.hasExactlyAtIndex("Skill Name 3", this.cIndex)
 	this.hasExactlyAtIndex = function(skill, index){
 		if(index != -1){
 			if (data.skills[index].name == skill){
@@ -2637,7 +2653,7 @@ function activeHero(hero){
 	this.resetCharge = function(){
 		//resets charge based on weapon
 		if(this.has("Killing Edge") || this.has("Killer Axe") || this.has("Killer Lance") || this.has("Killer Bow")
-			|| this.has("Slaying Bow") || this.has("Slaying Edge") || this.has("Slaying Axe")
+			|| this.has("Slaying Bow") || this.has("Slaying Edge") || this.has("Slaying Axe") || this.has("Slaying Lance")
 			|| this.has("Cursed Lance")|| this.has("Mystletainn") || this.has("Hauteclere") 
 			|| this.has("Urvan")){
 			this.charge = 1;
@@ -2675,19 +2691,26 @@ function activeHero(hero){
 		var skillNames = [];
 
 		//Only do ploys if not facing ranged diagonally-oriented asshats
+		//Ploys debuff do not stack with other debuff
 		if(enemy.range == "melee" || options.ployBehavior != "Diagonal"){
 			if(this.res > enemy.res){
-				if(this.has("Atk Ploy")){
-					threatDebuffs.atk = Math.min(threatDebuffs.atk,-this.has("Atk Ploy")-2);
+				//Passive C Skills
+				if(this.hasAtIndex("Atk Ploy", this.cIndex)){
+					threatDebuffs.atk = Math.min(threatDebuffs.atk,-this.hasAtIndex("Atk Ploy", this.cIndex)-2);
 					skillNames.push(data.skills[this.cIndex].name);
 				}
-				if(this.has("Def Ploy")){
-					threatDebuffs.def = Math.min(threatDebuffs.def,-this.has("Def Ploy")-2);
+				if(this.hasAtIndex("Def Ploy", this.cIndex)){
+					threatDebuffs.def = Math.min(threatDebuffs.def,-this.hasAtIndex("Def Ploy", this.cIndex)-2);
 					skillNames.push(data.skills[this.cIndex].name);
 				}
-				if(this.has("Res Ploy")){
-					threatDebuffs.def = Math.min(threatDebuffs.res,-this.has("Res Ploy")-2);
+				if(this.hasAtIndex("Res Ploy", this.cIndex)){
+					threatDebuffs.def = Math.min(threatDebuffs.res,-this.hasAtIndex("Res Ploy", this.cIndex)-2);
 					skillNames.push(data.skills[this.cIndex].name);
+				}
+				//Seals
+				if(this.hasAtIndex("Atk Ploy", this.sIndex)){
+					threatDebuffs.atk = Math.min(threatDebuffs.atk,-this.hasAtIndex("Atk Ploy", this.sIndex)-2);
+					skillNames.push(data.skills[this.sIndex].name);
 				}
 			}
 
@@ -3364,48 +3387,54 @@ function activeHero(hero){
 		var enemyEffDef = enemy.def + Math.max(enemy.buffs.def,enemy.combatBuffs.def) + Math.min(enemy.debuffs.def,enemy.combatDebuffs.def) + enemy.spur.def + enemy.combatSpur.def;
 		var enemyEffRes = enemy.res + Math.max(enemy.buffs.res,enemy.combatBuffs.res) + Math.min(enemy.debuffs.res,enemy.combatDebuffs.res) + enemy.spur.res + enemy.combatSpur.res;
 		
+		//Relavant defense stat
+		var relevantDef = (this.attackType == "magical" ? enemyEffRes : enemyEffDef);
+		
 		//Buff cancellation and reversion - Atk, Def, Res calculations
-		//***May require change depending on order of application between Panic and null skills***		
+		//***May require changes depending on order of application between Panic and other debuff skills***		
+		//Attacker relevant stats
+		//Panic debuff
 		if(this.panicked){
 			thisEffAtk = this.atk - Math.max(this.buffs.atk,this.combatBuffs.atk) + Math.min(this.debuffs.atk,this.combatDebuffs.atk) + this.spur.atk + this.combatSpur.atk;
 			thisEffDef = this.def - Math.max(this.buffs.def,this.combatBuffs.def) + Math.min(this.debuffs.def,this.combatDebuffs.def) + this.spur.def + this.combatSpur.def;
 			thisEffRes = this.res - Math.max(this.buffs.res,this.combatBuffs.res) + Math.min(this.debuffs.res,this.combatDebuffs.res) + this.spur.res + this.combatSpur.res;
 			if(!AOE){damageText += this.name + "'s buffs are reversed by debuff.<br>";}
+		//Buff cancellation
 		} else if((enemy.has("Beorc's Blessing") && (this.moveType == "cavalry" || this.moveType == "flying"))
 			|| (enemy.has("Mulagir") && (this.weaponType == "redtome" || this.weaponType == "bluetome" || this.weaponType == "greentome"))){
 			thisEffAtk = this.atk + Math.min(this.debuffs.atk,this.combatDebuffs.atk) + this.spur.atk + this.combatSpur.atk;
 			thisEffDef = this.def + Math.min(this.debuffs.def,this.combatDebuffs.def) + this.spur.def + this.combatSpur.def;
 			thisEffRes = this.res + Math.min(this.debuffs.res,this.combatDebuffs.res) + this.spur.res + this.combatSpur.res;
 			if(!AOE){damageText += this.name + "'s buffs are nullified by opponent's skill.<br>";}			
+		//Bladetome bonus
+		} else if(this.has("Raudrblade") || this.has("Blarblade") || this.has("Gronnblade")){
+			var bladebonus = Math.max(this.buffs.atk,this.combatBuffs.atk) + Math.max(this.buffs.spd,this.combatBuffs.spd) + Math.max(this.buffs.def,this.combatBuffs.def) + Math.max(this.buffs.res,this.combatBuffs.res);
+			thisEffAtk += bladebonus;
+			if(!AOE && bladebonus != 0){damageText += this.name + " gains " + bladebonus + " damage from " + data.skills[hero.weapon].name + ".<br>";}
 		}
 
+		//Defender relevant stats
+		//Panic Debuff
 		if(enemy.panicked){
 			enemyEffAtk = enemy.atk - Math.max(enemy.buffs.atk,enemy.combatBuffs.atk) + Math.min(enemy.debuffs.atk,enemy.combatDebuffs.atk) + enemy.spur.atk + enemy.combatSpur.atk;
 			enemyEffDef = enemy.def - Math.max(enemy.buffs.def,enemy.combatBuffs.def) + Math.min(enemy.debuffs.def,enemy.combatDebuffs.def) + enemy.spur.def + enemy.combatSpur.def;
 			enemyEffRes = enemy.res - Math.max(enemy.buffs.res,enemy.combatBuffs.res) + Math.min(enemy.debuffs.res,enemy.combatDebuffs.res) + enemy.spur.res + enemy.combatSpur.res;
 			if(!AOE){damageText += enemy.name + "'s buffs are reversed by debuff.<br>";}
+		//Buff cancellation
 		} else if((this.has("Beorc's Blessing") && (enemy.moveType == "cavalry" || enemy.moveType == "flying"))
 			|| (this.has("Mulagir") && (enemy.weaponType == "redtome" || enemy.weaponType == "bluetome" || enemy.weaponType == "greentome"))){
 			enemyEffAtk = enemy.atk + Math.min(enemy.debuffs.atk,enemy.combatDebuffs.atk) + enemy.spur.atk + enemy.combatSpur.atk;
 			enemyEffDef = enemy.def + Math.min(enemy.debuffs.def,enemy.combatDebuffs.def) + enemy.spur.def + enemy.combatSpur.def;
 			enemyEffRes = enemy.res + Math.min(enemy.debuffs.res,enemy.combatDebuffs.res) + enemy.spur.res + enemy.combatSpur.res;
 			if(!AOE){damageText += enemy.name + "'s buffs are nullified by opponent's skill.<br>";}
-		}		
-
-		var relevantDef = enemyEffDef;
-		if(this.attackType=="magical"){
-			relevantDef = enemyEffRes;
+		//Bladetome bonus
+		} else if(enemy.has("Raudrblade") || enemy.has("Blarblade") || enemy.has("Gronnblade")){
+			var bladebonus = Math.max(this.buffs.atk,this.combatBuffs.atk) + Math.max(this.buffs.spd,this.combatBuffs.spd) + Math.max(this.buffs.def,this.combatBuffs.def) + Math.max(this.buffs.res,this.combatBuffs.res);
+			enemyEffAtk += bladebonus;
 		}
-
-		//blade tomes add atk
-		var bladeAtk = 0;
-		if(this.has("Raudrblade") || this.has("Blarblade") || this.has("Gronnblade")){
-			bladeAtk = Math.max(this.buffs.atk,this.combatBuffs.atk) + Math.max(this.buffs.spd,this.combatBuffs.spd) + Math.max(this.buffs.def,this.combatBuffs.def) + Math.max(this.buffs.res,this.combatBuffs.res);
-			thisEffAtk += bladeAtk;
-		}
-
+		
+		//Specials
 		var offensiveSpecialActivated = false;
-
 		if(this.specialIndex!=-1&&data.skills[this.specialIndex].charge<=this.charge){
 
 			//Do AOE specials
@@ -3430,7 +3459,15 @@ function activeHero(hero){
 					if(this.has("Wo Dao") || this.hasExactly("Dark Excalibur")){
 						AOEDamage += 10;
 						damageText += this.name + " gains 10 damage from " + data.skills[hero.weapon].name + ".<br>";
-					}					
+					}
+					if(this.has("Wrath")){
+						if(this.hp/this.maxHp <= .25 * this.has("Wrath")){
+							AOEDamage += 10;
+							damageText += this.name + " gains 10 damage from " + data.skills[this.bIndex].name + ".<br>";
+						}
+					}
+
+					
 					if(enemy.has("Embla's Ward")){
 						AOEDamage = 0;
 					}
@@ -3516,6 +3553,12 @@ function activeHero(hero){
 				if(this.has("Wo Dao") || this.hasExactly("Dark Excalibur")){
 					dmgBoost += 10;
 					damageText += this.name + " gains 10 damage from " + data.skills[hero.weapon].name + ".<br>";
+				}
+				if(this.has("Wrath")){
+					if(this.hp/this.maxHp <= .25 * this.has("Wrath")){
+						dmgBoost += 10;
+						damageText += this.name + " gains 10 damage from " + data.skills[this.bIndex].name + ".<br>";
+					}
 				}
 			}
 		}
@@ -3920,7 +3963,7 @@ function activeHero(hero){
 
 			//do damage again if brave weapon
 			if(brave && enemy.hp > 0){
-				damageText += this.name + " attacks again with a brave weapon.<br>";
+				damageText += this.name + " attacks again with weapon.<br>";
 				damageText += this.doDamage(enemy);
 			}
 		}
@@ -4070,7 +4113,7 @@ function activeHero(hero){
 		//check for brave
 		//brave will be passed to this.doDamage
 		var brave = false;
-		if(this.has("Brave Sword") || this.has("Brave Lance") || this.has("Brave Axe") || this.has("Brave Bow") || this.has("Dire Thunder")){
+		if(this.has("Brave Sword") || this.has("Brave Lance") || this.has("Brave Axe") || this.has("Brave Bow") || this.has("Dire Thunder") || this.has("Amiti")){
 			brave = true;
 		}
 
