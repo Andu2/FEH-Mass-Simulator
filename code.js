@@ -86,6 +86,8 @@ function initOptions(){
 	challenger.rarity = 5;
 	challenger.boon = "none";
 	challenger.bane = "none";
+	challenger.summoner = "none";
+	challenger.ally = "none";
 
 	//The following 6 arrays will be set from arrays generated in the heroes array so they don't have to be re-calculated
 	challenger.naturalSkills = []; //Skills the hero has without having to inherit
@@ -127,6 +129,8 @@ function initOptions(){
 	enemies.fl.rarity = 5;
 	enemies.fl.boon = "none";
 	enemies.fl.bane = "none";
+	enemies.fl.summoner = "none";
+	enemies.fl.ally = "none";
 
 	enemies.fl.naturalSkills = [];
 	enemies.fl.validWeaponSkills = getValidSkills(enemies.fl,"weapon");
@@ -248,14 +252,14 @@ $(document).ready(function(){
 		var dataVar = $(this).attr("data-var");
 		if(dataVar){
 			var varsThatChangeStats = [
-				".rarity",".merge",".boon",".bane",".weapon",".a",".s",".replaceWeapon",".replaceA"
+				".rarity",".merge",".boon",".bane",".summoner",".ally",".weapon",".a",".s",".replaceWeapon",".replaceA"
 			];
 			var varsThatChangeSkills = [
 				".rarity",".replaceWeapon",".replaceSpecial",".replaceA",".replaceB",".replaceC","enemies.fl.weapon",
 				"enemies.fl.special","enemies.fl.a","enemies.fl.b","enemies.fl.c","enemies.fl.s"
 			];
 			var varsThatUpdateFl = [
-				".boon",".bane",".precharge",".damage",".rarity",".merge"
+				".boon",".bane",".summoner",".ally",".precharge",".damage",".rarity",".merge"
 			]
 
 			var newVal = $(this).val();
@@ -813,6 +817,80 @@ function setStats(hero){
 			hero.def += data.skills[hero.s].def;
 			hero.res += data.skills[hero.s].res;
 		}
+		
+		//Summoner Support
+		if(hero.summoner != "none"){
+			switch (hero.summoner){
+				case "s":
+					hero.hp += 5;
+					hero.atk += 2;
+					hero.spd += 2;
+					hero.def += 2;
+					hero.res += 2;
+					break;
+				case "a":
+					hero.hp += 4;
+					hero.spd += 2;
+					hero.def += 2;
+					hero.res += 2;
+					break;
+				case "b":
+					hero.hp += 4;
+					hero.def += 2;
+					hero.res += 2;
+					break;
+				case "c":
+					hero.hp += 3;
+					hero.res += 2;
+					break;
+				default:
+					break;
+			}
+		}
+		
+		//Ally Support
+		if(hero.ally != "none"){
+			switch (hero.ally){
+				case "s":
+					hero.atk += 2;
+					hero.spd += 2;
+					hero.def += 2;
+					hero.res += 2;
+					break;
+				case "s-":
+					hero.atk += 1;
+					hero.spd += 1;
+					hero.def += 1;
+					hero.res += 1;
+					break;
+				case "a":
+					hero.spd += 2;
+					hero.def += 2;
+					hero.res += 2;
+					break;
+				case "a-":
+					hero.spd += 1;
+					hero.def += 1;
+					hero.res += 1;
+					break;
+				case "b":
+					hero.def += 2;
+					hero.res += 2;
+					break;
+				case "b-":
+					hero.def += 1;
+					hero.res += 1;
+					break;
+				case "c":
+					hero.res += 2;
+					break;
+				case "c-":
+					hero.res += 1;
+					break;
+				default:
+					break;
+			}
+		}
 	}
 }
 
@@ -847,6 +925,8 @@ function resetHero(hero,blockInit){//also resets fl, despite singular name - pas
 	hero.merge = 0;
 	hero.boon = "none";
 	hero.bane = "none";
+	hero.summoner = "none";
+	hero.ally = "none";
 
 	hero.damage = 0;
 	hero.precharge = 0;
@@ -900,7 +980,7 @@ function addClEnemy(index){
 	enemies.cl.list.push({
 		"index":index,"hp":0,"atk":0,"spd":0,"def":0,"res":0,"weapon":-1,"special":-1,"a":-1,"b":-1,"c":-1,"s":-1,
 		"buffs": {"atk":0,"spd":0,"def":0,"res":0}, "debuffs": {"atk":0,"spd":0,"def":0,"res":0}, "spur": {"atk":0,"spd":0,"def":0,"res":0},
-		"boon": "none", "bane": "none", "merge":0, "rarity": 5, "precharge":0, "damage": 0
+		"boon": "none", "bane": "none", "summoner": "none", "ally": "none", "merge":0, "rarity": 5, "precharge":0, "damage": 0
 	});
 
 	options.customEnemySelected = newCustomEnemyId;
@@ -945,7 +1025,8 @@ function setFlEnemies(){
 	for(var i = 0; i < data.heroes.length;i++){
 		if(enemies.fl.list.length-1 < i){
 			enemies.fl.list.push({"index":i,"hp":0,"atk":0,"spd":0,"def":0,"res":0,"weapon":-1,"special":-1,"a":-1,"b":-1,"c":-1,"s":-1,
-				"buffs": enemies.fl.buffs, "debuffs": enemies.fl.debuffs, "spur": enemies.fl.spur, "boon": enemies.fl.boon, "bane": enemies.fl.bane,
+				"buffs": enemies.fl.buffs, "debuffs": enemies.fl.debuffs, "spur": enemies.fl.spur, 
+				"boon": enemies.fl.boon, "bane": enemies.fl.bane, "summoner": enemies.fl.summoner, "ally": enemies.fl.ally,
 				"merge": enemies.fl.merge, "rarity": enemies.fl.rarity, "precharge": enemies.fl.precharge, "damage": enemies.fl.damage
 			});
 		}
@@ -998,6 +1079,8 @@ function updateFlEnemies(){
 		enemies.fl.list[i].spur =  enemies.fl.spur;
 		enemies.fl.list[i].boon =  enemies.fl.boon;
 		enemies.fl.list[i].bane =  enemies.fl.bane;
+		enemies.fl.list[i].summoner =  enemies.fl.summoner;
+		enemies.fl.list[i].ally =  enemies.fl.ally;
 		enemies.fl.list[i].merge =  enemies.fl.merge;
 		enemies.fl.list[i].rarity =  enemies.fl.rarity;
 		enemies.fl.list[i].precharge =  enemies.fl.precharge;
@@ -1095,7 +1178,7 @@ function updateHeroUI(hero){
 		hero = {
 			"index":-1,"hp":0,"atk":0,"spd":0,"def":0,"res":0,"weapon":-1,"special":-1,"a":-1,"b":-1,"c":-1,"s":-1,
 			"buffs": {"atk":0,"spd":0,"def":0,"res":0}, "debuffs": {"atk":0,"spd":0,"def":0,"res":0}, "spur": {"atk":0,"spd":0,"def":0,"res":0},
-			"boon": "none", "bane": "none", "merge":0, "rarity": 5, "precharge":0, "damage": 0
+			"boon": "none", "bane": "none", "summoner": "none", "ally": "none", "merge":0, "rarity": 5, "precharge":0, "damage": 0
 		}
 	}
 	var htmlPrefix = getHtmlPrefix(hero);
@@ -1136,6 +1219,8 @@ function updateHeroUI(hero){
 
 	$("#" + htmlPrefix + "boon").val(hero.boon);
 	$("#" + htmlPrefix + "bane").val(hero.bane);
+	$("#" + htmlPrefix + "summoner").val(hero.summoner);
+	$("#" + htmlPrefix + "ally").val(hero.ally);
 
 	if(typeof hero.index!= "undefined" && hero.index != -1){ //cl/challenger-specific stuff
 		$("#" + htmlPrefix + "name").val(hero.index);
@@ -1411,7 +1496,7 @@ function importText(side){
 			enemies.cl.list.push({
 				"index":-1,"hp":0,"atk":0,"spd":0,"def":0,"res":0,"weapon":-1,"special":-1,"a":-1,"b":-1,"c":-1,"s":-1,
 				"buffs": {"atk":0,"spd":0,"def":0,"res":0}, "debuffs": {"atk":0,"spd":0,"def":0,"res":0}, "spur": {"atk":0,"spd":0,"def":0,"res":0},
-				"boon": "none", "bane": "none", "merge":0, "rarity": 5, "precharge":0, "damage": 0
+				"boon": "none", "bane": "none", "summoner": "none", "ally": "none", "merge":0, "rarity": 5, "precharge":0, "damage": 0
 			});
 			hero = enemies.cl.list[enemies.cl.list.length-1];
 		}
@@ -1434,7 +1519,13 @@ function importText(side){
 		if(firstLine.bane){
 			hero.bane = firstLine.bane;
 		}
-
+		if(firstLine.summoner){
+			hero.summoner = firstLine.summoner;
+		}
+		if(firstLine.ally){
+			hero.ally = firstLine.ally;
+		}
+		
 		//Reset skills - they won't be reset with setSkills
 		hero.weapon = -1;
 		hero.special = -1;
@@ -1527,7 +1618,22 @@ function importText(side){
 				});
 			}
 		}
+		
+		//***Implement Support Import***
+		//***Statement below is imcomplete***
+		var summonerSplit = line.split("Summoner: ");
+		if(summonerSplit.length > 1){ //Don't check if there's no S:
+			for(var summonerLine = 0; summonerLine < summonerSplit.length; summonerLine++){
+				summonerSplit[summonerLine] = removeEdgeJunk(summonerSplit[summonerLine]).toLowerCase();
 
+				data.stats.forEach(function(stat){
+					if(summonerSplit[summonerLine].slice(0,stat.length) == stat){
+						dataFound.summoner = stat;
+					}
+				});
+			}
+		}
+		
 		return dataFound;
 	}
 
@@ -1575,6 +1681,12 @@ function importText(side){
 		}
 		else if(includesLike(keyValue[0],"bane")){
 			key = "bane";
+		}
+		else if(includesLike(keyValue[0],"summoner")){
+			key = "summoner";
+		}
+		else if(includesLike(keyValue[0],"ally")){
+			key = "ally";
 		}
 		else if(includesLike(keyValue[0],"include")){
 			key = "include";
@@ -1635,6 +1747,7 @@ function importText(side){
 				}
 			});
 		}
+		//***Implement Support Key***
 		else if(includeObject){
 			var value = {"melee":0,"ranged":0,"red":0,"blue":0,"green":0,"gray":0,"physical":0,"magical":0,"infantry":0,"cavalry":0,"flying":0,"armored":0,"staff":0,"nonstaff":0};
 			var splitInclude = trySplit(keyValue[1],[","," "]);
@@ -1734,6 +1847,12 @@ function getExportText(side){
 		if(enemies.fl.bane != "none"){
 			exportText += "Bane: -" + enemies.fl.bane + delimiter;
 		}
+		if(enemies.fl.summoner != "none"){
+			exportText += "Summoner: +" + enemies.fl.summoner + delimiter;
+		}
+		if(enemies.fl.ally != "none"){
+			exportText += "Ally: -" + enemies.fl.ally + delimiter;
+		}
 
 		data.skillSlots.forEach(function(slot){
 			if(enemies.fl[slot] != -1){
@@ -1780,6 +1899,12 @@ function getExportText(side){
 			}
 			if(hero.bane != "none"){
 				heroExportText += " -" + hero.bane;
+			}
+			if(hero.summoner != "none"){
+				heroExportText += " Summoner: " + hero.summoner;
+			}
+			if(hero.ally != "none"){
+				heroExportText += " Ally: " + hero.ally;
 			}
 			heroExportText += ")" + delimiter;
 
@@ -2513,6 +2638,8 @@ function activeHero(hero){
 
 	this.boon = hero.boon;
 	this.bane = hero.bane;
+	this.summoner = hero.summoner;
+	this.ally = hero.ally;
 	this.damage = hero.damage;
 
 	this.buffs = hero.buffs;
@@ -3479,6 +3606,7 @@ function activeHero(hero){
 						AOEDamage += 10;
 						damageText += this.name + " gains 10 damage from " + data.skills[hero.weapon].name + ".<br>";
 					}
+					//Wrath damage is checked when special is activated
 					if(this.has("Wrath")){
 						if(this.hp/this.maxHp <= .25 * this.has("Wrath")){
 							AOEDamage += 10;
@@ -3573,6 +3701,7 @@ function activeHero(hero){
 					dmgBoost += 10;
 					damageText += this.name + " gains 10 damage from " + data.skills[hero.weapon].name + ".<br>";
 				}
+				//Wrath damage is checked when special is activated
 				if(this.has("Wrath")){
 					if(this.hp/this.maxHp <= .25 * this.has("Wrath")){
 						dmgBoost += 10;
@@ -4027,6 +4156,7 @@ function activeHero(hero){
 			}
 			
 			//Check for charge effects
+			//***Does turn start Wrath check for health after Renew?***
 			roundText += this.charging();
 		}
 
