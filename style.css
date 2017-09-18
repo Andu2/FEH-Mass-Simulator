@@ -404,6 +404,14 @@ body{
 	position: absolute;
 	right:0;
 	top:2px;
+	width:55px;
+}
+
+.misc_input_left{
+	position: absolute;
+	right:58px;
+	top:2px;
+	width:55px;
 }
 
 .misc_number{
