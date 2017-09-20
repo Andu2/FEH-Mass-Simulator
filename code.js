@@ -819,77 +819,73 @@ function setStats(hero){
 		}
 		
 		//Summoner Support
-		if(hero.summoner != "none"){
-			switch (hero.summoner){
-				case "s":
-					hero.hp += 5;
-					hero.atk += 2;
-					hero.spd += 2;
-					hero.def += 2;
-					hero.res += 2;
-					break;
-				case "a":
-					hero.hp += 4;
-					hero.spd += 2;
-					hero.def += 2;
-					hero.res += 2;
-					break;
-				case "b":
-					hero.hp += 4;
-					hero.def += 2;
-					hero.res += 2;
-					break;
-				case "c":
-					hero.hp += 3;
-					hero.res += 2;
-					break;
-				default:
-					break;
-			}
+		switch (hero.summoner){
+			case "s":
+				hero.hp += 5;
+				hero.atk += 2;
+				hero.spd += 2;
+				hero.def += 2;
+				hero.res += 2;
+				break;
+			case "a":
+				hero.hp += 4;
+				hero.spd += 2;
+				hero.def += 2;
+				hero.res += 2;
+				break;
+			case "b":
+				hero.hp += 4;
+				hero.def += 2;
+				hero.res += 2;
+				break;
+			case "c":
+				hero.hp += 3;
+				hero.res += 2;
+				break;
+			default:
+				break;
 		}
-		
+
 		//Ally Support
-		if(hero.ally != "none"){
-			switch (hero.ally){
-				case "s":
-					hero.atk += 2;
-					hero.spd += 2;
-					hero.def += 2;
-					hero.res += 2;
-					break;
-				case "s-":
-					hero.atk += 1;
-					hero.spd += 1;
-					hero.def += 1;
-					hero.res += 1;
-					break;
-				case "a":
-					hero.spd += 2;
-					hero.def += 2;
-					hero.res += 2;
-					break;
-				case "a-":
-					hero.spd += 1;
-					hero.def += 1;
-					hero.res += 1;
-					break;
-				case "b":
-					hero.def += 2;
-					hero.res += 2;
-					break;
-				case "b-":
-					hero.def += 1;
-					hero.res += 1;
-					break;
-				case "c":
-					hero.res += 2;
-					break;
-				case "c-":
-					hero.res += 1;
-					break;
-				default:
-					break;
-			}
+		switch (hero.ally){
+			case "s":
+				hero.atk += 2;
+				hero.spd += 2;
+				hero.def += 2;
+				hero.res += 2;
+				break;
+			case "s-":
+				hero.atk += 1;
+				hero.spd += 1;
+				hero.def += 1;
+				hero.res += 1;
+				break;
+			case "a":
+				hero.spd += 2;
+				hero.def += 2;
+				hero.res += 2;
+				break;
+			case "a-":
+				hero.spd += 1;
+				hero.def += 1;
+				hero.res += 1;
+				break;
+			case "b":
+				hero.def += 2;
+				hero.res += 2;
+				break;
+			case "b-":
+				hero.def += 1;
+				hero.res += 1;
+				break;
+			case "c":
+				hero.res += 2;
+				break;
+			case "c-":
+				hero.res += 1;
+				break;
+			default:
+				break;
 		}
 	}
 }
@@ -1622,7 +1618,7 @@ function importText(side){
 		//***Implement Support Import***
 		//***Statement below is imcomplete***
 		var summonerSplit = line.split("Summoner: ");
-		if(summonerSplit.length > 1){ //Don't check if there's no S:
+		if(summonerSplit.length > 1){ //Don't check if there's no Summoner:
 			for(var summonerLine = 0; summonerLine < summonerSplit.length; summonerLine++){
 				summonerSplit[summonerLine] = removeEdgeJunk(summonerSplit[summonerLine]).toLowerCase();
 
@@ -3666,8 +3662,12 @@ function activeHero(hero){
 					enemyDefModifier = -0.3;
 					offensiveSpecialActivated = true;
 				}
-				else if(this.has("Luna")){
+				else if(this.hasExactly("Luna")){
 					enemyDefModifier = -0.5;
+					offensiveSpecialActivated = true;
+				}
+				else if(this.hasExactly("Black Luna")){
+					enemyDefModifier = -0.8;
 					offensiveSpecialActivated = true;
 				}
 				else if(this.has("Chilling Wind") || this.has("Iceberg")){
@@ -3942,7 +3942,8 @@ function activeHero(hero){
 			if(enemy.specialIndex!=-1&&data.skills[enemy.specialIndex].charge<=enemy.charge){
 				//gotta check range
 				var anyRangeCounter = false;
-				if(this.has("Close Counter") || this.has("Distant Counter") || this.has("Raijinto") || this.has("Lightning Breath") || this.has("Siegfried") || this.has("Ragnell") || this.has("Gradivus")){
+				if(this.has("Close Counter") || this.has("Distant Counter") || this.has("Lightning Breath")
+					|| this.has("Raijinto") || this.has("Siegfried") || this.has("Ragnell") || this.has("Gradivus") || this.has("Alondite")){
 					anyRangeCounter = true;
 				}
 
@@ -4193,7 +4194,8 @@ function activeHero(hero){
 		
 		//check for any-distance counterattack
 		var anyRangeCounter = false;
-		if(enemy.has("Close Counter") || enemy.has("Distant Counter") || enemy.has("Raijinto") || enemy.has("Lightning Breath") || enemy.has("Ragnell") || enemy.has("Siegfried") || enemy.has("Gradivus")){
+		if(enemy.has("Close Counter") || enemy.has("Distant Counter") || enemy.has("Lightning Breath")
+			|| enemy.has("Raijinto") || enemy.has("Ragnell") || enemy.has("Siegfried") || enemy.has("Gradivus") || enemy.has("Alondite") ){
 			anyRangeCounter = true;
 		}
 
