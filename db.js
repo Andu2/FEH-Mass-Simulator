@@ -7,7 +7,7 @@ window.data = {};
 
 /*
 *	To fix SQL export, use find all and replace to replace String to Int: 
-*	Expression: "(\-{0,1}[0-9]+(\.[0-9]+){0,1})" 
+*	Expression: "(\-{0,1}[0-9]+(\.[0-9]+){0,1})"
 *	Replace: \1
 */
 
@@ -2926,6 +2926,23 @@ window.data.heroes = [{
 		"weapontype": "lance",
 		"movetype": "cavalry",
 		"minrarity": 5
+	}, {
+		"hero_id": 174,
+		"name": "Black Knight",
+		"basehp": 22,
+		"baseatk": 10,
+		"basespd": 8,
+		"basedef": 9,
+		"baseres": 5,
+		"hpgrowth": 8,
+		"atkgrowth": 7,
+		"spdgrowth": 8,
+		"defgrowth": 8,
+		"resgrowth": 2,
+		"color": "red",
+		"weapontype": "sword",
+		"movetype": "armored",
+		"minrarity": 4
 	}
 ];
 
@@ -11702,6 +11719,48 @@ window.data.skills = [{
 		"charge": 0,
 		"inheritrule": "",
 		"affectsduel": 0
+	}, {
+		"skill_id": 627,
+		"name": "Alondite",
+		"slot": "weapon",
+		"sp": 400,
+		"description": "Enables counterattack regardless of distance if this unit is attacked.",
+		"hp": 0,
+		"atk": 16,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "unique",
+		"affectsduel": 1
+	}, {
+		"skill_id": 628,
+		"name": "Black Luna",
+		"slot": "special",
+		"sp": 500,
+		"description": "Resolve combat as if foe suffered Def\/Res-80%. (Skill cannot be inherited.)",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 3,
+		"inheritrule": "unique",
+		"affectsduel": 1
+	}, {
+		"skill_id": 629,
+		"name": "Steady Stance 3",
+		"slot": "a",
+		"sp": 200,
+		"description": "Grants Def+6 during combat when this unit is attacked.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 1
 	}
 ];
 
@@ -13180,6 +13239,15 @@ window.data.prereqs = [{
 	}, {
 		"skill_id": 626,
 		"required_id": 625
+	}, {
+		"skill_id": 627,
+		"required_id": 3
+	}, {
+		"skill_id": 628,
+		"required_id": 170
+	}, {
+		"skill_id": 629,
+		"required_id": 597
 	}
 ];
 
@@ -20335,6 +20403,34 @@ window.data.heroSkills = [{
 	}, {
 		"hero_id": 173,
 		"skill_id": 626,
+		"rarity": 5
+	}, {
+		"hero_id": 174,
+		"skill_id": 3,
+		"rarity": 4
+	}, {
+		"hero_id": 174,
+		"skill_id": 170,
+		"rarity": 4
+	}, {
+		"hero_id": 174,
+		"skill_id": 270,
+		"rarity": 4
+	}, {
+		"hero_id": 174,
+		"skill_id": 597,
+		"rarity": 4
+	}, {
+		"hero_id": 174,
+		"skill_id": 627,
+		"rarity": 5
+	}, {
+		"hero_id": 174,
+		"skill_id": 628,
+		"rarity": 5
+	}, {
+		"hero_id": 174,
+		"skill_id": 629,
 		"rarity": 5
 	}
 ];
