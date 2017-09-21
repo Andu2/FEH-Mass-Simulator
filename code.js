@@ -19,6 +19,7 @@ data.skillSlots = ["weapon","special","a","b","c","s"];
 data.buffTypes = ["buffs","debuffs","spur"];
 data.buffStats = ["atk","spd","def","res"];
 data.stats = ["hp","atk","spd","def","res"];
+data.support = ["s","s-","a","a-","b","b-","c","c-"];
 
 //Growth shifts of 3 are what make some banes/boons +/- 4
 //growth table from https://feheroes.wiki/Stat_Growth
@@ -1615,16 +1616,27 @@ function importText(side){
 			}
 		}
 		
-		//***Implement Support Import***
-		//***Statement below is imcomplete***
 		var summonerSplit = line.split("Summoner: ");
-		if(summonerSplit.length > 1){ //Don't check if there's no Summoner:
+		if(summonerSplit.length > 1){ //Don't check if there's no "Summoner: "
 			for(var summonerLine = 0; summonerLine < summonerSplit.length; summonerLine++){
 				summonerSplit[summonerLine] = removeEdgeJunk(summonerSplit[summonerLine]).toLowerCase();
 
-				data.stats.forEach(function(stat){
-					if(summonerSplit[summonerLine].slice(0,stat.length) == stat){
-						dataFound.summoner = stat;
+				data.support.forEach(function(support){
+					if(summonerSplit[summonerLine].slice(0,support.length) == support){
+						dataFound.summoner = support;
+					}
+				});
+			}
+		}
+		
+		var allySplit = line.split("Ally: ");
+		if(allySplit.length > 1){ //Don't check if there's no "Ally: "
+			for(var allyLine = 0; allyLine < allySplit.length; allyLine++){
+				allySplit[allyLine] = removeEdgeJunk(allySplit[allyLine]).toLowerCase();
+
+				data.support.forEach(function(support){
+					if(allySplit[allyLine].slice(0,support.length) == support){
+						dataFound.ally = support;
 					}
 				});
 			}
@@ -1744,6 +1756,13 @@ function importText(side){
 			});
 		}
 		//***Implement Support Key***
+		else if(key == "summoner" || key == "ally"){
+			data.support.forEach(function(support){
+				if(keyValue[1].indexOf(support) != -1){
+					value = support;
+				}
+			});
+		}
 		else if(includeObject){
 			var value = {"melee":0,"ranged":0,"red":0,"blue":0,"green":0,"gray":0,"physical":0,"magical":0,"infantry":0,"cavalry":0,"flying":0,"armored":0,"staff":0,"nonstaff":0};
 			var splitInclude = trySplit(keyValue[1],[","," "]);
