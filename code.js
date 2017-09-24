@@ -2850,11 +2850,15 @@ function activeHero(hero){
 					skillNames.push(data.skills[this.sIndex].name);
 				}
 			}
-
-			if(this.has("Panic Ploy") && this.hp > enemy.hp + 6 - this.has("Panic Ploy") * 2){
-				var skillName = data.skills[this.cIndex].name;
+			//Panic Ploy
+			if(this.hasAtIndex("Panic Ploy", this.cIndex) && this.hp > enemy.hp + 6 - this.hasAtIndex("Panic Ploy", this.cIndex) * 2){
 				enemy.panicked = true;
-				threatenText += this.name + " activates " + skillName + ", inflicting panic on " + enemy.name + ".<br>";
+				threatenText += this.name + " activates " + data.skills[this.cIndex].name + ", inflicting panic on " + enemy.name + ".<br>";
+			}
+			//Panic Ploy Seal
+			if(this.hasAtIndex("Panic Ploy", this.sIndex) && this.hp > enemy.hp + 6 - this.hasAtIndex("Panic Ploy", this.sIndex) * 2){
+				enemy.panicked = true;
+				threatenText += this.name + " activates " + data.skills[this.sIndex].name + ", inflicting panic on " + enemy.name + ".<br>";
 			}
 		}
 
