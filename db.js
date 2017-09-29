@@ -7,7 +7,7 @@ window.data = {};
 
 /*
 *	To fix SQL export, use find all and replace to replace String to Int: 
-*	Expression: "(\-{0,1}[0-9]+(\.[0-9]+){0,1})" 
+*	Expression: "(\-{0,1}[0-9]+(\.[0-9]+){0,1})"
 *	Replace: \1
 */
 
@@ -2874,6 +2874,74 @@ window.data.heroes = [{
 		"color": "blue",
 		"weapontype": "lance",
 		"movetype": "cavalry",
+		"minrarity": 4
+	}, {
+		"hero_id": 171,
+		"name": "Elincia",
+		"basehp": 16,
+		"baseatk": 8,
+		"basespd": 10,
+		"basedef": 5,
+		"baseres": 8,
+		"hpgrowth": 5,
+		"atkgrowth": 8,
+		"spdgrowth": 8,
+		"defgrowth": 5,
+		"resgrowth": 5,
+		"color": "red",
+		"weapontype": "sword",
+		"movetype": "flying",
+		"minrarity": 5
+	}, {
+		"hero_id": 172,
+		"name": "Nephenee",
+		"basehp": 18,
+		"baseatk": 7,
+		"basespd": 9,
+		"basedef": 8,
+		"baseres": 5,
+		"hpgrowth": 5,
+		"atkgrowth": 7,
+		"spdgrowth": 8,
+		"defgrowth": 8,
+		"resgrowth": 3,
+		"color": "blue",
+		"weapontype": "lance",
+		"movetype": "infantry",
+		"minrarity": 5
+	}, {
+		"hero_id": 173,
+		"name": "Oscar",
+		"basehp": 18,
+		"baseatk": 7,
+		"basespd": 8,
+		"basedef": 7,
+		"baseres": 6,
+		"hpgrowth": 6,
+		"atkgrowth": 8,
+		"spdgrowth": 8,
+		"defgrowth": 5,
+		"resgrowth": 3,
+		"color": "blue",
+		"weapontype": "lance",
+		"movetype": "cavalry",
+		"minrarity": 5
+	}, {
+		"hero_id": 174,
+		"name": "Black Knight",
+		"basehp": 22,
+		"baseatk": 10,
+		"basespd": 8,
+		"basedef": 9,
+		"baseres": 5,
+		"hpgrowth": 8,
+		"atkgrowth": 7,
+		"spdgrowth": 8,
+		"defgrowth": 8,
+		"resgrowth": 2,
+		"color": "red",
+		"weapontype": "sword",
+		"movetype": "armored",
 		"minrarity": 4
 	}
 ];
@@ -11441,6 +11509,258 @@ window.data.skills = [{
 		"charge": 0,
 		"inheritrule": "",
 		"affectsduel": 1
+	}, {
+		"skill_id": 612,
+		"name": "Atk Ploy 1",
+		"slot": "s",
+		"sp": 0,
+		"description": "At start of turn, all foes in cardinal directions with Res 1 or more lower than unit suffer Atk-3 until the end of foe's next action.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 1
+	}, {
+		"skill_id": 613,
+		"name": "Amiti",
+		"slot": "weapon",
+		"sp": 400,
+		"description": "Spd-2. Attack twice when initiating combat.",
+		"hp": 0,
+		"atk": 11,
+		"spd": -2,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "unique",
+		"affectsduel": 1
+	}, {
+		"skill_id": 614,
+		"name": "Flier Formation 1",
+		"slot": "b",
+		"sp": 60,
+		"description": "If unit has 100% HP, unit can move to a space adjacent to a flier ally within 2 spaces.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "flying",
+		"affectsduel": 1
+	}, {
+		"skill_id": 615,
+		"name": "Flier Formation 2",
+		"slot": "b",
+		"sp": 120,
+		"description": "If unit has >= 50% HP, unit can move to a space adjacent to a flier ally within 2 spaces.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "flying",
+		"affectsduel": 1
+	}, {
+		"skill_id": 616,
+		"name": "Flier Formation 3",
+		"slot": "b",
+		"sp": 240,
+		"description": "Unit can move to a space adjacent to a flier ally within 2 spaces.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "flying",
+		"affectsduel": 1
+	}, {
+		"skill_id": 617,
+		"name": "Slaying Lance",
+		"slot": "weapon",
+		"sp": 200,
+		"description": "Accelerates Special trigger (cooldown count-1).",
+		"hp": 0,
+		"atk": 10,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "lance",
+		"affectsduel": 1
+	}, {
+		"skill_id": 618,
+		"name": "Slaying Lance+",
+		"slot": "weapon",
+		"sp": 400,
+		"description": "Accelerates Special trigger (cooldown count-1).",
+		"hp": 0,
+		"atk": 14,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "lance",
+		"affectsduel": 1
+	}, {
+		"skill_id": 619,
+		"name": "Atk Spd 1",
+		"slot": "a",
+		"sp": 80,
+		"description": "Grants Atk\/Spd+1.",
+		"hp": 0,
+		"atk": 1,
+		"spd": 1,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 1
+	}, {
+		"skill_id": 620,
+		"name": "Atk Spd 2",
+		"slot": "a",
+		"sp": 160,
+		"description": "Grants Atk\/Spd+2.",
+		"hp": 0,
+		"atk": 2,
+		"spd": 2,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 1
+	}, {
+		"skill_id": 621,
+		"name": "Wrath 1",
+		"slot": "b",
+		"sp": 60,
+		"description": "If unit's HP <= 25%, Special cooldown count-1 at start of turn if Special triggers by attacking. If Special triggers, +10 damage from Special.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "melee,noncavalry,nonflying",
+		"affectsduel": 1
+	}, {
+		"skill_id": 622,
+		"name": "Wrath 2",
+		"slot": "b",
+		"sp": 120,
+		"description": "If unit's HP <= 50%, Special cooldown count-1 at start of turn if Special triggers by attacking. If Special triggers, +10 damage from Special.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "melee,noncavalry,nonflying",
+		"affectsduel": 1
+	}, {
+		"skill_id": 623,
+		"name": "Wrath 3",
+		"slot": "b",
+		"sp": 240,
+		"description": "If unit's HP <= 75%, Special cooldown count-1 at start of turn if Special triggers by attacking. If Special triggers, +10 damage from Special.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "melee,noncavalry,nonflying",
+		"affectsduel": 1
+	}, {
+		"skill_id": 624,
+		"name": "Rally Speed Defense",
+		"slot": "assist",
+		"sp": 300,
+		"description": "Grants Spd\/Def+3 to an adjacent ally until the end of the turn.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "nonstaff",
+		"affectsduel": 0
+	}, {
+		"skill_id": 625,
+		"name": "Spur Spd Def 1",
+		"slot": "c",
+		"sp": 120,
+		"description": "Grants adjacent allies Spd\/Def +2 during combat.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 0
+	}, {
+		"skill_id": 626,
+		"name": "Spur Spd Def 2",
+		"slot": "c",
+		"sp": 240,
+		"description": "Grants adjacent allies Spd\/Def +3 during combat.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 0
+	}, {
+		"skill_id": 627,
+		"name": "Alondite",
+		"slot": "weapon",
+		"sp": 400,
+		"description": "Enables counterattack regardless of distance if this unit is attacked.",
+		"hp": 0,
+		"atk": 16,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "unique",
+		"affectsduel": 1
+	}, {
+		"skill_id": 628,
+		"name": "Black Luna",
+		"slot": "special",
+		"sp": 500,
+		"description": "Resolve combat as if foe suffered Def\/Res-80%. (Skill cannot be inherited.)",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 3,
+		"inheritrule": "unique",
+		"affectsduel": 1
+	}, {
+		"skill_id": 629,
+		"name": "Steady Stance 3",
+		"slot": "a",
+		"sp": 200,
+		"description": "Grants Def+6 during combat when this unit is attacked.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 1
 	}
 ];
 
@@ -12883,6 +13203,51 @@ window.data.prereqs = [{
 	}, {
 		"skill_id": 610,
 		"required_id": 609
+	}, {
+		"skill_id": 613,
+		"required_id": 3
+	}, {
+		"skill_id": 615,
+		"required_id": 614
+	}, {
+		"skill_id": 616,
+		"required_id": 615
+	}, {
+		"skill_id": 617,
+		"required_id": 68
+	}, {
+		"skill_id": 618,
+		"required_id": 617
+	}, {
+		"skill_id": 619,
+		"required_id": 208
+	}, {
+		"skill_id": 620,
+		"required_id": 619
+	}, {
+		"skill_id": 622,
+		"required_id": 621
+	}, {
+		"skill_id": 623,
+		"required_id": 622
+	}, {
+		"skill_id": 624,
+		"required_id": 133
+	}, {
+		"skill_id": 625,
+		"required_id": 346
+	}, {
+		"skill_id": 626,
+		"required_id": 625
+	}, {
+		"skill_id": 627,
+		"required_id": 3
+	}, {
+		"skill_id": 628,
+		"required_id": 170
+	}, {
+		"skill_id": 629,
+		"required_id": 597
 	}
 ];
 
@@ -19991,5 +20356,81 @@ window.data.heroSkills = [{
 		"hero_id": 170,
 		"skill_id": 408,
 		"rarity": 4
+	}, {
+		"hero_id": 171,
+		"skill_id": 137,
+		"rarity": 5
+	}, {
+		"hero_id": 171,
+		"skill_id": 213,
+		"rarity": 5
+	}, {
+		"hero_id": 171,
+		"skill_id": 613,
+		"rarity": 5
+	}, {
+		"hero_id": 171,
+		"skill_id": 616,
+		"rarity": 5
+	}, {
+		"hero_id": 172,
+		"skill_id": 169,
+		"rarity": 5
+	}, {
+		"hero_id": 172,
+		"skill_id": 618,
+		"rarity": 5
+	}, {
+		"hero_id": 172,
+		"skill_id": 620,
+		"rarity": 5
+	}, {
+		"hero_id": 172,
+		"skill_id": 623,
+		"rarity": 5
+	}, {
+		"hero_id": 173,
+		"skill_id": 78,
+		"rarity": 5
+	}, {
+		"hero_id": 173,
+		"skill_id": 309,
+		"rarity": 5
+	}, {
+		"hero_id": 173,
+		"skill_id": 624,
+		"rarity": 5
+	}, {
+		"hero_id": 173,
+		"skill_id": 626,
+		"rarity": 5
+	}, {
+		"hero_id": 174,
+		"skill_id": 3,
+		"rarity": 4
+	}, {
+		"hero_id": 174,
+		"skill_id": 170,
+		"rarity": 4
+	}, {
+		"hero_id": 174,
+		"skill_id": 270,
+		"rarity": 4
+	}, {
+		"hero_id": 174,
+		"skill_id": 597,
+		"rarity": 4
+	}, {
+		"hero_id": 174,
+		"skill_id": 627,
+		"rarity": 5
+	}, {
+		"hero_id": 174,
+		"skill_id": 628,
+		"rarity": 5
+	}, {
+		"hero_id": 174,
+		"skill_id": 629,
+		"rarity": 5
 	}
 ];
