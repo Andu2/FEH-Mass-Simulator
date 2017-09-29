@@ -14,7 +14,7 @@
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
 
-	<link rel="stylesheet" type="text/css" href="style.css?v=16"/>
+	<link rel="stylesheet" type="text/css" href="style.css?v=17"/>
 	<script type="text/javascript" src="db.js?v=0"></script>
 	<script type="text/javascript" src="code.js?v=26"></script>
 
@@ -32,7 +32,11 @@
 			<div id="frame_challenger">
 				<div id="challenger_bar_top">
 					<div class="bar_top_title">Challenger
-						<div class="bar_top_title_right"><div class="button button_importexport" id="import_challenger">Import</div><div class="button button_importexport" id="export_challenger">Export</div></div>
+						<div class="bar_top_title_right">
+							<div class="button button_copy" id="copy_challenger">Copy</div>
+							<div class="button button_importexport" id="import_challenger">Import</div>
+							<div class="button button_importexport" id="export_challenger">Export</div>
+						</div>
 					</div>
 				</div>
 				<div class="frame_hero_main">
@@ -93,7 +97,12 @@
 			<div id="frame_enemies">
 				<div id="enemies_bar_top">
 					<div class="bar_top_title">Enemies
-						<div class="bar_top_title_right"><select id="enemies_mode" data-var="options.customEnemyList" class="bar_label"><option value=0>Filtered full list</option><option value=1>Custom list</option></select><div class="button button_importexport" id="import_enemies">Import</div><div class="button button_importexport" id="export_enemies">Export</div></div>
+						<div class="bar_top_title_right">
+							<select id="enemies_mode" data-var="options.customEnemyList" class="bar_label"><option value=0>Filtered full list</option><option value=1>Custom list</option></select>
+							<div class="button button_copy" id="copy_enemy">Copy</div>
+							<div class="button button_importexport" id="import_enemies">Import</div>
+							<div class="button button_importexport" id="export_enemies">Export</div>
+						</div>
 					</div>
 				</div>
 				<div id="enemies_full_list" class="frame_hero_main">
@@ -163,7 +172,11 @@
 					<div class="frame_hero_main_right">
 						<div class="bar_top_options"><select id="cl_enemy_name" data-var="enemies.cl.list.index"></select><div class="bar_top_options_right"><span class="bar_label">Rarity:</span><input id="cl_enemy_rarity" data-var="enemies.cl.list.rarity" type="number" class="rarityinput smallnuminput" value=5 min=1 max=5 /><span class="bar_label">Lvl 40+</span><input id="cl_enemy_merge" data-var="enemies.cl.list.merge" class="smallnuminput" type="number" value=0 min=0 max=10 /><div class="button reset_button reset_enemies" id="reset_cl_enemy">Reset</div></div></div>
 						<div class="frame_hero_main_top">
-							<div class="frame_hero_picture"><img class="hero_picture" id="cl_enemy_picture" src="heroes/nohero.png"/><img id="cl_enemy_weapon_icon" class="weaponIcon" src="weapons/noweapon.png"/><img id="cl_enemy_movement_icon" class="movementIcon" src="weapons/noweapon.png"/></div>
+							<div class="frame_hero_picture">
+								<img class="hero_picture" id="cl_enemy_picture" src="heroes/nohero.png"/>								
+								<img id="cl_enemy_weapon_icon" class="weaponIcon" src="weapons/noweapon.png"/>
+								<img id="cl_enemy_movement_icon" class="movementIcon" src="weapons/noweapon.png"/>
+							</div>
 							<div class="frame_stats">
 								<div class="bufflabel">Buff</div><div class="debufflabel">Debuff</div><div class="spurlabel">Spur</div>
 								<div class="stat_row">HP: <span class="stat_number" id="cl_enemy_hp">-</span></div>
