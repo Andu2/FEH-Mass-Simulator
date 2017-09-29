@@ -2943,6 +2943,74 @@ window.data.heroes = [{
 		"weapontype": "sword",
 		"movetype": "armored",
 		"minrarity": 4
+	}, {
+		"hero_id": 175,
+		"name": "Azura (Performing Arts)",
+		"basehp": 16,
+		"baseatk": 6,
+		"basespd": 8,
+		"basedef": 3,
+		"baseres": 6,
+		"hpgrowth": 5,
+		"atkgrowth": 8,
+		"spdgrowth": 8,
+		"defgrowth": 4,
+		"resgrowth": 6,
+		"color": "green",
+		"weapontype": "axe",
+		"movetype": "infantry",
+		"minrarity": 5
+	}, {
+		"hero_id": 176,
+		"name": "Inigo (Performing Arts)",
+		"basehp": 15,
+		"baseatk": 6,
+		"basespd": 7,
+		"basedef": 5,
+		"baseres": 3,
+		"hpgrowth": 6,
+		"atkgrowth": 6,
+		"spdgrowth": 8,
+		"defgrowth": 4,
+		"resgrowth": 4,
+		"color": "green",
+		"weapontype": "greentome",
+		"movetype": "infantry",
+		"minrarity": 5
+	}, {
+		"hero_id": 177,
+		"name": "Olivia (Performing Arts)",
+		"basehp": 15,
+		"baseatk": 6,
+		"basespd": 8,
+		"basedef": 3,
+		"baseres": 4,
+		"hpgrowth": 5,
+		"atkgrowth": 6,
+		"spdgrowth": 8,
+		"defgrowth": 2,
+		"resgrowth": 7,
+		"color": "gray",
+		"weapontype": "dagger",
+		"movetype": "infantry",
+		"minrarity": 5
+	}, {
+		"hero_id": 178,
+		"name": "Shigure (Performing Arts)",
+		"basehp": 15,
+		"baseatk": 7,
+		"basespd": 5,
+		"basedef": 4,
+		"baseres": 5,
+		"hpgrowth": 5,
+		"atkgrowth": 7,
+		"spdgrowth": 7,
+		"defgrowth": 4,
+		"resgrowth": 5,
+		"color": "blue",
+		"weapontype": "bluetome",
+		"movetype": "infantry",
+		"minrarity": 5
 	}
 ];
 
@@ -11761,6 +11829,314 @@ window.data.skills = [{
 		"charge": 0,
 		"inheritrule": "",
 		"affectsduel": 1
+	}, {
+		"skill_id": 630,
+		"name": "Panic Ploy 1",
+		"slot": "s",
+		"sp": 0,
+		"description": "At start of turn, bonuses become penalties on all foes in cardinal directions with HP 5 or more lower than unit through foe's next action.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 1
+	}, {
+		"skill_id": 631,
+		"name": "Uror",
+		"slot": "weapon",
+		"sp": 400,
+		"description": "If Sing or Dance is used, target also granted Atk\/Spd\/Def\/Res+3.",
+		"hp": 0,
+		"atk": 16,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "unique",
+		"affectsduel": 1
+	}, {
+		"skill_id": 632,
+		"name": "Drive Res 1",
+		"slot": "c",
+		"sp": 120,
+		"description": "Grants allies within 2 spaces Res+2 during combat.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 0
+	}, {
+		"skill_id": 633,
+		"name": "Drive Res 2",
+		"slot": "c",
+		"sp": 240,
+		"description": "Grants allies within 2 spaces Res+3 during combat.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 0
+	}, {
+		"skill_id": 634,
+		"name": "Dancer's Ring",
+		"slot": "weapon",
+		"sp": 200,
+		"description": "If unit initiates attack, adjacent allies recover 7 HP after combat.",
+		"hp": 0,
+		"atk": 8,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "greentome",
+		"affectsduel": 1
+	}, {
+		"skill_id": 635,
+		"name": "Dancer's Ring+",
+		"slot": "weapon",
+		"sp": 300,
+		"description": "If unit initiates attack, adjacent allies recover 7 HP after combat.",
+		"hp": 0,
+		"atk": 12,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "greentome",
+		"affectsduel": 1
+	}, {
+		"skill_id": 636,
+		"name": "Gale Dance 1",
+		"slot": "b",
+		"sp": 50,
+		"description": "If Sing or Dance is used, target also granted Spd+2.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 0
+	}, {
+		"skill_id": 637,
+		"name": "Gale Dance 2",
+		"slot": "b",
+		"sp": 100,
+		"description": "If Sing or Dance is used, target also granted Spd+3.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 0
+	}, {
+		"skill_id": 638,
+		"name": "Gale Dance 3",
+		"slot": "b",
+		"sp": 200,
+		"description": "If Sing or Dance is used, target also granted Spd+4.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 0
+	}, {
+		"skill_id": 639,
+		"name": "Dancer's Fan",
+		"slot": "weapon",
+		"sp": 200,
+		"description": "If unit initiates attack, adjacent allies recover 7 HP after combat. Also, enemy suffers Def\/Res-5 after combat until the end of foe's next action.",
+		"hp": 0,
+		"atk": 7,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "dagger",
+		"affectsduel": 1
+	}, {
+		"skill_id": 640,
+		"name": "Dancer's Fan+",
+		"slot": "weapon",
+		"sp": 300,
+		"description": "If unit initiates attack, adjacent allies recover 7 HP after combat. Also, enemy suffers Def\/Res-7 after combat until the end of foe's next action.",
+		"hp": 0,
+		"atk": 10,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "dagger",
+		"affectsduel": 1
+	}, {
+		"skill_id": 641,
+		"name": "Blaze Dance 1",
+		"slot": "b",
+		"sp": 50,
+		"description": "If Sing or Dance is used, target also granted Atk+2.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 0
+	}, {
+		"skill_id": 642,
+		"name": "Blaze Dance 2",
+		"slot": "b",
+		"sp": 100,
+		"description": "If Sing or Dance is used, target also granted Atk+3.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 0
+	}, {
+		"skill_id": 643,
+		"name": "Blaze Dance 3",
+		"slot": "b",
+		"sp": 200,
+		"description": "If Sing or Dance is used, target also granted Atk+4.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 0
+	}, {
+		"skill_id": 644,
+		"name": "Dancer's Score",
+		"slot": "weapon",
+		"sp": 200,
+		"description": "If unit initiates attack, adjacent allies recover 7 HP after combat.",
+		"hp": 0,
+		"atk": 8,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "bluetome",
+		"affectsduel": 1
+	}, {
+		"skill_id": 645,
+		"name": "Dancer's Score+",
+		"slot": "weapon",
+		"sp": 300,
+		"description": "If unit initiates attack, adjacent allies recover 7 HP after combat.",
+		"hp": 0,
+		"atk": 12,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "bluetome",
+		"affectsduel": 1
+	}, {
+		"skill_id": 646,
+		"name": "Torrent Dance 1",
+		"slot": "b",
+		"sp": 50,
+		"description": "If Sing or Dance is used, target also granted Res+3.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 0
+	}, {
+		"skill_id": 647,
+		"name": "Geyser Dance 1",
+		"slot": "b",
+		"sp": 120,
+		"description": "If Sing or Dance is used, target also granted Def\/Res+3.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 0
+	}, {
+		"skill_id": 648,
+		"name": "Geyser Dance 2",
+		"slot": "b",
+		"sp": 240,
+		"description": "If Sing or Dance is used, target also granted Def\/Res+4.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 0
+	}, {
+		"skill_id": 649,
+		"name": "B Tome Valor 1",
+		"slot": "c",
+		"sp": 30,
+		"description": "If unit survives and uses a blue tome, unit gets 1.5x SP. (If similar skill effects also used, only highest multiplier applied.)",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "bluetome",
+		"affectsduel": 0
+	}, {
+		"skill_id": 650,
+		"name": "B Tome Valor 2",
+		"slot": "c",
+		"sp": 60,
+		"description": "If unit survives, all blue tome users on team get 1.5x SP. (If similar skill effects also used, only highest multiplier applied.)",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "bluetome",
+		"affectsduel": 0
+	}, {
+		"skill_id": 651,
+		"name": "B Tome Valor 3",
+		"slot": "c",
+		"sp": 120,
+		"description": "If unit survives, all blue tome users on team get 2x SP. (If similar skill effects also used, only highest multiplier applied.)",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "bluetome",
+		"affectsduel": 0
 	}
 ];
 
@@ -13248,6 +13624,57 @@ window.data.prereqs = [{
 	}, {
 		"skill_id": 629,
 		"required_id": 597
+	}, {
+		"skill_id": 631,
+		"required_id": 43
+	}, {
+		"skill_id": 632,
+		"required_id": 349
+	}, {
+		"skill_id": 633,
+		"required_id": 632
+	}, {
+		"skill_id": 634,
+		"required_id": 57
+	}, {
+		"skill_id": 635,
+		"required_id": 634
+	}, {
+		"skill_id": 637,
+		"required_id": 636
+	}, {
+		"skill_id": 638,
+		"required_id": 637
+	}, {
+		"skill_id": 639,
+		"required_id": 115
+	}, {
+		"skill_id": 640,
+		"required_id": 639
+	}, {
+		"skill_id": 642,
+		"required_id": 641
+	}, {
+		"skill_id": 643,
+		"required_id": 642
+	}, {
+		"skill_id": 644,
+		"required_id": 82
+	}, {
+		"skill_id": 645,
+		"required_id": 644
+	}, {
+		"skill_id": 647,
+		"required_id": 646
+	}, {
+		"skill_id": 648,
+		"required_id": 647
+	}, {
+		"skill_id": 650,
+		"required_id": 649
+	}, {
+		"skill_id": 651,
+		"required_id": 650
 	}
 ];
 
@@ -20431,6 +20858,70 @@ window.data.heroSkills = [{
 	}, {
 		"hero_id": 174,
 		"skill_id": 629,
+		"rarity": 5
+	}, {
+		"hero_id": 175,
+		"skill_id": 153,
+		"rarity": 5
+	}, {
+		"hero_id": 175,
+		"skill_id": 249,
+		"rarity": 5
+	}, {
+		"hero_id": 175,
+		"skill_id": 631,
+		"rarity": 5
+	}, {
+		"hero_id": 175,
+		"skill_id": 633,
+		"rarity": 5
+	}, {
+		"hero_id": 176,
+		"skill_id": 152,
+		"rarity": 5
+	}, {
+		"hero_id": 176,
+		"skill_id": 330,
+		"rarity": 5
+	}, {
+		"hero_id": 176,
+		"skill_id": 635,
+		"rarity": 5
+	}, {
+		"hero_id": 176,
+		"skill_id": 638,
+		"rarity": 5
+	}, {
+		"hero_id": 177,
+		"skill_id": 152,
+		"rarity": 5
+	}, {
+		"hero_id": 177,
+		"skill_id": 440,
+		"rarity": 5
+	}, {
+		"hero_id": 177,
+		"skill_id": 640,
+		"rarity": 5
+	}, {
+		"hero_id": 177,
+		"skill_id": 643,
+		"rarity": 5
+	}, {
+		"hero_id": 178,
+		"skill_id": 153,
+		"rarity": 5
+	}, {
+		"hero_id": 178,
+		"skill_id": 645,
+		"rarity": 5
+	}, {
+		"hero_id": 178,
+		"skill_id": 648,
+		"rarity": 5
+	}, {
+		"hero_id": 178,
+		"skill_id": 651,
 		"rarity": 5
 	}
 ];
