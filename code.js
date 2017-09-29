@@ -420,7 +420,16 @@ $(document).ready(function(){
 	$("#add_turn_enemy").click(function(){
 		addTurn("Enemy initiates");
 	})
-
+	
+	$(".button_copy").click(function(){
+		if(this.id == "copy_enemy"){
+			copyEnemy();
+		}else{
+			copyChallenger();
+		}
+		
+	})
+	
 	$(".button_importexport").click(function(){
 		var target = "challenger";
 		var type = "import";
@@ -1347,6 +1356,7 @@ function updateHeroUI(hero){
 			$("#" + htmlPrefix + "def").html("-");
 			$("#" + htmlPrefix + "res").html("-");
 			$("#" + htmlPrefix + "weapon_icon").attr("src","weapons/noweapon.png");
+			$("#" + htmlPrefix + "movement_icon").attr("src","weapons/noweapon.png");
 			$("#" + htmlPrefix + "specialcharge").html("-");
 		}
 	}
@@ -1392,6 +1402,81 @@ function deleteTurn(initTurn){
 		$("#turn_text_" + i).html(options.roundInitiators[i]);
 	}
 	calculate();
+}
+
+function copyChallenger(){
+	if (challenger.index != -1){
+		if (options.customEnemyList != 1){
+			options.customEnemyList = 1;
+		}
+		var hero;
+		//Generate a new hero
+		enemies.cl.list.push({
+			"index":-1,"hp":0,"atk":0,"spd":0,"def":0,"res":0,"weapon":-1,"special":-1,"a":-1,"b":-1,"c":-1,"s":-1,
+			"buffs": {"atk":0,"spd":0,"def":0,"res":0}, "debuffs": {"atk":0,"spd":0,"def":0,"res":0}, "spur": {"atk":0,"spd":0,"def":0,"res":0},
+			"boon": "none", "bane": "none", "summoner": "none", "ally": "none", "merge":0, "rarity": 5, "precharge":0, "damage": 0
+		});
+		hero = enemies.cl.list[enemies.cl.list.length-1];
+		//Copy challenger attributes
+		hero.index = challenger.index;
+		hero.rarity = challenger.rarity;
+		hero.merge = challenger.merge;
+		hero.boon = challenger.boon;
+		hero.bane = challenger.bane;
+		hero.summoner = challenger.summoner;
+		hero.ally = challenger.ally;
+		hero.weapon = challenger.weapon;
+		herospecial = challenger.special;
+		hero.a = challenger.a;
+		hero.b = challenger.b;
+		hero.c = challenger.c;
+		hero.s = challenger.s;
+		hero.buffs = challenger.buffs;
+		hero.debuffs = challenger.debuffs;
+		hero.spur = challenger.spur;
+		hero.damage = challenger.damage;
+		hero.precharge = challenger.precharge;
+		//Init hero and update UI
+		initHero(hero, true);
+		options.customEnemySelected = enemies.cl.list.length - 1;
+		updateEnemyUI();
+		updateClList();
+		updateChallengerUI();		
+		validateNumberInputs();
+		calculate();
+	}
+}
+
+function copyEnemy(){
+	if(options.customEnemyList == 1 && options.customEnemySelected != -1 && enemies.cl.list[options.customEnemySelected].index != -1){
+		//Clear curreng challenger
+		challenger.index = -1;
+		resetHero(challenger);
+		//Copy attributes from enemy
+		challenger.index = enemies.cl.list[options.customEnemySelected].index;
+		challenger.rarity = enemies.cl.list[options.customEnemySelected].rarity;
+		challenger.merge = enemies.cl.list[options.customEnemySelected].merge;
+		challenger.boon = enemies.cl.list[options.customEnemySelected].boon;
+		challenger.bane = enemies.cl.list[options.customEnemySelected].bane;
+		challenger.summoner = enemies.cl.list[options.customEnemySelected].summoner;
+		challenger.ally = enemies.cl.list[options.customEnemySelected].ally;
+		challenger.weapon = enemies.cl.list[options.customEnemySelected].weapon;
+		challenger.special = enemies.cl.list[options.customEnemySelected].special;
+		challenger.a = enemies.cl.list[options.customEnemySelected].a;
+		challenger.b = enemies.cl.list[options.customEnemySelected].b;
+		challenger.c = enemies.cl.list[options.customEnemySelected].c;
+		challenger.s = enemies.cl.list[options.customEnemySelected].s;
+		challenger.buffs = enemies.cl.list[options.customEnemySelected].buffs;
+		challenger.debuffs = enemies.cl.list[options.customEnemySelected].debuffs;
+		challenger.spur = enemies.cl.list[options.customEnemySelected].spur;
+		challenger.damage = enemies.cl.list[options.customEnemySelected].damage;
+		challenger.precharge = enemies.cl.list[options.customEnemySelected].precharge;
+		//Init challenger and refresh UI
+		initHero(challenger, true);
+		updateChallengerUI();		
+		validateNumberInputs();
+		calculate();
+	}	
 }
 
 function showImportDialog(side,type){
@@ -1816,7 +1901,7 @@ function importText(side){
 		alert("Error: " + errorMsg);
 	}
 
-	validateNumberInputs()
+	validateNumberInputs();
 	hideImportDialog();
 	calculate();
 }
