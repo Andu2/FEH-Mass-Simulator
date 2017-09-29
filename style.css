@@ -197,6 +197,36 @@ body{
 	font-weight:bold;
 }
 
+.button_copy{
+	display:inline-block;
+	font-size:14px;
+	border-radius:2px;
+	padding: 0 6px;
+	margin-right:4px;
+	width:54px;
+	text-align:center;
+}
+
+#frame_challenger .button_copy{
+	background-color: #4a6de2;
+}
+
+#frame_challenger .button_copy:hover{
+	background-color: #ffffff;
+	color:#4a6de2;
+	font-weight:bold;
+}
+
+#frame_enemies .button_copy{
+	background-color: #d82a3e;
+}
+
+#frame_enemies .button_copy:hover{
+	background-color: #ffffff;
+	color:#d82a3e;
+	font-weight:bold;
+}
+
 .bar_top_options{
 	position:absolute;
 	height:30px;
