@@ -14,7 +14,7 @@
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
 
-	<link rel="stylesheet" type="text/css" href="style.css?v=14"/>
+	<link rel="stylesheet" type="text/css" href="style.css?v=15"/>
 	<script type="text/javascript" src="db.js?v=0"></script>
 	<script type="text/javascript" src="code.js?v=26"></script>
 
@@ -63,11 +63,11 @@
 							<div class="misc_row">IV: 
 								<select class="misc_input_left" data-var="challenger.boon" id="challenger_boon">
 									<option value="boon" disabled> Boon </option>
-									<option value="none">None</option><option value="hp">HP</option><option value="atk">Atk</option><option value="spd">Spd</option><option value="def">Def</option><option value="res">Res</option>
+									<option value="none">None</option><option value="hp">+HP</option><option value="atk">+Atk</option><option value="spd">+Spd</option><option value="def">+Def</option><option value="res">+Res</option>
 								</select>
 								<select class="misc_input" data-var="challenger.bane" id="challenger_bane">
 									<option value="bane" disabled>Bane</option>
-									<option value="none">None</option><option value="hp">HP</option><option value="atk">Atk</option><option value="spd">Spd</option><option value="def">Def</option><option value="res">Res</option>
+									<option value="none">None</option><option value="hp">-HP</option><option value="atk">-Atk</option><option value="spd">-Spd</option><option value="def">-Def</option><option value="res">-Res</option>
 								</select>
 							</div>
 							<div class="misc_row">Rank: 
@@ -129,11 +129,11 @@
 							<div class="misc_row">IV: 
 								<select class="misc_input_left" data-var="enemies.fl.boon" id="enemies_boon">
 									<option value="boon" disabled> Boon </option>
-									<option value="none">None</option><option value="hp">HP</option><option value="atk">Atk</option><option value="spd">Spd</option><option value="def">Def</option><option value="res">Res</option>
+									<option value="none">None</option><option value="hp">+HP</option><option value="atk">+Atk</option><option value="spd">+Spd</option><option value="def">+Def</option><option value="res">+Res</option>
 								</select>
 								<select class="misc_input" data-var="enemies.fl.bane" id="enemies_bane">
 									<option value="bane" disabled>Bane</option>
-									<option value="none">None</option><option value="hp">HP</option><option value="atk">Atk</option><option value="spd">Spd</option><option value="def">Def</option><option value="res">Res</option>
+									<option value="none">None</option><option value="hp">-HP</option><option value="atk">-Atk</option><option value="spd">-Spd</option><option value="def">-Def</option><option value="res">-Res</option>
 								</select>
 							</div>
 							<div class="misc_row">Rank: 
@@ -186,11 +186,11 @@
 								<div class="misc_row">IV: 
 									<select class="misc_input_left" data-var="enemies.cl.list.boon" id="cl_enemy_boon">
 										<option value="boon" disabled> Boon </option>
-										<option value="none">None</option><option value="hp">HP</option><option value="atk">Atk</option><option value="spd">Spd</option><option value="def">Def</option><option value="res">Res</option>
+										<option value="none">None</option><option value="hp">+HP</option><option value="atk">+Atk</option><option value="spd">+Spd</option><option value="def">+Def</option><option value="res">+Res</option>
 									</select>
 									<select class="misc_input" data-var="enemies.cl.list.bane" id="cl_enemy_bane">
 										<option value="bane" disabled>Bane</option>
-										<option value="none">None</option><option value="hp">HP</option><option value="atk">Atk</option><option value="spd">Spd</option><option value="def">Def</option><option value="res">Res</option>
+										<option value="none">None</option><option value="hp">-HP</option><option value="atk">-Atk</option><option value="spd">-Spd</option><option value="def">-Def</option><option value="res">-Res</option>
 									</select>
 								</div>
 								<div class="misc_row">Rank: 
@@ -222,8 +222,8 @@
 			<div id="rules_turnorder">
 				<div id="turnorder_left">
 					<div id="turnorder_label">Turn order:</div>
-					<div class="button turnorder_button" id="add_turn_challenger">Challenger -></div>
-					<div class="button turnorder_button" id="add_turn_enemy">Enemy -></div>
+					<div class="turnorder_button_row"><div class="button turnorder_button" id="add_turn_challenger_reset">Challenger</div><div class="button turnorder_button_add" id="add_turn_challenger">+</div></div>
+					<div class="turnorder_button_row"><div class="button turnorder_button" id="add_turn_enemy_reset">Enemy</div><div class="button turnorder_button_add" id="add_turn_enemy">+</div></div>
 				</div>
 				<div id="turnorder_right">
 					<div class="turn_label" id="turn_0"><span id="turn_text_0">Challenger initiates</span><div class="button turn_delete" id="turn_delete_0" onclick="deleteTurn(0);">x</div></div>
