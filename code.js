@@ -407,6 +407,13 @@ $(document).ready(function(){
 		calculate();
 	});
 
+	$("#add_turn_challenger_reset").click(function(){
+		resetTurn("Challenger initiates");
+	})
+	$("#add_turn_enemy_reset").click(function(){
+		resetTurn("Enemy initiates");
+	})
+	
 	$("#add_turn_challenger").click(function(){
 		addTurn("Challenger initiates");
 	})
@@ -1354,6 +1361,18 @@ function showResultsTooltip(e,resultDiv){
 function hideResultsTooltip(){
 	showingTooltip = false;
 	$("#frame_tooltip").hide();
+}
+
+//Clear all turns and add a turn
+function resetTurn(turnName){
+	for(var initTurn = options.roundInitiators.length; initTurn >= 0; initTurn--){	
+		$("#turn_" + (options.roundInitiators.length - 1)).hide();
+		options.roundInitiators.splice(initTurn,1);
+	}
+	$("#turn_text_" + options.roundInitiators.length).html(turnName);
+	$("#turn_" + options.roundInitiators.length).show();
+	options.roundInitiators.push(turnName);
+	calculate();
 }
 
 function addTurn(turnName){
@@ -3409,11 +3428,11 @@ function activeHero(hero){
 		}
 		//Daggers only take effect if the unit performed an attack
 		if(this.didAttack){
-			if((this.hasExactly("Silver Dagger+") || this.hasExactly("Deathly Dagger") || this.hasExactly("Seashell+")) && sealDef > -7){
+			if((this.hasExactly("Silver Dagger+") || this.hasExactly("Deathly Dagger") || this.hasExactly("Seashell+") || this.hasExactly("Dancer's Fan+")) && sealDef > -7){
 				sealDef = -7;
 				skillName = data.skills[this.weaponIndex].name;
 			}
-			else if((this.hasExactly("Silver Dagger") || this.hasExactly("Rogue Dagger+") || this.hasExactly("Seashell")) && sealDef > -5){
+			else if((this.hasExactly("Silver Dagger") || this.hasExactly("Rogue Dagger+") || this.hasExactly("Seashell") || this.hasExactly("Dancer's Fan")) && sealDef > -5){
 				sealDef = -5;
 				skillName = data.skills[this.weaponIndex].name;
 			}
@@ -3443,11 +3462,11 @@ function activeHero(hero){
 		}
 		//Daggers only take effect if the unit performed an attack
 		if(this.didAttack){
-			if((this.hasExactly("Silver Dagger+") || this.hasExactly("Deathly Dagger") || this.hasExactly("Seashell+")) && sealRes > -7){
+			if((this.hasExactly("Silver Dagger+") || this.hasExactly("Deathly Dagger") || this.hasExactly("Seashell+") || this.hasExactly("Dancer's Fan+")) && sealRes > -7){
 				sealRes = -7;
 				skillName = data.skills[this.weaponIndex].name;
 			}
-			else if((this.hasExactly("Silver Dagger") || this.hasExactly("Rogue Dagger+") || this.hasExactly("Seashell")) && sealRes > -5){
+			else if((this.hasExactly("Silver Dagger") || this.hasExactly("Rogue Dagger+") || this.hasExactly("Seashell") || this.hasExactly("Dancer's Fan")) && sealRes > -5){
 				sealRes = -5;
 				skillName = data.skills[this.weaponIndex].name;
 			}
