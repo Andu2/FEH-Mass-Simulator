@@ -705,18 +705,40 @@ body{
 	font-size:15px;
 }
 
+.turnorder_button_row{
+	position:relative;
+	margin-top:4px;
+	height:22px;
+}
+
 .turnorder_button{
-	font-size:13px;
+	font-size:12px;
 	border-radius:2px;
 	background-color: #444444;
-	width:90px;
+	width:64px;
 	text-align:center;
 	height:22px;
 	line-height:22px;
-	margin-top:4px;
+	display:inline-block;
+}
+
+.turnorder_button_add{	
+	font-size:13px;
+	border-radius:2px;
+	background-color: #444444;
+	width:22px;
+	text-align:center;
+	height:22px;
+	line-height:22px;
+	display:inline-block;
+	margin-left:4px;
 }
 
 .turnorder_button:hover{
+	background-color: #888888;
+}
+
+.turnorder_button_add:hover{
 	background-color: #888888;
 }
 
