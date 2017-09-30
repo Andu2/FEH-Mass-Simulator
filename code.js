@@ -1030,7 +1030,6 @@ function selectClEnemy(clEnemyId){
 		options.customEnemySelected = clEnemyId;
 		updateClList();
 		updateEnemyUI();
-		$("#cl_enemy_name").trigger('change.select2');
 	}
 }
 
@@ -1205,6 +1204,7 @@ function updateEnemyUI(){
 	else{
 		updateHeroUI(enemies.fl);
 	}
+	$("#cl_enemy_name").trigger('change.select2');
 }
 
 function updateHeroUI(hero){
@@ -1448,7 +1448,6 @@ function copyChallenger(){
 		options.customEnemySelected = enemies.cl.list.length - 1;
 		updateEnemyUI();
 		updateClList();
-		$("#cl_enemy_name").trigger('change.select2');
 		//Scroll to bottom of list
 		$('#cl_enemylist_list').scrollTop((enemies.cl.list.length - 12) * 25 + 3);
 		//Update challenger UI and calculate
@@ -1543,7 +1542,6 @@ function importText(side){
 			}
 			updateClList();
 			updateEnemyUI();
-			$("#cl_enemy_name").trigger('change.select2');
 			//Scroll to bottom of enemy list
 			$('#cl_enemylist_list').scrollTop((enemies.cl.list.length - 12) * 25 + 3);
 		}
