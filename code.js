@@ -933,6 +933,28 @@ function setSkills(hero){
 	}
 }
 
+//Copies stats from target onto the clone
+function cloneHero(clone, target){
+		clone.index = target.index;
+		clone.rarity = target.rarity;
+		clone.merge = target.merge;
+		clone.boon = target.boon;
+		clone.bane = target.bane;
+		clone.summoner = target.summoner;
+		clone.ally = target.ally;
+		clone.weapon = target.weapon;
+		clone.special = target.special;
+		clone.a = target.a;
+		clone.b = target.b;
+		clone.c = target.c;
+		clone.s = target.s;
+		clone.buffs = target.buffs;
+		clone.debuffs = target.debuffs;
+		clone.spur = target.spur;
+		clone.damage = target.damage;
+		clone.precharge = target.precharge;
+}
+
 function resetHero(hero,blockInit){//also resets fl, despite singular name - pass enemies.fl
 	hero.rarity = 5;
 	hero.merge = 0;
@@ -995,10 +1017,11 @@ function addClEnemy(index){
 		"buffs": {"atk":0,"spd":0,"def":0,"res":0}, "debuffs": {"atk":0,"spd":0,"def":0,"res":0}, "spur": {"atk":0,"spd":0,"def":0,"res":0},
 		"boon": "none", "bane": "none", "summoner": "none", "ally": "none", "merge":0, "rarity": 5, "precharge":0, "damage": 0
 	});
-
 	options.customEnemySelected = newCustomEnemyId;
 	updateEnemyUI();
 	updateClList();
+	//Scroll to bottom of the list
+	$('#cl_enemylist_list').scrollTop((enemies.cl.list.length - 12) * 25 + 3);
 }
 
 function selectClEnemy(clEnemyId){
@@ -1007,6 +1030,7 @@ function selectClEnemy(clEnemyId){
 		options.customEnemySelected = clEnemyId;
 		updateClList();
 		updateEnemyUI();
+		$("#cl_enemy_name").trigger('change');
 	}
 }
 
@@ -1416,32 +1440,19 @@ function copyChallenger(){
 			"buffs": {"atk":0,"spd":0,"def":0,"res":0}, "debuffs": {"atk":0,"spd":0,"def":0,"res":0}, "spur": {"atk":0,"spd":0,"def":0,"res":0},
 			"boon": "none", "bane": "none", "summoner": "none", "ally": "none", "merge":0, "rarity": 5, "precharge":0, "damage": 0
 		});
-		hero = enemies.cl.list[enemies.cl.list.length-1];
+		hero = enemies.cl.list[enemies.cl.list.length - 1];
 		//Copy challenger attributes
-		hero.index = challenger.index;
-		hero.rarity = challenger.rarity;
-		hero.merge = challenger.merge;
-		hero.boon = challenger.boon;
-		hero.bane = challenger.bane;
-		hero.summoner = challenger.summoner;
-		hero.ally = challenger.ally;
-		hero.weapon = challenger.weapon;
-		herospecial = challenger.special;
-		hero.a = challenger.a;
-		hero.b = challenger.b;
-		hero.c = challenger.c;
-		hero.s = challenger.s;
-		hero.buffs = challenger.buffs;
-		hero.debuffs = challenger.debuffs;
-		hero.spur = challenger.spur;
-		hero.damage = challenger.damage;
-		hero.precharge = challenger.precharge;
-		//Init hero and update UI
+		cloneHero(hero, challenger);
+		//Init hero and update enemy UI
 		initHero(hero, true);
 		options.customEnemySelected = enemies.cl.list.length - 1;
 		updateEnemyUI();
 		updateClList();
-		updateChallengerUI();		
+		$("#cl_enemy_name").trigger('change');	
+		//Scroll to bottom of list
+		$('#cl_enemylist_list').scrollTop((enemies.cl.list.length - 12) * 25 + 3);
+		//Update challenger UI and calculate
+		updateChallengerUI();
 		validateNumberInputs();
 		calculate();
 	}
@@ -1449,31 +1460,15 @@ function copyChallenger(){
 
 function copyEnemy(){
 	if(options.customEnemyList == 1 && options.customEnemySelected != -1 && enemies.cl.list[options.customEnemySelected].index != -1){
-		//Clear curreng challenger
+		//Clear current challenger
 		challenger.index = -1;
 		resetHero(challenger);
 		//Copy attributes from enemy
-		challenger.index = enemies.cl.list[options.customEnemySelected].index;
-		challenger.rarity = enemies.cl.list[options.customEnemySelected].rarity;
-		challenger.merge = enemies.cl.list[options.customEnemySelected].merge;
-		challenger.boon = enemies.cl.list[options.customEnemySelected].boon;
-		challenger.bane = enemies.cl.list[options.customEnemySelected].bane;
-		challenger.summoner = enemies.cl.list[options.customEnemySelected].summoner;
-		challenger.ally = enemies.cl.list[options.customEnemySelected].ally;
-		challenger.weapon = enemies.cl.list[options.customEnemySelected].weapon;
-		challenger.special = enemies.cl.list[options.customEnemySelected].special;
-		challenger.a = enemies.cl.list[options.customEnemySelected].a;
-		challenger.b = enemies.cl.list[options.customEnemySelected].b;
-		challenger.c = enemies.cl.list[options.customEnemySelected].c;
-		challenger.s = enemies.cl.list[options.customEnemySelected].s;
-		challenger.buffs = enemies.cl.list[options.customEnemySelected].buffs;
-		challenger.debuffs = enemies.cl.list[options.customEnemySelected].debuffs;
-		challenger.spur = enemies.cl.list[options.customEnemySelected].spur;
-		challenger.damage = enemies.cl.list[options.customEnemySelected].damage;
-		challenger.precharge = enemies.cl.list[options.customEnemySelected].precharge;
+		cloneHero(challenger, enemies.cl.list[options.customEnemySelected]);
 		//Init challenger and refresh UI
 		initHero(challenger, true);
-		updateChallengerUI();		
+		updateChallengerUI();
+		$("#challenger_name").trigger('change');		
 		validateNumberInputs();
 		calculate();
 	}	
@@ -1548,6 +1543,9 @@ function importText(side){
 			}
 			updateClList();
 			updateEnemyUI();
+			$("#cl_enemy_name").trigger('change');
+			//Scroll to bottom of enemy list
+			$('#cl_enemylist_list').scrollTop((enemies.cl.list.length - 12) * 25 + 3);
 		}
 		//else if(includesLike(importSplit[0],"ENEMIES - FILTERED FULL LIST")){
 		else{
@@ -1579,6 +1577,7 @@ function importText(side){
 			resetHero(challenger);
 			parseHero(importSplit,firstLine);
 			updateChallengerUI();
+			$("#challenger_name").trigger('change');
 		}
 		else{
 			errorMsg = "Import challenger failed.";
@@ -2140,8 +2139,14 @@ function updateClList(){
 		}
 
 		//Need to create a new element - the list is not pre-populated with hidden elements
-		var clEnemyHTML = "<div class=\"cl_enemy button\" id=\"cl_enemy" + clIndex + "\" data-clindex=\"" + clIndex + "\" onclick=\"selectClEnemy(" + clIndex + ")\"><span id=\"cl_enemy" + clIndex + "_name\">" + enemyName;
-		clEnemyHTML += "</span><div class=\"cl_delete_enemy button\" id=\"cl_enemy" + clIndex + "_delete\" onclick=\"deleteClEnemy(event," + clIndex + ");\" onmouseover=\"undoClStyle(this)\" onmouseout=\"redoClStyle(this)\">x</div></div>";
+		var clEnemyHTML = "<div class=\"cl_enemy button\" id=\"cl_enemy" + clIndex 
+			+ "\" data-clindex=\"" + clIndex 
+			+ "\" onclick=\"selectClEnemy(" + clIndex 
+			+ ")\"><span id=\"cl_enemy" + clIndex 
+			+ "_name\">" + enemyName
+			+ "</span><div class=\"cl_delete_enemy button\" id=\"cl_enemy" + clIndex 
+			+ "_delete\" onclick=\"deleteClEnemy(event," + clIndex 
+			+ ");\" onmouseover=\"undoClStyle(this)\" onmouseout=\"redoClStyle(this)\">x</div></div>";
 		$("#cl_enemylist_list").append(clEnemyHTML);
 	}
 }
