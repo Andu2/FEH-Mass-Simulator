@@ -165,6 +165,7 @@ body{
 	right:0;top:-1px;bottom:0;
 	font-size:16px;
 	font-family:"Segoe UI", sans-serif;
+	margin-right:4px;
 }
 
 .button_importexport{
@@ -172,7 +173,6 @@ body{
 	font-size:14px;
 	border-radius:2px;
 	padding: 0 6px;
-	margin-right:4px;
 	width:54px;
 	text-align:center;
 }
@@ -202,7 +202,6 @@ body{
 	font-size:14px;
 	border-radius:2px;
 	padding: 0 6px;
-	margin-right:4px;
 	width:54px;
 	text-align:center;
 }
