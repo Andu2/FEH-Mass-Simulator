@@ -647,6 +647,7 @@ body{
 	height:22px;
 	line-height:22px;
 	padding-left:4px;
+	overflow:hidden;
 }
 
 .cl_enemy + .cl_enemy{
