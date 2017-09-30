@@ -1030,7 +1030,7 @@ function selectClEnemy(clEnemyId){
 		options.customEnemySelected = clEnemyId;
 		updateClList();
 		updateEnemyUI();
-		$("#cl_enemy_name").trigger('change');
+		//$("#cl_enemy_name").trigger('change');
 	}
 }
 
@@ -1448,7 +1448,7 @@ function copyChallenger(){
 		options.customEnemySelected = enemies.cl.list.length - 1;
 		updateEnemyUI();
 		updateClList();
-		$("#cl_enemy_name").trigger('change');	
+		//$("#cl_enemy_name").trigger('change');
 		//Scroll to bottom of list
 		$('#cl_enemylist_list').scrollTop((enemies.cl.list.length - 12) * 25 + 3);
 		//Update challenger UI and calculate
@@ -1468,7 +1468,7 @@ function copyEnemy(){
 		//Init challenger and refresh UI
 		initHero(challenger, true);
 		updateChallengerUI();
-		$("#challenger_name").trigger('change');		
+		//$("#challenger_name").trigger('change');		
 		validateNumberInputs();
 		calculate();
 	}	
@@ -1543,7 +1543,7 @@ function importText(side){
 			}
 			updateClList();
 			updateEnemyUI();
-			$("#cl_enemy_name").trigger('change');
+			//$("#cl_enemy_name").trigger('change');
 			//Scroll to bottom of enemy list
 			$('#cl_enemylist_list').scrollTop((enemies.cl.list.length - 12) * 25 + 3);
 		}
@@ -1577,7 +1577,7 @@ function importText(side){
 			resetHero(challenger);
 			parseHero(importSplit,firstLine);
 			updateChallengerUI();
-			$("#challenger_name").trigger('change');
+			//$("#challenger_name").trigger('change');
 		}
 		else{
 			errorMsg = "Import challenger failed.";
