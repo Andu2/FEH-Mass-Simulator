@@ -239,7 +239,7 @@ $(document).ready(function(){
 	for(var i = 0; i < data.heroes.length; i++){
 		heroHTML += "<option value=" + i + " class=\"hero_option\">" + data.heroes[i].name + "</option>";
 	}
-	$("#challenger_name, #cl_enemy_name").html(heroHTML).select2();
+	$("#challenger_name, #cl_enemy_name").html(heroHTML).select2({dropdownAutoWidth : true});
 
 	setSkillOptions(enemies.fl);
 
