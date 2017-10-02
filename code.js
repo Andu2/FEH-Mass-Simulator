@@ -1364,11 +1364,11 @@ function updateHeroUI(hero){
 			}
 			
 			//Display before precharge calculation to ignore precharge changes on UI (Old UI includes precharge changes for displayed value)
-			$("#" + htmlPrefix + "specialcharge").html(precharge == 0 ? specialCharge : (specialCharge - precharge) + "(" + specialCharge + ")");
+			$("#" + htmlPrefix + "specialcharge").html(precharge == 0 ? specialCharge : Math.max(0, specialCharge - precharge) + "(" + specialCharge + ")");
 			
 			specialCharge -= precharge;
 			specialCharge -= hero.precharge;
-			specialCharge = Math.max(0,specialCharge);
+			specialCharge = Math.max(0, specialCharge);
 		}
 		else{
 			$("#" + htmlPrefix + "specialcharge").html("-");
