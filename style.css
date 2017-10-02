@@ -443,9 +443,21 @@ body{
 	width:55px;
 }
 
+.misc_separator{
+	position: absolute;
+	right:38px;
+	top:0;
+}
+
 .misc_number{
 	position: absolute;
 	right:0;
+	top:0;
+}
+
+.misc_number_left{
+	position: absolute;
+	right:58px;
 	top:0;
 }
 
