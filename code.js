@@ -110,11 +110,15 @@ function initOptions(){
 	challenger.spd = 0;
 	challenger.def = 0;
 	challenger.res = 0;
+	
+	challenger.bst = 0;
+	challenger.spt = 0;
 
 	challenger.buffs = {"atk":0,"spd":0,"def":0,"res":0};
 	challenger.debuffs = {"atk":0,"spd":0,"def":0,"res":0};
 	challenger.spur = {"atk":0,"spd":0,"def":0,"res":0};
 
+	challenger.currenthp = 0;
 	challenger.damage = 0;
 	challenger.precharge = 0;
 
@@ -158,7 +162,7 @@ function initOptions(){
 	enemies.fl.replaceA = 0;
 	enemies.fl.replaceB = 0;
 	enemies.fl.replaceC = 0;
-
+	
 	enemies.fl.buffs = {"atk":0,"spd":0,"def":0,"res":0};
 	enemies.fl.debuffs = {"atk":0,"spd":0,"def":0,"res":0};
 	enemies.fl.spur = {"atk":0,"spd":0,"def":0,"res":0};
@@ -306,19 +310,19 @@ $(document).ready(function(){
 			changeDataVar(dataVar,newVal);
 
 			//Stuff specific to changing skill
-			if(newVal != -1 && (endsWith(dataVar,".weapon") || endsWith(dataVar,".special") || endsWith(dataVar,".a") || endsWith(dataVar,".b") || endsWith(dataVar,".c") || endsWith(dataVar,".s"))){
-
-				var dataToPass = data.skills[newVal].name;
-				if(endsWith(dataVar,".s")){
-					//Rename s skills to differentate from regular skills
-					dataToPass = "s_" + dataToPass;
+			if(endsWith(dataVar,".weapon") || endsWith(dataVar,".special") || endsWith(dataVar,".a") || endsWith(dataVar,".b") || endsWith(dataVar,".c") || endsWith(dataVar,".s")){
+				if(newVal != -1){
+					var dataToPass = data.skills[newVal].name;
+					if(endsWith(dataVar,".s")){
+						//Rename s skills to differentate from regular skills
+						dataToPass = "s_" + dataToPass;
+					}
 				}
 			}
 
 			//Stuff specific to changing hero
 			if(endsWith(dataVar,".index")){
 				if(newVal != -1){
-
 					//find hero's starting skills
 					initHero(hero);
 
@@ -344,7 +348,7 @@ $(document).ready(function(){
 					blockCalculate = true;
 				}
 			}
-
+			
 			for(var i = 0; i < varsThatUpdateFl.length; i++){
 				if(endsWith(dataVar,varsThatUpdateFl[i])){
 					updateFlEnemies();
@@ -365,7 +369,12 @@ $(document).ready(function(){
 					break;
 				}
 			}
-
+			
+			//Update health
+			if(endsWith(dataVar,".currenthp") && hero){
+				updateHealth(newVal, hero);
+			}
+			
 			if(hero && hero.challenger){
 				updateChallengerUI();
 			}
@@ -731,7 +740,7 @@ function setStats(hero){
 		hero.spd = base.spd + data.growths[hero.rarity-1][data.heroes[hero.index].spdgrowth + growthValMod.spd];
 		hero.def = base.def + data.growths[hero.rarity-1][data.heroes[hero.index].defgrowth + growthValMod.def];
 		hero.res = base.res + data.growths[hero.rarity-1][data.heroes[hero.index].resgrowth + growthValMod.res];
-
+		
 		//Add merge bonuses
 		var mergeBoost = {"hp":0,"atk":0,"spd":0,"def":0,"res":0};
 
@@ -808,6 +817,9 @@ function setStats(hero){
 		hero.spd += mergeBoost.spd;
 		hero.def += mergeBoost.def;
 		hero.res += mergeBoost.res;
+		
+		//Calculate hero bst after IV, merge, and rarity
+		hero.bst = hero.hp + hero.atk + hero.spd + hero.def + hero.res;
 
 		//Add stats based on skills
 		if(hero.weapon != -1){
@@ -817,7 +829,7 @@ function setStats(hero){
 			hero.def += data.skills[hero.weapon].def;
 			hero.res += data.skills[hero.weapon].res;
 		}
-
+		
 		//A-passive and S only ones that affects stats
 		if(hero.a != -1){
 			hero.hp += data.skills[hero.a].hp;
@@ -826,7 +838,7 @@ function setStats(hero){
 			hero.def += data.skills[hero.a].def;
 			hero.res += data.skills[hero.a].res;
 		}
-
+		
 		if(hero.s != -1){
 			hero.hp += data.skills[hero.s].hp;
 			hero.atk += data.skills[hero.s].atk;
@@ -905,6 +917,26 @@ function setStats(hero){
 				break;
 		}
 	}
+}
+
+//Calculate damage from current HP
+function updateHealth(value, hero){
+	if (value > hero.hp){
+		hero.damage = 0;
+	}else if (value <= 0){
+		hero.damage = hero.hp - 1;
+	}else{
+		hero.damage = hero.hp - hero.currenthp;
+	}
+}
+
+function updateSpt(hero){
+	hero.spt = 0;
+	hero.spt += (hero.weapon != -1 ? data.skills[hero.weapon].sp : 0);
+	hero.spt += (hero.special != -1 ? data.skills[hero.special].sp : 0);
+	hero.spt += (hero.a != -1 ? data.skills[hero.a].sp : 0);
+	hero.spt += (hero.b != -1 ? data.skills[hero.b].sp : 0);
+	hero.spt += (hero.c != -1 ? data.skills[hero.c].sp : 0);
 }
 
 function setSkills(hero){
@@ -1219,9 +1251,10 @@ function updateHeroUI(hero){
 		}
 	}
 	var htmlPrefix = getHtmlPrefix(hero);
-
+	updateSpt(hero);
+	
 	//Global stuff
-	$("#" + htmlPrefix + "damage").val(hero.damage);
+	//$("#" + htmlPrefix + "damage").val(hero.damage);
 	$("#" + htmlPrefix + "precharge").val(hero.precharge);
 
 	$("#" + htmlPrefix + "merge").val(hero.merge);
@@ -1259,15 +1292,17 @@ function updateHeroUI(hero){
 	$("#" + htmlPrefix + "summoner").val(hero.summoner);
 	$("#" + htmlPrefix + "ally").val(hero.ally);
 
-	if(typeof hero.index!= "undefined" && hero.index != -1){ //cl/challenger-specific stuff
+	if(typeof hero.index != "undefined" && hero.index != -1){ //cl/challenger-specific stuff
 		$("#" + htmlPrefix + "name").val(hero.index);
 		$("#" + htmlPrefix + "picture").attr("src","heroes/" + data.heroes[hero.index].name + ".png");
 		$("#" + htmlPrefix + "hp").html(hero.hp);
-		$("#" + htmlPrefix + "currenthp").html(hero.hp - hero.damage);
+		$("#" + htmlPrefix + "currenthp").val(hero.hp - hero.damage);
+		$("#" + htmlPrefix + "basehp").html(hero.hp);
 		$("#" + htmlPrefix + "atk").html(hero.atk);
 		$("#" + htmlPrefix + "spd").html(hero.spd);
 		$("#" + htmlPrefix + "def").html(hero.def);
 		$("#" + htmlPrefix + "res").html(hero.res);
+		$("#" + htmlPrefix + "bst").html(hero.bst + " / " + hero.spt);
 		if(data.heroes[hero.index].weapontype != "dragon"){
 			$("#" + htmlPrefix + "weapon_icon").attr("src","weapons/" + data.heroes[hero.index].weapontype + ".png");
 		}
@@ -1279,6 +1314,7 @@ function updateHeroUI(hero){
 		if(hero.special != -1){
 			var specialCharge = data.skills[hero.special].charge;
 			var specialName = data.skills[hero.special].name;
+			var precharge = 0;
 
 			//Weapon Skill
 			if(hero.weapon != -1){
@@ -1300,7 +1336,7 @@ function updateHeroUI(hero){
 
 				//Quicken Pulse
 				if(sName.indexOf("Quickened Pulse") != -1){
-					specialCharge -= 1;
+					precharge += 1;
 				}
 			}
 
@@ -1313,9 +1349,9 @@ function updateHeroUI(hero){
 					|| specialName.indexOf("Holy Vestments") != -1 || specialName.indexOf("Pavise") != -1 || specialName.indexOf("Sacred Cowl")!= -1){
 					//Shield Pulse
 					if(bName.indexOf("Shield Pulse 3") != -1){
-						specialCharge -= 2;
+						precharge += 2;
 					} else if(bName.indexOf("Shield Pulse 1") != -1 || bName.indexOf("Shield Pulse 2") != -1){
-						specialCharge -= 1;
+						precharge += 1;
 					}
 				//Else if special is supportive
 				}else if(specialName.indexOf("Heavenly Light") != -1 || specialName.indexOf("Imbue") != -1 || specialName.indexOf("Kindled-Fire Balm") != -1
@@ -1326,11 +1362,13 @@ function updateHeroUI(hero){
 
 				}
 			}
-
+			
+			//Display before precharge calculation to ignore precharge changes on UI (Old UI includes precharge changes for displayed value)
+			$("#" + htmlPrefix + "specialcharge").html(precharge == 0 ? specialCharge : (specialCharge - precharge) + "(" + specialCharge + ")");
+			
+			specialCharge -= precharge;
 			specialCharge -= hero.precharge;
 			specialCharge = Math.max(0,specialCharge);
-
-			$("#" + htmlPrefix + "specialcharge").html(specialCharge);
 		}
 		else{
 			$("#" + htmlPrefix + "specialcharge").html("-");
