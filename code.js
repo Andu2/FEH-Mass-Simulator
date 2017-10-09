@@ -2986,7 +2986,7 @@ function activeHero(hero){
 					skillNames.push(data.skills[this.cIndex].name);
 				}
 				if(this.hasAtIndex("Res Ploy", this.cIndex)){
-					threatDebuffs.def = Math.min(threatDebuffs.res,-this.hasAtIndex("Res Ploy", this.cIndex)-2);
+					threatDebuffs.res = Math.min(threatDebuffs.res,-this.hasAtIndex("Res Ploy", this.cIndex)-2);
 					skillNames.push(data.skills[this.cIndex].name);
 				}
 				//Seals
