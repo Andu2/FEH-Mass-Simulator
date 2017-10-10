@@ -8626,10 +8626,10 @@ window.data.skills =
 		"affectsduel": 0
 	}, {
 		"skill_id": 401,
-		"name": "Attack 1",
+		"name": "Attack +1",
 		"slot": "s",
 		"sp": 0,
-		"description": "Atk +1",
+		"description": "Grants Atk+1.",
 		"hp": 0,
 		"atk": 1,
 		"spd": 0,
@@ -8640,10 +8640,10 @@ window.data.skills =
 		"affectsduel": 1
 	}, {
 		"skill_id": 402,
-		"name": "Resistance 1",
+		"name": "Resistance +1",
 		"slot": "s",
 		"sp": 0,
-		"description": "Res +1",
+		"description": "Grants Res+1.",
 		"hp": 0,
 		"atk": 0,
 		"spd": 0,
@@ -8654,10 +8654,10 @@ window.data.skills =
 		"affectsduel": 1
 	}, {
 		"skill_id": 403,
-		"name": "Speed 1",
+		"name": "Speed +1",
 		"slot": "s",
 		"sp": 0,
-		"description": "Spd +1",
+		"description": "Grants Spd+1.",
 		"hp": 0,
 		"atk": 0,
 		"spd": 1,
@@ -8668,10 +8668,10 @@ window.data.skills =
 		"affectsduel": 1
 	}, {
 		"skill_id": 404,
-		"name": "HP 3",
+		"name": "HP +3",
 		"slot": "s",
 		"sp": 0,
-		"description": "HP +3",
+		"description": "Grants +3 to max HP.",
 		"hp": 3,
 		"atk": 0,
 		"spd": 0,
@@ -9564,10 +9564,10 @@ window.data.skills =
 		"affectsduel": 1
 	}, {
 		"skill_id": 468,
-		"name": "Fortify Res 1",
+		"name": "Fortify Def 1",
 		"slot": "s",
 		"sp": 0,
-		"description": "",
+		"description": "Grants adjacent allies Def+2 through their next actions at the start of each turn.",
 		"hp": 0,
 		"atk": 0,
 		"spd": 0,
@@ -9578,10 +9578,10 @@ window.data.skills =
 		"affectsduel": 0
 	}, {
 		"skill_id": 469,
-		"name": "Spur Def 1",
+		"name": "Fortify Res 1",
 		"slot": "s",
 		"sp": 0,
-		"description": "",
+		"description": "Grants adjacent allies Res+2 through their next actions at the start of each turn.",
 		"hp": 0,
 		"atk": 0,
 		"spd": 0,
@@ -9595,7 +9595,7 @@ window.data.skills =
 		"name": "Quickened Pulse",
 		"slot": "s",
 		"sp": 0,
-		"description": "",
+		"description": "Special cooldown count -1 at start of Turn 1.",
 		"hp": 0,
 		"atk": 0,
 		"spd": 0,
@@ -11314,10 +11314,10 @@ window.data.skills =
 		"affectsduel": 1
 	}, {
 		"skill_id": 593,
-		"name": "Defense 1",
+		"name": "Defense +1",
 		"slot": "s",
 		"sp": 0,
-		"description": "Def +1",
+		"description": "Grants Def+1.",
 		"hp": 0,
 		"atk": 0,
 		"spd": 0,
@@ -12432,6 +12432,370 @@ window.data.skills =
 		"charge": 0,
 		"inheritrule": "",
 		"affectsduel": 1
+	}, {
+		"skill_id": 673,
+		"name": "HP +4",
+		"slot": "s",
+		"sp": 0,
+		"description": "Grants +4 to max HP.",
+		"hp": 4,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 1
+	}, {
+		"skill_id": 674,
+		"name": "HP +5",
+		"slot": "s",
+		"sp": 0,
+		"description": "Grants +5 to max HP.",
+		"hp": 5,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 1
+	}, {
+		"skill_id": 675,
+		"name": "Attack +2",
+		"slot": "s",
+		"sp": 0,
+		"description": "Grants Atk+2.",
+		"hp": 0,
+		"atk": 2,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 1
+	}, {
+		"skill_id": 676,
+		"name": "Attack +3",
+		"slot": "s",
+		"sp": 0,
+		"description": "Grants Atk+3.",
+		"hp": 0,
+		"atk": 3,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 1
+	}, {
+		"skill_id": 677,
+		"name": "Speed +2",
+		"slot": "s",
+		"sp": 0,
+		"description": "Grants Spd+2.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 2,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 1
+	}, {
+		"skill_id": 678,
+		"name": "Speed +3",
+		"slot": "s",
+		"sp": 0,
+		"description": "Grants Spd+3.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 3,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 1
+	}, {
+		"skill_id": 679,
+		"name": "Defense +2",
+		"slot": "s",
+		"sp": 0,
+		"description": "Grants Def+2.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 2,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 1
+	}, {
+		"skill_id": 680,
+		"name": "Defense +3",
+		"slot": "s",
+		"sp": 0,
+		"description": "Grants Def+3.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 3,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 1
+	}, {
+		"skill_id": 681,
+		"name": "Resistance +2",
+		"slot": "s",
+		"sp": 0,
+		"description": "Grants Res+2.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 2,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 1
+	}, {
+		"skill_id": 682,
+		"name": "Resistance +3",
+		"slot": "s",
+		"sp": 0,
+		"description": "Grants Res+3.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 3,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 1
+	}, {
+		"skill_id": 683,
+		"name": "Fortify Def 2",
+		"slot": "s",
+		"sp": 0,
+		"description": "Grants adjacent allies Def+3 through their next actions at the start of each turn.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 0
+	}, {
+		"skill_id": 684,
+		"name": "Fortify Def 3",
+		"slot": "s",
+		"sp": 0,
+		"description": "Grants adjacent allies Def+4 through their next actions at the start of each turn.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 0
+	}, {
+		"skill_id": 685,
+		"name": "Fortify Res 2",
+		"slot": "s",
+		"sp": 0,
+		"description": "Grants adjacent allies Res+3 through their next actions at the start of each turn.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 0
+	}, {
+		"skill_id": 686,
+		"name": "Fortify Res 3",
+		"slot": "s",
+		"sp": 0,
+		"description": "Grants adjacent allies Res+4 through their next actions at the start of each turn.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 0
+	}, {
+		"skill_id": 687,
+		"name": "Spur Atk 1",
+		"slot": "s",
+		"sp": 0,
+		"description": "Grants adjacent allies Atk+2 during combat.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 0
+	}, {
+		"skill_id": 688,
+		"name": "Spur Atk 2",
+		"slot": "s",
+		"sp": 0,
+		"description": "Grants adjacent allies Atk+3 during combat.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 0
+	}, {
+		"skill_id": 689,
+		"name": "Spur Atk 3",
+		"slot": "s",
+		"sp": 0,
+		"description": "Grants adjacent allies Atk+4 during combat.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 0
+	}, {
+		"skill_id": 690,
+		"name": "Spur Spd 1",
+		"slot": "s",
+		"sp": 0,
+		"description": "Grants adjacent allies Spd+2 during combat.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 0
+	}, {
+		"skill_id": 691,
+		"name": "Spur Spd 2",
+		"slot": "s",
+		"sp": 0,
+		"description": "Grants adjacent allies Spd+3 during combat.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 0
+	}, {
+		"skill_id": 692,
+		"name": "Spur Spd 3",
+		"slot": "s",
+		"sp": 0,
+		"description": "Grants adjacent allies Spd+4 during combat.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 0
+	}, {
+		"skill_id": 693,
+		"name": "Spur Def 1",
+		"slot": "s",
+		"sp": 0,
+		"description": "Grants adjacent allies Def+2 during combat.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 0
+	}, {
+		"skill_id": 694,
+		"name": "Spur Def 2",
+		"slot": "s",
+		"sp": 0,
+		"description": "Grants adjacent allies Def+3 during combat.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 0
+	}, {
+		"skill_id": 695,
+		"name": "Spur Def 3",
+		"slot": "s",
+		"sp": 0,
+		"description": "Grants adjacent allies Def+4 during combat.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 0
+	}, {
+		"skill_id": 696,
+		"name": "Spur Res 1",
+		"slot": "s",
+		"sp": 0,
+		"description": "Grants adjacent allies Res+2 during combat.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 0
+	}, {
+		"skill_id": 697,
+		"name": "Spur Res 2",
+		"slot": "s",
+		"sp": 0,
+		"description": "Grants adjacent allies Res+3 during combat.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 0
+	}, {
+		"skill_id": 698,
+		"name": "Spur Res 3",
+		"slot": "s",
+		"sp": 0,
+		"description": "Grants adjacent allies Res+4 during combat.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 0
 	}
 ];
 
@@ -14025,6 +14389,72 @@ window.data.prereqs =
 	}, {
 		"skill_id": 672,
 		"required_id": 671
+	}, {
+		"skill_id": 673,
+		"required_id": 404
+	}, {
+		"skill_id": 674,
+		"required_id": 673
+	}, {
+		"skill_id": 675,
+		"required_id": 401
+	}, {
+		"skill_id": 676,
+		"required_id": 675
+	}, {
+		"skill_id": 677,
+		"required_id": 403
+	}, {
+		"skill_id": 678,
+		"required_id": 677
+	}, {
+		"skill_id": 679,
+		"required_id": 593
+	}, {
+		"skill_id": 680,
+		"required_id": 679
+	}, {
+		"skill_id": 681,
+		"required_id": 402
+	}, {
+		"skill_id": 682,
+		"required_id": 681
+	}, {
+		"skill_id": 683,
+		"required_id": 468
+	}, {
+		"skill_id": 684,
+		"required_id": 683
+	}, {
+		"skill_id": 685,
+		"required_id": 469
+	}, {
+		"skill_id": 686,
+		"required_id": 685
+	}, {
+		"skill_id": 688,
+		"required_id": 687
+	}, {
+		"skill_id": 689,
+		"required_id": 688
+	}, {
+		"skill_id": 691,
+		"required_id": 690
+	}, {
+		"skill_id": 692,
+		"required_id": 691
+	}, {
+		"skill_id": 694,
+		"required_id": 693
+	}, {
+		"skill_id": 695,
+		"required_id": 694
+	}, {
+		"skill_id": 697,
+		"required_id": 696
+	}, {
+		"skill_id": 698,
+		"required_id": 697
 	}
 ];
 
