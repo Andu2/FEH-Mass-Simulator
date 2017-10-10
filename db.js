@@ -3023,7 +3023,8 @@ window.data.heroes = [{
 //Inheritrule can be multiple traits separated by commas
 //ex: melee,physical (for Galeforce)
 //affectsduel determines whether a skill is shown if "show only skills that affect duel" is selected
-window.data.skills = [{
+window.data.skills = 
+	[{
 		"skill_id": 1,
 		"name": "Iron Sword",
 		"slot": "weapon",
@@ -9608,7 +9609,7 @@ window.data.skills = [{
 		"name": "Breath of Life 1",
 		"slot": "s",
 		"sp": 0,
-		"description": "",
+		"description": "If unit initiates attack, adjacent allies recover 3 HP after combat.",
 		"hp": 0,
 		"atk": 0,
 		"spd": 0,
@@ -11845,7 +11846,7 @@ window.data.skills = [{
 		"affectsduel": 1
 	}, {
 		"skill_id": 631,
-		"name": "Uror",
+		"name": "Urdr",
 		"slot": "weapon",
 		"sp": 400,
 		"description": "If Sing or Dance is used, target also granted Atk\/Spd\/Def\/Res+3.",
@@ -11925,7 +11926,7 @@ window.data.skills = [{
 		"def": 0,
 		"res": 0,
 		"charge": 0,
-		"inheritrule": "",
+		"inheritrule": "nonstaff",
 		"affectsduel": 0
 	}, {
 		"skill_id": 637,
@@ -11939,7 +11940,7 @@ window.data.skills = [{
 		"def": 0,
 		"res": 0,
 		"charge": 0,
-		"inheritrule": "",
+		"inheritrule": "nonstaff",
 		"affectsduel": 0
 	}, {
 		"skill_id": 638,
@@ -11953,7 +11954,7 @@ window.data.skills = [{
 		"def": 0,
 		"res": 0,
 		"charge": 0,
-		"inheritrule": "",
+		"inheritrule": "nonstaff",
 		"affectsduel": 0
 	}, {
 		"skill_id": 639,
@@ -11995,7 +11996,7 @@ window.data.skills = [{
 		"def": 0,
 		"res": 0,
 		"charge": 0,
-		"inheritrule": "",
+		"inheritrule": "nonstaff",
 		"affectsduel": 0
 	}, {
 		"skill_id": 642,
@@ -12009,7 +12010,7 @@ window.data.skills = [{
 		"def": 0,
 		"res": 0,
 		"charge": 0,
-		"inheritrule": "",
+		"inheritrule": "nonstaff",
 		"affectsduel": 0
 	}, {
 		"skill_id": 643,
@@ -12023,7 +12024,7 @@ window.data.skills = [{
 		"def": 0,
 		"res": 0,
 		"charge": 0,
-		"inheritrule": "",
+		"inheritrule": "nonstaff",
 		"affectsduel": 0
 	}, {
 		"skill_id": 644,
@@ -12065,7 +12066,7 @@ window.data.skills = [{
 		"def": 0,
 		"res": 0,
 		"charge": 0,
-		"inheritrule": "",
+		"inheritrule": "nonstaff",
 		"affectsduel": 0
 	}, {
 		"skill_id": 647,
@@ -12079,7 +12080,7 @@ window.data.skills = [{
 		"def": 0,
 		"res": 0,
 		"charge": 0,
-		"inheritrule": "",
+		"inheritrule": "nonstaff",
 		"affectsduel": 0
 	}, {
 		"skill_id": 648,
@@ -12093,7 +12094,7 @@ window.data.skills = [{
 		"def": 0,
 		"res": 0,
 		"charge": 0,
-		"inheritrule": "",
+		"inheritrule": "nonstaff",
 		"affectsduel": 0
 	}, {
 		"skill_id": 649,
@@ -12137,6 +12138,300 @@ window.data.skills = [{
 		"charge": 0,
 		"inheritrule": "bluetome",
 		"affectsduel": 0
+	}, {
+		"skill_id": 652,
+		"name": "Phantom Spd 2",
+		"slot": "s",
+		"sp": 0,
+		"description": "When any skill compares this unit's Spd stat to another unit's, this unit's Spd stat is counted as +8 over actual value.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 1
+	}, {
+		"skill_id": 653,
+		"name": "Phantom Spd 3",
+		"slot": "s",
+		"sp": 0,
+		"description": "When any skill compares this unit's Spd stat to another unit's, this unit's Spd stat is counted as +10 over actual value.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 1
+	}, {
+		"skill_id": 654,
+		"name": "Panic Ploy 2",
+		"slot": "s",
+		"sp": 0,
+		"description": "At start of turn, bonuses become penalties on all foes in cardinal directions with HP 3 or more lower than unit through foe's next action.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 1
+	}, {
+		"skill_id": 655,
+		"name": "Panic Ploy 3",
+		"slot": "s",
+		"sp": 0,
+		"description": "At start of turn, bonuses become penalties on all foes in cardinal directions with HP 1 or more lower than unit through foe's next action.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 1
+	}, {
+		"skill_id": 656,
+		"name": "Hardy Bearing 2",
+		"slot": "s",
+		"sp": 0,
+		"description": "Disables skills that change unit's attack priority. If unit has 50% HP at start of battle, enemy skills that change attack priority are also disabled.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 1
+	}, {
+		"skill_id": 657,
+		"name": "Hardy Bearing 3",
+		"slot": "s",
+		"sp": 0,
+		"description": "Disables skills that change unit's attack priority. Enemy skills that change attack priority are also disabled.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 1
+	}, {
+		"skill_id": 658,
+		"name": "Atk Ploy 2",
+		"slot": "s",
+		"sp": 0,
+		"description": "At start of turn, all foes in cardinal directions with Res 1 or more lower than unit suffer Atk-4 until the end of foe's next action.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 1
+	}, {
+		"skill_id": 659,
+		"name": "Atk Ploy 3",
+		"slot": "s",
+		"sp": 0,
+		"description": "At start of turn, all foes in cardinal directions with Res 1 or more lower than unit suffer Atk-5 until the end of foe's next action.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 1
+	}, {
+		"skill_id": 660,
+		"name": "Breath of Life 2",
+		"slot": "s",
+		"sp": 0,
+		"description": "If unit initiates attack, adjacent allies recover 5 HP after combat.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 0
+	}, {
+		"skill_id": 661,
+		"name": "Breath of Life 3",
+		"slot": "s",
+		"sp": 0,
+		"description": "If unit initiates attack, adjacent allies recover 7 HP after combat.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 0
+	}, {
+		"skill_id": 662,
+		"name": "Distant Def 2",
+		"slot": "s",
+		"sp": 0,
+		"description": "If unit is attacked by foe using bow, daggers, magic, or staff, unit receives Def\/Res+4 during combat.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 1
+	}, {
+		"skill_id": 663,
+		"name": "Distant Def 3",
+		"slot": "s",
+		"sp": 0,
+		"description": "If unit is attacked by foe using bow, daggers, magic, or staff, unit receives Def\/Res+6 during combat.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 1
+	}, {
+		"skill_id": 664,
+		"name": "Deflect Magic 1",
+		"slot": "s",
+		"sp": 0,
+		"description": "If unit receives consecutive attacks from a foe using magic, damage from second attack onward reduced by 30%.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 1
+	}, {
+		"skill_id": 665,
+		"name": "Deflect Magic 2",
+		"slot": "s",
+		"sp": 0,
+		"description": "If unit receives consecutive attacks from a foe using magic, damage from second attack onward reduced by 50%.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 1
+	}, {
+		"skill_id": 666,
+		"name": "Deflect Magic 3",
+		"slot": "s",
+		"sp": 0,
+		"description": "If unit receives consecutive attacks from a foe using magic, damage from second attack onward reduced by 80%.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 1
+	}, {
+		"skill_id": 667,
+		"name": "Deflect Melee 1",
+		"slot": "s",
+		"sp": 0,
+		"description": "If unit receives consecutive attacks from a foe using a sword, lance, or axe, damage from second attack onward reduced by 30%.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "melee",
+		"affectsduel": 1
+	}, {
+		"skill_id": 668,
+		"name": "Deflect Melee 2",
+		"slot": "s",
+		"sp": 0,
+		"description": "If unit receives consecutive attacks from a foe using a sword, lance, or axe, damage from second attack onward reduced by 50%.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "melee",
+		"affectsduel": 1
+	}, {
+		"skill_id": 669,
+		"name": "Deflect Melee 3",
+		"slot": "s",
+		"sp": 0,
+		"description": "If unit receives consecutive attacks from a foe using a sword, lance, or axe, damage from second attack onward reduced by 80%.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "melee",
+		"affectsduel": 1
+	}, {
+		"skill_id": 670,
+		"name": "Deflect Missile 1",
+		"slot": "s",
+		"sp": 0,
+		"description": "If unit receives consecutive attacks from a foe using a bow or dagger, damage from second attack onward reduced by 30%.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 1
+	}, {
+		"skill_id": 671,
+		"name": "Deflect Missile 2",
+		"slot": "s",
+		"sp": 0,
+		"description": "If unit receives consecutive attacks from a foe using a bow or dagger, damage from second attack onward reduced by 50%.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 1
+	}, {
+		"skill_id": 672,
+		"name": "Deflect Missile 3",
+		"slot": "s",
+		"sp": 0,
+		"description": "If unit receives consecutive attacks from a foe using a bow or dagger, damage from second attack onward reduced by 80%.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 1
 	}
 ];
 
@@ -12148,7 +12443,8 @@ window.data.skills = [{
 //Joins many-to-many relationship between skills and prerequisites
 //Good luck manually updating this shit
 //I (Andy) had created a database updater for my own personal use to handle this
-window.data.prereqs = [{
+window.data.prereqs = 
+	[{
 		"skill_id": 2,
 		"required_id": 1
 	}, {
@@ -13675,6 +13971,60 @@ window.data.prereqs = [{
 	}, {
 		"skill_id": 651,
 		"required_id": 650
+	}, {
+		"skill_id": 652,
+		"required_id": 555
+	}, {
+		"skill_id": 653,
+		"required_id": 652
+	}, {
+		"skill_id": 654,
+		"required_id": 630
+	}, {
+		"skill_id": 655,
+		"required_id": 654
+	}, {
+		"skill_id": 656,
+		"required_id": 594
+	}, {
+		"skill_id": 657,
+		"required_id": 656
+	}, {
+		"skill_id": 658,
+		"required_id": 612
+	}, {
+		"skill_id": 659,
+		"required_id": 658
+	}, {
+		"skill_id": 660,
+		"required_id": 471
+	}, {
+		"skill_id": 661,
+		"required_id": 660
+	}, {
+		"skill_id": 662,
+		"required_id": 611
+	}, {
+		"skill_id": 663,
+		"required_id": 662
+	}, {
+		"skill_id": 665,
+		"required_id": 664
+	}, {
+		"skill_id": 666,
+		"required_id": 665
+	}, {
+		"skill_id": 668,
+		"required_id": 667
+	}, {
+		"skill_id": 669,
+		"required_id": 668
+	}, {
+		"skill_id": 671,
+		"required_id": 670
+	}, {
+		"skill_id": 672,
+		"required_id": 671
 	}
 ];
 
