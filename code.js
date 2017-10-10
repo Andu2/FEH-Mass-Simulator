@@ -3166,33 +3166,34 @@ function activeHero(hero){
 		var boostText = "";
 
 		if(!this.initiator && enemy.range == "ranged"){
-			var skillName = "";
 			var buffVal = 0;
 			if(this.hasAtIndex("Distant Def", this.aIndex)){
 				buffVal = this.hasAtIndex("Distant Def", this.aIndex) * 2;
-				skillName = data.skills[this.aIndex].name;
 				this.combatSpur.def += buffVal;
 				this.combatSpur.res += buffVal;
-				boostText += this.name + " gets +" + buffVal + " def and res from being attacked from range with " + skillName + ".<br>";
+				boostText += this.name + " gets +" + buffVal + " def and res from being attacked from range with " + data.skills[this.aIndex].name + ".<br>";
 			}			
 			if(this.hasAtIndex("Distant Def", this.sIndex)){
 				buffVal = this.hasAtIndex("Distant Def", this.sIndex) * 2;
-				skillName = data.skills[this.sIndex].name;
 				this.combatSpur.def += buffVal;
 				this.combatSpur.res += buffVal;
-				boostText += this.name + " gets +" + buffVal + " def and res from being attacked from range with " + skillName + " (Seal).<br>";
+				boostText += this.name + " gets +" + buffVal + " def and res from being attacked from range with " + data.skills[this.sIndex].name + " (Seal).<br>";
 			}			
 		}
 
 		if(!this.initiator && enemy.range == "melee"){
-			var skillName = "";
 			var buffVal = 0;
-			if(this.has("Close Def")){
-				buffVal = this.has("Close Def") * 2;
-				skillName = data.skills[this.aIndex].name;
+			if(this.hasAtIndex("Close Def", this.aIndex)){
+				buffVal = this.hasAtIndex("Close Def", this.aIndex) * 2;
 				this.combatSpur.def += buffVal;
 				this.combatSpur.res += buffVal;
-				boostText += this.name + " gets +" + buffVal + " def and res from being attacked from melee with " + skillName + ".<br>";
+				boostText += this.name + " gets +" + buffVal + " def and res from being attacked from melee with " + data.skills[this.aIndex].name + ".<br>";
+			}
+			if(this.hasAtIndex("Close Def", this.sIndex)){
+				buffVal = this.hasAtIndex("Close Def", this.sIndex) * 2;
+				this.combatSpur.def += buffVal;
+				this.combatSpur.res += buffVal;
+				boostText += this.name + " gets +" + buffVal + " def and res from being attacked from melee with " + data.skills[this.sIndex].name + " (Seal).<br>";
 			}
 		}
 
@@ -4100,12 +4101,41 @@ function activeHero(hero){
 			var dmgReduction = 1.0;
 			var miracle = false;
 			
-			//Check Urvan damage reduction, currently occurs before damage reducing special
+			//Check consequtive damage reduction, currently occurs before damage reducing special
 			//***May need to revise due to Shield Pulse's if calculation order is different***
 			if (enemy.has("Urvan") && lastAttacker == this.name){
 				dmgReduction *= 0.2;
 				damageText += enemy.name + "'s Urvan reduces " + this.name + "'s consecutive damage by 80%.<br>"; 
-			}			
+			}
+			//Deflect Seals
+			//***Currently stack with similar effects***
+			var deflect = 0;
+			if (enemy.has("Deflect Magic") && this.attackType == "magical" && lastAttacker == this.name){
+				deflect = enemy.has("Deflect Magic");
+			}else if (enemy.has("Deflect Melee") && this.attackType == "physical" && this.range == "melee" && lastAttacker == this.name){
+				deflect = enemy.has("Deflect Melee");
+			}else if (enemy.has("Deflect Missile") && this.attackType == "physical" && this.range == "ranged" && lastAttacker == this.name){
+				deflect = enemy.has("Deflect Missile");
+			}
+			if (deflect != 0){
+				switch (deflect){
+					case 1: 
+						dmgReduction *= 0.7;
+						damageText += enemy.name + "'s " + data.skills[enemy.sIndex].name + " reduces " + this.name + "'s consecutive damage by 30%.<br>";
+						break;
+					case 2:
+						dmgReduction *= 0.5;
+						damageText += enemy.name + "'s " + data.skills[enemy.sIndex].name + " reduces " + this.name + "'s consecutive damage by 50%.<br>"; 
+						break;
+					case 3:
+						dmgReduction *= 0.2;
+						damageText += enemy.name + "'s " + data.skills[enemy.sIndex].name + " reduces " + this.name + "'s consecutive damage by 80%.<br>"; 
+						break;
+					default:
+						damageText += "Error: Invalid 'deflect' value.";
+						break;						
+				}
+			}
 			
 			if(enemy.specialIndex!=-1&&data.skills[enemy.specialIndex].charge<=enemy.charge){
 				//gotta check range
@@ -4394,8 +4424,8 @@ function activeHero(hero){
 			desperation = true;
 		}
 
-		//Check for Hardy Bearing 1, affects all skills that change attack priority
-		if(this.has("Hardy Bearing 1") || (enemy.has("Hardy Bearing 1") && (enemy.combatStartHp / enemy.maxHp >= 1))){
+		//Check for Hardy Bearing, affects all skills that change attack priority
+		if(this.has("Hardy Bearing") || (enemy.has("Hardy Bearing") && (enemy.combatStartHp / enemy.maxHp >= (1.5 - enemy.has("Hardy Bearing") * 0.5)))){
 			vantage = false;
 			desperation = false;
 		}		
@@ -4517,12 +4547,19 @@ function activeHero(hero){
 		}		
 		if(enemy.has("Firesweep")){
 			firesweep = true;
+			firesweep = true;
 		}	
 		if(this.has("Windsweep")){
-			windsweep = this.has("Windsweep")*-2 + 7 + (this.has("Phantom Spd 1") ? -5 : 0);
+			windsweep = (this.has("Windsweep") * -2) + 7;
+			if(this.has("Phantom Spd")){
+				windsweep += -2 + (this.has("Phantom Spd") * -3);
+			}
 		}
 		if(this.has("Watersweep")){
-			watersweep = this.has("Watersweep")*-2 + 7 + (this.has("Phantom Spd 1") ? -5 : 0);
+			watersweep = (this.has("Watersweep") * -2) + 7;
+			if(this.has("Phantom Spd")){
+				watersweep += -2 + (this.has("Phantom Spd") * -3);
+			}
 		}
 
 		var thisFollowUp = false;
@@ -4563,9 +4600,10 @@ function activeHero(hero){
 			enemyOutspeeds = true;
 		}
 
-		if(!firesweep && !(windsweep && data.physicalWeapons.indexOf(enemy.weaponType) != -1 && thisEffSpd-enemyEffSpd >= windsweep) 
-			&& !(watersweep && data.magicalWeapons.indexOf(enemy.weaponType) != -1 && thisEffSpd-enemyEffSpd >= watersweep)){
-			if(this.range==enemy.range || anyRangeCounter){
+		if(!firesweep 
+			&& !(windsweep && data.physicalWeapons.indexOf(enemy.weaponType) != -1 && thisEffSpd - enemyEffSpd >= windsweep) 
+			&& !(watersweep && data.magicalWeapons.indexOf(enemy.weaponType) != -1 && thisEffSpd - enemyEffSpd >= watersweep)){
+			if(this.range == enemy.range || anyRangeCounter){
 				enemyCanCounter = true;
 			}
 		}
