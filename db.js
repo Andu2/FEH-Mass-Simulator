@@ -3030,7 +3030,7 @@ window.data.heroes = [{
 		"minrarity": 5
 	}, {
 		"hero_id": 180,
-		"name": "Deidre",
+		"name": "Deirdre",
 		"basehp": 17,
 		"baseatk": 9,
 		"basespd": 6,
