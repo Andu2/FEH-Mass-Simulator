@@ -4131,7 +4131,7 @@ function activeHero(hero){
 			//First Attack
 			if (firstAttack){
 				//Weapon
-				if (enemy.hasExactly("Divine Tyrfing") && this.attackType == "magical"){
+				if (enemy.hasExactly("Divine Tyrfing") && this.attackType == "magical" && this.range == "ranged" && this.weaponType != "staff"){
 					dmgReduction *= 0.5;
 					damageText += enemy.name + "'s Divine Tyrfing reduces " + this.name + "'s magic damage by 50%.<br>";
 				}
@@ -4343,6 +4343,7 @@ function activeHero(hero){
 					damageText += this.name + " loses " + loseCharge + " charge due to " + skillNames.join(", ") + ".<br>";
 				}
 				
+				//Initiator gains a charge after attacking
 				this.charge++;
 			}
 
