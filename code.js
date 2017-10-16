@@ -24,10 +24,10 @@ data.support = ["s","s-","a","a-","b","b-","c","c-"];
 //Growth shifts of 3 are what make some banes/boons +/- 4
 //growth table from https://feheroes.wiki/Stat_Growth
 data.growths = [[6,8,9,11,13,14,16,18,19,21,23,24],
-[7,8,10,12,14,15,17,19,21,23,25,26],
-[7,9,11,13,15,17,19,21,23,25,27,29],
-[8,10,12,14,16,18,20,22,24,26,28,31],
-[8,10,13,15,17,19,22,24,26,28,30,33]];
+				[7,8,10,12,14,15,17,19,21,23,25,26],
+				[7,9,11,13,15,17,19,21,23,25,27,29],
+				[8,10,12,14,16,18,20,22,24,26,28,31],
+				[8,10,13,15,17,19,22,24,26,28,30,33,35]];
 
 //Remember: heroes, skills, prereqs, and heroskills arrays come from PHP-created script
 
@@ -2976,6 +2976,12 @@ function activeHero(hero){
 		//Ploys debuff do not stack with other debuff
 		if(enemy.range == "melee" || options.ployBehavior != "Diagonal"){
 			if(this.res > enemy.res){
+				//Weapon
+				if (this.hasExactly("Valflame")){
+					threatDebuffs.atk = Math.min(threatDebuffs.atk, -4);
+					threatDebuffs.res = Math.min(threatDebuffs.res, -4);
+					skillNames.push(data.skills[this.weaponIndex].name);
+				}
 				//Passive C Skills
 				if(this.hasAtIndex("Atk Ploy", this.cIndex)){
 					threatDebuffs.atk = Math.min(threatDebuffs.atk,-this.hasAtIndex("Atk Ploy", this.cIndex)-2);
@@ -3054,28 +3060,37 @@ function activeHero(hero){
 
 	//Turn counting is complicated due to mix & matching turn order, will revisit later if necessary.
 	//Currently repeat effects are not applied since there are only 4 rounds (2 exchanges max) in this simulator
-	this.renew = function(){
-		var renewText = "";	
-
-		if(this.has("Renewal")){
-			//if(turn % (5 - this.has("Renewal")) == 0){
-			if(this.hp + 10 > this.maxHp){
-				this.hp = this.maxHp;
-			} else{
-				this.hp += 10;
+	this.renewal = function(renew){
+		var renewText = "";			
+		
+		//Effects that apply on renewal turn
+		if (renew){
+			if(this.has("Renewal")){
+				//if(turn % (5 - this.has("Renewal")) == 0){
+				if(this.hp + 10 > this.maxHp){
+					this.hp = this.maxHp;
+				} else{
+					this.hp += 10;
+				}
+				renewText += this.name + " heals 10 HP due to Renewal.<br>";
 			}
-			renewText += this.name + " heals 10 HP due to Renewal.<br>";
+			
+			if(this.has("Falchion")){
+				//if(turn % 3 == 0){
+				if(this.hp + 10 > this.maxHp){
+					this.hp = this.maxHp;
+				} else{
+					this.hp += 10;
+				}
+				renewText += this.name + " heals 10 HP due to Falchion.<br>";
+			}	
 		}
 		
-		if(this.has("Falchion")){
-			//if(turn % 3 == 0){
-			if(this.hp + 10 > this.maxHp){
-				this.hp = this.maxHp;
-			} else{
-				this.hp += 10;
-			}
-			renewText += this.name + " heals 10 HP due to Falchion.<br>";
-		}		
+		//Effects that apply every turn
+		if (this.hasExactly("Recover Ring")){
+			this.hp += 10;
+			renewText += this.name + " heals 10 HP due to Recover Ring.<br>";
+		}
 
 		return renewText;
 	}
@@ -3335,7 +3350,7 @@ function activeHero(hero){
 				this.combatSpur.def += blowDef;
 				boostText += this.name + " gets +" + blowDef + " def from initiating with " + skillName + ".<br>";
 			}
-			if(this.has("Tyrfing") && this.hp / this.maxHp <= 0.5){
+			if(this.hasExactly("Tyrfing") && this.hp / this.maxHp <= 0.5){
 				this.combatSpur.def += 4;
 				boostText += this.name + " gets +4 def from Tyrfing.<br>";
 			}
@@ -3370,16 +3385,16 @@ function activeHero(hero){
 		//this.defendBuff = function(relevantDefType){
 		if(!this.initiator){
 			//Not actually going to limit text from relevantDefType, beccause res/def may always be relevant for special attacks
-			if(this.has("Binding Blade") || this.has("Naga")){
+			if(this.hasExactly("Binding Blade") || this.hasExactly("Naga")){
 				this.combatSpur.def += 2;
 				this.combatSpur.res += 2;
 				boostText += this.name + " gets +2 def and res while defending with " + data.skills[this.weaponIndex].name + ".<br>";
 			}
-			if(this.has("Vidofnir") && (enemy.weaponType == "axe" || enemy.weaponType == "sword" ||enemy.weaponType == "lance" )){
+			if(this.hasExactly("Vidofnir") && (enemy.weaponType == "axe" || enemy.weaponType == "sword" ||enemy.weaponType == "lance" )){
 				this.combatSpur.def += 7;
 				boostText += this.name + " gets +7 def while defending with " + data.skills[this.weaponIndex].name + ".<br>";
 			}
-			if(this.has("Tyrfing") && this.hp / this.maxHp <= 0.5){
+			if(this.hasExactly("Tyrfing") && this.hp / this.maxHp <= 0.5){
 				this.combatSpur.def += 4;
 				boostText += this.name + " gets +4 def from Tyrfing.<br>";
 			}
@@ -3679,7 +3694,7 @@ function activeHero(hero){
 	}
 
 	//represents one attack of combat
-	this.doDamage = function(enemy,brave,AOE){
+	this.doDamage = function(enemy, brave, AOE, firstAttack){
 		//didAttack variable for checking daggers and pain
 		this.didAttack = true;
 
@@ -3692,9 +3707,11 @@ function activeHero(hero){
 		var damageText = "";
 
 		var thisEffAtk = this.atk + Math.max(this.buffs.atk,this.combatBuffs.atk) + Math.min(this.debuffs.atk,this.combatDebuffs.atk) + this.spur.atk + this.combatSpur.atk;
+		var thisEffSpd = this.spd + Math.max(this.buffs.spd,this.combatBuffs.spd) + Math.min(this.debuffs.spd,this.combatDebuffs.spd) + this.spur.spd + this.combatSpur.spd;
 		var thisEffDef = this.def + Math.max(this.buffs.def,this.combatBuffs.def) + Math.min(this.debuffs.def,this.combatDebuffs.def) + this.spur.def + this.combatSpur.def;
 		var thisEffRes = this.res + Math.max(this.buffs.res,this.combatBuffs.res) + Math.min(this.debuffs.res,this.combatDebuffs.res) + this.spur.res + this.combatSpur.res;
 		var enemyEffAtk = enemy.atk + Math.max(enemy.buffs.atk,enemy.combatBuffs.atk) + Math.min(enemy.debuffs.atk,enemy.combatDebuffs.atk) + enemy.spur.atk + enemy.combatSpur.atk;
+		var enemyEffSpd = enemy.spd + Math.max(enemy.buffs.spd,enemy.combatBuffs.spd) + Math.min(enemy.debuffs.spd,enemy.combatDebuffs.spd) + enemy.spur.spd + enemy.combatSpur.spd;
 		var enemyEffDef = enemy.def + Math.max(enemy.buffs.def,enemy.combatBuffs.def) + Math.min(enemy.debuffs.def,enemy.combatDebuffs.def) + enemy.spur.def + enemy.combatSpur.def;
 		var enemyEffRes = enemy.res + Math.max(enemy.buffs.res,enemy.combatBuffs.res) + Math.min(enemy.debuffs.res,enemy.combatDebuffs.res) + enemy.spur.res + enemy.combatSpur.res;
 		
@@ -3707,13 +3724,16 @@ function activeHero(hero){
 		//Panic debuff
 		if(this.panicked){
 			thisEffAtk = this.atk - Math.max(this.buffs.atk,this.combatBuffs.atk) + Math.min(this.debuffs.atk,this.combatDebuffs.atk) + this.spur.atk + this.combatSpur.atk;
+			thisEffSpd = this.spd - Math.max(this.buffs.spd,this.combatBuffs.spd) + Math.min(this.debuffs.spd,this.combatDebuffs.spd) + this.spur.spd + this.combatSpur.spd;
 			thisEffDef = this.def - Math.max(this.buffs.def,this.combatBuffs.def) + Math.min(this.debuffs.def,this.combatDebuffs.def) + this.spur.def + this.combatSpur.def;
 			thisEffRes = this.res - Math.max(this.buffs.res,this.combatBuffs.res) + Math.min(this.debuffs.res,this.combatDebuffs.res) + this.spur.res + this.combatSpur.res;
 			if(!AOE){damageText += this.name + "'s buffs are reversed by debuff.<br>";}
 		//Buff cancellation
-		} else if((enemy.has("Beorc's Blessing") && (this.moveType == "cavalry" || this.moveType == "flying"))
+		} else if(enemy.hasExactly("Divine Naga")
+			|| (enemy.has("Beorc's Blessing") && (this.moveType == "cavalry" || this.moveType == "flying"))
 			|| (enemy.has("Mulagir") && (this.weaponType == "redtome" || this.weaponType == "bluetome" || this.weaponType == "greentome"))){
 			thisEffAtk = this.atk + Math.min(this.debuffs.atk,this.combatDebuffs.atk) + this.spur.atk + this.combatSpur.atk;
+			thisEffSpd = this.spd + Math.min(this.debuffs.spd,this.combatDebuffs.spd) + this.spur.spd + this.combatSpur.spd;
 			thisEffDef = this.def + Math.min(this.debuffs.def,this.combatDebuffs.def) + this.spur.def + this.combatSpur.def;
 			thisEffRes = this.res + Math.min(this.debuffs.res,this.combatDebuffs.res) + this.spur.res + this.combatSpur.res;
 			if(!AOE){damageText += this.name + "'s buffs are nullified by opponent's skill.<br>";}			
@@ -3728,13 +3748,16 @@ function activeHero(hero){
 		//Panic Debuff
 		if(enemy.panicked){
 			enemyEffAtk = enemy.atk - Math.max(enemy.buffs.atk,enemy.combatBuffs.atk) + Math.min(enemy.debuffs.atk,enemy.combatDebuffs.atk) + enemy.spur.atk + enemy.combatSpur.atk;
+			enemyEffSpd = enemy.spd - Math.max(enemy.buffs.spd,enemy.combatBuffs.spd) + Math.min(enemy.debuffs.spd,enemy.combatDebuffs.spd) + enemy.spur.spd + enemy.combatSpur.spd;
 			enemyEffDef = enemy.def - Math.max(enemy.buffs.def,enemy.combatBuffs.def) + Math.min(enemy.debuffs.def,enemy.combatDebuffs.def) + enemy.spur.def + enemy.combatSpur.def;
 			enemyEffRes = enemy.res - Math.max(enemy.buffs.res,enemy.combatBuffs.res) + Math.min(enemy.debuffs.res,enemy.combatDebuffs.res) + enemy.spur.res + enemy.combatSpur.res;
 			if(!AOE){damageText += enemy.name + "'s buffs are reversed by debuff.<br>";}
 		//Buff cancellation
-		} else if((this.has("Beorc's Blessing") && (enemy.moveType == "cavalry" || enemy.moveType == "flying"))
+		} else if(this.hasExactly("Divine Naga")
+			|| (this.has("Beorc's Blessing") && (enemy.moveType == "cavalry" || enemy.moveType == "flying"))
 			|| (this.has("Mulagir") && (enemy.weaponType == "redtome" || enemy.weaponType == "bluetome" || enemy.weaponType == "greentome"))){
 			enemyEffAtk = enemy.atk + Math.min(enemy.debuffs.atk,enemy.combatDebuffs.atk) + enemy.spur.atk + enemy.combatSpur.atk;
+			enemyEffSpd = enemy.spd + Math.min(enemy.debuffs.spd,enemy.combatDebuffs.spd) + enemy.spur.spd + enemy.combatSpur.spd;
 			enemyEffDef = enemy.def + Math.min(enemy.debuffs.def,enemy.combatDebuffs.def) + enemy.spur.def + enemy.combatSpur.def;
 			enemyEffRes = enemy.res + Math.min(enemy.debuffs.res,enemy.combatDebuffs.res) + enemy.spur.res + enemy.combatSpur.res;
 			if(!AOE){damageText += enemy.name + "'s buffs are nullified by opponent's skill.<br>";}
@@ -3794,32 +3817,32 @@ function activeHero(hero){
 			else{
 
 				//special will fire if it's an attacking special
-				if(this.has("Night Sky") || this.has("Glimmer")){
+				if(this.hasExactly("Night Sky") || this.hasExactly("Glimmer")){
 					dmgMultiplier = 1.5;
 					offensiveSpecialActivated = true;
 				}
-				else if(this.has("Astra")){
+				else if(this.hasExactly("Astra")){
 					dmgMultiplier = 2.5;
 					offensiveSpecialActivated = true;
 				}
-				else if(this.has("Dragon Gaze") || this.has("Draconic Aura")){
+				else if(this.hasExactly("Dragon Gaze") || this.hasExactly("Draconic Aura")){
 					//Works like Ignis and Glacies
 					dmgBoost += thisEffAtk * 0.3;
 					offensiveSpecialActivated = true;
 				}
-				else if(this.has("Dragon Fang")){
+				else if(this.hasExactly("Dragon Fang")){
 					dmgBoost += thisEffAtk * 0.5;
 					offensiveSpecialActivated = true;
 				}
-				else if(this.has("Glowing Ember") || this.has("Bonfire")){
+				else if(this.hasExactly("Glowing Ember") || this.hasExactly("Bonfire")){
 					dmgBoost += thisEffDef/2;
 					offensiveSpecialActivated = true;
 				}
-				else if(this.has("Ignis")){
+				else if(this.hasExactly("Ignis")){
 					dmgBoost += thisEffDef * 0.8;
 					offensiveSpecialActivated = true;
 				}
-				else if(this.has("Daylight") || this.has("Noontime")){
+				else if(this.hasExactly("Daylight") || this.hasExactly("Noontime")){
 					absorbPct = 0.3;
 					offensiveSpecialActivated = true;
 				}
@@ -3827,7 +3850,7 @@ function activeHero(hero){
 					absorbPct = 0.5;
 					offensiveSpecialActivated = true;
 				}
-				else if(this.has("New Moon") || this.has("Moonbow")){
+				else if(this.hasExactly("New Moon") || this.hasExactly("Moonbow")){
 					enemyDefModifier = -0.3;
 					offensiveSpecialActivated = true;
 				}
@@ -3839,23 +3862,27 @@ function activeHero(hero){
 					enemyDefModifier = -0.8;
 					offensiveSpecialActivated = true;
 				}
-				else if(this.has("Chilling Wind") || this.has("Iceberg")){
+				else if(this.hasExactly("Chilling Wind") || this.hasExactly("Iceberg")){
 					dmgBoost += thisEffRes/2;
 					offensiveSpecialActivated = true;
 				}
-				else if(this.has("Glacies")){
+				else if(this.hasExactly("Glacies")){
 					dmgBoost += thisEffRes*0.8;
 					offensiveSpecialActivated = true;
 				}
-				else if(this.has("Retribution") || this.has("Reprisal")){
+				else if(this.hasExactly("Regnal Astra")){
+					dmgBoost += thisEffSpd*0.4;
+					offensiveSpecialActivated = true;
+				}
+				else if(this.hasExactly("Retribution") || this.hasExactly("Reprisal")){
 					dmgBoost += (this.maxHp-this.hp)*0.3;
 					offensiveSpecialActivated = true;
 				}
-				else if(this.has("Vengeance")){
+				else if(this.hasExactly("Vengeance")){
 					dmgBoost += (this.maxHp-this.hp)*0.5;
 					offensiveSpecialActivated = true;
 				}
-				else if(this.has("Aether")){
+				else if(this.hasExactly("Aether")){
 					enemyDefModifier = -0.5;
 					absorbPct = 0.5;
 					offensiveSpecialActivated = true;
@@ -4087,7 +4114,7 @@ function activeHero(hero){
 				else if(enemy.moveType == "cavalry" && (this.has("Raudrwolf") || this.has("Blarwolf") || this.has("Gronnwolf") || this.has("Zanbato") || this.has("Ridersbane"))){
 					effectiveBonus = 1.5;
 				}
-				else if(enemy.weaponType == "dragon" && (this.has("Falchion") || this.has("Naga"))){
+				else if(enemy.weaponType == "dragon" && (this.hasExactly("Falchion") || this.hasExactly("Naga") || this.hasExactly("Divine Naga"))){
 					effectiveBonus = 1.5;
 				}
 
@@ -4101,39 +4128,54 @@ function activeHero(hero){
 			var dmgReduction = 1.0;
 			var miracle = false;
 			
-			//Check consequtive damage reduction, currently occurs before damage reducing special
-			//***May need to revise due to Shield Pulse's if calculation order is different***
-			if (enemy.has("Urvan") && lastAttacker == this.name){
-				dmgReduction *= 0.2;
-				damageText += enemy.name + "'s Urvan reduces " + this.name + "'s consecutive damage by 80%.<br>"; 
-			}
-			//Deflect Seals
-			//***Currently stack with similar effects***
-			var deflect = 0;
-			if (enemy.has("Deflect Magic") && this.attackType == "magical" && lastAttacker == this.name){
-				deflect = enemy.has("Deflect Magic");
-			}else if (enemy.has("Deflect Melee") && this.attackType == "physical" && this.range == "melee" && lastAttacker == this.name){
-				deflect = enemy.has("Deflect Melee");
-			}else if (enemy.has("Deflect Missile") && this.attackType == "physical" && this.range == "ranged" && lastAttacker == this.name){
-				deflect = enemy.has("Deflect Missile");
-			}
-			if (deflect != 0){
-				switch (deflect){
-					case 1: 
-						dmgReduction *= 0.7;
-						damageText += enemy.name + "'s " + data.skills[enemy.sIndex].name + " reduces " + this.name + "'s consecutive damage by 30%.<br>";
-						break;
-					case 2:
-						dmgReduction *= 0.5;
-						damageText += enemy.name + "'s " + data.skills[enemy.sIndex].name + " reduces " + this.name + "'s consecutive damage by 50%.<br>"; 
-						break;
-					case 3:
-						dmgReduction *= 0.2;
-						damageText += enemy.name + "'s " + data.skills[enemy.sIndex].name + " reduces " + this.name + "'s consecutive damage by 80%.<br>"; 
-						break;
-					default:
-						damageText += "Error: Invalid 'deflect' value.";
-						break;						
+			//First Attack
+			if (firstAttack){
+				//Weapon
+				if (enemy.hasExactly("Divine Tyrfing") && this.attackType == "magical"){
+					dmgReduction *= 0.5;
+					damageText += enemy.name + "'s Divine Tyrfing reduces " + this.name + "'s magic damage by 50%.<br>";
+				}
+			}			
+
+			//Consequtive Attack
+			if (lastAttacker == this.name){
+				//Weapon
+				if (enemy.hasExactly("Urvan")){
+					dmgReduction *= 0.2;
+					damageText += enemy.name + "'s Urvan reduces " + this.name + "'s consecutive damage by 80%.<br>"; 
+				}
+				if (enemy.hasExactly("Crusader's Ward") && this.range == "ranged"){
+					dmgReduction *= 0.2;
+					damageText += enemy.name + "'s Crusader's Ward reduces " + this.name + "'s consecutive damage by 80%.<br>"; 
+				}				
+				
+				//Deflect Seals
+				var deflect = 0;
+				if (enemy.has("Deflect Magic") && this.attackType == "magical"){
+					deflect = enemy.has("Deflect Magic");
+				}else if (enemy.has("Deflect Melee") && this.attackType == "physical" && this.range == "melee"){
+					deflect = enemy.has("Deflect Melee");
+				}else if (enemy.has("Deflect Missile") && this.attackType == "physical" && this.range == "ranged"){
+					deflect = enemy.has("Deflect Missile");
+				}
+				if (deflect != 0){
+					switch (deflect){
+						case 1: 
+							dmgReduction *= 0.7;
+							damageText += enemy.name + "'s " + data.skills[enemy.sIndex].name + " reduces " + this.name + "'s consecutive damage by 30%.<br>";
+							break;
+						case 2:
+							dmgReduction *= 0.5;
+							damageText += enemy.name + "'s " + data.skills[enemy.sIndex].name + " reduces " + this.name + "'s consecutive damage by 50%.<br>"; 
+							break;
+						case 3:
+							dmgReduction *= 0.2;
+							damageText += enemy.name + "'s " + data.skills[enemy.sIndex].name + " reduces " + this.name + "'s consecutive damage by 80%.<br>"; 
+							break;
+						default:
+							damageText += "Error: Invalid 'deflect' value.";
+							break;						
+					}
 				}
 			}
 			
@@ -4217,6 +4259,7 @@ function activeHero(hero){
 				dmg -= 5;
 			}			
 			
+			//Final damage calculations
 			dmg = Math.max(dmg,0);
 			if(enemy.has("Embla's Ward")){
 				dmg = 0;
@@ -4236,19 +4279,8 @@ function activeHero(hero){
 			}
 			enemy.hp -= dmg;
 			
-			//Increase enemy charge when dealing non-aoe damage
-			//***May require revision, does it work when damage is 0?***
-			//***It also works when attacking as the defender?***
-			if(this.initiator && enemy.has("Steady Breath")){
-				enemy.charge++;
-				damageText += enemy.name + " gains an extra charge with Steady Breath.<br>";
-			}else if(!this.initiator && this.has("Steady Breath")){
-				this.charge++;
-				damageText += this.name + " gains an extra charge with Steady Breath.<br>";
-			}
-			
 			//Set this attacker as last attacker for Urvan check
-			//Divide into initiator vs defender for mirror match differentiation
+			//Initiator vs defender differentiated when name was assigned
 			lastAttacker = this.name;
 			
 			//add absorbed hp
@@ -4259,40 +4291,91 @@ function activeHero(hero){
 			this.hp += absorbHp;
 			if(absorbHp > 0){
 				damageText += this.name + " absorbs " + absorbHp + ".<br>";
-			}
-
+			}	
+			
 			//Special charge does not increase if special was used on this attack
 			if(!offensiveSpecialActivated){
+				var gainCharge = 0;	//For possible >1 gains
+				var loseCharge = 0;
+				var skillNames = [];
+				
+				//Steady Breath: Initiator has
+				if(!this.initiator && this.has("Steady Breath")){
+					gainCharge = Math.max(gainCharge, 1);
+					skillNames.push(data.skills[this.aIndex].name);
+				}
 				if(this.has("Heavy Blade")){
 					if(thisEffAtk - enemyEffAtk >= this.has("Heavy Blade")*-2 + 7){
-						this.charge++;
-						damageText += this.name + " gains an extra charge with Heavy Blade.<br>";
+						gainCharge = Math.max(gainCharge, 1);
+						skillNames.push(data.skills[this.aIndex].name);
 					}
-				} else if(this.hasExactly("Blazing Durandal")){
+				} 
+				if(this.hasExactly("Blazing Durandal")){
 					if(thisEffAtk - enemyEffAtk >= 1){
-						this.charge++;
-						damageText += this.name + " gains an extra charge with Blazing Durandal.<br>";
+						gainCharge = Math.max(gainCharge, 1);
+						skillNames.push(data.skills[this.weaponIndex].name);
 					}
 				}
+				if(this.hasExactly("Ayra's Blade")){
+					if(thisEffSpd - enemyEffSpd >= 1){
+						gainCharge = Math.max(gainCharge, 1);
+						skillNames.push(data.skills[this.weaponIndex].name);
+					}
+				}
+				
+				if (gainCharge > 0){
+					this.charge += gainCharge;
+					damageText += this.name + " gains " + gainCharge + " charge with " + skillNames.join(", ") + ".<br>";
+				}
+				
+				//Reset skillNames
+				skillNames = [];
 				
 				if(enemy.has("Guard")){
 					if(enemy.combatStartHp / enemy.maxHp >= 1.1 - enemy.has("Guard")*0.1){
-						this.charge--;
-						damageText += this.name + " loses a charge due to opponent's Guard.<br>";
+						loseCharge = Math.max(loseCharge, 1);
+						skillNames.push(data.skills[enemy.bIndex].name);
 					}
 				}
 				
-				this.charge++;
+				if(loseCharge > 0){
+					this.charge -= loseCharge;
+					damageText += this.name + " loses " + loseCharge + " charge due to " + skillNames.join(", ") + ".<br>";
+				}
 			}
 
 			if(!defensiveSpecialActivated){
+				var gainCharge = 0;
+				var loseCharge = 0;
+				var skillNames = [];
+				
+				//Steady Breath: Enemy has
+				if(this.initiator && enemy.has("Steady Breath")){
+					gainCharge = Math.max(gainCharge, 1);
+					skillNames.push(data.skills[enemy.aIndex].name);
+				}
+				
+				if (gainCharge > 0){
+					enemy.charge += gainCharge;
+					damageText += enemy.name + " gains " + gainCharge + " charge with " + skillNames.join(", ") + ".<br>";
+				}
+				
+				//Reset skillNames
+				skillNames = []
+				
 				if(this.has("Guard")){
 					if(this.combatStartHp / this.maxHp >= 1.1 - this.has("Guard")*0.1){
-						enemy.charge--;
-						damageText += enemy.name + " loses a charge due to opponent's Guard.<br>";
+						loseCharge = Math.max(loseCharge, 1);
+						skillNames.push(data.skills[this.bIndex].name);
 					}
 				}	
 
+				if (loseCharge > 0){
+					enemy.charge -= loseCharge;
+					damageText += enemy.name + " loses " + loseCharge + " charge due to " + skillNames.join(", ") + ".<br>";
+				}
+				
+				//Enemy gains a charge when attacked
 				enemy.charge++;
 			}
 
@@ -4309,13 +4392,13 @@ function activeHero(hero){
 			//do damage again if brave weapon
 			if(brave && enemy.hp > 0){
 				damageText += this.name + " attacks again with weapon.<br>";
-				damageText += this.doDamage(enemy);
+				damageText += this.doDamage(enemy, false, false, false);
 			}
 		}
 
 		return damageText;
 	}
-
+	
 	//represents a full round of combat
 	this.attack = function(enemy,round,renew,galeforce){		
 				
@@ -4341,10 +4424,8 @@ function activeHero(hero){
 			//Check self buffs (defiant skills)
 			roundText += this.defiant();
 
-			//Check for renewal effects
-			if (renew){
-				roundText += this.renew();
-			}			
+			//Apply renewal effects
+			roundText += this.renewal(renew);			
 
 			//Check threaten if not first turn (unless startThreatened is on)
 			if((options.threatenRule=="Both"||options.threatenRule=="Attacker") && (round == 1)){
@@ -4371,6 +4452,7 @@ function activeHero(hero){
 		roundText += enemy.startCombatSpur(this);
 
 		//Adjust speeds
+		//***Speed currently calculated twice, once here and once in doDamage, should merge together***
 		var thisEffSpd = this.spd + Math.max(this.buffs.spd,this.combatBuffs.spd) + Math.min(this.debuffs.spd,this.combatDebuffs.spd) + this.spur.spd + this.combatSpur.spd;
 		var enemyEffSpd = enemy.spd + Math.max(enemy.buffs.spd,enemy.combatBuffs.spd) + Math.min(enemy.debuffs.spd,enemy.combatDebuffs.spd) + enemy.spur.spd + enemy.combatSpur.spd;
 
@@ -4378,14 +4460,16 @@ function activeHero(hero){
 		//***May require change depending on order of application between Panic and null skills***		
 		if(this.panicked){
 			thisEffSpd = this.spd - Math.max(this.buffs.spd,this.combatBuffs.spd) + Math.min(this.debuffs.spd,this.combatDebuffs.spd) + this.spur.spd + this.combatSpur.spd;
-		} else if((enemy.has("Beorc's Blessing") && (this.moveType == "cavalry" || this.moveType == "flying"))
+		} else if(enemy.hasExactly("Divine Naga")
+			|| (enemy.has("Beorc's Blessing") && (this.moveType == "cavalry" || this.moveType == "flying"))
 			|| (enemy.has("Mulagir") && (this.weaponType == "redtome" || this.weaponType == "bluetome" || this.weaponType == "greentome"))){
 			thisEffSpd = this.spd + Math.min(this.debuffs.spd,this.combatDebuffs.spd) + this.spur.spd + this.combatSpur.spd;
 		}
 
 		if(enemy.panicked){
 			enemyEffSpd = enemy.spd - Math.max(enemy.buffs.spd,enemy.combatBuffs.spd) + Math.min(enemy.debuffs.spd,enemy.combatDebuffs.spd) + enemy.spur.spd + enemy.combatSpur.spd;
-		} else if((this.has("Beorc's Blessing") && (enemy.moveType == "cavalry" || enemy.moveType == "flying"))
+		} else if(this.hasExactly("Divine Naga")
+			|| (this.has("Beorc's Blessing") && (enemy.moveType == "cavalry" || enemy.moveType == "flying"))
 			|| (this.has("Mulagir") && (enemy.weaponType == "redtome" || enemy.weaponType == "bluetome" || enemy.weaponType == "greentome"))){
 			enemyEffSpd = enemy.spd + Math.min(enemy.debuffs.spd,enemy.combatDebuffs.spd) + enemy.spur.spd + enemy.combatSpur.spd;
 		}
@@ -4398,7 +4482,7 @@ function activeHero(hero){
 		}
 
 		//Check for AOE special activation
-		roundText += this.doDamage(enemy,false,true);
+		roundText += this.doDamage(enemy, false, true, false);
 		
 		//check for vantage before beginning combat
 		var vantage = false;
@@ -4430,7 +4514,7 @@ function activeHero(hero){
 			desperation = false;
 		}		
 		
-		//Check for quick riposte
+		//Check for quick riposte and auto follow-up counters
 		var quickRiposte = false;
 		if(enemy.has("Quick Riposte")){
 			if(enemy.hp/enemy.maxHp >= 1 - 0.1 * enemy.has("Quick Riposte")){
@@ -4438,6 +4522,9 @@ function activeHero(hero){
 			}
 		}
 		if(enemy.has("Armads") && enemy.hp/enemy.maxHp >= .8){
+			quickRiposte = true;
+		}
+		if(enemy.has("Follow-Up Ring") && enemy.hp/enemy.maxHp >= .5){
 			quickRiposte = true;
 		}
 
@@ -4626,11 +4713,14 @@ function activeHero(hero){
 			enemyCanCounter = false;
 		}
 		
-		//Check for brash assault
-		if(this.has("Brash Assault") && (this.range==enemy.range || anyRangeCounter) && enemyCanCounter){
+		//Check for other auto follow-up attack skills
+		if(this.has("Brash Assault") && (this.range == enemy.range || anyRangeCounter) && enemyCanCounter){
 			if(this.hp/this.maxHp <= .2 + this.has("Brash Assault") * 0.1){
 				thisAutoFollow = true;
 			}
+		}
+		if(this.has("Follow-Up Ring") && (this.combatStartHp / this.maxHp >= 0.5)){
+			thisAutoFollow = true;
 		}
 
 		//Cancel things out
@@ -4666,43 +4756,43 @@ function activeHero(hero){
 		if((enemyOutspeeds || enemyAutoFollow) && !preventEnemyFollow){
 			enemyFollowUp = true;
 		}
-
-		//Do vantage damage
-		//Enemy attacks
+		
+		//Combat Damage
+		//doDamage parameters - enemy, brave, AOE, firstAttack
+		
+		//Vantage: Enemy first attack
 		if(vantage && enemyCanCounter){
 			roundText += enemy.name + " counterattacks first with vantage.<br>";
-			roundText += enemy.doDamage(this);
+			roundText += enemy.doDamage(this, false, false, true);
 		}
 
-		//This attacks
-		if(this.hp>0){
-			roundText += this.doDamage(enemy,brave);
+		//Initiator first attack
+		if(this.hp > 0){
+			roundText += this.doDamage(enemy, brave, false, true);
 		}
 
-		//Do desperation
-		//This attacks
+		//Desperation: Initiator second attack
 		if(this.hp > 0 && enemy.hp > 0 && desperation && thisFollowUp){
 			roundText += this.name + " attacks again immediately with desperation.<br>";
-			roundText += this.doDamage(enemy,brave);
+			roundText += this.doDamage(enemy, brave, false, false);
 		}
 
-		//Enemy attacks, either vantage follow-up or first attack
+		//Non-Vantage: Enemy first attack
+		//Vantange: Enemy second attack
 		if(enemy.hp > 0 && this.hp > 0 && (!vantage || (vantage && enemyFollowUp && enemyCanCounter))){
 			if(enemyCanCounter){
-				roundText += enemy.doDamage(this);
+				roundText += enemy.doDamage(this, false, false, !vantage);
 			}
 		}
 
-		//Don't do this attack if already did desperation
-		//or if broken
-		//This attacks again
-		if(this.hp>0 && enemy.hp > 0 && !desperation && thisFollowUp){
-			roundText += this.doDamage(enemy,brave);
+		//Non-Desperation: Initiator second attack
+		if(this.hp > 0 && enemy.hp > 0 && !desperation && thisFollowUp){
+			roundText += this.doDamage(enemy, brave, false, false);
 		}
 
-		//Enemy attacks, non-vantage follow-up
+		//Non-Vantage: Enemy second attack
 		if(this.hp>0 && enemy.hp > 0 && !vantage && enemyCanCounter && enemyFollowUp){
-			roundText += enemy.doDamage(this);
+			roundText += enemy.doDamage(this, false, false, false);
 		}
 
 		//Do post-combat damage to enemy if enemy isn't dead
