@@ -4342,6 +4342,8 @@ function activeHero(hero){
 					this.charge -= loseCharge;
 					damageText += this.name + " loses " + loseCharge + " charge due to " + skillNames.join(", ") + ".<br>";
 				}
+				
+				this.charge++;
 			}
 
 			if(!defensiveSpecialActivated){
