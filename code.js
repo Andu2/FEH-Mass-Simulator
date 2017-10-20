@@ -4321,7 +4321,7 @@ function activeHero(hero){
 					}
 				}
 				if(this.hasExactly("Ayra's Blade")){
-					if(thisEffSpd - enemyEffSpd >= 1){
+					if(thisEffSpd + (this.has("Phantom Spd") ? (2 + this.has("Phantom Spd") * 3) : 0) - enemyEffSpd >= 1){
 						gainCharge = Math.max(gainCharge, 1);
 						skillNames.push(data.skills[this.weaponIndex].name);
 					}
