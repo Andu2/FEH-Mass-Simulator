@@ -2987,6 +2987,10 @@ function activeHero(hero){
 					threatDebuffs.atk = Math.min(threatDebuffs.atk,-this.hasAtIndex("Atk Ploy", this.cIndex)-2);
 					skillNames.push(data.skills[this.cIndex].name);
 				}
+				if(this.hasAtIndex("Spd Ploy", this.cIndex)){
+					threatDebuffs.spd = Math.min(threatDebuffs.spd,-this.hasAtIndex("Spd Ploy", this.cIndex)-2);
+					skillNames.push(data.skills[this.cIndex].name);
+				}
 				if(this.hasAtIndex("Def Ploy", this.cIndex)){
 					threatDebuffs.def = Math.min(threatDebuffs.def,-this.hasAtIndex("Def Ploy", this.cIndex)-2);
 					skillNames.push(data.skills[this.cIndex].name);
