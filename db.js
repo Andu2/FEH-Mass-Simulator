@@ -6,7 +6,7 @@ window.data = {};
 //HERO SKILLS TABLE
 
 /*
-*	To fix SQL export, use find all and replace to replace String to Int: 
+*	To fix SQL export, use 'find all and replace' to replace String to Int: 
 *	Expression: "(\-{0,1}[0-9]+(\.[0-9]+){0,1})"
 *	Replace: \1
 */
@@ -13108,6 +13108,132 @@ window.data.skills =
 		"charge": 2,
 		"inheritrule": "unique",
 		"affectsduel": 1
+	}, {
+		"skill_id": 714,
+		"name": "Brash Assault 1",
+		"slot": "s",
+		"sp": 0,
+		"description": "Unit automatically makes a follow-up when at HP <= 30% and attacking a foe that can counter.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 1
+	}, {
+		"skill_id": 715,
+		"name": "Brash Assault 2",
+		"slot": "s",
+		"sp": 0,
+		"description": "Unit automatically makes a follow-up when at HP <= 40% and attacking a foe that can counter.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 1
+	}, {
+		"skill_id": 716,
+		"name": "Brash Assault 3",
+		"slot": "s",
+		"sp": 0,
+		"description": "Unit automatically makes a follow-up when at HP <= 50% and attacking a foe that can counter.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 1
+	}, {
+		"skill_id": 717,
+		"name": "Guidance 1",
+		"slot": "s",
+		"sp": 0,
+		"description": "If unit has 100% HP, infantry and armored allies within 2 spaces can move to a space adjacent to unit.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 0
+	}, {
+		"skill_id": 718,
+		"name": "Guidance 2",
+		"slot": "s",
+		"sp": 0,
+		"description": "If unit has >= 50% HP, infantry and armored allies within 2 spaces can move to a space adjacent to unit.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 0
+	}, {
+		"skill_id": 719,
+		"name": "Guidance 3",
+		"slot": "s",
+		"sp": 0,
+		"description": "Infantry and armored allies within 2 spaces can move to a space adjacent to unit.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 0
+	}, {
+		"skill_id": 720,
+		"name": "Atk Smoke 1",
+		"slot": "s",
+		"sp": 0,
+		"description": "After combat, inflicts Atk-3 on foes within 2 spaces of target through their next actions.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 0
+	}, {
+		"skill_id": 721,
+		"name": "Atk Smoke 2",
+		"slot": "s",
+		"sp": 0,
+		"description": "After combat, inflicts Atk-5 on foes within 2 spaces of target through their next actions.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 0
+	}, {
+		"skill_id": 722,
+		"name": "Atk Smoke 3",
+		"slot": "s",
+		"sp": 0,
+		"description": "After combat, inflicts Atk-7 on foes within 2 spaces of target through their next actions.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 0
 	}
 ];
 
@@ -14797,6 +14923,24 @@ window.data.prereqs =
 	}, {
 		"skill_id": 713,
 		"required_id": 162
+	}, {
+		"skill_id": 715,
+		"required_id": 714
+	}, {
+		"skill_id": 716,
+		"required_id": 715
+	}, {
+		"skill_id": 718,
+		"required_id": 717
+	}, {
+		"skill_id": 719,
+		"required_id": 718
+	}, {
+		"skill_id": 721,
+		"required_id": 720
+	}, {
+		"skill_id": 722,
+		"required_id": 721
 	}
 ];
 
