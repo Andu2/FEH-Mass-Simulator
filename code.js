@@ -4722,7 +4722,8 @@ function activeHero(hero){
 		
 		//Check for other auto follow-up attack skills
 		if(this.has("Brash Assault") && (this.range == enemy.range || anyRangeCounter) && enemyCanCounter){
-			if(this.hp/this.maxHp <= .2 + this.has("Brash Assault") * 0.1){
+			//Use highest level of Brash Assault between B passive and seal
+			if(this.hp/this.maxHp <= .2 +  Math.max(this.hasAtIndex("Brash Assault", this.bIndex), this.hasAtIndex("Brash Assault", this.sIndex)) * 0.1){
 				thisAutoFollow = true;
 			}
 		}
