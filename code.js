@@ -4155,7 +4155,7 @@ function activeHero(hero){
 				
 				//Deflect Seals
 				var deflect = 0;
-				if (enemy.has("Deflect Magic") && this.attackType == "magical"){
+				if (enemy.has("Deflect Magic") && this.attackType == "magical" && this.range == "ranged" && this.weaponType != "staff"){
 					deflect = enemy.has("Deflect Magic");
 				}else if (enemy.has("Deflect Melee") && this.attackType == "physical" && this.range == "melee"){
 					deflect = enemy.has("Deflect Melee");
