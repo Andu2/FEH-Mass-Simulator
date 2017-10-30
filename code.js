@@ -3270,6 +3270,18 @@ function activeHero(hero){
 				boostText += this.name + " gets +" + buffVal + " res from having >=3 more hp than " + enemy.name + " with " + skillName + ".<br>";
 			}
 		}
+		
+		//Bond skills
+		//Not fully implemented, will always apply buff
+		if (true){
+			if (this.has("Atk Res Bond")){
+				buffVal = this.has("Atk Res Bond") + 2;
+				skillName = data.skills[this.aIndex].name;
+				this.combatSpur.atk += buffVal;
+				this.combatSpur.res += buffVal;
+				boostText += this.name + " gets +" + buffVal + " atk and res from being adjacent to an ally with " + skillName + ".<br>";
+			}
+		}
 
 		//this.blow = function(){
 		if(this.initiator){
