@@ -14,9 +14,9 @@
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
 
-	<link rel="stylesheet" type="text/css" href="style.css?v=18"/>
-	<script type="text/javascript" src="db.js?v=0"></script>
-	<script type="text/javascript" src="code.js?v=26"></script>
+	<link rel="stylesheet" type="text/css" href="style.css?v=20171030"/>
+	<script type="text/javascript" src="db.js?v=20171030"></script>
+	<script type="text/javascript" src="code.js?v=20171030"></script>
 
 </head>
 
@@ -87,21 +87,20 @@
 									<option value="b">B</option><option value="b-">B-</option><option value="c">C</option><option value="c-">C-</option>									
 								</select>
 							</div>
-							<div class="misc_row">
-								Health: 
+							<div class="misc_row">Adjacent Allies: 
+								<input type="number" id="challenger_adjacent" data-var="challenger.adjacent" class="misc_input smallnuminput" value=1 min=0 max=4 />
+							</div>
+							<div class="misc_row">Health: 
 								<input id="challenger_currenthp" data-var="challenger.currenthp" class="misc_input_left smallnuminput" type="number" value=0 min=0 max=99 />
 								<span class="misc_separator">/</span>
 								<span id="challenger_basehp" class="misc_number">-</span>
 							</div>
-							<div class="misc_row">
-								Charge: 
+							<div class="misc_row">Charge: 
 								<input type="number" id="challenger_precharge" data-var="challenger.precharge" class="misc_input_left smallnuminput" value=0 min=0 max=6 />
 								<span class="misc_separator">/</span>
 								<span id="challenger_specialcharge" class="misc_number">-</span>
 							</div>
-							<div class="misc_row"></div>
-							<div class="misc_row">
-								BST/SPT: 
+							<div class="misc_row">BST/SPT: 
 								<span id="challenger_bst" class="misc_number">-</span>
 							</div>
 						</div>
@@ -171,6 +170,9 @@
 									<option value="b">B</option><option value="b-">B-</option><option value="c">C</option><option value="c-">C-</option>									
 								</select>
 							</div>
+							<div class="misc_row">Adjacent Allies: 
+								<input type="number" id="enemies_adjacent" data-var="enemies.fl.adjacent" class="misc_input smallnuminput" value=1 min=0 max=4 />
+							</div>
 							<div class="misc_row">Damage taken: <input id="enemies_damage" data-var="enemies.fl.damage" class="misc_input smallnuminput" type="number" value=0 min=0 max=99 /></div>
 							<div class="misc_row">Pre-charge: <input type="number" id="enemies_precharge" data-var="enemies.fl.precharge" class="misc_input smallnuminput" value=0 min=0 max=6 /></div>
 						</div>
@@ -231,8 +233,10 @@
 										<option value="b">B</option><option value="b-">B-</option><option value="c">C</option><option value="c-">C-</option>									
 									</select>
 								</div>
-								<div class="misc_row">
-									Health: 
+								<div class="misc_row">Adjacent Allies: 
+									<input type="number" id="cl_enemies_adjacent" data-var="enemies.cl.list.adjacent" class="misc_input smallnuminput" value=1 min=0 max=4 />
+								</div>
+								<div class="misc_row">Health: 
 									<input id="cl_enemy_currenthp" data-var="enemies.cl.list.currenthp" class="misc_input_left smallnuminput" type="number" value=0 min=0 max=99 />
 									<span class="misc_separator">/</span>
 									<span id="cl_enemy_basehp" class="misc_number">-</span>
@@ -242,9 +246,7 @@
 									<span class="misc_separator">/</span>
 									<span id="cl_enemy_specialcharge" class="misc_number">-</span>
 								</div>
-								<div class="misc_row"></div>
-								<div class="misc_row">
-									BST/SPT: 
+								<div class="misc_row">BST/SPT: 
 									<span id="cl_enemy_bst" class="misc_number">-</span>
 								</div>
 							</div>
@@ -279,7 +281,7 @@
 						Round to start Renewal effects: <div class="rules_inputs_lineright"><input type="number" data-var="options.startTurn" min=1 max=5 id="rules_renewal" class="smallnuminput" value=1 /></div>
 					</div>
 					<div class="rules_inputs_line">
-						Ranged attack angle (for ploy): <div class="rules_inputs_lineright"><select id="rules_ploy" data-var="options.ployBehavior"><option>Diagonal</option><option>Orthogonal</option></select></div>
+						Ranged attack angle (for ploy): <div class="rules_inputs_lineright"><select id="rules_ploy" data-var="options.ployBehavior"><option>Orthogonal</option><option>Diagonal</option></select></div>
 					</div>
 				</div>
 				<div id="rules_checks">
