@@ -3354,6 +3354,12 @@ function activeHero(hero){
 				this.combatSpur.def += blowDef;
 				boostText += this.name + " gets +" + blowDef + " def from initiating with " + skillName + ".<br>";
 			}
+			if(this.has("Bracing Blow")){
+				blowDef = this.has("Bracing Blow") * 2;
+				skillName = data.skills[this.aIndex].name;
+				this.combatSpur.def += blowDef;
+				boostText += this.name + " gets +" + blowDef + " def from initiating with " + skillName + ".<br>";
+			}
 			if(this.hasExactly("Tyrfing") && this.hp / this.maxHp <= 0.5){
 				this.combatSpur.def += 4;
 				boostText += this.name + " gets +4 def from Tyrfing.<br>";
@@ -3378,6 +3384,12 @@ function activeHero(hero){
 				this.combatSpur.res += blowRes;
 				boostText += this.name + " gets +" + blowRes + " res from initiating with " + skillName + ".<br>";
 			}
+			if(this.has("Bracing Blow")){
+				blowRes = this.has("Bracing Blow") * 2;
+				skillName = data.skills[this.aIndex].name;
+				this.combatSpur.res += blowRes;
+				boostText += this.name + " gets +" + blowRes + " res from initiating with " + skillName + ".<br>";
+			}
 			if(this.has("Parthia")){
 				this.combatSpur.res += 4;
 				boostText += this.name + " gets +4 res from initiating with Parthia.<br>";
@@ -3389,6 +3401,8 @@ function activeHero(hero){
 		//this.defendBuff = function(relevantDefType){
 		if(!this.initiator){
 			//Not actually going to limit text from relevantDefType, beccause res/def may always be relevant for special attacks
+			
+			//Weapon
 			if(this.hasExactly("Binding Blade") || this.hasExactly("Naga")){
 				this.combatSpur.def += 2;
 				this.combatSpur.res += 2;
@@ -3406,6 +3420,8 @@ function activeHero(hero){
 				this.combatSpur.res += 4;
 				boostText += this.name + " gets +4 res while defending with " + data.skills[this.weaponIndex].name + ".<br>";
 			}
+			
+			//Defense passive
 			var stanceDef = 0;
 			if(this.has("Steady Stance")){
 				stanceDef = this.has("Steady Stance") * 2;
@@ -3417,6 +3433,16 @@ function activeHero(hero){
 				this.combatSpur.def += 4;
 				boostText += this.name + " gets +4 def from defending with Steady Breath.<br>";
 			}
+			
+			//Resistance passive
+			var stanceRes = 0;
+			if(this.has("Warding Stance")){
+				stanceRes = this.has("Warding Stance") * 2;
+				skillName = data.skills[this.aIndex].name;
+				this.combatSpur.def += stanceRes;
+				boostText += this.name + " gets +" + stanceRes + " res from defending with " + skillName + ".<br>";
+			}
+			
 			return boostText;
 		}
 	}
@@ -3594,6 +3620,14 @@ function activeHero(hero){
 				sealDef = -4;
 				skillName = data.skills[this.weaponIndex].name;
 			}
+			else if(this.hasExactly("Kitty Paddle+") && sealDef > -7 && (enemy.weaponType == "redtome" || enemy.weaponType == "bluetome" || enemy.weaponType == "greentome")){
+				sealDef = -7;
+				skillName = data.skills[this.weaponIndex].name;
+			}
+			else if(this.hasExactly("Kitty Paddle") && sealDef > -5 && (enemy.weaponType == "redtome" || enemy.weaponType == "bluetome" || enemy.weaponType == "greentome")){
+				sealDef = -5;
+				skillName = data.skills[this.weaponIndex].name;
+			}
 		}
 		if(sealDef < enemy.combatDebuffs.def){
 			enemy.combatDebuffs.def = sealDef;
@@ -3626,6 +3660,14 @@ function activeHero(hero){
 			}
 			else if(this.hasExactly("Poison Dagger") && sealRes > -4 && enemy.moveType == "infantry"){
 				sealRes = -4;
+				skillName = data.skills[this.weaponIndex].name;
+			}
+			else if(this.hasExactly("Kitty Paddle+") && sealRes > -7 && (enemy.weaponType == "redtome" || enemy.weaponType == "bluetome" || enemy.weaponType == "greentome")){
+				sealRes = -7;
+				skillName = data.skills[this.weaponIndex].name;
+			}
+			else if(this.hasExactly("Kitty Paddle") && sealRes > -5 && (enemy.weaponType == "redtome" || enemy.weaponType == "bluetome" || enemy.weaponType == "greentome")){
+				sealRes = -5;
 				skillName = data.skills[this.weaponIndex].name;
 			}
 		}
@@ -4121,6 +4163,9 @@ function activeHero(hero){
 				else if(enemy.weaponType == "dragon" && (this.hasExactly("Falchion") || this.hasExactly("Naga") || this.hasExactly("Divine Naga"))){
 					effectiveBonus = 1.5;
 				}
+				else if((enemy.weaponType == "redtome" || enemy.weaponType == "bluetome" || enemy.weaponType == "greentome")&& (this.has("Kitty Paddle"))){
+					effectiveBonus = 1.5;
+				}
 
 				if(effectiveBonus > 1 ){
 					damageText += this.name + "'s attack is multiplied by " + effectiveBonus + " from weapon effectiveness.<br>";
@@ -4155,7 +4200,7 @@ function activeHero(hero){
 				
 				//Deflect Seals
 				var deflect = 0;
-				if (enemy.has("Deflect Magic") && this.attackType == "magical" && this.range == "ranged" && this.weaponType != "staff"){
+				if (enemy.has("Deflect Magic") && this.attackType == "magical"){
 					deflect = enemy.has("Deflect Magic");
 				}else if (enemy.has("Deflect Melee") && this.attackType == "physical" && this.range == "melee"){
 					deflect = enemy.has("Deflect Melee");
@@ -4835,11 +4880,11 @@ function activeHero(hero){
 			roundText += this.postCombatHeal();
 
 			//panic
-			if(this.hasExactly("Panic") || this.has("Legion's Axe")){
+			if(this.hasExactly("Panic") || this.has("Legion's Axe") || this.has("Spectral Tome") || this.has("Monstrous Bow")){
 				enemy.panicked = true;
 				roundText += this.name + " panics " + enemy.name + ".<br>";
 			}
-			if(enemy.hasExactly("Panic") || enemy.has("Legion's Axe")){
+			if(enemy.hasExactly("Panic") || enemy.has("Legion's Axe") || enemy.has("Spectral Tome") || enemy.has("Monstrous Bow")){
 				this.panicked = true;
 				roundText += enemy.name + " panics " + this.name + ".<br>";
 			}
