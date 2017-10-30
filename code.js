@@ -982,9 +982,9 @@ function cloneHero(clone, target){
 		clone.b = target.b;
 		clone.c = target.c;
 		clone.s = target.s;
-		clone.buffs = target.buffs;
-		clone.debuffs = target.debuffs;
-		clone.spur = target.spur;
+		clone.buffs = jQuery.extend(true, {}, target.buffs);
+		clone.debuffs = jQuery.extend(true, {}, target.debuffs);
+		clone.spur = jQuery.extend(true, {}, target.spur);
 		clone.damage = target.damage;
 		clone.precharge = target.precharge;
 		clone.adjacent = target.adjacent;
