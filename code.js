@@ -4180,7 +4180,7 @@ function activeHero(hero){
 			//First Attack
 			if (firstAttack){
 				//Weapon
-				if (enemy.hasExactly("Divine Tyrfing") && this.attackType == "magical" && this.range == "ranged" && this.weaponType != "staff"){
+				if (enemy.hasExactly("Divine Tyrfing") && (this.weaponType == "redtome" || this.weaponType == "bluetome" || this.weaponType == "greentome")){
 					dmgReduction *= 0.5;
 					damageText += enemy.name + "'s Divine Tyrfing reduces " + this.name + "'s magic damage by 50%.<br>";
 				}
@@ -4200,7 +4200,7 @@ function activeHero(hero){
 				
 				//Deflect Seals
 				var deflect = 0;
-				if (enemy.has("Deflect Magic") && this.attackType == "magical"){
+				if (enemy.has("Deflect Magic") && (this.weaponType == "redtome" || this.weaponType == "bluetome" || this.weaponType == "greentome")){
 					deflect = enemy.has("Deflect Magic");
 				}else if (enemy.has("Deflect Melee") && this.attackType == "physical" && this.range == "melee"){
 					deflect = enemy.has("Deflect Melee");
