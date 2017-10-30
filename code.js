@@ -2947,8 +2947,7 @@ function activeHero(hero){
 		} else{
 			return false;
 		}
-	}
-	
+	}	
 
 	this.resetCharge = function(){
 		//resets charge based on weapon
@@ -3289,13 +3288,13 @@ function activeHero(hero){
 			}
 		}
 		
-		//Adjacent functions
+		//Adjacent Buffs
 		if (this.adjacent > 0){
 			var skillName = "";
 			var buffVal = 0;
 			
 			//Owl Tomes
-			if (this.has("Blarowl") || this.has("Gronnowl") || this.has("Raudowl") || this.hasExactly("Nidhogg")){
+			if (this.has("Blarowl") || this.has("Gronnowl") || this.has("Raudrowl") || this.hasExactly("Nidhogg")){
 				buffVal = this.adjacent * 2;
 				skillName = data.skills[this.weaponIndex].name;
 				this.combatSpur.atk += buffVal;
@@ -3781,11 +3780,11 @@ function activeHero(hero){
 
 			if(buffDef > this.combatBuffs.def){
 				this.combatBuffs.def = buffDef;
-				postCombatBuffText += this.name + " gains " + buffDef + " def after combat from " + skillName + ".<br>";
+				postCombatBuffText += this.name + " gains " + buffDef + " Def after combat from " + skillName + ".<br>";
 			}
 			if(buffRes > this.combatBuffs.res){
 				this.combatBuffs.res = buffRes;
-				postCombatBuffText += this.name + " gains " + buffRes + " res after combat from " + skillName + ".<br>";
+				postCombatBuffText += this.name + " gains " + buffRes + " Res after combat from " + skillName + ".<br>";
 			}
 		}
 
@@ -3806,7 +3805,7 @@ function activeHero(hero){
 				}
 				if(healAmount > 0){
 					this.hp += healAmount;
-					postCombatHealText += this.name + " heals " + healAmount + " hp with " + skillName + ".<br>";
+					postCombatHealText += this.name + " heals " + healAmount + " Hp with " + skillName + ".<br>";
 				}
 			}
 		}
@@ -4034,7 +4033,6 @@ function activeHero(hero){
 
 		//Don't do anything else if it's just an AOE attack
 		if(!AOE){
-
 			//Check weapon advantage
 			//0 is no advantage, 1 is attacker advantage, -1 is defender advantage
 			var weaponAdvantage = 0;
@@ -4117,7 +4115,7 @@ function activeHero(hero){
 						extraWeaponAdvantage = 0.05 + 0.05 * this.has("Triangle Adept");
 					}
 					if(enemy.has("Triangle Adept")){
-						extraWeaponAdvantage = Math.max(extraWeaponAdvantage,0.05 + 0.05 * enemy.has("Triangle Adept"));
+						extraWeaponAdvantage = Math.max(extraWeaponAdvantage, 0.05 + 0.05 * enemy.has("Triangle Adept"));
 					}
 				}
 
@@ -4247,7 +4245,7 @@ function activeHero(hero){
 				}
 
 				if(effectiveBonus > 1 ){
-					damageText += this.name + "'s attack is multiplied by " + effectiveBonus + " from weapon effectiveness.<br>";
+					damageText += this.name + "'s attack is increased by " + (effectiveBonus * 100 - 100) + "% from weapon effectiveness.<br>";
 				}
 			}			
 			
@@ -4522,7 +4520,7 @@ function activeHero(hero){
 
 			//do damage again if brave weapon
 			if(brave && enemy.hp > 0){
-				damageText += this.name + " attacks again with weapon.<br>";
+				damageText += this.name + " attacks again with " + data.skills[this.weaponIndex].name + ".<br>";
 				damageText += this.doDamage(enemy, false, false, false);
 			}
 		}
@@ -4542,10 +4540,7 @@ function activeHero(hero){
 		enemy.didAttack = false;
 
 		//Get relevant defense for simplified text output
-		var relevantDefType = "def";
-		if(enemy.attackType=="magical"){
-			relevantDefType = "res";
-		}
+		var relevantDefType = (enemy.attackType == "magical") ? "res" : "def";
 		
 		//Remove certain buffs
 		this.combatBuffs = {"atk":0,"spd":0,"def":0,"res":0};
@@ -4923,12 +4918,12 @@ function activeHero(hero){
 		}
 
 		//Non-Vantage: Enemy second attack
-		if(this.hp>0 && enemy.hp > 0 && !vantage && enemyCanCounter && enemyFollowUp){
+		if(this.hp > 0 && enemy.hp > 0 && !vantage && enemyCanCounter && enemyFollowUp){
 			roundText += enemy.doDamage(this, false, false, false);
 		}
 
 		//Do post-combat damage to enemy if enemy isn't dead
-		if(enemy.hp>0){
+		if(enemy.hp > 0){
 			roundText += this.poisonEnemy(enemy);
 			roundText += this.painEnemy(enemy);
 			roundText += enemy.endCombatDamage();
@@ -4936,7 +4931,7 @@ function activeHero(hero){
 
 		//Do post-combat damage to this if this isn't dead
 		//No poison because this initiated
-		if(this.hp>0){
+		if(this.hp > 0){
 			roundText += enemy.painEnemy(this);
 			roundText += this.endCombatDamage();
 		}
