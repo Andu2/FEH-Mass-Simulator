@@ -3113,6 +3113,74 @@ window.data.heroes = [{
 		"weapontype": "sword",
 		"movetype": "infantry",
 		"minrarity": 4
+	}, {
+		"hero_id": 185,
+		"name": "Henry (Trick or Defeat)",
+		"basehp": 17,
+		"baseatk": 9,
+		"basespd": 10,
+		"basedef": 4,
+		"baseres": 12,
+		"hpgrowth": 5,
+		"atkgrowth": 7,
+		"spdgrowth": 7,
+		"defgrowth": 6,
+		"resgrowth": 7,
+		"color": "green",
+		"weapontype": "greentome",
+		"movetype": "armored",
+		"minrarity": 5
+	}, {
+		"hero_id": 186,
+		"name": "Jakob (Trick or Defeat)",
+		"basehp": 20,
+		"baseatk": 9,
+		"basespd": 6,
+		"basedef": 9,
+		"baseres": 8,
+		"hpgrowth": 6,
+		"atkgrowth": 8,
+		"spdgrowth": 4,
+		"defgrowth": 7,
+		"resgrowth": 7,
+		"color": "gray",
+		"weapontype": "bow",
+		"movetype": "armored",
+		"minrarity": 5
+	}, {
+		"hero_id": 187,
+		"name": "Nowi (Trick or Defeat)",
+		"basehp": 17,
+		"baseatk": 8,
+		"basespd": 6,
+		"basedef": 5,
+		"baseres": 8,
+		"hpgrowth": 4,
+		"atkgrowth": 8,
+		"spdgrowth": 8,
+		"defgrowth": 3,
+		"resgrowth": 5,
+		"color": "red",
+		"weapontype": "redtome",
+		"movetype": "flying",
+		"minrarity": 5
+	}, {
+		"hero_id": 188,
+		"name": "Sakura (Trick or Defeat)",
+		"basehp": 16,
+		"baseatk": 8,
+		"basespd": 8,
+		"basedef": 4,
+		"baseres": 8,
+		"hpgrowth": 4,
+		"atkgrowth": 7,
+		"spdgrowth": 8,
+		"defgrowth": 1,
+		"resgrowth": 8,
+		"color": "gray",
+		"weapontype": "dagger",
+		"movetype": "infantry",
+		"minrarity": 5
 	}
 ];
 
@@ -11721,7 +11789,7 @@ window.data.skills =
 		"res": 0,
 		"charge": 0,
 		"inheritrule": "flying",
-		"affectsduel": 1
+		"affectsduel": 0
 	}, {
 		"skill_id": 615,
 		"name": "Flier Formation 2",
@@ -11735,7 +11803,7 @@ window.data.skills =
 		"res": 0,
 		"charge": 0,
 		"inheritrule": "flying",
-		"affectsduel": 1
+		"affectsduel": 0
 	}, {
 		"skill_id": 616,
 		"name": "Flier Formation 3",
@@ -11749,7 +11817,7 @@ window.data.skills =
 		"res": 0,
 		"charge": 0,
 		"inheritrule": "flying",
-		"affectsduel": 1
+		"affectsduel": 0
 	}, {
 		"skill_id": 617,
 		"name": "Slaying Lance",
@@ -13233,6 +13301,258 @@ window.data.skills =
 		"res": 0,
 		"charge": 0,
 		"inheritrule": "",
+		"affectsduel": 0
+	}, {
+		"skill_id": 723,
+		"name": "Spectral Tome",
+		"slot": "weapon",
+		"sp": 200,
+		"description": "After combat, bonuses become penalties on all foes within 2 spaces through foe's next action.",
+		"hp": 0,
+		"atk": 8,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "greentome",
+		"affectsduel": 1
+	}, {
+		"skill_id": 724,
+		"name": "Spectral Tome+",
+		"slot": "weapon",
+		"sp": 300,
+		"description": "After combat, bonuses become penalties on all foes within 2 spaces through foe's next action.",
+		"hp": 0,
+		"atk": 12,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "greentome",
+		"affectsduel": 1
+	}, {
+		"skill_id": 725,
+		"name": "Monstrous Bow",
+		"slot": "weapon",
+		"sp": 200,
+		"description": "Effective against fliers. After combat, bonuses become penalties on all foes within 2 spaces through foe's next action.",
+		"hp": 0,
+		"atk": 8,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "bow",
+		"affectsduel": 1
+	}, {
+		"skill_id": 726,
+		"name": "Monstrous Bow+",
+		"slot": "weapon",
+		"sp": 300,
+		"description": "Effective against fliers. After combat, bonuses become penalties on all foes within 2 spaces through foe's next action.",
+		"hp": 0,
+		"atk": 12,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "bow",
+		"affectsduel": 1
+	}, {
+		"skill_id": 727,
+		"name": "Bracing Blow 1",
+		"slot": "a",
+		"sp": 120,
+		"description": "Grants Def\/Res+2 during combat if unit initiates combat.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "nonstaff",
+		"affectsduel": 1
+	}, {
+		"skill_id": 728,
+		"name": "Bracing Blow 2",
+		"slot": "a",
+		"sp": 240,
+		"description": "Grants Def\/Res+4 during combat if unit initiates combat.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "nonstaff",
+		"affectsduel": 1
+	}, {
+		"skill_id": 729,
+		"name": "Grimoire",
+		"slot": "weapon",
+		"sp": 400,
+		"description": "If unit has >= 50% HP, unit can move to a space adjacent to an ally within 2 spaces.",
+		"hp": 0,
+		"atk": 16,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "unique",
+		"affectsduel": 1
+	}, {
+		"skill_id": 730,
+		"name": "Atk Res Bond 1",
+		"slot": "a",
+		"sp": 60,
+		"description": "Grants Atk\/Res+3 to this unit during combat if unit is adjacent to an ally.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 1
+	}, {
+		"skill_id": 731,
+		"name": "Atk Res Bond 2",
+		"slot": "a",
+		"sp": 120,
+		"description": "Grants Atk\/Res+4 to this unit during combat if unit is adjacent to an ally.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 1
+	}, {
+		"skill_id": 732,
+		"name": "Atk Res Bond 3",
+		"slot": "a",
+		"sp": 240,
+		"description": "Grants Atk\/Res+5 to this unit during combat if unit is adjacent to an ally.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 1
+	}, {
+		"skill_id": 733,
+		"name": "Kitty Paddle",
+		"slot": "weapon",
+		"sp": 200,
+		"description": "Effective against foe using magic. After combat, if foe uses magic, foe suffers Def\/Res-5 through foe's next action.",
+		"hp": 0,
+		"atk": 5,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "dagger",
+		"affectsduel": 1
+	}, {
+		"skill_id": 734,
+		"name": "Kitty Paddle+",
+		"slot": "weapon",
+		"sp": 300,
+		"description": "Effective against foe using magic. After combat, if foe uses magic, foe suffers Def\/Res-7 through foe's next action.",
+		"hp": 0,
+		"atk": 8,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "dagger",
+		"affectsduel": 1
+	}, {
+		"skill_id": 735,
+		"name": "Warding Stance 1",
+		"slot": "a",
+		"sp": 50,
+		"description": "Grants Res+2 during combat when this unit is attacked.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 1
+	}, {
+		"skill_id": 736,
+		"name": "Warding Stance 2",
+		"slot": "a",
+		"sp": 100,
+		"description": "Grants Res+3 during combat when this unit is attacked.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 1
+	}, {
+		"skill_id": 737,
+		"name": "Warding Stance 3",
+		"slot": "a",
+		"sp": 200,
+		"description": "Grants Res+4 during combat when this unit is attacked.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 1
+	}, {
+		"skill_id": 738,
+		"name": "Dagger Valor 1",
+		"slot": "c",
+		"sp": 30,
+		"description": "If unit survives and uses a dagger, unit gets 1.5x SP. (If similar skill effects also used, only highest multiplier applied.)",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "dagger",
+		"affectsduel": 0
+	}, {
+		"skill_id": 739,
+		"name": "Dagger Valor 2",
+		"slot": "c",
+		"sp": 60,
+		"description": "If unit survives, all dagger users on team get 1.5x SP. (If similar skill effects also used, only highest multiplier applied.)",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "dagger",
+		"affectsduel": 0
+	}, {
+		"skill_id": 740,
+		"name": "Dagger Valor 3",
+		"slot": "c",
+		"sp": 120,
+		"description": "If unit survives, all dagger users on team get 2x SP. (If similar skill effects also used, only highest multiplier applied.)",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "dagger",
 		"affectsduel": 0
 	}
 ];
@@ -14941,7 +15261,52 @@ window.data.prereqs =
 	}, {
 		"skill_id": 722,
 		"required_id": 721
-	}
+	}, {
+		"skill_id": 723,
+		"required_id": 57
+	}, {
+		"skill_id": 724,
+		"required_id": 723
+	}, {
+		"skill_id": 725,
+		"required_id": 103
+	}, {
+		"skill_id": 726,
+		"required_id": 725
+	}, {
+		"skill_id": 727,
+		"required_id": 223
+	}, {
+		"skill_id": 728,
+		"required_id": 727
+	}, {
+		"skill_id": 729,
+		"required_id": 31
+	}, {
+		"skill_id": 731,
+		"required_id": 730
+	}, {
+		"skill_id": 732,
+		"required_id": 731
+	}, {
+		"skill_id": 733,
+		"required_id": 115
+	}, {
+		"skill_id": 734,
+		"required_id": 733
+	}, {
+		"skill_id": 736,
+		"required_id": 735
+	}, {
+		"skill_id": 737,
+		"required_id": 736
+	}, {
+		"skill_id": 739,
+		"required_id": 738
+	}, {
+		"skill_id": 740,
+		"required_id": 739
+	}	 
 ];
 
 //HERO SKILLS TABLE
@@ -22308,6 +22673,78 @@ window.data.heroSkills = [{
 	}, {
 		"hero_id": 184,
 		"skill_id": 713,
+		"rarity": 5
+	}, {
+		"hero_id": 185,
+		"skill_id": 173,
+		"rarity": 5
+	}, {
+		"hero_id": 185,
+		"skill_id": 399,
+		"rarity": 5
+	}, {
+		"hero_id": 185,
+		"skill_id": 579,
+		"rarity": 5
+	}, {
+		"hero_id": 185,
+		"skill_id": 724,
+		"rarity": 5
+	}, {
+		"hero_id": 186,
+		"skill_id": 166,
+		"rarity": 5
+	}, {
+		"hero_id": 186,
+		"skill_id": 279,
+		"rarity": 5
+	}, {
+		"hero_id": 186,
+		"skill_id": 726,
+		"rarity": 5
+	}, {
+		"hero_id": 186,
+		"skill_id": 728,
+		"rarity": 5
+	}, {
+		"hero_id": 187,
+		"skill_id": 141,
+		"rarity": 5
+	}, {
+		"hero_id": 187,
+		"skill_id": 374,
+		"rarity": 5
+	}, {
+		"hero_id": 187,
+		"skill_id": 400,
+		"rarity": 5
+	}, {
+		"hero_id": 187,
+		"skill_id": 729,
+		"rarity": 5
+	}, {
+		"hero_id": 187,
+		"skill_id": 732,
+		"rarity": 5
+	}, {
+		"hero_id": 188,
+		"skill_id": 172,
+		"rarity": 5
+	}, {
+		"hero_id": 188,
+		"skill_id": 427,
+		"rarity": 5
+	}, {
+		"hero_id": 188,
+		"skill_id": 734,
+		"rarity": 5
+	}, {
+		"hero_id": 188,
+		"skill_id": 737,
+		"rarity": 5
+	}, {
+		"hero_id": 188,
+		"skill_id": 740,
 		"rarity": 5
 	}
 ];
