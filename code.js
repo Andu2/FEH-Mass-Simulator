@@ -4892,11 +4892,11 @@ function activeHero(hero){
 			roundText += this.postCombatHeal();
 
 			//panic
-			if(this.hasExactly("Panic") || this.has("Legion's Axe") || this.has("Spectral Tome") || this.has("Monstrous Bow")){
+			if(this.hasExactly("Panic") || this.has("Legion's Axe")){
 				enemy.panicked = true;
 				roundText += this.name + " panics " + enemy.name + ".<br>";
 			}
-			if(enemy.hasExactly("Panic") || enemy.has("Legion's Axe") || enemy.has("Spectral Tome") || enemy.has("Monstrous Bow")){
+			if(enemy.hasExactly("Panic") || enemy.has("Legion's Axe")){
 				this.panicked = true;
 				roundText += enemy.name + " panics " + this.name + ".<br>";
 			}
