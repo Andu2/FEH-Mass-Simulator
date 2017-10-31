@@ -3889,7 +3889,7 @@ function activeHero(hero){
 		}	
 		
 		//Relavant defense stat
-		var relevantDef = (this.attackType == "magical" ? enemyEffRes : enemyEffDef);
+		var relevantDef = (this.attackType == "magical") ? enemyEffRes : enemyEffDef;
 		
 		//Specials
 		var offensiveSpecialActivated = false;
@@ -4224,30 +4224,28 @@ function activeHero(hero){
 
 			//Check weapon effective against
 			var effectiveBonus = 1;
-			if(!(enemy.has("Svalinn Shield") || enemy.has("Iote's Shield") || enemy.has("Grani's Shield"))){
-				if(enemy.moveType == "armored" && (this.has("Hammer") || this.has("Armorslayer") || this.has("Heavy Spear"))){
-					effectiveBonus = 1.5;
-				}
-				else if(enemy.moveType == "flying" && (this.hasExactly("Excalibur") || this.weaponType=="bow")){
-					effectiveBonus = 1.5;
-				}
-				else if(enemy.moveType == "infantry" && (this.has("Poison Dagger"))){
-					effectiveBonus = 1.5;
-				}
-				else if(enemy.moveType == "cavalry" && (this.has("Raudrwolf") || this.has("Blarwolf") || this.has("Gronnwolf") || this.has("Zanbato") || this.has("Ridersbane"))){
-					effectiveBonus = 1.5;
-				}
-				else if(enemy.weaponType == "dragon" && (this.hasExactly("Falchion") || this.hasExactly("Naga") || this.hasExactly("Divine Naga"))){
-					effectiveBonus = 1.5;
-				}
-				else if((enemy.weaponType == "redtome" || enemy.weaponType == "bluetome" || enemy.weaponType == "greentome")&& (this.has("Kitty Paddle"))){
-					effectiveBonus = 1.5;
-				}
+			if(enemy.moveType == "armored" && (this.has("Hammer") || this.has("Armorslayer") || this.has("Heavy Spear"))){
+			  effectiveBonus = (enemy.has("Svalinn Shield")) ? 1 : 1.5;
+			}
+			else if(enemy.moveType == "flying" && (this.hasExactly("Excalibur") || this.weaponType=="bow")){
+				effectiveBonus = (enemy.has("Iote's Shield")) ? 1 : 1.5;
+			}
+			else if(enemy.moveType == "infantry" && (this.has("Poison Dagger"))){
+			  effectiveBonus = 1.5;
+			}
+			else if(enemy.moveType == "cavalry" && (this.has("Raudrwolf") || this.has("Blarwolf") || this.has("Gronnwolf") || this.has("Zanbato") || this.has("Ridersbane"))){
+			  effectiveBonus = (enemy.has("Grani's Shield")) ? 1 : 1.5;
+			}
+			else if(enemy.weaponType == "dragon" && (this.hasExactly("Falchion") || this.hasExactly("Naga") || this.hasExactly("Divine Naga"))){
+			  effectiveBonus = 1.5;
+			}
+			else if((enemy.weaponType == "redtome" || enemy.weaponType == "bluetome" || enemy.weaponType == "greentome")&& (this.has("Kitty Paddle"))){
+			  effectiveBonus = 1.5;
+			}
 
-				if(effectiveBonus > 1 ){
-					damageText += this.name + "'s attack is increased by " + (effectiveBonus * 100 - 100) + "% from weapon effectiveness.<br>";
-				}
-			}			
+			if(effectiveBonus > 1 ){
+			  damageText += this.name + "'s attack is increased by " + (effectiveBonus * 100 - 100) + "% from weapon effectiveness.<br>";
+			}
 			
 			//Check damage reducing specials
 			var defensiveSpecialActivated = false;
@@ -4378,7 +4376,7 @@ function activeHero(hero){
 			var rawDmg = (thisEffAtk * effectiveBonus | 0) + ((thisEffAtk * effectiveBonus | 0) * weaponAdvantageBonus | 0) + (dmgBoost | 0);
 			var reduceDmg = relevantDef + (relevantDef * enemyDefModifier | 0);
 			var dmg = (rawDmg - reduceDmg) * weaponModifier | 0;
-			dmg = (dmg*dmgMultiplier | 0) - (dmg*(1-dmgReduction) | 0);
+			dmg = (dmg * dmgMultiplier | 0) - (dmg * (1-dmgReduction) | 0);
 
 			//Pushing Shield check
 			if (defensiveSpecialActivated && (enemy.has("Shield Pulse 2") || enemy.has("Shield Pulse 3"))){
@@ -4540,6 +4538,7 @@ function activeHero(hero){
 		enemy.didAttack = false;
 
 		//Get relevant defense for simplified text output
+		//***This variable isn't used???***
 		var relevantDefType = (enemy.attackType == "magical") ? "res" : "def";
 		
 		//Remove certain buffs
