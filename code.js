@@ -3839,9 +3839,6 @@ function activeHero(hero){
 		var enemyEffDef = enemy.def + Math.max(enemy.buffs.def,enemy.combatBuffs.def) + Math.min(enemy.debuffs.def,enemy.combatDebuffs.def) + enemy.spur.def + enemy.combatSpur.def;
 		var enemyEffRes = enemy.res + Math.max(enemy.buffs.res,enemy.combatBuffs.res) + Math.min(enemy.debuffs.res,enemy.combatDebuffs.res) + enemy.spur.res + enemy.combatSpur.res;
 		
-		//Relavant defense stat
-		var relevantDef = (this.attackType == "magical" ? enemyEffRes : enemyEffDef);
-		
 		//Buff cancellation and reversion - Atk, Def, Res calculations
 		//***May require changes depending on order of application between Panic and other debuff skills***		
 		//Attacker relevant stats
@@ -3890,6 +3887,9 @@ function activeHero(hero){
 			var bladebonus = Math.max(this.buffs.atk,this.combatBuffs.atk) + Math.max(this.buffs.spd,this.combatBuffs.spd) + Math.max(this.buffs.def,this.combatBuffs.def) + Math.max(this.buffs.res,this.combatBuffs.res);
 			enemyEffAtk += bladebonus;
 		}	
+		
+		//Relavant defense stat
+		var relevantDef = (this.attackType == "magical" ? enemyEffRes : enemyEffDef);
 		
 		//Specials
 		var offensiveSpecialActivated = false;
@@ -4375,9 +4375,9 @@ function activeHero(hero){
 			//Damage calculation from http://feheroes.wiki/Damage_Calculation
 			//use bitwise or to truncate properly
 			//Doing calculation in steps to see the formula more clearly
-			var rawDmg = (thisEffAtk*effectiveBonus | 0) + ((thisEffAtk*effectiveBonus | 0)*weaponAdvantageBonus | 0) + (dmgBoost | 0);
-			var reduceDmg = relevantDef + (relevantDef*enemyDefModifier | 0);
-			var dmg = (rawDmg - reduceDmg)*weaponModifier | 0;
+			var rawDmg = (thisEffAtk * effectiveBonus | 0) + ((thisEffAtk * effectiveBonus | 0) * weaponAdvantageBonus | 0) + (dmgBoost | 0);
+			var reduceDmg = relevantDef + (relevantDef * enemyDefModifier | 0);
+			var dmg = (rawDmg - reduceDmg) * weaponModifier | 0;
 			dmg = (dmg*dmgMultiplier | 0) - (dmg*(1-dmgReduction) | 0);
 
 			//Pushing Shield check
