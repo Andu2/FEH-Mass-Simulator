@@ -3889,7 +3889,7 @@ function activeHero(hero){
 		}	
 		
 		//Relavant defense stat
-		var relevantDef = (this.attackType == "magical" ? enemyEffRes : enemyEffDef);
+		var relevantDef = (this.attackType == "magical") ? enemyEffRes : enemyEffDef;
 		
 		//Specials
 		var offensiveSpecialActivated = false;
@@ -4539,7 +4539,7 @@ function activeHero(hero){
 
 		//Get relevant defense for simplified text output
 		//***This variable isn't used???***
-		var relevantDefType = (enemy.attackType == "magical" ? "res" : "def");
+		var relevantDefType = (enemy.attackType == "magical") ? "res" : "def";
 		
 		//Remove certain buffs
 		this.combatBuffs = {"atk":0,"spd":0,"def":0,"res":0};
