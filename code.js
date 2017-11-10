@@ -4376,7 +4376,8 @@ function activeHero(hero){
 			var rawDmg = (thisEffAtk * effectiveBonus | 0) + ((thisEffAtk * effectiveBonus | 0) * weaponAdvantageBonus | 0) + (dmgBoost | 0);
 			var reduceDmg = relevantDef + (relevantDef * enemyDefModifier | 0);
 			var dmg = (rawDmg - reduceDmg) * weaponModifier | 0;
-			dmg = (dmg * dmgMultiplier | 0) - (dmg * (1-dmgReduction) | 0);
+			dmg = dmg * dmgMultiplier | 0;
+			dmg -= dmg * (1-dmgReduction) | 0;
 
 			//Pushing Shield check
 			if (defensiveSpecialActivated && (enemy.has("Shield Pulse 2") || enemy.has("Shield Pulse 3"))){
