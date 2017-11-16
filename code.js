@@ -1443,6 +1443,67 @@ function hideResultsTooltip(){
 	$("#frame_tooltip").hide();
 }
 
+function showSkillTooltip(heroType, skillType){
+	var hero;
+	var skillID;
+	var tooltipText;
+	
+	//Set hero to selected hero type
+	switch (heroType){
+		case "challenger":
+			hero = challenger;
+			break;
+		case "list":
+			hero = enemies.fl;
+			break;
+		case "custom":
+			(options.customEnemySelected == -1) ? hero = -1 : hero = enemies.cl.list[options.customEnemySelected];
+			break;
+	}
+	
+	//Set skillID to selected skill type
+	if (hero == -1){
+		skillID = -1;
+	}else{
+		switch (skillType){
+			case "weapon":
+				skillID = hero.weapon;
+				break;
+			case "special":
+				skillID = hero.special;
+				break;
+			case "a":
+				skillID = hero.a;
+				break;
+			case "b":
+				skillID = hero.b;
+				break;
+			case "c":
+				skillID = hero.c;
+				break;
+			case "s":
+				skillID = hero.s;
+				break;
+			default:
+				skillID = -1;
+		}
+	}
+	
+	//If skill is not blank: Show tooltip
+	if (skillID != -1){
+		showingTooltip = true;
+		tooltipText = "<span class=\"bold\">" + data.skills[skillID].name + "</span> " 
+			+ "<font color=\"#fefec8\">" + data.skills[skillID].sp + "</font><br>"
+			+ data.skills[skillID].description;
+		$("#frame_tooltip").html(tooltipText).show();
+	}	
+}
+
+function hideSkillTooltip(){
+	showingTooltip = false;
+	$("#frame_tooltip").hide();
+}
+
 //Clear all turns and add a turn
 function resetTurn(turnName){
 	for(var initTurn = options.roundInitiators.length; initTurn >= 0; initTurn--){	
