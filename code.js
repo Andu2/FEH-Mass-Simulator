@@ -2956,7 +2956,7 @@ function activeHero(hero){
 		if(this.has("Killing Edge") || this.has("Killer Axe") || this.has("Killer Lance") || this.has("Killer Bow")
 			|| this.has("Slaying Bow") || this.has("Slaying Edge") || this.has("Slaying Axe") || this.has("Slaying Lance")
 			|| this.has("Cursed Lance")|| this.has("Mystletainn") || this.has("Hauteclere") 
-			|| this.has("Urvan")){
+			|| this.has("Urvan") || this.has("Audhulma")){
 			this.charge = 1;
 		}
 		else if(this.has("Raudrblade") || this.has("Lightning Breath") || this.has("Blarblade") || this.has("Gronnblade")){
@@ -2999,6 +2999,10 @@ function activeHero(hero){
 				if (this.hasExactly("Valflame")){
 					threatDebuffs.atk = Math.min(threatDebuffs.atk, -4);
 					threatDebuffs.res = Math.min(threatDebuffs.res, -4);
+					skillNames.push(data.skills[this.weaponIndex].name);
+				}
+				if (this.hasExactly("Weirding Tome")){
+					threatDebuffs.atk = Math.min(threatDebuffs.spd, -5);
 					skillNames.push(data.skills[this.weaponIndex].name);
 				}
 				//Passive C Skills
@@ -3501,6 +3505,24 @@ function activeHero(hero){
 				boostText += this.name + " gets +4 Res while defending with " + data.skills[this.weaponIndex].name + ".<br>";
 			}
 			
+			//Attack passive
+			var stanceAtk = 0;
+			if(this.has("Fierce Stance")){
+				stanceAtk = this.has("Fierce Stance") * 2;
+				skillName = data.skills[this.aIndex].name;
+				this.combatSpur.atk += stanceAtk;
+				boostText += this.name + " gets +" + stanceAtk + " Atk from defending with " + skillName + ".<br>";
+			}
+			
+			//Speed passive
+			var stanceSpd = 0;
+			if(this.has("Speed Stance")){
+				stanceSpd = this.has("Speed Stance") * 2;
+				skillName = data.skills[this.aIndex].name;
+				this.combatSpur.spd += stanceSpd;
+				boostText += this.name + " gets +" + stanceSpd + " Spd from defending with " + skillName + ".<br>";
+			}
+			
 			//Defense passive
 			var stanceDef = 0;
 			if(this.has("Steady Stance")){
@@ -3916,7 +3938,7 @@ function activeHero(hero){
 				if(AOEActivated){
 					this.resetCharge();
 					
-					if(this.has("Wo Dao") || this.hasExactly("Dark Excalibur")){
+					if(this.has("Wo Dao") || this.hasExactly("Dark Excalibur") || this.hasExactly("Resolute Blade")){
 						AOEDamage += 10;
 						damageText += this.name + " gains 10 damage from " + data.skills[hero.weapon].name + ".<br>";
 					}
@@ -4019,7 +4041,7 @@ function activeHero(hero){
 				this.resetCharge();
 				damageText += this.name + " activates " + data.skills[this.specialIndex].name + ".<br>";
 
-				if(this.has("Wo Dao") || this.hasExactly("Dark Excalibur")){
+				if(this.has("Wo Dao") || this.hasExactly("Dark Excalibur") || this.hasExactly("Resolute Blade")){
 					dmgBoost += 10;
 					damageText += this.name + " gains 10 damage from " + data.skills[hero.weapon].name + ".<br>";
 				}
@@ -4309,7 +4331,7 @@ function activeHero(hero){
 				//gotta check range
 				var anyRangeCounter = false;
 				if(this.has("Close Counter") || this.has("Distant Counter") || this.has("Lightning Breath")
-					|| this.has("Raijinto") || this.has("Siegfried") || this.has("Ragnell") || this.has("Gradivus") || this.has("Alondite")){
+					|| this.has("Raijinto") || this.has("Siegfried") || this.has("Ragnell") || this.has("Gradivus") || this.has("Alondite") || this.has("Stout Tomahawk")){
 					anyRangeCounter = true;
 				}
 
@@ -4432,7 +4454,7 @@ function activeHero(hero){
 					skillNames.push(data.skills[this.aIndex].name);
 				}
 				if(this.has("Heavy Blade")){
-					if(thisEffAtk - enemyEffAtk >= this.has("Heavy Blade")*-2 + 7){
+					if(thisEffAtk - enemyEffAtk >= 7 - (this.has("Heavy Blade") * 2)){
 						gainCharge = Math.max(gainCharge, 1);
 						skillNames.push(data.skills[this.aIndex].name);
 					}
@@ -4443,6 +4465,12 @@ function activeHero(hero){
 						skillNames.push(data.skills[this.weaponIndex].name);
 					}
 				}
+				if(this.has("Flashing Blade")){
+					if(thisEffSpd + (this.has("Phantom Spd") ? (2 + this.has("Phantom Spd") * 3) : 0) - enemyEffSpd >= 7 - (this.has("Flashing Blade") * 2)){
+						gainCharge = Math.max(gainCharge, 1);
+						skillNames.push(data.skills[this.aIndex].name);
+					}
+				} 
 				if(this.hasExactly("Ayra's Blade")){
 					if(thisEffSpd + (this.has("Phantom Spd") ? (2 + this.has("Phantom Spd") * 3) : 0) - enemyEffSpd >= 1){
 						gainCharge = Math.max(gainCharge, 1);
@@ -4605,7 +4633,7 @@ function activeHero(hero){
 		//check for any-distance counterattack
 		var anyRangeCounter = false;
 		if(enemy.has("Close Counter") || enemy.has("Distant Counter") || enemy.has("Lightning Breath")
-			|| enemy.has("Raijinto") || enemy.has("Ragnell") || enemy.has("Siegfried") || enemy.has("Gradivus") || enemy.has("Alondite") ){
+			|| enemy.has("Raijinto") || enemy.has("Ragnell") || enemy.has("Siegfried") || enemy.has("Gradivus") || enemy.has("Alondite") || enemy.has("Stout Tomahawk")){
 			anyRangeCounter = true;
 		}
 
