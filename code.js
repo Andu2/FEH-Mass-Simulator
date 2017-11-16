@@ -1492,9 +1492,12 @@ function showSkillTooltip(heroType, skillType){
 	//If skill is not blank: Show tooltip
 	if (skillID != -1){
 		showingTooltip = true;
-		tooltipText = "<span class=\"bold\">" + data.skills[skillID].name + "</span> " 
-			+ "<font color=\"#fefec8\">" + data.skills[skillID].sp + "</font><br>"
-			+ data.skills[skillID].description;
+		
+		tooltipText = "<span class=\"bold\">" + data.skills[skillID].name + "</span>";
+		tooltipText += (skillType == "weapon") ? " Mt: <font color=\"#fefec8\">" + data.skills[skillID].atk + "</font>" : "";
+		tooltipText += " SP: <font color=\"#fefec8\">" + data.skills[skillID].sp + "</font><br>";
+		tooltipText += data.skills[skillID].description;
+		
 		$("#frame_tooltip").html(tooltipText).show();
 	}	
 }
