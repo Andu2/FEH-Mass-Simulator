@@ -90,7 +90,7 @@ window.data.heroes =
 		"minrarity": 4
 	}, {
 		"hero_id": 5,
-		"name": "Corrin(M)",
+		"name": "Corrin (M)",
 		"basehp": 20,
 		"baseatk": 8,
 		"basespd": 8,
@@ -311,7 +311,7 @@ window.data.heroes =
 		"minrarity": 4
 	}, {
 		"hero_id": 18,
-		"name": "Lonqu",
+		"name": "Lon'qu",
 		"basehp": 19,
 		"baseatk": 7,
 		"basespd": 11,
@@ -583,7 +583,7 @@ window.data.heroes =
 		"minrarity": 4
 	}, {
 		"hero_id": 34,
-		"name": "Tiki(A)",
+		"name": "Tiki (Adult)",
 		"basehp": 18,
 		"baseatk": 7,
 		"basespd": 6,
@@ -600,7 +600,7 @@ window.data.heroes =
 		"minrarity": 3
 	}, {
 		"hero_id": 35,
-		"name": "Tiki(Y)",
+		"name": "Tiki (Young)",
 		"basehp": 15,
 		"baseatk": 5,
 		"basespd": 4,
@@ -940,7 +940,7 @@ window.data.heroes =
 		"minrarity": 4
 	}, {
 		"hero_id": 55,
-		"name": "Robin(F)",
+		"name": "Robin (F)",
 		"basehp": 18,
 		"baseatk": 7,
 		"basespd": 7,
@@ -1042,7 +1042,7 @@ window.data.heroes =
 		"minrarity": 4
 	}, {
 		"hero_id": 61,
-		"name": "Corrin(F)",
+		"name": "Corrin (F)",
 		"basehp": 19,
 		"baseatk": 8,
 		"basespd": 6,
@@ -1331,7 +1331,7 @@ window.data.heroes =
 		"minrarity": 4
 	}, {
 		"hero_id": 78,
-		"name": "Robin(M)",
+		"name": "Robin (M)",
 		"basehp": 18,
 		"baseatk": 7,
 		"basespd": 7,
@@ -1892,7 +1892,7 @@ window.data.heroes =
 		"minrarity": 3
 	}, {
 		"hero_id": 112,
-		"name": "Lucina (Spring)",
+		"name": "Lucina (Spring Festival)",
 		"basehp": 16,
 		"baseatk": 7,
 		"basespd": 10,
@@ -1909,7 +1909,7 @@ window.data.heroes =
 		"minrarity": 5
 	}, {
 		"hero_id": 113,
-		"name": "Camilla (Spring)",
+		"name": "Camilla (Spring Festival)",
 		"basehp": 17,
 		"baseatk": 9,
 		"basespd": 6,
@@ -1926,7 +1926,7 @@ window.data.heroes =
 		"minrarity": 5
 	}, {
 		"hero_id": 114,
-		"name": "Xander (Spring)",
+		"name": "Xander (Spring Festival)",
 		"basehp": 18,
 		"baseatk": 6,
 		"basespd": 6,
@@ -1943,7 +1943,7 @@ window.data.heroes =
 		"minrarity": 5
 	}, {
 		"hero_id": 115,
-		"name": "Chrom (Spring)",
+		"name": "Chrom (Spring Festival)",
 		"basehp": 19,
 		"baseatk": 9,
 		"basespd": 8,
@@ -2232,7 +2232,7 @@ window.data.heroes =
 		"minrarity": 3
 	}, {
 		"hero_id": 133,
-		"name": "Caeda (Bride)",
+		"name": "Caeda (Bridal Blessings)",
 		"basehp": 16,
 		"baseatk": 7,
 		"basespd": 9,
@@ -2266,7 +2266,7 @@ window.data.heroes =
 		"minrarity": 3
 	}, {
 		"hero_id": 135,
-		"name": "Charlotte (Bride)",
+		"name": "Charlotte (Bridal Blessings)",
 		"basehp": 20,
 		"baseatk": 10,
 		"basespd": 8,
@@ -2283,7 +2283,7 @@ window.data.heroes =
 		"minrarity": 5
 	}, {
 		"hero_id": 136,
-		"name": "Cordelia (Bride)",
+		"name": "Cordelia (Bridal Blessings)",
 		"basehp": 17,
 		"baseatk": 9,
 		"basespd": 9,
@@ -2300,7 +2300,7 @@ window.data.heroes =
 		"minrarity": 5
 	}, {
 		"hero_id": 137,
-		"name": "Lyn (Bride)",
+		"name": "Lyn (Bridal Blessings)",
 		"basehp": 17,
 		"baseatk": 6,
 		"basespd": 10,
@@ -2436,7 +2436,7 @@ window.data.heroes =
 		"minrarity": 5
 	}, {
 		"hero_id": 145,
-		"name": "Frederick (Summer)",
+		"name": "Frederick (Ylissean Summer)",
 		"basehp": 18,
 		"baseatk": 8,
 		"basespd": 7,
@@ -2453,7 +2453,7 @@ window.data.heroes =
 		"minrarity": 5
 	}, {
 		"hero_id": 146,
-		"name": "Gaius (Summer)",
+		"name": "Gaius (Ylissean Summer)",
 		"basehp": 17,
 		"baseatk": 8,
 		"basespd": 9,
@@ -2470,7 +2470,7 @@ window.data.heroes =
 		"minrarity": 5
 	}, {
 		"hero_id": 147,
-		"name": "Robin(F) (Summer)",
+		"name": "Robin (F) (Ylissean Summer)",
 		"basehp": 18,
 		"baseatk": 8,
 		"basespd": 8,
@@ -2487,7 +2487,7 @@ window.data.heroes =
 		"minrarity": 5
 	}, {
 		"hero_id": 148,
-		"name": "Tiki(A) (Summer)",
+		"name": "Tiki (Adult) (Ylissean Summer)",
 		"basehp": 18,
 		"baseatk": 8,
 		"basespd": 6,
@@ -2640,7 +2640,7 @@ window.data.heroes =
 		"minrarity": 3
 	}, {
 		"hero_id": 157,
-		"name": "Corrin(F) (Summer)",
+		"name": "Corrin (F) (Nohrian Summer)",
 		"basehp": 17,
 		"baseatk": 7,
 		"basespd": 8,
@@ -2657,7 +2657,7 @@ window.data.heroes =
 		"minrarity": 5
 	}, {
 		"hero_id": 158,
-		"name": "Leo (Summer)",
+		"name": "Leo (Nohrian Summer)",
 		"basehp": 18,
 		"baseatk": 8,
 		"basespd": 5,
@@ -2674,7 +2674,7 @@ window.data.heroes =
 		"minrarity": 5
 	}, {
 		"hero_id": 159,
-		"name": "Xander (Summer)",
+		"name": "Xander (Nohrian Summer)",
 		"basehp": 19,
 		"baseatk": 8,
 		"basespd": 6,
@@ -2691,7 +2691,7 @@ window.data.heroes =
 		"minrarity": 5
 	}, {
 		"hero_id": 160,
-		"name": "Elise (Summer)",
+		"name": "Elise (Nohrian Summer)",
 		"basehp": 17,
 		"baseatk": 10,
 		"basespd": 8,
@@ -3116,7 +3116,7 @@ window.data.heroes =
 		"minrarity": 4
 	}, {
 		"hero_id": 185,
-		"name": "Henry (Trick or Defeat)",
+		"name": "Henry (Trick or Defeat!)",
 		"basehp": 17,
 		"baseatk": 9,
 		"basespd": 10,
@@ -3133,7 +3133,7 @@ window.data.heroes =
 		"minrarity": 5
 	}, {
 		"hero_id": 186,
-		"name": "Jakob (Trick or Defeat)",
+		"name": "Jakob (Trick or Defeat!)",
 		"basehp": 20,
 		"baseatk": 9,
 		"basespd": 6,
@@ -3150,7 +3150,7 @@ window.data.heroes =
 		"minrarity": 5
 	}, {
 		"hero_id": 187,
-		"name": "Nowi (Trick or Defeat)",
+		"name": "Nowi (Trick or Defeat!)",
 		"basehp": 17,
 		"baseatk": 8,
 		"basespd": 6,
@@ -3167,7 +3167,7 @@ window.data.heroes =
 		"minrarity": 5
 	}, {
 		"hero_id": 188,
-		"name": "Sakura (Trick or Defeat)",
+		"name": "Sakura (Trick or Defeat!)",
 		"basehp": 16,
 		"baseatk": 8,
 		"basespd": 8,
