@@ -1,6 +1,51 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+//Load JSON from database
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+var data = {};
+
+// Load JSON text from server hosted file and return JSON parsed object
+function loadJSON(filePath) {
+	// Load json file;
+	var json = loadTextFileAjaxSync(filePath, "application/json");
+	// Parse json
+	return JSON.parse(json);
+}   
+
+// Load text with Ajax synchronously: takes path to file and optional MIME type
+function loadTextFileAjaxSync(filePath, mimeType)
+{
+	var xmlhttp = new XMLHttpRequest();
+	//Using synchronous request
+	xmlhttp.open("GET", filePath, false);
+	if (mimeType != null) {
+		if (xmlhttp.overrideMimeType) {
+			xmlhttp.overrideMimeType(mimeType);
+		}
+	}
+	xmlhttp.send();
+	if (xmlhttp.status == 200)
+	{
+		return xmlhttp.responseText;
+	}
+	else {
+		// TODO Throw exception
+		return null;
+	}
+}
+
+data.heroes = loadJSON('json/hero.json');
+data.heroSkills = loadJSON('json/hero_skill.json');
+data.skills = loadJSON('json/skill.json');
+data.prereqs = loadJSON('json/skill_prereq.json');
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 //Initialize variables and data structure
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -32,18 +77,6 @@ data.growths = [
 	];
 
 //Remember: heroes, skills, prereqs, and heroskills arrays come from PHP-created script
-
-//Sort hero array by name
-data.heroes.sort(function(a,b){
-	//console.log(a.name + ", " + b.name + ": " + a.name>b.name);
-	return (a.name.toLowerCase() > b.name.toLowerCase())*2-1;
-})
-
-//Sort skills array by name
-data.skills.sort(function(a,b){
-	//console.log(a.name + ", " + b.name + ": " + a.name>b.name);
-	return (a.name.toLowerCase() + a.slot > b.name.toLowerCase() + b.slot)*2-1;
-})
 
 data.heroPossibleSkills = [];
 data.heroBaseSkills = [];
@@ -207,23 +240,7 @@ var showingTooltip = false;
 var calcuwaiting = false;
 var calcuwaitTime = 0;
 
-//Make list of all skill ids that are a strictly inferior prereq to exclude from dropdown boxes
-for(var i = 0; i < data.prereqs.length;i++){
-	if(data.skillsThatArePrereq.indexOf(data.prereqs[i].required_id)==-1 && data.skillPrereqExceptions.indexOf(data.prereqs[i].required_id)==-1){
-		data.skillsThatArePrereq.push(data.prereqs[i].required_id);
-	}
-}
 
-//Find hero skills
-for(var i = 0; i < data.heroes.length;i++){
-	data.heroPossibleSkills.push(getValidSkills({index:i}));
-
-	var baseSkills = getHeroSkills(i);
-	data.heroBaseSkills.push(baseSkills);
-	for(var j = 0; j < 5; j++){
-		data.heroMaxSkills[j].push(getMaxSkills(baseSkills,j));
-	}
-}
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -234,6 +251,36 @@ for(var i = 0; i < data.heroes.length;i++){
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 $(document).ready(function(){
+	
+	//Sort hero array by name
+	data.heroes.sort(function(a,b){
+		//console.log(a.name + ", " + b.name + ": " + a.name>b.name);
+		return (a.name.toLowerCase() > b.name.toLowerCase())*2-1;
+	})
+
+	//Sort skills array by name
+	data.skills.sort(function(a,b){
+		//console.log(a.name + ", " + b.name + ": " + a.name>b.name);
+		return (a.name.toLowerCase() + a.slot > b.name.toLowerCase() + b.slot)*2-1;
+	})
+	
+	//Make list of all skill ids that are a strictly inferior prereq to exclude from dropdown boxes
+	for(var i = 0; i < data.prereqs.length;i++){
+		if(data.skillsThatArePrereq.indexOf(data.prereqs[i].required_id)==-1 && data.skillPrereqExceptions.indexOf(data.prereqs[i].required_id)==-1){
+			data.skillsThatArePrereq.push(data.prereqs[i].required_id);
+		}
+	}
+
+	//Find hero skills
+	for(var i = 0; i < data.heroes.length;i++){
+		data.heroPossibleSkills.push(getValidSkills({index:i}));
+
+		var baseSkills = getHeroSkills(i);
+		data.heroBaseSkills.push(baseSkills);
+		for(var j = 0; j < 5; j++){
+			data.heroMaxSkills[j].push(getMaxSkills(baseSkills,j));
+		}
+	}
 
 	//Show incompatibility message: code does not work fr IE<9
 	//(Analytics show that the % of people who use IE<9 on my site is EXTREMELY low, like 1 in 30,000)
