@@ -1,4 +1,5 @@
-[{
+[
+	{
 		"skill_id": 1,
 		"name": "Iron Sword",
 		"slot": "weapon",
@@ -10526,5 +10527,89 @@
 		"charge": 0,
 		"inheritrule": "unique",
 		"affectsduel": 1
+	}, {
+		"skill_id": 753,
+		"name": "Close Def 1",
+		"slot": "s",
+		"sp": 0,
+		"description": "If unit is attacked by foe using sword, axe, lance, or dragonstone, unit receives Def\/Res+2 during combat.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 1
+	}, {
+		"skill_id": 754,
+		"name": "Close Def 2",
+		"slot": "s",
+		"sp": 0,
+		"description": "If unit is attacked by foe using sword, axe, lance, or dragonstone, unit receives Def\/Res+4 during combat.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 1
+	}, {
+		"skill_id": 755,
+		"name": "Close Def 3",
+		"slot": "s",
+		"sp": 0,
+		"description": "If unit is attacked by foe using sword, axe, lance, or dragonstone, unit receives Def\/Res+6 during combat.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 1
+	}, {
+		"skill_id": 756,
+		"name": "Savage Blow 1",
+		"slot": "s",
+		"sp": 0,
+		"description": "If unit initiates attack, foes within 2 spaces of target take 3 damage after combat.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 0
+	}, {
+		"skill_id": 757,
+		"name": "Savage Blow 2",
+		"slot": "s",
+		"sp": 0,
+		"description": "If unit initiates attack, foes within 2 spaces of target take 5 damage after combat.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 0
+	}, {
+		"skill_id": 758,
+		"name": "Savage Blow 3",
+		"slot": "s",
+		"sp": 0,
+		"description": "If unit initiates attack, foes within 2 spaces of target take 7 damage after combat.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 0
 	}
 ]
