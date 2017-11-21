@@ -10611,5 +10611,47 @@
 		"charge": 0,
 		"inheritrule": "",
 		"affectsduel": 0
+	}, {
+		"skill_id": 759,
+		"name": "Hone Spd 1",
+		"slot": "s",
+		"sp": 0,
+		"description": "Grants adjacent allies Spd+2 through their next actions at the start of each turn.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 0
+	}, {
+		"skill_id": 760,
+		"name": "Hone Spd 2",
+		"slot": "s",
+		"sp": 0,
+		"description": "Grants adjacent allies Spd+3 through their next actions at the start of each turn.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 0
+	}, {
+		"skill_id": 761,
+		"name": "Hone Spd 3",
+		"slot": "s",
+		"sp": 0,
+		"description": "Grants adjacent allies Spd+4 through their next actions at the start of each turn.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 0
 	}
 ]
