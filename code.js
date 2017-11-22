@@ -78,6 +78,18 @@ data.growths = [
 
 //Remember: heroes, skills, prereqs, and heroskills arrays come from PHP-created script
 
+//Sort hero array by name
+data.heroes.sort(function(a,b){
+	//console.log(a.name + ", " + b.name + ": " + a.name>b.name);
+	return (a.name.toLowerCase() > b.name.toLowerCase())*2-1;
+})
+
+//Sort skills array by name
+data.skills.sort(function(a,b){
+	//console.log(a.name + ", " + b.name + ": " + a.name>b.name);
+	return (a.name.toLowerCase() + a.slot > b.name.toLowerCase() + b.slot)*2-1;
+})
+
 data.heroPossibleSkills = [];
 data.heroBaseSkills = [];
 data.heroMaxSkills = [[],[],[],[],[]]; //2d array; 1st num rarity, 2nd num skillindex
@@ -93,6 +105,23 @@ data.enemyPrompts = {
 	"Karel":"Time to feast:",
 	"Nino":"Do my best:",
 	"Sharena":"My turn!:"
+}
+
+//Make list of all skill ids that are a strictly inferior prereq to exclude from dropdown boxes
+for(var i = 0; i < data.prereqs.length;i++){
+	if(data.skillsThatArePrereq.indexOf(data.prereqs[i].required_id)==-1 && data.skillPrereqExceptions.indexOf(data.prereqs[i].required_id)==-1){
+		data.skillsThatArePrereq.push(data.prereqs[i].required_id);
+	}
+}
+
+//Find hero skills
+for(var i = 0; i < data.heroes.length;i++){
+	data.heroPossibleSkills.push(getValidSkills({index:i}));
+	var baseSkills = getHeroSkills(i);
+	data.heroBaseSkills.push(baseSkills);
+	for(var j = 0; j < 5; j++){
+		data.heroMaxSkills[j].push(getMaxSkills(baseSkills,j));
+	}
 }
 
 function initOptions(){
@@ -239,40 +268,6 @@ var resultHTML = []; //Needs to be a global variable to flip sort order without
 var showingTooltip = false;
 var calcuwaiting = false;
 var calcuwaitTime = 0;
-
-function manageData(){
-	//Sort hero array by name
-	data.heroes.sort(function(a,b){
-		//console.log(a.name + ", " + b.name + ": " + a.name>b.name);
-		return (a.name.toLowerCase() > b.name.toLowerCase())*2-1;
-	})
-
-	//Sort skills array by name
-	data.skills.sort(function(a,b){
-		//console.log(a.name + ", " + b.name + ": " + a.name>b.name);
-		return (a.name.toLowerCase() + a.slot > b.name.toLowerCase() + b.slot)*2-1;
-	})
-	
-	//Make list of all skill ids that are a strictly inferior prereq to exclude from dropdown boxes
-	for(var i = 0; i < data.prereqs.length;i++){
-		if(data.skillsThatArePrereq.indexOf(data.prereqs[i].required_id)==-1 && data.skillPrereqExceptions.indexOf(data.prereqs[i].required_id)==-1){
-			data.skillsThatArePrereq.push(data.prereqs[i].required_id);
-		}
-	}
-
-	//Find hero skills
-	for(var i = 0; i < data.heroes.length;i++){
-		data.heroPossibleSkills.push(getValidSkills({index:i}));
-
-		var baseSkills = getHeroSkills(i);
-		data.heroBaseSkills.push(baseSkills);
-		for(var j = 0; j < 5; j++){
-			data.heroMaxSkills[j].push(getMaxSkills(baseSkills,j));
-		}
-	}
-}
-
-manageData();
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
