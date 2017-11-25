@@ -4034,11 +4034,11 @@ function activeHero(hero){
 				var AOEthisEffAtk = thisEffAtk - this.spur.atk - this.combatSpur.atk;
 
 				if(this.has("Rising Thunder") || this.has("Rising Wind") || this.has("Rising Light") || this.has("Rising Flame") || this.has("Growing Thunder") || this.has("Growing Wind") || this.has("Growing Light") || this.has("Growing Flame")){
-					AOEDamage = AOEthisEffAtk - relevantDef;
+					AOEDamage = Math.max(0, AOEthisEffAtk - relevantDef);
 					AOEActivated = true;
 				}
 				else if(this.has("Blazing Thunder") || this.has("Blazing Wind") || this.has("Blazing Light") || this.has("Blazing Flame")){
-					AOEDamage = Math.floor(1.5*(AOEthisEffAtk - relevantDef));
+					AOEDamage = Math.floor(1.5 * Math.max(0, AOEthisEffAtk - relevantDef));
 					AOEActivated = true;
 				}
 				
@@ -4066,7 +4066,7 @@ function activeHero(hero){
 					}
 
 					enemy.hp -= AOEDamage;
-					damageText += "Before combat, " + this.name + " hits with " + data.skills[this.specialIndex].name + " for " + AOEDamage + ".<br>";
+					damageText += "Before combat, " + this.name + " hits " + enemy.name + " with " + data.skills[this.specialIndex].name + " for <span class=\"highlight\">" + AOEDamage + "</span> damage.<br>";
 				}
 			}
 			else{
