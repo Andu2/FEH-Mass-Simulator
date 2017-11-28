@@ -3778,8 +3778,12 @@ function activeHero(hero){
 			sealAtk = -this.has("Seal Atk") * 2 - 1;
 			skillName = data.skills[this.bIndex].name;
 		}
-		if(this.didAttack && this.has("Fear") && sealAtk > -6){
+		if(this.didAttack && this.hasExactly("Fear") && sealAtk > -6){
 			sealAtk = -6;
+			skillName = data.skills[this.weaponIndex].name;			
+		}
+		if(this.didAttack && this.hasExactly("Fear+") && sealAtk > -7){
+			sealAtk = -7;
 			skillName = data.skills[this.weaponIndex].name;
 		}
 		if(sealAtk < enemy.combatDebuffs.atk){
@@ -3797,8 +3801,12 @@ function activeHero(hero){
 			sealSpd = -this.has("Seal Atk Spd") * 2 - 1;
 			skillName = data.skills[this.bIndex].name;
 		}
-		if(this.didAttack && this.has("Slow") && sealSpd > -6){
+		if(this.didAttack && this.hasExactly("Slow") && sealSpd > -6){
 			sealSpd = -6;
+			skillName = data.skills[this.weaponIndex].name;
+		}
+		if(this.didAttack && this.hasExactly("Slow+") && sealSpd > -7){
+			sealSpd = -7;
 			skillName = data.skills[this.weaponIndex].name;
 		}
 		if(sealSpd < enemy.combatDebuffs.spd){
@@ -5131,11 +5139,11 @@ function activeHero(hero){
 			roundText += this.postCombatHeal();
 
 			//panic
-			if(this.hasExactly("Panic") || this.has("Legion's Axe")){
+			if(this.has("Panic") || this.has("Legion's Axe")){
 				enemy.panicked = true;
 				roundText += this.name + " panics " + enemy.name + ".<br>";
 			}
-			if(enemy.hasExactly("Panic") || enemy.has("Legion's Axe")){
+			if(enemy.has("Panic") || enemy.has("Legion's Axe")){
 				this.panicked = true;
 				roundText += enemy.name + " panics " + this.name + ".<br>";
 			}
