@@ -3229,5 +3229,22 @@
 		"weapontype": "sword",
 		"movetype": "infantry",
 		"minrarity": 4
+	}, {
+		"hero_id": 193,
+		"name": "Fjorm",
+		"basehp": 17,
+		"baseatk": 8,
+		"basespd": 7,
+		"basedef": 8,
+		"baseres": 8,
+		"hpgrowth": 6,
+		"atkgrowth": 6,
+		"spdgrowth": 7,
+		"defgrowth": 6,
+		"resgrowth": 8,
+		"color": "blue",
+		"weapontype": "lance",
+		"movetype": "infantry",
+		"minrarity": 5
 	}
 ]

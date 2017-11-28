@@ -1397,7 +1397,8 @@ function updateHeroUI(hero){
 
 				//If special is defensive
 				if(specialName.indexOf("Miracle") != -1 || specialName.indexOf("Aegis") != -1 || specialName.indexOf("Buckler") != -1 || specialName.indexOf("Escutcheon") != -1
-					|| specialName.indexOf("Holy Vestments") != -1 || specialName.indexOf("Pavise") != -1 || specialName.indexOf("Sacred Cowl")!= -1){
+					|| specialName.indexOf("Holy Vestments") != -1 || specialName.indexOf("Pavise") != -1 || specialName.indexOf("Sacred Cowl")!= -1 
+					|| specialName.indexOf("Ice Mirror")!= -1 ){
 					//Shield Pulse
 					if(bName.indexOf("Shield Pulse 3") != -1){
 						precharge += 2;
@@ -2905,7 +2906,7 @@ function activeHero(hero){
 	this.combatBuffs = {"atk":0,"spd":0,"def":0,"res":0};
 	this.combatDebuffs = {"atk":0,"spd":0,"def":0,"res":0};
 	this.combatSpur = {"atk":0,"spd":0,"def":0,"res":0};
-
+	
 	this.skillNames = [];
 
 	this.challenger = !!hero.challenger; //Will be undefined if not challenger
@@ -2931,6 +2932,9 @@ function activeHero(hero){
 	this.buffs = hero.buffs;
 	this.debuffs = hero.debuffs;
 	this.spur = hero.spur;
+	
+	//Charged damage to be released during combat, resets at end of combat
+	this.chargedDamage = 0;
 
 	this.maxHp = hero.hp;
 	this.atk = hero.atk;
@@ -3083,7 +3087,9 @@ function activeHero(hero){
 	}
 
 	//Shield Pulse charge at beginning
-	if(this.has("Miracle") || this.has("Aegis") || this.has("Buckler") || this.has("Escutcheon") || this.has("Holy Vestments") || this.has("Pavise") || this.has("Sacred Cowl")){
+	if(this.has("Miracle") || this.has("Aegis") || this.has("Buckler") || this.has("Escutcheon") 
+		|| this.has("Holy Vestments") || this.has("Pavise") || this.has("Sacred Cowl") 
+		|| this.has("Ice Mirror")){
 		if(this.has("Shield Pulse 3")){
 			this.charge += 2;
 		} else if(this.has("Shield Pulse 1") || this.has("Shield Pulse 2")){
@@ -3235,7 +3241,8 @@ function activeHero(hero){
 		
 		//If special is defensive
 		if(this.has("Miracle") || this.has("Aegis") || this.has("Buckler") || this.has("Escutcheon")
-			|| this.has("Holy Vestments") || this.has("Pavise") || this.has("Sacred Cowl")){
+			|| this.has("Holy Vestments") || this.has("Pavise") || this.has("Sacred Cowl") 
+			|| this.has("Ice Mirror")){
 		//Else if special is supportive
 		}else if(this.has("Heavenly Light") || this.has("Imbue") || this.has("Kindled-Fire Balm")
 			|| this.has("Solid-Earth Balm") || this.has("Still-Water Balm") || this.has("Swift-Winds Balm")){				
@@ -4024,8 +4031,7 @@ function activeHero(hero){
 		
 		//Specials
 		var offensiveSpecialActivated = false;
-		if(this.specialIndex!=-1&&data.skills[this.specialIndex].charge<=this.charge){
-
+		if(this.specialIndex != -1 && data.skills[this.specialIndex].charge <= this.charge){
 			//Do AOE specials
 			if(AOE){
 				var AOEActivated = false;
@@ -4050,12 +4056,15 @@ function activeHero(hero){
 						damageText += this.name + " gains 10 damage from " + data.skills[hero.weapon].name + ".<br>";
 					}
 					//Wrath damage is checked when special is activated
+					//***Apparently Wrath does not affect AOE skills***
+					/*
 					if(this.has("Wrath")){
 						if(this.hp/this.maxHp <= .25 * this.has("Wrath")){
 							AOEDamage += 10;
 							damageText += this.name + " gains 10 damage from " + data.skills[this.bIndex].name + ".<br>";
 						}
 					}
+					*/
 
 					
 					if(enemy.has("Embla's Ward")){
@@ -4070,7 +4079,6 @@ function activeHero(hero){
 				}
 			}
 			else{
-
 				//special will fire if it's an attacking special
 				if(this.hasExactly("Night Sky") || this.hasExactly("Glimmer")){
 					dmgMultiplier = 1.5;
@@ -4378,9 +4386,24 @@ function activeHero(hero){
 			  damageText += this.name + "'s attack is increased by " + (effectiveBonus * 100 - 100) + "% from weapon effectiveness.<br>";
 			}		
 			
-			//Check damage reducing specials
+			//Weapon mod for healers
+			var weaponModifier = 1;
+			if(this.weaponType == "staff"){
+				//poor healers
+				weaponModifier = 0.5;
+
+				//But wait!
+				if(this.has("Wrathful Staff")){
+					if(this.combatStartHp / this.maxHp >= 1.5 + this.has("Wrathful Staff") * -0.5){
+						weaponModifier = 1;
+					}
+				}
+			}
+			
+			//Check damage reducing specials and effects
 			var defensiveSpecialActivated = false;
 			var dmgReduction = 1.0;
+			var dmgReductionFlat = 0;
 			var miracle = false;
 			
 			//First Attack
@@ -4434,11 +4457,13 @@ function activeHero(hero){
 				}
 			}
 			
-			if(enemy.specialIndex!=-1&&data.skills[enemy.specialIndex].charge<=enemy.charge){
+			if(enemy.specialIndex != -1 && data.skills[enemy.specialIndex].charge <= enemy.charge){
 				//gotta check range
 				var anyRangeCounter = false;
 				if(this.has("Close Counter") || this.has("Distant Counter") || this.has("Lightning Breath")
-					|| this.has("Raijinto") || this.has("Siegfried") || this.has("Ragnell") || this.has("Gradivus") || this.has("Alondite") || this.has("Stout Tomahawk")){
+					|| this.has("Raijinto") || this.has("Siegfried") || this.has("Ragnell") 
+					|| this.has("Gradivus") || this.has("Alondite") || this.has("Stout Tomahawk")
+					|| this.has("Leiptr")){
 					anyRangeCounter = true;
 				}
 
@@ -4455,7 +4480,7 @@ function activeHero(hero){
 					}
 				}
 				else if(this.range == "ranged" || (!this.initiator && enemy.range == "ranged" && anyRangeCounter)){
-					if(enemy.has("Holy Vestments") || enemy.has("Sacred Cowl")){
+					if(enemy.has("Holy Vestments") || enemy.has("Sacred Cowl") || enemy.has("Ice Mirror")){
 						dmgReduction *= 0.7;
 						defensiveSpecialActivated = true;
 						damageText += enemy.name + " activates " + data.skills[enemy.specialIndex].name + " and reduces " + this.name + "'s damage by 30%.<br>";
@@ -4471,34 +4496,28 @@ function activeHero(hero){
 					miracle = true;
 				}
 			}
-
+			
+			//Before damage defensive special effects
 			if(defensiveSpecialActivated){
+				//Shield Pulse flat damage reduction check
 				if(dmgReduction < 1){
-					//damageText += data.skills[enemy.specialIndex].name + " reduces " + this.name + "'s damage by " + ((1 - dmgReduction) * 100 | 0) + "%.<br>"
-
 					if (enemy.has("Shield Pulse 2") || enemy.has("Shield Pulse 3")){
+						dmgReductionFlat += 5;
 						damageText += enemy.name + "'s Shield Pulse reduces " + this.name + "'s damage by an additional 5.<br>";
 					}
 				}
-				enemy.resetCharge();
 			}
-
-			//Weapon mod for healers
-			var weaponModifier = 1;
-			if(this.weaponType == "staff"){
-				//poor healers
-				weaponModifier = 0.5;
-
-				//But wait!
-				if(this.has("Wrathful Staff")){
-					if(this.combatStartHp / this.maxHp >= 1.5 + this.has("Wrathful Staff") * -0.5){
-						weaponModifier = 1;
-					}
-				}
-			}
-
+			
+			//Absorb check
 			if(this.has("Absorb")){
 				absorbPct = 0.5;
+			}
+			
+			//Release charged damage
+			if (this.chargedDamage > 0){
+				dmgBoost += this.chargedDamage;
+				damageText += this.name + " releases charged damage and increases damage by an additional " + this.chargedDamage + ".<br>";
+				this.chargedDamage = 0;
 			}
 
 			//Damage calculation from http://feheroes.wiki/Damage_Calculation
@@ -4508,19 +4527,35 @@ function activeHero(hero){
 			var reduceDmg = relevantDef + (relevantDef * enemyDefModifier | 0);
 			var dmg = (rawDmg - reduceDmg) * weaponModifier | 0;
 			dmg = dmg * dmgMultiplier | 0;
-			dmg -= dmg * (1-dmgReduction) | 0;
-
-			//Pushing Shield check
-			if (defensiveSpecialActivated && (enemy.has("Shield Pulse 2") || enemy.has("Shield Pulse 3"))){
-				dmg -= 5;
-			}			
+			dmg -= dmg * (1 - dmgReduction) | 0;
+			dmg -= dmgReductionFlat | 0;
 			
 			//Final damage calculations
 			dmg = Math.max(dmg,0);
 			if(enemy.has("Embla's Ward")){
 				dmg = 0;
 			}
+			
 			damageText += this.name + " attacks " + enemy.name + " for <span class=\"highlight\">" + dmg + "</span> damage.<br>";
+			
+			//After damage defensive special effects
+			//***Does this count weapon triangle reductions? Reduction value > damage dealt?***
+			if(defensiveSpecialActivated){
+				//Ice Mirror damage charge up check
+				if (enemy.has("Ice Mirror")){
+					var iceMirrorDamage = ((rawDmg - reduceDmg) * weaponModifier | 0) - dmg;
+					if (iceMirrorDamage > 0){
+						enemy.chargedDamage += iceMirrorDamage;
+						damageText += enemy.name + "'s Ice Mirror stores " + iceMirrorDamage + " damage for next attack.<br>";
+					}
+				}
+				//Reset enemy charge after special activation
+				enemy.resetCharge();
+			}
+			
+			
+			
+			//Miracle survival check
 			if(dmg >= enemy.hp){
 				if(miracle){
 					dmg = enemy.hp - 1;
@@ -4667,13 +4702,14 @@ function activeHero(hero){
 	//represents a full round of combat
 	this.attack = function(enemy,round,renew,galeforce){		
 				
-		//Initialize last attacker
-		lastAttacker = "none";
-
+		//Initialize round		
 		var roundText = "";//Common theme: text is returned by helper functions, so the functions are called by adding them to roundText
 		this.initiator = true;
 		enemy.initiator = false;
 		enemy.didAttack = false;
+		lastAttacker = "none";
+		this.chargedDamage = 0;
+		enemy.chargedDamage = 0;
 
 		//Get relevant defense for simplified text output
 		//***This variable isn't used???***
@@ -4740,7 +4776,9 @@ function activeHero(hero){
 		//check for any-distance counterattack
 		var anyRangeCounter = false;
 		if(enemy.has("Close Counter") || enemy.has("Distant Counter") || enemy.has("Lightning Breath")
-			|| enemy.has("Raijinto") || enemy.has("Ragnell") || enemy.has("Siegfried") || enemy.has("Gradivus") || enemy.has("Alondite") || enemy.has("Stout Tomahawk")){
+			|| enemy.has("Raijinto") || enemy.has("Ragnell") || enemy.has("Siegfried")
+			|| enemy.has("Gradivus") || enemy.has("Alondite") || enemy.has("Stout Tomahawk")
+			|| enemy.has("Leiptr")){
 			anyRangeCounter = true;
 		}
 
