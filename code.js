@@ -3474,6 +3474,30 @@ function activeHero(hero){
 			var skillName = "";
 			var buffVal = 0;
 			
+			//Weapons
+			if(this.hasExactly("Durandal")){
+				this.combatSpur.atk += 4;
+				boostText += this.name + " gets +4 Atk from initiating with " + data.skills[this.weaponIndex].name + ".<br>"
+			}
+			if(this.hasExactly("Yato")){
+				this.combatSpur.spd += 4;
+				boostText += this.name + " gets +4 Spd from initiating with " + data.skills[this.weaponIndex].name + ".<br>";
+			}
+			if(this.hasExactly("Tyrfing") && this.hp / this.maxHp <= 0.5){
+				this.combatSpur.def += 4;
+				boostText += this.name + " gets +4 Def from " + data.skills[this.weaponIndex].name + ".<br>";
+			}
+			if(this.hasExactly("Parthia")){
+				this.combatSpur.res += 4;
+				boostText += this.name + " gets +4 Res from initiating with " + data.skills[this.weaponIndex].name + ".<br>";
+			}
+			if(this.hasExactly("Dark Greatsword")){
+				this.combatSpur.atk += 4;
+				this.combatSpur.spd += 4;
+				boostText += this.name + " gets +4 Atk/Spd from initiating with " + data.skills[this.weaponIndex].name + ".<br>";
+			}
+			
+			//Skills
 			if(this.has("Death Blow")){
 				buffVal = this.has("Death Blow") * 2;
 				skillName = data.skills[this.aIndex].name;
@@ -3498,99 +3522,80 @@ function activeHero(hero){
 				this.combatSpur.atk += buffVal;
 				boostText += this.name + " gets +" + buffVal + " Atk from initiating with " + skillName + ".<br>";
 			}
-			if(this.hasExactly("Durandal")){
-				this.combatSpur.atk += 4;
-				boostText += this.name + " gets +4 Atk from initiating with Durandal.<br>";
-			}
 
-			var blowSpd = 0;
 			if(this.has("Darting Blow")){
-				blowSpd = this.has("Darting Blow") * 2;
+				buffVal = this.has("Darting Blow") * 2;
 				skillName = data.skills[this.aIndex].name;
-				this.combatSpur.spd += blowSpd;
-				boostText += this.name + " gets " + blowSpd + " Spd from initiating with " + skillName + ".<br>";
+				this.combatSpur.spd += buffVal;
+				boostText += this.name + " gets " + buffVal + " Spd from initiating with " + skillName + ".<br>";
 			}
 			if(this.has("Steady Blow")){
-				blowSpd = this.has("Steady Blow") * 2;
+				buffVal = this.has("Steady Blow") * 2;
 				skillName = data.skills[this.aIndex].name;
-				this.combatSpur.spd += blowSpd;
-				boostText += this.name + " gets " + blowSpd + " Spd from initiating with " + skillName + ".<br>";
+				this.combatSpur.spd += buffVal;
+				boostText += this.name + " gets " + buffVal + " Spd from initiating with " + skillName + ".<br>";
 			}
 			if(this.has("Swift Sparrow")){
-				blowSpd = this.has("Swift Sparrow") * 2;
+				buffVal = this.has("Swift Sparrow") * 2;
 				skillName = data.skills[this.aIndex].name;
-				this.combatSpur.spd += blowSpd;
-				boostText += this.name + " gets +" + blowSpd + " Spd from initiating with " + skillName + ".<br>";
+				this.combatSpur.spd += buffVal;
+				boostText += this.name + " gets +" + buffVal + " Spd from initiating with " + skillName + ".<br>";
 			}
 			if(this.has("Swift Strike")){
-				blowSpd = this.has("Swift Strike") * 2;
+				buffVal = this.has("Swift Strike") * 2;
 				skillName = data.skills[this.aIndex].name;
-				this.combatSpur.spd += blowSpd;
-				boostText += this.name + " gets +" + blowSpd + " Spd from initiating with " + skillName + ".<br>";
+				this.combatSpur.spd += buffVal;
+				boostText += this.name + " gets +" + buffVal + " Spd from initiating with " + skillName + ".<br>";
 			}
-			if(this.has("Yato")){
-				this.combatSpur.spd += 4;
-				boostText += this.name + " gets +4 Spd from initiating with Yato.<br>";
-			}
-
-			var blowDef = 0;
+			
 			if(this.has("Armored Blow")){
-				blowDef = this.has("Armored Blow") * 2;
+				buffVal = this.has("Armored Blow") * 2;
 				skillName = data.skills[this.aIndex].name;
-				this.combatSpur.def += blowDef;
-				boostText += this.name + " gets " + blowDef + " Def from initiating with " + skillName + ".<br>";
+				this.combatSpur.def += buffVal;
+				boostText += this.name + " gets " + buffVal + " Def from initiating with " + skillName + ".<br>";
 			}
 			if(this.has("Steady Blow")){
-				blowDef = this.has("Steady Blow") * 2;
+				buffVal = this.has("Steady Blow") * 2;
 				skillName = data.skills[this.aIndex].name;
-				this.combatSpur.def += blowDef;
-				boostText += this.name + " gets " + blowDef + " Def from initiating with " + skillName + ".<br>";
+				this.combatSpur.def += buffVal;
+				boostText += this.name + " gets " + buffVal + " Def from initiating with " + skillName + ".<br>";
 			}
 			if(this.has("Sturdy Blow")){
-				blowDef = this.has("Sturdy Blow") * 2;
+				buffVal = this.has("Sturdy Blow") * 2;
 				skillName = data.skills[this.aIndex].name;
-				this.combatSpur.def += blowDef;
-				boostText += this.name + " gets +" + blowDef + " Def from initiating with " + skillName + ".<br>";
+				this.combatSpur.def += buffVal;
+				boostText += this.name + " gets +" + buffVal + " Def from initiating with " + skillName + ".<br>";
 			}
 			if(this.has("Bracing Blow")){
-				blowDef = this.has("Bracing Blow") * 2;
+				buffVal = this.has("Bracing Blow") * 2;
 				skillName = data.skills[this.aIndex].name;
-				this.combatSpur.def += blowDef;
-				boostText += this.name + " gets +" + blowDef + " Def from initiating with " + skillName + ".<br>";
+				this.combatSpur.def += buffVal;
+				boostText += this.name + " gets +" + buffVal + " Def from initiating with " + skillName + ".<br>";
 			}
-			if(this.hasExactly("Tyrfing") && this.hp / this.maxHp <= 0.5){
-				this.combatSpur.def += 4;
-				boostText += this.name + " gets +4 Def from Tyrfing.<br>";
-			}
-
-			var blowRes = 0;
+			
 			if(this.has("Warding Blow")){
-				blowRes = this.has("Warding Blow") * 2;
+				buffVal = this.has("Warding Blow") * 2;
 				skillName = data.skills[this.aIndex].name;
-				this.combatSpur.res += blowRes;
-				boostText += this.name + " gets +" + blowRes + " Res from initiating with " + skillName + ".<br>";
+				this.combatSpur.res += buffVal;
+				boostText += this.name + " gets +" + buffVal + " Res from initiating with " + skillName + ".<br>";
 			}
 			if(this.has("Mirror Strike")){
-				blowRes = this.has("Mirror Strike") * 2;
+				buffVal = this.has("Mirror Strike") * 2;
 				skillName = data.skills[this.aIndex].name;
-				this.combatSpur.res += blowRes;
-				boostText += this.name + " gets +" + blowRes + " Res from initiating with " + skillName + ".<br>";
+				this.combatSpur.res += buffVal;
+				boostText += this.name + " gets +" + buffVal + " Res from initiating with " + skillName + ".<br>";
 			}
 			if(this.has("Swift Strike")){
-				blowRes = this.has("Swift Strike") * 2;
+				buffVal = this.has("Swift Strike") * 2;
 				skillName = data.skills[this.aIndex].name;
-				this.combatSpur.res += blowRes;
-				boostText += this.name + " gets +" + blowRes + " Res from initiating with " + skillName + ".<br>";
+				this.combatSpur.res += buffVal;
+				boostText += this.name + " gets +" + buffVal + " Res from initiating with " + skillName + ".<br>";
 			}
 			if(this.has("Bracing Blow")){
-				blowRes = this.has("Bracing Blow") * 2;
+				buffVal = this.has("Bracing Blow") * 2;
 				skillName = data.skills[this.aIndex].name;
-				this.combatSpur.res += blowRes;
-				boostText += this.name + " gets +" + blowRes + " Res from initiating with " + skillName + ".<br>";
-			}
-			if(this.has("Parthia")){
-				this.combatSpur.res += 4;
-				boostText += this.name + " gets +4 Res from initiating with Parthia.<br>";
+				this.combatSpur.res += buffVal;
+				boostText += this.name + " gets +" + buffVal + " Res from initiating with " + skillName + ".<br>";
 			}
 
 			return boostText;
@@ -3599,6 +3604,7 @@ function activeHero(hero){
 		//this.defendBuff = function(relevantDefType){
 		if(!this.initiator){
 			//Not actually going to limit text from relevantDefType, beccause res/def may always be relevant for special attacks
+			var buffVal = 0;
 			
 			//Weapon
 			if(this.hasExactly("Binding Blade") || this.hasExactly("Naga")){
@@ -3618,45 +3624,41 @@ function activeHero(hero){
 				this.combatSpur.res += 4;
 				boostText += this.name + " gets +4 Res while defending with " + data.skills[this.weaponIndex].name + ".<br>";
 			}
+			if(this.hasExactly("Bright Naginata")){
+				this.combatSpur.atk += 4;
+				this.combatSpur.def += 4;
+				boostText += this.name + " gets +4 Atk/Def while defending with " + data.skills[this.weaponIndex].name + ".<br>";
+			}				
 			
-			//Attack passive
-			var stanceAtk = 0;
-			if(this.has("Fierce Stance")){
-				stanceAtk = this.has("Fierce Stance") * 2;
-				skillName = data.skills[this.aIndex].name;
-				this.combatSpur.atk += stanceAtk;
-				boostText += this.name + " gets +" + stanceAtk + " Atk from defending with " + skillName + ".<br>";
-			}
-			
-			//Speed passive
-			var stanceSpd = 0;
-			if(this.has("Speed Stance")){
-				stanceSpd = this.has("Speed Stance") * 2;
-				skillName = data.skills[this.aIndex].name;
-				this.combatSpur.spd += stanceSpd;
-				boostText += this.name + " gets +" + stanceSpd + " Spd from defending with " + skillName + ".<br>";
-			}
-			
-			//Defense passive
-			var stanceDef = 0;
-			if(this.has("Steady Stance")){
-				stanceDef = this.has("Steady Stance") * 2;
-				skillName = data.skills[this.aIndex].name;
-				this.combatSpur.def += stanceDef;
-				boostText += this.name + " gets +" + stanceDef + " Def from defending with " + skillName + ".<br>";
-			}
+			//Skills
 			if(this.has("Steady Breath")){
 				this.combatSpur.def += 4;
 				boostText += this.name + " gets +4 Def from defending with Steady Breath.<br>";
-			}
-			
-			//Resistance passive
-			var stanceRes = 0;
-			if(this.has("Warding Stance")){
-				stanceRes = this.has("Warding Stance") * 2;
+			}			
+			if(this.has("Fierce Stance")){
+				buffVal = this.has("Fierce Stance") * 2;
 				skillName = data.skills[this.aIndex].name;
-				this.combatSpur.def += stanceRes;
-				boostText += this.name + " gets +" + stanceRes + " Res from defending with " + skillName + ".<br>";
+				this.combatSpur.atk += buffVal;
+				boostText += this.name + " gets +" + buffVal + " Atk from defending with " + skillName + ".<br>";
+			}
+			//***Speed Stance not in game - need to rename***
+			if(this.has("Speed Stance")){
+				buffVal = this.has("Speed Stance") * 2;
+				skillName = data.skills[this.aIndex].name;
+				this.combatSpur.spd += buffVal;
+				boostText += this.name + " gets +" + buffVal + " Spd from defending with " + skillName + ".<br>";
+			}			
+			if(this.has("Steady Stance")){
+				buffVal = this.has("Steady Stance") * 2;
+				skillName = data.skills[this.aIndex].name;
+				this.combatSpur.def += buffVal;
+				boostText += this.name + " gets +" + buffVal + " Def from defending with " + skillName + ".<br>";
+			}
+			if(this.has("Warding Stance")){
+				buffVal = this.has("Warding Stance") * 2;
+				skillName = data.skills[this.aIndex].name;
+				this.combatSpur.def += buffVal;
+				boostText += this.name + " gets +" + buffVal + " Res from defending with " + skillName + ".<br>";
 			}
 			
 			return boostText;
@@ -4516,7 +4518,7 @@ function activeHero(hero){
 			//Release charged damage
 			if (this.chargedDamage > 0){
 				dmgBoost += this.chargedDamage;
-				damageText += this.name + " releases charged damage and increases damage by an additional " + this.chargedDamage + ".<br>";
+				damageText += this.name + " releases stored damage and increases damage by an additional " + this.chargedDamage + ".<br>";
 				this.chargedDamage = 0;
 			}
 
