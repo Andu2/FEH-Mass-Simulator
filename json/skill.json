@@ -11089,7 +11089,7 @@
 		"affectsduel": 1
 	}, {
 		"skill_id": 793,
-		"name": "Keen Raudrwolf",
+		"name": "Keen Raudrwolf+",
 		"slot": "weapon",
 		"sp": 300,
 		"description": "Effective against cavalry foes.",
@@ -11103,7 +11103,7 @@
 		"affectsduel": 1
 	}, {
 		"skill_id": 794,
-		"name": "Keen Blarwolf",
+		"name": "Keen Blarwolf+",
 		"slot": "weapon",
 		"sp": 300,
 		"description": "Effective against cavalry foes.",
@@ -11117,7 +11117,7 @@
 		"affectsduel": 1
 	}, {
 		"skill_id": 795,
-		"name": "Keen Gronnwolf",
+		"name": "Keen Gronnwolf+",
 		"slot": "weapon",
 		"sp": 300,
 		"description": "Effective against cavalry foes.",
