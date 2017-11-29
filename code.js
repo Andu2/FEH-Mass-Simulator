@@ -3453,7 +3453,7 @@ function activeHero(hero){
 			}
 			if(this.hasExactly("Tyrfing") && this.hp / this.maxHp <= 0.5){
 				this.combatSpur.def += 4;
-				boostText += this.name + " gets +4 Def from " + data.skills[this.weaponIndex].name + ".<br>";
+				boostText += this.name + " gets +4 Def in combat from " + data.skills[this.weaponIndex].name + " with <= 50% health.<br>";
 			}
 			if(this.hasExactly("Parthia")){
 				this.combatSpur.res += 4;
@@ -3580,13 +3580,13 @@ function activeHero(hero){
 				this.combatSpur.res += 2;
 				boostText += this.name + " gets +2 Def/Res while defending with " + data.skills[this.weaponIndex].name + ".<br>";
 			}
-			if(this.hasExactly("Vidofnir") && (enemy.weaponType == "axe" || enemy.weaponType == "sword" ||enemy.weaponType == "lance" )){
+			if(this.hasExactly("Vidofnir") && (enemy.weaponType == "sword" || enemy.weaponType == "axe" ||enemy.weaponType == "lance" )){
 				this.combatSpur.def += 7;
-				boostText += this.name + " gets +7 Def while defending with " + data.skills[this.weaponIndex].name + ".<br>";
+				boostText += this.name + " gets +7 Def while defending with " + data.skills[this.weaponIndex].name + " against sword, axe, or lance.<br>";
 			}
 			if(this.hasExactly("Tyrfing") && this.hp / this.maxHp <= 0.5){
 				this.combatSpur.def += 4;
-				boostText += this.name + " gets +4 Def from Tyrfing.<br>";
+				boostText += this.name + " gets +4 Def in combat from " + data.skills[this.weaponIndex].name + " with <= 50% health.<br>";
 			}
 			if(this.has("Berkut's Lance")){
 				this.combatSpur.res += 4;
@@ -3601,7 +3601,7 @@ function activeHero(hero){
 			if(this.has("Guard Bow") && enemy.range == "ranged"){
 				this.combatSpur.def += 6;
 				this.combatSpur.res += 6;
-				boostText += this.name + " gets +6 Def/Res while defending with " + data.skills[this.weaponIndex].name + ".<br>";
+				boostText += this.name + " gets +6 Def/Res while defending with " + data.skills[this.weaponIndex].name + " against bow, dagger, magic, or staff.<br>";
 			}
 			
 			//Skills
@@ -4532,7 +4532,7 @@ function activeHero(hero){
 			//Release charged damage
 			if (this.chargedDamage > 0){
 				dmgBoost += this.chargedDamage;
-				damageText += this.name + " releases stored damage and increases damage by an additional " + this.chargedDamage + ".<br>";
+				damageText += this.name + " gains " + this.chargedDamage + " damage from releasing stored energy.<br>";
 				this.chargedDamage = 0;
 			}
 
@@ -4597,7 +4597,7 @@ function activeHero(hero){
 			}
 			this.hp += absorbHp;
 			if(absorbHp > 0){
-				damageText += this.name + " absorbs " + absorbHp + ".<br>";
+				damageText += this.name + " absorbs " + absorbHp + " health.<br>";
 			}	
 			
 			//Special charge does not increase if special was used on this attack
