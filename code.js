@@ -3321,38 +3321,6 @@ function activeHero(hero){
 	this.startCombatSpur = function(enemy){
 		var boostText = "";
 
-		if(!this.initiator && enemy.range == "ranged"){
-			var buffVal = 0;
-			if(this.hasAtIndex("Distant Def", this.aIndex)){
-				buffVal = this.hasAtIndex("Distant Def", this.aIndex) * 2;
-				this.combatSpur.def += buffVal;
-				this.combatSpur.res += buffVal;
-				boostText += this.name + " gets +" + buffVal + " Def/Res from being attacked from range with " + data.skills[this.aIndex].name + ".<br>";
-			}			
-			if(this.hasAtIndex("Distant Def", this.sIndex)){
-				buffVal = this.hasAtIndex("Distant Def", this.sIndex) * 2;
-				this.combatSpur.def += buffVal;
-				this.combatSpur.res += buffVal;
-				boostText += this.name + " gets +" + buffVal + " Def/Res from being attacked from range with " + data.skills[this.sIndex].name + " (Seal).<br>";
-			}			
-		}
-
-		if(!this.initiator && enemy.range == "melee"){
-			var buffVal = 0;
-			if(this.hasAtIndex("Close Def", this.aIndex)){
-				buffVal = this.hasAtIndex("Close Def", this.aIndex) * 2;
-				this.combatSpur.def += buffVal;
-				this.combatSpur.res += buffVal;
-				boostText += this.name + " gets +" + buffVal + " Def/Res from being attacked from melee with " + data.skills[this.aIndex].name + ".<br>";
-			}
-			if(this.hasAtIndex("Close Def", this.sIndex)){
-				buffVal = this.hasAtIndex("Close Def", this.sIndex) * 2;
-				this.combatSpur.def += buffVal;
-				this.combatSpur.res += buffVal;
-				boostText += this.name + " gets +" + buffVal + " Def/Res from being attacked from melee with " + data.skills[this.sIndex].name + " (Seal).<br>";
-			}
-		}
-
 		if(this.combatStartHp / this.maxHp >= 1){
 			if(this.has("Ragnarok")){
 				//Does this take effect when defending? Answer: yes
@@ -3497,7 +3465,7 @@ function activeHero(hero){
 				boostText += this.name + " gets +4 Atk/Spd from initiating with " + data.skills[this.weaponIndex].name + ".<br>";
 			}
 			
-			//Skills
+			//Skills			
 			if(this.has("Death Blow")){
 				buffVal = this.has("Death Blow") * 2;
 				skillName = data.skills[this.aIndex].name;
@@ -3628,9 +3596,44 @@ function activeHero(hero){
 				this.combatSpur.atk += 4;
 				this.combatSpur.def += 4;
 				boostText += this.name + " gets +4 Atk/Def while defending with " + data.skills[this.weaponIndex].name + ".<br>";
-			}				
+			}
+			//***Does magic for Guard Bow include dragons?***
+			if(this.has("Guard Bow") && enemy.range == "ranged"){
+				this.combatSpur.def += 6;
+				this.combatSpur.res += 6;
+				boostText += this.name + " gets +6 Def/Res while defending with " + data.skills[this.weaponIndex].name + ".<br>";
+			}
 			
 			//Skills
+			if(enemy.range == "ranged"){				
+				if(this.hasAtIndex("Distant Def", this.aIndex)){
+					buffVal = this.hasAtIndex("Distant Def", this.aIndex) * 2;
+					this.combatSpur.def += buffVal;
+					this.combatSpur.res += buffVal;
+					boostText += this.name + " gets +" + buffVal + " Def/Res from being attacked from range with " + data.skills[this.aIndex].name + ".<br>";
+				}			
+				if(this.hasAtIndex("Distant Def", this.sIndex)){
+					buffVal = this.hasAtIndex("Distant Def", this.sIndex) * 2;
+					this.combatSpur.def += buffVal;
+					this.combatSpur.res += buffVal;
+					boostText += this.name + " gets +" + buffVal + " Def/Res from being attacked from range with " + data.skills[this.sIndex].name + " (Seal).<br>";
+				}
+			}
+			if(enemy.range == "melee"){				
+				if(this.hasAtIndex("Close Def", this.aIndex)){
+					buffVal = this.hasAtIndex("Close Def", this.aIndex) * 2;
+					this.combatSpur.def += buffVal;
+					this.combatSpur.res += buffVal;
+					boostText += this.name + " gets +" + buffVal + " Def/Res from being attacked from melee with " + data.skills[this.aIndex].name + ".<br>";
+				}
+				if(this.hasAtIndex("Close Def", this.sIndex)){
+					buffVal = this.hasAtIndex("Close Def", this.sIndex) * 2;
+					this.combatSpur.def += buffVal;
+					this.combatSpur.res += buffVal;
+					boostText += this.name + " gets +" + buffVal + " Def/Res from being attacked from melee with " + data.skills[this.sIndex].name + " (Seal).<br>";
+				}
+			}	
+			
 			if(this.has("Steady Breath")){
 				this.combatSpur.def += 4;
 				boostText += this.name + " gets +4 Def from defending with Steady Breath.<br>";
@@ -4373,27 +4376,30 @@ function activeHero(hero){
 
 			//Check weapon effective against
 			var effectiveBonus = 1;
-			if(enemy.moveType == "armored" && (this.has("Hammer") || this.has("Armorslayer") || this.has("Heavy Spear"))){
-			  effectiveBonus = (enemy.has("Svalinn Shield")) ? 1 : 1.5;
+			if(enemy.moveType == "armored" && (this.has("Hammer") || this.has("Slaying Hammer")
+				|| this.has("Armorslayer") || this.has("Armorsmasher")
+				|| this.has("Heavy Spear") || this.has("Slaying Spear"))){
+				effectiveBonus = (enemy.has("Svalinn Shield")) ? 1 : 1.5;
 			}
 			else if(enemy.moveType == "flying" && (this.hasExactly("Excalibur") || this.weaponType=="bow")){
 				effectiveBonus = (enemy.has("Iote's Shield")) ? 1 : 1.5;
 			}
 			else if(enemy.moveType == "infantry" && (this.has("Poison Dagger"))){
-			  effectiveBonus = 1.5;
+				effectiveBonus = 1.5;
 			}
-			else if(enemy.moveType == "cavalry" && (this.has("Raudrwolf") || this.has("Blarwolf") || this.has("Gronnwolf") || this.has("Zanbato") || this.has("Ridersbane"))){
-			  effectiveBonus = (enemy.has("Grani's Shield")) ? 1 : 1.5;
+			else if(enemy.moveType == "cavalry" && (this.has("Zanbato") || this.has("Ridersbane") 
+				|| this.has("Raudrwolf") || this.has("Blarwolf") || this.has("Gronnwolf"))){
+				effectiveBonus = (enemy.has("Grani's Shield")) ? 1 : 1.5;
 			}
 			else if(enemy.weaponType == "dragon" && (this.hasExactly("Falchion") || this.hasExactly("Naga") || this.hasExactly("Divine Naga"))){
-			  effectiveBonus = 1.5;
+				effectiveBonus = 1.5;
 			}
 			else if((enemy.weaponType == "redtome" || enemy.weaponType == "bluetome" || enemy.weaponType == "greentome")&& (this.has("Kitty Paddle"))){
-			  effectiveBonus = 1.5;
+				effectiveBonus = 1.5;
 			}
 
 			if(effectiveBonus > 1 ){
-			  damageText += this.name + "'s attack is increased by " + (effectiveBonus * 100 - 100) + "% from weapon effectiveness.<br>";
+				damageText += this.name + "'s attack is increased by " + (effectiveBonus * 100 - 100) + "% from weapon effectiveness.<br>";
 			}		
 			
 			//Weapon mod for healers
