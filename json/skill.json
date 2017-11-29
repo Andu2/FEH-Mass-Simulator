@@ -11071,7 +11071,7 @@
 		"def": 0,
 		"res": 0,
 		"charge": 0,
-		"inheritrule": "lance",
+		"inheritrule": "axe",
 		"affectsduel": 1
 	}, {
 		"skill_id": 792,

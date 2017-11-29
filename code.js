@@ -3574,37 +3574,7 @@ function activeHero(hero){
 			//Not actually going to limit text from relevantDefType, beccause res/def may always be relevant for special attacks
 			var buffVal = 0;
 			
-			//Weapon
-			if(this.hasExactly("Binding Blade") || this.hasExactly("Naga")){
-				this.combatSpur.def += 2;
-				this.combatSpur.res += 2;
-				boostText += this.name + " gets +2 Def/Res while defending with " + data.skills[this.weaponIndex].name + ".<br>";
-			}
-			if(this.hasExactly("Vidofnir") && (enemy.weaponType == "sword" || enemy.weaponType == "axe" ||enemy.weaponType == "lance" )){
-				this.combatSpur.def += 7;
-				boostText += this.name + " gets +7 Def while defending with " + data.skills[this.weaponIndex].name + " against sword, axe, or lance.<br>";
-			}
-			if(this.hasExactly("Tyrfing") && this.hp / this.maxHp <= 0.5){
-				this.combatSpur.def += 4;
-				boostText += this.name + " gets +4 Def in combat from " + data.skills[this.weaponIndex].name + " with <= 50% health.<br>";
-			}
-			if(this.has("Berkut's Lance")){
-				this.combatSpur.res += 4;
-				boostText += this.name + " gets +4 Res while defending with " + data.skills[this.weaponIndex].name + ".<br>";
-			}
-			if(this.hasExactly("Bright Naginata")){
-				this.combatSpur.atk += 4;
-				this.combatSpur.def += 4;
-				boostText += this.name + " gets +4 Atk/Def while defending with " + data.skills[this.weaponIndex].name + ".<br>";
-			}
-			//***Does magic for Guard Bow include dragons?***
-			if(this.has("Guard Bow") && enemy.range == "ranged"){
-				this.combatSpur.def += 6;
-				this.combatSpur.res += 6;
-				boostText += this.name + " gets +6 Def/Res while defending with " + data.skills[this.weaponIndex].name + " against bow, dagger, magic, or staff.<br>";
-			}
-			
-			//Skills
+			//Close/Distant Def
 			if(enemy.range == "ranged"){				
 				if(this.hasAtIndex("Distant Def", this.aIndex)){
 					buffVal = this.hasAtIndex("Distant Def", this.aIndex) * 2;
@@ -3632,8 +3602,38 @@ function activeHero(hero){
 					this.combatSpur.res += buffVal;
 					boostText += this.name + " gets +" + buffVal + " Def/Res from being attacked from melee with " + data.skills[this.sIndex].name + " (Seal).<br>";
 				}
-			}	
+			}
 			
+			//Weapons
+			if(this.hasExactly("Binding Blade") || this.hasExactly("Naga")){
+				this.combatSpur.def += 2;
+				this.combatSpur.res += 2;
+				boostText += this.name + " gets +2 Def/Res while defending with " + data.skills[this.weaponIndex].name + ".<br>";
+			}
+			if(this.hasExactly("Vidofnir") && (enemy.weaponType == "sword" || enemy.weaponType == "axe" ||enemy.weaponType == "lance" )){
+				this.combatSpur.def += 7;
+				boostText += this.name + " gets +7 Def while defending with " + data.skills[this.weaponIndex].name + " against sword, axe, or lance.<br>";
+			}
+			if(this.hasExactly("Tyrfing") && this.hp / this.maxHp <= 0.5){
+				this.combatSpur.def += 4;
+				boostText += this.name + " gets +4 Def in combat from " + data.skills[this.weaponIndex].name + " with <= 50% health.<br>";
+			}
+			if(this.has("Berkut's Lance")){
+				this.combatSpur.res += 4;
+				boostText += this.name + " gets +4 Res while defending with " + data.skills[this.weaponIndex].name + ".<br>";
+			}
+			if(this.hasExactly("Bright Naginata")){
+				this.combatSpur.atk += 4;
+				this.combatSpur.def += 4;
+				boostText += this.name + " gets +4 Atk/Def while defending with " + data.skills[this.weaponIndex].name + ".<br>";
+			}
+			if(this.has("Guard Bow") && enemy.range == "ranged"){
+				this.combatSpur.def += 6;
+				this.combatSpur.res += 6;
+				boostText += this.name + " gets +6 Def/Res while defending with " + data.skills[this.weaponIndex].name + " against bow, dagger, magic, or staff.<br>";
+			}
+			
+			//Skills			
 			if(this.has("Steady Breath")){
 				this.combatSpur.def += 4;
 				boostText += this.name + " gets +4 Def from defending with Steady Breath.<br>";
