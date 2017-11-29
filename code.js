@@ -4644,8 +4644,8 @@ function activeHero(hero){
 				//Reset skillNames
 				skillNames = [];
 				
-				if(enemy.has("Guard")){
-					if(enemy.combatStartHp / enemy.maxHp >= 1.1 - enemy.has("Guard")*0.1){
+				if(enemy.hasAtIndex("Guard", enemy.bIndex)){
+					if(enemy.combatStartHp / enemy.maxHp >= 1.1 - enemy.hasAtIndex("Guard", enemy.bIndex) * 0.1){
 						loseCharge = Math.max(loseCharge, 1);
 						skillNames.push(data.skills[enemy.bIndex].name);
 					}
@@ -4679,8 +4679,8 @@ function activeHero(hero){
 				//Reset skillNames
 				skillNames = []
 				
-				if(this.has("Guard")){
-					if(this.combatStartHp / this.maxHp >= 1.1 - this.has("Guard")*0.1){
+				if(this.hasAtIndex("Guard", this.bIndex)){
+					if(this.combatStartHp / this.maxHp >= 1.1 - this.hasAtIndex("Guard", this.bIndex) * 0.1){
 						loseCharge = Math.max(loseCharge, 1);
 						skillNames.push(data.skills[this.bIndex].name);
 					}
