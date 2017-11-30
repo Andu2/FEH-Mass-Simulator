@@ -5416,6 +5416,8 @@ function activeHero(hero){
 			roundText += this.postCombatBuff();
 			roundText += enemy.postCombatBuff();
 			roundText += this.postCombatHeal();
+			roundText += enemy.postCombatHeal();
+			
 
 			//Panic
 			if(this.has("Panic") || this.has("Legion's Axe") 
