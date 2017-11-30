@@ -11129,5 +11129,19 @@
 		"charge": 0,
 		"inheritrule": "greentome",
 		"affectsduel": 1
+	}, {
+		"skill_id": 796,
+		"name": "Thoron+",
+		"slot": "weapon",
+		"sp": 300,
+		"description": "",
+		"hp": 0,
+		"atk": 13,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "bluetome",
+		"affectsduel": 1
 	}
 ]

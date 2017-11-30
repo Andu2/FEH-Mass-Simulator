@@ -90,7 +90,7 @@ body{
 
 #frame_options{
 	position: relative;
-	height:388px;
+	height: 416px;
 }
 
 #frame_results{
@@ -371,6 +371,12 @@ body{
 	position: relative;
 }
 
+.skill_tabbed_row{
+	margin-left:38px;
+	height:26px;
+	position: relative;
+}
+
 .skill_letter{
 	width:12px;
 	height:12px;
@@ -391,9 +397,22 @@ body{
 	width:140px;
 }
 
+.skill_select_short{
+	position: absolute;
+	left:31px;
+	top:4px;
+	width:110px;
+}
+
 .skill_overwrite{
 	position: absolute;
 	left:177px;
+	top:4px;
+}
+
+.skill_overwrite_tabbed{
+	position: absolute;
+	left:147px;
 	top:4px;
 }
 

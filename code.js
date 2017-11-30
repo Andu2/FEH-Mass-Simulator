@@ -42,6 +42,7 @@ data.heroes = loadJSON('json/hero.json');
 data.heroSkills = loadJSON('json/hero_skill.json');
 data.skills = loadJSON('json/skill.json');
 data.prereqs = loadJSON('json/skill_prereq.json');
+data.refine = loadJSON('json/weapon_refine.json');
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -60,7 +61,7 @@ data.physicalWeapons = ["sword","lance","axe","bow","dagger"];
 data.magicalWeapons = ["redtome","bluetome","greentome","dragon","staff"];
 data.moveTypes = ["infantry","armored","flying","cavalry","mounted"];
 data.colors = ["red","blue","green","gray"];
-data.skillSlots = ["weapon","special","a","b","c","s"];
+data.skillSlots = ["weapon","refine","special","a","b","c","s"];
 data.buffTypes = ["buffs","debuffs","spur"];
 data.buffStats = ["atk","spd","def","res"];
 data.stats = ["hp","atk","spd","def","res"];
@@ -157,12 +158,14 @@ function initOptions(){
 	//The following 6 arrays will be set from arrays generated in the heroes array so they don't have to be re-calculated
 	challenger.naturalSkills = []; //Skills the hero has without having to inherit
 	challenger.validWeaponSkills = [];
+	challenger.validRefineSkills = [];
 	challenger.validSpecialSkills = [];
 	challenger.validASkills = [];
 	challenger.validBSkills = [];
 	challenger.validCSkills = [];
 
 	challenger.weapon = -1;
+	challenger.refine = -1;
 	challenger.special = -1;
 	challenger.a = -1;
 	challenger.b = -1;
@@ -204,6 +207,7 @@ function initOptions(){
 
 	enemies.fl.naturalSkills = [];
 	enemies.fl.validWeaponSkills = getValidSkills(enemies.fl,"weapon");
+	enemies.fl.validRefineSkills = getValidSkills(enemies.fl,"refine");
 	enemies.fl.validSpecialSkills = getValidSkills(enemies.fl,"special");
 	enemies.fl.validASkills = getValidSkills(enemies.fl,"a");
 	enemies.fl.validBSkills = getValidSkills(enemies.fl,"b");
@@ -217,12 +221,14 @@ function initOptions(){
 	enemies.fl.avgRes = 0;
 
 	enemies.fl.weapon = -1;
+	enemies.fl.refine = -1;
 	enemies.fl.special = -1;
 	enemies.fl.a = -1;
 	enemies.fl.b = -1;
 	enemies.fl.c = -1;
 	enemies.fl.s = -1;
 	enemies.fl.replaceWeapon = 0;
+	enemies.fl.replaceRefine = 0;
 	enemies.fl.replaceSpecial = 0;
 	enemies.fl.replaceA = 0;
 	enemies.fl.replaceB = 0;
@@ -304,10 +310,10 @@ $(document).ready(function(){
 		var dataVar = $(this).attr("data-var");
 		if(dataVar){
 			var varsThatChangeStats = [
-				".rarity",".merge",".boon",".bane",".summoner",".ally",".weapon",".a",".s",".replaceWeapon",".replaceA"
+				".rarity",".merge",".boon",".bane",".summoner",".ally",".weapon",".refine",".a",".s",".replaceWeapon",".replaceRefine",".replaceA"
 			];
 			var varsThatChangeSkills = [
-				".rarity",".replaceWeapon",".replaceSpecial",".replaceA",".replaceB",".replaceC","enemies.fl.weapon",
+				".rarity",".replaceWeapon",".replaceRefine",".replaceSpecial",".replaceA",".replaceB",".replaceC","enemies.fl.weapon","enemies.fl.refine",
 				"enemies.fl.special","enemies.fl.a","enemies.fl.b","enemies.fl.c","enemies.fl.s"
 			];
 			var varsThatUpdateFl = [
@@ -357,16 +363,25 @@ $(document).ready(function(){
 			changeDataVar(dataVar,newVal);
 
 			//Stuff specific to changing skill
-			if(endsWith(dataVar,".weapon") || endsWith(dataVar,".special") || endsWith(dataVar,".a") || endsWith(dataVar,".b") || endsWith(dataVar,".c") || endsWith(dataVar,".s")){
+			if(endsWith(dataVar,".weapon") ||endsWith(dataVar,".special") || endsWith(dataVar,".a") || endsWith(dataVar,".b") || endsWith(dataVar,".c") || endsWith(dataVar,".s")){
 				if(newVal != -1){
+					//***This does nothing?***
 					var dataToPass = data.skills[newVal].name;
 					if(endsWith(dataVar,".s")){
 						//Rename s skills to differentate from regular skills
 						dataToPass = "s_" + dataToPass;
 					}
+					//***This does nothing?***
 				}
 			}
-
+			
+			//Stuff specific to changing weapon option
+			if(endsWith(dataVar,".weapon")){
+				//Update refine options
+				updateRefineUI(hero);
+				hero.refine = -1;
+			}
+			
 			//Stuff specific to changing hero
 			if(endsWith(dataVar,".index")){
 				if(newVal != -1){
@@ -558,16 +573,19 @@ $(document).ready(function(){
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-function initHero(hero,alreadyHasSkills){
+function initHero(hero, alreadyHasSkills){
 	if(hero.index != -1){
 		hero.naturalSkills = data.heroBaseSkills[hero.index];
 
 		hero.validWeaponSkills = getValidSkills(hero,"weapon");
+		if (hero.weapon != -1 || undefined){
+			hero.validRefineSkills = getValidRefineSkills(hero,"refine");
+		}		
 		hero.validSpecialSkills = getValidSkills(hero,"special");
 		hero.validASkills = getValidSkills(hero,"a");
 		hero.validBSkills = getValidSkills(hero,"b");
 		hero.validCSkills = getValidSkills(hero,"c");
-		hero.validSSkills = getValidSkills(hero,"s");
+		hero.validSSkills = getValidSkills(hero,"s");		
 		if(!alreadyHasSkills){
 			setSkills(hero);
 		}
@@ -582,6 +600,7 @@ function initHero(hero,alreadyHasSkills){
 				}
 			});
 		}
+		hero.validRefineSkills = getValidRefineSkills(hero,"refine");
 		setSkillOptions(hero);
 		setStats(hero);
 	}
@@ -597,110 +616,148 @@ function getValidSkills(hero,slot){
 	//returns an array of indices on "skills" array for skills that hero can learn
 	//If hero has no index, returns all skills in slot except unique
 	//if not given slot, gives all
-
 	var validSkills = [];
-	for(var i = 0; i < data.skills.length; i++){
-		var inheritRules = data.skills[i].inheritrule.split(","); //Thanks Galeforce (melee,physical)
-		if(!slot || data.skills[i].slot == slot){
-			if(hero.index != undefined){
-				var attackType = getAttackTypeFromWeapon(data.heroes[hero.index].weapontype);
-				var inheritRuleMatches = 0;
-				for(var ruleNum = 0; ruleNum < inheritRules.length; ruleNum++){
-					//console.log("Trying " + slot + ": " + data.skills[i].name);
-					if(inheritRules[ruleNum] == "unique"){
-						//can only use if hero starts with it
-						if(hero.naturalSkills){
-							for(var j = 0; j < hero.naturalSkills.length; j++){
-								if(hero.naturalSkills[j][0] == data.skills[i].skill_id){
+	
+	//Get valid refines
+	if (slot == "refine"){
+		//TODO: Get initial valid refine options from initial weapon for Full List
+	}
+	//Otherwise, get skills
+	else{
+		for(var i = 0; i < data.skills.length; i++){
+			var inheritRules = data.skills[i].inheritrule.split(","); //Thanks Galeforce (melee,physical)
+			if(!slot || data.skills[i].slot == slot){
+				if(hero.index != undefined){
+					var attackType = getAttackTypeFromWeapon(data.heroes[hero.index].weapontype);
+					var inheritRuleMatches = 0;
+					for(var ruleNum = 0; ruleNum < inheritRules.length; ruleNum++){
+						//console.log("Trying " + slot + ": " + data.skills[i].name);
+						if(inheritRules[ruleNum] == "unique"){
+							//can only use if hero starts with it
+							if(hero.naturalSkills){
+								for(var j = 0; j < hero.naturalSkills.length; j++){
+									if(hero.naturalSkills[j][0] == data.skills[i].skill_id){
+										inheritRuleMatches++;
+									}
+								}
+							}
+						}
+						else if(attackType == inheritRules[ruleNum]){
+							//inherit if weapon is right attacking type
+							inheritRuleMatches++;
+						}
+						else if(data.weaponTypes.indexOf(inheritRules[ruleNum])!=-1){
+							//inherit if weapon is right
+							if(data.heroes[hero.index].weapontype==inheritRules[ruleNum]){
+								inheritRuleMatches++;
+							}
+						}
+						else if(data.moveTypes.indexOf(inheritRules[ruleNum])!=-1){
+							//inherit if movetype is right
+							if(inheritRules[ruleNum] === "mounted"){
+								if(data.heroes[hero.index].movetype == "cavalry" || data.heroes[hero.index].movetype == "flying"){
+									inheritRuleMatches++;
+								}
+							}
+							else{
+								if(data.heroes[hero.index].movetype==inheritRules[ruleNum]){
 									inheritRuleMatches++;
 								}
 							}
 						}
-					}
-					else if(attackType == inheritRules[ruleNum]){
-						//inherit if weapon is right attacking type
-						inheritRuleMatches++;
-					}
-					else if(data.weaponTypes.indexOf(inheritRules[ruleNum])!=-1){
-						//inherit if weapon is right
-						if(data.heroes[hero.index].weapontype==inheritRules[ruleNum]){
-							inheritRuleMatches++;
-						}
-					}
-					else if(data.moveTypes.indexOf(inheritRules[ruleNum])!=-1){
-						//inherit if movetype is right
-						if(inheritRules[ruleNum] === "mounted"){
-							if(data.heroes[hero.index].movetype == "cavalry" || data.heroes[hero.index].movetype == "flying"){
+						else if(data.weaponTypes.indexOf(inheritRules[ruleNum].replace("non",""))!=-1){
+							//inherit if not a certain weapon
+							if(data.heroes[hero.index].weapontype!=inheritRules[ruleNum].replace("non","")){
 								inheritRuleMatches++;
 							}
+						}
+						else if(data.moveTypes.indexOf(inheritRules[ruleNum].replace("non",""))!=-1){
+							//inherit if not a certain movement type
+							if(inheritRules[ruleNum] === "nonmounted"){
+								if(data.heroes[hero.index].movetype != "cavalry" && data.heroes[hero.index].movetype != "flying"){
+									inheritRuleMatches++;
+								}
+							}
+							else{
+								if(data.heroes[hero.index].movetype!=inheritRules[ruleNum].replace("non","")){
+									inheritRuleMatches++;
+								}
+							}
+						}
+						else if(data.colors.indexOf(inheritRules[ruleNum].replace("non",""))!=-1){
+							//inherit if not a certain color
+							if(data.heroes[hero.index].color!=inheritRules[ruleNum].replace("non","")){
+								inheritRuleMatches++;
+							}
+						}
+						else if(inheritRules[ruleNum]=="ranged"){
+							//inherit if weapon type in ranged group
+							if(data.rangedWeapons.indexOf(data.heroes[hero.index].weapontype) != -1){
+								inheritRuleMatches++;
+							}
+						}
+						else if(inheritRules[ruleNum]=="melee"){
+							//inherit if weapon type in melee group
+							if(data.meleeWeapons.indexOf(data.heroes[hero.index].weapontype) != -1){
+								inheritRuleMatches++;
+							}
+						}
+						else if(inheritRules[ruleNum]==""){
+							//everyone can inherit!
+							inheritRuleMatches++;
 						}
 						else{
-							if(data.heroes[hero.index].movetype==inheritRules[ruleNum]){
-								inheritRuleMatches++;
-							}
+							//shouldn't get here
+							//console.log("Issue finding logic for inheritrule " + inheritRules[ruleNum]);
 						}
-					}
-					else if(data.weaponTypes.indexOf(inheritRules[ruleNum].replace("non",""))!=-1){
-						//inherit if not a certain weapon
-						if(data.heroes[hero.index].weapontype!=inheritRules[ruleNum].replace("non","")){
-							inheritRuleMatches++;
-						}
-					}
-					else if(data.moveTypes.indexOf(inheritRules[ruleNum].replace("non",""))!=-1){
-						//inherit if not a certain movement type
-						if(inheritRules[ruleNum] === "nonmounted"){
-							if(data.heroes[hero.index].movetype != "cavalry" && data.heroes[hero.index].movetype != "flying"){
-								inheritRuleMatches++;
-							}
-						}
-						else{
-							if(data.heroes[hero.index].movetype!=inheritRules[ruleNum].replace("non","")){
-								inheritRuleMatches++;
-							}
-						}
-					}
-					else if(data.colors.indexOf(inheritRules[ruleNum].replace("non",""))!=-1){
-						//inherit if not a certain color
-						if(data.heroes[hero.index].color!=inheritRules[ruleNum].replace("non","")){
-							inheritRuleMatches++;
-						}
-					}
-					else if(inheritRules[ruleNum]=="ranged"){
-						//inherit if weapon type in ranged group
-						if(data.rangedWeapons.indexOf(data.heroes[hero.index].weapontype) != -1){
-							inheritRuleMatches++;
-						}
-					}
-					else if(inheritRules[ruleNum]=="melee"){
-						//inherit if weapon type in melee group
-						if(data.meleeWeapons.indexOf(data.heroes[hero.index].weapontype) != -1){
-							inheritRuleMatches++;
-						}
-					}
-					else if(inheritRules[ruleNum]==""){
-						//everyone can inherit!
-						inheritRuleMatches++;
-					}
-					else{
-						//shouldn't get here
-						//console.log("Issue finding logic for inheritrule " + inheritRules[ruleNum]);
-					}
 
-					if(inheritRuleMatches == inheritRules.length){
+						if(inheritRuleMatches == inheritRules.length){
+							validSkills.push(i);
+						}
+					}
+				}
+				else{
+					//It's the right slot, not given hero.index, so it's valid unless unique
+					if(inheritRules[0] != "unique"){
 						validSkills.push(i);
 					}
 				}
 			}
-			else{
-				//It's the right slot, not given hero.index, so it's valid unless unique
-				if(inheritRules[0] != "unique"){
-					validSkills.push(i);
-				}
+		}
+	}
+	
+	return validSkills;
+}
+
+//Returns a list of valid refine options for hero
+function getValidRefineSkills(hero){
+	var validSkills = [];
+		
+	//Return nothing if hero index is undefined
+	if (hero.index == undefined || hero.weapon == undefined || hero.weapon == -1){
+		return validSkills;
+	}
+	
+	//For each refine option in data.refine
+	for (var i = 0; i < data.refine.length; i++){
+		//Get list of prereqs for each type of refinement
+		var prereqList = data.refine[i].prereq.split(",");
+		var isPrereq = false;				
+		var heroWeaponName = data.skills[hero.weapon].name;	
+		//For each prereq in prereqList, each if it matches hero weapon name EXACTLY
+		for (var prereq = 0; prereq < prereqList.length; prereq++){
+			if (heroWeaponName == prereqList[prereq]){
+				isPrereq = true;
 			}
+		}
+		//If refine option is valid, push the option's index into the list
+		if(isPrereq == true){		
+			validSkills.push(i);
 		}
 	}
 	return validSkills;
 }
+
 
 function getHeroSkills(heroIndex){
 	//returns an array of arrays of skill-rarity pairs
@@ -876,16 +933,20 @@ function setStats(hero){
 			hero.def += data.skills[hero.weapon].def;
 			hero.res += data.skills[hero.weapon].res;
 		}
-		
-		//A-passive and S only ones that affects stats
+		if(hero.refine != -1){
+			hero.hp += data.refine[hero.refine].hp;
+			hero.atk += data.refine[hero.refine].atk;
+			hero.spd += data.refine[hero.refine].spd;
+			hero.def += data.refine[hero.refine].def;
+			hero.res += data.refine[hero.refine].res;
+		}
 		if(hero.a != -1){
 			hero.hp += data.skills[hero.a].hp;
 			hero.atk += data.skills[hero.a].atk;
 			hero.spd += data.skills[hero.a].spd;
 			hero.def += data.skills[hero.a].def;
 			hero.res += data.skills[hero.a].res;
-		}
-		
+		}		
 		if(hero.s != -1){
 			hero.hp += data.skills[hero.s].hp;
 			hero.atk += data.skills[hero.s].atk;
@@ -980,6 +1041,7 @@ function updateHealth(value, hero){
 function updateSpt(hero){
 	hero.spt = 0;
 	hero.spt += (hero.weapon != -1 ? data.skills[hero.weapon].sp : 0);
+	hero.spt += (hero.refine != -1 ? (data.refine[hero.refine].sp - data.skills[hero.weapon].sp) : 0);
 	hero.spt += (hero.special != -1 ? data.skills[hero.special].sp : 0);
 	hero.spt += (hero.a != -1 ? data.skills[hero.a].sp : 0);
 	hero.spt += (hero.b != -1 ? data.skills[hero.b].sp : 0);
@@ -995,6 +1057,7 @@ function setSkills(hero){
 			//Find if skill needs replacement based on inputs
 			data.skillSlots.forEach(function(slot){
 				if(enemies.fl[slot] != -1 && (enemies.fl["replace" + capitalize(slot)] == 1 || enemies.fl.list[i][slot] == -1)){
+					//TODO: Make refine options work in Full List Comparisons
 					if(data.heroPossibleSkills[enemies.fl.list[i].index].indexOf(enemies.fl[slot]) != -1){
 						enemies.fl.list[i][slot] = enemies.fl[slot];
 					}
@@ -1004,6 +1067,7 @@ function setSkills(hero){
 	}
 	else if(typeof hero.index != "undefined" && hero.index != -1){
 		hero.weapon = data.heroMaxSkills[hero.rarity-1][hero.index].weapon;
+		hero.refine = -1;
 		hero.special = data.heroMaxSkills[hero.rarity-1][hero.index].special;
 		hero.a = data.heroMaxSkills[hero.rarity-1][hero.index].a;
 		hero.b = data.heroMaxSkills[hero.rarity-1][hero.index].b;
@@ -1022,6 +1086,7 @@ function cloneHero(clone, target){
 		clone.summoner = target.summoner;
 		clone.ally = target.ally;
 		clone.weapon = target.weapon;
+		clone.refine = target.refine;
 		clone.special = target.special;
 		clone.a = target.a;
 		clone.b = target.b;
@@ -1061,12 +1126,14 @@ function resetHero(hero,blockInit){//also resets fl, despite singular name - pas
 	else{
 		if(options.customEnemyList == 0){
 			hero.weapon = -1;
+			hero.refine = -1;
 			hero.special = -1;
 			hero.a = -1;
 			hero.b = -1;
 			hero.c = -1;
 			hero.s = -1;
 			hero.replaceWeapon = 0;
+			hero.replaceRefine = 0;
 			hero.replaceSpecial = 0;
 			hero.replaceA = 0;
 			hero.replaceB = 0;
@@ -1094,7 +1161,7 @@ function addClEnemy(index){
 	var newCustomEnemyId = enemies.cl.list.length;
 
 	enemies.cl.list.push({
-		"index":index,"hp":0,"atk":0,"spd":0,"def":0,"res":0,"weapon":-1,"special":-1,"a":-1,"b":-1,"c":-1,"s":-1,
+		"index":index,"hp":0,"atk":0,"spd":0,"def":0,"res":0,"weapon":-1,"refine":-1,"special":-1,"a":-1,"b":-1,"c":-1,"s":-1,
 		"buffs": {"atk":0,"spd":0,"def":0,"res":0}, "debuffs": {"atk":0,"spd":0,"def":0,"res":0}, "spur": {"atk":0,"spd":0,"def":0,"res":0},
 		"boon": "none", "bane": "none", "summoner": "none", "ally": "none", "merge":0, "rarity": 5, "precharge":0, "adjacent":1, "damage": 0
 	});
@@ -1141,7 +1208,7 @@ function setFlEnemies(){
 
 	for(var i = 0; i < data.heroes.length;i++){
 		if(enemies.fl.list.length-1 < i){
-			enemies.fl.list.push({"index":i,"hp":0,"atk":0,"spd":0,"def":0,"res":0,"weapon":-1,"special":-1,"a":-1,"b":-1,"c":-1,"s":-1,
+			enemies.fl.list.push({"index":i,"hp":0,"atk":0,"spd":0,"def":0,"res":0,"weapon":-1,"refine":-1,"special":-1,"a":-1,"b":-1,"c":-1,"s":-1,
 				"buffs": enemies.fl.buffs, "debuffs": enemies.fl.debuffs, "spur": enemies.fl.spur, 
 				"boon": enemies.fl.boon, "bane": enemies.fl.bane, "summoner": enemies.fl.summoner, "ally": enemies.fl.ally,
 				"merge": enemies.fl.merge, "rarity": enemies.fl.rarity, "precharge": enemies.fl.precharge, "adjacent": enemies.fl.adjacent, "damage": enemies.fl.damage
@@ -1216,7 +1283,7 @@ function updateFlEnemies(){
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-function changeSkillPic(hero,slot){
+function changeSkillPic(hero, slot){
 	var htmlPrefix = getHtmlPrefix(hero);
 	if(data.skills[hero[slot]]){
 		var skillname = data.skills[hero[slot]].name;
@@ -1228,11 +1295,23 @@ function changeSkillPic(hero,slot){
 	}
 }
 
+function changeRefinePic(hero, slot){
+	var htmlPrefix = getHtmlPrefix(hero);
+	if(data.refine[hero[slot]]){
+		var refineName = data.refine[hero[slot]].name;
+		refineName = refineName.replace(/\s/g,"_");
+		$("#" + htmlPrefix + slot + "_picture").attr("src","weapons/" + refineName + ".png");
+	}
+	else{
+		$("#" + htmlPrefix + slot + "_picture").attr("src","skills/noskill.png");
+	}
+}
+
 function setSkillOptions(hero){
 	//set html for character skill select based on valid skills
 
 	var htmlPrefix = "challenger_";
-	var maxSkills = {"weapon":-1,"special":-1,"a":-1,"b":-1,"c":-1,"s":-1};
+	var maxSkills = {"weapon":-1,"refine":-1,"special":-1,"a":-1,"b":-1,"c":-1,"s":-1};
 	if(typeof hero.index != "undefined" && hero.index != -1){
 		maxSkills = data.heroMaxSkills[hero.rarity-1][hero.index];
 	}
@@ -1255,14 +1334,50 @@ function setSkillOptions(hero){
 		var slotHTML = "<option value=-1>No " + slotFriendlyText + "</option>";
 		var validSkills = hero["valid" + capitalize(slot) + "Skills"];
 		if(validSkills){
-			for(var i = 0; i < validSkills.length; i++){
-				if(((!options.showOnlyMaxSkills || data.skillsThatArePrereq.indexOf(data.skills[validSkills[i]].skill_id)==-1) && (!options.hideUnaffectingSkills || data.skills[validSkills[i]].affectsduel)) || validSkills[i] == maxSkills[slot] || validSkills[i] == hero[slot]){
-					slotHTML += "<option value=" + validSkills[i] + ">" + data.skills[validSkills[i]].name + "</option>";
+			if(slot == "refine"){
+				updateRefineUI(hero, htmlPrefix);
+			}else{
+				for(var i = 0; i < validSkills.length; i++){
+					if(((!options.showOnlyMaxSkills || data.skillsThatArePrereq.indexOf(data.skills[validSkills[i]].skill_id)==-1) && (!options.hideUnaffectingSkills || data.skills[validSkills[i]].affectsduel)) || validSkills[i] == maxSkills[slot] || validSkills[i] == hero[slot]){
+						slotHTML += "<option value=" + validSkills[i] + ">" + data.skills[validSkills[i]].name + "</option>";
+					}
 				}
-			}
+			}			
 		}
-		$("#" + htmlPrefix + slot).html(slotHTML);
+		//TODO: Clean this up so slot does not have to be checked again
+		if (slot != "refine"){
+			$("#" + htmlPrefix + slot).html(slotHTML);
+		}
 	});
+}
+
+function updateRefineUI(hero){
+	var htmlPrefix = "challenger_";
+	var slotHTML = "<option value=-1>No refine</option>";
+	var validSkills = hero["valid" + capitalize("refine") + "Skills"];
+	
+	//Set htmlPrefix
+	if(!hero.challenger){
+		if(hero.isFl){
+			htmlPrefix = "enemies_";
+		}
+		else{
+			htmlPrefix = "cl_enemy_";
+		}
+	}
+	
+	//If hero exists, find their refine options
+	if (hero.index != undefined && hero.index != -1){
+		validSkills = getValidRefineSkills(hero);
+	}
+	
+	//Add each valid refine option into html string
+	for(var i = 0; i < validSkills.length; i++){					
+		slotHTML += "<option value=" + validSkills[i] + ">" + data.refine[validSkills[i]].name + "</option>";
+	}
+	
+	//Set html for specified hero type
+	$("#" + htmlPrefix + "refine").html(slotHTML);
 }
 
 function updateFullUI(){
@@ -1291,11 +1406,11 @@ function updateEnemyUI(){
 
 function updateHeroUI(hero){
 	//Shared elements between challenger and custom enemy
-
+	
 	if(!hero){
 		//Make a dummy hero
 		hero = {
-			"index":-1,"hp":0,"atk":0,"spd":0,"def":0,"res":0,"weapon":-1,"special":-1,"a":-1,"b":-1,"c":-1,"s":-1,
+			"index":-1,"hp":0,"atk":0,"spd":0,"def":0,"res":0,"weapon":-1,"refine":-1,"special":-1,"a":-1,"b":-1,"c":-1,"s":-1,
 			"buffs": {"atk":0,"spd":0,"def":0,"res":0}, "debuffs": {"atk":0,"spd":0,"def":0,"res":0}, "spur": {"atk":0,"spd":0,"def":0,"res":0},
 			"boon": "none", "bane": "none", "summoner": "none", "ally": "none", "merge":0, "rarity": 5, "precharge":0, "adjacent":1, "damage": 0
 		}
@@ -1309,14 +1424,16 @@ function updateHeroUI(hero){
 	$("#" + htmlPrefix + "adjacent").val(hero.adjacent);
 	$("#" + htmlPrefix + "merge").val(hero.merge);
 	$("#" + htmlPrefix + "rarity").val(hero.rarity);
-
+	
 	setSkillOptions(hero);
 	$("#" + htmlPrefix + "weapon").val(hero.weapon);
+	$("#" + htmlPrefix + "refine").val(hero.refine);
 	$("#" + htmlPrefix + "special").val(hero.special);
 	$("#" + htmlPrefix + "a").val(hero.a);
 	$("#" + htmlPrefix + "b").val(hero.b);
 	$("#" + htmlPrefix + "c").val(hero.c);
 	$("#" + htmlPrefix + "s").val(hero.s);
+	changeRefinePic(hero,"refine");
 	changeSkillPic(hero,"a");
 	changeSkillPic(hero,"b");
 	changeSkillPic(hero,"c");
@@ -1380,6 +1497,10 @@ function updateHeroUI(hero){
 					specialCharge += 1;
 				}
 			}
+			
+			//Refine bonus
+			if(hero.refine != -1){
+			}
 
 			//Special Item
 			if(hero.s != -1){
@@ -1430,6 +1551,8 @@ function updateHeroUI(hero){
 		if(hero.isFl){
 			//Do fl-specific stuff here (no heroIndex)
 			$("#" + htmlPrefix + "weapon_overwrite").val(hero.replaceWeapon);
+			//TODO: complete replace refine checks for Full List
+			$("#" + htmlPrefix + "refine_overwrite").val(hero.replaceRefine);
 			$("#" + htmlPrefix + "special_overwrite").val(hero.replaceSpecial);
 			$("#" + htmlPrefix + "a_overwrite").val(hero.replaceA);
 			$("#" + htmlPrefix + "b_overwrite").val(hero.replaceB);
@@ -1513,6 +1636,9 @@ function showSkillTooltip(heroType, skillType){
 			case "weapon":
 				skillID = hero.weapon;
 				break;
+			case "refine":
+				skillID = hero.refine;
+				break;
 			case "special":
 				skillID = hero.special;
 				break;
@@ -1537,13 +1663,26 @@ function showSkillTooltip(heroType, skillType){
 	if (skillID != -1){
 		showingTooltip = true;
 		
-		tooltipText = "<span class=\"bold\">" + data.skills[skillID].name + "</span>";
-		tooltipText += (skillType == "weapon") ? " Mt: <font color=\"#fefec8\">" + data.skills[skillID].atk + "</font>" : "";
-		tooltipText += " SP: <font color=\"#fefec8\">" + data.skills[skillID].sp + "</font><br>";
-		tooltipText += data.skills[skillID].description;
+		if(skillType == "refine"){
+			tooltipText = "<span class=\"bold\">" + data.refine[skillID].name + " - </span>";
+			tooltipText += "<span class=\"bold\">" + data.refine[skillID].category + "</span>";
+			tooltipText += " SP: <font color=\"#fefec8\">" + data.refine[skillID].sp + "</font><br>";
+			tooltipText += " HP: <font color=\"#fefec8\">" + data.refine[skillID].hp + "</font>";
+			tooltipText += " Atk: <font color=\"#fefec8\">" + data.refine[skillID].atk + "</font>";
+			tooltipText += " Spd: <font color=\"#fefec8\">" + data.refine[skillID].spd + "</font>";
+			tooltipText += " Def: <font color=\"#fefec8\">" + data.refine[skillID].def + "</font>";
+			tooltipText += " Res: <font color=\"#fefec8\">" + data.refine[skillID].res + "</font><br>";
+			tooltipText += data.refine[skillID].description;
+		}
+		else{
+			tooltipText = "<span class=\"bold\">" + data.skills[skillID].name + "</span>";
+			tooltipText += (skillType == "weapon") ? " Mt: <font color=\"#fefec8\">" + data.skills[skillID].atk + "</font>" : "";
+			tooltipText += " SP: <font color=\"#fefec8\">" + data.skills[skillID].sp + "</font><br>";
+			tooltipText += data.skills[skillID].description;
+		}		
 		
 		$("#frame_tooltip").html(tooltipText).show();
-	}	
+	}
 }
 
 function hideSkillTooltip(){
@@ -1590,7 +1729,7 @@ function copyChallenger(){
 		var hero;
 		//Generate a new hero
 		enemies.cl.list.push({
-			"index":-1,"hp":0,"atk":0,"spd":0,"def":0,"res":0,"weapon":-1,"special":-1,"a":-1,"b":-1,"c":-1,"s":-1,
+			"index":-1,"hp":0,"atk":0,"spd":0,"def":0,"res":0,"weapon":-1,"refine":-1,"special":-1,"a":-1,"b":-1,"c":-1,"s":-1,
 			"buffs": {"atk":0,"spd":0,"def":0,"res":0}, "debuffs": {"atk":0,"spd":0,"def":0,"res":0}, "spur": {"atk":0,"spd":0,"def":0,"res":0},
 			"boon": "none", "bane": "none", "summoner": "none", "ally": "none", "merge":0, "rarity": 5, "precharge":0, "adjacent":1, "damage": 0
 		});
@@ -1598,7 +1737,7 @@ function copyChallenger(){
 		//Copy challenger attributes
 		cloneHero(hero, challenger);
 		//Init hero and update enemy UI
-		initHero(hero, true);
+		initHero(hero, true);		
 		options.customEnemySelected = enemies.cl.list.length - 1;
 		updateEnemyUI();
 		updateClList();
@@ -1746,7 +1885,7 @@ function importText(side){
 		}
 		else{
 			enemies.cl.list.push({
-				"index":-1,"hp":0,"atk":0,"spd":0,"def":0,"res":0,"weapon":-1,"special":-1,"a":-1,"b":-1,"c":-1,"s":-1,
+				"index":-1,"hp":0,"atk":0,"spd":0,"def":0,"res":0,"weapon":-1,"refine":-1,"special":-1,"a":-1,"b":-1,"c":-1,"s":-1,
 				"buffs": {"atk":0,"spd":0,"def":0,"res":0}, "debuffs": {"atk":0,"spd":0,"def":0,"res":0}, "spur": {"atk":0,"spd":0,"def":0,"res":0},
 				"boon": "none", "bane": "none", "summoner": "none", "ally": "none", "merge":0, "rarity": 5, "precharge":0, "adjacent":1, "damage": 0
 			});
@@ -1780,6 +1919,7 @@ function importText(side){
 		
 		//Reset skills - they won't be reset with setSkills
 		hero.weapon = -1;
+		hero.refine = -1;
 		hero.special = -1;
 		hero.a = -1;
 		hero.b = -1;
@@ -1800,7 +1940,6 @@ function importText(side){
 				}
 			}
 		}
-
 		initHero(hero,true);
 	}
 
@@ -1914,7 +2053,6 @@ function importText(side){
 		var buffObject = false;
 		var skillName = false;
 		var includeObject = false;
-
 		if(includesLike(keyValue[0],"debuff")){ //do debuff first, because buff is contained in it
 			key = "debuffs";
 			buffObject = true;
@@ -1962,6 +2100,9 @@ function importText(side){
 			key = "weapon";
 			skillName = true;
 		}
+		else if(includesLike(keyValue[0],"refine")){
+			key = "refine";
+		}
 		else if(includesLike(keyValue[0],"special")){
 			key = "special";
 			skillName = true;
@@ -2005,6 +2146,10 @@ function importText(side){
 		else if(skillName){
 			value = getIndexFromName(removeEdgeJunk(keyValue[1]),data.skills,key);
 			//console.log("Looking for " + key + ", found " + value);
+		}
+		else if(key == "refine"){			
+			//TODO: Complete refine import script
+			value = searchRefineIndex(keyValue[1].split(" - "));			
 		}
 		else if(key=="boon" || key=="bane"){
 			data.stats.forEach(function(stat){
@@ -2058,6 +2203,17 @@ function importText(side){
 	validateNumberInputs();
 	hideImportDialog();
 	calculate();
+}
+
+//Search for refine index by name and category
+function searchRefineIndex(refine){
+	for (var i = 0; i < data.refine.length; i++){
+		if (refine[0] == data.refine[i].name.toLowerCase() && refine[1] == data.refine[i].category.toLowerCase()){
+			return i;
+		}
+	}
+	//Refine not found
+	return -1;
 }
 
 function removeEdgeJunk(string){
@@ -2129,8 +2285,13 @@ function getExportText(side){
 
 		data.skillSlots.forEach(function(slot){
 			if(enemies.fl[slot] != -1){
-				exportText += capitalize(slot) + ": " + data.skills[enemies.fl[slot]].name + delimiter;
-				exportText += "Replace " + capitalize(slot) + ": " + !!parseInt(enemies.fl["replace" + capitalize(slot)]) + delimiter;
+				if (slot == "refine"){
+					exportText += capitalize(slot) + ": " + data.refine[enemies.fl[slot]].name + " - " + data.refine[enemies.fl[slot]].category + delimiter;
+					exportText += "Replace " + capitalize(slot) + ": " + !!parseInt(enemies.fl["replace" + capitalize(slot)]) + delimiter;
+				}else{
+					exportText += capitalize(slot) + ": " + data.skills[enemies.fl[slot]].name + delimiter;
+					exportText += "Replace " + capitalize(slot) + ": " + !!parseInt(enemies.fl["replace" + capitalize(slot)]) + delimiter;
+				}				
 			}
 		});
 
@@ -2187,7 +2348,12 @@ function getExportText(side){
 			//Might not do it this way because order is not guaranteed
 			data.skillSlots.forEach(function(slot){
 				if(hero[slot] != -1){
-					heroExportText += capitalize(slot) + ": " + data.skills[hero[slot]].name + delimiter;
+					if(slot == "refine"){
+						heroExportText += capitalize(slot) + ": " + data.refine[hero[slot]].name + " - " + data.refine[hero[slot]].category + delimiter;
+					}else{
+						heroExportText += capitalize(slot) + ": " + data.skills[hero[slot]].name + delimiter;
+					}
+					
 				}
 			});
 
@@ -2215,7 +2381,7 @@ function getExportText(side){
 			}
 
 			if(statusText){
-				heroExportText += ":::Status" + delimiter+statusText;
+				heroExportText += ":::Status" + delimiter + statusText;
 			}
 		}
 		return heroExportText;
@@ -2418,6 +2584,7 @@ function fight(enemyIndex,resultIndex){
 	}
 
 	var weaponName = "None";
+	var refineName = "norefine";
 	var specialName = "None";
 	var aName = "noskill";
 	var bName = "noskill";
@@ -2425,6 +2592,9 @@ function fight(enemyIndex,resultIndex){
 	var sName = "noskill";
 	if(ahEnemy.weaponIndex != -1){
 		weaponName = data.skills[ahEnemy.weaponIndex].name;
+	}
+	if(ahEnemy.refineIndex != -1){
+		refineName = data.refine[ahEnemy.refineIndex].name;
 	}
 	if(ahEnemy.specialIndex != -1){
 		specialName = data.skills[ahEnemy.specialIndex].name;
@@ -2441,7 +2611,7 @@ function fight(enemyIndex,resultIndex){
 	if(ahEnemy.sIndex != -1){
 		sName = data.skills[ahEnemy.sIndex].name.replace(/\s/g,"_");
 	}
-
+	
 	var weaponTypeName = ahEnemy.weaponType;
 	if(weaponTypeName == "dragon"){
 		weaponTypeName = ahEnemy.color + "dragon";
@@ -2531,7 +2701,16 @@ function fight(enemyIndex,resultIndex){
 			"<div class=\"results_previousresult\">" + enemyList[enemyIndex].lastFightResult + "</div>",
 		"</div>",
 		"<div class=\"results_bottomline\">",
-			"<span class=\"results_stat\">HP: " + ahEnemy.maxHp + "</span><span class=\"results_stat\">Atk: " + ahEnemy.atk + "</span><span class=\"results_stat\">Spd: " + ahEnemy.spd + "</span><span class=\"results_stat\">Def: " + ahEnemy.def + "</span><span class=\"results_stat\">Res: " + ahEnemy.res + "</span><div class=\"results_skills\"><span class=\"results_stat\"><img class=\"skill_picture\" src=\"skills/weapon.png\"/>" + weaponName + "</span><span class=\"results_stat\"><img class=\"skill_picture\" src=\"skills/special.png\"/>" + specialName + "</span><span class=\"results_stat\"><img class=\"skill_picture\" src=\"skills/" + aName + ".png\"/><img class=\"skill_picture\" src=\"skills/" + bName + ".png\"/><img class=\"skill_picture\" src=\"skills/" + cName + ".png\"/><img class=\"skill_picture\" src=\"skills/" + sName + ".png\"/></span></div>",
+			"<span class=\"results_stat\">HP: " + ahEnemy.maxHp + "</span>",
+			"<span class=\"results_stat\">Atk: " + ahEnemy.atk + "</span>",
+			"<span class=\"results_stat\">Spd: " + ahEnemy.spd + "</span>",
+			"<span class=\"results_stat\">Def: " + ahEnemy.def + "</span>",
+			"<span class=\"results_stat\">Res: " + ahEnemy.res + "</span>",
+			"<div class=\"results_skills\">",
+				"<span class=\"results_stat\"><img class=\"skill_picture\" src=\"skills/weapon.png\"/><img class=\"skill_picture\" src=\"weapons/" + refineName + ".png\"/>" + weaponName + "</span>",
+				"<span class=\"results_stat\"><img class=\"skill_picture\" src=\"skills/special.png\"/>" + specialName + "</span>",
+				"<span class=\"results_stat\"><img class=\"skill_picture\" src=\"skills/" + aName + ".png\"/><img class=\"skill_picture\" src=\"skills/" + bName + ".png\"/><img class=\"skill_picture\" src=\"skills/" + cName + ".png\"/><img class=\"skill_picture\" src=\"skills/" + sName + ".png\"/></span>",
+			"</div>",
 		"</div>",
 	"</div>",""].join("\n");
 
@@ -2702,8 +2881,8 @@ function exportCalc(){
 
 		//Column headers
 		//Should take out buffs and stuff that aren't used to minimize columns?
-		csvString += "Challenger,cColor,cMovetype,cWeapontype,cRarity,cMerge,cBoon,cBane,cMaxHP,cStartHP,cAtk,cSpd,cDef,cRes,cWeapon,cSpecial,cPrecharge,cAdjacent,cA,cB,cC,cS,cBuffAtk,cBuffSpd,cBuffDef,cBuffRes,cDebuffAtk,cDebuffSpd,cDebuffDef,cDebuffRes,cSpurAtk,cSpurSpd,cSpurDef,cSpurRes,";
-		csvString += "Enemy,eColor,eMovetype,eWeapontype,eRarity,eMerge,eBoon,eBane,eMaxHP,eStartHP,eAtk,eSpd,eDef,eRes,eWeapon,eSpecial,ePrecharge,eAdjacent,eA,eB,eC,eS,eBuffAtk,eBuffSpd,eBuffDef,eBuffRes,eDebuffAtk,eDebuffSpd,eDebuffDef,eDebuffRes,eSpurAtk,eSpurSpd,eSpurDef,eSpurRes,";
+		csvString += "Challenger,cColor,cMovetype,cWeapontype,cRarity,cMerge,cBoon,cBane,cMaxHP,cStartHP,cAtk,cSpd,cDef,cRes,cWeapon,cRefine,cSpecial,cPrecharge,cAdjacent,cA,cB,cC,cS,cBuffAtk,cBuffSpd,cBuffDef,cBuffRes,cDebuffAtk,cDebuffSpd,cDebuffDef,cDebuffRes,cSpurAtk,cSpurSpd,cSpurDef,cSpurRes,";
+		csvString += "Enemy,eColor,eMovetype,eWeapontype,eRarity,eMerge,eBoon,eBane,eMaxHP,eStartHP,eAtk,eSpd,eDef,eRes,eWeapon,eRefine,eSpecial,ePrecharge,eAdjacent,eA,eB,eC,eS,eBuffAtk,eBuffSpd,eBuffDef,eBuffRes,eDebuffAtk,eDebuffSpd,eDebuffDef,eDebuffRes,eSpurAtk,eSpurSpd,eSpurDef,eSpurRes,";
 		csvString += "FirstTurnThreaten,StartTurn,UseGaleforce,Initiator1,Initiator2,Initiator3,Initiator4,Outcome,cEndHP,eEndHP,Rounds,Overkill,BattleLog\n";
 
 		fightResults.forEach(function(result){
@@ -2723,6 +2902,12 @@ function exportCalc(){
 			csvString += challenger.res + ",";
 			if(challenger.weapon != -1){
 				csvString += data.skills[challenger.weapon].name + ",";
+			}
+			else{
+				csvString += ",";
+			}
+			if(challenger.refine != -1){
+				csvString += data.refine[challenger.refine].name + ",";
 			}
 			else{
 				csvString += ",";
@@ -2789,6 +2974,12 @@ function exportCalc(){
 			csvString += enemy.res + ",";
 			if(enemy.weaponIndex != -1){
 				csvString += data.skills[enemy.weaponIndex].name + ",";
+			}
+			else{
+				csvString += ",";
+			}
+			if(enemy.refineIndex != -1){
+				csvString += data.skills[enemy.refineIndex].name + ",";
 			}
 			else{
 				csvString += ",";
@@ -2917,6 +3108,7 @@ function activeHero(hero){
 	this.merge = hero.merge;
 
 	this.weaponIndex = hero.weapon;
+	this.refineIndex = hero.refine;
 	this.specialIndex = hero.special;
 	this.aIndex = hero.a;
 	this.bIndex = hero.b;
@@ -2953,6 +3145,10 @@ function activeHero(hero){
 	//Make a list of skill names for easy reference
 	if(this.weaponIndex != -1){
 		this.skillNames.push(data.skills[this.weaponIndex].name);
+	}
+	if(this.refineIndex != -1){
+		//TODO: Add refine skill name to list and integrate into 'has' functions
+		this.skillNames.push(data.refine[this.refineIndex].name);
 	}
 	if(this.specialIndex != -1){
 		this.skillNames.push(data.skills[this.specialIndex].name);
@@ -3028,6 +3224,7 @@ function activeHero(hero){
 	
 	//Checks if skill name matches skill index and returns skill tier
 	//eg. this.hasAtIndex("Skill Name", this.aIndex)
+	//TODO: Search refineIndex properly
 	this.hasAtIndex = function(skill, index){
 		if(index != -1){
 			var skillName = data.skills[index].name;
@@ -3060,7 +3257,21 @@ function activeHero(hero){
 		} else{
 			return false;
 		}
-	}	
+	}
+	
+	//Checks if refine name matches refine index exactly and returns boolean
+	//eg. this.hasExactlyAtIndex("Refine Option", this.refineIndex)
+	this.hasAtRefineIndex = function(skill, index){
+		if(index != -1){
+			if (data.refine[index].name == skill){
+				return true;
+			} else{
+				return false;
+			}
+		} else{
+			return false;
+		}
+	}
 
 	this.resetCharge = function(){
 		//resets charge based on weapon
@@ -3619,8 +3830,14 @@ function activeHero(hero){
 				boostText += this.name + " gets +4 Def in combat from " + data.skills[this.weaponIndex].name + " with <= 50% health.<br>";
 			}
 			if(this.has("Berkut's Lance")){
-				this.combatSpur.res += 4;
-				boostText += this.name + " gets +4 Res while defending with " + data.skills[this.weaponIndex].name + ".<br>";
+				if(this.hasExactly("Berkut's Lance+") && this.refineIndex != -1){
+					this.combatSpur.res += 7;
+					boostText += this.name + " gets +7 Res while defending with " + data.skills[this.weaponIndex].name + " (Refined).<br>";
+				}
+				else{
+					this.combatSpur.res += 4;
+					boostText += this.name + " gets +4 Res while defending with " + data.skills[this.weaponIndex].name + ".<br>";
+				}				
 			}
 			if(this.hasExactly("Bright Naginata")){
 				this.combatSpur.atk += 4;
@@ -3685,7 +3902,7 @@ function activeHero(hero){
 				poisonEnemyText += enemy.name + " takes " + poison + " damage after combat from " + skillName + ".<br>";
 			}
 			if(this.has("Deathly Dagger")){
-				poison = 7;
+				poison = (this.refineIndex != -1) ? 10 : 7;
 				skillName = data.skills[this.weaponIndex].name;
 				if(enemy.hp - poison <= 0){
 					poison = enemy.hp - 1;
@@ -3703,16 +3920,16 @@ function activeHero(hero){
 	//They could be put into one function, but separating them is easier to make sense of
 	this.painEnemy = function(enemy){
 		var painEnemyText = "";
-
-		if(!enemy.has("Embla's Ward")){
-			//Pain only takes place when the unit performs an attack in the round
-			if(this.has("Pain") && this.didAttack){
+		
+		//Pain only takes place when the unit performs an attack in the round
+		if(!enemy.has("Embla's Ward") && this.didAttack){
+			if(this.has("Pain")){
 				var painDmg = 10;
 				if(enemy.hp - painDmg <= 0){
 					painDmg = enemy.hp - 1;
 				}
 				enemy.hp -= painDmg;
-				painEnemyText += enemy.name + " takes " + painDmg + " damage after combat from Pain.<br>";
+				painEnemyText += enemy.name + " takes " + painDmg + " damage after combat.<br>";
 			}
 		}
 
@@ -3728,11 +3945,17 @@ function activeHero(hero){
 
 		if(!this.has("Embla's Ward")){		
 
-			//Fury		
-			if(this.has("Fury")){
-				damage = this.has("Fury") * 2;
+			//Fury
+			if(this.hasAtIndex("Fury", this.aIndex)){
+				damage = this.hasAtIndex("Fury", this.aIndex) * 2;
 				skillName = data.skills[this.aIndex].name;
 				damageText += this.name + " takes " + damage + " damage after combat from " + skillName + ".<br>";
+				totalDamage += damage;
+			}
+			if(this.hasAtRefineIndex("Fury", this.refineIndex)){
+				damage = 6;
+				skillName = data.skills[this.weaponIndex].name;
+				damageText += this.name + " takes " + damage + " damage after combat from " + skillName + " (Refined).<br>";
 				totalDamage += damage;
 			}
 
@@ -3770,139 +3993,120 @@ function activeHero(hero){
 		return damageText;
 	}
 
+	//***This was messy and hard to read =( ***
 	this.seal = function(enemy){
 		var sealText = "";
-
 		var skillName = "";
+		var sealValue = {"atk":0,"spd":0,"def":0,"res":0};
 		
-		//Seal Atk
-		var sealAtk = 0;
+		//Seals stats for skill, can calculate up to two tiers
+		function sealStats(skill, statTypes, tierValue){
+			//Check for second value
+			if (tierValue.length == 2 && skill.charAt(skill.length - 1) == "+"){
+				for (var i = 0; i < statTypes.length; i++){
+					if (sealValue[statTypes[i]] > tierValue[1]){
+						sealValue[statTypes[i]] = tierValue[1];
+						skillName = skill;
+					}
+				}
+			//Otherwise just check for first value
+			}else{
+				for (var i = 0; i < statTypes.length; i++){
+					if (sealValue[statTypes[i]] > tierValue[0]){
+						sealValue[statTypes[i]] = tierValue[0];
+						skillName = skill;
+					}
+				}
+			}
+		}
+		
+		//Seals
 		if(this.has("Seal Atk")){ //Will count for seal atk speed as well
-			sealAtk = -this.has("Seal Atk") * 2 - 1;
+			sealValue.atk = -this.has("Seal Atk") * 2 - 1;
 			skillName = data.skills[this.bIndex].name;
 		}
-		if(this.didAttack && this.hasExactly("Fear") && sealAtk > -6){
-			sealAtk = -6;
-			skillName = data.skills[this.weaponIndex].name;			
-		}
-		if(this.didAttack && this.hasExactly("Fear+") && sealAtk > -7){
-			sealAtk = -7;
-			skillName = data.skills[this.weaponIndex].name;
-		}
-		if(sealAtk < enemy.combatDebuffs.atk){
-			enemy.combatDebuffs.atk = sealAtk;
-			sealText += this.name + " lowers " + enemy.name + "'s Atk by " + (-sealAtk) + " after combat with " + skillName + ".<br>";
-		}
-		
-		//Seal Spd
-		var sealSpd = 0;
 		if(this.has("Seal Spd")){
-			sealSpd = -this.has("Seal Spd") * 2 - 1;
+			sealValue.spd = -this.has("Seal Spd") * 2 - 1;
 			skillName = data.skills[this.bIndex].name;
 		}
 		if(this.has("Seal Atk Spd")){
-			sealSpd = -this.has("Seal Atk Spd") * 2 - 1;
+			sealValue.spd = -this.has("Seal Atk Spd") * 2 - 1;
 			skillName = data.skills[this.bIndex].name;
 		}
-		if(this.didAttack && this.hasExactly("Slow") && sealSpd > -6){
-			sealSpd = -6;
-			skillName = data.skills[this.weaponIndex].name;
-		}
-		if(this.didAttack && this.hasExactly("Slow+") && sealSpd > -7){
-			sealSpd = -7;
-			skillName = data.skills[this.weaponIndex].name;
-		}
-		if(sealSpd < enemy.combatDebuffs.spd){
-			enemy.combatDebuffs.spd = sealSpd;
-			sealText += this.name + " lowers " + enemy.name + "'s Spd by " + (-sealSpd) + " after combat with " + skillName + ".<br>";
-		}
-		
-		//Seal Def
-		var sealDef = 0;
 		if(this.has("Seal Def")){
-			sealDef = -this.has("Seal Def") * 2 - 1;
+			sealValue.def = -this.has("Seal Def") * 2 - 1;
 			skillName = data.skills[this.bIndex].name;
 		}
 		if(this.has("Seal Atk Def")){
-			sealDef = -this.has("Seal Atk Def") * 2 - 1;
+			sealValue.def = -this.has("Seal Atk Def") * 2 - 1;
 			skillName = data.skills[this.bIndex].name;
 		}
-		//Daggers only take effect if the unit performed an attack
-		if(this.didAttack){
-			if((this.hasExactly("Silver Dagger+") || this.hasExactly("Deathly Dagger") || this.hasExactly("Seashell+") || this.hasExactly("Dancer's Fan+")) && sealDef > -7){
-				sealDef = -7;
-				skillName = data.skills[this.weaponIndex].name;
-			}
-			else if((this.hasExactly("Silver Dagger") || this.hasExactly("Rogue Dagger+") || this.hasExactly("Seashell") || this.hasExactly("Dancer's Fan")) && sealDef > -5){
-				sealDef = -5;
-				skillName = data.skills[this.weaponIndex].name;
-			}
-			else if((this.hasExactly("Iron Dagger") || this.hasExactly("Steel Dagger") || this.hasExactly("Rogue Dagger")) && sealDef > -3){
-				sealDef = -3;
-				skillName = data.skills[this.weaponIndex].name;
-			}
-			else if(this.hasExactly("Poison Dagger+") && sealDef > -6 && enemy.moveType == "infantry"){
-				sealDef = -6;
-				skillName = data.skills[this.weaponIndex].name;
-			}
-			else if(this.hasExactly("Poison Dagger") && sealDef > -4 && enemy.moveType == "infantry"){
-				sealDef = -4;
-				skillName = data.skills[this.weaponIndex].name;
-			}
-			else if(this.hasExactly("Kitty Paddle+") && sealDef > -7 && (enemy.weaponType == "redtome" || enemy.weaponType == "bluetome" || enemy.weaponType == "greentome")){
-				sealDef = -7;
-				skillName = data.skills[this.weaponIndex].name;
-			}
-			else if(this.hasExactly("Kitty Paddle") && sealDef > -5 && (enemy.weaponType == "redtome" || enemy.weaponType == "bluetome" || enemy.weaponType == "greentome")){
-				sealDef = -5;
-				skillName = data.skills[this.weaponIndex].name;
-			}
-		}
-		if(sealDef < enemy.combatDebuffs.def){
-			enemy.combatDebuffs.def = sealDef;
-			sealText += this.name + " lowers " + enemy.name + "'s Def by " + (-sealDef) + " after combat with " + skillName + ".<br>";
+		if(this.has("Seal Res")){
+			sealValue.res = -this.has("Seal Res") * 2 - 1;
+			skillName = data.skills[this.bIndex].name;
 		}
 		
-		//Seal Res
-		var sealRes = 0;
-		if(this.has("Seal Res")){
-			sealRes = -this.has("Seal Res") * 2 - 1;
-			skillName = data.skills[this.bIndex].name;
-		}
-		//Daggers only take effect if the unit performed an attack
+		//These only take effect if the unit performed an attack
 		if(this.didAttack){
-			if((this.hasExactly("Silver Dagger+") || this.hasExactly("Deathly Dagger") || this.hasExactly("Seashell+") || this.hasExactly("Dancer's Fan+")) && sealRes > -7){
-				sealRes = -7;
-				skillName = data.skills[this.weaponIndex].name;
+			//Staves
+			if (this.has("Fear")){
+				sealStats(data.skills[this.weaponIndex].name, ["atk"], [-6, -7]);
 			}
-			else if((this.hasExactly("Silver Dagger") || this.hasExactly("Rogue Dagger+") || this.hasExactly("Seashell") || this.hasExactly("Dancer's Fan")) && sealRes > -5){
-				sealRes = -5;
-				skillName = data.skills[this.weaponIndex].name;
+			if (this.has("Slow")){
+				sealStats(data.skills[this.weaponIndex].name, ["spd"], [-6, -7]);
 			}
-			else if((this.hasExactly("Iron Dagger") || this.hasExactly("Steel Dagger") || this.hasExactly("Rogue Dagger")) && sealRes > -3){
-				sealRes = -3;
-				skillName = data.skills[this.weaponIndex].name;
+			
+			//Daggers
+			if (this.hasExactly("Deathly Dagger")){
+				sealStats(data.skills[this.weaponIndex].name, ["def","res"], [-7]);
 			}
-			else if(this.hasExactly("Poison Dagger+") && sealRes > -6 && enemy.moveType == "infantry"){
-				sealRes = -6;
-				skillName = data.skills[this.weaponIndex].name;
+			if (this.has("Silver Dagger") || this.has("Seashell") || this.has("Dancer's Fan")){
+				sealStats(data.skills[this.weaponIndex].name, ["def","res"], [-5, -7]);
 			}
-			else if(this.hasExactly("Poison Dagger") && sealRes > -4 && enemy.moveType == "infantry"){
-				sealRes = -4;
-				skillName = data.skills[this.weaponIndex].name;
+			if (this.has("Kitty Paddle") && (enemy.weaponType == "redtome" || enemy.weaponType == "bluetome" || enemy.weaponType == "greentome")){
+				sealStats(data.skills[this.weaponIndex].name, ["def","res"], [-5, -7]);
 			}
-			else if(this.hasExactly("Kitty Paddle+") && sealRes > -7 && (enemy.weaponType == "redtome" || enemy.weaponType == "bluetome" || enemy.weaponType == "greentome")){
-				sealRes = -7;
-				skillName = data.skills[this.weaponIndex].name;
+			if (this.has("Poison Dagger") && enemy.moveType == "infantry"){
+				sealStats(data.skills[this.weaponIndex].name, ["def","res"], [-4, -6]);
 			}
-			else if(this.hasExactly("Kitty Paddle") && sealRes > -5 && (enemy.weaponType == "redtome" || enemy.weaponType == "bluetome" || enemy.weaponType == "greentome")){
-				sealRes = -5;
-				skillName = data.skills[this.weaponIndex].name;
+			if (this.has("Rogue Dagger")){
+				sealStats(data.skills[this.weaponIndex].name, ["def","res"], [-3, -5]);
+			}
+			if (this.hasExactly("Rogue Dagger+") && this.refineIndex != -1){
+				sealStats(data.skills[this.weaponIndex].name, ["def","res"], [-6]);
+			}
+			if (this.hasExactly("Iron Dagger") || this.hasExactly("Steel Dagger")){
+				sealStats(data.skills[this.weaponIndex].name, ["def","res"], [-7]);
+			}
+			if (this.hasExactly("Smoke Dagger+") && this.refineIndex != -1){
+				sealStats(data.skills[this.weaponIndex].name, ["atk","spd","def","res"], [-6]);
+			}
+			
+			//Other
+			if (this.hasExactly("Clarisse's Bow+") && this.refineIndex != -1){
+				sealStats(data.skills[this.weaponIndex].name, ["atk","spd"], [-5]);
+			}
+			if (this.hasExactly("Dark Breath+") && this.refineIndex != -1){
+				sealStats(data.skills[this.weaponIndex].name, ["atk","spd"], [-7]);
 			}
 		}
-		if(sealRes < enemy.combatDebuffs.res){
-			enemy.combatDebuffs.res = sealRes;
-			sealText += this.name + " lowers " + enemy.name + "'s Res by " + (-sealRes) + " after combat with " + skillName + ".<br>";
+		
+		//Set seal values
+		if(sealValue.atk < enemy.combatDebuffs.atk){
+			enemy.combatDebuffs.atk = sealValue.atk;
+			sealText += this.name + " lowers " + enemy.name + "'s Atk by " + (-sealValue.atk) + " after combat with " + skillName + ".<br>";
+		}		
+		if(sealValue.spd < enemy.combatDebuffs.spd){
+			enemy.combatDebuffs.spd = sealValue.spd;
+			sealText += this.name + " lowers " + enemy.name + "'s Spd by " + (-sealValue.spd) + " after combat with " + skillName + ".<br>";
+		}
+		if(sealValue.def < enemy.combatDebuffs.def){
+			enemy.combatDebuffs.def = sealValue.def;
+			sealText += this.name + " lowers " + enemy.name + "'s Def by " + (-sealValue.def) + " after combat with " + skillName + ".<br>";
+		}
+		if(sealValue.res < enemy.combatDebuffs.res){
+			enemy.combatDebuffs.res = sealValue.res;
+			sealText += this.name + " lowers " + enemy.name + "'s Res by " + (-sealValue.res) + " after combat with " + skillName + ".<br>";
 		}
 
 		return sealText;
@@ -3916,8 +4120,11 @@ function activeHero(hero){
 			var skillName = "";
 
 			//Will need to split these up if there comes another thing which boosts def or res after combat
+			var buffAtk = 0;
+			var buffSpd = 0;
 			var buffDef = 0;
 			var buffRes = 0;
+			
 			if(this.hasExactly("Rogue Dagger+")){
 				buffDef = 5;
 				buffRes = 5;
@@ -3928,7 +4135,29 @@ function activeHero(hero){
 				buffRes = 3;
 				skillName = data.skills[this.weaponIndex].name;
 			}
-
+			
+			if((this.hasExactly("First Bite+") || this.hasExactly("Cupid's Arrow+") || this.hasExactly("Wedding Bouquet+")) && this.refineIndex != -1){
+				buffDef = 5;
+				buffRes = 5;
+				skillName = data.skills[this.weaponIndex].name + " (Refined)";
+			}
+			
+			if((this.hasExactly("Light Breath+")) && this.refineIndex != -1){
+				buffAtk = 5;
+				buffSpd = 5;
+				buffDef = 5;
+				buffRes = 5;
+				skillName = data.skills[this.weaponIndex].name + " (Refined)";
+			}
+			
+			if(buffAtk > this.combatBuffs.def){
+				this.combatBuffs.atk = buffAtk;
+				postCombatBuffText += this.name + " gains " + buffAtk + " Atk after combat from " + skillName + ".<br>";
+			}
+			if(buffSpd > this.combatBuffs.res){
+				this.combatBuffs.spd = buffSpd;
+				postCombatBuffText += this.name + " gains " + buffSpd + " Spd after combat from " + skillName + ".<br>";
+			}
 			if(buffDef > this.combatBuffs.def){
 				this.combatBuffs.def = buffDef;
 				postCombatBuffText += this.name + " gains " + buffDef + " Def after combat from " + skillName + ".<br>";
@@ -3965,7 +4194,7 @@ function activeHero(hero){
 	}
 
 	this.takeDamage = function(dmg){
-		//TODO
+		//TODO: ?
 	}
 
 	//represents one attack of combat
@@ -4003,7 +4232,10 @@ function activeHero(hero){
 		//Buff cancellation
 		} else if(enemy.hasExactly("Divine Naga")
 			|| (enemy.has("Beorc's Blessing") && (this.moveType == "cavalry" || this.moveType == "flying"))
-			|| (enemy.has("Mulagir") && (this.weaponType == "redtome" || this.weaponType == "bluetome" || this.weaponType == "greentome"))){
+			|| (enemy.has("Mulagir") && (this.weaponType == "redtome" || this.weaponType == "bluetome" || this.weaponType == "greentome"))
+			|| (enemy.hasExactly("Nullify Armored") && this.moveType == "armored")
+			|| (enemy.hasExactly("Nullify Cavalry") && this.moveType == "cavalry")
+			){
 			thisEffAtk = this.atk + Math.min(this.debuffs.atk,this.combatDebuffs.atk) + this.spur.atk + this.combatSpur.atk;
 			thisEffSpd = this.spd + Math.min(this.debuffs.spd,this.combatDebuffs.spd) + this.spur.spd + this.combatSpur.spd;
 			thisEffDef = this.def + Math.min(this.debuffs.def,this.combatDebuffs.def) + this.spur.def + this.combatSpur.def;
@@ -4027,7 +4259,10 @@ function activeHero(hero){
 		//Buff cancellation
 		} else if(this.hasExactly("Divine Naga")
 			|| (this.has("Beorc's Blessing") && (enemy.moveType == "cavalry" || enemy.moveType == "flying"))
-			|| (this.has("Mulagir") && (enemy.weaponType == "redtome" || enemy.weaponType == "bluetome" || enemy.weaponType == "greentome"))){
+			|| (this.has("Mulagir") && (enemy.weaponType == "redtome" || enemy.weaponType == "bluetome" || enemy.weaponType == "greentome"))
+			|| (this.hasExactly("Nullify Armored") && enemy.moveType == "armored")
+			|| (this.hasExactly("Nullify Cavalry") && enemy.moveType == "cavalry")
+			){
 			enemyEffAtk = enemy.atk + Math.min(enemy.debuffs.atk,enemy.combatDebuffs.atk) + enemy.spur.atk + enemy.combatSpur.atk;
 			enemyEffSpd = enemy.spd + Math.min(enemy.debuffs.spd,enemy.combatDebuffs.spd) + enemy.spur.spd + enemy.combatSpur.spd;
 			enemyEffDef = enemy.def + Math.min(enemy.debuffs.def,enemy.combatDebuffs.def) + enemy.spur.def + enemy.combatSpur.def;
@@ -4041,6 +4276,12 @@ function activeHero(hero){
 		
 		//Relavant defense stat
 		var relevantDef = (this.attackType == "magical") ? enemyEffRes : enemyEffDef;
+		
+		//Refined Dragonstone
+		if (this.weaponType == "dragon" && this.refineIndex != -1 && enemy.range == "ranged"){
+			relevantDef = (enemyEffDef > enemyEffRes) ? enemyEffRes : enemyEffDef;
+			if (!AOE) {damageText += this.name + " is targeting foe's " + ((enemyEffDef > enemyEffRes) ? "Res" : "Def" ) + " with " + data.skills[hero.weapon].name + " (Refined).<br>";}
+		}
 		
 		//Specials
 		var offensiveSpecialActivated = false;
@@ -4064,7 +4305,7 @@ function activeHero(hero){
 				if(AOEActivated){
 					this.resetCharge();
 					
-					if(this.has("Wo Dao") || this.hasExactly("Dark Excalibur") || this.hasExactly("Resolute Blade")){
+					if(this.has("Wo Dao") || this.hasExactly("Dark Excalibur") || this.hasExactly("Resolute Blade") || this.has("Special Damage")){
 						AOEDamage += 10;
 						damageText += this.name + " gains 10 damage from " + data.skills[hero.weapon].name + ".<br>";
 					}
@@ -4169,7 +4410,7 @@ function activeHero(hero){
 				this.resetCharge();
 				damageText += this.name + " activates " + data.skills[this.specialIndex].name + ".<br>";
 
-				if(this.has("Wo Dao") || this.hasExactly("Dark Excalibur") || this.hasExactly("Resolute Blade")){
+				if(this.has("Wo Dao") || this.hasExactly("Dark Excalibur") || this.hasExactly("Resolute Blade") || this.has("Special Damage")){
 					dmgBoost += 10;
 					damageText += this.name + " gains 10 damage from " + data.skills[hero.weapon].name + ".<br>";
 				}
@@ -4402,18 +4643,19 @@ function activeHero(hero){
 				damageText += this.name + "'s attack is increased by " + (effectiveBonus * 100 - 100) + "% from weapon effectiveness.<br>";
 			}		
 			
-			//Weapon mod for healers
+			//Weapon modifier for healers
 			var weaponModifier = 1;
 			if(this.weaponType == "staff"){
-				//poor healers
 				weaponModifier = 0.5;
-
-				//But wait!
+				//Wrathful effects
 				if(this.has("Wrathful Staff")){
 					if(this.combatStartHp / this.maxHp >= 1.5 + this.has("Wrathful Staff") * -0.5){
 						weaponModifier = 1;
 					}
 				}
+				if(this.hasExactly("Wrathful")){
+					weaponModifier = 1;
+				}				
 			}
 			
 			//Check damage reducing specials and effects
@@ -4777,7 +5019,10 @@ function activeHero(hero){
 			thisEffSpd = this.spd - Math.max(this.buffs.spd,this.combatBuffs.spd) + Math.min(this.debuffs.spd,this.combatDebuffs.spd) + this.spur.spd + this.combatSpur.spd;
 		} else if(enemy.hasExactly("Divine Naga")
 			|| (enemy.has("Beorc's Blessing") && (this.moveType == "cavalry" || this.moveType == "flying"))
-			|| (enemy.has("Mulagir") && (this.weaponType == "redtome" || this.weaponType == "bluetome" || this.weaponType == "greentome"))){
+			|| (enemy.has("Mulagir") && (this.weaponType == "redtome" || this.weaponType == "bluetome" || this.weaponType == "greentome"))
+			|| (enemy.hasExactly("Nullify Armored") && this.moveType == "armored")
+			|| (enemy.hasExactly("Nullify Cavalry") && this.moveType == "cavalry")
+			){
 			thisEffSpd = this.spd + Math.min(this.debuffs.spd,this.combatDebuffs.spd) + this.spur.spd + this.combatSpur.spd;
 		}
 
@@ -4785,7 +5030,10 @@ function activeHero(hero){
 			enemyEffSpd = enemy.spd - Math.max(enemy.buffs.spd,enemy.combatBuffs.spd) + Math.min(enemy.debuffs.spd,enemy.combatDebuffs.spd) + enemy.spur.spd + enemy.combatSpur.spd;
 		} else if(this.hasExactly("Divine Naga")
 			|| (this.has("Beorc's Blessing") && (enemy.moveType == "cavalry" || enemy.moveType == "flying"))
-			|| (this.has("Mulagir") && (enemy.weaponType == "redtome" || enemy.weaponType == "bluetome" || enemy.weaponType == "greentome"))){
+			|| (this.has("Mulagir") && (enemy.weaponType == "redtome" || enemy.weaponType == "bluetome" || enemy.weaponType == "greentome"))
+			|| (this.hasExactly("Nullify Armored") && enemy.moveType == "armored")
+			|| (this.hasExactly("Nullify Cavalry") && enemy.moveType == "cavalry")
+			){
 			enemyEffSpd = enemy.spd + Math.min(enemy.debuffs.spd,enemy.combatDebuffs.spd) + enemy.spur.spd + enemy.combatSpur.spd;
 		}
 		
@@ -4821,8 +5069,12 @@ function activeHero(hero){
 				desperation = true;
 			}
 		}
-		if(this.has("Sol Katti") && this.hp/this.maxHp <= .5){
-			desperation = true;
+		if (this.has("Sol Katti")){
+			if (this.refineIndex != -1 && this.hp/this.maxHp <= .75){
+				desperation = true;
+			} else if (this.hp/this.maxHp <= .5){
+				desperation = true;
+			}
 		}
 
 		//Check for Hardy Bearing, affects all skills that change attack priority
@@ -4838,10 +5090,13 @@ function activeHero(hero){
 				quickRiposte = true;
 			}
 		}
-		if(enemy.has("Armads") && enemy.hp/enemy.maxHp >= .8){
+		if (enemy.has("Armads") && enemy.hp/enemy.maxHp >= .8){
 			quickRiposte = true;
 		}
-		if(enemy.has("Follow-Up Ring") && enemy.hp/enemy.maxHp >= .5){
+		if (enemy.hasAtRefineIndex("Pursuit", enemy.refineIndex) && enemy.combatStartHp / enemy.maxHp >= 0.9){
+			quickRiposte = true;
+		}
+		if (enemy.has("Follow-Up Ring") && enemy.hp/enemy.maxHp >= .5){
 			quickRiposte = true;
 		}
 
@@ -5020,8 +5275,13 @@ function activeHero(hero){
 			}
 		}
 		
+		if(this.hasExactly("Dazzling") && enemyCanCounter){
+			roundText += enemy.name + " cannot counterattack because of Dazzling effect.<br>";
+			enemyCanCounter = false;
+		}
+		
 		if(enemy.lit && enemyCanCounter){
-			roundText += enemy.name + " cannot counterattack because " + enemy.name + " is still blinded by Candlelight.<br>";
+			roundText += enemy.name + " cannot counterattack because " + enemy.name + " is blinded by Candlelight.<br>";
 			enemyCanCounter = false;
 		}
 		
@@ -5030,14 +5290,25 @@ function activeHero(hero){
 			enemyCanCounter = false;
 		}
 		
+		if(this.has("Magic Suppression") && (enemy.weaponType == "redtome" || enemy.weaponType == "bluetome" ||enemy.weaponType == "greentome")){
+			roundText += enemy.name + " cannot counterattack because of " + data.skills[this.weaponIndex].name + " (Refined).<br>";
+			enemyCanCounter = false;
+		}
+		
 		//Check for other auto follow-up attack skills
-		if(this.has("Brash Assault") && (this.range == enemy.range || anyRangeCounter) && enemyCanCounter){
+		if((this.hasAtIndex("Brash Assault", this.bIndex) || this.hasAtIndex("Brash Assault", this.sIndex)) && (this.range == enemy.range || anyRangeCounter) && enemyCanCounter){
 			//Use highest level of Brash Assault between B passive and seal
 			if(this.hp/this.maxHp <= .2 +  Math.max(this.hasAtIndex("Brash Assault", this.bIndex), this.hasAtIndex("Brash Assault", this.sIndex)) * 0.1){
 				thisAutoFollow = true;
 			}
 		}
-		if(this.has("Follow-Up Ring") && (this.combatStartHp / this.maxHp >= 0.5)){
+		if (this.has("Sol Katti") && this.hp/this.maxHp <= .75 && this.hasAtRefineIndex("Brash Assault", this.refineIndex) && (this.range == enemy.range || anyRangeCounter) && enemyCanCounter){
+			thisAutoFollow = true;
+		}
+		if (this.hasAtRefineIndex("Pursuit", this.refineIndex) && (this.combatStartHp / this.maxHp >= 0.9) && (this.range == enemy.range || anyRangeCounter) && enemyCanCounter){
+			thisAutoFollow = true;
+		}
+		if (this.has("Follow-Up Ring") && (this.combatStartHp / this.maxHp >= 0.5)){
 			thisAutoFollow = true;
 		}
 
@@ -5138,23 +5409,27 @@ function activeHero(hero){
 			roundText += this.seal(enemy);
 			roundText += enemy.seal(this);
 
-			//post-combat buffs
+			//Post-Combat Buffs
 			//Rogue dagger works on enemy turn, but buffs are reset at beginning of player turn, so it only matters if a rogue gets attacked twice in one turn, which is possible with Galeforce
 			roundText += this.postCombatBuff();
 			roundText += enemy.postCombatBuff();
 			roundText += this.postCombatHeal();
 
-			//panic
-			if(this.has("Panic") || this.has("Legion's Axe")){
+			//Panic
+			if(this.has("Panic") || this.has("Legion's Axe") 
+				|| ((this.hasExactly("Monstrous Bow+") || this.hasExactly("Spectral Tome+")) && this.refineIndex != -1)
+				){
 				enemy.panicked = true;
 				roundText += this.name + " panics " + enemy.name + ".<br>";
 			}
-			if(enemy.has("Panic") || enemy.has("Legion's Axe")){
+			if(enemy.has("Panic") || enemy.has("Legion's Axe")
+				|| ((enemy.hasExactly("Monstrous Bow+") || enemy.hasExactly("Spectral Tome+")) && enemy.refineIndex != -1)
+				){
 				this.panicked = true;
 				roundText += enemy.name + " panics " + this.name + ".<br>";
 			}
 
-			//candlelight
+			//Candlelight
 			if(this.has("Candlelight")){
 				enemy.lit = true;
 				roundText += this.name + " inflicts " + enemy.name + " with an inability to make counterattacks.<br>";
