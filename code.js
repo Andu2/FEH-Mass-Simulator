@@ -2147,8 +2147,7 @@ function importText(side){
 			value = getIndexFromName(removeEdgeJunk(keyValue[1]),data.skills,key);
 			//console.log("Looking for " + key + ", found " + value);
 		}
-		else if(key == "refine"){			
-			//TODO: Complete refine import script
+		else if(key == "refine"){
 			value = searchRefineIndex(keyValue[1].split(" - "));			
 		}
 		else if(key=="boon" || key=="bane"){
@@ -2206,6 +2205,8 @@ function importText(side){
 }
 
 //Search for refine index by name and category
+//TODO: Change from exporting refineName/category as key to exporting refineName/weaponName to match against name/prereq instead?
+// 		Can merge duplicate entries in DB using this logic.
 function searchRefineIndex(refine){
 	for (var i = 0; i < data.refine.length; i++){
 		if (refine[0] == data.refine[i].name.toLowerCase() && refine[1] == data.refine[i].category.toLowerCase()){
@@ -3147,7 +3148,6 @@ function activeHero(hero){
 		this.skillNames.push(data.skills[this.weaponIndex].name);
 	}
 	if(this.refineIndex != -1){
-		//TODO: Add refine skill name to list and integrate into 'has' functions
 		this.skillNames.push(data.refine[this.refineIndex].name);
 	}
 	if(this.specialIndex != -1){
@@ -3224,7 +3224,6 @@ function activeHero(hero){
 	
 	//Checks if skill name matches skill index and returns skill tier
 	//eg. this.hasAtIndex("Skill Name", this.aIndex)
-	//TODO: Search refineIndex properly
 	this.hasAtIndex = function(skill, index){
 		if(index != -1){
 			var skillName = data.skills[index].name;
@@ -4153,6 +4152,7 @@ function activeHero(hero){
 				skillName = data.skills[this.weaponIndex].name + " (Refined)";
 			}
 			
+			//TODO: Less text -_-'''
 			if(buffAtk > this.combatBuffs.def){
 				this.combatBuffs.atk = buffAtk;
 				postCombatBuffText += this.name + " gains " + buffAtk + " Atk after combat from " + skillName + ".<br>";
@@ -5404,7 +5404,7 @@ function activeHero(hero){
 		this.combatDebuffs = {"atk":0,"spd":0,"def":0,"res":0};
 		this.panicked = false;
 		this.lit = false;
-
+		
 		//Do stuff if both aren't dead
 		if(this.hp > 0 && enemy.hp > 0){
 			//Apply post-combat debuffs (seal)
