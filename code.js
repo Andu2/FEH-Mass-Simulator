@@ -363,7 +363,7 @@ $(document).ready(function(){
 			changeDataVar(dataVar,newVal);
 
 			//Stuff specific to changing skill
-			if(endsWith(dataVar,".weapon") ||endsWith(dataVar,".special") || endsWith(dataVar,".a") || endsWith(dataVar,".b") || endsWith(dataVar,".c") || endsWith(dataVar,".s")){
+			if(endsWith(dataVar,".weapon") || endsWith(dataVar,".special") || endsWith(dataVar,".a") || endsWith(dataVar,".b") || endsWith(dataVar,".c") || endsWith(dataVar,".s")){
 				if(newVal != -1){
 					//***This does nothing?***
 					var dataToPass = data.skills[newVal].name;
@@ -3901,8 +3901,8 @@ function activeHero(hero){
 				enemy.hp -= poison;
 				poisonEnemyText += enemy.name + " takes " + poison + " damage after combat from " + skillName + ".<br>";
 			}
-			if(this.has("Deathly Dagger")){
-				poison = (this.refineIndex != -1) ? 10 : 7;
+			if(this.has("Deathly Dagger") && this.refineIndex == -1){
+				poison = 7;
 				skillName = data.skills[this.weaponIndex].name;
 				if(enemy.hp - poison <= 0){
 					poison = enemy.hp - 1;
@@ -3923,13 +3923,15 @@ function activeHero(hero){
 		
 		//Pain only takes place when the unit performs an attack in the round
 		if(!enemy.has("Embla's Ward") && this.didAttack){
-			if(this.has("Pain")){
-				var painDmg = 10;
+			var painDmg = 0;
+			if(this.has("Pain") || (this.has("Deathly Dagger") && this.refineIndex != -1)
+				){
+				painDmg = 10;
 				if(enemy.hp - painDmg <= 0){
 					painDmg = enemy.hp - 1;
 				}
 				enemy.hp -= painDmg;
-				painEnemyText += enemy.name + " takes " + painDmg + " damage after combat.<br>";
+				painEnemyText += enemy.name + " takes " + painDmg + " damage after combat from " + data.skills[this.weaponIndex].name + (this.refineIndex != -1 ? " (refined)" : "") + ".<br>";
 			}
 		}
 
@@ -4092,6 +4094,7 @@ function activeHero(hero){
 		}
 		
 		//Set seal values
+		//TODO: Less text -_-'''
 		if(sealValue.atk < enemy.combatDebuffs.atk){
 			enemy.combatDebuffs.atk = sealValue.atk;
 			sealText += this.name + " lowers " + enemy.name + "'s Atk by " + (-sealValue.atk) + " after combat with " + skillName + ".<br>";
