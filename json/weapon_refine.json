@@ -9,7 +9,7 @@
 		"spd": 0,
 		"def": 0,
 		"res": 0,
-		"prereq": "Silver Sword+,Silver Axe+,Silver Lance+,Carrot Lance+,Carrot Axe+,Wo Dao+"
+		"prereq": "Silver Sword+,Silver Axe+,Silver Lance+,Wo Dao+"
 	},	{
 		"category": "Basic Melee",
 		"name": "Spd Bonus",
@@ -20,7 +20,7 @@
 		"spd": 3,
 		"def": 0,
 		"res": 0,
-		"prereq": "Silver Sword+,Silver Axe+,Silver Lance+,Carrot Lance+,Carrot Axe+,Wo Dao+"
+		"prereq": "Silver Sword+,Silver Axe+,Silver Lance+,Wo Dao+"
 	},	{
 		"category": "Basic Melee",
 		"name": "Def Bonus",
@@ -31,7 +31,7 @@
 		"spd": 0,
 		"def": 4,
 		"res": 0,
-		"prereq": "Silver Sword+,Silver Axe+,Silver Lance+,Carrot Lance+,Carrot Axe+,Wo Dao+"
+		"prereq": "Silver Sword+,Silver Axe+,Silver Lance+,Wo Dao+"
 	},	{
 		"category": "Basic Melee",
 		"name": "Res Bonus",
@@ -42,7 +42,51 @@
 		"spd": 0,
 		"def": 0,
 		"res": 4,
-		"prereq": "Silver Sword+,Silver Axe+,Silver Lance+,Carrot Lance+,Carrot Axe+,Wo Dao+"
+		"prereq": "Silver Sword+,Silver Axe+,Silver Lance+,Wo Dao+"
+	},	{
+		"category": "Spring Melee",
+		"name": "Atk Bonus",
+		"sp": 300,
+		"description": "Restores 4 HP after combat.",
+		"hp": 5,
+		"atk": 3,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"prereq": "Carrot Lance+,Carrot Axe+"
+	},	{
+		"category": "Spring Melee",
+		"name": "Spd Bonus",
+		"sp": 300,
+		"description": "Restores 4 HP after combat.",
+		"hp": 5,
+		"atk": 1,
+		"spd": 3,
+		"def": 0,
+		"res": 0,
+		"prereq": "Carrot Lance+,Carrot Axe+"
+	},	{
+		"category": "Spring Melee",
+		"name": "Def Bonus",
+		"sp": 300,
+		"description": "Restores 4 HP after combat.",
+		"hp": 5,
+		"atk": 1,
+		"spd": 0,
+		"def": 4,
+		"res": 0,
+		"prereq": "Carrot Lance+,Carrot Axe+"
+	},	{
+		"category": "Spring Melee",
+		"name": "Res Bonus",
+		"sp": 300,
+		"description": "Restores 4 HP after combat.",
+		"hp": 5,
+		"atk": 1,
+		"spd": 0,
+		"def": 0,
+		"res": 4,
+		"prereq": "Carrot Lance+,Carrot Axe+"
 	},	{
 		"category": "Basic Ranged",
 		"name": "Atk Bonus",
@@ -53,7 +97,7 @@
 		"spd": 0,
 		"def": 0,
 		"res": 0,
-		"prereq": "Silver Bow+,Bolganone+,Fenrir+,Thoron+,Rexcalibur+,Blue Egg+,Green Egg+,Raudrowl+,Blarowl+,Gronnowl+"
+		"prereq": "Silver Bow+,Bolganone+,Fenrir+,Thoron+,Rexcalibur+,Raudrowl+,Blarowl+,Gronnowl+"
 	},	{
 		"category": "Basic Ranged",
 		"name": "Spd Bonus",
@@ -64,7 +108,7 @@
 		"spd": 2,
 		"def": 0,
 		"res": 0,
-		"prereq": "Silver Bow+,Bolganone+,Fenrir+,Thoron+,Rexcalibur+,Blue Egg+,Green Egg+,Raudrowl+,Blarowl+,Gronnowl+"
+		"prereq": "Silver Bow+,Bolganone+,Fenrir+,Thoron+,Rexcalibur+,Raudrowl+,Blarowl+,Gronnowl+"
 	},	{
 		"category": "Basic Ranged",
 		"name": "Def Bonus",
@@ -75,7 +119,7 @@
 		"spd": 0,
 		"def": 3,
 		"res": 0,
-		"prereq": "Silver Bow+,Bolganone+,Fenrir+,Thoron+,Rexcalibur+,Blue Egg+,Green Egg+,Raudrowl+,Blarowl+,Gronnowl+"
+		"prereq": "Silver Bow+,Bolganone+,Fenrir+,Thoron+,Rexcalibur+,Raudrowl+,Blarowl+,Gronnowl+"
 	},	{
 		"category": "Basic Ranged",
 		"name": "Res Bonus",
@@ -86,7 +130,51 @@
 		"spd": 0,
 		"def": 0,
 		"res": 3,
-		"prereq": "Silver Bow+,Bolganone+,Fenrir+,Thoron+,Rexcalibur+,Blue Egg+,Green Egg+,Raudrowl+,Blarowl+,Gronnowl+"
+		"prereq": "Silver Bow+,Bolganone+,Fenrir+,Thoron+,Rexcalibur+,Raudrowl+,Blarowl+,Gronnowl+"
+	},	{
+		"category": "Spring Ranged",
+		"name": "Atk Bonus",
+		"sp": 300,
+		"description": "Restores 4 HP after combat.",
+		"hp": 2,
+		"atk": 2,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"prereq": "Blue Egg+,Green Egg+"
+	},	{
+		"category": "Spring Ranged",
+		"name": "Spd Bonus",
+		"sp": 300,
+		"description": "Restores 4 HP after combat.",
+		"hp": 2,
+		"atk": 1,
+		"spd": 2,
+		"def": 0,
+		"res": 0,
+		"prereq": "Blue Egg+,Green Egg+"
+	},	{
+		"category": "Spring Ranged",
+		"name": "Def Bonus",
+		"sp": 300,
+		"description": "Restores 4 HP after combat.",
+		"hp": 2,
+		"atk": 1,
+		"spd": 0,
+		"def": 3,
+		"res": 0,
+		"prereq": "Blue Egg+,Green Egg+"
+	},	{
+		"category": "Spring Ranged",
+		"name": "Res Bonus",
+		"sp": 300,
+		"description": "Restores 4 HP after combat.",
+		"hp": 2,
+		"atk": 1,
+		"spd": 0,
+		"def": 0,
+		"res": 3,
+		"prereq": "Blue Egg+,Green Egg+"
 	},	{
 		"category": "Basic Dagger",
 		"name": "Atk Bonus",

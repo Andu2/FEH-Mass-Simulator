@@ -4175,12 +4175,11 @@ function activeHero(hero){
 	}
 
 	this.postCombatHeal = function(){
-		var postCombatHealText = "";
+		var postCombatHealText = "";		
+		var skillname = "";
 
-		if(this.initiator){
-			var skillname = "";
-
-			if(this.has("Blue Egg") || this.has("Green Egg") || this.has("Carrot Axe") || this.has("Carrot Lance")){
+		if(this.has("Blue Egg") || this.has("Green Egg") || this.has("Carrot Axe") || this.has("Carrot Lance")){
+			if(this.initiator || this.refineIndex != -1){
 				skillName = data.skills[this.weaponIndex].name;
 				var healAmount = 4;
 				if(this.maxHp - this.hp < healAmount){
@@ -4192,7 +4191,7 @@ function activeHero(hero){
 				}
 			}
 		}
-
+		
 		return postCombatHealText;
 	}
 
