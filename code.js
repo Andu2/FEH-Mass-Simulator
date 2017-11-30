@@ -4139,7 +4139,7 @@ function activeHero(hero){
 				skillName = data.skills[this.weaponIndex].name;
 			}
 			
-			if((this.hasExactly("First Bite+") || this.hasExactly("Cupid's Arrow+") || this.hasExactly("Wedding Bouquet+")) && this.refineIndex != -1){
+			if((this.hasExactly("First Bite+") || this.hasExactly("Cupid's Arrow+") || this.hasExactly("Blessed Bouquet+")) && this.refineIndex != -1){
 				buffDef = 5;
 				buffRes = 5;
 				skillName = data.skills[this.weaponIndex].name + " (Refined)";
