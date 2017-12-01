@@ -1299,7 +1299,7 @@ function changeRefinePic(hero, slot){
 	var htmlPrefix = getHtmlPrefix(hero);
 	if(data.refine[hero[slot]]){
 		var refineName = data.refine[hero[slot]].name;
-		refineName = refineName.replace(/\s/g,"_");
+		//refineName = refineName.replace(/\s/g,"_");
 		$("#" + htmlPrefix + slot + "_picture").attr("src","weapons/" + refineName + ".png");
 	}
 	else{
