@@ -63,7 +63,7 @@ data.moveTypes = ["infantry","armored","flying","cavalry","mounted"];
 data.colors = ["red","blue","green","gray"];
 data.skillSlots = ["weapon","refine","special","a","b","c","s"];
 data.buffTypes = ["buffs","debuffs","spur"];
-data.buffStats = ["atk","spd","def","res"];
+data.buffStats = ["hp","atk","spd","def","res"];
 data.stats = ["hp","atk","spd","def","res"];
 data.support = ["s","s-","a","a-","b","b-","c","c-"];
 
@@ -181,8 +181,8 @@ function initOptions(){
 	challenger.bst = 0;
 	challenger.spt = 0;
 
-	challenger.buffs = {"atk":0,"spd":0,"def":0,"res":0};
-	challenger.debuffs = {"atk":0,"spd":0,"def":0,"res":0};
+	challenger.buffs = {"hp":0,"atk":0,"spd":0,"def":0,"res":0};
+	challenger.debuffs = {"hp":0,"atk":0,"spd":0,"def":0,"res":0};
 	challenger.spur = {"atk":0,"spd":0,"def":0,"res":0};
 
 	challenger.currenthp = 0;
@@ -234,8 +234,8 @@ function initOptions(){
 	enemies.fl.replaceB = 0;
 	enemies.fl.replaceC = 0;
 	
-	enemies.fl.buffs = {"atk":0,"spd":0,"def":0,"res":0};
-	enemies.fl.debuffs = {"atk":0,"spd":0,"def":0,"res":0};
+	enemies.fl.buffs = {"hp":0,"atk":0,"spd":0,"def":0,"res":0};
+	enemies.fl.debuffs = {"hp":0,"atk":0,"spd":0,"def":0,"res":0};
 	enemies.fl.spur = {"atk":0,"spd":0,"def":0,"res":0};
 
 	enemies.fl.damage = 0;
@@ -310,7 +310,7 @@ $(document).ready(function(){
 		var dataVar = $(this).attr("data-var");
 		if(dataVar){
 			var varsThatChangeStats = [
-				".rarity",".merge",".boon",".bane",".summoner",".ally",".weapon",".refine",".a",".s",".replaceWeapon",".replaceRefine",".replaceA"
+				".buffs.hp",".debuffs.hp",".rarity",".merge",".boon",".bane",".summoner",".ally",".weapon",".refine",".a",".s",".replaceWeapon",".replaceRefine",".replaceA"
 			];
 			var varsThatChangeSkills = [
 				".rarity",".replaceWeapon",".replaceRefine",".replaceSpecial",".replaceA",".replaceB",".replaceC","enemies.fl.weapon","enemies.fl.refine",
@@ -923,6 +923,9 @@ function setStats(hero){
 		hero.def += mergeBoost.def;
 		hero.res += mergeBoost.res;
 		
+		//Add hero hp changes
+		hero.hp += mergeBoost.hp + hero.buffs.hp + hero.debuffs.hp;
+		
 		//Calculate hero bst after IV, merge, and rarity
 		hero.bst = hero.hp + hero.atk + hero.spd + hero.def + hero.res;
 
@@ -1112,8 +1115,8 @@ function resetHero(hero,blockInit){//also resets fl, despite singular name - pas
 	hero.damage = 0;
 	hero.precharge = 0;
 	hero.adjacent = 1;
-	hero.buffs = {"atk":0,"spd":0,"def":0,"res":0};
-	hero.debuffs = {"atk":0,"spd":0,"def":0,"res":0};
+	hero.buffs = {"hp":0,"atk":0,"spd":0,"def":0,"res":0};
+	hero.debuffs = {"hp":0,"atk":0,"spd":0,"def":0,"res":0};
 	hero.spur = {"atk":0,"spd":0,"def":0,"res":0};
 
 	if(hero.index){
@@ -1163,7 +1166,7 @@ function addClEnemy(index){
 
 	enemies.cl.list.push({
 		"index":index,"hp":0,"atk":0,"spd":0,"def":0,"res":0,"weapon":-1,"refine":-1,"special":-1,"a":-1,"b":-1,"c":-1,"s":-1,
-		"buffs": {"atk":0,"spd":0,"def":0,"res":0}, "debuffs": {"atk":0,"spd":0,"def":0,"res":0}, "spur": {"atk":0,"spd":0,"def":0,"res":0},
+		"buffs": {"hp":0,"atk":0,"spd":0,"def":0,"res":0}, "debuffs": {"hp":0,"atk":0,"spd":0,"def":0,"res":0}, "spur": {"atk":0,"spd":0,"def":0,"res":0},
 		"boon": "none", "bane": "none", "summoner": "none", "ally": "none", "merge":0, "rarity": 5, "precharge":0, "adjacent":1, "damage": 0
 	});
 	options.customEnemySelected = newCustomEnemyId;
@@ -1412,7 +1415,7 @@ function updateHeroUI(hero){
 		//Make a dummy hero
 		hero = {
 			"index":-1,"hp":0,"atk":0,"spd":0,"def":0,"res":0,"weapon":-1,"refine":-1,"special":-1,"a":-1,"b":-1,"c":-1,"s":-1,
-			"buffs": {"atk":0,"spd":0,"def":0,"res":0}, "debuffs": {"atk":0,"spd":0,"def":0,"res":0}, "spur": {"atk":0,"spd":0,"def":0,"res":0},
+			"buffs": {"hp":0,"atk":0,"spd":0,"def":0,"res":0}, "debuffs": {"hp":0,"atk":0,"spd":0,"def":0,"res":0}, "spur": {"atk":0,"spd":0,"def":0,"res":0},
 			"boon": "none", "bane": "none", "summoner": "none", "ally": "none", "merge":0, "rarity": 5, "precharge":0, "adjacent":1, "damage": 0
 		}
 	}
@@ -1441,10 +1444,12 @@ function updateHeroUI(hero){
 	changeSkillPic(hero,"s");
 
 	if(hero.buffs){
+		$("#" + htmlPrefix + "hp_buff").val(hero.buffs.hp);
 		$("#" + htmlPrefix + "atk_buff").val(hero.buffs.atk);
 		$("#" + htmlPrefix + "spd_buff").val(hero.buffs.spd);
 		$("#" + htmlPrefix + "def_buff").val(hero.buffs.def);
 		$("#" + htmlPrefix + "res_buff").val(hero.buffs.res);
+		$("#" + htmlPrefix + "hp_debuff").val(hero.debuffs.hp);
 		$("#" + htmlPrefix + "atk_debuff").val(hero.debuffs.atk);
 		$("#" + htmlPrefix + "spd_debuff").val(hero.debuffs.spd);
 		$("#" + htmlPrefix + "def_debuff").val(hero.debuffs.def);
@@ -1731,7 +1736,7 @@ function copyChallenger(){
 		//Generate a new hero
 		enemies.cl.list.push({
 			"index":-1,"hp":0,"atk":0,"spd":0,"def":0,"res":0,"weapon":-1,"refine":-1,"special":-1,"a":-1,"b":-1,"c":-1,"s":-1,
-			"buffs": {"atk":0,"spd":0,"def":0,"res":0}, "debuffs": {"atk":0,"spd":0,"def":0,"res":0}, "spur": {"atk":0,"spd":0,"def":0,"res":0},
+			"buffs": {"hp":0,"atk":0,"spd":0,"def":0,"res":0}, "debuffs": {"hp":0,"atk":0,"spd":0,"def":0,"res":0}, "spur": {"atk":0,"spd":0,"def":0,"res":0},
 			"boon": "none", "bane": "none", "summoner": "none", "ally": "none", "merge":0, "rarity": 5, "precharge":0, "adjacent":1, "damage": 0
 		});
 		hero = enemies.cl.list[enemies.cl.list.length - 1];
@@ -1887,7 +1892,7 @@ function importText(side){
 		else{
 			enemies.cl.list.push({
 				"index":-1,"hp":0,"atk":0,"spd":0,"def":0,"res":0,"weapon":-1,"refine":-1,"special":-1,"a":-1,"b":-1,"c":-1,"s":-1,
-				"buffs": {"atk":0,"spd":0,"def":0,"res":0}, "debuffs": {"atk":0,"spd":0,"def":0,"res":0}, "spur": {"atk":0,"spd":0,"def":0,"res":0},
+				"buffs": {"hp":0,"atk":0,"spd":0,"def":0,"res":0}, "debuffs": {"hp":0,"atk":0,"spd":0,"def":0,"res":0}, "spur": {"atk":0,"spd":0,"def":0,"res":0},
 				"boon": "none", "bane": "none", "summoner": "none", "ally": "none", "merge":0, "rarity": 5, "precharge":0, "adjacent":1, "damage": 0
 			});
 			hero = enemies.cl.list[enemies.cl.list.length-1];
@@ -2158,7 +2163,6 @@ function importText(side){
 				}
 			});
 		}
-		//***Implement Support Key***
 		else if(key == "summoner" || key == "ally"){
 			data.support.forEach(function(support){
 				if(keyValue[1].indexOf(support) != -1){
