@@ -183,7 +183,7 @@ function initOptions(){
 
 	challenger.buffs = {"hp":0,"atk":0,"spd":0,"def":0,"res":0};
 	challenger.debuffs = {"hp":0,"atk":0,"spd":0,"def":0,"res":0};
-	challenger.spur = {"atk":0,"spd":0,"def":0,"res":0};
+	challenger.spur = {"hp":0,"atk":0,"spd":0,"def":0,"res":0};
 
 	challenger.currenthp = 0;
 	challenger.damage = 0;
@@ -236,7 +236,7 @@ function initOptions(){
 	
 	enemies.fl.buffs = {"hp":0,"atk":0,"spd":0,"def":0,"res":0};
 	enemies.fl.debuffs = {"hp":0,"atk":0,"spd":0,"def":0,"res":0};
-	enemies.fl.spur = {"atk":0,"spd":0,"def":0,"res":0};
+	enemies.fl.spur = {"hp":0,"atk":0,"spd":0,"def":0,"res":0};
 
 	enemies.fl.damage = 0;
 	enemies.fl.precharge = 0;
@@ -1117,7 +1117,7 @@ function resetHero(hero,blockInit){//also resets fl, despite singular name - pas
 	hero.adjacent = 1;
 	hero.buffs = {"hp":0,"atk":0,"spd":0,"def":0,"res":0};
 	hero.debuffs = {"hp":0,"atk":0,"spd":0,"def":0,"res":0};
-	hero.spur = {"atk":0,"spd":0,"def":0,"res":0};
+	hero.spur = {"hp":0,"atk":0,"spd":0,"def":0,"res":0};
 
 	if(hero.index){
 		setSkills(hero);
@@ -2134,9 +2134,11 @@ function importText(side){
 			key = "replace" + capitalize(key);
 			skillName = false;
 		}
-
+		
+		
+		//TODO: Fix HP buff import/export
 		if(buffObject){
-			var value = {"atk":0,"spd":0,"def":0,"res":0};
+			var value = {"hp":0,"atk":0,"spd":0,"def":0,"res":0};
 			var splitBuffs = trySplit(keyValue[1],[","]);
 			for(var i = 0; i < splitBuffs.length; i++){
 				data.buffStats.forEach(function(stat){
@@ -2300,7 +2302,8 @@ function getExportText(side){
 				}				
 			}
 		});
-
+		
+		//TODO: Fix HP export
 		var statusText = "";
 		data.buffTypes.forEach(function(buffType){
 			var notZero = [];
