@@ -4002,20 +4002,22 @@ function activeHero(hero){
 		return damageText;
 	}
 
-	//***This was messy and hard to read =( ***
+	//After combat debuffs
 	this.seal = function(enemy){
-		var sealText = "";
-		var skillName = "";
+		var sealText = "";		
 		var sealValue = {"atk":0,"spd":0,"def":0,"res":0};
+		var skillNames = [];
 		
 		//Seals stats for skill, can calculate up to two tiers
-		function sealStats(skill, statTypes, tierValue){
+		function sealStats(skillName, statTypes, tierValue){
 			//Check for second value
-			if (tierValue.length == 2 && skill.charAt(skill.length - 1) == "+"){
+			if (tierValue.length == 2 && skillName.charAt(skillName.length - 1) == "+"){
 				for (var i = 0; i < statTypes.length; i++){
 					if (sealValue[statTypes[i]] > tierValue[1]){
 						sealValue[statTypes[i]] = tierValue[1];
-						skillName = skill;
+						if (!skillNames.includes(skillName)){
+							skillNames.push(skillName);
+						}
 					}
 				}
 			//Otherwise just check for first value
@@ -4023,7 +4025,9 @@ function activeHero(hero){
 				for (var i = 0; i < statTypes.length; i++){
 					if (sealValue[statTypes[i]] > tierValue[0]){
 						sealValue[statTypes[i]] = tierValue[0];
-						skillName = skill;
+						if (!skillNames.includes(skillName)){
+							skillNames.push(skillName);
+						}
 					}
 				}
 			}
@@ -4032,27 +4036,27 @@ function activeHero(hero){
 		//Seals
 		if(this.has("Seal Atk")){ //Will count for seal atk speed as well
 			sealValue.atk = -this.has("Seal Atk") * 2 - 1;
-			skillName = data.skills[this.bIndex].name;
+			skillNames.push(data.skills[this.bIndex].name);
 		}
 		if(this.has("Seal Atk Spd")){
 			sealValue.spd = -this.has("Seal Atk Spd") * 2 - 1;
-			skillName = data.skills[this.bIndex].name;
+			skillNames.push(data.skills[this.bIndex].name);
 		}
 		if(this.has("Seal Atk Def")){
 			sealValue.def = -this.has("Seal Atk Def") * 2 - 1;
-			skillName = data.skills[this.bIndex].name;
+			skillNames.push(data.skills[this.bIndex].name);
 		}
 		if(this.has("Seal Spd")){
 			sealValue.spd = -this.has("Seal Spd") * 2 - 1;
-			skillName = data.skills[this.bIndex].name;
+			skillNames.push(data.skills[this.bIndex].name);
 		}		
 		if(this.has("Seal Def")){
 			sealValue.def = -this.has("Seal Def") * 2 - 1;
-			skillName = data.skills[this.bIndex].name;
+			skillNames.push(data.skills[this.bIndex].name);
 		}		
 		if(this.has("Seal Res")){
 			sealValue.res = -this.has("Seal Res") * 2 - 1;
-			skillName = data.skills[this.bIndex].name;
+			skillNames.push(data.skills[this.bIndex].name);
 		}
 		
 		//These only take effect if the unit performed an attack
@@ -4100,88 +4104,81 @@ function activeHero(hero){
 			}
 		}
 		
-		//Set seal values
-		//TODO: Less text -_-'''
-		if(sealValue.atk < enemy.combatDebuffs.atk){
-			enemy.combatDebuffs.atk = sealValue.atk;
-			sealText += this.name + " lowers " + enemy.name + "'s Atk by " + (-sealValue.atk) + " after combat with " + skillName + ".<br>";
-		}		
-		if(sealValue.spd < enemy.combatDebuffs.spd){
-			enemy.combatDebuffs.spd = sealValue.spd;
-			sealText += this.name + " lowers " + enemy.name + "'s Spd by " + (-sealValue.spd) + " after combat with " + skillName + ".<br>";
+		//Set debuff values
+		var statChanges = [];
+		
+		for(var stat in sealValue){
+			if(sealValue[stat] < enemy.combatDebuffs[stat]){
+				enemy.combatDebuffs[stat] = sealValue[stat];
+				statChanges.push(enemy.combatDebuffs[stat] + " " + stat);
+			}
 		}
-		if(sealValue.def < enemy.combatDebuffs.def){
-			enemy.combatDebuffs.def = sealValue.def;
-			sealText += this.name + " lowers " + enemy.name + "'s Def by " + (-sealValue.def) + " after combat with " + skillName + ".<br>";
-		}
-		if(sealValue.res < enemy.combatDebuffs.res){
-			enemy.combatDebuffs.res = sealValue.res;
-			sealText += this.name + " lowers " + enemy.name + "'s Res by " + (-sealValue.res) + " after combat with " + skillName + ".<br>";
+		
+		if(skillNames.length > 0){
+			if(statChanges.length > 0){
+				sealText += this.name + " causes " + statChanges.join(",") + " on " + enemy.name + " with " + skillNames.join(", ") + ".<br>";
+			}
 		}
 
 		return sealText;
 	}
-
+	
+	//After combat buffs
 	this.postCombatBuff = function(){
 		var postCombatBuffText = "";
-
+		var buffValue = {"atk":0,"spd":0,"def":0,"res":0};
+		var skillNames = [];
+		
+		//Check and set highest buff value
+		function buffStat(skillName, statTypes, value){
+			for (var i = 0; i < statTypes.length; i++){
+				if (buffValue[statTypes[i]] < value){
+					buffValue[statTypes[i]] = value;
+					if (!skillNames.includes(skillName)){
+						skillNames.push(skillName);
+					}
+				}
+			}
+		}
+		
 		//Daggers only take effect if the unit performed an attack
-		if(this.didAttack){
-			var skillName = "";
-
-			//Will need to split these up if there comes another thing which boosts def or res after combat
-			var buffAtk = 0;
-			var buffSpd = 0;
-			var buffDef = 0;
-			var buffRes = 0;
-			
+		if(this.didAttack){			
 			if(this.hasExactly("Rogue Dagger+")){
-				buffDef = 5;
-				buffRes = 5;
-				skillName = data.skills[this.weaponIndex].name;
+				buffStat(data.skills[this.weaponIndex].name, ["def", "res"], 5);
 			}
 			else if(this.hasExactly("Rogue Dagger")){
-				buffDef = 3;
-				buffRes = 3;
-				skillName = data.skills[this.weaponIndex].name;
+				buffStat(data.skills[this.weaponIndex].name, ["def", "res"], 3);
 			}
 			
 			if((this.hasExactly("First Bite+") || this.hasExactly("Cupid's Arrow+") || this.hasExactly("Blessed Bouquet+")) && this.refineIndex != -1){
-				buffDef = 5;
-				buffRes = 5;
-				skillName = data.skills[this.weaponIndex].name + " (Refined)";
+				buffStat(data.skills[this.weaponIndex].name + " (Refined)", ["def", "res"], 5);
 			}
 			
 			if((this.hasExactly("Light Breath+")) && this.refineIndex != -1){
-				buffAtk = 5;
-				buffSpd = 5;
-				buffDef = 5;
-				buffRes = 5;
-				skillName = data.skills[this.weaponIndex].name + " (Refined)";
+				buffStat(data.skills[this.weaponIndex].name + " (Refined)", ["atk", "spd", "def", "res"], 5);
 			}
-			
-			//TODO: Less text -_-'''
-			if(buffAtk > this.combatBuffs.def){
-				this.combatBuffs.atk = buffAtk;
-				postCombatBuffText += this.name + " gains " + buffAtk + " Atk after combat from " + skillName + ".<br>";
+		}
+		
+		//Set buff values
+		var statChanges = [];
+		
+		for(var stat in buffValue){
+			if(buffValue[stat] > this.combatBuffs[stat]){
+				this.combatBuffs[stat] = buffValue[stat];
+				statChanges.push("+" + this.combatBuffs[stat] + " " + stat);
 			}
-			if(buffSpd > this.combatBuffs.res){
-				this.combatBuffs.spd = buffSpd;
-				postCombatBuffText += this.name + " gains " + buffSpd + " Spd after combat from " + skillName + ".<br>";
-			}
-			if(buffDef > this.combatBuffs.def){
-				this.combatBuffs.def = buffDef;
-				postCombatBuffText += this.name + " gains " + buffDef + " Def after combat from " + skillName + ".<br>";
-			}
-			if(buffRes > this.combatBuffs.res){
-				this.combatBuffs.res = buffRes;
-				postCombatBuffText += this.name + " gains " + buffRes + " Res after combat from " + skillName + ".<br>";
+		}
+		
+		if(skillNames.length > 0){
+			if(statChanges.length > 0){
+				postCombatBuffText += this.name + " gains " + statChanges.join(",") + " with " + skillNames.join(", ") + ".<br>";
 			}
 		}
 
 		return postCombatBuffText;
 	}
-
+	
+	//After combat heals
 	this.postCombatHeal = function(){
 		var postCombatHealText = "";		
 		var skillname = "";
