@@ -240,7 +240,7 @@
 		"spd": 3,
 		"def": 0,
 		"res": 0,
-		"prereq": "Slaying Edge+,Slaying Lance+,Slaying Axe+,FDeft Harpoon+,Melon Crusher+,Lilith Floaie+"
+		"prereq": "Slaying Edge+,Slaying Lance+,Slaying Axe+,Deft Harpoon+,Melon Crusher+,Lilith Floaie+"
 	},	{
 		"category": "Advanced Melee",
 		"name": "Def Bonus",

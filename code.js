@@ -4034,22 +4034,22 @@ function activeHero(hero){
 			sealValue.atk = -this.has("Seal Atk") * 2 - 1;
 			skillName = data.skills[this.bIndex].name;
 		}
-		if(this.has("Seal Spd")){
-			sealValue.spd = -this.has("Seal Spd") * 2 - 1;
-			skillName = data.skills[this.bIndex].name;
-		}
 		if(this.has("Seal Atk Spd")){
 			sealValue.spd = -this.has("Seal Atk Spd") * 2 - 1;
-			skillName = data.skills[this.bIndex].name;
-		}
-		if(this.has("Seal Def")){
-			sealValue.def = -this.has("Seal Def") * 2 - 1;
 			skillName = data.skills[this.bIndex].name;
 		}
 		if(this.has("Seal Atk Def")){
 			sealValue.def = -this.has("Seal Atk Def") * 2 - 1;
 			skillName = data.skills[this.bIndex].name;
 		}
+		if(this.has("Seal Spd")){
+			sealValue.spd = -this.has("Seal Spd") * 2 - 1;
+			skillName = data.skills[this.bIndex].name;
+		}		
+		if(this.has("Seal Def")){
+			sealValue.def = -this.has("Seal Def") * 2 - 1;
+			skillName = data.skills[this.bIndex].name;
+		}		
 		if(this.has("Seal Res")){
 			sealValue.res = -this.has("Seal Res") * 2 - 1;
 			skillName = data.skills[this.bIndex].name;
@@ -4206,7 +4206,31 @@ function activeHero(hero){
 	this.takeDamage = function(dmg){
 		//TODO: ?
 	}
-
+	
+	//Checks if hero's buffs are cancelled by opponent	
+	function isBuffCancelled(hero, opponent){
+		//Weapon
+		if (opponent.hasExactly("Divine Naga")){
+			return true;
+		}
+		//Refinement
+		if (opponent.hasExactly("Nullify Armored") && hero.moveType == "armored"){
+			return true;
+		}			
+		if (opponent.hasExactly("Nullify Cavalry") && hero.moveType == "cavalry"){
+			return true;
+		}
+		//Skill
+		if (opponent.has("Beorc's Blessing") && (hero.moveType == "cavalry" || hero.moveType == "flying")){
+			return true;
+		}
+		if (opponent.has("Mulagir") && (hero.weaponType == "redtome" || hero.weaponType == "bluetome" || hero.weaponType == "greentome")){
+			return true;
+		}
+		//Not cancelled
+		return false
+	}
+	
 	//represents one attack of combat
 	this.doDamage = function(enemy, brave, AOE, firstAttack){
 		//didAttack variable for checking daggers and pain
@@ -4240,12 +4264,7 @@ function activeHero(hero){
 			thisEffRes = this.res - Math.max(this.buffs.res,this.combatBuffs.res) + Math.min(this.debuffs.res,this.combatDebuffs.res) + this.spur.res + this.combatSpur.res;
 			if(!AOE){damageText += this.name + "'s buffs are reversed by debuff.<br>";}
 		//Buff cancellation
-		} else if(enemy.hasExactly("Divine Naga")
-			|| (enemy.has("Beorc's Blessing") && (this.moveType == "cavalry" || this.moveType == "flying"))
-			|| (enemy.has("Mulagir") && (this.weaponType == "redtome" || this.weaponType == "bluetome" || this.weaponType == "greentome"))
-			|| (enemy.hasExactly("Nullify Armored") && this.moveType == "armored")
-			|| (enemy.hasExactly("Nullify Cavalry") && this.moveType == "cavalry")
-			){
+		} else if(isBuffCancelled(this, enemy)){
 			thisEffAtk = this.atk + Math.min(this.debuffs.atk,this.combatDebuffs.atk) + this.spur.atk + this.combatSpur.atk;
 			thisEffSpd = this.spd + Math.min(this.debuffs.spd,this.combatDebuffs.spd) + this.spur.spd + this.combatSpur.spd;
 			thisEffDef = this.def + Math.min(this.debuffs.def,this.combatDebuffs.def) + this.spur.def + this.combatSpur.def;
@@ -4267,12 +4286,7 @@ function activeHero(hero){
 			enemyEffRes = enemy.res - Math.max(enemy.buffs.res,enemy.combatBuffs.res) + Math.min(enemy.debuffs.res,enemy.combatDebuffs.res) + enemy.spur.res + enemy.combatSpur.res;
 			if(!AOE){damageText += enemy.name + "'s buffs are reversed by debuff.<br>";}
 		//Buff cancellation
-		} else if(this.hasExactly("Divine Naga")
-			|| (this.has("Beorc's Blessing") && (enemy.moveType == "cavalry" || enemy.moveType == "flying"))
-			|| (this.has("Mulagir") && (enemy.weaponType == "redtome" || enemy.weaponType == "bluetome" || enemy.weaponType == "greentome"))
-			|| (this.hasExactly("Nullify Armored") && enemy.moveType == "armored")
-			|| (this.hasExactly("Nullify Cavalry") && enemy.moveType == "cavalry")
-			){
+		} else if(isBuffCancelled(enemy, this)){
 			enemyEffAtk = enemy.atk + Math.min(enemy.debuffs.atk,enemy.combatDebuffs.atk) + enemy.spur.atk + enemy.combatSpur.atk;
 			enemyEffSpd = enemy.spd + Math.min(enemy.debuffs.spd,enemy.combatDebuffs.spd) + enemy.spur.spd + enemy.combatSpur.spd;
 			enemyEffDef = enemy.def + Math.min(enemy.debuffs.def,enemy.combatDebuffs.def) + enemy.spur.def + enemy.combatSpur.def;
@@ -4329,7 +4343,6 @@ function activeHero(hero){
 						}
 					}
 					*/
-
 					
 					if(enemy.has("Embla's Ward")){
 						AOEDamage = 0;
@@ -4693,7 +4706,7 @@ function activeHero(hero){
 				if (enemy.hasExactly("Crusader's Ward") && this.range == "ranged"){
 					dmgReduction *= 0.2;
 					damageText += enemy.name + "'s Crusader's Ward reduces " + this.name + "'s consecutive damage by 80%.<br>"; 
-				}				
+				}
 				
 				//Deflect Seals
 				var deflect = 0;
@@ -4955,8 +4968,7 @@ function activeHero(hero){
 			else{
 				damageText += enemy.name + " <span class=\"blue\">" + enemy.hp + "</span> : " + this.name + " <span class=\"red\">" + this.hp + "</span><br>";
 			}
-
-
+			
 			//do damage again if brave weapon
 			if(brave && enemy.hp > 0){
 				damageText += this.name + " attacks again with " + data.skills[this.weaponIndex].name + ".<br>";
@@ -5022,28 +5034,16 @@ function activeHero(hero){
 		//***Speed currently calculated twice, once here and once in doDamage, should merge together***
 		var thisEffSpd = this.spd + Math.max(this.buffs.spd,this.combatBuffs.spd) + Math.min(this.debuffs.spd,this.combatDebuffs.spd) + this.spur.spd + this.combatSpur.spd;
 		var enemyEffSpd = enemy.spd + Math.max(enemy.buffs.spd,enemy.combatBuffs.spd) + Math.min(enemy.debuffs.spd,enemy.combatDebuffs.spd) + enemy.spur.spd + enemy.combatSpur.spd;
-
 		//Buff cancellation and reversion - Spd calculations
 		//***May require change depending on order of application between Panic and null skills***		
 		if(this.panicked){
 			thisEffSpd = this.spd - Math.max(this.buffs.spd,this.combatBuffs.spd) + Math.min(this.debuffs.spd,this.combatDebuffs.spd) + this.spur.spd + this.combatSpur.spd;
-		} else if(enemy.hasExactly("Divine Naga")
-			|| (enemy.has("Beorc's Blessing") && (this.moveType == "cavalry" || this.moveType == "flying"))
-			|| (enemy.has("Mulagir") && (this.weaponType == "redtome" || this.weaponType == "bluetome" || this.weaponType == "greentome"))
-			|| (enemy.hasExactly("Nullify Armored") && this.moveType == "armored")
-			|| (enemy.hasExactly("Nullify Cavalry") && this.moveType == "cavalry")
-			){
+		} else if(isBuffCancelled(this, enemy)){
 			thisEffSpd = this.spd + Math.min(this.debuffs.spd,this.combatDebuffs.spd) + this.spur.spd + this.combatSpur.spd;
 		}
-
 		if(enemy.panicked){
 			enemyEffSpd = enemy.spd - Math.max(enemy.buffs.spd,enemy.combatBuffs.spd) + Math.min(enemy.debuffs.spd,enemy.combatDebuffs.spd) + enemy.spur.spd + enemy.combatSpur.spd;
-		} else if(this.hasExactly("Divine Naga")
-			|| (this.has("Beorc's Blessing") && (enemy.moveType == "cavalry" || enemy.moveType == "flying"))
-			|| (this.has("Mulagir") && (enemy.weaponType == "redtome" || enemy.weaponType == "bluetome" || enemy.weaponType == "greentome"))
-			|| (this.hasExactly("Nullify Armored") && enemy.moveType == "armored")
-			|| (this.hasExactly("Nullify Cavalry") && enemy.moveType == "cavalry")
-			){
+		} else if(isBuffCancelled(enemy, this)){
 			enemyEffSpd = enemy.spd + Math.min(enemy.debuffs.spd,enemy.combatDebuffs.spd) + enemy.spur.spd + enemy.combatSpur.spd;
 		}
 		
@@ -5132,7 +5132,8 @@ function activeHero(hero){
 		//check for brave
 		//brave will be passed to this.doDamage
 		var brave = false;
-		if(this.has("Brave Sword") || this.has("Brave Lance") || this.has("Brave Axe") || this.has("Brave Bow") || this.has("Dire Thunder") || this.has("Amiti")){
+		if(this.has("Brave Sword") || this.has("Brave Lance") || this.has("Brave Axe") || this.has("Brave Bow") 
+			|| this.has("Dire Thunder") || this.has("Amiti")){
 			brave = true;
 		}
 
