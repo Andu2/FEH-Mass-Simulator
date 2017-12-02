@@ -1166,7 +1166,7 @@ function addClEnemy(index){
 
 	enemies.cl.list.push({
 		"index":index,"hp":0,"atk":0,"spd":0,"def":0,"res":0,"weapon":-1,"refine":-1,"special":-1,"a":-1,"b":-1,"c":-1,"s":-1,
-		"buffs": {"hp":0,"atk":0,"spd":0,"def":0,"res":0}, "debuffs": {"hp":0,"atk":0,"spd":0,"def":0,"res":0}, "spur": {"atk":0,"spd":0,"def":0,"res":0},
+		"buffs": {"hp":0,"atk":0,"spd":0,"def":0,"res":0}, "debuffs": {"hp":0,"atk":0,"spd":0,"def":0,"res":0}, "spur": {"hp":0,"atk":0,"spd":0,"def":0,"res":0},
 		"boon": "none", "bane": "none", "summoner": "none", "ally": "none", "merge":0, "rarity": 5, "precharge":0, "adjacent":1, "damage": 0
 	});
 	options.customEnemySelected = newCustomEnemyId;
@@ -1415,7 +1415,7 @@ function updateHeroUI(hero){
 		//Make a dummy hero
 		hero = {
 			"index":-1,"hp":0,"atk":0,"spd":0,"def":0,"res":0,"weapon":-1,"refine":-1,"special":-1,"a":-1,"b":-1,"c":-1,"s":-1,
-			"buffs": {"hp":0,"atk":0,"spd":0,"def":0,"res":0}, "debuffs": {"hp":0,"atk":0,"spd":0,"def":0,"res":0}, "spur": {"atk":0,"spd":0,"def":0,"res":0},
+			"buffs": {"hp":0,"atk":0,"spd":0,"def":0,"res":0}, "debuffs": {"hp":0,"atk":0,"spd":0,"def":0,"res":0}, "spur": {"hp":0,"atk":0,"spd":0,"def":0,"res":0},
 			"boon": "none", "bane": "none", "summoner": "none", "ally": "none", "merge":0, "rarity": 5, "precharge":0, "adjacent":1, "damage": 0
 		}
 	}
@@ -1736,7 +1736,7 @@ function copyChallenger(){
 		//Generate a new hero
 		enemies.cl.list.push({
 			"index":-1,"hp":0,"atk":0,"spd":0,"def":0,"res":0,"weapon":-1,"refine":-1,"special":-1,"a":-1,"b":-1,"c":-1,"s":-1,
-			"buffs": {"hp":0,"atk":0,"spd":0,"def":0,"res":0}, "debuffs": {"hp":0,"atk":0,"spd":0,"def":0,"res":0}, "spur": {"atk":0,"spd":0,"def":0,"res":0},
+			"buffs": {"hp":0,"atk":0,"spd":0,"def":0,"res":0}, "debuffs": {"hp":0,"atk":0,"spd":0,"def":0,"res":0}, "spur": {"hp":0,"atk":0,"spd":0,"def":0,"res":0},
 			"boon": "none", "bane": "none", "summoner": "none", "ally": "none", "merge":0, "rarity": 5, "precharge":0, "adjacent":1, "damage": 0
 		});
 		hero = enemies.cl.list[enemies.cl.list.length - 1];
@@ -1892,7 +1892,7 @@ function importText(side){
 		else{
 			enemies.cl.list.push({
 				"index":-1,"hp":0,"atk":0,"spd":0,"def":0,"res":0,"weapon":-1,"refine":-1,"special":-1,"a":-1,"b":-1,"c":-1,"s":-1,
-				"buffs": {"hp":0,"atk":0,"spd":0,"def":0,"res":0}, "debuffs": {"hp":0,"atk":0,"spd":0,"def":0,"res":0}, "spur": {"atk":0,"spd":0,"def":0,"res":0},
+				"buffs": {"hp":0,"atk":0,"spd":0,"def":0,"res":0}, "debuffs": {"hp":0,"atk":0,"spd":0,"def":0,"res":0}, "spur": {"hp":0,"atk":0,"spd":0,"def":0,"res":0},
 				"boon": "none", "bane": "none", "summoner": "none", "ally": "none", "merge":0, "rarity": 5, "precharge":0, "adjacent":1, "damage": 0
 			});
 			hero = enemies.cl.list[enemies.cl.list.length-1];
