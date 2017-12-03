@@ -3884,7 +3884,7 @@ function activeHero(hero){
 			if(this.has("Warding Stance")){
 				buffVal = this.has("Warding Stance") * 2;
 				skillName = data.skills[this.aIndex].name;
-				this.combatSpur.def += buffVal;
+				this.combatSpur.res += buffVal;
 				boostText += this.name + " gets +" + buffVal + " Res from defending with " + skillName + ".<br>";
 			}
 			
