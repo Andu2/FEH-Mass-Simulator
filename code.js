@@ -1479,6 +1479,7 @@ function updateHeroUI(hero){
 		$("#" + htmlPrefix + "def").html(hero.def);
 		$("#" + htmlPrefix + "res").html(hero.res);
 		$("#" + htmlPrefix + "bst").html(hero.bst + " / " + hero.spt);
+		$("#" + htmlPrefix + "asc").html(Math.round(100*(588.5 + 4*((hero.bst / 8) + (hero.spt / 240) + hero.merge + 5*(hero.rarity - 5)))) * 0.01);
 		if(data.heroes[hero.index].weapontype != "dragon"){
 			$("#" + htmlPrefix + "weapon_icon").attr("src","weapons/" + data.heroes[hero.index].weapontype + ".png");
 		}
