@@ -916,8 +916,7 @@ function setStats(hero){
 			mergeBoost.def -= 2;
 			mergeBoost.res -= 2;
 		}
-
-		hero.hp += mergeBoost.hp;
+		
 		hero.atk += mergeBoost.atk;
 		hero.spd += mergeBoost.spd;
 		hero.def += mergeBoost.def;
@@ -925,7 +924,7 @@ function setStats(hero){
 		
 		//Add hero hp changes
 		hero.hp += mergeBoost.hp + hero.buffs.hp + hero.debuffs.hp;
-		
+	
 		//Calculate hero bst after IV, merge, and rarity
 		hero.bst = hero.hp + hero.atk + hero.spd + hero.def + hero.res;
 
@@ -2135,8 +2134,6 @@ function importText(side){
 			skillName = false;
 		}
 		
-		
-		//TODO: Fix HP buff import/export
 		if(buffObject){
 			var value = {"hp":0,"atk":0,"spd":0,"def":0,"res":0};
 			var splitBuffs = trySplit(keyValue[1],[","]);
@@ -2303,7 +2300,6 @@ function getExportText(side){
 			}
 		});
 		
-		//TODO: Fix HP export
 		var statusText = "";
 		data.buffTypes.forEach(function(buffType){
 			var notZero = [];
@@ -4116,7 +4112,7 @@ function activeHero(hero){
 		
 		if(skillNames.length > 0){
 			if(statChanges.length > 0){
-				sealText += this.name + " causes " + statChanges.join(",") + " on " + enemy.name + " with " + skillNames.join(", ") + ".<br>";
+				sealText += this.name + " causes " + statChanges.join(",") + " to " + enemy.name + " with " + skillNames.join(", ") + ".<br>";
 			}
 		}
 
@@ -4298,7 +4294,7 @@ function activeHero(hero){
 		//Relavant defense stat
 		var relevantDef = (this.attackType == "magical") ? enemyEffRes : enemyEffDef;
 		
-		//Refined Dragonstone
+		//Refined Dragonstones
 		if (this.weaponType == "dragon" && this.refineIndex != -1 && enemy.range == "ranged"){
 			relevantDef = (enemyEffDef > enemyEffRes) ? enemyEffRes : enemyEffDef;
 			if (!AOE) {damageText += this.name + " is targeting foe's " + ((enemyEffDef > enemyEffRes) ? "Res" : "Def" ) + " with " + data.skills[hero.weapon].name + " (Refined).<br>";}
