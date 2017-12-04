@@ -1052,10 +1052,15 @@ function updateHealth(value, hero){
 }
 
 function updateSpt(hero){
+	//Temporary set assist sp to 150 until a solution is made.
+	var assist = 150;
+	
 	hero.spt = 0;
 	hero.spt += (hero.weapon != -1 ? data.skills[hero.weapon].sp : 0);
 	hero.spt += (hero.refine != -1 ? (data.refine[hero.refine].sp - data.skills[hero.weapon].sp) : 0);
 	hero.spt += (hero.special != -1 ? data.skills[hero.special].sp : 0);
+	//hero.spt += (hero.assist != -1 ? data.skills[hero.assist].sp : 0);
+	hero.spt += assist;
 	hero.spt += (hero.a != -1 ? data.skills[hero.a].sp : 0);
 	hero.spt += (hero.b != -1 ? data.skills[hero.b].sp : 0);
 	hero.spt += (hero.c != -1 ? data.skills[hero.c].sp : 0);
