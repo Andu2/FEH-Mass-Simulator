@@ -10769,7 +10769,7 @@
 		"skill_id": 770,
 		"name": "Atk Tactic 3",
 		"slot": "c",
-		"sp": 24,
+		"sp": 240,
 		"description": "At start of turn, grants Atk+6 to allies within 2 spaces for 1 turn. Granted only if number of that ally's movement type on current team <= 2.",
 		"hp": 0,
 		"atk": 0,

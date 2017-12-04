@@ -801,6 +801,63 @@ function getMaxSkills(skillset,rarity){
 	return maxSkillset;
 }
 
+//Return cooldown changes of skill
+function getCDChange(skillName, slot){
+	//Weapon
+	if (slot == "weapon"){
+		//Cooldown decrease
+		if (skillName.indexOf("Killing Edge") != -1 	|| skillName.indexOf("Killer Axe") != -1	|| skillName.indexOf("Killer Lance") != -1
+			|| skillName.indexOf("Killer Bow") != -1	|| skillName.indexOf("Slaying Bow") != -1 	|| skillName.indexOf("Slaying Edge") != -1
+			|| skillName.indexOf("Slaying Axe") != -1	|| skillName.indexOf("Slaying Lance") != -1	|| skillName.indexOf("Cursed Lance") != -1
+			|| skillName.indexOf("Mystletainn") != -1	|| skillName.indexOf("Hauteclere") != -1	|| skillName.indexOf("Urvan") != -1
+			|| skillName.indexOf("Audhulma") != -1
+			){
+				return -1;
+		}
+		//Cooldown increase
+		if (skillName.indexOf("Raudrblade") != -1 	|| skillName.indexOf("Blarblade") != -1 || skillName.indexOf("Gronnblade") != -1
+			|| skillName.indexOf("Lightning Breath") != -1
+			){
+				return 1;
+		}
+	}
+	
+	//Refine
+	if	(slot == "refine"){
+		
+	}
+	
+	//Seal
+	if (slot == "s"){
+		//Precharge Increase
+		if(skillName.indexOf("Quickened Pulse") != -1){
+			return 1;;
+		}
+	}		
+	
+	//No Change
+	return 0;
+}
+
+//Return type of special skill
+function getSpecialType(skillName, type){
+	//If special is defensive
+	if (skillName.indexOf("Miracle") != -1 			|| skillName.indexOf("Aegis") != -1 			|| skillName.indexOf("Buckler") != -1
+		|| skillName.indexOf("Escutcheon") != -1	|| skillName.indexOf("Holy Vestments") != -1 	|| skillName.indexOf("Pavise") != -1
+		|| skillName.indexOf("Sacred Cowl")!= -1	|| skillName.indexOf("Ice Mirror")!= -1
+		){
+		return "defensive";
+	//Else if special is supportive
+	}else if (skillName.indexOf("Heavenly Light") != -1 || skillName.indexOf("Imbue") != -1				|| skillName.indexOf("Kindled-Fire Balm") != -1
+		|| skillName.indexOf("Solid-Earth Balm") != -1	|| skillName.indexOf("Still-Water Balm") != -1	|| skillName.indexOf("Swift-Winds Balm") != -1
+		){
+		return "supportive";
+	//Else if special is offensive
+	}else{
+		return "offensive";
+	}
+}
+
 function setStats(hero){
 	if(hero.isFl){
 		enemies.fl.avgHp = 0;
@@ -1511,53 +1568,29 @@ function updateHeroUI(hero){
 
 			//Weapon Skill
 			if(hero.weapon != -1){
-				var weaponName = data.skills[hero.weapon].name;
-
-				if(weaponName.indexOf("Killer") != -1 || weaponName.indexOf("Killing") != -1 || weaponName.indexOf("Slaying") != -1 
-					|| weaponName.indexOf("Mystletainn") != -1 || weaponName.indexOf("Hauteclere") != -1 || weaponName.indexOf("Cursed Lance") != -1
-					|| weaponName.indexOf("Urvan") != -1){
-					specialCharge -= 1;
-				}
-				else if(weaponName.indexOf("Raudrblade") != -1 || weaponName.indexOf("Lightning Breath") != -1 || weaponName.indexOf("Blarblade") != -1 || weaponName.indexOf("Gronnblade") != -1){
-					specialCharge += 1;
-				}
+				specialCharge += getCDChange(data.skills[hero.weapon].name, "weapon");
 			}
 			
 			//Refine bonus
 			if(hero.refine != -1){
+				specialCharge += getCDChange(data.refine[hero.refine].name, "refine");
 			}
 
 			//Special Item
 			if(hero.s != -1){
-				var sName = data.skills[hero.s].name;
-
-				//Quicken Pulse
-				if(sName.indexOf("Quickened Pulse") != -1){
-					precharge += 1;
-				}
+				precharge += getCDChange(data.skills[hero.s].name, "s")
 			}
 
 			//B Skill
 			if(hero.b != -1){
-				var bName = data.skills[hero.b].name;
-
-				//If special is defensive
-				if(specialName.indexOf("Miracle") != -1 || specialName.indexOf("Aegis") != -1 || specialName.indexOf("Buckler") != -1 || specialName.indexOf("Escutcheon") != -1
-					|| specialName.indexOf("Holy Vestments") != -1 || specialName.indexOf("Pavise") != -1 || specialName.indexOf("Sacred Cowl")!= -1 
-					|| specialName.indexOf("Ice Mirror")!= -1 ){
-					//Shield Pulse
+				var bName = data.skills[hero.b].name;				
+				//Shield Pulse
+				if (getSpecialType(data.skills[hero.special].name) == "defensive"){					
 					if(bName.indexOf("Shield Pulse 3") != -1){
-						precharge += 2;
+						precharge += 2;						
 					} else if(bName.indexOf("Shield Pulse 1") != -1 || bName.indexOf("Shield Pulse 2") != -1){
 						precharge += 1;
 					}
-				//Else if special is supportive
-				}else if(specialName.indexOf("Heavenly Light") != -1 || specialName.indexOf("Imbue") != -1 || specialName.indexOf("Kindled-Fire Balm") != -1
-					|| specialName.indexOf("Solid-Earth Balm") != -1 || specialName.indexOf("Still-Water Balm") != -1 || specialName.indexOf("Swift-Winds Balm") != -1){
-						
-				//Else if special is offensive
-				}else{
-
 				}
 			}
 			
@@ -3340,19 +3373,8 @@ function activeHero(hero){
 	}
 
 	this.resetCharge = function(){
-		//resets charge based on weapon
-		if(this.has("Killing Edge") || this.has("Killer Axe") || this.has("Killer Lance") || this.has("Killer Bow")
-			|| this.has("Slaying Bow") || this.has("Slaying Edge") || this.has("Slaying Axe") || this.has("Slaying Lance")
-			|| this.has("Cursed Lance")|| this.has("Mystletainn") || this.has("Hauteclere") 
-			|| this.has("Urvan") || this.has("Audhulma")){
-			this.charge = 1;
-		}
-		else if(this.has("Raudrblade") || this.has("Lightning Breath") || this.has("Blarblade") || this.has("Gronnblade")){
-			this.charge = -1;
-		}
-		else{
-			this.charge = 0;
-		}
+		//Reset charge based on weapon		
+		this.charge += getCDChange(this.weaponIndex == -1 ? "no weapon" : data.skills[this.weaponIndex].name, "weapon");
 	}
 
 	//Set charge at beginning
@@ -3364,13 +3386,11 @@ function activeHero(hero){
 	}
 
 	//Shield Pulse charge at beginning
-	if(this.has("Miracle") || this.has("Aegis") || this.has("Buckler") || this.has("Escutcheon") 
-		|| this.has("Holy Vestments") || this.has("Pavise") || this.has("Sacred Cowl") 
-		|| this.has("Ice Mirror")){
+	if (getSpecialType(this.specialIndex == -1 ? "no special" : data.skills[this.specialIndex].name) == "defensive"){
 		if(this.has("Shield Pulse 3")){
 			this.charge += 2;
 		} else if(this.has("Shield Pulse 1") || this.has("Shield Pulse 2")){
-			this.charge++;
+			this.charge += 1;
 		}
 	}
 
@@ -3516,21 +3536,11 @@ function activeHero(hero){
 	this.charging = function(){
 		var chargingText = "";
 		
-		//If special is defensive
-		if(this.has("Miracle") || this.has("Aegis") || this.has("Buckler") || this.has("Escutcheon")
-			|| this.has("Holy Vestments") || this.has("Pavise") || this.has("Sacred Cowl") 
-			|| this.has("Ice Mirror")){
-		//Else if special is supportive
-		}else if(this.has("Heavenly Light") || this.has("Imbue") || this.has("Kindled-Fire Balm")
-			|| this.has("Solid-Earth Balm") || this.has("Still-Water Balm") || this.has("Swift-Winds Balm")){				
-		//Else if special is offensive
-		}else{
-			//Wrath
-			if(this.has("Wrath")){
-				if(this.hp/this.maxHp <= .25 * this.has("Wrath")){
-					this.charge++;
-					chargingText += this.name + " gains an extra charge with " + data.skills[this.bIndex].name + ".<br>";
-				}
+		//Wrath
+		if (this.has("Wrath") && getSpecialType(this.speicalIndex == -1 ? "no special" : data.skills[this.specialIndex].name) == "offensive"){
+			if(this.hp/this.maxHp <= .25 * this.has("Wrath")){
+				this.charge++;
+				chargingText += this.name + " gains an extra charge with " + data.skills[this.bIndex].name + ".<br>";
 			}
 		}
 		
@@ -4890,8 +4900,6 @@ function activeHero(hero){
 				enemy.resetCharge();
 			}
 			
-			
-			
 			//Miracle survival check
 			if(dmg >= enemy.hp){
 				if(miracle){
@@ -5194,7 +5202,7 @@ function activeHero(hero){
 		}
 
 		//check for breaker skills
-		//Need to rdo this code to avoid repeating twice...
+		//Need to redo this code to avoid repeating twice...
 		var thisBroken = false;
 		var thisBreakLevel = 2; // hp threshold
 		if(this.weaponType=="sword" && enemy.has("Swordbreaker")){
@@ -5255,7 +5263,7 @@ function activeHero(hero){
 			enemyBreakLevel = 0;
 		}
 
-		if(enemy.hp / this.maxHp >= thisBreakLevel){
+		if(enemy.hp / enemy.maxHp >= thisBreakLevel){
 			thisBroken = true;
 		}
 		if(this.hp / this.maxHp >= enemyBreakLevel){
