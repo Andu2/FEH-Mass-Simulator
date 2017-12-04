@@ -32,7 +32,7 @@ ex: melee,physical (for Galeforce)
 
 affectsduel determines whether a skill is shown if "show only skills that affect duel" is selected
 
-##SKILL PREREQS TABLE - skill_prereq.json
+## SKILL PREREQS TABLE - skill_prereq.json
 
 Joins many-to-many relationship between skills and prerequisites
 
@@ -40,7 +40,7 @@ Good luck manually updating this shit (I (Jason) might kill this table and combi
 
 I (Andy) had created a database updater for my own personal use to handle this (examples in old_resoure folder)
 
-##WEAPON REFINES TABLE - weapon_refine.json
+## WEAPON REFINES TABLE - weapon_refine.json
 
 Seperates weapon refinements into categories that separates different descriptions.
 
@@ -48,7 +48,7 @@ Holds individual prereq information for each refinement.
 
 Remember to create a set of new entries for refinements that has unique descriptions.
 
-##CUSTOM LISTS TABLE - custom_lists.json
+## CUSTOM LISTS TABLE - custom_lists.json
 
 Contain keys to public Google Sheet feeds.
 
