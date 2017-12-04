@@ -14,7 +14,7 @@ function loadJSON(filePath) {
 	var json = loadTextFileAjaxSync(filePath, "application/json");
 	// Parse json
 	return JSON.parse(json);
-}   
+}
 
 // Load text with Ajax synchronously: takes path to file and optional MIME type
 function loadTextFileAjaxSync(filePath, mimeType)
@@ -27,13 +27,18 @@ function loadTextFileAjaxSync(filePath, mimeType)
 			xmlhttp.overrideMimeType(mimeType);
 		}
 	}
-	xmlhttp.send();
+	try {
+		xmlhttp.send();
+	}catch(error) {
+		console.log("Invalid target address.");
+		return null
+	}
+	
 	if (xmlhttp.status == 200)
 	{
 		return xmlhttp.responseText;
-	}
-	else {
-		// TODO Throw exception
+	}else {
+		console.log("Invalid xmlhttp.status.");
 		return null;
 	}
 }
@@ -43,6 +48,7 @@ data.heroSkills = loadJSON('json/hero_skill.json');
 data.skills = loadJSON('json/skill.json');
 data.prereqs = loadJSON('json/skill_prereq.json');
 data.refine = loadJSON('json/weapon_refine.json');
+data.lists = loadJSON('json/custom_lists.json')
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -290,18 +296,24 @@ $(document).ready(function(){
 		console.log("Unsupported JavaScript");
 		$("#update_text").html("Your browser does not appear to support some of the code this app uses (JavaScript ES5). The app probably won't work.");
 	}
-
+	
 	//Populate hero select options
 	heroHTML = "<option value=-1 class=\"hero_option\">Select Hero</option>";
 	for(var i = 0; i < data.heroes.length; i++){
 		heroHTML += "<option value=" + i + " class=\"hero_option\">" + data.heroes[i].name + "</option>";
 	}
 	$("#challenger_name, #cl_enemy_name").html(heroHTML).select2({dropdownAutoWidth : true});
-
-	setSkillOptions(enemies.fl);
-
-	initEnemyList();
-
+	
+	//Load Custom Lists	
+	listHTML = "<option value=0> Filtered Full List</option>";
+	listHTML += "<option value=1> Custom List</option>";
+	for(var i = 0; i < data.lists.length; i++){
+		listHTML += "<option value=" + (i + 2) + ">" + data.lists[i].name + "</option>";
+	}
+	$("#enemies_mode").html(listHTML).select2({dropdownAutoWidth : true, width: '145px'});	
+	
+	setSkillOptions(enemies.fl);	
+	initEnemyList();	
 	updateFullUI();
 
 	//Create listener on whole body and check data-var to see which var to replace
@@ -512,7 +524,7 @@ $(document).ready(function(){
 		}
 		showImportDialog(target,type);
 	})
-
+	
 	$("#import_exit").click(function(){
 		hideImportDialog();
 	})
@@ -1802,8 +1814,11 @@ function showImportDialog(side,type){
 		$("#frame_import").removeClass("enemiesimport").addClass("enemiesimport");
 		label += "enemies";
 	}
-
+	
 	$("#import_title").html(label);
+	$("#button_clear").click(function(){
+		$("#importinput").val("");
+	})
 
 	$("#screen_fade").show();
 	$("#frame_import").show();
@@ -1814,10 +1829,11 @@ function hideImportDialog(){
 	$("#frame_import").hide();
 }
 
-function importText(side){
+function importText(side, customList){
 	var errorMsg = "";
 
-	var text = $("#importinput").val();
+	var text = (customList) ? customList : $("#importinput").val();
+	//console.log(((customList) ? "I" : "Not i") + "mporting custom list from db.");
 	text = removeDiacritics(text); //Fuckin rauðrblade
 	var importSplit = text.split(/\n|;/).map(function (line) {
 		return line.trim();
@@ -2212,6 +2228,40 @@ function importText(side){
 	calculate();
 }
 
+//Load custom list from google spreadsheet
+//Using API 2.0 that acquires public feed without an API key
+function loadCustomList(index){
+	var listText = "";
+	
+	var key = data.lists[index].key;
+	var range = data.lists[index].range;
+	var url = "https://spreadsheets.google.com/feeds/cells/" + key + "/od6/public/basic?alt=json" + range;
+	
+	/* Asynchronous AJAX
+	$.ajax({
+		url:url,
+		dataType:"jsonp",
+		async: false,
+		success:function(data) {
+			// data.feed.entry is an array of objects that represent each cell
+			data.feed.entry.forEach(function(entry, index){
+				listText += entry.content.$t + ";";
+			});		
+		},
+	});
+	*/
+	try {
+		loadJSON(url).feed.entry.forEach(function(entry, index){
+			listText += entry.content.$t + ";";
+		});
+	}catch (error){
+		console.log("Invalid url key or range");
+	}
+		
+	//console.log(listText);
+	importText("enemies", listText);
+}
+
 //Search for refine index by name and category
 //TODO: Change from exporting refineName/category as key to exporting refineName/weaponName to match against name/prereq instead?
 // 		Can merge duplicate entries in DB using this logic.
@@ -2417,14 +2467,20 @@ function switchEnemySelect(newVal){
 		willCalculate = true;
 	}
 	options.customEnemyList = newVal;
-	if(options.customEnemyList==1){
-		$("#enemies_full_list").hide();
-		$("#enemies_custom_list").show();
-	}
-	else{
+	if(options.customEnemyList == 0){
 		$("#enemies_custom_list").hide();
 		$("#enemies_full_list").show();
-	}
+	}else if(options.customEnemyList == 1){
+		$("#enemies_full_list").hide();
+		$("#enemies_custom_list").show();
+	}else{
+		$("#enemies_full_list").hide();
+		$("#enemies_custom_list").show();
+		//index - 2 because enemies_mode starts with 2 options
+		loadCustomList(options.customEnemyList - 2);
+		options.customEnemyList = 1;
+		$("#enemies_mode").trigger('change.select2');
+	} 
 
 	if(willCalculate){
 		calculate();

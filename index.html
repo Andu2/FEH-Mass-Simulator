@@ -141,7 +141,7 @@
 				<div id="enemies_bar_top">
 					<div class="bar_top_title">Enemies
 						<div class="bar_top_title_right">
-							<select id="enemies_mode" data-var="options.customEnemyList" class="bar_label"><option value=0>Filtered full list</option><option value=1>Custom list</option></select>
+							<select id="enemies_mode" data-var="options.customEnemyList" class="bar_label"></select>
 							<div class="button button_copy" id="copy_enemy">Copy</div>
 							<div class="button button_importexport" id="import_enemies">Import</div>
 							<div class="button button_importexport" id="export_enemies">Export</div>
@@ -362,10 +362,18 @@
 	</div>
 	<div id="frame_tooltip"></div>
 	<div id="screen_fade"></div>
-	<div id="frame_import" class="challengerimport">
-		<div id="import_header"><span id="import_title"></span><div class="button" id="import_exit">x</div></div>
+	<div id="frame_import" class="challengerimport">		
+		<div id="import_header">
+			<span id="import_title"></span>
+			<div class="button" id="import_exit">x</div>			
+		</div>
 		<textarea class="importinput" id="importinput" tabindex="-1" ></textarea>
-		<div id="import_footer"><div class="button" id="button_import">Import into calculator</div></div>
+		<div id="import_footer">
+			<div class="button" id="button_import">Import into calculator</div>
+		</div>
+		<div id="import_clear">
+			<div class="button" id="button_clear">Clear</div>
+		</div>
 		<label id="export_collapse_label"><input type="checkbox" id="export_collapse" />Collapse</label>
 	</div>
 </body>
