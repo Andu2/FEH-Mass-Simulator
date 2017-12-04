@@ -1,6 +1,6 @@
 # JSON Data
 
-If using SQL export to JSON, use 'find all and replace' and replace number Strings to Int: 
+If using a SQL export to JSON, use 'find all and replace' and replace String numbers to Int: 
 
 	Expression: "(\-{0,1}[0-9]+(\.[0-9]+){0,1})"
 	
@@ -52,7 +52,7 @@ Remember to create a set of new entries for refinements that has unique descript
 
 Contain keys to public Google Sheet feeds.
 
-Allows modifiers to specify range being read.
+Allows modifiers to specify range to read.
 
 The Google Sheet MUST be public and shared on the web.
 

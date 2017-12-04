@@ -831,7 +831,7 @@ function getCDChange(skillName, slot){
 	if (slot == "s"){
 		//Precharge Increase
 		if(skillName.indexOf("Quickened Pulse") != -1){
-			return 1;;
+			return 1;
 		}
 	}		
 	
