@@ -42,11 +42,11 @@ I (Andy) had created a database updater for my own personal use to handle this (
 
 ## WEAPON REFINES TABLE - weapon_refine.json
 
-Seperates weapon refinements into categories that separates different descriptions.
+Seperates weapon refinements into categories that has different descriptions.
 
 Holds individual prereq information for each refinement.
 
-Remember to create a set of new entries for refinements that has unique descriptions.
+Remember to create a new category of entries for refinements that has unique descriptions.
 
 ## CUSTOM LISTS TABLE - custom_lists.json
 

@@ -911,6 +911,9 @@ function setStats(hero){
 		hero.def = base.def + data.growths[hero.rarity-1][data.heroes[hero.index].defgrowth + growthValMod.def];
 		hero.res = base.res + data.growths[hero.rarity-1][data.heroes[hero.index].resgrowth + growthValMod.res];
 		
+		//Calculate hero BST after IV before merge stat bonuses
+		hero.bst = hero.hp + hero.atk + hero.spd + hero.def + hero.res;	
+		
 		//Add merge bonuses
 		var mergeBoost = {"hp":0,"atk":0,"spd":0,"def":0,"res":0};
 
@@ -988,12 +991,11 @@ function setStats(hero){
 		hero.def += mergeBoost.def;
 		hero.res += mergeBoost.res;
 		
-		//Add hero hp changes - from blessings
+		//Add hero hp changes - from blessings		
 		hero.hp += hero.buffs.hp + hero.debuffs.hp;
-		
-		//Calculate hero bst after IV, merge, and rarity
-		//TODO: Include blessing stat changes
-		hero.bst = hero.hp + hero.atk + hero.spd + hero.def + hero.res;	
+		//Blessing bonuses are included in BST
+		//TODO: Include blessing stat changes into BST
+		hero.bst += hero.buffs.hp + hero.debuffs.hp;
 
 		//Add stats based on skills
 		if(hero.weapon != -1){
