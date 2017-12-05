@@ -804,7 +804,15 @@ function getMaxSkills(skillset,rarity){
 }
 
 //Return cooldown changes of skill
-function getCDChange(skillName, slot){
+function getCDChange(skill, slot){
+	
+	//If skill slot is empty, return 0
+	if (skill == undefined){
+		return 0;
+	}
+	
+	var skillName = skill.name;
+	
 	//Weapon
 	if (slot == "weapon"){
 		//Cooldown decrease
@@ -826,7 +834,7 @@ function getCDChange(skillName, slot){
 	
 	//Refine
 	if	(slot == "refine"){
-		
+		//Refinement changes to cooldown go here
 	}
 	
 	//Seal
@@ -842,7 +850,15 @@ function getCDChange(skillName, slot){
 }
 
 //Return type of special skill
-function getSpecialType(skillName, type){
+function getSpecialType(skill, type){
+	
+	//If skill slot is empty, return 0
+	if (skill == undefined){
+		return "undefined";
+	}
+	
+	var skillName = skill.name;
+	
 	//If special is defensive
 	if (skillName.indexOf("Miracle") != -1 			|| skillName.indexOf("Aegis") != -1 			|| skillName.indexOf("Buckler") != -1
 		|| skillName.indexOf("Escutcheon") != -1	|| skillName.indexOf("Holy Vestments") != -1 	|| skillName.indexOf("Pavise") != -1
@@ -1572,24 +1588,24 @@ function updateHeroUI(hero){
 
 			//Weapon Skill
 			if(hero.weapon != -1){
-				specialCharge += getCDChange(data.skills[hero.weapon].name, "weapon");
+				specialCharge += getCDChange(data.skills[hero.weapon], "weapon");
 			}
 			
 			//Refine bonus
 			if(hero.refine != -1){
-				specialCharge += getCDChange(data.refine[hero.refine].name, "refine");
+				specialCharge += getCDChange(data.refine[hero.refine], "refine");
 			}
 
 			//Special Item
 			if(hero.s != -1){
-				precharge += getCDChange(data.skills[hero.s].name, "s")
+				precharge += getCDChange(data.skills[hero.s], "s")
 			}
 
 			//B Skill
 			if(hero.b != -1){
 				var bName = data.skills[hero.b].name;				
 				//Shield Pulse
-				if (getSpecialType(data.skills[hero.special].name) == "defensive"){					
+				if (getSpecialType(data.skills[hero.special]) == "defensive"){					
 					if(bName.indexOf("Shield Pulse 3") != -1){
 						precharge += 2;						
 					} else if(bName.indexOf("Shield Pulse 1") != -1 || bName.indexOf("Shield Pulse 2") != -1){
@@ -3415,7 +3431,7 @@ function activeHero(hero){
 	this.resetCharge = function(){
 		//Reset charge based on weapon
 		//For weapons that would reduce charge, you gain a charge instead, and vice versa
-		this.charge = -1 * getCDChange(this.weaponIndex == -1 ? "no weapon" : data.skills[this.weaponIndex].name, "weapon");
+		this.charge = -1 * getCDChange(data.skills[this.weaponIndex], "weapon");
 	}
 
 	//Set charge at beginning
@@ -3427,7 +3443,7 @@ function activeHero(hero){
 	}
 
 	//Shield Pulse charge at beginning
-	if (getSpecialType(this.specialIndex == -1 ? "no special" : data.skills[this.specialIndex].name) == "defensive"){
+	if (getSpecialType(data.skills[this.specialIndex]) == "defensive"){
 		if(this.has("Shield Pulse 3")){
 			this.charge += 2;
 		} else if(this.has("Shield Pulse 1") || this.has("Shield Pulse 2")){
@@ -3578,7 +3594,7 @@ function activeHero(hero){
 		var chargingText = "";
 		
 		//Wrath
-		if (this.has("Wrath") && getSpecialType(this.speicalIndex == -1 ? "no special" : data.skills[this.specialIndex].name) == "offensive"){
+		if (this.has("Wrath") && getSpecialType(data.skills[this.specialIndex]) == "offensive"){
 			if(this.hp/this.maxHp <= .25 * this.has("Wrath")){
 				this.charge++;
 				chargingText += this.name + " gains an extra charge with " + data.skills[this.bIndex].name + ".<br>";
