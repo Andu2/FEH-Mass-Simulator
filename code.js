@@ -3376,7 +3376,7 @@ function activeHero(hero){
 
 	this.resetCharge = function(){
 		//Reset charge based on weapon		
-		this.charge += getCDChange(this.weaponIndex == -1 ? "no weapon" : data.skills[this.weaponIndex].name, "weapon");
+		this.charge = getCDChange(this.weaponIndex == -1 ? "no weapon" : data.skills[this.weaponIndex].name, "weapon");
 	}
 
 	//Set charge at beginning
@@ -5046,7 +5046,7 @@ function activeHero(hero){
 	}
 	
 	//represents a full round of combat
-	this.attack = function(enemy,round,renew,galeforce){		
+	this.attack = function(enemy,round,renew,galeforce){
 				
 		//Initialize round		
 		var roundText = "";//Common theme: text is returned by helper functions, so the functions are called by adding them to roundText
