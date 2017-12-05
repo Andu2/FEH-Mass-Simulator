@@ -3376,7 +3376,7 @@ function activeHero(hero){
 
 	this.resetCharge = function(){
 		//Reset charge based on weapon		
-		this.charge = getCDChange(this.weaponIndex == -1 ? "no weapon" : data.skills[this.weaponIndex].name, "weapon");
+		this.charge = -1 * getCDChange(this.weaponIndex == -1 ? "no weapon" : data.skills[this.weaponIndex].name, "weapon");
 	}
 
 	//Set charge at beginning
