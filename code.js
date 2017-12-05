@@ -148,7 +148,7 @@ function initOptions(){
 	options.viewFilter = "all";
 	options.customEnemyList = 0;
 	options.customEnemySelected = -1;
-	options.sortOrder = 1;
+	options.sortOrder = -1;
 	options.roundInitiators = ["Challenger initiates","Enemy initiates"];
 
 	//Holder for challenger options and pre-calculated stats
@@ -850,9 +850,9 @@ function getCDChange(skill, slot){
 }
 
 //Return type of special skill
-function getSpecialType(skill, type){
+function getSpecialType(skill){
 	
-	//If skill slot is empty, return 0
+	//If skill slot is empty, return undefined
 	if (skill == undefined){
 		return "undefined";
 	}
@@ -2758,7 +2758,7 @@ function fight(enemyIndex,resultIndex){
 		passFilters.push("gray");
 	}
 	//Filter Range
-	if ($.inArray(weaponTypeName, data.rangedWeapons) > -1){
+	if (data.rangedWeapons.indexOf(weaponTypeName) > -1){
 		passFilters.push("ranged");
 	}else{
 		passFilters.push("melee");
@@ -3839,13 +3839,13 @@ function activeHero(hero){
 				buffVal = this.has("Darting Blow") * 2;
 				skillName = data.skills[this.aIndex].name;
 				this.combatSpur.spd += buffVal;
-				boostText += this.name + " gets " + buffVal + " Spd from initiating with " + skillName + ".<br>";
+				boostText += this.name + " gets +" + buffVal + " Spd from initiating with " + skillName + ".<br>";
 			}
 			if(this.has("Steady Blow")){
 				buffVal = this.has("Steady Blow") * 2;
 				skillName = data.skills[this.aIndex].name;
 				this.combatSpur.spd += buffVal;
-				boostText += this.name + " gets " + buffVal + " Spd from initiating with " + skillName + ".<br>";
+				boostText += this.name + " gets +" + buffVal + " Spd from initiating with " + skillName + ".<br>";
 			}
 			if(this.has("Swift Sparrow")){
 				buffVal = this.has("Swift Sparrow") * 2;
@@ -3864,13 +3864,13 @@ function activeHero(hero){
 				buffVal = this.has("Armored Blow") * 2;
 				skillName = data.skills[this.aIndex].name;
 				this.combatSpur.def += buffVal;
-				boostText += this.name + " gets " + buffVal + " Def from initiating with " + skillName + ".<br>";
+				boostText += this.name + " gets +" + buffVal + " Def from initiating with " + skillName + ".<br>";
 			}
 			if(this.has("Steady Blow")){
 				buffVal = this.has("Steady Blow") * 2;
 				skillName = data.skills[this.aIndex].name;
 				this.combatSpur.def += buffVal;
-				boostText += this.name + " gets " + buffVal + " Def from initiating with " + skillName + ".<br>";
+				boostText += this.name + " gets +" + buffVal + " Def from initiating with " + skillName + ".<br>";
 			}
 			if(this.has("Sturdy Blow")){
 				buffVal = this.has("Sturdy Blow") * 2;
@@ -4363,6 +4363,7 @@ function activeHero(hero){
 		var effectiveBonus = 1.0;
 		var dmgMultiplier = 1.0;
 		var dmgBoost = 0;
+		var dmgBoostFlat = 0;
 		var absorbPct = 0;
 
 		var damageText = "";
@@ -4498,7 +4499,7 @@ function activeHero(hero){
 					offensiveSpecialActivated = true;
 				}
 				else if(this.hasExactly("Glowing Ember") || this.hasExactly("Bonfire")){
-					dmgBoost += thisEffDef/2;
+					dmgBoost += thisEffDef / 2;
 					offensiveSpecialActivated = true;
 				}
 				else if(this.hasExactly("Ignis")){
@@ -4526,23 +4527,23 @@ function activeHero(hero){
 					offensiveSpecialActivated = true;
 				}
 				else if(this.hasExactly("Chilling Wind") || this.hasExactly("Iceberg")){
-					dmgBoost += thisEffRes/2;
+					dmgBoost += thisEffRes / 2;
 					offensiveSpecialActivated = true;
 				}
 				else if(this.hasExactly("Glacies")){
-					dmgBoost += thisEffRes*0.8;
+					dmgBoost += thisEffRes * 0.8;
 					offensiveSpecialActivated = true;
 				}
 				else if(this.hasExactly("Regnal Astra")){
-					dmgBoost += thisEffSpd*0.4;
+					dmgBoost += thisEffSpd * 0.4;
 					offensiveSpecialActivated = true;
 				}
 				else if(this.hasExactly("Retribution") || this.hasExactly("Reprisal")){
-					dmgBoost += (this.maxHp-this.hp)*0.3;
+					dmgBoost += (this.maxHp-this.hp) * 0.3;
 					offensiveSpecialActivated = true;
 				}
 				else if(this.hasExactly("Vengeance")){
-					dmgBoost += (this.maxHp-this.hp)*0.5;
+					dmgBoost += (this.maxHp-this.hp) * 0.5;
 					offensiveSpecialActivated = true;
 				}
 				else if(this.hasExactly("Aether")){
@@ -4557,13 +4558,13 @@ function activeHero(hero){
 				damageText += this.name + " activates " + data.skills[this.specialIndex].name + ".<br>";
 
 				if(this.has("Wo Dao") || this.hasExactly("Dark Excalibur") || this.hasExactly("Resolute Blade") || this.has("Special Damage")){
-					dmgBoost += 10;
+					dmgBoostFlat += 10;
 					damageText += this.name + " gains 10 damage from " + data.skills[hero.weapon].name + ".<br>";
 				}
 				//Wrath damage is checked when special is activated
 				if(this.has("Wrath")){
 					if(this.hp/this.maxHp <= .25 * this.has("Wrath")){
-						dmgBoost += 10;
+						dmgBoostFlat += 10;
 						damageText += this.name + " gains 10 damage from " + data.skills[this.bIndex].name + ".<br>";
 					}
 				}
@@ -4789,8 +4790,9 @@ function activeHero(hero){
 				damageText += this.name + "'s attack is increased by " + (effectiveBonus * 100 - 100) + "% from weapon effectiveness.<br>";
 			}		
 			
-			//Weapon modifier for healers
+			//Class modifier
 			var weaponModifier = 1;
+			//Healers
 			if(this.weaponType == "staff"){
 				weaponModifier = 0.5;
 				//Wrathful effects
@@ -4919,7 +4921,7 @@ function activeHero(hero){
 			
 			//Release charged damage
 			if (this.chargedDamage > 0){
-				dmgBoost += this.chargedDamage;
+				dmgBoostFlat += this.chargedDamage;
 				damageText += this.name + " gains " + this.chargedDamage + " damage from releasing stored energy.<br>";
 				this.chargedDamage = 0;
 			}
@@ -4927,15 +4929,33 @@ function activeHero(hero){
 			//Damage calculation from http://feheroes.wiki/Damage_Calculation
 			//use bitwise or to truncate properly
 			//Doing calculation in steps to see the formula more clearly
+			
+			var rawDmg = (thisEffAtk * effectiveBonus | 0);
+			var advBoost = ((thisEffAtk * effectiveBonus | 0) * weaponAdvantageBonus | 0);
+			var statBoost = dmgBoost;
+			var reduceDmg = relevantDef + (relevantDef * enemyDefModifier | 0);
+			
+			//Total damage dealth = base damage + weapon advantage boost + stat-reliant special boost - mitigation with relevant defense
+			var totalDmg = (rawDmg + advBoost + statBoost - reduceDmg);			
+			//Total damage is modified by weapon modifier (ie. healer staff reduction)
+			totalDmg = (totalDmg * weaponModifier | 0);
+			//Total damage is modified by damage multiplier from specials + flat damage bonus
+			totalDmg = (totalDmg * dmgMultiplier | 0) + dmgBoostFlat;
+			//Final damage is total damage - damage reduction from specials - flat damage reduction
+			var dmg = totalDmg - (totalDmg * (1 - dmgReduction) | 0) - dmgReductionFlat;
+			
+			/*	Old damage formula
 			var rawDmg = (thisEffAtk * effectiveBonus | 0) + ((thisEffAtk * effectiveBonus | 0) * weaponAdvantageBonus | 0) + (dmgBoost | 0);
 			var reduceDmg = relevantDef + (relevantDef * enemyDefModifier | 0);
 			var dmg = (rawDmg - reduceDmg) * weaponModifier | 0;
 			dmg = dmg * dmgMultiplier | 0;
 			dmg -= dmg * (1 - dmgReduction) | 0;
 			dmg -= dmgReductionFlat | 0;
-			
+			*/
+						
 			//Final damage calculations
 			dmg = Math.max(dmg,0);
+			
 			if(enemy.has("Embla's Ward")){
 				dmg = 0;
 			}
@@ -4947,7 +4967,7 @@ function activeHero(hero){
 			if(defensiveSpecialActivated){
 				//Ice Mirror damage charge up check
 				if (enemy.has("Ice Mirror")){
-					var iceMirrorDamage = ((rawDmg - reduceDmg) * weaponModifier | 0) - dmg;
+					var iceMirrorDamage = totalDmg - dmg;
 					if (iceMirrorDamage > 0){
 						enemy.chargedDamage += iceMirrorDamage;
 						damageText += enemy.name + "'s Ice Mirror stores " + iceMirrorDamage + " damage for next attack.<br>";
