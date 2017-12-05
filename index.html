@@ -15,8 +15,8 @@
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
 
-	<link rel="stylesheet" type="text/css" href="style.css?v=201712042400"/>
-	<script type="text/javascript" src="code.js?v=201712042400"></script>
+	<link rel="stylesheet" type="text/css" href="style.css?v=201712041822"/>
+	<script type="text/javascript" src="code.js?v=201712041822"></script>
 
 </head>
 
@@ -344,8 +344,41 @@
 		</div>
 		<div id="frame_results">
 			<div id="results_bar_top">
-				<div class="button" id="button_calculate" onclick="calculate();">Calculate!</div> <input type="checkbox" data-var="options.autoCalculate" id="autocalculate" checked="checked"/>Auto-calculate
-				<div id="results_bar_right"><span class="bar_label">View:</span><select id="view_results" data-var="options.viewFilter"><option value="all" >All battles</option><option value="changeVictor" >Changed victor</option><option value="changeRounds" >Changed rounds</option><option value="changeDamage" >Changed damage</option><option value="win" >Wins</option><option value="loss" >Losses</option><option value="inconclusive" >Inconclusive</option></select><span class="bar_label">Sort:</span><select id="sort_results" data-var="options.sortOrder"><option value=1 >Best</option><option value=-1 >Worst</option></select><div class="button" id="button_exportcalc" onclick="exportCalc();">Export results</div></div>
+				<div class="button" id="button_calculate" onclick="calculate();">Calculate!</div> 
+				<input type="checkbox" data-var="options.autoCalculate" id="autocalculate" checked="checked"/>
+				Auto-calculate
+				<div id="results_bar_right">
+					<span class="bar_label">Color:</span>
+					<select id="color_results" data-var="options.colorFilter">
+						<option value="all" >All</option>
+						<option value="red" style="background-color: #FAAFBE">Red</option>
+						<option value="blue" style="background-color: lightblue">Blue</option>
+						<option value="green" style="background-color: #99C68E">Green</option>
+						<option value="gray" style="background-color: silver">Gray</option>
+					</select>
+					<span class="bar_label">Range:</span>
+					<select id="range_results" data-var="options.rangeFilter">
+						<option value="all" >All</option>
+						<option value="melee" >Melee</option>
+						<option value="ranged" >Ranged</option>
+					</select>
+					<span class="bar_label">View:</span>
+					<select id="view_results" data-var="options.viewFilter">
+						<option value="all" >All battles</option>
+						<option value="changeVictor" >Changed victor</option>
+						<option value="changeRounds" >Changed rounds</option>
+						<option value="changeDamage" >Changed damage</option>
+						<option value="win" >Wins</option>
+						<option value="loss" >Losses</option>
+						<option value="inconclusive" >Inconclusive</option>
+					</select>
+					<span class="bar_label">Sort:</span>
+					<select id="sort_results" data-var="options.sortOrder">
+						<option value=1 >Best</option>
+						<option value=-1 >Worst</option>
+					</select>
+					<div class="button" id="button_exportcalc" onclick="exportCalc();">Export results</div>
+				</div>
 			</div>
 			<div id="results_graph_back">
 				<div id="results_graph_wins"></div>
@@ -354,7 +387,7 @@
 			<div id="winpercentages"><span class="results_stat">Wins: <span id="win_pct">-</span></span><span class="results_stat">Losses: <span id="lose_pct">-</span></span><span class="results_stat">Inconclusive: <span id="inconclusive_pct">-</span></span></div>
 			<div id="results_list"></div>
 		</div>
-		<div id="footer">Code found <a href="https://github.com/Andu2/FEH-Mass-Simulator">here</a>. Last <a href="changelog.txt">updated</a> 2017-7-3.</div>
+		<div id="footer">Visit our GitHub <a href="https://github.com/Andu2/FEH-Mass-Simulator">here</a>. Please submit any issues <a href="https://github.com/Andu2/FEH-Mass-Simulator/issues">here</a>.
 	</div>
 	<div id="frame_tooltip"></div>
 	<div id="screen_fade"></div>

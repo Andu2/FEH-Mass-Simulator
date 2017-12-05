@@ -143,6 +143,8 @@ function initOptions(){
 	options.ployBehavior = "Orthogonal";
 	options.showOnlyMaxSkills = true;
 	options.hideUnaffectingSkills = true;
+	options.colorFilter = "all";
+	options.rangeFilter = "all";
 	options.viewFilter = "all";
 	options.customEnemyList = 0;
 	options.customEnemySelected = -1;
@@ -2686,6 +2688,7 @@ function fight(enemyIndex,resultIndex){
 		}
 	}
 
+	//Set icon names
 	var weaponName = "None";
 	var refineName = "norefine";
 	var specialName = "None";
@@ -2715,6 +2718,7 @@ function fight(enemyIndex,resultIndex){
 		sName = data.skills[ahEnemy.sIndex].name.replace(/\s/g,"_");
 	}
 	
+	//Set weapon icon name for dragon
 	var weaponTypeName = ahEnemy.weaponType;
 	if(weaponTypeName == "dragon"){
 		weaponTypeName = ahEnemy.color + "dragon";
@@ -2726,6 +2730,23 @@ function fight(enemyIndex,resultIndex){
 
 	var passFilters = ["all"];
 	passFilters.push(outcome);
+	
+	//Filter Color
+	if (weaponTypeName == "sword" || weaponTypeName == "redtome" || weaponTypeName == "reddragon"){
+		passFilters.push("red");
+	}else if (weaponTypeName == "lance" || weaponTypeName == "bluetome" || weaponTypeName == "bluedragon"){
+		passFilters.push("blue");
+	}else if (weaponTypeName == "axe" || weaponTypeName == "greentome" || weaponTypeName == "greendragon"){
+		passFilters.push("green");
+	}else{
+		passFilters.push("gray");
+	}
+	//Filter Range
+	if ($.inArray(weaponTypeName, data.rangedWeapons) > -1){
+		passFilters.push("ranged");
+	}else{
+		passFilters.push("melee");
+	}
 
 	if(enemyList[enemyIndex].lastFightResult){
 		var prevResult = "";
@@ -2970,9 +2991,26 @@ function outputResults(){
 //Helper function for filtering
 //Will return true if include or false if not
 function filterResult(i){
-	//console.log(resultHTML[i].passFilters.indexOf(options.viewFilter));
+	//console.log(options.viewFilter);
+	//console.log(resultHTML[i].passFilters.indexOf(options.viewFilter));	
 	//console.log(resultHTML[i].passFilters);
-	return resultHTML[i].passFilters.indexOf(options.viewFilter) > -1;
+	//return resultHTML[i].passFilters.indexOf(options.viewFilter) > -1;
+	
+	//Color Filter
+	if (resultHTML[i].passFilters.indexOf(options.colorFilter) == -1){
+		return false
+	}	
+	//Range Filter
+	if (resultHTML[i].passFilters.indexOf(options.rangeFilter) == -1){
+		return false
+	}	
+	//View Filter
+	if (resultHTML[i].passFilters.indexOf(options.viewFilter) == -1){
+		return false
+	}
+	
+	//Return true if all filter passes
+	return true;
 }
 
 function exportCalc(){
@@ -3375,7 +3413,8 @@ function activeHero(hero){
 	}
 
 	this.resetCharge = function(){
-		//Reset charge based on weapon		
+		//Reset charge based on weapon
+		//For weapons that would reduce charge, you gain a charge instead, and vice versa
 		this.charge = -1 * getCDChange(this.weaponIndex == -1 ? "no weapon" : data.skills[this.weaponIndex].name, "weapon");
 	}
 
