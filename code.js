@@ -876,6 +876,17 @@ function getSpecialType(skill){
 	}
 }
 
+//Return true if hero can counter any range
+function canCounterAnyRange(hero){
+	if(hero.has("Close Counter") || hero.has("Distant Counter") || hero.has("Lightning Breath")
+		|| hero.has("Raijinto") || hero.has("Siegfried") || hero.has("Ragnell") 
+		|| hero.has("Gradivus") || hero.has("Alondite") || hero.has("Stout Tomahawk")
+		|| hero.has("Leiptr")){
+		return true;
+	}
+	return false;
+}
+
 function setStats(hero){
 	if(hero.isFl){
 		enemies.fl.avgHp = 0;
@@ -4242,7 +4253,7 @@ function activeHero(hero){
 		
 		if(skillNames.length > 0){
 			if(statChanges.length > 0){
-				sealText += this.name + " causes " + statChanges.join(",") + " to " + enemy.name + " with " + skillNames.join(", ") + ".<br>";
+				sealText += this.name + " applies " + statChanges.join(",") + " on " + enemy.name + " with " + skillNames.join(", ") + ".<br>";
 			}
 		}
 
@@ -4865,13 +4876,7 @@ function activeHero(hero){
 			
 			if(enemy.specialIndex != -1 && data.skills[enemy.specialIndex].charge <= enemy.charge){
 				//gotta check range
-				var anyRangeCounter = false;
-				if(this.has("Close Counter") || this.has("Distant Counter") || this.has("Lightning Breath")
-					|| this.has("Raijinto") || this.has("Siegfried") || this.has("Ragnell") 
-					|| this.has("Gradivus") || this.has("Alondite") || this.has("Stout Tomahawk")
-					|| this.has("Leiptr")){
-					anyRangeCounter = true;
-				}
+				var anyRangeCounter = canCounterAnyRange(this);
 
 				if(this.range == "melee" || (!this.initiator && enemy.range == "melee" && anyRangeCounter)){
 					if(enemy.has("Buckler") || enemy.has("Escutcheon")){
@@ -4935,7 +4940,7 @@ function activeHero(hero){
 			var statBoost = dmgBoost;
 			var reduceDmg = relevantDef + (relevantDef * enemyDefModifier | 0);
 			
-			//Total damage dealth = base damage + weapon advantage boost + stat-reliant special boost - mitigation with relevant defense
+			//Total damage = base damage + weapon advantage boost + stat-reliant special boost - relevant defense mitigation
 			var totalDmg = (rawDmg + advBoost + statBoost - reduceDmg);			
 			//Total damage is modified by weapon modifier (ie. healer staff reduction)
 			totalDmg = (totalDmg * weaponModifier | 0);
@@ -5189,13 +5194,7 @@ function activeHero(hero){
 		}
 		
 		//check for any-distance counterattack
-		var anyRangeCounter = false;
-		if(enemy.has("Close Counter") || enemy.has("Distant Counter") || enemy.has("Lightning Breath")
-			|| enemy.has("Raijinto") || enemy.has("Ragnell") || enemy.has("Siegfried")
-			|| enemy.has("Gradivus") || enemy.has("Alondite") || enemy.has("Stout Tomahawk")
-			|| enemy.has("Leiptr")){
-			anyRangeCounter = true;
-		}
+		var anyRangeCounter = canCounterAnyRange(enemy);
 
 		//Check for AOE special activation
 		roundText += this.doDamage(enemy, false, true, false);
@@ -5242,9 +5241,6 @@ function activeHero(hero){
 			}
 		}
 		if (enemy.has("Armads") && enemy.hp/enemy.maxHp >= .8){
-			quickRiposte = true;
-		}
-		if (enemy.hasAtRefineIndex("Pursuit", enemy.refineIndex) && enemy.combatStartHp / enemy.maxHp >= 0.9){
 			quickRiposte = true;
 		}
 		if (enemy.has("Follow-Up Ring") && enemy.hp/enemy.maxHp >= .5){
@@ -5457,7 +5453,7 @@ function activeHero(hero){
 		if (this.has("Sol Katti") && this.hp/this.maxHp <= .75 && this.hasAtRefineIndex("Brash Assault", this.refineIndex) && (this.range == enemy.range || anyRangeCounter) && enemyCanCounter){
 			thisAutoFollow = true;
 		}
-		if (this.hasAtRefineIndex("Pursuit", this.refineIndex) && (this.combatStartHp / this.maxHp >= 0.9) && (this.range == enemy.range || anyRangeCounter) && enemyCanCounter){
+		if (this.hasAtRefineIndex("Pursuit", this.refineIndex) && (this.combatStartHp / this.maxHp >= 0.9)){
 			thisAutoFollow = true;
 		}
 		if (this.has("Follow-Up Ring") && (this.combatStartHp / this.maxHp >= 0.5)){
