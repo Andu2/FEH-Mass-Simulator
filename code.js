@@ -138,7 +138,6 @@ function initOptions(){
 	options = {};
 	options.autoCalculate = true;
 	options.startTurn = 1;
-	options.useGaleforce = true;
 	options.threatenRule = "Neither";
 	options.ployBehavior = "Orthogonal";
 	options.showOnlyMaxSkills = true;
@@ -150,6 +149,18 @@ function initOptions(){
 	options.customEnemySelected = -1;
 	options.sortOrder = -1;
 	options.roundInitiators = ["Challenger initiates","Enemy initiates"];
+	
+	//Holder for side-specific options
+	options.panic_challenger = false;
+	options.panic_enemy = false;
+	options.candlelight_challenger = false;
+	options.candlelight_enemy = false;
+	options.defensive_challenger = false;
+	options.defensive_enemy = false;
+	options.threaten_challenger = false;
+	options.threaten_enemy = false;
+	options.galeforce_challenger = true;
+	options.galeforce_enemy = true;
 
 	//Holder for challenger options and pre-calculated stats
 	challenger = {};
@@ -2953,10 +2964,9 @@ function calculate(manual){
 			});
 
 			outputResults();
-
 			var total = wins + losses + inconclusive;
-			$("#results_graph_wins").animate({"width":wins/total*906+"px"},200);
-			$("#results_graph_losses").animate({"width":losses/total*906+"px"},200);
+			$("#results_graph_wins").animate({"width":(wins/total) * ($("#frame_main").width() - 4) + "px"},200);
+			$("#results_graph_losses").animate({"width":(losses/total) * ($("#frame_main").width() - 4) + "px"},200);
 			$("#win_pct").html(wins);
 			$("#lose_pct").html(losses);
 			$("#inconclusive_pct").html(inconclusive);
@@ -3051,7 +3061,7 @@ function exportCalc(){
 		//Should take out buffs and stuff that aren't used to minimize columns?
 		csvString += "Challenger,cColor,cMovetype,cWeapontype,cRarity,cMerge,cBoon,cBane,cMaxHP,cStartHP,cAtk,cSpd,cDef,cRes,cWeapon,cRefine,cSpecial,cPrecharge,cAdjacent,cA,cB,cC,cS,cBuffAtk,cBuffSpd,cBuffDef,cBuffRes,cDebuffAtk,cDebuffSpd,cDebuffDef,cDebuffRes,cSpurAtk,cSpurSpd,cSpurDef,cSpurRes,";
 		csvString += "Enemy,eColor,eMovetype,eWeapontype,eRarity,eMerge,eBoon,eBane,eMaxHP,eStartHP,eAtk,eSpd,eDef,eRes,eWeapon,eRefine,eSpecial,ePrecharge,eAdjacent,eA,eB,eC,eS,eBuffAtk,eBuffSpd,eBuffDef,eBuffRes,eDebuffAtk,eDebuffSpd,eDebuffDef,eDebuffRes,eSpurAtk,eSpurSpd,eSpurDef,eSpurRes,";
-		csvString += "FirstTurnThreaten,StartTurn,UseGaleforce,Initiator1,Initiator2,Initiator3,Initiator4,Outcome,cEndHP,eEndHP,Rounds,Overkill,BattleLog\n";
+		csvString += "FirstTurnThreaten,StartTurn,GaleforceChallenger,GaleforceEnemy,Initiator1,Initiator2,Initiator3,Initiator4,Outcome,cEndHP,eEndHP,Rounds,Overkill,BattleLog\n";
 
 		fightResults.forEach(function(result){
 			csvString += data.heroes[challenger.index].name + ",";
@@ -3199,7 +3209,8 @@ function exportCalc(){
 
 			csvString += options.threatenRule + ",";
 			csvString += options.startTurn + ",";
-			csvString += options.useGaleforce + ",";
+			csvString += options.galeforce_challenger + ",";
+			csvString += options.galeforce_enemy + ",";
 			for(var rnd = 0; rnd < 4;rnd++){
 				if(!!options.roundInitiators[rnd]){
 					csvString += options.roundInitiators[rnd].substring(0,options.roundInitiators[rnd].length-10) + ",";
@@ -4930,11 +4941,17 @@ function activeHero(hero){
 				damageText += this.name + " gains " + this.chargedDamage + " damage from releasing stored energy.<br>";
 				this.chargedDamage = 0;
 			}
+			
+			//Defensive Terrain
+			var enemyDefensive = enemy.challenger ? options.defensive_challenger : options.defensive_enemy;
+			if (enemyDefensive){
+				enemyDefModifier += 0.3;
+				damageText += enemy.name + " reduces 30% damage from being on defensive terrain.<br>";
+			}
 
 			//Damage calculation from http://feheroes.wiki/Damage_Calculation
 			//use bitwise or to truncate properly
-			//Doing calculation in steps to see the formula more clearly
-			
+			//Doing calculation in steps to see the formula more clearly			
 			var rawDmg = (thisEffAtk * effectiveBonus | 0);
 			var advBoost = ((thisEffAtk * effectiveBonus | 0) * weaponAdvantageBonus | 0);
 			var statBoost = dmgBoost;
@@ -5151,7 +5168,34 @@ function activeHero(hero){
 
 			//Apply renewal effects
 			roundText += this.renewal(renew);			
-
+			
+			//Set initial status
+			if (round == 1){
+				if(options.panic_challenger){
+					this.challenger ? this.panicked = true : enemy.panicked = true;
+				}
+				if(options.panic_enemy){
+					enemy.challenger ? this.panicked = true : enemy.panicked = true;
+				}
+				if(options.candlelight_challenger){
+					this.challenger ? this.lit = true : enemy.lit = true;
+				}
+				if(options.candlelight_enemy){
+					enemy.challenger ? this.lit = true : enemy.lit = true;
+				}				
+				if(this.challenger ? options.threaten_enemy : options.threaten_challenger){
+					roundText += enemy.threaten(this);
+				}
+				if(this.challenger ? options.threaten_challenger : options.threaten_enemy){
+					roundText += this.threaten(enemy);
+				}
+			}else{
+				//Always apply threaten effects from enemy on following rounds
+				roundText += this.threaten(enemy);
+			}
+			
+			
+			/*
 			//Check threaten if not first turn (unless startThreatened is on)
 			if((options.threatenRule=="Both"||options.threatenRule=="Attacker") && (round == 1)){
 				roundText += enemy.threaten(this);
@@ -5159,6 +5203,7 @@ function activeHero(hero){
 			if((options.threatenRule=="Both"||options.threatenRule=="Defender") || (round != 1)){
 				roundText += this.threaten(enemy);
 			}
+			*/
 			
 			//Check for charge effects
 			//***Does turn start Wrath check for health after Renew?***
@@ -5592,7 +5637,7 @@ function activeHero(hero){
 			}
 
 			//Finally, Galeforce!
-			if(this.has("Galeforce") && data.skills[this.specialIndex].charge <= this.charge && options.useGaleforce){
+			if(this.has("Galeforce") && data.skills[this.specialIndex].charge <= this.charge && (this.challenger ? options.galeforce_challenger : options.galeforce_enemy)){
 				roundText += this.name + " initiates again with Galeforce!<br>";
 				this.resetCharge();
 				roundText += this.attack(enemy,round,false,true);

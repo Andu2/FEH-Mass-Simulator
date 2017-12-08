@@ -15,8 +15,8 @@
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
 
-	<link rel="stylesheet" type="text/css" href="style.css?v=201712051339"/>
-	<script type="text/javascript" src="code.js?v=201712051339"></script>
+	<link rel="stylesheet" type="text/css" href="style.css?v=201712081500"/>
+	<script type="text/javascript" src="code.js?v=201712081500"></script>
 
 </head>
 
@@ -136,6 +136,84 @@
 						</div>
 					</div>
 				</div>
+			</div>
+			<div id="frame_adj">
+				<div id="rules_bar_top">
+					Options
+				</div>
+				<div id="adj_title">Status:</div>
+				<div class="adj_status">
+					<div class="status_challenger"><input type="checkbox" data-var="options.panic_challenger" id="panic_challenger"/></div>
+					<div class="status_title">Panic</div>
+					<div class="status_enemy"><input type="checkbox" data-var="options.panic_enemy" id="panic_enemy"/></div>
+				</div>
+				<div class="adj_status">
+					<div class="status_challenger"><input type="checkbox" data-var="options.candlelight_challenger" id="candlelight_challenger"/></div>
+					<div class="status_title">Candlelight</div>
+					<div class="status_enemy"><input type="checkbox" data-var="options.candlelight_enemy" id="candlelight_enemy"/></div>
+				</div>
+				<div class="adj_status">
+					<div class="status_challenger"><input type="checkbox" data-var="options.defensive_challenger" id="defensive_challenger"/></div>
+					<div class="status_title">Defensive Tile</div>
+					<div class="status_enemy"><input type="checkbox" data-var="options.defensive_enemy" id="defensive_enemy"/></div>
+				</div>
+				<div id="adj_title">Mechanics:</div>				
+				<div class="adj_status">
+					<div class="status_challenger"><input type="checkbox" data-var="options.threaten_challenger" id="threaten_challenger"/></div>
+					<div class="status_title">Initial Threaten/Ploy</div>
+					<div class="status_enemy"><input type="checkbox" data-var="options.threaten_enemy" id="threaten_enemy"/></div>
+				</div>
+				<div class="adj_status">
+					<div class="status_challenger"><input type="checkbox" data-var="options.galeforce_challenger" id="galeforce_challenger" checked/></div>
+					<div class="status_title">Galeforce Initiates Again</div>
+					<div class="status_enemy"><input type="checkbox" data-var="options.galeforce_enemy" id="galeforce_enemy" checked/></div>
+				</div>
+				<div id="adj_title">Custom List Adjustments:</div>
+				<div class="adj_status">
+					<div class="status_desc">Damage Taken</div>
+					<div class="status_select">Amount</div>
+					<div class="status_apply">Apply</div>
+				</div>
+				<div class="adj_status">
+					<div class="status_desc">Total Health</div>
+					<div class="status_select">Percent</div>
+					<div class="status_apply">Apply</div>
+				</div>
+				<div class="adj_status">
+					<div class="status_full">Reset Health</div>					
+				</div>
+				<div class="adj_status">
+					<div class="status_desc">Status</div>
+					<div class="status_select">Buff</div>
+					<div class="status_apply">Apply</div>
+				</div>
+				<div class="adj_status">
+					<div class="status_desc">Movement</div>
+					<div class="status_select">Buff</div>
+					<div class="status_apply">Apply</div>
+				</div>
+				<div class="adj_status">
+					<div class="status_full">Reset Buffs</div>					
+				</div>
+				<div id="adj_title">Other Options:</div>
+				<div class="adj_status">
+					<div class="status_desc_long">Ranged Attack Angle: </div>
+					<div class="status_select">Direction</div>
+				</div>
+				<div class="adj_status">
+					<div class="status_desc_long">Start Renewal Turn: </div>
+					<div class="status_select">Round</div>
+				</div>
+				<div class="adj_status">
+					<div class="status_desc_long">Show only max skills: </div>
+					<div class="status_select">Tick</div>
+				</div>
+				<div class="adj_status">
+					<div class="status_desc_long">Show only duel skills: </div>
+					<div class="status_select">Tick</div>
+				</div>
+				
+				
 			</div>
 			<div id="frame_enemies">
 				<div id="enemies_bar_top">
@@ -338,7 +416,9 @@
 					</div>
 				</div>
 				<div id="rules_checks">
-					<span class="checkrule"><label><input type="checkbox" data-var="options.showOnlyMaxSkills" id="rules_prereqs" checked="checked" /> Only show max skills</label></span><span class="checkrule"><label><span class="checkrule"><input type="checkbox" id="rules_hideunaffecting" data-var="options.hideUnaffectingSkills" checked="checked" /> Hide skills that won't affect a duel</label></span><span class="checkrule"><label><input type="checkbox" data-var="options.useGaleforce" id="rules_galeforce" checked="checked" /> Initiate again if Galeforce triggers</label></span>
+					<span class="checkrule"><label><input type="checkbox" data-var="options.showOnlyMaxSkills" id="rules_prereqs" checked="checked" /> Only show max skills</label></span>
+					<span class="checkrule"><label><input type="checkbox" data-var="options.hideUnaffectingSkills" id="rules_hideunaffecting" checked="checked" /> Hide skills that won't affect a duel</label></span>
+					<span class="checkrule"><label><input type="checkbox" data-var="options.useGaleforce" id="rules_galeforce" checked="checked" /> Initiate again if Galeforce triggers</label></span>
 				</div>
 			</div>
 		</div>

@@ -18,7 +18,7 @@ body{
 }
 
 #frame_main{
-	width:910px;
+	width:1125px;
 	margin: 0 auto;
 }
 
@@ -728,12 +728,81 @@ body{
 	background-color: #ffffff;
 	color:#d82a3e;
 }
+/*Adjustments///////////////////////////////////////*/
+#frame_adj{
+	border-radius:4px;
+	border:2px solid #ffffff;
+	background-color: #222222;
+	position:absolute;
+	margin-left:10px;
+	margin-right:10px;
+	left:385px;
+	right:0;
+	top:0;
+	bottom:0;
+	width:200px;
+}
+
+#adj_title{
+	text-align:center;
+	font-size:16px;
+	margin-top:6px;
+	margin-bottom:2px;
+}
+
+.adj_status {
+	display: flex;
+	width: 100%;
+	font-size:11px;
+}
+
+.status_title {
+	width: 60%;
+	text-align:center;
+}
+
+.status_challenger {
+	width: 20%;
+	text-align:left;
+}
+
+.status_enemy {
+	width: 20%;
+	text-align:right;
+}
+
+.status_desc {
+	width: 45%;
+	text-align:left;
+	margin-left:5px;	
+}
+.status_desc_long {
+	width: 80%;
+	text-align:left;
+	margin-left:5px;	
+}
+
+.status_select {
+	width: 40%;
+	text-align:left;
+}
+
+.status_apply {
+	width: 15%;
+	text-align:right;
+	margin-right:5px;
+}
+
+.status_full {
+	width: 100%;
+	text-align:center;
+}
 
 /*Rules/////////////////////////////////////////////*/
 #frame_rules{
+	border-radius:4px;
 	border:2px solid #ffffff;
 	background-color: #222222;
-	border-radius:4px;
 	margin-top:10px;
 	text-align:left;
 	height:138px;
@@ -932,7 +1001,7 @@ body{
 #results_graph_back{
 	position:absolute;
 	background-color: #444444;
-	width:906px;
+	width:1121px;
 	height:10px;
 	margin:10px auto 0 auto;
 }
