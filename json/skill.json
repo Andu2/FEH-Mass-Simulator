@@ -10198,7 +10198,7 @@
 		"sp": 400,
 		"description": "If unit has >= 50% HP, unit can move to a space adjacent to an ally within 2 spaces.",
 		"hp": 0,
-		"atk": 16,
+		"atk": 14,
 		"spd": 0,
 		"def": 0,
 		"res": 0,
