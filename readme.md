@@ -20,7 +20,7 @@ Here are some things I wanted to do before I stopped updating. I'm not saying th
 
 * I wanted to take the calculation functions off the ActiveHero object, because I was concerned that the functions were being created once per ActiveHero, taking up way more space than necessary (not actually sure if this is how JavaScript works)
 * Add a Battle object representing a battle (things like round number and result) and a Hero object representing hero settings (not in battle). Some things consistent throughout a battle like weapon advantage can be part of the Battle?
-* Add defensive terrain...
+* ~~Add defensive terrain...~~
 * Save hero settings data to local storage automatically, so the calculator is set up the same when a user goes back to it
 * Add option to save challenger settings and enemy settings each in save slots
 * Add statistics and graphs to results
