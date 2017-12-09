@@ -1200,18 +1200,24 @@ function updateSpt(hero){
 	hero.spt += (hero.s != -1 ? data.skills[hero.s].sp : 0);
 }
 
+//Adjust HP for heroes in custom list
 function adjustCustomListHp(isFlat){
+	//Adjust the amount of damage each hero took
 	enemies.cl.list.forEach(function(hero){
 		if (isFlat){
 			hero.damage = enemies.cl.damage;
 		}
 		else{
+			//HP is floored, but this is rounded towards positive infinity since it is calculating damage
 			hero.damage = Math.ceil(hero.hp * (1.00 - (enemies.cl.HpPercent * 0.25)));
 		}
 	});
+	
+	//Update enemy UI
 	updateEnemyUI();
 }
 
+//Reset HP for heroes in custom list
 function resetCustomListHp(){
 	//Reset all custom list hero damage to 0
 	if (enemies.cl.list.length > 0){
@@ -1230,6 +1236,7 @@ function resetCustomListHp(){
 	updateEnemyUI();
 }
 
+//Adjust buffs for heroes in custom list
 function adjustCustomListBuff(isStat){
 	//For single stat adjustments
 	if (isStat){
@@ -1299,14 +1306,14 @@ function adjustCustomListBuff(isStat){
 					}
 				});
 			}
-		});
-		
-	}
+		});		
+	}	
 	
-	
+	//Update enemy UI
 	updateEnemyUI();
 }
 
+//Reset buffs for heroes in custom list
 function resetCustomListBuffs(isFlat){
 	console.log("Resetting buffs");
 	//Reset all custom list hero buffs and debuffs to 0
@@ -1316,7 +1323,7 @@ function resetCustomListBuffs(isFlat){
 		hero.spur = {"hp":0,"atk":0,"spd":0,"def":0,"res":0};
 	});
 	
-	/*
+	/* This isn't intuitive and causes user error
 	//Initialize custom list buff adjustment UI
 	$("#enemies_cl_status").val('hp');
 	enemies.cl.status = "hp";
