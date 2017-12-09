@@ -76,11 +76,11 @@ data.support = ["s","s-","a","a-","b","b-","c","c-"];
 //Growth shifts of 3 are what make some banes/boons +/- 4
 //growth table from https://feheroes.wiki/Stat_Growth
 data.growths = [
-	[6,8,9,11,13,14,16,18,19,21,23,24,26],
-	[7,8,10,12,14,15,17,19,21,23,25,26,28],
-	[7,9,11,13,15,17,19,21,23,25,27,29,31,33],
-	[8,10,12,14,16,18,20,22,24,26,28,31,33,35],
-	[8,10,13,15,17,19,22,24,26,28,30,33,35,37]
+	[6,	8,	9,	11,	13,	14,	16,	18,	19,	21,	23,	24,	26],
+	[7,	8,	10,	12,	14,	15,	17,	19,	21,	23,	25,	26,	28],
+	[7,	9,	11,	13,	15,	17,	19,	21,	23,	25,	27,	29,	31,	33],
+	[8,	10,	12,	14,	16,	18,	20,	22,	24,	26,	28,	31,	33,	35],
+	[8,	10,	13,	15,	17,	19,	22,	24,	26,	28,	30,	33,	35,	37]
 	];
 
 //Remember: heroes, skills, prereqs, and heroskills arrays come from PHP-created script
@@ -144,6 +144,7 @@ function initOptions(){
 	options.hideUnaffectingSkills = true;
 	options.colorFilter = "all";
 	options.rangeFilter = "all";
+	options.typeFilter = "all";
 	options.viewFilter = "all";
 	options.customEnemyList = 0;
 	options.customEnemySelected = -1;
@@ -272,11 +273,11 @@ function initOptions(){
 	
 	//Custom List Adjustments
 	enemies.cl.damage = 0;
-	enemies.cl.HpPercent = 1;
-	enemies.cl.status = "";
-	enemies.cl.statusbuff = 0;
-	enemies.cl.movement = "";
-	enemies.cl.movementbuff = 0;
+	enemies.cl.HpPercent = 4;
+	enemies.cl.status = "hp";
+	enemies.cl.statusbuff = 4;
+	enemies.cl.movement = "infantry";
+	enemies.cl.movementbuff = "hone";
 
 	// //now set stored values
 	// //(setting and resetting just in case new options are defined)
@@ -525,6 +526,7 @@ $(document).ready(function(){
 		addTurn("Enemy initiates");
 	})
 	
+	//Copy Function Buttons
 	$(".button_copy").click(function(){
 		if(this.id == "copy_enemy"){
 			copyEnemy();
@@ -534,6 +536,30 @@ $(document).ready(function(){
 		
 	})
 	
+	//Custom List Adjustment Buttons
+	$(".adj_apply_button").click(function(){
+		if (enemies.cl.list.length > 0){
+			if (this.id == "apply_damage_taken"){
+				adjustCustomListHp(true);
+			}else if (this.id == "apply_total_health"){
+				adjustCustomListHp(false);
+			}else if (this.id == "apply_status_buff"){
+				adjustCustomListBuff(true);
+			}else if (this.id == "apply_movement_buff"){
+				adjustCustomListBuff(false);
+			}
+		}
+		
+	})	
+	$(".adj_reset_button").click(function(){
+		if (this.id == "reset_health"){
+			resetCustomListHp();
+		}else if (this.id == "reset_buff"){
+			resetCustomListBuffs();
+		}
+	})
+	
+	//Import/Export Buttons
 	$(".button_importexport").click(function(){
 		var target = "challenger";
 		var type = "import";
@@ -1172,6 +1198,138 @@ function updateSpt(hero){
 	hero.spt += (hero.b != -1 ? data.skills[hero.b].sp : 0);
 	hero.spt += (hero.c != -1 ? data.skills[hero.c].sp : 0);
 	hero.spt += (hero.s != -1 ? data.skills[hero.s].sp : 0);
+}
+
+function adjustCustomListHp(isFlat){
+	enemies.cl.list.forEach(function(hero){
+		if (isFlat){
+			hero.damage = enemies.cl.damage;
+		}
+		else{
+			hero.damage = Math.ceil(hero.hp * (1.00 - (enemies.cl.HpPercent * 0.25)));
+		}
+	});
+	updateEnemyUI();
+}
+
+function resetCustomListHp(){
+	//Reset all custom list hero damage to 0
+	if (enemies.cl.list.length > 0){
+		enemies.cl.list.forEach(function(hero){
+			hero.damage = 0;		
+		});
+	}
+	
+	//Initialize custom list damage adjustment UI
+	$("#enemies_cl_damage").val("0");
+	enemies.cl.damage = 0;
+	$("#enemies_cl_HpPercent").val('4');	
+	enemies.cl.HpPercent = 4;
+	
+	//Update enemy UI
+	updateEnemyUI();
+}
+
+function adjustCustomListBuff(isStat){
+	//For single stat adjustments
+	if (isStat){
+		enemies.cl.list.forEach(function(hero){
+			if (enemies.cl.statusbuff > 0){
+				hero.buffs[enemies.cl.status] = enemies.cl.statusbuff;
+			}else{
+				hero.debuffs[enemies.cl.status] = enemies.cl.statusbuff;
+			}		
+		});
+	}
+	//For multiple stat adjustments
+	else{
+		var buffStats = [];
+		var buffVal = (enemies.cl.movement == "infantry") ? 4 : 6;
+		var isSpur = false;		
+		
+		//Set type of buff and adjusted stats 
+		switch (enemies.cl.movementbuff){
+			case "hone":
+				isSpur = false;
+				buffStats.push("atk");
+				buffStats.push("spd");
+				break;
+			case "fortify":
+				isSpur = false;
+				buffStats.push("def");
+				buffStats.push("res");
+				break;
+			case "goad":
+				isSpur = true;
+				buffStats.push("atk");
+				buffStats.push("spd");
+				buffVal = 4;
+				break;
+			case "goad x2":
+				isSpur = true;
+				buffStats.push("atk");
+				buffStats.push("spd");
+				buffVal = 8;
+				break;
+			case "ward":
+				isSpur = true;
+				buffStats.push("def");
+				buffStats.push("res");
+				buffVal = 4;
+				break;
+			case "ward x2":
+				isSpur = true;
+				buffStats.push("def");
+				buffStats.push("res");
+				buffVal = 8;
+				break;
+			default:
+				console.log("Invalid Skill Buff input.")
+		}	
+		
+		//Add buffs for each hero based on buffStats, buffVal, and isSpur
+		enemies.cl.list.forEach(function(hero){			
+			if (data.heroes[hero.index].movetype == enemies.cl.movement || data.heroes[hero.index].weapontype == enemies.cl.movement){
+				//console.log(data.heroes[hero.index].movetype + " " + enemies.cl.movement + " " + buffVal + " " + isSpur);
+				buffStats.forEach(function(stat){
+					if (isSpur){
+						hero.spur[stat] = buffVal;
+					}else{
+						hero.buffs[stat] = buffVal;
+					}
+				});
+			}
+		});
+		
+	}
+	
+	
+	updateEnemyUI();
+}
+
+function resetCustomListBuffs(isFlat){
+	console.log("Resetting buffs");
+	//Reset all custom list hero buffs and debuffs to 0
+	enemies.cl.list.forEach(function(hero){
+		hero.buffs = {"hp":0,"atk":0,"spd":0,"def":0,"res":0};
+		hero.debuffs = {"hp":0,"atk":0,"spd":0,"def":0,"res":0};
+		hero.spur = {"hp":0,"atk":0,"spd":0,"def":0,"res":0};
+	});
+	
+	/*
+	//Initialize custom list buff adjustment UI
+	$("#enemies_cl_status").val('hp');
+	enemies.cl.status = "hp";
+	$("#enemies_cl_statusbuff").val('4');
+	enemies.cl.statusbuff = 4;
+	$("#enemies_cl_movement").val('infantry');
+	enemies.cl.movement = "infantry";
+	$("#enemies_cl_movementbuff").val('hone');
+	enemies.cl.movementbuff = "hone";
+	*/
+	
+	//Update enemy UI
+	updateEnemyUI();
 }
 
 function setSkills(hero){
@@ -2793,7 +2951,17 @@ function fight(enemyIndex,resultIndex){
 	}else{
 		passFilters.push("melee");
 	}
-
+	//Filter  Type
+	if (ahEnemy.moveType == "infantry"){
+		passFilters.push("infantry");
+	}else if (ahEnemy.moveType == "armored"){
+		passFilters.push("armored");
+	}else if (ahEnemy.moveType == "flying"){
+		passFilters.push("flying");
+	}else if (ahEnemy.moveType == "cavalry"){
+		passFilters.push("cavalry");
+	}
+	
 	if(enemyList[enemyIndex].lastFightResult){
 		var prevResult = "";
 		if(enemyList[enemyIndex].lastFightResult.indexOf("win") > -1){
@@ -3048,12 +3216,15 @@ function filterResult(i){
 	//Range Filter
 	if (resultHTML[i].passFilters.indexOf(options.rangeFilter) == -1){
 		return false
-	}	
+	}
+	//Type Filter
+	if (resultHTML[i].passFilters.indexOf(options.typeFilter) == -1){
+		return false
+	}
 	//View Filter
 	if (resultHTML[i].passFilters.indexOf(options.viewFilter) == -1){
 		return false
 	}
-	
 	//Return true if all filter passes
 	return true;
 }

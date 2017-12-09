@@ -772,7 +772,7 @@ body{
 }
 
 .status_desc {
-	width: 44%;
+	width: 49%;
 	text-align:left;
 	margin-left:5px;	
 }
@@ -817,7 +817,7 @@ body{
 	font-size:10px;
 	border-radius:2px;
 	background-color: #444444;
-	width:38px;
+	width:28px;
 	text-align:center;
 	height:12px;
 	line-height:10px;

@@ -182,10 +182,10 @@
 					<div class="status_desc">Total Health:</div>
 					<div class="status_select">
 						<select class="adj_select_long" data-var="enemies.cl.HpPercent" id="enemies_cl_HpPercent">
-							<option value="1" selected>100%</option>
-							<option value="0.75">75%</option>
-							<option value="0.5">50%</option>
-							<option value="0.25">25%</option>
+							<option value="4" selected>100%</option>
+							<option value="3">75%</option>
+							<option value="2">50%</option>
+							<option value="1">25%</option>
 						</select>
 					</div>
 					<div class="button adj_apply_button" id="apply_total_health">Apply</div>
@@ -208,6 +208,7 @@
 						<select class="adj_select" data-var="enemies.cl.statusbuff" id="enemies_cl_statusbuff">
 							<option value="3">+3</option>
 							<option value="4" selected>+4</option>
+							<option value="5">+5</option>
 							<option value="6">+6</option>
 							<option value="-3">-3</option>
 							<option value="-4">-5</option>
@@ -217,7 +218,7 @@
 					<div class="button adj_apply_button" id="apply_status_buff">Apply</div>
 				</div>
 				<div class="adj_status">
-					<div class="status_desc_short">Full Buff:</div>
+					<div class="status_desc_short">Skill Buff:</div>
 					<div class="status_select_mid">
 						<select class="adj_select_left" data-var="enemies.cl.movement" id="enemies_cl_movement">
 							<option value="infantry" selected>Infantry</option>
@@ -229,12 +230,12 @@
 					</div>
 					<div class="status_select">
 						<select class="adj_select" data-var="enemies.cl.movementbuff" id="enemies_cl_movementbuff">
-							<option value="0" selected>Hone</option>
-							<option value="1">Fortify</option>
-							<option value="2">Goad</option>
-							<option value="3">Goad x2</option>
-							<option value="4">Ward</option>
-							<option value="5">Ward x2</option>
+							<option value="hone" selected>Hone</option>
+							<option value="fortify">Fortify</option>
+							<option value="goad">Goad</option>
+							<option value="goad x2">Goad x2</option>
+							<option value="ward">Ward</option>
+							<option value="ward x2">Ward x2</option>
 						</select>
 					</div>
 					<div class="button adj_apply_button" id="apply_movement_buff">Apply</div>
@@ -245,13 +246,13 @@
 				<div style="line-height: 30%;"><br></div>
 				<div id="adj_title">Simulator:</div>
 				<div class="adj_status">
-					<div class="status_desc_long">Turn to Start Renewal: </div>
+					<div class="status_desc_long">Turn to start Renewal: </div>
 					<div class="status_select">
 						<input class="adj_input smallnuminput" type="number" data-var="options.startTurn" min=1 max=5 id="rules_renewal" value=1 />
 					</div>
 				</div>
 				<div class="adj_status">
-					<div class="status_desc_long">Ranged Attack Angle: </div>
+					<div class="status_desc_long">Ranged attack angle: </div>
 					<div class="status_select">
 						<select class="adj_select_long" id="rules_ploy" data-var="options.ployBehavior">
 							<option>Orthogonal</option>
@@ -496,7 +497,7 @@
 						<option value="ranged" >Ranged</option>
 					</select>
 					<span class="bar_label">Type:</span>
-					<select id="range_results" data-var="options.rangeFilter">
+					<select id="range_results" data-var="options.typeFilter">
 						<option value="all" >All</option>
 						<option value="infantry" >Infantry</option>
 						<option value="armored" >Armored</option>
