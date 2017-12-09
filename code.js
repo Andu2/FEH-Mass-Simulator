@@ -1,6 +1,16 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+//Load from browser cache
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+var hideOptions = localStorage['hideOptions'] || "false";
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 //Load JSON from database
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -76,11 +86,11 @@ data.support = ["s","s-","a","a-","b","b-","c","c-"];
 //Growth shifts of 3 are what make some banes/boons +/- 4
 //growth table from https://feheroes.wiki/Stat_Growth
 data.growths = [
-	[6,8,9,11,13,14,16,18,19,21,23,24,26],
-	[7,8,10,12,14,15,17,19,21,23,25,26,28],
-	[7,9,11,13,15,17,19,21,23,25,27,29,31,33],
-	[8,10,12,14,16,18,20,22,24,26,28,31,33,35],
-	[8,10,13,15,17,19,22,24,26,28,30,33,35,37]
+	[6,	8,	9,	11,	13,	14,	16,	18,	19,	21,	23,	24,	26],
+	[7,	8,	10,	12,	14,	15,	17,	19,	21,	23,	25,	26,	28],
+	[7,	9,	11,	13,	15,	17,	19,	21,	23,	25,	27,	29,	31,	33],
+	[8,	10,	12,	14,	16,	18,	20,	22,	24,	26,	28,	31,	33,	35],
+	[8,	10,	13,	15,	17,	19,	22,	24,	26,	28,	30,	33,	35,	37]
 	];
 
 //Remember: heroes, skills, prereqs, and heroskills arrays come from PHP-created script
@@ -138,18 +148,30 @@ function initOptions(){
 	options = {};
 	options.autoCalculate = true;
 	options.startTurn = 1;
-	options.useGaleforce = true;
-	options.threatenRule = "Neither";
+	//options.threatenRule = "Neither";
 	options.ployBehavior = "Orthogonal";
 	options.showOnlyMaxSkills = true;
 	options.hideUnaffectingSkills = true;
 	options.colorFilter = "all";
 	options.rangeFilter = "all";
+	options.typeFilter = "all";
 	options.viewFilter = "all";
 	options.customEnemyList = 0;
 	options.customEnemySelected = -1;
 	options.sortOrder = -1;
-	options.roundInitiators = ["Challenger initiates","Enemy initiates"];
+	options.roundInitiators = ["Challenger","Enemy"];
+	
+	//Holder for side-specific options
+	options.panic_challenger = false;
+	options.panic_enemy = false;
+	options.candlelight_challenger = false;
+	options.candlelight_enemy = false;
+	options.defensive_challenger = false;
+	options.defensive_enemy = false;
+	options.threaten_challenger = false;
+	options.threaten_enemy = false;
+	options.galeforce_challenger = true;
+	options.galeforce_enemy = true;
 
 	//Holder for challenger options and pre-calculated stats
 	challenger = {};
@@ -258,6 +280,14 @@ function initOptions(){
 	enemies.cl.avgSpd = 0;
 	enemies.cl.avgDef = 0;
 	enemies.cl.avgRes = 0;
+	
+	//Custom List Adjustments
+	enemies.cl.damage = 0;
+	enemies.cl.HpPercent = 4;
+	enemies.cl.status = "hp";
+	enemies.cl.statusbuff = 4;
+	enemies.cl.movement = "infantry";
+	enemies.cl.movementbuff = "hone";
 
 	// //now set stored values
 	// //(setting and resetting just in case new options are defined)
@@ -313,6 +343,9 @@ $(document).ready(function(){
 		listHTML += "<option value=" + (i + 2) + ">" + data.lists[i].name + "</option>";
 	}
 	$("#enemies_mode").html(listHTML).select2({dropdownAutoWidth : true, width: '145px'});	
+	
+	//Set Options UI
+	showOptions(hideOptions == "false");
 	
 	setSkillOptions(enemies.fl);	
 	initEnemyList();	
@@ -493,28 +526,58 @@ $(document).ready(function(){
 	});
 
 	$("#add_turn_challenger_reset").click(function(){
-		resetTurn("Challenger initiates");
+		resetTurn("Challenger");
 	})
 	$("#add_turn_enemy_reset").click(function(){
-		resetTurn("Enemy initiates");
+		resetTurn("Enemy");
 	})
 	
 	$("#add_turn_challenger").click(function(){
-		addTurn("Challenger initiates");
+		addTurn("Challenger");
 	})
 	$("#add_turn_enemy").click(function(){
-		addTurn("Enemy initiates");
+		addTurn("Enemy");
 	})
 	
+	//Copy Function Buttons
 	$(".button_copy").click(function(){
 		if(this.id == "copy_enemy"){
 			copyEnemy();
 		}else{
 			copyChallenger();
-		}
-		
+		}		
 	})
 	
+	//Custom List Adjustment Buttons
+	$(".adj_apply_button").click(function(){
+		if (enemies.cl.list.length > 0){
+			if (this.id == "apply_damage_taken"){
+				adjustCustomListHp(true);
+			}else if (this.id == "apply_total_health"){
+				adjustCustomListHp(false);
+			}else if (this.id == "apply_status_buff"){
+				adjustCustomListBuff(true);
+			}else if (this.id == "apply_movement_buff"){
+				adjustCustomListBuff(false);
+			}
+		}		
+	})
+	
+	//Custom List Reset Buttons
+	$(".adj_reset_button").click(function(){
+		if (this.id == "reset_health"){
+			resetCustomListHp();
+		}else if (this.id == "reset_buff"){
+			resetCustomListBuffs();
+		}
+	})
+	
+	//Show Options Buttons
+	$(".button_options").click(function(){		
+		showOptions(hideOptions == "true");		
+	})
+	
+	//Import/Export Buttons
 	$(".button_importexport").click(function(){
 		var target = "challenger";
 		var type = "import";
@@ -1155,6 +1218,144 @@ function updateSpt(hero){
 	hero.spt += (hero.s != -1 ? data.skills[hero.s].sp : 0);
 }
 
+//Adjust HP for heroes in custom list
+function adjustCustomListHp(isFlat){
+	//Adjust the amount of damage each hero took
+	enemies.cl.list.forEach(function(hero){
+		if (isFlat){
+			hero.damage = enemies.cl.damage;
+		}
+		else{
+			//HP is floored, but this is rounded towards positive infinity since it is calculating damage
+			hero.damage = Math.ceil(hero.hp * (1.00 - (enemies.cl.HpPercent * 0.25)));
+		}
+	});
+	
+	//Update enemy UI
+	updateEnemyUI();
+}
+
+//Reset HP for heroes in custom list
+function resetCustomListHp(){
+	//Reset all custom list hero damage to 0
+	if (enemies.cl.list.length > 0){
+		enemies.cl.list.forEach(function(hero){
+			hero.damage = 0;		
+		});
+	}
+	
+	//Initialize custom list damage adjustment UI
+	$("#enemies_cl_damage").val("0");
+	enemies.cl.damage = 0;
+	$("#enemies_cl_HpPercent").val('4');	
+	enemies.cl.HpPercent = 4;
+	
+	//Update enemy UI
+	updateEnemyUI();
+}
+
+//Adjust buffs for heroes in custom list
+function adjustCustomListBuff(isStat){
+	//For single stat adjustments
+	if (isStat){
+		enemies.cl.list.forEach(function(hero){
+			if (enemies.cl.statusbuff > 0){
+				hero.buffs[enemies.cl.status] = enemies.cl.statusbuff;
+			}else{
+				hero.debuffs[enemies.cl.status] = enemies.cl.statusbuff;
+			}		
+		});
+	}
+	//For multiple stat adjustments
+	else{
+		var buffStats = [];
+		var buffVal = (enemies.cl.movement == "infantry") ? 4 : 6;
+		var isSpur = false;		
+		
+		//Set type of buff and adjusted stats 
+		switch (enemies.cl.movementbuff){
+			case "hone":
+				isSpur = false;
+				buffStats.push("atk");
+				buffStats.push("spd");
+				break;
+			case "fortify":
+				isSpur = false;
+				buffStats.push("def");
+				buffStats.push("res");
+				break;
+			case "goad":
+				isSpur = true;
+				buffStats.push("atk");
+				buffStats.push("spd");
+				buffVal = 4;
+				break;
+			case "goad x2":
+				isSpur = true;
+				buffStats.push("atk");
+				buffStats.push("spd");
+				buffVal = 8;
+				break;
+			case "ward":
+				isSpur = true;
+				buffStats.push("def");
+				buffStats.push("res");
+				buffVal = 4;
+				break;
+			case "ward x2":
+				isSpur = true;
+				buffStats.push("def");
+				buffStats.push("res");
+				buffVal = 8;
+				break;
+			default:
+				console.log("Invalid Skill Buff input.")
+		}	
+		
+		//Add buffs for each hero based on buffStats, buffVal, and isSpur
+		enemies.cl.list.forEach(function(hero){			
+			if (data.heroes[hero.index].movetype == enemies.cl.movement || data.heroes[hero.index].weapontype == enemies.cl.movement){
+				//console.log(data.heroes[hero.index].movetype + " " + enemies.cl.movement + " " + buffVal + " " + isSpur);
+				buffStats.forEach(function(stat){
+					if (isSpur){
+						hero.spur[stat] = buffVal;
+					}else{
+						hero.buffs[stat] = buffVal;
+					}
+				});
+			}
+		});		
+	}	
+	
+	//Update enemy UI
+	updateEnemyUI();
+}
+
+//Reset buffs for heroes in custom list
+function resetCustomListBuffs(isFlat){
+	//Reset all custom list hero buffs and debuffs to 0
+	enemies.cl.list.forEach(function(hero){
+		hero.buffs = {"hp":0,"atk":0,"spd":0,"def":0,"res":0};
+		hero.debuffs = {"hp":0,"atk":0,"spd":0,"def":0,"res":0};
+		hero.spur = {"hp":0,"atk":0,"spd":0,"def":0,"res":0};
+	});
+	
+	/* This isn't intuitive and causes user error
+	//Initialize custom list buff adjustment UI
+	$("#enemies_cl_status").val('hp');
+	enemies.cl.status = "hp";
+	$("#enemies_cl_statusbuff").val('4');
+	enemies.cl.statusbuff = 4;
+	$("#enemies_cl_movement").val('infantry');
+	enemies.cl.movement = "infantry";
+	$("#enemies_cl_movementbuff").val('hone');
+	enemies.cl.movementbuff = "hone";
+	*/
+	
+	//Update enemy UI
+	updateEnemyUI();
+}
+
 function setSkills(hero){
 	if(hero.isFl){
 		for(var i = 0; i < enemies.fl.list.length;i++){
@@ -1392,6 +1593,24 @@ function updateFlEnemies(){
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function showOptions(show){
+	if (show){		
+		$("#frame_main").width(1125);
+		$("#frame_adj").show();
+		$("#set_options").text("Hide Options");
+		hideOptions = "false";
+		localStorage["hideOptions"] = "false";
+	}
+	else{
+		$("#frame_main").width(910);
+		$("#frame_adj").hide();
+		$("#set_options").text("Show Options");
+		hideOptions = "true";
+		localStorage["hideOptions"] = "true";		
+	}
+	$("#results_graph_back").width($("#frame_main").width() - 4);
+}
 
 function changeSkillPic(hero, slot){
 	var htmlPrefix = getHtmlPrefix(hero);
@@ -1786,6 +2005,7 @@ function resetTurn(turnName){
 	}
 	$("#turn_text_" + options.roundInitiators.length).html(turnName);
 	$("#turn_" + options.roundInitiators.length).show();
+	$("#turn_image_" + options.roundInitiators.length).attr("src", "weapons/" + ((turnName == "Challenger") ? "challenger" : "enemy") + "_sprite.png");
 	options.roundInitiators.push(turnName);
 	calculate();
 }
@@ -1794,6 +2014,7 @@ function addTurn(turnName){
 	if(options.roundInitiators.length < 4){
 		$("#turn_text_" + options.roundInitiators.length).html(turnName);
 		$("#turn_" + options.roundInitiators.length).show();
+		$("#turn_image_" + options.roundInitiators.length).attr("src", "weapons/" + ((turnName == "Challenger") ? "challenger" : "enemy") + "_sprite.png");
 		options.roundInitiators.push(turnName);
 	}
 	calculate();
@@ -2666,7 +2887,7 @@ function fight(enemyIndex,resultIndex){
 	for(var round = 1; round <= options.roundInitiators.length;round++){
 		rounds = round;
 		fightText += "<div class=\"fight_round\"><span class=\"bold\">Round " + round + ": ";
-		if(options.roundInitiators[round-1]=="Challenger initiates"){
+		if(options.roundInitiators[round-1]=="Challenger"){
 			fightText += ahChallenger.name + " initiates</span><br>";		
 			if (round >= options.startTurn) challengerRound++;
 			fightText += ahChallenger.attack(ahEnemy, round, challengerRound == 1, false);			
@@ -2774,7 +2995,17 @@ function fight(enemyIndex,resultIndex){
 	}else{
 		passFilters.push("melee");
 	}
-
+	//Filter  Type
+	if (ahEnemy.moveType == "infantry"){
+		passFilters.push("infantry");
+	}else if (ahEnemy.moveType == "armored"){
+		passFilters.push("armored");
+	}else if (ahEnemy.moveType == "flying"){
+		passFilters.push("flying");
+	}else if (ahEnemy.moveType == "cavalry"){
+		passFilters.push("cavalry");
+	}
+	
 	if(enemyList[enemyIndex].lastFightResult){
 		var prevResult = "";
 		if(enemyList[enemyIndex].lastFightResult.indexOf("win") > -1){
@@ -2953,10 +3184,9 @@ function calculate(manual){
 			});
 
 			outputResults();
-
 			var total = wins + losses + inconclusive;
-			$("#results_graph_wins").animate({"width":wins/total*906+"px"},200);
-			$("#results_graph_losses").animate({"width":losses/total*906+"px"},200);
+			$("#results_graph_wins").animate({"width":(wins/total) * ($("#frame_main").width() - 4) + "px"},200);
+			$("#results_graph_losses").animate({"width":(losses/total) * ($("#frame_main").width() - 4) + "px"},200);
 			$("#win_pct").html(wins);
 			$("#lose_pct").html(losses);
 			$("#inconclusive_pct").html(inconclusive);
@@ -3030,12 +3260,15 @@ function filterResult(i){
 	//Range Filter
 	if (resultHTML[i].passFilters.indexOf(options.rangeFilter) == -1){
 		return false
-	}	
+	}
+	//Type Filter
+	if (resultHTML[i].passFilters.indexOf(options.typeFilter) == -1){
+		return false
+	}
 	//View Filter
 	if (resultHTML[i].passFilters.indexOf(options.viewFilter) == -1){
 		return false
 	}
-	
 	//Return true if all filter passes
 	return true;
 }
@@ -3051,7 +3284,7 @@ function exportCalc(){
 		//Should take out buffs and stuff that aren't used to minimize columns?
 		csvString += "Challenger,cColor,cMovetype,cWeapontype,cRarity,cMerge,cBoon,cBane,cMaxHP,cStartHP,cAtk,cSpd,cDef,cRes,cWeapon,cRefine,cSpecial,cPrecharge,cAdjacent,cA,cB,cC,cS,cBuffAtk,cBuffSpd,cBuffDef,cBuffRes,cDebuffAtk,cDebuffSpd,cDebuffDef,cDebuffRes,cSpurAtk,cSpurSpd,cSpurDef,cSpurRes,";
 		csvString += "Enemy,eColor,eMovetype,eWeapontype,eRarity,eMerge,eBoon,eBane,eMaxHP,eStartHP,eAtk,eSpd,eDef,eRes,eWeapon,eRefine,eSpecial,ePrecharge,eAdjacent,eA,eB,eC,eS,eBuffAtk,eBuffSpd,eBuffDef,eBuffRes,eDebuffAtk,eDebuffSpd,eDebuffDef,eDebuffRes,eSpurAtk,eSpurSpd,eSpurDef,eSpurRes,";
-		csvString += "FirstTurnThreaten,StartTurn,UseGaleforce,Initiator1,Initiator2,Initiator3,Initiator4,Outcome,cEndHP,eEndHP,Rounds,Overkill,BattleLog\n";
+		csvString += "InitialThreatenChallenger,InitialThreatenEnemy,StartTurn,GaleforceChallenger,GaleforceEnemy,Initiator1,Initiator2,Initiator3,Initiator4,Outcome,cEndHP,eEndHP,Rounds,Overkill,BattleLog\n";
 
 		fightResults.forEach(function(result){
 			csvString += data.heroes[challenger.index].name + ",";
@@ -3197,9 +3430,11 @@ function exportCalc(){
 			csvString += enemy.spur.def + ",";
 			csvString += enemy.spur.res + ",";
 
-			csvString += options.threatenRule + ",";
+			csvString += options.threaten_challenger + ",";
+			csvString += options.threaten_enemy + ",";
 			csvString += options.startTurn + ",";
-			csvString += options.useGaleforce + ",";
+			csvString += options.galeforce_challenger + ",";
+			csvString += options.galeforce_enemy + ",";
 			for(var rnd = 0; rnd < 4;rnd++){
 				if(!!options.roundInitiators[rnd]){
 					csvString += options.roundInitiators[rnd].substring(0,options.roundInitiators[rnd].length-10) + ",";
@@ -4930,11 +5165,17 @@ function activeHero(hero){
 				damageText += this.name + " gains " + this.chargedDamage + " damage from releasing stored energy.<br>";
 				this.chargedDamage = 0;
 			}
+			
+			//Defensive Terrain
+			var enemyDefensive = enemy.challenger ? options.defensive_challenger : options.defensive_enemy;
+			if (enemyDefensive){
+				enemyDefModifier += 0.3;
+				damageText += enemy.name + " reduces 30% damage from being on defensive terrain.<br>";
+			}
 
 			//Damage calculation from http://feheroes.wiki/Damage_Calculation
 			//use bitwise or to truncate properly
-			//Doing calculation in steps to see the formula more clearly
-			
+			//Doing calculation in steps to see the formula more clearly			
 			var rawDmg = (thisEffAtk * effectiveBonus | 0);
 			var advBoost = ((thisEffAtk * effectiveBonus | 0) * weaponAdvantageBonus | 0);
 			var statBoost = dmgBoost;
@@ -5151,7 +5392,34 @@ function activeHero(hero){
 
 			//Apply renewal effects
 			roundText += this.renewal(renew);			
-
+			
+			//Set initial status
+			if (round == 1){
+				if(options.panic_challenger){
+					this.challenger ? this.panicked = true : enemy.panicked = true;
+				}
+				if(options.panic_enemy){
+					enemy.challenger ? this.panicked = true : enemy.panicked = true;
+				}
+				if(options.candlelight_challenger){
+					this.challenger ? this.lit = true : enemy.lit = true;
+				}
+				if(options.candlelight_enemy){
+					enemy.challenger ? this.lit = true : enemy.lit = true;
+				}				
+				if(this.challenger ? options.threaten_enemy : options.threaten_challenger){
+					roundText += enemy.threaten(this);
+				}
+				if(this.challenger ? options.threaten_challenger : options.threaten_enemy){
+					roundText += this.threaten(enemy);
+				}
+			}else{
+				//Always apply threaten effects from enemy on following rounds
+				roundText += this.threaten(enemy);
+			}
+			
+			
+			/*
 			//Check threaten if not first turn (unless startThreatened is on)
 			if((options.threatenRule=="Both"||options.threatenRule=="Attacker") && (round == 1)){
 				roundText += enemy.threaten(this);
@@ -5159,6 +5427,7 @@ function activeHero(hero){
 			if((options.threatenRule=="Both"||options.threatenRule=="Defender") || (round != 1)){
 				roundText += this.threaten(enemy);
 			}
+			*/
 			
 			//Check for charge effects
 			//***Does turn start Wrath check for health after Renew?***
@@ -5592,7 +5861,7 @@ function activeHero(hero){
 			}
 
 			//Finally, Galeforce!
-			if(this.has("Galeforce") && data.skills[this.specialIndex].charge <= this.charge && options.useGaleforce){
+			if(this.has("Galeforce") && data.skills[this.specialIndex].charge <= this.charge && (this.challenger ? options.galeforce_challenger : options.galeforce_enemy)){
 				roundText += this.name + " initiates again with Galeforce!<br>";
 				this.resetCharge();
 				roundText += this.attack(enemy,round,false,true);
