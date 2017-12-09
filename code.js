@@ -1263,7 +1263,10 @@ function adjustCustomListBuff(isStat){
 				hero.buffs[enemies.cl.status] = enemies.cl.statusbuff;
 			}else{
 				hero.debuffs[enemies.cl.status] = enemies.cl.statusbuff;
-			}		
+			}
+			if (enemies.cl.status == "hp"){
+				setStats(hero);
+			}			
 		});
 	}
 	//For multiple stat adjustments
