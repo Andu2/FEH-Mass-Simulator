@@ -286,7 +286,7 @@ function initOptions(){
 	enemies.cl.HpPercent = 4;
 	enemies.cl.status = "hp";
 	enemies.cl.statusbuff = 4;
-	enemies.cl.movement = "infantry";
+	enemies.cl.movement = "all";
 	enemies.cl.movementbuff = "hone";
 
 	// //now set stored values
@@ -1314,13 +1314,22 @@ function adjustCustomListBuff(isStat){
 		
 		//Add buffs for each hero based on buffStats, buffVal, and isSpur
 		enemies.cl.list.forEach(function(hero){			
-			if (data.heroes[hero.index].movetype == enemies.cl.movement || data.heroes[hero.index].weapontype == enemies.cl.movement){
+			if (enemies.cl.movement == "all" || data.heroes[hero.index].movetype == enemies.cl.movement || data.heroes[hero.index].weapontype == enemies.cl.movement){
 				//console.log(data.heroes[hero.index].movetype + " " + enemies.cl.movement + " " + buffVal + " " + isSpur);
 				buffStats.forEach(function(stat){
 					if (isSpur){
 						hero.spur[stat] = buffVal;
 					}else{
-						hero.buffs[stat] = buffVal;
+						if (enemies.cl.movement == "all"){
+							//Account for lack of dragon Hone buffs
+							if (stat == "atk" || stat == "spd"){
+								hero.buffs[stat] = (data.heroes[hero.index].movetype == "infantry") ? 4 : 6;
+							}else{
+								hero.buffs[stat] = (data.heroes[hero.index].movetype != "infantry" || data.heroes[hero.index].weapontype == "dragon") ? 6 : 4;
+							}							
+						}else{
+							hero.buffs[stat] = buffVal;
+						}						
 					}
 				});
 			}
