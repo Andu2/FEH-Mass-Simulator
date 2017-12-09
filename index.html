@@ -244,7 +244,7 @@
 					<div class="button adj_reset_button" id="reset_buff">Reset Buffs</div>
 				</div>
 				<div style="line-height: 30%;"><br></div>
-				<div id="adj_title">Simulator:</div>
+				<div id="adj_title">Simulator Setting:</div>
 				<div class="adj_status">
 					<div class="status_desc_long">Turn to start Renewal: </div>
 					<div class="status_select">
@@ -457,25 +457,46 @@
 			<div id="rules_turnorder">
 				<div id="turnorder_left">
 					<div id="turnorder_label">Initiator:</div>
-					<div class="turnorder_button_row"><div class="button turnorder_button" id="add_turn_challenger_reset">Challenger</div><div class="button turnorder_button_add" id="add_turn_challenger">+</div></div>
-					<div class="turnorder_button_row"><div class="button turnorder_button" id="add_turn_enemy_reset">Enemy</div><div class="button turnorder_button_add" id="add_turn_enemy">+</div></div>
+					<div class="turnorder_button_row"><div class="button turnorder_button_challenger" id="add_turn_challenger_reset">Challenger</div></div>
+					<div class="turnorder_button_row"><div class="button turnorder_button_enemy" id="add_turn_enemy_reset">Enemy</div></div>
 				</div>
 				<div id="turnorder_right">
-					<div class="turn_label" id="turn_0"><span id="turn_text_0">Challenger initiates</span><div class="button turn_delete" id="turn_delete_0" onclick="deleteTurn(0);">x</div></div>
-					<div class="turn_label" id="turn_1"><span id="turn_text_1">Enemy initiates</span><div class="button turn_delete" id="turn_delete_1" onclick="deleteTurn(1);">x</div></div>
-					<div class="turn_label" id="turn_2" style="display:none;"><span id="turn_text_2"></span><div class="button turn_delete" id="turn_delete_2" onclick="deleteTurn(2);">x</div></div>
-					<div class="turn_label" id="turn_3" style="display:none;"><span id="turn_text_3"></span><div class="button turn_delete" id="turn_delete_3" onclick="deleteTurn(3);">x</div></div>
+					<div id="turnorder_label">Append:</div>
+					<div class="button turnorder_button_challenger" id="add_turn_challenger">+</div>
+					<div class="button turnorder_button_enemy" id="add_turn_enemy">+</div>
 				</div>
 			</div>
-			<div id="rules_other">
-				<div id="rules_inputs">
-					<div class="rules_inputs_line">
-					</div>
-					<div class="rules_inputs_line">
+			<div id="turn_order">
+				<div id="turn_first">
+					<div class="turn_label" id="turn_0">						
+						<span id="turn_text_0">Challenger</span>
+						<div class="button turn_delete" id="turn_delete_0" onclick="deleteTurn(0);"></div>						
+						<img id="turn_image_0" src="weapons/challenger_sprite.png" height="62" width="62">						
+					</div>					
+				</div>
+				<div id="turn_second">
+					<div class="turn_label" id="turn_1">
+						<span id="turn_text_1">Enemy</span>
+						<div class="button turn_delete" id="turn_delete_1" onclick="deleteTurn(1);"></div>
+						<img id="turn_image_1" src="weapons/enemy_sprite.png" height="62" width="62">
 					</div>
 				</div>
-				<div id="rules_checks">
+				<div id="turn_third">					
+					<div class="turn_label" id="turn_2" style="display:none;">
+						<span id="turn_text_2"></span>
+						<div class="button turn_delete" id="turn_delete_2" onclick="deleteTurn(2);"></div>
+						<img id="turn_image_2" src="weapons/challenger_sprite.png" height="62" width="62">
+					</div>
 				</div>
+				<div id="turn_fourth">
+					<div class="turn_label" id="turn_3" style="display:none;">
+						<span id="turn_text_3"></span>
+						<div class="button turn_delete" id="turn_delete_3" onclick="deleteTurn(3);"></div>
+						<img id="turn_image_3" src="weapons/challenger_sprite.png" height="62" width="62">
+					</div>
+				</div>
+			</div>
+			<div id="turn_order_split">
 			</div>
 		</div>
 		<div id="frame_results">

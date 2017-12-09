@@ -149,7 +149,7 @@ function initOptions(){
 	options.customEnemyList = 0;
 	options.customEnemySelected = -1;
 	options.sortOrder = -1;
-	options.roundInitiators = ["Challenger initiates","Enemy initiates"];
+	options.roundInitiators = ["Challenger","Enemy"];
 	
 	//Holder for side-specific options
 	options.panic_challenger = false;
@@ -513,17 +513,17 @@ $(document).ready(function(){
 	});
 
 	$("#add_turn_challenger_reset").click(function(){
-		resetTurn("Challenger initiates");
+		resetTurn("Challenger");
 	})
 	$("#add_turn_enemy_reset").click(function(){
-		resetTurn("Enemy initiates");
+		resetTurn("Enemy");
 	})
 	
 	$("#add_turn_challenger").click(function(){
-		addTurn("Challenger initiates");
+		addTurn("Challenger");
 	})
 	$("#add_turn_enemy").click(function(){
-		addTurn("Enemy initiates");
+		addTurn("Enemy");
 	})
 	
 	//Copy Function Buttons
@@ -1970,6 +1970,8 @@ function resetTurn(turnName){
 	}
 	$("#turn_text_" + options.roundInitiators.length).html(turnName);
 	$("#turn_" + options.roundInitiators.length).show();
+	console.log(turnName);
+	$("#turn_image_" + options.roundInitiators.length).attr("src", "weapons/" + ((turnName == "Challenger") ? "challenger" : "enemy") + "_sprite.png");
 	options.roundInitiators.push(turnName);
 	calculate();
 }
@@ -1978,6 +1980,8 @@ function addTurn(turnName){
 	if(options.roundInitiators.length < 4){
 		$("#turn_text_" + options.roundInitiators.length).html(turnName);
 		$("#turn_" + options.roundInitiators.length).show();
+		console.log(turnName);
+		$("#turn_image_" + options.roundInitiators.length).attr("src", "weapons/" + ((turnName == "Challenger") ? "challenger" : "enemy") + "_sprite.png");
 		options.roundInitiators.push(turnName);
 	}
 	calculate();
@@ -2850,7 +2854,7 @@ function fight(enemyIndex,resultIndex){
 	for(var round = 1; round <= options.roundInitiators.length;round++){
 		rounds = round;
 		fightText += "<div class=\"fight_round\"><span class=\"bold\">Round " + round + ": ";
-		if(options.roundInitiators[round-1]=="Challenger initiates"){
+		if(options.roundInitiators[round-1]=="Challenger"){
 			fightText += ahChallenger.name + " initiates</span><br>";		
 			if (round >= options.startTurn) challengerRound++;
 			fightText += ahChallenger.attack(ahEnemy, round, challengerRound == 1, false);			

@@ -879,7 +879,7 @@ body{
 	background-color: #222222;
 	margin-top:10px;
 	text-align:left;
-	height:138px;
+	height:128px;
 	position:relative;
 }
 
@@ -915,97 +915,135 @@ body{
 	height:22px;
 }
 
-.turnorder_button{
-	font-size:12px;
-	border-radius:2px;
+.turnorder_button_challenger{
+	font-size:13px;
 	background-color: #444444;
-	width:64px;
+	width:90px;
 	text-align:center;
-	height:22px;
-	line-height:22px;
-	display:inline-block;
+	height:20px;
+	line-height:20px;
+	margin-top:4px;
+	border-radius:4px;
+	border-style: dotted dashed;
+	border-width: 2px;
+	border-color: #7797ff;;
 }
 
-.turnorder_button_add{	
-	font-size:12px;
-	border-radius:2px;
+.turnorder_button_enemy{	
+	font-size:13px;
 	background-color: #444444;
-	width:22px;
+	width:90px;
 	text-align:center;
-	height:22px;
-	line-height:22px;
-	display:inline-block;
-	margin-left:4px;
+	height:20px;
+	line-height:20px;
+	margin-top:4px;
+	border-radius:4px;
+	border-style: dotted dashed;
+	border-width: 2px;
+	border-color: #ff5165;
 }
 
-.turnorder_button:hover{
+.turnorder_button_challenger:hover{
 	background-color: #888888;
 }
 
-.turnorder_button_add:hover{
+.turnorder_button_enemy:hover{
 	background-color: #888888;
 }
 
 #turnorder_left{
 	position:absolute;
 	left:0;
-	top:10px;
+	top:5px;
 }
 
 #turnorder_right{
 	position:absolute;
 	left:104px;
-	top:6px;
+	top:5px;
 }
 
 .turn_label{
 	position:relative;
 	background-color: #333333;
 	border-radius:2px;
-	height:20px;
-	line-height:20px;
-	padding-left:6px;
-	font-size:12px;
-	width:126px;
+	height:86px;
+	line-height:18px;
+	font-size:10px;
+	width:70px;
+	text-align:center;
 }
 
 .turn_delete{
 	position:absolute;
 	top:0;
 	right:0;
-	width:16px;
-	height:16px;
+	width:66px;
+	height:82px;
 	line-height:14px;
 	margin:2px;
 	border-radius:2px;
-	background-color: #222222;
+	background-color: transparent;
 	text-align:center;
 }
 
 .turn_delete:hover{
 	background-color: #888888;
+	opacity: 0.5;
 }
 
 .turn_label + .turn_label{
 	margin-top:4px;
 }
 
-#rules_other{
+#turn_order{
 	position:absolute;
 	top:30px;
 	bottom:0;
 	font-size:13px;
 	line-height:22px;
-	left:248px;
+	left:208px;
 	right:0;
 	border-left:2px solid #000000;
 }
 
-#rules_inputs{
+#turn_first{
 	position:absolute;
 	left:8px;
 	top:8px;
-	width:330px;
+	width:70px;
+}
+
+#turn_second{
+	position:absolute;
+	left:88px;
+	top:8px;
+	width:70px;
+}
+
+#turn_third{
+	position:absolute;
+	left:168px;
+	top:8px;
+	width:70px;
+}
+
+#turn_fourth{
+	position:absolute;
+	left:248px;
+	top:8px;
+	width:70px;
+}
+
+#turn_order_split{
+	position:absolute;
+	top:30px;
+	bottom:0;
+	font-size:13px;
+	line-height:22px;
+	left:536px;
+	right:0;
+	border-left:2px solid #000000;
 }
 
 .rules_inputs_line{
