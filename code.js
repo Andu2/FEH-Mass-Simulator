@@ -1266,7 +1266,7 @@ function adjustCustomListBuff(isStat){
 			}
 			if (enemies.cl.status == "hp"){
 				setStats(hero);
-			}			
+			}
 		});
 	}
 	//For multiple stat adjustments
@@ -1347,6 +1347,11 @@ function adjustCustomListBuff(isStat){
 function resetCustomListBuffs(isFlat){
 	//Reset all custom list hero buffs and debuffs to 0
 	enemies.cl.list.forEach(function(hero){
+		if (hero.buffs.hp != 0 || hero.debuffs.hp != 0){
+			hero.buffs.hp = 0;
+			hero.debuffs.hp = 0;
+			setStats(hero);
+		}
 		hero.buffs = {"hp":0,"atk":0,"spd":0,"def":0,"res":0};
 		hero.debuffs = {"hp":0,"atk":0,"spd":0,"def":0,"res":0};
 		hero.spur = {"hp":0,"atk":0,"spd":0,"def":0,"res":0};
