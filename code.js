@@ -148,7 +148,7 @@ function initOptions(){
 	options = {};
 	options.autoCalculate = true;
 	options.startTurn = 1;
-	options.threatenRule = "Neither";
+	//options.threatenRule = "Neither";
 	options.ployBehavior = "Orthogonal";
 	options.showOnlyMaxSkills = true;
 	options.hideUnaffectingSkills = true;
@@ -1333,7 +1333,6 @@ function adjustCustomListBuff(isStat){
 
 //Reset buffs for heroes in custom list
 function resetCustomListBuffs(isFlat){
-	console.log("Resetting buffs");
 	//Reset all custom list hero buffs and debuffs to 0
 	enemies.cl.list.forEach(function(hero){
 		hero.buffs = {"hp":0,"atk":0,"spd":0,"def":0,"res":0};
@@ -2006,7 +2005,6 @@ function resetTurn(turnName){
 	}
 	$("#turn_text_" + options.roundInitiators.length).html(turnName);
 	$("#turn_" + options.roundInitiators.length).show();
-	console.log(turnName);
 	$("#turn_image_" + options.roundInitiators.length).attr("src", "weapons/" + ((turnName == "Challenger") ? "challenger" : "enemy") + "_sprite.png");
 	options.roundInitiators.push(turnName);
 	calculate();
@@ -2016,7 +2014,6 @@ function addTurn(turnName){
 	if(options.roundInitiators.length < 4){
 		$("#turn_text_" + options.roundInitiators.length).html(turnName);
 		$("#turn_" + options.roundInitiators.length).show();
-		console.log(turnName);
 		$("#turn_image_" + options.roundInitiators.length).attr("src", "weapons/" + ((turnName == "Challenger") ? "challenger" : "enemy") + "_sprite.png");
 		options.roundInitiators.push(turnName);
 	}
@@ -3287,7 +3284,7 @@ function exportCalc(){
 		//Should take out buffs and stuff that aren't used to minimize columns?
 		csvString += "Challenger,cColor,cMovetype,cWeapontype,cRarity,cMerge,cBoon,cBane,cMaxHP,cStartHP,cAtk,cSpd,cDef,cRes,cWeapon,cRefine,cSpecial,cPrecharge,cAdjacent,cA,cB,cC,cS,cBuffAtk,cBuffSpd,cBuffDef,cBuffRes,cDebuffAtk,cDebuffSpd,cDebuffDef,cDebuffRes,cSpurAtk,cSpurSpd,cSpurDef,cSpurRes,";
 		csvString += "Enemy,eColor,eMovetype,eWeapontype,eRarity,eMerge,eBoon,eBane,eMaxHP,eStartHP,eAtk,eSpd,eDef,eRes,eWeapon,eRefine,eSpecial,ePrecharge,eAdjacent,eA,eB,eC,eS,eBuffAtk,eBuffSpd,eBuffDef,eBuffRes,eDebuffAtk,eDebuffSpd,eDebuffDef,eDebuffRes,eSpurAtk,eSpurSpd,eSpurDef,eSpurRes,";
-		csvString += "FirstTurnThreaten,StartTurn,GaleforceChallenger,GaleforceEnemy,Initiator1,Initiator2,Initiator3,Initiator4,Outcome,cEndHP,eEndHP,Rounds,Overkill,BattleLog\n";
+		csvString += "InitialThreatenChallenger,InitialThreatenEnemy,StartTurn,GaleforceChallenger,GaleforceEnemy,Initiator1,Initiator2,Initiator3,Initiator4,Outcome,cEndHP,eEndHP,Rounds,Overkill,BattleLog\n";
 
 		fightResults.forEach(function(result){
 			csvString += data.heroes[challenger.index].name + ",";
@@ -3433,7 +3430,8 @@ function exportCalc(){
 			csvString += enemy.spur.def + ",";
 			csvString += enemy.spur.res + ",";
 
-			csvString += options.threatenRule + ",";
+			csvString += options.threaten_challenger + ",";
+			csvString += options.threaten_enemy + ",";
 			csvString += options.startTurn + ",";
 			csvString += options.galeforce_challenger + ",";
 			csvString += options.galeforce_enemy + ",";
