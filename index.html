@@ -15,8 +15,8 @@
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
 
-	<link rel="stylesheet" type="text/css" href="style.css?v=201712081500"/>
-	<script type="text/javascript" src="code.js?v=201712081500"></script>
+	<link rel="stylesheet" type="text/css" href="style.css?v=201712082352"/>
+	<script type="text/javascript" src="code.js?v=201712082352"></script>
 
 </head>
 
@@ -143,6 +143,11 @@
 				</div>
 				<div id="adj_title">Status:</div>
 				<div class="adj_status">
+					<div class="status_challenger"><input type="checkbox" data-var="options.defensive_challenger" id="defensive_challenger"/></div>
+					<div class="status_title">Defensive Tile</div>
+					<div class="status_enemy"><input type="checkbox" data-var="options.defensive_enemy" id="defensive_enemy"/></div>
+				</div>
+				<div class="adj_status">
 					<div class="status_challenger"><input type="checkbox" data-var="options.panic_challenger" id="panic_challenger"/></div>
 					<div class="status_title">Panic</div>
 					<div class="status_enemy"><input type="checkbox" data-var="options.panic_enemy" id="panic_enemy"/></div>
@@ -151,12 +156,7 @@
 					<div class="status_challenger"><input type="checkbox" data-var="options.candlelight_challenger" id="candlelight_challenger"/></div>
 					<div class="status_title">Candlelight</div>
 					<div class="status_enemy"><input type="checkbox" data-var="options.candlelight_enemy" id="candlelight_enemy"/></div>
-				</div>
-				<div class="adj_status">
-					<div class="status_challenger"><input type="checkbox" data-var="options.defensive_challenger" id="defensive_challenger"/></div>
-					<div class="status_title">Defensive Tile</div>
-					<div class="status_enemy"><input type="checkbox" data-var="options.defensive_enemy" id="defensive_enemy"/></div>
-				</div>
+				</div>				
 				<div style="line-height: 30%;"><br></div>
 				<div id="adj_title">Mechanics:</div>				
 				<div class="adj_status">
@@ -191,7 +191,7 @@
 					<div class="button adj_apply_button" id="apply_total_health">Apply</div>
 				</div>
 				<div class="adj_status">
-					<div class="button adj_reset_button" id="reset_health">Reset Health</div>				
+					<div class="button adj_reset_button" id="reset_health">Reset All Health</div>				
 				</div>
 				<div class="adj_status">
 					<div class="status_desc_short">Stat Buff:</div>
@@ -241,7 +241,7 @@
 					<div class="button adj_apply_button" id="apply_movement_buff">Apply</div>
 				</div>
 				<div class="adj_status">
-					<div class="button adj_reset_button" id="reset_buff">Reset Buffs</div>
+					<div class="button adj_reset_button" id="reset_buff">Reset All Buffs</div>
 				</div>
 				<div style="line-height: 30%;"><br></div>
 				<div id="adj_title">Simulator Setting:</div>
@@ -273,7 +273,7 @@
 					</div>
 				</div>
 				<div class="adj_status">
-					<div class="status_desc_long">Auto-Calculate: </div>
+					<div class="status_desc_long">Auto-calculate: </div>
 					<div class="status_select_long">
 						<input class="status_select" type="checkbox" data-var="options.autoCalculate" id="autocalculate" checked="checked"/>
 					</div>
@@ -451,8 +451,11 @@
 			</div>
 		</div>
 		<div id="frame_rules">
-			<div id="rules_bar_top">
+			<div id="rules_bar_top">				
 				Turn Order
+				<div class="bar_top_title_right">
+					<div class="button button_options" id="set_options">Hide Options</div>
+				</div>
 			</div>
 			<div id="rules_turnorder">
 				<div id="turnorder_left">

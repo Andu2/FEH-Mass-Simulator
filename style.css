@@ -967,9 +967,10 @@ body{
 	position:relative;
 	background-color: #333333;
 	border-radius:2px;
-	height:86px;
+	height:84px;
 	line-height:18px;
 	font-size:10px;
+	margin-top:1px;
 	width:70px;
 	text-align:center;
 }
@@ -1079,6 +1080,26 @@ body{
 	left:580px;
 	padding:8px;
 	border-left:2px solid #000000;
+}
+
+.button_options{
+	display:inline-block;
+	font-size:14px;
+	line-height:24px;
+	border-radius:2px;
+	padding: 0 6px;
+	width:120px;
+	height:24px;
+	margin-top:6px;
+	margin-right:4px;
+	text-align:center;
+	background-color: #444444;
+}
+
+.button_options:hover{
+	background-color: #ffffff;
+	color:#888888;
+	font-weight:bold;
 }
 
 /*Results/////////////////////////////////////////////*/

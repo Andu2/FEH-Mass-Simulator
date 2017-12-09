@@ -1,6 +1,16 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+//Load from browser cache
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+var hideOptions = localStorage['hideOptions'] || "false";
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 //Load JSON from database
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -334,6 +344,9 @@ $(document).ready(function(){
 	}
 	$("#enemies_mode").html(listHTML).select2({dropdownAutoWidth : true, width: '145px'});	
 	
+	//Set Options UI
+	showOptions(hideOptions == "false");
+	
 	setSkillOptions(enemies.fl);	
 	initEnemyList();	
 	updateFullUI();
@@ -532,8 +545,7 @@ $(document).ready(function(){
 			copyEnemy();
 		}else{
 			copyChallenger();
-		}
-		
+		}		
 	})
 	
 	//Custom List Adjustment Buttons
@@ -548,15 +560,21 @@ $(document).ready(function(){
 			}else if (this.id == "apply_movement_buff"){
 				adjustCustomListBuff(false);
 			}
-		}
-		
-	})	
+		}		
+	})
+	
+	//Custom List Reset Buttons
 	$(".adj_reset_button").click(function(){
 		if (this.id == "reset_health"){
 			resetCustomListHp();
 		}else if (this.id == "reset_buff"){
 			resetCustomListBuffs();
 		}
+	})
+	
+	//Show Options Buttons
+	$(".button_options").click(function(){		
+		showOptions(hideOptions == "true");		
 	})
 	
 	//Import/Export Buttons
@@ -1576,6 +1594,24 @@ function updateFlEnemies(){
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function showOptions(show){
+	if (show){		
+		$("#frame_main").width(1125);
+		$("#frame_adj").show();
+		$("#set_options").text("Hide Options");
+		hideOptions = "false";
+		localStorage["hideOptions"] = "false";
+	}
+	else{
+		$("#frame_main").width(910);
+		$("#frame_adj").hide();
+		$("#set_options").text("Show Options");
+		hideOptions = "true";
+		localStorage["hideOptions"] = "true";		
+	}
+	$("#results_graph_back").width($("#frame_main").width() - 4);
+}
 
 function changeSkillPic(hero, slot){
 	var htmlPrefix = getHtmlPrefix(hero);
