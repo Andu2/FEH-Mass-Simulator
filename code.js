@@ -269,6 +269,14 @@ function initOptions(){
 	enemies.cl.avgSpd = 0;
 	enemies.cl.avgDef = 0;
 	enemies.cl.avgRes = 0;
+	
+	//Custom List Adjustments
+	enemies.cl.damage = 0;
+	enemies.cl.HpPercent = 1;
+	enemies.cl.status = "";
+	enemies.cl.statusbuff = 0;
+	enemies.cl.movement = "";
+	enemies.cl.movementbuff = 0;
 
 	// //now set stored values
 	// //(setting and resetting just in case new options are defined)

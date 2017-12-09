@@ -157,6 +157,7 @@
 					<div class="status_title">Defensive Tile</div>
 					<div class="status_enemy"><input type="checkbox" data-var="options.defensive_enemy" id="defensive_enemy"/></div>
 				</div>
+				<div style="line-height: 30%;"><br></div>
 				<div id="adj_title">Mechanics:</div>				
 				<div class="adj_status">
 					<div class="status_challenger"><input type="checkbox" data-var="options.threaten_challenger" id="threaten_challenger"/></div>
@@ -168,52 +169,114 @@
 					<div class="status_title">Galeforce Initiates Again</div>
 					<div class="status_enemy"><input type="checkbox" data-var="options.galeforce_enemy" id="galeforce_enemy" checked/></div>
 				</div>
+				<div style="line-height: 30%;"><br></div>
 				<div id="adj_title">Custom List Adjustments:</div>
 				<div class="adj_status">
-					<div class="status_desc">Damage Taken</div>
-					<div class="status_select">Amount</div>
-					<div class="status_apply">Apply</div>
+					<div class="status_desc">Damage Taken:</div>
+					<div class="status_select">
+						<input class="adj_input smallnuminput" id="enemies_cl_damage" data-var="enemies.cl.damage" type="number" value=0 min=0 max=99 />
+					</div>
+					<div class="button adj_apply_button" id="apply_damage_taken">Apply</div>
 				</div>
 				<div class="adj_status">
-					<div class="status_desc">Total Health</div>
-					<div class="status_select">Percent</div>
-					<div class="status_apply">Apply</div>
+					<div class="status_desc">Total Health:</div>
+					<div class="status_select">
+						<select class="adj_select_long" data-var="enemies.cl.HpPercent" id="enemies_cl_HpPercent">
+							<option value="1" selected>100%</option>
+							<option value="0.75">75%</option>
+							<option value="0.5">50%</option>
+							<option value="0.25">25%</option>
+						</select>
+					</div>
+					<div class="button adj_apply_button" id="apply_total_health">Apply</div>
 				</div>
 				<div class="adj_status">
-					<div class="status_full">Reset Health</div>					
+					<div class="button adj_reset_button" id="reset_health">Reset Health</div>				
 				</div>
 				<div class="adj_status">
-					<div class="status_desc">Status</div>
-					<div class="status_select">Buff</div>
-					<div class="status_apply">Apply</div>
+					<div class="status_desc_short">Stat Buff:</div>
+					<div class="status_select_mid">
+						<select class="adj_select_left" data-var="enemies.cl.status" id="enemies_cl_status">
+							<option value="hp" selected>HP</option>
+							<option value="atk">Atk</option>
+							<option value="spd">Spd</option>
+							<option value="def">Def</option>
+							<option value="res">Res</option>
+						</select>
+					</div>
+					<div class="status_select">
+						<select class="adj_select" data-var="enemies.cl.statusbuff" id="enemies_cl_statusbuff">
+							<option value="3">+3</option>
+							<option value="4" selected>+4</option>
+							<option value="6">+6</option>
+							<option value="-3">-3</option>
+							<option value="-4">-5</option>
+							<option value="-7">-7</option>
+						</select>
+					</div>
+					<div class="button adj_apply_button" id="apply_status_buff">Apply</div>
 				</div>
 				<div class="adj_status">
-					<div class="status_desc">Movement</div>
-					<div class="status_select">Buff</div>
-					<div class="status_apply">Apply</div>
+					<div class="status_desc_short">Full Buff:</div>
+					<div class="status_select_mid">
+						<select class="adj_select_left" data-var="enemies.cl.movement" id="enemies_cl_movement">
+							<option value="infantry" selected>Infantry</option>
+							<option value="armored">Armored</option>
+							<option value="flying">Flying</option>
+							<option value="cavalry">Cavalry</option>
+							<option value="dragon">Dragon</option>
+						</select>
+					</div>
+					<div class="status_select">
+						<select class="adj_select" data-var="enemies.cl.movementbuff" id="enemies_cl_movementbuff">
+							<option value="0" selected>Hone</option>
+							<option value="1">Fortify</option>
+							<option value="2">Goad</option>
+							<option value="3">Goad x2</option>
+							<option value="4">Ward</option>
+							<option value="5">Ward x2</option>
+						</select>
+					</div>
+					<div class="button adj_apply_button" id="apply_movement_buff">Apply</div>
 				</div>
 				<div class="adj_status">
-					<div class="status_full">Reset Buffs</div>					
+					<div class="button adj_reset_button" id="reset_buff">Reset Buffs</div>
 				</div>
-				<div id="adj_title">Other Options:</div>
+				<div style="line-height: 30%;"><br></div>
+				<div id="adj_title">Simulator:</div>
+				<div class="adj_status">
+					<div class="status_desc_long">Turn to Start Renewal: </div>
+					<div class="status_select">
+						<input class="adj_input smallnuminput" type="number" data-var="options.startTurn" min=1 max=5 id="rules_renewal" value=1 />
+					</div>
+				</div>
 				<div class="adj_status">
 					<div class="status_desc_long">Ranged Attack Angle: </div>
-					<div class="status_select">Direction</div>
-				</div>
-				<div class="adj_status">
-					<div class="status_desc_long">Start Renewal Turn: </div>
-					<div class="status_select">Round</div>
+					<div class="status_select">
+						<select class="adj_select_long" id="rules_ploy" data-var="options.ployBehavior">
+							<option>Orthogonal</option>
+							<option>Diagonal</option>
+						</select>
+					</div>
 				</div>
 				<div class="adj_status">
 					<div class="status_desc_long">Show only max skills: </div>
-					<div class="status_select">Tick</div>
+					<div class="status_select_long">
+						<input class="status_select" type="checkbox" data-var="options.showOnlyMaxSkills" id="rules_prereqs" checked="checked" />
+					</div>
 				</div>
 				<div class="adj_status">
 					<div class="status_desc_long">Show only duel skills: </div>
-					<div class="status_select">Tick</div>
+					<div class="status_select_long">
+						<input class="status_select" type="checkbox" data-var="options.hideUnaffectingSkills" id="rules_hideunaffecting" checked="checked" />
+					</div>
 				</div>
-				
-				
+				<div class="adj_status">
+					<div class="status_desc_long">Auto-Calculate: </div>
+					<div class="status_select_long">
+						<input class="status_select" type="checkbox" data-var="options.autoCalculate" id="autocalculate" checked="checked"/>
+					</div>
+				</div>
 			</div>
 			<div id="frame_enemies">
 				<div id="enemies_bar_top">
@@ -388,11 +451,11 @@
 		</div>
 		<div id="frame_rules">
 			<div id="rules_bar_top">
-				Duel Rules
+				Turn Order
 			</div>
 			<div id="rules_turnorder">
 				<div id="turnorder_left">
-					<div id="turnorder_label">Turn order:</div>
+					<div id="turnorder_label">Initiator:</div>
 					<div class="turnorder_button_row"><div class="button turnorder_button" id="add_turn_challenger_reset">Challenger</div><div class="button turnorder_button_add" id="add_turn_challenger">+</div></div>
 					<div class="turnorder_button_row"><div class="button turnorder_button" id="add_turn_enemy_reset">Enemy</div><div class="button turnorder_button_add" id="add_turn_enemy">+</div></div>
 				</div>
@@ -406,27 +469,17 @@
 			<div id="rules_other">
 				<div id="rules_inputs">
 					<div class="rules_inputs_line">
-						On first turn, threaten/ploy skills affect: <div class="rules_inputs_lineright"><select id="rules_threaten" data-var="options.threatenRule"><option>Both</option><option>Attacker</option><option>Defender</option><option selected>Neither</option></select></div>
 					</div>
 					<div class="rules_inputs_line">
-						Round to start Renewal effects: <div class="rules_inputs_lineright"><input type="number" data-var="options.startTurn" min=1 max=5 id="rules_renewal" class="smallnuminput" value=1 /></div>
-					</div>
-					<div class="rules_inputs_line">
-						Ranged attack angle (for ploy): <div class="rules_inputs_lineright"><select id="rules_ploy" data-var="options.ployBehavior"><option>Orthogonal</option><option>Diagonal</option></select></div>
 					</div>
 				</div>
 				<div id="rules_checks">
-					<span class="checkrule"><label><input type="checkbox" data-var="options.showOnlyMaxSkills" id="rules_prereqs" checked="checked" /> Only show max skills</label></span>
-					<span class="checkrule"><label><input type="checkbox" data-var="options.hideUnaffectingSkills" id="rules_hideunaffecting" checked="checked" /> Hide skills that won't affect a duel</label></span>
-					<span class="checkrule"><label><input type="checkbox" data-var="options.useGaleforce" id="rules_galeforce" checked="checked" /> Initiate again if Galeforce triggers</label></span>
 				</div>
 			</div>
 		</div>
 		<div id="frame_results">
 			<div id="results_bar_top">
 				<div class="button" id="button_calculate" onclick="calculate();">Calculate!</div> 
-				<input type="checkbox" data-var="options.autoCalculate" id="autocalculate" checked="checked"/>
-				Auto-calculate
 				<div id="results_bar_right">
 					<span class="bar_label">Color:</span>
 					<select id="color_results" data-var="options.colorFilter">
@@ -441,6 +494,14 @@
 						<option value="all" >All</option>
 						<option value="melee" >Melee</option>
 						<option value="ranged" >Ranged</option>
+					</select>
+					<span class="bar_label">Type:</span>
+					<select id="range_results" data-var="options.rangeFilter">
+						<option value="all" >All</option>
+						<option value="infantry" >Infantry</option>
+						<option value="armored" >Armored</option>
+						<option value="flying" >Flying</option>
+						<option value="cavalry" >Cavalry</option>
 					</select>
 					<span class="bar_label">View:</span>
 					<select id="view_results" data-var="options.viewFilter">

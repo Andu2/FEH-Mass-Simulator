@@ -744,9 +744,9 @@ body{
 }
 
 #adj_title{
+	background-color: #333333;
 	text-align:center;
 	font-size:16px;
-	margin-top:6px;
 	margin-bottom:2px;
 }
 
@@ -772,7 +772,7 @@ body{
 }
 
 .status_desc {
-	width: 45%;
+	width: 44%;
 	text-align:left;
 	margin-left:5px;	
 }
@@ -781,10 +781,25 @@ body{
 	text-align:left;
 	margin-left:5px;	
 }
+.status_desc_short {
+	width: 35%;
+	text-align:left;
+	margin-left:5px;	
+}
 
 .status_select {
 	width: 40%;
 	text-align:left;
+}
+
+.status_select_mid {
+	width: 35%;
+	text-align:left;
+}
+
+.status_select_long {
+	width: 20%;
+	text-align:right;
 }
 
 .status_apply {
@@ -798,6 +813,65 @@ body{
 	text-align:center;
 }
 
+.adj_apply_button{
+	font-size:10px;
+	border-radius:2px;
+	background-color: #444444;
+	width:38px;
+	text-align:center;
+	height:12px;
+	line-height:10px;
+	display:inline-block;
+	margin-top:2px;
+	margin-right:4px;
+}
+
+.adj_apply_button:hover{
+	background-color: #888888;
+}
+
+.adj_reset_button{
+	font-size:10px;
+	border-radius:2px;
+	background-color: #444444;
+	width:100%;
+	text-align:center;
+	height:12px;
+	line-height:10px;
+	display:inline-block;
+	margin-top:4px;
+	margin-bottom:2px;
+	margin-right:24px;
+	margin-left:24px;
+}
+
+.adj_reset_button:hover{
+	background-color: #888888;
+}
+
+.adj_input{
+	font-size:8px;
+	width:54px;
+	height:12px;
+}
+
+.adj_select{
+	font-size:8px;
+	width:50px;
+	height:14px;
+}
+
+.adj_select_left{
+	font-size:8px;
+	width:50px;
+	height:14px;
+}
+
+.adj_select_long{
+	font-size:8px;
+	width:58px;
+	height:14px;
+}
 /*Rules/////////////////////////////////////////////*/
 #frame_rules{
 	border-radius:4px;
