@@ -2614,7 +2614,7 @@ function getExportText(side){
 	}
 	else if(options.customEnemyList==1){
 		if(enemies.cl.list.length){
-			exportText = "ENEMIES - CUSTOM LIST" + delimiter;
+			//exportText = "ENEMIES - CUSTOM LIST" + delimiter;
 			for(var i = 0; i < enemies.cl.list.length; i++){
 				exportText += getHeroExportText(enemies.cl.list[i]) + delimiter;
 			}

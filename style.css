@@ -925,20 +925,10 @@ body{
 	margin-top:4px;
 	border-radius:4px;
 	border-style: solid;
-	border-width: 1px;
+	border-width: 2px;
+	border-color: #333333;
 }
-#add_turn_challenger_reset{
-	border-color: #7797ff;
-}
-#add_turn_challenger{
-	border-color: #7797ff;
-}
-#add_turn_enemy{
-	border-color: #ff5165;
-}
-#add_turn_enemy_reset{
-	border-color: #ff5165;
-}
+
 .turnorder_button:hover{
 	background-color: #888888;
 }
