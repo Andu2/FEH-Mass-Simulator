@@ -888,7 +888,7 @@ function getCDChange(skill, slot){
 				return -1;
 		}
 		//Cooldown increase
-		if (skillName.indexOf("Raudrblade") != -1 	|| skillName.indexOf("Blarblade") != -1 || skillName.indexOf("Gronnblade") != -1
+		if (skillName.indexOf("Raudrblade") != -1 		|| skillName.indexOf("Blarblade") != -1 	|| skillName.indexOf("Gronnblade") != -1
 			|| skillName.indexOf("Lightning Breath") != -1
 			){
 				return 1;
@@ -923,9 +923,9 @@ function getSpecialType(skill){
 	var skillName = skill.name;
 
 	//If special is defensive
-	if (skillName.indexOf("Miracle") != -1 			|| skillName.indexOf("Aegis") != -1 			|| skillName.indexOf("Buckler") != -1
-		|| skillName.indexOf("Escutcheon") != -1	|| skillName.indexOf("Holy Vestments") != -1 	|| skillName.indexOf("Pavise") != -1
-		|| skillName.indexOf("Sacred Cowl")!= -1	|| skillName.indexOf("Ice Mirror")!= -1
+	if (skillName.indexOf("Miracle") != -1 				|| skillName.indexOf("Aegis") != -1 			|| skillName.indexOf("Buckler") != -1
+		|| skillName.indexOf("Escutcheon") != -1		|| skillName.indexOf("Holy Vestments") != -1 	|| skillName.indexOf("Pavise") != -1
+		|| skillName.indexOf("Sacred Cowl")!= -1		|| skillName.indexOf("Ice Mirror")!= -1
 		){
 		return "defensive";
 	//Else if special is supportive
@@ -941,9 +941,9 @@ function getSpecialType(skill){
 
 //Return true if hero can counter any range
 function canCounterAnyRange(hero){
-	if(hero.has("Close Counter") || hero.has("Distant Counter") || hero.has("Lightning Breath")
-		|| hero.has("Raijinto") || hero.has("Siegfried") || hero.has("Ragnell")
-		|| hero.has("Gradivus") || hero.has("Alondite") || hero.has("Stout Tomahawk")
+	if(hero.has("Close Counter")	|| hero.has("Distant Counter")	|| hero.has("Lightning Breath")
+		|| hero.has("Raijinto")		|| hero.has("Siegfried")		|| hero.has("Ragnell")
+		|| hero.has("Gradivus")		|| hero.has("Alondite")			|| hero.has("Stout Tomahawk")
 		|| hero.has("Leiptr")){
 		return true;
 	}
@@ -1612,12 +1612,14 @@ function updateFlEnemies(){
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function showOptions(show){
+	var originBarWidth = $("#results_graph_back").width();
 	if (show){
 		$("#frame_main").width(1125);
 		$("#frame_adj").show();
 		$("#set_options").text("Hide Options");
 		hideOptions = "false";
 		localStorage["hideOptions"] = "false";
+		
 	}
 	else{
 		$("#frame_main").width(910);
@@ -1627,6 +1629,8 @@ function showOptions(show){
 		localStorage["hideOptions"] = "true";
 	}
 	$("#results_graph_back").width($("#frame_main").width() - 4);
+	$("#results_graph_wins").width($("#results_graph_wins").width() * $("#results_graph_back").width() / originBarWidth);
+	$("#results_graph_losses").width($("#results_graph_losses").width() * $("#results_graph_back").width() / originBarWidth);
 }
 
 function changeSkillPic(hero, slot){
@@ -1684,7 +1688,9 @@ function setSkillOptions(hero){
 				updateRefineUI(hero, htmlPrefix);
 			}else{
 				for(var i = 0; i < validSkills.length; i++){
-					if(((!options.showOnlyMaxSkills || data.skillsThatArePrereq.indexOf(data.skills[validSkills[i]].skill_id)==-1) && (!options.hideUnaffectingSkills || data.skills[validSkills[i]].affectsduel)) || validSkills[i] == maxSkills[slot] || validSkills[i] == hero[slot]){
+					if(((!options.showOnlyMaxSkills || data.skillsThatArePrereq.indexOf(data.skills[validSkills[i]].skill_id)==-1) && (!options.hideUnaffectingSkills || data.skills[validSkills[i]].affectsduel))
+						|| validSkills[i] == maxSkills[slot] 
+						|| validSkills[i] == hero[slot]){
 						slotHTML += "<option value=" + validSkills[i] + ">" + data.skills[validSkills[i]].name + "</option>";
 					}
 				}
