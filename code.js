@@ -2812,7 +2812,7 @@ function getExportText(side){
 			if(hero.ally != "none"){
 				heroExportText += " Ally: " + hero.ally;
 			}
-			if(hero.bless != "none"){
+			if(hero.bless != "none" && hero.blessStack != 0){
 				heroExportText += " Bless: " + hero.bless + hero.blessStack;
 			}
 			heroExportText += ")" + delimiter;
