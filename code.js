@@ -2443,13 +2443,11 @@ function importText(side, customList){
 		if(blessSplit.length > 1){ //Don't check if there's no "Bless: "
 			for(var blessLine = 0; blessLine < blessSplit.length; blessLine++){
 				blessSplit[blessLine] = removeEdgeJunk(blessSplit[blessLine]).toLowerCase();
-
+				
 				data.blessType.forEach(function(blessType){
 					if(blessSplit[blessLine].slice(0,blessType.length) == blessType){
 						dataFound.bless = blessType;
-						console.log("Bless: " + dataFound.bless);
 						dataFound.blessStack = parseInt(blessSplit[blessLine].replace( /^\D+/g, ''));
-						console.log("BlessStack: " + dataFound.blessStack);
 					}
 				});
 			}
