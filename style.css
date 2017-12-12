@@ -17,6 +17,11 @@ body{
 	font-size: 18px;
 }
 
+sup { 
+    vertical-align: super;
+    font-size: 12px;
+}
+
 #frame_main{
 	width:1125px;
 	margin: 0 auto;
