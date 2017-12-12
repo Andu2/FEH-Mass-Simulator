@@ -733,6 +733,22 @@ sup {
 	background-color: #ffffff;
 	color:#d82a3e;
 }
+/*Statistics///////////////////////////////////////*/
+#frame_stat{
+	border-radius:4px;
+	border:2px solid #ffffff;
+	background-color: #222222;
+	position:absolute;
+	margin-left:10px;
+	margin-right:10px;
+	left:385px;
+	right:0;
+	top:0;
+	bottom:0;
+	width:200px;
+}
+
+
 /*Adjustments///////////////////////////////////////*/
 #frame_adj{
 	border-radius:4px;
@@ -746,6 +762,7 @@ sup {
 	top:0;
 	bottom:0;
 	width:200px;
+	overflow:auto;
 }
 
 #adj_title{
@@ -1092,7 +1109,7 @@ sup {
 	line-height:24px;
 	border-radius:2px;
 	padding: 0 6px;
-	width:120px;
+	width:100px;
 	height:24px;
 	margin-top:6px;
 	margin-right:4px;
