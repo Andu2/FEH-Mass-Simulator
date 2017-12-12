@@ -292,6 +292,7 @@ function initOptions(){
 	enemies.cl.avgRes = 0;
 
 	//Custom List Adjustments
+	enemies.cl.merge = 0;
 	enemies.cl.damage = 0;
 	enemies.cl.HpPercent = 4;
 	enemies.cl.status = "all";
@@ -561,7 +562,9 @@ $(document).ready(function(){
 	//Custom List Adjustment Buttons
 	$(".adj_apply_button").click(function(){
 		if (enemies.cl.list.length > 0){
-			if (this.id == "apply_damage_taken"){
+			if (this.id == "apply_hero_merge"){
+				adjustCustomListMerge();
+			}else if (this.id == "apply_damage_taken"){
 				adjustCustomListHp(true);
 			}else if (this.id == "apply_total_health"){
 				adjustCustomListHp(false);
@@ -1251,6 +1254,18 @@ function updateSpt(hero){
 	hero.spt += (hero.s != -1 ? data.skills[hero.s].sp : 0);
 }
 
+//Adjust merge level for heroes in custom list
+function adjustCustomListMerge(){
+	enemies.cl.list.forEach(function(hero){
+		hero.merge = enemies.cl.merge;			
+		//Update hero base stats
+		setStats(hero);
+	});
+	
+	//Update enemy UI
+	updateEnemyUI();
+}
+
 //Adjust HP for heroes in custom list
 function adjustCustomListHp(isFlat){
 	//Adjust the amount of damage each hero took
@@ -1263,7 +1278,7 @@ function adjustCustomListHp(isFlat){
 			hero.damage = Math.ceil(hero.hp * (1.00 - (enemies.cl.HpPercent * 0.25)));
 		}
 	});
-
+	
 	//Update enemy UI
 	updateEnemyUI();
 }
@@ -1291,7 +1306,7 @@ function resetCustomListHp(){
 function adjustCustomListBuff(isStat){
 	//For single stat adjustments
 	if (isStat){
-		//Adjust all stats
+		//Adjust all stats except hp
 		if (enemies.cl.status == "all"){
 			enemies.cl.list.forEach(function(hero){
 				data.stats.forEach(function(stat){
