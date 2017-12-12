@@ -292,8 +292,8 @@ function initOptions(){
 	enemies.cl.avgRes = 0;
 
 	//Custom List Adjustments
-	enemies.cl.merge = 0;
-	enemies.cl.damage = 0;
+	enemies.cl.merges = 0;
+	enemies.cl.damages = 0;
 	enemies.cl.HpPercent = 4;
 	enemies.cl.status = "all";
 	enemies.cl.statusbuff = 4;
@@ -1257,7 +1257,7 @@ function updateSpt(hero){
 //Adjust merge level for heroes in custom list
 function adjustCustomListMerge(){
 	enemies.cl.list.forEach(function(hero){
-		hero.merge = enemies.cl.merge;			
+		hero.merge = enemies.cl.merges;			
 		//Update hero base stats
 		setStats(hero);
 	});
@@ -1271,7 +1271,7 @@ function adjustCustomListHp(isFlat){
 	//Adjust the amount of damage each hero took
 	enemies.cl.list.forEach(function(hero){
 		if (isFlat){
-			hero.damage = enemies.cl.damage;
+			hero.damage = enemies.cl.damages;
 		}
 		else{
 			//HP is floored, but this is rounded towards positive infinity since it is calculating damage
@@ -1294,7 +1294,7 @@ function resetCustomListHp(){
 
 	//Initialize custom list damage adjustment UI
 	$("#enemies_cl_damage").val("0");
-	enemies.cl.damage = 0;
+	enemies.cl.damages = 0;
 	$("#enemies_cl_HpPercent").val('4');
 	enemies.cl.HpPercent = 4;
 
