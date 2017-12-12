@@ -294,7 +294,7 @@ function initOptions(){
 	//Custom List Adjustments
 	enemies.cl.damage = 0;
 	enemies.cl.HpPercent = 4;
-	enemies.cl.status = "hp";
+	enemies.cl.status = "all";
 	enemies.cl.statusbuff = 4;
 	enemies.cl.movement = "all";
 	enemies.cl.movementbuff = "hone";
@@ -1291,16 +1291,27 @@ function resetCustomListHp(){
 function adjustCustomListBuff(isStat){
 	//For single stat adjustments
 	if (isStat){
-		enemies.cl.list.forEach(function(hero){
-			if (enemies.cl.statusbuff > 0){
-				hero.buffs[enemies.cl.status] = enemies.cl.statusbuff;
-			}else{
-				hero.debuffs[enemies.cl.status] = enemies.cl.statusbuff;
-			}
-			if (enemies.cl.status == "hp"){
-				setStats(hero);
-			}
-		});
+		//Adjust all stats
+		if (enemies.cl.status == "all"){
+			enemies.cl.list.forEach(function(hero){
+				data.stats.forEach(function(stat){
+					if (stat != "hp"){hero.buffs[stat] = enemies.cl.statusbuff;}
+				});
+			});
+		}
+		//Adjust single stats
+		else{
+			enemies.cl.list.forEach(function(hero){
+				if (enemies.cl.statusbuff > 0){
+					hero.buffs[enemies.cl.status] = enemies.cl.statusbuff;
+				}else{
+					hero.debuffs[enemies.cl.status] = enemies.cl.statusbuff;
+				}
+				if (enemies.cl.status == "hp"){
+					setStats(hero);
+				}
+			});
+		}		
 	}
 	//For multiple stat adjustments
 	else{
