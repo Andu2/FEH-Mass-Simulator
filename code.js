@@ -2455,7 +2455,7 @@ function importText(side, customList){
 
 		return dataFound;
 	}
-
+	
 	function parseAttributeLine(line){
 		var dataFound = {};
 
@@ -2592,7 +2592,7 @@ function importText(side, customList){
 			data.blessType.forEach(function(blessType){
 				if(keyValue[1].indexOf(blessType) != -1){
 					value = blessType;
-					dataFound[blessStack] = parseInt(keyValue[1].substr(keyValue[1].length - 1));
+					dataFound["blessStack"] = parseInt(keyValue[1].replace( /^\D+/g, ''));
 				}
 			});
 		}
@@ -2749,7 +2749,7 @@ function getExportText(side){
 			exportText += "Ally: " + enemies.fl.ally + delimiter;
 		}
 		if(enemies.fl.bless != "none"){
-			exportText += "Bless: " + enemies.fl.bless + " " + enemies.fl.blessStack + delimiter;
+			exportText += "Bless: " + enemies.fl.bless + enemies.fl.blessStack + delimiter;
 		}
 
 		data.skillSlots.forEach(function(slot){
