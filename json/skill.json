@@ -11005,7 +11005,7 @@
 		"affectsduel": 0
 	}, {
 		"skill_id": 787,
-		"name": "Marytr+",
+		"name": "Martyr+",
 		"slot": "assist",
 		"sp": 300,
 		"description": "Restores HP = this unit's suffered damage +50% of Atk. (Minimum of 7 HP.) Also restores HP to unit = half suffered damage.",

@@ -789,7 +789,7 @@ function getValidSkills(hero,slot){
 					}
 					else{
 						//shouldn't get here
-						console.log("Issue finding logic for inheritrule " + inheritRules[ruleNum]);
+						//console.log("Issue finding logic for inheritrule " + inheritRules[ruleNum]);
 					}
 					
 					if(inheritRuleMatches == inheritRules.length){
@@ -3157,6 +3157,7 @@ function fight(enemyIndex,resultIndex){
 			"<span class=\"results_stat\">Res: " + ahEnemy.res + "</span>",
 			"<div class=\"results_skills\">",
 				"<span class=\"results_stat\"><img class=\"skill_picture\" src=\"skills/weapon.png\"/><img class=\"skill_picture\" src=\"weapons/" + refineName + ".png\"/>" + weaponName + "</span>",
+				//"<span class=\"results_stat\"><img class=\"skill_picture\" src=\"skills/assist.png\"/>" + assistName + "</span>",
 				"<span class=\"results_stat\"><img class=\"skill_picture\" src=\"skills/special.png\"/>" + specialName + "</span>",
 				"<span class=\"results_stat\"><img class=\"skill_picture\" src=\"skills/" + aName + ".png\"/><img class=\"skill_picture\" src=\"skills/" + bName + ".png\"/><img class=\"skill_picture\" src=\"skills/" + cName + ".png\"/><img class=\"skill_picture\" src=\"skills/" + sName + ".png\"/></span>",
 			"</div>",
@@ -3760,7 +3761,11 @@ function activeHero(hero){
 	this.resetCharge = function(){
 		//Reset charge based on weapon
 		//For weapons that would reduce charge, you gain a charge instead, and vice versa
-		this.charge = -1 * getCDChange(data.skills[this.weaponIndex], "weapon");
+		//***Important: Append a slot whenever a new slot gains a skill that affects CD***
+		this.charge = 0;
+		this.charge += -1 * getCDChange(data.skills[this.weaponIndex], "weapon");
+		this.charge += -1 * getCDChange(data.skills[this.refineIndex], "refine");
+		this.charge += -1 * getCDChange(data.skills[this.assistIndex], "assist");
 	}
 
 	//Set charge at beginning
