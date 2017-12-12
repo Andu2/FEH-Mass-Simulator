@@ -453,6 +453,23 @@ sup {
 	position: relative;
 }
 
+.misc_button{
+	display:inline-block;
+	font-size:14px;
+	line-height:24px;
+	border-radius:2px;
+	width:100%;
+	height:24px;
+	text-align:center;
+	background-color: #333333;
+}
+
+.misc_button:hover{
+	background-color: #ffffff;
+	color:#888888;
+	font-weight:bold;
+}
+
 .misc_input{
 	position: absolute;
 	right:0;
@@ -747,7 +764,6 @@ sup {
 	bottom:0;
 	width:200px;
 }
-
 
 /*Adjustments///////////////////////////////////////*/
 #frame_adj{

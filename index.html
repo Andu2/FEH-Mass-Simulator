@@ -149,7 +149,10 @@
 							</div>
 							<div class="misc_row">BST/SPT:
 								<span id="challenger_bst" class="misc_number">-</span>
-							</div>							
+							</div>		
+							<div class="misc_row">
+								<div class="button misc_button" id="toggle_stat">Show Statistics</div>
+							</div>
 							<!--
 							<div class="misc_row">Arena Score
 								<sup>1</sup>:
@@ -159,8 +162,6 @@
 						</div>
 					</div>
 				</div>
-			</div>
-			<div id="frame_stat">
 			</div>
 			<div id="frame_adj">
 				<div id="rules_bar_top">
@@ -311,6 +312,11 @@
 					<div class="status_select_long">
 						<input class="status_select" type="checkbox" data-var="options.autoCalculate" id="autocalculate" checked="checked"/>
 					</div>
+				</div>
+			</div>
+			<div id="frame_stat" style="display: none;">
+				<div id="rules_bar_top">
+					Statistics
 				</div>
 			</div>
 			<div id="frame_enemies">
@@ -526,7 +532,7 @@
 			<div id="rules_bar_top">
 				Turn Order
 				<div class="bar_top_title_right">
-					<div class="button button_options" id="set_options">Hide Options</div>
+					<div class="button button_options" id="toggle_options">Hide Options</div>
 				</div>
 			</div>
 			<div id="rules_turnorder">

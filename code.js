@@ -587,7 +587,16 @@ $(document).ready(function(){
 
 	//Show Options Buttons
 	$(".button_options").click(function(){
-		showOptions(hideOptions == "true");
+		if (this.id == "toggle_options"){
+			showOptions(hideOptions == "true");
+		}
+	})
+	
+	//Show Options Buttons
+	$(".misc_button").click(function(){
+		if (this.id == "toggle_stat"){
+			toggleStat();
+		}		
 	})
 
 	//Import/Export Buttons
@@ -1680,22 +1689,62 @@ function updateFlEnemies(){
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-function showOptions(show){
-	var originBarWidth = $("#results_graph_back").width();
+function showOptions(show){	
 	if (show){
-		$("#frame_main").width(1125);
+		setWideUI(true);
+		toggleUI("options");
+	}
+	else{
+		setWideUI(false);
+		toggleUI("none");
+	}	
+}
+
+function toggleStat(){
+	//If mid UI is not open, open it
+	if ($("#frame_main").width() < 1125){
+		setWideUI(true);
+		toggleUI("stat");
+	//Else check if stat UI is open and toggle it
+	}else{
+		if ($("#frame_stat").is(':hidden')){
+			toggleUI("stat");
+		}else{
+			toggleUI("none");
+			setWideUI(false);
+		}
+	}
+}
+
+function toggleUI(midUI){	
+	if (midUI == "options"){
 		$("#frame_adj").show();
-		$("#set_options").text("Hide Options");
+		$("#toggle_options").text("Hide Options");
 		hideOptions = "false";
 		localStorage["hideOptions"] = "false";
-		
+	}else{
+		$("#frame_adj").hide();
+		$("#toggle_options").text("Show Options");
+		hideOptions = "true";
+		localStorage["hideOptions"] = "true";
+	}
+	
+	if (midUI == "stat"){
+		$("#frame_stat").show();
+		$("#toggle_stat").text("Hide Statistics");
+	}else{
+		$("#frame_stat").hide();
+		$("#toggle_stat").text("Show Statistics");
+	}
+}
+
+function setWideUI(isWide){
+	var originBarWidth = $("#results_graph_back").width();
+	if (isWide){
+		$("#frame_main").width(1125);
 	}
 	else{
 		$("#frame_main").width(910);
-		$("#frame_adj").hide();
-		$("#set_options").text("Show Options");
-		hideOptions = "true";
-		localStorage["hideOptions"] = "true";
 	}
 	$("#results_graph_back").width($("#frame_main").width() - 4);
 	$("#results_graph_wins").width($("#results_graph_wins").width() * $("#results_graph_back").width() / originBarWidth);
