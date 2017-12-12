@@ -119,16 +119,17 @@
 								</select>
 							</div>
 							<div class="misc_row">Bless:
-								<select class="misc_input_left" data-var="challenger.blessing" id="challenger_blessing">
-									<option value="blessing" disabled>Blessing</option>
+								<select class="misc_input_left" data-var="challenger.bless" id="challenger_bless">
+									<option value="bless" disabled>Blessing</option>
+									<option value="none">None</option>
+									<option value="fire">Fire</option>
 									<option value="water">Water</option>
-									<option value="fire">Fire</option>									
 									<option value="wind">Wind</option>
 									<option value="earth">Earth</option>
 								</select>
-								<select class="misc_input" data-var="challenger.blessingStack" id="challenger_blessingStack">
+								<select class="misc_input" data-var="challenger.blessStack" id="challenger_blessStack">
 									<option value="stack" disabled>Stack</option>
-									<option value="0">x0</option>
+									<option value="0">None</option>
 									<option value="1">x1</option>
 									<option value="2">x2</option>
 									<option value="3">x3</option>
@@ -377,16 +378,17 @@
 								</select>
 							</div>
 							<div class="misc_row">Bless:
-								<select class="misc_input_left" data-var="enemies.fl.blessing" id="enemies_blessing">
-									<option value="blessing" disabled>Blessing</option>
+								<select class="misc_input_left" data-var="enemies.fl.bless" id="enemies_bless">
+									<option value="bless" disabled>Blessing</option>
+									<option value="none">None</option>
+									<option value="fire">Fire</option>
 									<option value="water">Water</option>
-									<option value="fire">Fire</option>									
 									<option value="wind">Wind</option>
 									<option value="earth">Earth</option>
 								</select>
-								<select class="misc_input" data-var="enemies.fl.blessingStack" id="enemies_blessingStack">
+								<select class="misc_input" data-var="enemies.fl.blessStack" id="enemies_blessStack">
 									<option value="stack" disabled>Stack</option>
-									<option value="0">x0</option>
+									<option value="0">None</option>
 									<option value="1">x1</option>
 									<option value="2">x2</option>
 									<option value="3">x3</option>
@@ -465,16 +467,17 @@
 									</select>
 								</div>
 								<div class="misc_row">Bless:
-								<select class="misc_input_left" data-var="enemies.cl.list.blessing" id="cl_enemies_blessing">
-									<option value="blessing" disabled>Blessing</option>
+								<select class="misc_input_left" data-var="enemies.cl.list.bless" id="cl_enemy_bless">
+									<option value="bless" disabled>Blessing</option>
+									<option value="none">None</option>
+									<option value="fire">Fire</option>
 									<option value="water">Water</option>
-									<option value="fire">Fire</option>									
 									<option value="wind">Wind</option>
 									<option value="earth">Earth</option>
 								</select>
-								<select class="misc_input" data-var="enemies.cl.list.blessingStack" id="cl_enemies_blessingStack">
+								<select class="misc_input" data-var="enemies.cl.list.blessStack" id="cl_enemy_blessStack">
 									<option value="stack" disabled>Stack</option>
-									<option value="0">x0</option>
+									<option value="0">None</option>
 									<option value="1">x1</option>
 									<option value="2">x2</option>
 									<option value="3">x3</option>
@@ -541,7 +544,7 @@
 						<img id="turn_image_1" src="ui/enemy_sprite.png" height="62" width="62">
 					</div>
 				</div>
-				
+
 				<div id="turn_third">
 					<div class="turn_block">3</div>
 					<div class="turn_label" id="turn_2" style="display:none;">
