@@ -240,7 +240,7 @@ function initOptions(){
 	enemies.fl.summoner = "none";
 	enemies.fl.ally = "none";
 	enemies.fl.bless = "none";
-	enemies.fl.blessStack = "none";
+	enemies.fl.blessStack = 0;
 
 	enemies.fl.naturalSkills = [];
 	enemies.fl.validWeaponSkills = getValidSkills(enemies.fl,"weapon");
