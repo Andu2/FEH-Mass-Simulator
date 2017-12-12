@@ -774,17 +774,17 @@ body{
 .status_desc {
 	width: 49%;
 	text-align:left;
-	margin-left:5px;	
+	margin-left:5px;
 }
 .status_desc_long {
 	width: 80%;
 	text-align:left;
-	margin-left:5px;	
+	margin-left:5px;
 }
 .status_desc_short {
 	width: 35%;
 	text-align:left;
-	margin-left:5px;	
+	margin-left:5px;
 }
 
 .status_select {
@@ -852,7 +852,7 @@ body{
 .adj_input{
 	font-size:8px;
 	width:54px;
-	height:12px;
+	height:8px;
 }
 
 .adj_select{
@@ -915,39 +915,21 @@ body{
 	height:22px;
 }
 
-.turnorder_button_challenger{
-	font-size:13px;
+.turnorder_button{
+	font-size:14px;
 	background-color: #444444;
 	width:90px;
 	text-align:center;
 	height:20px;
-	line-height:20px;
+	line-height:18px;
 	margin-top:4px;
 	border-radius:4px;
-	border-style: dotted dashed;
+	border-style: solid;
 	border-width: 2px;
-	border-color: #7797ff;;
+	border-color: #333333;
 }
 
-.turnorder_button_enemy{	
-	font-size:13px;
-	background-color: #444444;
-	width:90px;
-	text-align:center;
-	height:20px;
-	line-height:20px;
-	margin-top:4px;
-	border-radius:4px;
-	border-style: dotted dashed;
-	border-width: 2px;
-	border-color: #ff5165;
-}
-
-.turnorder_button_challenger:hover{
-	background-color: #888888;
-}
-
-.turnorder_button_enemy:hover{
+.turnorder_button:hover{
 	background-color: #888888;
 }
 
@@ -965,14 +947,14 @@ body{
 
 .turn_label{
 	position:relative;
-	background-color: #333333;
-	border-radius:2px;
+	width:70px;
 	height:84px;
 	line-height:18px;
 	font-size:10px;
 	margin-top:1px;
-	width:70px;
 	text-align:center;
+	background-color: #333333;
+	border-radius:2px;
 }
 
 .turn_delete{
@@ -995,6 +977,23 @@ body{
 
 .turn_label + .turn_label{
 	margin-top:4px;
+}
+
+.turn_block{
+	position:absolute;
+	left:8px;
+	top:10px;
+	width:50px;
+	height:60px;
+	line-height:58px;
+	font-size:20px;
+	margin-top:1px;
+	text-align:center;
+	border-radius: 4px;
+	border-style: dashed;
+	border-width: 2px;
+	border-color: #444444;
+	color: #444444;
 }
 
 #turn_order{
@@ -1145,7 +1144,7 @@ body{
 	bottom:0;
 	top:0;
 	width:0px;
-	background-color:#7797ff; 
+	background-color:#7797ff;
 }
 
 #results_graph_losses{
@@ -1154,7 +1153,7 @@ body{
 	bottom:0;
 	top:0;
 	width:0px;
-	background-color:#ff5165; 
+	background-color:#ff5165;
 }
 
 #winpercentages{
@@ -1427,7 +1426,7 @@ a:hover{
 	right:3px;
 	bottom:2px;
 	width:25px;
-	height:25px;	
+	height:25px;
 }
 
 .weaponIcon{
@@ -1516,7 +1515,7 @@ a:hover{
 }
 
 .challengerimport #import_exit{
-	background-color: #4a6de2; 
+	background-color: #4a6de2;
 }
 
 .challengerimport #import_exit:hover{
@@ -1526,7 +1525,7 @@ a:hover{
 }
 
 .enemiesimport #import_exit{
-	background-color: #d82a3e; 
+	background-color: #d82a3e;
 }
 
 .enemiesimport #import_exit:hover{
@@ -1558,7 +1557,7 @@ a:hover{
 	height:40px;
 	bottom:0;
 	right:70px;
-	line-height:40px;	
+	line-height:40px;
 	margin:auto 0;
 }
 
@@ -1604,7 +1603,7 @@ a:hover{
 }
 
 .challengerimport #button_import{
-	background-color: #4a6de2; 
+	background-color: #4a6de2;
 }
 
 .challengerimport #button_import:hover{
@@ -1614,7 +1613,7 @@ a:hover{
 }
 
 .enemiesimport #button_import{
-	background-color: #d82a3e; 
+	background-color: #d82a3e;
 }
 
 .enemiesimport #button_import:hover{
@@ -1624,7 +1623,7 @@ a:hover{
 }
 
 .challengerimport #button_clear{
-	background-color: #4a6de2; 
+	background-color: #4a6de2;
 }
 
 .challengerimport #button_clear:hover{
@@ -1634,7 +1633,7 @@ a:hover{
 }
 
 .enemiesimport #button_clear{
-	background-color: #d82a3e; 
+	background-color: #d82a3e;
 }
 
 .enemiesimport #button_clear:hover{
