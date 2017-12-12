@@ -2028,7 +2028,7 @@ function resetTurn(turnName){
 	}
 	$("#turn_text_" + options.roundInitiators.length).html(turnName);
 	$("#turn_" + options.roundInitiators.length).show();
-	$("#turn_image_" + options.roundInitiators.length).attr("src", "weapons/" + ((turnName == "Challenger") ? "challenger" : "enemy") + "_sprite.png");
+	$("#turn_image_" + options.roundInitiators.length).attr("src", "ui/" + ((turnName == "Challenger") ? "challenger" : "enemy") + "_sprite.png");
 	options.roundInitiators.push(turnName);
 	calculate();
 }
@@ -2037,7 +2037,7 @@ function addTurn(turnName){
 	if(options.roundInitiators.length < 4){
 		$("#turn_text_" + options.roundInitiators.length).html(turnName);
 		$("#turn_" + options.roundInitiators.length).show();
-		$("#turn_image_" + options.roundInitiators.length).attr("src", "weapons/" + ((turnName == "Challenger") ? "challenger" : "enemy") + "_sprite.png");
+		$("#turn_image_" + options.roundInitiators.length).attr("src", "ui/" + ((turnName == "Challenger") ? "challenger" : "enemy") + "_sprite.png");
 		options.roundInitiators.push(turnName);
 	}
 	calculate();
@@ -2049,7 +2049,7 @@ function deleteTurn(initTurn){
 	options.roundInitiators.splice(initTurn,1);
 	for(var i = 0; i < options.roundInitiators.length; i++){
 		$("#turn_text_" + i).html(options.roundInitiators[i]);
-		$("#turn_image_" + i).attr("src", "weapons/" + ((options.roundInitiators[i] == "Challenger") ? "challenger" : "enemy") + "_sprite.png");
+		$("#turn_image_" + i).attr("src", "ui/" + ((options.roundInitiators[i] == "Challenger") ? "challenger" : "enemy") + "_sprite.png");
 	}
 	calculate();
 }

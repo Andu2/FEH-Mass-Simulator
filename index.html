@@ -6,7 +6,7 @@
 	<title>FEH Mass Duel Simulator</title>
 	<meta name="description" content="A calculator for Fire Emblem Heroes that simulates lots of one-on-one duels at once. Pick your hero, pick your enemies, and see how you do!"/>
 	<link href="https://fonts.googleapis.com/css?family=Merriweather" rel="stylesheet">
-	<link rel="shortcut icon" href="favicon.ico" />
+	<link rel="shortcut icon" href="ui/favicon.ico" />
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<!--<script src="https://unpkg.com/react@15/dist/react.js"></script>
@@ -15,14 +15,14 @@
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
 
-	<link rel="stylesheet" type="text/css" href="style.css?v=201712091113"/>
-	<script type="text/javascript" src="code.js?v=201712091113"></script>
+	<link rel="stylesheet" type="text/css" href="style.css?v=201712112224"/>
+	<script type="text/javascript" src="code.js?v=201712112224"></script>
 
 </head>
 
 <body>
 	<div id="frame_main">
-		<div id="header"><img src="logo.png" style="margin-right:20px;"/><div style="display:inline-block;">Mass Duel Simulator!</div><div id="subtitle"></div></div>
+		<div id="header"><img src="ui/logo.png" style="margin-right:20px;"/><div style="display:inline-block;">Mass Duel Simulator!</div><div id="subtitle"></div></div>
 		<div id="frame_updatenotice" data-update="20170723">App now hosted in GitHub Pages for communal development. Nice!<br/>
 			You can help out <a href="https://github.com/Andu2/FEH-Mass-Simulator">here</a>!
 			<div id="update_icon">!</div>
@@ -65,6 +65,10 @@
 								<img class="skill_picture" id="challenger_refine_picture" src="skills/noskill.png" onmouseover="showSkillTooltip('challenger', 'refine');" onmouseout="hideSkillTooltip();">
 								<img class="skill_letter" id="challenger_refine_weapon_picture" src="skills/weapon.png">
 								<select class="skill_select_short" data-var="challenger.refine" id="challenger_refine"></select>
+							</div>
+							<div class="skill_row">
+								<img class="skill_picture" id="challenger_assist_picture" src="skills/assist.png" onmouseover="showSkillTooltip('challenger', 'assist');" onmouseout="hideSkillTooltip();">
+								<select class="skill_select" data-var="challenger.assist" id="challenger_assist"></select>
 							</div>
 							<div class="skill_row">
 								<img class="skill_picture" id="challenger_special_picture" src="skills/special.png" onmouseover="showSkillTooltip('challenger', 'special');" onmouseout="hideSkillTooltip();">
@@ -112,6 +116,22 @@
 									<option value="none">None</option>
 									<option value="s">S</option><option value="s-">S-</option><option value="a">A</option><option value="a-">A-</option>
 									<option value="b">B</option><option value="b-">B-</option><option value="c">C</option><option value="c-">C-</option>
+								</select>
+							</div>
+							<div class="misc_row">Bless:
+								<select class="misc_input_left" data-var="challenger.blessing" id="challenger_blessing">
+									<option value="blessing" disabled>Blessing</option>
+									<option value="water">Water</option>
+									<option value="fire">Fire</option>									
+									<option value="wind">Wind</option>
+									<option value="earth">Earth</option>
+								</select>
+								<select class="misc_input" data-var="challenger.blessingStack" id="challenger_blessingStack">
+									<option value="stack" disabled>Stack</option>
+									<option value="0">x0</option>
+									<option value="1">x1</option>
+									<option value="2">x2</option>
+									<option value="3">x3</option>
 								</select>
 							</div>
 							<div class="misc_row">Adjacent Allies:
@@ -326,6 +346,7 @@
 								<img class="skill_letter" id="enemies_refine_weapon_picture" src="skills/weapon.png">
 								<select class="skill_select_short" data-var="enemies.fl.refine" id="enemies_refine"></select>
 							</div>
+							<div class="skill_row"><img class="skill_picture" id="enemies_assist_picture" src="skills/assist.png"  onmouseover="showSkillTooltip('list', 'assist');" onmouseout="hideSkillTooltip();"><select class="skill_select" data-var="enemies.fl.assist" id="enemies_assist"></select><select class="skill_overwrite" data-var="enemies.fl.replaceAssist" id="enemies_assist_overwrite"><option value=0>If empty</option><option value=1>Overwrite</option></select></div>
 							<div class="skill_row"><img class="skill_picture" id="enemies_special_picture" src="skills/special.png"  onmouseover="showSkillTooltip('list', 'special');" onmouseout="hideSkillTooltip();"><select class="skill_select" data-var="enemies.fl.special" id="enemies_special"></select><select class="skill_overwrite" data-var="enemies.fl.replaceSpecial" id="enemies_special_overwrite"><option value=0>If empty</option><option value=1>Overwrite</option></select></div>
 							<div class="skill_row"><img class="skill_picture" id="enemies_a_picture" src="skills/noskill.png" onmouseover="showSkillTooltip('list', 'a');" onmouseout="hideSkillTooltip();"><div class="skill_letter red">A</div><select class="skill_select" data-var="enemies.fl.a" id="enemies_a"></select><select class="skill_overwrite" data-var="enemies.fl.replaceA" id="enemies_a_overwrite"><option value=0>If empty</option><option value=1>Overwrite</option></select></div>
 							<div class="skill_row"><img class="skill_picture" id="enemies_b_picture" src="skills/noskill.png" onmouseover="showSkillTooltip('list', 'b');" onmouseout="hideSkillTooltip();"><div class="skill_letter blue">B</div><select class="skill_select" data-var="enemies.fl.b" id="enemies_b"></select><select class="skill_overwrite" data-var="enemies.fl.replaceB" id="enemies_b_overwrite"><option value=0>If empty</option><option value=1>Overwrite</option></select></div>
@@ -353,6 +374,22 @@
 									<option value="none">None</option>
 									<option value="s">S</option><option value="s-">S-</option><option value="a">A</option><option value="a-">A-</option>
 									<option value="b">B</option><option value="b-">B-</option><option value="c">C</option><option value="c-">C-</option>
+								</select>
+							</div>
+							<div class="misc_row">Bless:
+								<select class="misc_input_left" data-var="enemies.fl.blessing" id="enemies_blessing">
+									<option value="blessing" disabled>Blessing</option>
+									<option value="water">Water</option>
+									<option value="fire">Fire</option>									
+									<option value="wind">Wind</option>
+									<option value="earth">Earth</option>
+								</select>
+								<select class="misc_input" data-var="enemies.fl.blessingStack" id="enemies_blessingStack">
+									<option value="stack" disabled>Stack</option>
+									<option value="0">x0</option>
+									<option value="1">x1</option>
+									<option value="2">x2</option>
+									<option value="3">x3</option>
 								</select>
 							</div>
 							<div class="misc_row">Adjacent Allies:
@@ -397,6 +434,7 @@
 									<img class="skill_letter" id="cl_enemy_refine_weapon_picture" src="skills/weapon.png">
 									<select class="skill_select_short" data-var="enemies.cl.list.refine" id="cl_enemy_refine"></select>
 								</div>
+								<div class="skill_row"><img class="skill_picture" id="cl_enemy_assist_picture" src="skills/assist.png" onmouseover="showSkillTooltip('custom', 'assist');" onmouseout="hideSkillTooltip();"><select class="skill_select" data-var="enemies.cl.list.assist" id="cl_enemy_assist"></select></div>
 								<div class="skill_row"><img class="skill_picture" id="cl_enemy_special_picture" src="skills/special.png" onmouseover="showSkillTooltip('custom', 'special');" onmouseout="hideSkillTooltip();"><select class="skill_select" data-var="enemies.cl.list.special" id="cl_enemy_special"></select></div>
 								<div class="skill_row"><img class="skill_picture" id="cl_enemy_a_picture" src="skills/noskill.png" onmouseover="showSkillTooltip('custom', 'a');" onmouseout="hideSkillTooltip();"><div class="skill_letter red">A</div><select class="skill_select" data-var="enemies.cl.list.a" id="cl_enemy_a"></select></div>
 								<div class="skill_row"><img class="skill_picture" id="cl_enemy_b_picture" src="skills/noskill.png" onmouseover="showSkillTooltip('custom', 'b');" onmouseout="hideSkillTooltip();"><div class="skill_letter blue">B</div><select class="skill_select" data-var="enemies.cl.list.b" id="cl_enemy_b"></select></div>
@@ -426,6 +464,22 @@
 										<option value="b">B</option><option value="b-">B-</option><option value="c">C</option><option value="c-">C-</option>
 									</select>
 								</div>
+								<div class="misc_row">Bless:
+								<select class="misc_input_left" data-var="enemies.cl.list.blessing" id="cl_enemies_blessing">
+									<option value="blessing" disabled>Blessing</option>
+									<option value="water">Water</option>
+									<option value="fire">Fire</option>									
+									<option value="wind">Wind</option>
+									<option value="earth">Earth</option>
+								</select>
+								<select class="misc_input" data-var="enemies.cl.list.blessingStack" id="cl_enemies_blessingStack">
+									<option value="stack" disabled>Stack</option>
+									<option value="0">x0</option>
+									<option value="1">x1</option>
+									<option value="2">x2</option>
+									<option value="3">x3</option>
+								</select>
+							</div>
 								<div class="misc_row">Adjacent Allies:
 									<input type="number" id="cl_enemies_adjacent" data-var="enemies.cl.list.adjacent" class="misc_input smallnuminput" value=1 min=0 max=4 />
 								</div>
@@ -476,7 +530,7 @@
 					<div class="turn_label" id="turn_0">
 						<span id="turn_text_0">Challenger</span>
 						<div class="button turn_delete" id="turn_delete_0" onclick="deleteTurn(0);"></div>
-						<img id="turn_image_0" src="weapons/challenger_sprite.png" height="62" width="62">
+						<img id="turn_image_0" src="ui/challenger_sprite.png" height="62" width="62">
 					</div>
 				</div>
 				<div id="turn_second">
@@ -484,7 +538,7 @@
 					<div class="turn_label" id="turn_1">
 						<span id="turn_text_1">Enemy</span>
 						<div class="button turn_delete" id="turn_delete_1" onclick="deleteTurn(1);"></div>
-						<img id="turn_image_1" src="weapons/enemy_sprite.png" height="62" width="62">
+						<img id="turn_image_1" src="ui/enemy_sprite.png" height="62" width="62">
 					</div>
 				</div>
 				
@@ -493,7 +547,7 @@
 					<div class="turn_label" id="turn_2" style="display:none;">
 						<span id="turn_text_2"></span>
 						<div class="button turn_delete" id="turn_delete_2" onclick="deleteTurn(2);"></div>
-						<img id="turn_image_2" src="weapons/challenger_sprite.png" height="62" width="62">
+						<img id="turn_image_2" src="ui/challenger_sprite.png" height="62" width="62">
 					</div>
 				</div>
 				<div id="turn_fourth">
@@ -501,7 +555,7 @@
 					<div class="turn_label" id="turn_3" style="display:none;">
 						<span id="turn_text_3"></span>
 						<div class="button turn_delete" id="turn_delete_3" onclick="deleteTurn(3);"></div>
-						<img id="turn_image_3" src="weapons/challenger_sprite.png" height="62" width="62">
+						<img id="turn_image_3" src="ui/challenger_sprite.png" height="62" width="62">
 					</div>
 				</div>
 			</div>
