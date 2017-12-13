@@ -1,6 +1,17 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+//Load resource from Google
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+google.charts.load('current', {'packages':['corechart']});
+google.charts.load('current', {packages: ['corechart', 'bar']});
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 //Load from browser cache
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -173,6 +184,39 @@ function initOptions(){
 	options.threaten_enemy = false;
 	options.galeforce_challenger = true;
 	options.galeforce_enemy = true;
+
+	//Holder for statistic values;
+	options.chartType = "enemies by color";
+	statistics = {};
+	statistics.challenger = {};
+	statistics.enemies = {};
+	statistics.challenger.res_hp_max = -1;
+	statistics.challenger.res_hp_min = -1;
+	statistics.challenger.res_hp_avg = -1;
+	statistics.enemies.res_hp_max = -1;
+	statistics.enemies.res_hp_min = -1;
+	statistics.enemies.res_hp_avg = -1;
+	statistics.enemies.list = [];
+	statistics.enemies.red = 0;
+	statistics.enemies.red_outcome = [0,0,0];
+	statistics.enemies.blue = 0;
+	statistics.enemies.blue_outcome = [0,0,0];
+	statistics.enemies.green = 0;
+	statistics.enemies.green_outcome = [0,0,0];
+	statistics.enemies.gray = 0;
+	statistics.enemies.gray_outcome = [0,0,0];
+	statistics.enemies.infantry = 0;
+	statistics.enemies.infantry_outcome = [0,0,0];
+	statistics.enemies.armored = 0;
+	statistics.enemies.armored_outcome = [0,0,0];
+	statistics.enemies.flying = 0;
+	statistics.enemies.flying_outcome = [0,0,0];
+	statistics.enemies.cavalry = 0;
+	statistics.enemies.cavalry_outcome = [0,0,0];
+	statistics.enemies.melee = 0;
+	statistics.enemies.melee_outcome = [0,0,0];
+	statistics.enemies.ranged = 0;
+	statistics.enemies.ranged_outcome = [0,0,0];
 
 	//Holder for challenger options and pre-calculated stats
 	challenger = {};
@@ -439,7 +483,12 @@ $(document).ready(function(){
 				updateRefineUI(hero);
 				hero.refine = -1;
 			}
-
+			
+			//Stuff specific to changing chart type
+			if(endsWith(dataVar,".chartType")){
+				drawChart();
+			}
+			
 			//Stuff specific to changing hero
 			if(endsWith(dataVar,".index")){
 				if(newVal != -1){
@@ -591,12 +640,12 @@ $(document).ready(function(){
 			showOptions(hideOptions == "true");
 		}
 	})
-	
+
 	//Show Options Buttons
 	$(".misc_button").click(function(){
 		if (this.id == "toggle_stat"){
 			toggleStat();
-		}		
+		}
 	})
 
 	//Import/Export Buttons
@@ -731,7 +780,7 @@ function getValidSkills(hero,slot){
 				for(var ruleNum = 0; ruleNum < inheritRules.length; ruleNum++){
 					//console.log("Trying " + slot + ": " + data.skills[i].name);
 					//can only use if hero starts with it
-					if(inheritRules[ruleNum] == "unique"){						
+					if(inheritRules[ruleNum] == "unique"){
 						if(hero.naturalSkills){
 							for(var j = 0; j < hero.naturalSkills.length; j++){
 								if(hero.naturalSkills[j][0] == data.skills[i].skill_id){
@@ -741,17 +790,17 @@ function getValidSkills(hero,slot){
 						}
 					}
 					//inherit if weapon is right attacking type
-					else if(attackType == inheritRules[ruleNum]){						
+					else if(attackType == inheritRules[ruleNum]){
 						inheritRuleMatches++;
 					}
 					//inherit if weapon is right
-					else if(data.weaponTypes.indexOf(inheritRules[ruleNum])!=-1){						
+					else if(data.weaponTypes.indexOf(inheritRules[ruleNum])!=-1){
 						if(data.heroes[hero.index].weapontype==inheritRules[ruleNum]){
 							inheritRuleMatches++;
 						}
 					}
 					//inherit if movetype is right
-					else if(data.moveTypes.indexOf(inheritRules[ruleNum])!=-1){						
+					else if(data.moveTypes.indexOf(inheritRules[ruleNum])!=-1){
 						if(inheritRules[ruleNum] === "mounted"){
 							if(data.heroes[hero.index].movetype == "cavalry" || data.heroes[hero.index].movetype == "flying"){
 								inheritRuleMatches++;
@@ -764,13 +813,13 @@ function getValidSkills(hero,slot){
 						}
 					}
 					//inherit if not a certain weapon
-					else if(data.weaponTypes.indexOf(inheritRules[ruleNum].replace("non",""))!=-1){						
+					else if(data.weaponTypes.indexOf(inheritRules[ruleNum].replace("non",""))!=-1){
 						if(data.heroes[hero.index].weapontype!=inheritRules[ruleNum].replace("non","")){
 							inheritRuleMatches++;
 						}
 					}
 					//inherit if not a certain movement type
-					else if(data.moveTypes.indexOf(inheritRules[ruleNum].replace("non",""))!=-1){						
+					else if(data.moveTypes.indexOf(inheritRules[ruleNum].replace("non",""))!=-1){
 						if(inheritRules[ruleNum] === "nonmounted"){
 							if(data.heroes[hero.index].movetype != "cavalry" && data.heroes[hero.index].movetype != "flying"){
 								inheritRuleMatches++;
@@ -783,32 +832,32 @@ function getValidSkills(hero,slot){
 						}
 					}
 					//inherit if not a certain color
-					else if(data.colors.indexOf(inheritRules[ruleNum].replace("non",""))!=-1){						
+					else if(data.colors.indexOf(inheritRules[ruleNum].replace("non",""))!=-1){
 						if(data.heroes[hero.index].color!=inheritRules[ruleNum].replace("non","")){
 							inheritRuleMatches++;
 						}
 					}
 					//inherit if weapon type in ranged group
-					else if(inheritRules[ruleNum]=="ranged"){						
+					else if(inheritRules[ruleNum]=="ranged"){
 						if(data.rangedWeapons.indexOf(data.heroes[hero.index].weapontype) != -1){
 							inheritRuleMatches++;
 						}
 					}
 					//inherit if weapon type in melee group
-					else if(inheritRules[ruleNum]=="melee"){						
+					else if(inheritRules[ruleNum]=="melee"){
 						if(data.meleeWeapons.indexOf(data.heroes[hero.index].weapontype) != -1){
 							inheritRuleMatches++;
 						}
 					}
 					//everyone can inherit!
-					else if(inheritRules[ruleNum]==""){						
+					else if(inheritRules[ruleNum]==""){
 						inheritRuleMatches++;
 					}
 					else{
 						//shouldn't get here
 						//console.log("Issue finding logic for inheritrule " + inheritRules[ruleNum]);
 					}
-					
+
 					if(inheritRuleMatches == inheritRules.length){
 						validSkills.push(i);
 					}
@@ -923,7 +972,7 @@ function getCDChange(skill, slot){
 	if	(slot == "refine"){
 		//Refinement changes to cooldown go here
 	}
-	
+
 	//Assist
 	if (slot == "assist"){
 		//Cooldown increase
@@ -931,7 +980,7 @@ function getCDChange(skill, slot){
 				return 1;
 		}
 	}
-	
+
 	//Seal
 	if (slot == "s"){
 		//Precharge Increase
@@ -1034,7 +1083,7 @@ function setStats(hero){
 		hero.spd = base.spd + data.growths[hero.rarity-1][data.heroes[hero.index].spdgrowth + growthValMod.spd];
 		hero.def = base.def + data.growths[hero.rarity-1][data.heroes[hero.index].defgrowth + growthValMod.def];
 		hero.res = base.res + data.growths[hero.rarity-1][data.heroes[hero.index].resgrowth + growthValMod.res];
-		
+
 		//Confer Blessing
 		switch (hero.bless){
 			case "fire":
@@ -1050,7 +1099,7 @@ function setStats(hero){
 			default:
 				break;
 		}
-		
+
 		//Calculate hero BST after IV before merge stat bonuses
 		hero.bst = hero.hp + hero.atk + hero.spd + hero.def + hero.res;
 
@@ -1266,11 +1315,11 @@ function updateSpt(hero){
 //Adjust merge level for heroes in custom list
 function adjustCustomListMerge(){
 	enemies.cl.list.forEach(function(hero){
-		hero.merge = enemies.cl.merges;			
+		hero.merge = enemies.cl.merges;
 		//Update hero base stats
 		setStats(hero);
 	});
-	
+
 	//Update enemy UI
 	updateEnemyUI();
 }
@@ -1287,7 +1336,7 @@ function adjustCustomListHp(isFlat){
 			hero.damage = Math.ceil(hero.hp * (1.00 - (enemies.cl.HpPercent * 0.25)));
 		}
 	});
-	
+
 	//Update enemy UI
 	updateEnemyUI();
 }
@@ -1335,7 +1384,7 @@ function adjustCustomListBuff(isStat){
 					setStats(hero);
 				}
 			});
-		}		
+		}
 	}
 	//For multiple stat adjustments
 	else{
@@ -1689,58 +1738,73 @@ function updateFlEnemies(){
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-function showOptions(show){	
+//TODO: Clean all these mid UI functions up
+function showOptions(show){
 	if (show){
 		setWideUI(true);
-		toggleUI("options");
+		toggleMidUI("options");
 	}
 	else{
-		setWideUI(false);
-		toggleUI("none");
-	}	
+		if (!$("#frame_stat").is(':hidden') && $("#toggle_options").text() == "Show Options"){
+			toggleMidUI("stat_close");
+		}else{
+			$("#frame_adj").hide();
+			$("#toggle_options").text("Show Options");
+			hideOptions = "true";
+			localStorage["hideOptions"] = "true";
+			setWideUI(false);
+		}		
+	}
 }
 
 function toggleStat(){
-	//If mid UI is not open, open it
-	if ($("#frame_main").width() < 1125){
+	if ($("#frame_stat").is(':hidden')){
 		setWideUI(true);
-		toggleUI("stat");
-	//Else check if stat UI is open and toggle it
+		toggleMidUI("stat");			
 	}else{
-		if ($("#frame_stat").is(':hidden')){
-			toggleUI("stat");
-		}else{
-			toggleUI("none");
-			setWideUI(false);
-		}
+		toggleMidUI("stat_close");
+		setWideUI(false);
 	}
 }
 
-function toggleUI(midUI){	
-	if (midUI == "options"){
+function toggleMidUI(ui){
+	if (ui == "options"){
 		$("#frame_adj").show();
 		$("#toggle_options").text("Hide Options");
 		hideOptions = "false";
 		localStorage["hideOptions"] = "false";
-	}else{
-		$("#frame_adj").hide();
+		$("#frame_stat").hide();
+		$("#toggle_stat").text("Show Statistics");
+	}	
+	if (ui == "stat"){
+		//Change options to show
 		$("#toggle_options").text("Show Options");
-		hideOptions = "true";
-		localStorage["hideOptions"] = "true";
-	}
-	
-	if (midUI == "stat"){
+		//Show statistics UI
 		$("#frame_stat").show();
-		$("#toggle_stat").text("Hide Statistics");
-	}else{
+		$("#toggle_stat").text("Hide Statistics");	
+		drawChart();
+	}
+	if (ui == "stat_close"){
+		//If options UI is open, change button to hide
+		if (!$("#frame_adj").is(':hidden')){
+			$("#toggle_options").text("Hide Options");
+		}
+		//Hide statistics UI
 		$("#frame_stat").hide();
 		$("#toggle_stat").text("Show Statistics");
 	}
 }
 
-function setWideUI(isWide){
+function setWideUI(setWide){	
+	//If another mid UI is open, do not change width
+	if (!setWide){
+		if (!$("#frame_stat").is(':hidden') || !$("#frame_adj").is(':hidden')){
+			return;
+		}
+	}	
+	
 	var originBarWidth = $("#results_graph_back").width();
-	if (isWide){
+	if (setWide){
 		$("#frame_main").width(1125);
 	}
 	else{
@@ -1811,9 +1875,9 @@ function setSkillOptions(hero){
 					//	Option: Non-duel skills || Skills that affect duels || Assist skills || Special skills
 					//	Skill can be learned on hero (?)
 					//	Skill is learned on hero
-					if(((!options.showOnlyMaxSkills || data.skillsThatArePrereq.indexOf(data.skills[validSkills[i]].skill_id)==-1) 
+					if(((!options.showOnlyMaxSkills || data.skillsThatArePrereq.indexOf(data.skills[validSkills[i]].skill_id)==-1)
 							&& (!options.hideUnaffectingSkills || data.skills[validSkills[i]].affectsduel || data.skills[validSkills[i]].slot == "assist" || data.skills[validSkills[i]].slot == "special"))
-						|| validSkills[i] == maxSkills[slot] 
+						|| validSkills[i] == maxSkills[slot]
 						|| validSkills[i] == hero[slot]){
 						slotHTML += "<option value=" + validSkills[i] + ">" + data.skills[validSkills[i]].name + "</option>";
 					}
@@ -1960,7 +2024,7 @@ function updateHeroUI(hero){
 			$("#" + htmlPrefix + "weapon_icon").attr("src","weapons/" + data.heroes[hero.index].color + "dragon.png");
 		}
 		$("#" + htmlPrefix + "movement_icon").attr("src","weapons/" + data.heroes[hero.index].movetype + ".png");
-		
+
 		//Update Charge UI
 		if(hero.special != -1){
 			var specialCharge = data.skills[hero.special].charge;
@@ -1976,12 +2040,12 @@ function updateHeroUI(hero){
 			if(hero.refine != -1){
 				specialCharge += getCDChange(data.refine[hero.refine], "refine");
 			}
-			
+
 			//Assist Skill
 			if(hero.assist != -1){
 				specialCharge += getCDChange(data.skills[hero.assist], "assist");
 			}
-			
+
 			//Special Item
 			if(hero.s != -1){
 				precharge += getCDChange(data.skills[hero.s], "s")
@@ -2142,7 +2206,7 @@ function showSkillTooltip(heroType, skillType){
 			tooltipText += data.refine[skillID].description;
 		}
 		else{
-			tooltipText = "<span class=\"bold\">" + data.skills[skillID].name + "</span>";			
+			tooltipText = "<span class=\"bold\">" + data.skills[skillID].name + "</span>";
 			tooltipText += (skillType == "weapon") ? " Mt: <font color=\"#fefec8\">" + data.skills[skillID].atk + "</font>" : "";
 			tooltipText += (skillType == "special") ? " CD: <font color=\"#fefec8\">" + data.skills[skillID].charge + "</font>" : "";
 			tooltipText += " SP: <font color=\"#fefec8\">" + data.skills[skillID].sp + "</font><br>";
@@ -2513,12 +2577,12 @@ function importText(side, customList){
 				});
 			}
 		}
-		
+
 		var blessSplit = line.split("Bless: ");
 		if(blessSplit.length > 1){ //Don't check if there's no "Bless: "
 			for(var blessLine = 0; blessLine < blessSplit.length; blessLine++){
 				blessSplit[blessLine] = removeEdgeJunk(blessSplit[blessLine]).toLowerCase();
-				
+
 				data.blessType.forEach(function(blessType){
 					if(blessSplit[blessLine].slice(0,blessType.length) == blessType){
 						dataFound.bless = blessType;
@@ -2530,7 +2594,7 @@ function importText(side, customList){
 
 		return dataFound;
 	}
-	
+
 	function parseAttributeLine(line){
 		var dataFound = {};
 
@@ -3274,6 +3338,10 @@ function fight(enemyIndex,resultIndex){
 		}
 	}
 
+	//Do statistic collection here
+	collectStatistics(ahChallenger, ahEnemy, outcome);
+
+	//Generate fight HTML
 	fightHTML = ["<div class=\"results_entry\" id=\"result_" + resultIndex + "\" onmouseover=\"showResultsTooltip(event,this);\" onmouseout=\"hideResultsTooltip();\">",
 		"<div class=\"results_hpbox\">",
 			"<div class=\"results_hplabel\">HP</div>",
@@ -3339,6 +3407,11 @@ function calculate(manual){
 	//manual = true if button was clicked
 	//calculates results and also adds them to page
 	if(options.autoCalculate || manual){
+
+		//Reset statistics
+		resetStatistics();
+
+		//Do calculations
 		if(challenger.index!=-1 && options.roundInitiators.length > 0 && enemies.fl.list.length > 0){
 			var wins = 0;
 			var losses = 0;
@@ -3358,6 +3431,9 @@ function calculate(manual){
 			}
 			for(var i = 0;i<enemyList.length;i++){
 				if(enemyList[i].index >= 0 && !mustConfirm || enemyList[i].included){
+					//Push valid enemy into statistics enemies list
+					statistics.enemies.list.push(enemyList[i]);
+					//Do fight and push into results
 					fightResults.push(fight(i,fightResults.length));
 				}
 			}
@@ -3387,6 +3463,9 @@ function calculate(manual){
 					return (a.sortWeight < b.sortWeight)*2-1;
 				}
 			});
+
+			//Update statistics
+			updateStatisticsUI();
 
 			outputResults();
 			var total = wins + losses + inconclusive;
@@ -3693,6 +3772,342 @@ function exportCalc(){
 	else{
 		alert("No results!");
 	}
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//Statistics
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function resetStatistics(){
+	statistics.challenger.res_hp_max = -1;
+	statistics.challenger.res_hp_min = -1;
+	statistics.challenger.res_hp_avg = -1;
+	statistics.enemies.res_hp_max = -1;
+	statistics.enemies.res_hp_min = -1;
+	statistics.enemies.res_hp_avg = -1;
+	statistics.enemies.list = [];
+	statistics.enemies.red = 0;
+	statistics.enemies.red_outcome = [0,0,0];
+	statistics.enemies.blue = 0;
+	statistics.enemies.blue_outcome = [0,0,0];
+	statistics.enemies.green = 0;
+	statistics.enemies.green_outcome = [0,0,0];
+	statistics.enemies.gray = 0;
+	statistics.enemies.gray_outcome = [0,0,0];
+	statistics.enemies.infantry = 0;
+	statistics.enemies.infantry_outcome = [0,0,0];
+	statistics.enemies.armored = 0;
+	statistics.enemies.armored_outcome = [0,0,0];
+	statistics.enemies.flying = 0;
+	statistics.enemies.flying_outcome = [0,0,0];
+	statistics.enemies.cavalry = 0;
+	statistics.enemies.cavalry_outcome = [0,0,0];
+	statistics.enemies.melee = 0;
+	statistics.enemies.melee_outcome = [0,0,0];
+	statistics.enemies.ranged = 0;
+	statistics.enemies.ranged_outcome = [0,0,0];
+}
+
+function collectStatistics(challenger, enemy, outcome){
+	//Challenger
+	if (statistics.challenger.res_hp_max == -1){
+		statistics.challenger.res_hp_max = challenger.hp;
+	}else if (statistics.challenger.res_hp_max < challenger.hp){
+		statistics.challenger.res_hp_max = challenger.hp;
+	}
+	if (statistics.challenger.res_hp_min == -1){
+		statistics.challenger.res_hp_min = challenger.hp;
+	}else if (statistics.challenger.res_hp_min > challenger.hp){
+		statistics.challenger.res_hp_min = challenger.hp;
+	}
+	if (statistics.challenger.res_hp_avg == -1){
+		statistics.challenger.res_hp_avg = challenger.hp;
+	}else{
+		statistics.challenger.res_hp_avg += challenger.hp;
+	}
+
+	//Enemies
+	if (statistics.enemies.res_hp_max == -1){
+		statistics.enemies.res_hp_max = enemy.hp;
+	}else if (statistics.enemies.res_hp_max < enemy.hp){
+		statistics.enemies.res_hp_max = enemy.hp;
+	}
+	if (statistics.enemies.res_hp_min == -1){
+		statistics.enemies.res_hp_min = enemy.hp;
+	}else if (statistics.enemies.res_hp_min > enemy.hp){
+		statistics.enemies.res_hp_min = enemy.hp;
+	}
+	if (statistics.enemies.res_hp_avg == -1){
+		statistics.enemies.res_hp_avg = enemy.hp;
+	}else{
+		statistics.enemies.res_hp_avg += enemy.hp;
+	}
+	//Outcome [win, loss, inconclusive]
+	//Tally Color
+	if (enemy.color == "red"){
+		statistics.enemies.red++;
+		if (outcome == "win"){ statistics.enemies.red_outcome[0]++; }
+		else if (outcome == "loss"){ statistics.enemies.red_outcome[1]++; }
+		else if (outcome == "inconclusive"){ statistics.enemies.red_outcome[2]++; }
+	}else if (enemy.color == "blue"){
+		statistics.enemies.blue++;
+		if (outcome == "win"){ statistics.enemies.blue_outcome[0]++; }
+		else if (outcome == "loss"){ statistics.enemies.blue_outcome[1]++; }
+		else if (outcome == "inconclusive"){ statistics.enemies.blue_outcome[2]++; }
+	}else if (enemy.color == "green"){
+		statistics.enemies.green++;
+		if (outcome == "win"){ statistics.enemies.green_outcome[0]++; }
+		else if (outcome == "loss"){ statistics.enemies.green_outcome[1]++; }
+		else if (outcome == "inconclusive"){ statistics.enemies.green_outcome[2]++; }
+	}else{
+		statistics.enemies.gray++;
+		if (outcome == "win"){ statistics.enemies.gray_outcome[0]++; }
+		else if (outcome == "loss"){ statistics.enemies.gray_outcome[1]++; }
+		else if (outcome == "inconclusive"){ statistics.enemies.gray_outcome[2]++; }
+	}
+	//Tally Range
+	if (enemy.range == "melee"){
+		statistics.enemies.melee++;
+		if (outcome == "win"){ statistics.enemies.melee_outcome[0]++; }
+		else if (outcome == "loss"){ statistics.enemies.melee_outcome[1]++; }
+		else if (outcome == "inconclusive"){ statistics.enemies.melee_outcome[2]++; }
+	}else{
+		statistics.enemies.ranged++;
+		if (outcome == "win"){ statistics.enemies.ranged_outcome[0]++; }
+		else if (outcome == "loss"){ statistics.enemies.ranged_outcome[1]++; }
+		else if (outcome == "inconclusive"){ statistics.enemies.ranged_outcome[2]++; }
+	}
+	//Tally  Type
+	if (enemy.moveType == "infantry"){
+		statistics.enemies.infantry++;
+		if (outcome == "win"){ statistics.enemies.infantry_outcome[0]++; }
+		else if (outcome == "loss"){ statistics.enemies.infantry_outcome[1]++; }
+		else if (outcome == "inconclusive"){ statistics.enemies.infantry_outcome[2]++; }
+	}else if (enemy.moveType == "armored"){
+		statistics.enemies.armored++;
+		if (outcome == "win"){ statistics.enemies.armored_outcome[0]++; }
+		else if (outcome == "loss"){ statistics.enemies.armored_outcome[1]++; }
+		else if (outcome == "inconclusive"){ statistics.enemies.armored_outcome[2]++; }
+	}else if (enemy.moveType == "flying"){
+		statistics.enemies.flying++;
+		if (outcome == "win"){ statistics.enemies.flying_outcome[0]++; }
+		else if (outcome == "loss"){ statistics.enemies.flying_outcome[1]++; }
+		else if (outcome == "inconclusive"){ statistics.enemies.flying_outcome[2]++; }
+	}else if (enemy.moveType == "cavalry"){
+		statistics.enemies.cavalry++;
+		if (outcome == "win"){ statistics.enemies.cavalry_outcome[0]++; }
+		else if (outcome == "loss"){ statistics.enemies.cavalry_outcome[1]++; }
+		else if (outcome == "inconclusive"){ statistics.enemies.cavalry_outcome[2]++; }
+	}
+}
+
+function calculateStatistics(){
+	//console.log(statistics.enemies.list);
+	statistics.challenger.res_hp_avg = Math.round(statistics.challenger.res_hp_avg / statistics.enemies.list.length);
+	statistics.enemies.res_hp_avg = Math.round(statistics.enemies.res_hp_avg / statistics.enemies.list.length);
+}
+
+function updateStatisticsUI(){
+	//Do calculations first
+	calculateStatistics();
+
+	//Update UI
+	$("#challenger_res_hp_max").html(statistics.challenger.res_hp_max);
+	$("#challenger_res_hp_min").html(statistics.challenger.res_hp_min);
+	$("#challenger_res_hp_avg").html(statistics.challenger.res_hp_avg);
+
+	$("#enemies_res_hp_max").html(statistics.enemies.res_hp_max);
+	$("#enemies_res_hp_min").html(statistics.enemies.res_hp_min);
+	$("#enemies_res_hp_avg").html(statistics.enemies.res_hp_avg);
+
+	//Draw Chart
+	drawChart();
+}
+
+function drawChart() {
+	var data;
+	var option;
+	var chart;
+	
+	switch (options.chartType){
+		case "enemies by color":
+			//Data
+			data = google.visualization.arrayToDataTable([
+				['Color',	'# of Heroes'],
+				['Red',		statistics.enemies.red],
+				['Blue',	statistics.enemies.blue],
+				['Green',	statistics.enemies.green],
+				['Gray',	statistics.enemies.gray]
+			]);
+			//Options
+			option = {
+				backgroundColor: 'transparent',
+				width: 200,
+				legend: {
+					position: 'top',
+					textStyle: {color: 'white', fontSize: 10},
+					maxLines: 2
+				},
+				slices: {
+					0: { color: '#cd6155' },
+					1: { color: '#5dade2' },
+					2: { color: '#58d68d' },
+					3: { color: '#99a3a4' }
+				},
+				pieSliceText: 'value'
+			};
+			//Chart Type
+			chart = new google.visualization.PieChart(document.getElementById('stat_chart'));
+			break;
+		case "enemies by range":
+			//Data
+			data = google.visualization.arrayToDataTable([
+				['Range',	'# of Heroes'],
+				['Melee',	statistics.enemies.melee],
+				['Ranged',	statistics.enemies.ranged]
+			]);
+			//Options
+			option = {
+				backgroundColor: 'transparent',
+				width: 200,
+				legend: {
+					position: 'top',
+					textStyle: {color: 'white', fontSize: 10},
+					maxLines: 2
+				},
+				slices: {
+					0: { color: 'ca925b' },
+					1: { color: 'a1c4d0' },
+				},
+				pieSliceText: 'value'
+			};
+			//Chart Type
+			chart = new google.visualization.PieChart(document.getElementById('stat_chart'));
+			break;
+		case "enemies by movement":
+			//Data
+			data = google.visualization.arrayToDataTable([
+				['Movement',	'# of Heroes'],
+				['Infantry',	statistics.enemies.infantry],
+				['Armored',		statistics.enemies.armored],
+				['Flying',		statistics.enemies.flying],
+				['Cavalry',		statistics.enemies.cavalry]
+			]);
+			//Options
+			option = {
+				backgroundColor: 'transparent',
+				width: 200,
+				legend: {
+					position: 'top',
+					textStyle: {color: 'white', fontSize: 10},
+					maxLines: 2
+				},
+				slices: {
+					0: { color: 'b4b7b8' },
+					1: { color: '9e87cb' },
+					2: { color: '60c2ce' },
+					3: { color: 'db8f3f' }
+				},
+				pieSliceText: 'value'
+			};
+			//Chart Type
+			chart = new google.visualization.PieChart(document.getElementById('stat_chart'));
+			break;
+		case "outcomes by color":
+			//Data
+			data = google.visualization.arrayToDataTable([
+				['Color', 'Win', 'Inconclusive', 'Loss', { role: 'annotation' } ],
+				['Red', statistics.enemies.red_outcome[0], statistics.enemies.red_outcome[2], statistics.enemies.red_outcome[1], ""],
+				['Blue', statistics.enemies.blue_outcome[0], statistics.enemies.blue_outcome[2], statistics.enemies.blue_outcome[1], ""],
+				['Green', statistics.enemies.green_outcome[0], statistics.enemies.green_outcome[2], statistics.enemies.green_outcome[1], ""],
+				['Gray', statistics.enemies.gray_outcome[0], statistics.enemies.gray_outcome[2], statistics.enemies.gray_outcome[1], ""]
+			]);
+			//Options
+			option = {
+				backgroundColor: 'transparent',
+				width: 200,
+				legend: 'none',
+				hAxis: {
+					textStyle: {color: 'white', fontSize: 8}
+				},
+				vAxis: {
+					minValue: 0,
+					ticks: [0, .25, .5, .75, 1],
+					textStyle: {color: 'white', fontSize: 8}
+				},
+				bar: { groupWidth: '75%' },
+				colors: ['7797ff', 'cccccc', 'ff5165'],
+				isStacked: 'percent'
+			};
+			//Chart Type
+			chart = new google.visualization.ColumnChart(document.getElementById('stat_chart'));
+			break;
+		case "outcomes by range":
+			//Data
+			data = google.visualization.arrayToDataTable([
+				['Range', 'Win', 'Inconclusive', 'Loss', { role: 'annotation' } ],
+				['Melee', statistics.enemies.melee_outcome[0], statistics.enemies.melee_outcome[2], statistics.enemies.melee_outcome[1], ""],
+				['Ranged', statistics.enemies.ranged_outcome[0], statistics.enemies.ranged_outcome[2], statistics.enemies.ranged_outcome[1], ""]
+			]);
+			//Options
+			option = {
+				backgroundColor: 'transparent',
+				width: 200,
+				legend: 'none',
+				hAxis: {
+					textStyle: {color: 'white', fontSize: 8}
+				},
+				vAxis: {
+					minValue: 0,
+					ticks: [0, .25, .5, .75, 1],
+					textStyle: {color: 'white', fontSize: 8}
+				},
+				bar: { groupWidth: '75%' },
+				colors: ['7797ff', 'cccccc', 'ff5165'],
+				isStacked: 'percent'
+			};
+			//Chart Type
+			chart = new google.visualization.ColumnChart(document.getElementById('stat_chart'));
+			break;
+		case "outcomes by movement":
+			//Data
+			data = google.visualization.arrayToDataTable([
+				['Color', 'Win', 'Inconclusive', 'Loss', { role: 'annotation' } ],
+				['Infantry', statistics.enemies.infantry_outcome[0], statistics.enemies.infantry_outcome[2], statistics.enemies.infantry_outcome[1], ""],
+				['Armored', statistics.enemies.armored_outcome[0], statistics.enemies.armored_outcome[2], statistics.enemies.armored_outcome[1], ""],
+				['Flying', statistics.enemies.flying_outcome[0], statistics.enemies.flying_outcome[2], statistics.enemies.flying_outcome[1], ""],
+				['Cavalry', statistics.enemies.cavalry_outcome[0], statistics.enemies.cavalry_outcome[2], statistics.enemies.cavalry_outcome[1], ""]
+			]);
+			//Options
+			option = {
+				backgroundColor: 'transparent',
+				width: 200,
+				legend: 'none',
+				hAxis: {
+					textStyle: {color: 'white', fontSize: 8}
+				},
+				vAxis: {
+					minValue: 0,
+					ticks: [0, .25, .5, .75, 1],
+					textStyle: {color: 'white', fontSize: 8}
+				},
+				bar: { groupWidth: '75%' },
+				colors: ['7797ff', 'cccccc', 'ff5165'],
+				isStacked: 'percent'
+			};
+			//Chart Type
+			chart = new google.visualization.ColumnChart(document.getElementById('stat_chart'));
+			break;
+		default:
+			console.log("Invalid chart type.");
+	}	
+	
+	//Draw chart
+	chart.draw(data, option);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////

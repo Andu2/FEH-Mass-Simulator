@@ -22,6 +22,8 @@ sup {
     font-size: 12px;
 }
 
+svg > g > g:last-child { pointer-events: none }
+
 #frame_main{
 	width:1125px;
 	margin: 0 auto;
@@ -750,6 +752,7 @@ sup {
 	background-color: #ffffff;
 	color:#d82a3e;
 }
+
 /*Statistics///////////////////////////////////////*/
 #frame_stat{
 	border-radius:4px;
@@ -763,6 +766,27 @@ sup {
 	top:0;
 	bottom:0;
 	width:200px;
+}
+
+.stat_desc {
+	width: 80%;
+	text-align:left;
+	margin-left:5px;
+}
+
+.stat_value {
+	width: 20%;
+	text-align:right;
+	margin-right:5px;
+}
+
+.stat_select {
+	width: 100%;
+	text-align:left;
+	margin-top:5px;
+	margin-bottom:5px;
+	margin-left:5px;
+	margin-right:5px;
 }
 
 /*Adjustments///////////////////////////////////////*/

@@ -11,12 +11,14 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<!--<script src="https://unpkg.com/react@15/dist/react.js"></script>
 	<script src="https://unpkg.com/react-dom@15/dist/react-dom.js"></script>-->
+	
+	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
 
-	<link rel="stylesheet" type="text/css" href="style.css?v=201712120910"/>
-	<script type="text/javascript" src="code.js?v=201712120910"></script>
+	<link rel="stylesheet" type="text/css" href="style.css?v=201712121317"/>
+	<script type="text/javascript" src="code.js?v=201712121317"></script>
 </head>
 
 <body>
@@ -183,7 +185,7 @@
 					<div class="status_title">Candlelight</div>
 					<div class="status_enemy"><input type="checkbox" data-var="options.candlelight_enemy" id="candlelight_enemy"/></div>
 				</div>
-				<div style="line-height: 10%;"><br></div>
+				<div style="line-height:20%;"><br></div>
 				<div id="adj_title">Mechanics:</div>
 				<div class="adj_status">
 					<div class="status_challenger"><input type="checkbox" data-var="options.threaten_challenger" id="threaten_challenger"/></div>
@@ -195,7 +197,7 @@
 					<div class="status_title">Galeforce Initiates Again</div>
 					<div class="status_enemy"><input type="checkbox" data-var="options.galeforce_enemy" id="galeforce_enemy" checked/></div>
 				</div>
-				<div style="line-height: 10%;"><br></div>
+				<div style="line-height:20%;"><br></div>
 				<div id="adj_title">Custom List Adjustments:</div>
 				<div class="adj_status">
 					<div class="status_desc">Hero Merge:</div>
@@ -278,7 +280,7 @@
 				<div class="adj_status">
 					<div class="button adj_reset_button" id="reset_buff">Reset All Buffs</div>
 				</div>
-				<div style="line-height: 10%;"><br></div>
+				<div style="line-height:20%;"><br></div>
 				<div id="adj_title">Simulator Settings:</div>
 				<div class="adj_status">
 					<div class="status_desc_long">Turn to start Renewal: </div>
@@ -317,6 +319,48 @@
 			<div id="frame_stat" style="display: none;">
 				<div id="rules_bar_top">
 					Statistics
+				</div>
+				<div id="adj_title">Challenger</div>
+				<div class="adj_status">
+					<div class="stat_desc">Resulting HP: Maximum</div>
+					<div class="stat_value" id="challenger_res_hp_max">-</div>
+				</div>
+				<div class="adj_status">
+					<div class="stat_desc">Resulting HP: Minimum</div>
+					<div class="stat_value" id="challenger_res_hp_min">-</div>
+				</div>				
+				<div class="adj_status">
+					<div class="stat_desc">Resulting HP: Average</div>
+					<div class="stat_value" id="challenger_res_hp_avg">-</div>
+				</div>
+				<div style="line-height:20%;"><br></div>
+				<div id="adj_title">Enemies</div>
+				<div class="adj_status">
+					<div class="stat_desc">Resulting HP: Maximum</div>
+					<div class="stat_value" id="enemies_res_hp_max">-</div>
+				</div>
+				<div class="adj_status">
+					<div class="stat_desc">Resulting HP: Minimum</div>
+					<div class="stat_value" id="enemies_res_hp_min">-</div>
+				</div>				
+				<div class="adj_status">
+					<div class="stat_desc">Resulting HP: Average</div>
+					<div class="stat_value" id="enemies_res_hp_avg">-</div>
+				</div>
+				<div style="line-height:20%;"><br></div>
+				<div id="adj_title">Charts</div>
+				<div class="adj_status">
+					<select class="stat_select" id="chart_type" data-var="options.chartType">
+						<option value="enemies by color">Enemies by Color</option>
+						<option value="enemies by range">Enemies by Range</option>
+						<option value="enemies by movement">Enemies by Movement</option>
+						<option value="outcomes by color">Outcomes by Color</option>
+						<option value="outcomes by range">Outcomes by Range</option>
+						<option value="outcomes by movement">Outcomes by Movement</option>
+					</select>
+				</div>
+				<div class="adj_status">
+					<div id="stat_chart" style="width: 200px; height: 200px;"></div>
 				</div>
 			</div>
 			<div id="frame_enemies">
