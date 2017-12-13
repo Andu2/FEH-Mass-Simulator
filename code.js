@@ -4357,7 +4357,7 @@ function activeHero(hero){
 					skillNames.push(data.skills[this.weaponIndex].name);
 				}
 				if (this.hasExactly("Weirding Tome")){
-					threatDebuffs.atk = Math.min(threatDebuffs.spd, -5);
+					threatDebuffs.spd = Math.min(threatDebuffs.spd, -5);
 					skillNames.push(data.skills[this.weaponIndex].name);
 				}
 				//Passive C Skills
