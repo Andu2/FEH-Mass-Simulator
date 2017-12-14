@@ -1157,6 +1157,10 @@ svg > g > g:last-child { pointer-events: none }
 	background-color: #333333;
 }
 
+#toggle_stat{
+	margin-right:120px;
+}
+
 .button_options:hover{
 	background-color: #ffffff;
 	color:#888888;
@@ -1387,7 +1391,7 @@ svg > g > g:last-child { pointer-events: none }
 }
 
 .results_stat + .results_stat{
-	margin-left:15px;
+	margin-left:12px;
 }
 
 #footer{

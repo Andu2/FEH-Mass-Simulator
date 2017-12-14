@@ -622,6 +622,7 @@ $(document).ready(function(){
 			}else if (this.id == "apply_movement_buff"){
 				adjustCustomListBuff(false);
 			}
+			calculate();
 		}
 	})
 
@@ -632,6 +633,7 @@ $(document).ready(function(){
 		}else if (this.id == "reset_buff"){
 			resetCustomListBuffs();
 		}
+		calculate();
 	})
 
 	//Show Options Buttons
@@ -639,10 +641,6 @@ $(document).ready(function(){
 		if (this.id == "toggle_options"){
 			showOptions(hideOptions == "true");
 		}
-	})
-
-	//Show Options Buttons
-	$(".misc_button").click(function(){
 		if (this.id == "toggle_stat"){
 			toggleStat();
 		}
@@ -1760,7 +1758,7 @@ function showOptions(show){
 function toggleStat(){
 	if ($("#frame_stat").is(':hidden')){
 		setWideUI(true);
-		toggleMidUI("stat");			
+		toggleMidUI("stat");		
 	}else{
 		toggleMidUI("stat_close");
 		setWideUI(false);
@@ -3337,7 +3335,23 @@ function fight(enemyIndex,resultIndex){
 			passFilters.push("changeDamage");
 		}
 	}
-
+	
+	//Do Buff and Debuff UI here
+	var statChange = {"hp":0,"atk":0,"spd":0,"def":0,"res":0};
+	data.stats.forEach(function(stat){
+		statChange[stat] = ahEnemy.buffs[stat] + ahEnemy.debuffs[stat] + ahEnemy.spur[stat];
+	});
+	var statChangeText = {"hp":"","atk":"","spd":"","def":"","res":""};
+	data.stats.forEach(function(stat){
+		if (statChange[stat] != 0){
+			if (statChange[stat] > 0){
+				statChangeText[stat] = "<font color=\"99C68E\"> (+" + statChange[stat] + ")</font>";
+			}else{
+				statChangeText[stat] = "<font color=\"FAAFBE\"> (" + statChange[stat] + ")</font>";
+			}
+		}
+	});
+	
 	//Do statistic collection here
 	collectStatistics(ahChallenger, ahEnemy, outcome);
 
@@ -3356,10 +3370,10 @@ function fight(enemyIndex,resultIndex){
 		"</div>",
 		"<div class=\"results_bottomline\">",
 			"<span class=\"results_stat\">HP: " + ahEnemy.maxHp + "</span>",
-			"<span class=\"results_stat\">Atk: " + ahEnemy.atk + "</span>",
-			"<span class=\"results_stat\">Spd: " + ahEnemy.spd + "</span>",
-			"<span class=\"results_stat\">Def: " + ahEnemy.def + "</span>",
-			"<span class=\"results_stat\">Res: " + ahEnemy.res + "</span>",
+			"<span class=\"results_stat\">Atk: " + (ahEnemy.atk + statChange.atk) + statChangeText.atk + "</span>",
+			"<span class=\"results_stat\">Spd: " + (ahEnemy.spd + statChange.spd) + statChangeText.spd + "</span>",
+			"<span class=\"results_stat\">Def: " + (ahEnemy.def + statChange.def) + statChangeText.def + "</span>",
+			"<span class=\"results_stat\">Res: " + (ahEnemy.res + statChange.res) + statChangeText.res + "</span>",
 			"<div class=\"results_skills\">",
 				"<span class=\"results_stat\"><img class=\"skill_picture\" src=\"skills/weapon.png\"/><img class=\"skill_picture\" src=\"weapons/" + refineName + ".png\"/>" + weaponName + "</span>",
 				//"<span class=\"results_stat\"><img class=\"skill_picture\" src=\"skills/assist.png\"/>" + assistName + "</span>",
@@ -4171,7 +4185,7 @@ function activeHero(hero){
 	this.spd = hero.spd;
 	this.def = hero.def;
 	this.res = hero.res;
-
+	
 	this.moveType = data.heroes[this.heroIndex].movetype;
 	this.weaponType = data.heroes[this.heroIndex].weapontype;
 	this.color = data.heroes[this.heroIndex].color;
