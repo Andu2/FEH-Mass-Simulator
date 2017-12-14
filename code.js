@@ -1366,7 +1366,9 @@ function adjustCustomListBuff(isStat){
 		if (enemies.cl.status == "all"){
 			enemies.cl.list.forEach(function(hero){
 				data.stats.forEach(function(stat){
-					if (stat != "hp"){hero.buffs[stat] = enemies.cl.statusbuff;}
+					if (stat != "hp"){
+						(enemies.cl.statusbuff > 0) ? hero.buffs[stat] = enemies.cl.statusbuff : hero.debuffs[stat] = enemies.cl.statusbuff;					
+					}
 				});
 			});
 		}
