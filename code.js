@@ -487,6 +487,7 @@ $(document).ready(function(){
 			//Stuff specific to changing chart type
 			if(endsWith(dataVar,".chartType")){
 				drawChart();
+				blockCalculate = true;
 			}
 			
 			//Stuff specific to changing hero
