@@ -1082,22 +1082,6 @@ function setStats(hero){
 		hero.def = base.def + data.growths[hero.rarity-1][data.heroes[hero.index].defgrowth + growthValMod.def];
 		hero.res = base.res + data.growths[hero.rarity-1][data.heroes[hero.index].resgrowth + growthValMod.res];
 
-		//Confer Blessing
-		switch (hero.bless){
-			case "fire":
-				break;
-			case "water":
-				hero.hp += 3 * hero.blessStack;
-				hero.spd += 3 * hero.blessStack;
-				break;
-			case "wind":
-				break;
-			case "earth":
-				break;
-			default:
-				break;
-		}
-
 		//Calculate hero BST after IV before merge stat bonuses
 		hero.bst = hero.hp + hero.atk + hero.spd + hero.def + hero.res;
 
@@ -1178,11 +1162,27 @@ function setStats(hero){
 		hero.def += mergeBoost.def;
 		hero.res += mergeBoost.res;
 
-		//Add hero hp changes - from blessings
+		//Add hero hp changes
 		hero.hp += hero.buffs.hp + hero.debuffs.hp;
-		//Blessing bonuses are included in BST
-		//TODO: Include blessing stat changes into BST
-		hero.bst += hero.buffs.hp + hero.debuffs.hp;
+		
+		//Blessing bonuses are not(?) included in BST
+		//hero.bst += hero.buffs.hp + hero.debuffs.hp;
+		
+		//Confer Blessing
+		switch (hero.bless){
+			case "fire":
+				break;
+			case "water":
+				hero.hp += 3 * hero.blessStack;
+				hero.spd += 3 * hero.blessStack;
+				break;
+			case "wind":
+				break;
+			case "earth":
+				break;
+			default:
+				break;
+		}
 
 		//Add stats based on skills
 		if(hero.weapon != -1){
