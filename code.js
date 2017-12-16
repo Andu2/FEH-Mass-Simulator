@@ -124,8 +124,8 @@ data.heroBaseSkills = [];
 data.heroMaxSkills = [[],[],[],[],[]]; //2d array; 1st num rarity, 2nd num skillindex
 
 data.skillsThatArePrereq = [];
-//Prereq exceptions are Sol, Luna, Astra, Assault
-data.skillPrereqExceptions = [125,162,168,170];
+//Prereq exceptions are Sol, Luna, Astra, Assault, Sacred Cowl
+data.skillPrereqExceptions = [125,162,168,170,193];
 
 data.enemyPrompts = {
 	//Just for fun, special messages for some of my favorites ;)
