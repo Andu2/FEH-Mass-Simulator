@@ -7995,7 +7995,7 @@
 		"affectsduel": 0
 	}, {
 		"skill_id": 572,
-		"name": "Rally Attack Resista",
+		"name": "Rally Attack Resistance",
 		"slot": "assist",
 		"sp": 300,
 		"description": "Grants Atk\/Res+3 to an adjacent ally until the end of the turn",
