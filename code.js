@@ -5975,10 +5975,17 @@ function activeHero(hero){
 					gainCharge = Math.max(gainCharge, 1);
 					skillNames.push(data.skills[this.aIndex].name);
 				}
-				//TODO: Check if Bold Fighter and Vengeful Fighter grant special charge if HP threshold is not met.
-				if(this.has("Bold Fighter") || this.has("Vengeful Fighter")){
-					gainCharge = Math.max(gainCharge, 1);
-					skillNames.push(data.skills[this.bIndex].name);
+				if(this.initiator && this.has("Bold Fighter")){
+					if (this.hasAtIndex("Bold Fighter", this.bIndex) == 3 || this.combatStartHp / this.maxHp >= 1.0 / this.hasAtIndex("Bold Fighter", this.bIndex)){
+						gainCharge = Math.max(gainCharge, 1);
+						skillNames.push(data.skills[this.bIndex].name);
+					}				
+				}
+				if(!this.initiator && this.has("Vengeful Fighter")){
+					if (this.combatStartHp / this.maxHp >= (1.0 - (this.hasAtIndex("Vengeful Fighter", this.bIndex) * 0.1) - ((this.hasAtIndex("Vengeful Fighter", this.bIndex) - 1) * 0.1))){
+						gainCharge = Math.max(gainCharge, 1);
+						skillNames.push(data.skills[this.bIndex].name);
+					}					
 				}
 				if(this.has("Heavy Blade")){
 					if(thisEffAtk - enemyEffAtk >= 7 - (this.has("Heavy Blade") * 2)){
@@ -6039,7 +6046,6 @@ function activeHero(hero){
 					gainCharge = Math.max(gainCharge, 1);
 					skillNames.push(data.skills[enemy.aIndex].name);
 				}
-
 				if (gainCharge > 0){
 					enemy.charge += gainCharge;
 					damageText += enemy.name + " gains " + gainCharge + " charge with " + skillNames.join(", ") + ".<br>";
@@ -6445,11 +6451,9 @@ function activeHero(hero){
 			thisAutoFollow = true;
 		}
 		if (this.hasAtIndex("Bold Fighter", this.bIndex)){
-			if (this.hasAtIndex("Bold Fighter", this.bIndex) == 3){
+			if (this.hasAtIndex("Bold Fighter", this.bIndex) == 3 || this.combatStartHp / this.maxHp >= 1.0 / this.hasAtIndex("Bold Fighter", this.bIndex)){
 				thisAutoFollow = true;
-			}else if(this.combatStartHp / this.maxHp >= 1.0 / this.hasAtIndex("Bold Fighter", this.bIndex)){
-				thisAutoFollow = true;
-			}	
+			}
 		}
 		if (this.hasAtRefineIndex("Pursuit", this.refineIndex) && (this.combatStartHp / this.maxHp >= 0.9)){
 			thisAutoFollow = true;
