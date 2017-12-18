@@ -4539,11 +4539,11 @@ function activeHero(hero){
 
 	this.defiant = function(){
 		var defiantText = "";
-
+		var skillName = "";
+		var statBonus = 0;
+		
 		//All defiant sklls trigger at or below 50% HP
 		if(this.hp / this.maxHp <= 0.5){
-			var skillName = "";
-
 			var defiantAtk = 0;
 			if(this.has("Defiant Atk")){
 				defiantAtk = this.has("Defiant Atk") * 2 + 1;
@@ -4597,7 +4597,25 @@ function activeHero(hero){
 	//Must be passed enemy for Earth Boost
 	this.startCombatSpur = function(enemy){
 		var boostText = "";
-
+		
+		//Brazen skills
+		if(this.combatStartHp / this.maxHp <= 0.8){
+			if(this.has("Brazen Atk Def")){
+				statBonus = 1 + 2 * this.has("Brazen Atk Def");
+				this.combatSpur.atk += statBonus;
+				this.combatSpur.def += statBonus;
+				skillName = data.skills[this.aIndex].name;
+				boostText += this.name + " activates " + skillName + " and gets +" + statBonus + " atk/def.<br>";
+			}
+			if(this.has("Brazen Atk Spd")){
+				statBonus = 1 + 2 * this.has("Brazen Atk Spd");
+				this.combatSpur.atk += statBonus;
+				this.combatSpur.spd += statBonus;
+				skillName = data.skills[this.aIndex].name;
+				boostText += this.name + " activates " + skillName + " and gets +" + statBonus + " atk/spd.<br>";
+			}
+		}
+		
 		if(this.combatStartHp / this.maxHp >= 1){
 			if(this.has("Ragnarok")){
 				//Does this take effect when defending? Answer: yes
@@ -4886,6 +4904,13 @@ function activeHero(hero){
 				this.combatSpur.def += 2;
 				this.combatSpur.res += 2;
 				boostText += this.name + " gets +2 Def/Res while defending with " + data.skills[this.weaponIndex].name + ".<br>";
+			}
+			if(this.has("Sack o' Gifts") || this.has("Handbell") || this.has("Tannenboom!") || this.has("Candelabra")){
+				this.combatSpur.atk += 2;
+				this.combatSpur.spd += 2;
+				this.combatSpur.def += 2;
+				this.combatSpur.res += 2;
+				boostText += this.name + " gets +2 Atk/Spd/Def/Res while defending with " + data.skills[this.weaponIndex].name + ".<br>";
 			}
 			if(this.hasExactly("Vidofnir") && (enemy.weaponType == "sword" || enemy.weaponType == "axe" ||enemy.weaponType == "lance" )){
 				this.combatSpur.def += 7;
@@ -5950,6 +5975,11 @@ function activeHero(hero){
 					gainCharge = Math.max(gainCharge, 1);
 					skillNames.push(data.skills[this.aIndex].name);
 				}
+				//TODO: Check if Bold Fighter and Vengeful Fighter grant special charge if HP threshold is not met.
+				if(this.has("Bold Fighter") || this.has("Vengeful Fighter")){
+					gainCharge = Math.max(gainCharge, 1);
+					skillNames.push(data.skills[this.bIndex].name);
+				}
 				if(this.has("Heavy Blade")){
 					if(thisEffAtk - enemyEffAtk >= 7 - (this.has("Heavy Blade") * 2)){
 						gainCharge = Math.max(gainCharge, 1);
@@ -6192,14 +6222,19 @@ function activeHero(hero){
 		//Check for quick riposte and auto follow-up counters
 		var quickRiposte = false;
 		if(enemy.has("Quick Riposte")){
-			if(enemy.hp/enemy.maxHp >= 1 - 0.1 * enemy.has("Quick Riposte")){
+			if(enemy.combatStartHp/enemy.maxHp >= 1 - 0.1 * enemy.has("Quick Riposte")){
 				quickRiposte = true;
 			}
 		}
-		if (enemy.has("Armads") && enemy.hp/enemy.maxHp >= .8){
+		if (enemy.hasAtIndex("Vengeful Fighter", enemy.bIndex)){
+			if (enemy.combatStartHp / enemy.maxHp >= (1.0 - (enemy.hasAtIndex("Vengeful Fighter", enemy.bIndex) * 0.1) - ((enemy.hasAtIndex("Vengeful Fighter", enemy.bIndex) - 1) * 0.1))){
+				quickRiposte = true;
+			}
+		}
+		if (enemy.has("Armads") && enemy.combatStartHp/enemy.maxHp >= .8){
 			quickRiposte = true;
 		}
-		if (enemy.has("Follow-Up Ring") && enemy.hp/enemy.maxHp >= .5){
+		if (enemy.has("Follow-Up Ring") && enemy.combatStartHp/enemy.maxHp >= .5){
 			quickRiposte = true;
 		}
 
@@ -6398,7 +6433,7 @@ function activeHero(hero){
 			roundText += enemy.name + " cannot counterattack because of " + data.skills[this.weaponIndex].name + " (Refined).<br>";
 			enemyCanCounter = false;
 		}
-
+		
 		//Check for other auto follow-up attack skills
 		if((this.hasAtIndex("Brash Assault", this.bIndex) || this.hasAtIndex("Brash Assault", this.sIndex)) && (this.range == enemy.range || anyRangeCounter) && enemyCanCounter){
 			//Use highest level of Brash Assault between B passive and seal
@@ -6409,6 +6444,13 @@ function activeHero(hero){
 		if (this.has("Sol Katti") && this.hp/this.maxHp <= .75 && this.hasAtRefineIndex("Brash Assault", this.refineIndex) && (this.range == enemy.range || anyRangeCounter) && enemyCanCounter){
 			thisAutoFollow = true;
 		}
+		if (this.hasAtIndex("Bold Fighter", this.bIndex)){
+			if (this.hasAtIndex("Bold Fighter", this.bIndex) == 3){
+				thisAutoFollow = true;
+			}else if(this.combatStartHp / this.maxHp >= 1.0 / this.hasAtIndex("Bold Fighter", this.bIndex)){
+				thisAutoFollow = true;
+			}	
+		}
 		if (this.hasAtRefineIndex("Pursuit", this.refineIndex) && (this.combatStartHp / this.maxHp >= 0.9)){
 			thisAutoFollow = true;
 		}
@@ -6417,6 +6459,7 @@ function activeHero(hero){
 		}
 
 		//Cancel things out
+		//TODO: Add skill name into round text for follow-up triggers
 		if(preventThisFollow && thisAutoFollow){
 			preventThisFollow = false;
 			thisAutoFollow = false;
