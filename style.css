@@ -139,6 +139,10 @@ svg > g > g:last-child { pointer-events: none }
 	color:#000000;
 }
 
+.select2-dropdown.select2-dropdown--below{
+	font-size: 12px;
+}
+
 .select2-selection{
 	margin-top:-1px;
 	height:22px!important;
@@ -417,12 +421,6 @@ svg > g > g:last-child { pointer-events: none }
 	top:4px;
 }
 
-.skill_overwrite_tabbed{
-	position: absolute;
-	left:147px;
-	top:4px;
-}
-
 .hero_misc{
 	position: absolute;
 	top:0px;
@@ -477,6 +475,7 @@ svg > g > g:last-child { pointer-events: none }
 	right:0;
 	top:2px;
 	width:55px;
+	border-radius:3px;
 }
 
 .misc_input_left{
@@ -484,6 +483,7 @@ svg > g > g:last-child { pointer-events: none }
 	right:58px;
 	top:2px;
 	width:55px;
+	border-radius:3px;
 }
 
 .misc_separator{
@@ -506,6 +506,7 @@ svg > g > g:last-child { pointer-events: none }
 
 .smallnuminput{
 	width:36px;
+	border-radius:3px;
 }
 
 .button{
@@ -921,18 +922,21 @@ svg > g > g:last-child { pointer-events: none }
 	font-size:8px;
 	width:50px;
 	height:14px;
+	border-radius:3px;
 }
 
 .adj_select_left{
 	font-size:8px;
 	width:50px;
 	height:14px;
+	border-radius:3px;
 }
 
 .adj_select_long{
 	font-size:8px;
 	width:58px;
 	height:14px;
+	border-radius:3px;
 }
 /*Rules/////////////////////////////////////////////*/
 #frame_rules{
@@ -1051,7 +1055,7 @@ svg > g > g:last-child { pointer-events: none }
 	font-size:20px;
 	margin-top:1px;
 	text-align:center;
-	border-radius: 4px;
+	border-radius:4px;
 	border-style: dashed;
 	border-width: 2px;
 	border-color: #444444;
