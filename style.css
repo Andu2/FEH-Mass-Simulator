@@ -788,6 +788,7 @@ svg > g > g:last-child { pointer-events: none }
 	margin-bottom:5px;
 	margin-left:5px;
 	margin-right:5px;
+	border-radius:3px;
 }
 
 /*Adjustments///////////////////////////////////////*/
