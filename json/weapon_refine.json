@@ -229,7 +229,7 @@
 		"spd": 0,
 		"def": 0,
 		"res": 0,
-		"prereq": "Slaying Edge+,Slaying Lance+,Slaying Axe+,Deft Harpoon+,Melon Crusher+,Lilith Floatie+"
+		"prereq": "Slaying Edge+,Slaying Lance+,Slaying Axe+,Deft Harpoon+,Melon Crusher+,Lilith Floatie+,Sack o' Gifts+,Handbell+,Tannenboom!+"
 	},	{
 		"category": "Advanced Melee",
 		"name": "Spd Bonus",
@@ -240,7 +240,7 @@
 		"spd": 3,
 		"def": 0,
 		"res": 0,
-		"prereq": "Slaying Edge+,Slaying Lance+,Slaying Axe+,Deft Harpoon+,Melon Crusher+,Lilith Floatie+"
+		"prereq": "Slaying Edge+,Slaying Lance+,Slaying Axe+,Deft Harpoon+,Melon Crusher+,Lilith Floatie+,Sack o' Gifts+,Handbell+,Tannenboom!+"
 	},	{
 		"category": "Advanced Melee",
 		"name": "Def Bonus",
@@ -251,7 +251,7 @@
 		"spd": 0,
 		"def": 4,
 		"res": 0,
-		"prereq": "Slaying Edge+,Slaying Lance+,Slaying Axe+,Deft Harpoon+,Melon Crusher+,Lilith Floatie+"
+		"prereq": "Slaying Edge+,Slaying Lance+,Slaying Axe+,Deft Harpoon+,Melon Crusher+,Lilith Floatie+,Sack o' Gifts+,Handbell+,Tannenboom!+"
 	},	{
 		"category": "Advanced Melee",
 		"name": "Res Bonus",
@@ -262,7 +262,7 @@
 		"spd": 0,
 		"def": 0,
 		"res": 4,
-		"prereq": "Slaying Edge+,Slaying Lance+,Slaying Axe+,Deft Harpoon+,Melon Crusher+,Lilith Floatie+"
+		"prereq": "Slaying Edge+,Slaying Lance+,Slaying Axe+,Deft Harpoon+,Melon Crusher+,Lilith Floatie+,Sack o' Gifts+,Handbell+,Tannenboom!+"
 	},	{
 		"category": "Wedding Melee",
 		"name": "Atk Bonus",
@@ -351,50 +351,6 @@
 		"def": 0,
 		"res": 4,
 		"prereq": "Berkut's Lance+"
-	},	{
-		"category": "Winter Melee",
-		"name": "Atk Bonus",
-		"sp": 350,
-		"description": "Grants Atk\/Spd\/Def\/Res+2 during combat if foe initiates combat.",
-		"hp": 5,
-		"atk": 2,
-		"spd": 0,
-		"def": 0,
-		"res": 0,
-		"prereq": "Sack o' Gifts+,Handbell+,Tannenboom!+"
-	},	{
-		"category": "Winter Melee",
-		"name": "Spd Bonus",
-		"sp": 350,
-		"description": "Grants Atk\/Spd\/Def\/Res+2 during combat if foe initiates combat.",
-		"hp": 5,
-		"atk": 0,
-		"spd": 3,
-		"def": 0,
-		"res": 0,
-		"prereq": "Sack o' Gifts+,Handbell+,Tannenboom!+"
-	},	{
-		"category": "Winter Melee",
-		"name": "Def Bonus",
-		"sp": 350,
-		"description": "Grants Atk\/Spd\/Def\/Res+2 during combat if foe initiates combat.",
-		"hp": 5,
-		"atk": 0,
-		"spd": 0,
-		"def": 4,
-		"res": 0,
-		"prereq": "Sack o' Gifts+,Handbell+,Tannenboom!+"
-	},	{
-		"category": "Winter Melee",
-		"name": "Res Bonus",
-		"sp": 350,
-		"description": "Grants Atk\/Spd\/Def\/Res+2 during combat if foe initiates combat.",
-		"hp": 5,
-		"atk": 0,
-		"spd": 0,
-		"def": 0,
-		"res": 4,
-		"prereq": "Sack o' Gifts+,Handbell+,Tannenboom!+"
 	},	{
 		"category": "Panic Melee",
 		"name": "Atk Bonus",
@@ -449,7 +405,7 @@
 		"spd": 0,
 		"def": 0,
 		"res": 0,
-		"prereq": "Slaying Bow+,Refreshing Bolt+,Tomato Tome+,Sealife Tome+,Hibiscus Tome+,Dancer's Score+,Dancer's Ring+,Guard Bow+"
+		"prereq": "Slaying Bow+,Refreshing Bolt+,Tomato Tome+,Sealife Tome+,Hibiscus Tome+,Dancer's Score+,Dancer's Ring+,Guard Bow+,Candelabra+"
 	},	{
 		"category": "Advanced Ranged",
 		"name": "Spd Bonus",
@@ -460,7 +416,7 @@
 		"spd": 2,
 		"def": 0,
 		"res": 0,
-		"prereq": "Slaying Bow+,Refreshing Bolt+,Tomato Tome+,Sealife Tome+,Hibiscus Tome+,Dancer's Score+,Dancer's Ring+,Guard Bow+"
+		"prereq": "Slaying Bow+,Refreshing Bolt+,Tomato Tome+,Sealife Tome+,Hibiscus Tome+,Dancer's Score+,Dancer's Ring+,Guard Bow+,Candelabra+"
 	},	{
 		"category": "Advanced Ranged",
 		"name": "Def Bonus",
@@ -471,7 +427,7 @@
 		"spd": 0,
 		"def": 3,
 		"res": 0,
-		"prereq": "Slaying Bow+,Refreshing Bolt+,Tomato Tome+,Sealife Tome+,Hibiscus Tome+,Dancer's Score+,Dancer's Ring+,Guard Bow+"
+		"prereq": "Slaying Bow+,Refreshing Bolt+,Tomato Tome+,Sealife Tome+,Hibiscus Tome+,Dancer's Score+,Dancer's Ring+,Guard Bow+,Candelabra+"
 	},	{
 		"category": "Advanced Ranged",
 		"name": "Res Bonus",
@@ -482,51 +438,7 @@
 		"spd": 0,
 		"def": 0,
 		"res": 3,
-		"prereq": "Slaying Bow+,Refreshing Bolt+,Tomato Tome+,Sealife Tome+,Hibiscus Tome+,Dancer's Score+,Dancer's Ring+,Guard Bow+"
-	},	{
-		"category": "Winter Ranged",
-		"name": "Atk Bonus",
-		"sp": 350,
-		"description": "Grants Atk\/Spd\/Def\/Res+2 during combat if foe initiates combat.",
-		"hp": 2,
-		"atk": 1,
-		"spd": 0,
-		"def": 0,
-		"res": 0,
-		"prereq": "Candelabra+"
-	},	{
-		"category": "Winter Ranged",
-		"name": "Spd Bonus",
-		"sp": 350,
-		"description": "Grants Atk\/Spd\/Def\/Res+2 during combat if foe initiates combat.",
-		"hp": 2,
-		"atk": 0,
-		"spd": 2,
-		"def": 0,
-		"res": 0,
-		"prereq": "Candelabra+"
-	},	{
-		"category": "Winter Ranged",
-		"name": "Def Bonus",
-		"sp": 350,
-		"description": "Grants Atk\/Spd\/Def\/Res+2 during combat if foe initiates combat.",
-		"hp": 2,
-		"atk": 0,
-		"spd": 0,
-		"def": 3,
-		"res": 0,
-		"prereq": "Candelabra+"
-	},	{
-		"category": "Winter Ranged",
-		"name": "Res Bonus",
-		"sp": 350,
-		"description": "Grants Atk\/Spd\/Def\/Res+2 during combat if foe initiates combat.",
-		"hp": 2,
-		"atk": 0,
-		"spd": 0,
-		"def": 0,
-		"res": 3,
-		"prereq": "Candelabra+"
+		"prereq": "Slaying Bow+,Refreshing Bolt+,Tomato Tome+,Sealife Tome+,Hibiscus Tome+,Dancer's Score+,Dancer's Ring+,Guard Bow+,Candelabra+"
 	},	{
 		"category": "Dark Ranged",
 		"name": "Atk Bonus",
