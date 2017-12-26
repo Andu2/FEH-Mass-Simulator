@@ -1931,5 +1931,17 @@
 	}, {
 		"skill_id": 818,
 		"required_id": 817
+	}, {
+		"skill_id": 823,
+		"required_id": 822
+	}, {
+		"skill_id": 822,
+		"required_id": 821
+	}, {
+		"skill_id": 826,
+		"required_id": 825
+	}, {
+		"skill_id": 825,
+		"required_id": 824
 	}
 ]

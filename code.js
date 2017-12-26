@@ -4425,7 +4425,7 @@ function activeHero(hero){
 				//Seals
 				if(this.hasAtIndex("Atk Ploy", this.sIndex)){
 					threatDebuffs.atk = Math.min(threatDebuffs.atk,-this.hasAtIndex("Atk Ploy", this.sIndex)-2);
-					skillNames.push(data.skills[this.sIndex].name);
+					skillNames.push(data.skills[this.sIndex].name + " (Seal)");
 				}
 			}
 			//Panic Ploy
@@ -4436,38 +4436,54 @@ function activeHero(hero){
 			//Panic Ploy Seal
 			if(this.hasAtIndex("Panic Ploy", this.sIndex) && this.hp > enemy.hp + 6 - this.hasAtIndex("Panic Ploy", this.sIndex) * 2){
 				enemy.panicked = true;
-				threatenText += this.name + " activates " + data.skills[this.sIndex].name + ", inflicting panic on " + enemy.name + ".<br>";
+				threatenText += this.name + " activates " + data.skills[this.sIndex].name + " (Seal), inflicting panic on " + enemy.name + ".<br>";
 			}
 		}
-
-		if(this.has("Threaten Atk")){
-			threatDebuffs.atk = Math.min(threatDebuffs.atk,-this.has("Threaten Atk")-2);
+		
+		//Skills
+		if(this.hasAtIndex("Threaten Atk", this.cIndex)){
+			threatDebuffs.atk = Math.min(threatDebuffs.atk,-this.hasAtIndex("Threaten Atk", this.cIndex)-2);
 			skillNames.push(data.skills[this.cIndex].name);
 		}
+		if(this.hasAtIndex("Threaten Atk", this.sIndex)){
+			threatDebuffs.atk = Math.min(threatDebuffs.atk,-this.hasAtIndex("Threaten Atk", this.sIndex)-2);
+			skillNames.push(data.skills[this.sIndex].name + " (Seal)");
+		}
+		if(this.hasAtIndex("Threaten Spd", this.cIndex)){
+			threatDebuffs.spd = Math.min(threatDebuffs.spd,-this.hasAtIndex("Threaten Spd", this.cIndex)-2);
+			skillNames.push(data.skills[this.cIndex].name);
+		}
+		if(this.hasAtIndex("Threaten Spd", this.sIndex)){
+			threatDebuffs.spd = Math.min(threatDebuffs.spd,-this.hasAtIndex("Threaten Spd", this.sIndex)-2);
+			skillNames.push(data.skills[this.sIndex].name + " (Seal)");
+		}
+		if(this.hasAtIndex("Threaten Def", this.cIndex)){
+			threatDebuffs.def = Math.min(threatDebuffs.def,-this.hasAtIndex("Threaten Def", this.cIndex)-2);
+			skillNames.push(data.skills[this.cIndex].name);
+		}
+		if(this.hasAtIndex("Threaten Def", this.sIndex)){
+			threatDebuffs.def = Math.min(threatDebuffs.def,-this.hasAtIndex("Threaten Def", this.sIndex)-2);
+			skillNames.push(data.skills[this.sIndex].name + " (Seal)");
+		}
+		if(this.hasAtIndex("Threaten Res", this.cIndex)){
+			threatDebuffs.res = Math.min(threatDebuffs.res,-this.hasAtIndex("Threaten Res", this.cIndex)-2);
+			skillNames.push(data.skills[this.cIndex].name);
+		}
+		if(this.hasAtIndex("Threaten Res", this.sIndex)){
+			threatDebuffs.res = Math.min(threatDebuffs.res,-this.hasAtIndex("Threaten Res", this.sIndex)-2);
+			skillNames.push(data.skills[this.sIndex].name + " (Seal)");
+		}
+		
+		//Weapons
 		if(this.has("Fensalir")){
 			threatDebuffs.atk = Math.min(threatDebuffs.atk,-4);
 			skillNames.push("Fensalir");
-		}
-
-		if(this.has("Threaten Spd")){
-			threatDebuffs.spd = Math.min(threatDebuffs.spd,-this.has("Threaten Spd")-2);
-			skillNames.push(data.skills[this.cIndex].name);
-		}
-
-		if(this.has("Threaten Def")){
-			threatDebuffs.def = Math.min(threatDebuffs.def,-this.has("Threaten Def")-2);
-			skillNames.push(data.skills[this.cIndex].name);
 		}
 		if(this.has("Eckesachs")){
 			threatDebuffs.def = Math.min(threatDebuffs.def,-4);
 			skillNames.push("Eckesachs");
 		}
-
-		if(this.has("Threaten Res")){
-			threatDebuffs.res = Math.min(threatDebuffs.res,-this.has("Threaten Res")-2);
-			skillNames.push(data.skills[this.cIndex].name);
-		}
-
+		
 		if(skillNames.length > 0){
 			var statChanges = [];
 			for(var stat in threatDebuffs){
@@ -5921,7 +5937,6 @@ function activeHero(hero){
 			damageText += this.name + " attacks " + enemy.name + " for <span class=\"highlight\">" + dmg + "</span> damage.<br>";
 
 			//After damage defensive special effects
-			//***Does this count weapon triangle reductions? Reduction value > damage dealt?***
 			if(defensiveSpecialActivated){
 				//Ice Mirror damage charge up check
 				if (enemy.has("Ice Mirror")){
@@ -5987,10 +6002,16 @@ function activeHero(hero){
 						skillNames.push(data.skills[this.bIndex].name);
 					}					
 				}
-				if(this.has("Heavy Blade")){
-					if(thisEffAtk - enemyEffAtk >= 7 - (this.has("Heavy Blade") * 2)){
+				if(this.hasAtIndex("Heavy Blade", this.aIndex)){
+					if(thisEffAtk - enemyEffAtk >= 7 - (this.hasAtIndex("Heavy Blade", this.aIndex) * 2)){
 						gainCharge = Math.max(gainCharge, 1);
 						skillNames.push(data.skills[this.aIndex].name);
+					}
+				}
+				if(this.hasAtIndex("Heavy Blade", this.sIndex)){
+					if(thisEffAtk - enemyEffAtk >= 7 - (this.hasAtIndex("Heavy Blade", this.sIndex) * 2)){
+						gainCharge = Math.max(gainCharge, 1);
+						skillNames.push(data.skills[this.sIndex].name + " (Seal)");
 					}
 				}
 				if(this.hasExactly("Blazing Durandal")){
