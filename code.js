@@ -1249,57 +1249,13 @@ function setStats(hero){
 			default:
 				break;
 		}
-
-		//Ally Support
-		switch (hero.ally){
-			case "s":
-				hero.atk += 2;
-				hero.spd += 2;
-				hero.def += 2;
-				hero.res += 2;
-				break;
-			case "s-":
-				hero.atk += 1;
-				hero.spd += 1;
-				hero.def += 1;
-				hero.res += 1;
-				break;
-			case "a":
-				hero.spd += 2;
-				hero.def += 2;
-				hero.res += 2;
-				break;
-			case "a-":
-				hero.spd += 1;
-				hero.def += 1;
-				hero.res += 1;
-				break;
-			case "b":
-				hero.def += 2;
-				hero.res += 2;
-				break;
-			case "b-":
-				hero.def += 1;
-				hero.res += 1;
-				break;
-			case "c":
-				hero.res += 2;
-				break;
-			case "c-":
-				hero.res += 1;
-				break;
-			default:
-				break;
-		}
 	}
 }
 
 //Calculate damage from current HP
 function updateHealth(value, hero){
-	if (value > hero.hp){
+	if (value > hero.hp || value <= 0){
 		hero.damage = 0;
-	}else if (value <= 0){
-		hero.damage = hero.hp - 1;
 	}else{
 		hero.damage = hero.hp - hero.currenthp;
 	}
@@ -4614,6 +4570,56 @@ function activeHero(hero){
 	this.startCombatSpur = function(enemy){
 		var boostText = "";
 		
+		//Ally Support
+		switch (this.ally){
+			case "s":
+				this.combatSpur.atk += 2;
+				this.combatSpur.spd += 2;
+				this.combatSpur.def += 2;
+				this.combatSpur.res += 2;
+				boostText += this.name + " gets +2 atk/spd/def/res from ally support.<br>";
+				break;
+			case "s-":
+				this.combatSpur.atk += 1;
+				this.combatSpur.spd += 1;
+				this.combatSpur.def += 1;
+				this.combatSpur.res += 1;
+				boostText += this.name + " gets +1 atk/spd/def/res from ally support.<br>";
+				break;
+			case "a":
+				this.combatSpur.spd += 2;
+				this.combatSpur.def += 2;
+				this.combatSpur.res += 2;
+				boostText += this.name + " gets +2 spd/def/res from ally support.<br>";
+				break;
+			case "a-":
+				this.combatSpur.spd += 1;
+				this.combatSpur.def += 1;
+				this.combatSpur.res += 1;
+				boostText += this.name + " gets +1 spd/def/res from ally support.<br>";
+				break;
+			case "b":
+				this.combatSpur.def += 2;
+				this.combatSpur.res += 2;
+				boostText += this.name + " gets +2 def/res from ally support.<br>";
+				break;
+			case "b-":
+				this.combatSpur.def += 1;
+				this.combatSpur.res += 1;
+				boostText += this.name + " gets +1 def/res from ally support.<br>";
+				break;
+			case "c":
+				this.combatSpur.res += 2;
+				boostText += this.name + " gets +2 res from ally support.<br>";
+				break;
+			case "c-":
+				this.combatSpur.res += 1;
+				boostText += this.name + " gets +1 res from ally support.<br>";
+				break;
+			default:
+				break;
+		}
+		
 		//Brazen skills
 		if(this.combatStartHp / this.maxHp <= 0.8){
 			if(this.has("Brazen Atk Def")){
@@ -5282,11 +5288,12 @@ function activeHero(hero){
 	this.postCombatHeal = function(){
 		var postCombatHealText = "";
 		var skillname = "";
-
+		var healAmount = 0;
+		
 		if(this.has("Blue Egg") || this.has("Green Egg") || this.has("Carrot Axe") || this.has("Carrot Lance")){
-			if(this.initiator || this.refineIndex != -1){
+			if(this.initiator || (this.refineIndex != -1 && this.didAttack)){
 				skillName = data.skills[this.weaponIndex].name;
-				var healAmount = 4;
+				healAmount = 4;
 				if(this.maxHp - this.hp < healAmount){
 					healAmount = this.maxHp - this.hp;
 				}
@@ -5617,7 +5624,7 @@ function activeHero(hero){
 
 			var extraWeaponAdvantage = 0;
 
-			//If weapon advantage is not netural, and Attacker and Defender do not both have Cancel Affinity
+			//If weapon advantage is not neutral, and Attacker and Defender do not both have Cancel Affinity
 			if (weaponAdvantage !=0 && !(this.has("Cancel Affinity") && enemy.has("Cancel Affinity"))){
 
 				//Calculate base weapon advantage bonus
@@ -5795,7 +5802,7 @@ function activeHero(hero){
 				}
 			}
 
-			//Consequtive Attack
+			//Consecutive Attack
 			if (lastAttacker == this.name){
 				//Weapon
 				if (enemy.hasExactly("Urvan")){
@@ -6760,7 +6767,7 @@ function getAttackTypeFromWeapon(weaponType){
 }
 
 function verifyNumberInput(element,min,max){
-	//contrains number between two values and returns it
+	//contains number between two values and returns it
 	newVal = parseInt($(element).val());
 	if(!newVal){
 		//If input is blank, make it 0
