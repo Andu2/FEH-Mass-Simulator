@@ -1946,5 +1946,29 @@
 	}, {
 		"skill_id": 827,
 		"required_id": 58
+	}, {
+		"skill_id": 830,
+		"required_id": 829
+	}, {
+		"skill_id": 829,
+		"required_id": 42
+	}, {
+		"skill_id": 832,
+		"required_id": 831
+	}, {
+		"skill_id": 831,
+		"required_id": 2
+	}, {
+		"skill_id": 834,
+		"required_id": 833
+	}, {
+		"skill_id": 833,
+		"required_id": 103
+	}, {
+		"skill_id": 836,
+		"required_id": 835
+	}, {
+		"skill_id": 835,
+		"required_id": 115
 	}
 ]
