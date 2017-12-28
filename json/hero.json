@@ -3382,5 +3382,22 @@
 		"weapontype": "redtome",
 		"movetype": "armored",
 		"minrarity": 5
+	}, {
+		"hero_id": 202,
+		"name": "Gunnthra",
+		"basehp": 15,
+		"baseatk": 7,
+		"basespd": 9,
+		"basedef": 6,
+		"baseres": 6,
+		"hpgrowth": 6,
+		"atkgrowth": 7,
+		"spdgrowth": 7,
+		"defgrowth": 2,
+		"resgrowth": 5,
+		"color": "green",
+		"weapontype": "greentome",
+		"movetype": "cavalry",
+		"minrarity": 5
 	}
 ]

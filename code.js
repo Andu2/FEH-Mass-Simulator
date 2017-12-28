@@ -5379,9 +5379,9 @@ function activeHero(hero){
 		} else if(this.has("Raudrblade") || this.has("Blarblade") || this.has("Gronnblade")){
 			var bladebonus = Math.max(this.buffs.atk,this.combatBuffs.atk) + Math.max(this.buffs.spd,this.combatBuffs.spd) + Math.max(this.buffs.def,this.combatBuffs.def) + Math.max(this.buffs.res,this.combatBuffs.res);
 			thisEffAtk += bladebonus;
-			if(!AOE && bladebonus != 0){damageText += this.name + " gains " + bladebonus + " damage from " + data.skills[hero.weapon].name + ".<br>";}
+			if(!AOE && bladebonus != 0){damageText += this.name + " gains " + bladebonus + " damage from " + data.skills[this.weaponIndex].name + ".<br>";}
 		}
-
+		
 		//Defender relevant stats
 		//Panic Debuff
 		if(enemy.panicked){
@@ -5401,9 +5401,30 @@ function activeHero(hero){
 		} else if(enemy.has("Raudrblade") || enemy.has("Blarblade") || enemy.has("Gronnblade")){
 			var bladebonus = Math.max(this.buffs.atk,this.combatBuffs.atk) + Math.max(this.buffs.spd,this.combatBuffs.spd) + Math.max(this.buffs.def,this.combatBuffs.def) + Math.max(this.buffs.res,this.combatBuffs.res);
 			enemyEffAtk += bladebonus;
+			if(!AOE && bladebonus != 0){damageText += this.name + " gains " + bladebonus + " damage from " + data.skills[enemy.weaponIndex].name + ".<br>";}
 		}
 
-		//Relavant defense stat
+		//Blizzard bonus
+		//TODO: Check panic debuff interaction
+		if(this.has("Blizzard")){
+			var atkbonus = -1 * (Math.min(enemy.debuffs.atk,enemy.combatDebuffs.atk) + Math.min(enemy.debuffs.spd,enemy.combatDebuffs.spd) + Math.min(enemy.debuffs.def,enemy.combatDebuffs.def) + Math.min(enemy.debuffs.res,enemy.combatDebuffs.res));
+			if (enemy.panicked){
+				atkbonus += Math.max(enemy.buffs.atk,enemy.combatBuffs.atk) + Math.max(enemy.buffs.spd,enemy.combatBuffs.spd) + Math.max(enemy.buffs.def,enemy.combatBuffs.def) + Math.max(enemy.buffs.res,enemy.combatBuffs.res);
+			}
+			console.log(atkbonus);
+			thisEffAtk += atkbonus;
+			if(!AOE && atkbonus != 0){damageText += this.name + " gains +" + atkbonus + " atk from " + data.skills[this.weaponIndex].name + ".<br>";}
+		}
+		if(enemy.has("Blizzard")){
+			var atkbonus = -1 * (Math.min(this.debuffs.atk,this.combatDebuffs.atk) + Math.min(this.debuffs.spd,this.combatDebuffs.spd) + Math.min(this.debuffs.def,this.combatDebuffs.def) + Math.min(this.debuffs.res,this.combatDebuffs.res));
+			if (this.panicked){
+				atkbonus += Math.max(this.buffs.atk,this.combatBuffs.atk) + Math.max(this.buffs.spd,this.combatBuffs.spd) + Math.max(this.buffs.def,this.combatBuffs.def) + Math.max(this.buffs.res,this.combatBuffs.res);
+			}
+			enemyEffAtk += atkbonus;
+			if(!AOE && atkbonus != 0){damageText += enemy.name + " gains +" + atkbonus + " atk from " + data.skills[enemy.weaponIndex].name + ".<br>";}
+		}
+		
+		//Relevant defense stat
 		var relevantDef = (this.attackType == "magical") ? enemyEffRes : enemyEffDef;
 
 		//Refined Dragonstones
@@ -6623,7 +6644,7 @@ function activeHero(hero){
 			}
 
 			//Finally, Galeforce!
-			if(this.has("Galeforce") && data.skills[this.specialIndex].charge <= this.charge && (this.challenger ? options.galeforce_challenger : options.galeforce_enemy)){
+			if(!galeforce && this.has("Galeforce") && data.skills[this.specialIndex].charge <= this.charge && (this.challenger ? options.galeforce_challenger : options.galeforce_enemy)){
 				roundText += this.name + " initiates again with Galeforce!<br>";
 				this.resetCharge();
 				roundText += this.attack(enemy,round,false,true);

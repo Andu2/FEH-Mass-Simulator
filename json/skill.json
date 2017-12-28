@@ -11563,5 +11563,33 @@
 		"charge": 0,
 		"inheritrule": "",
 		"affectsduel": 1
+	}, {
+		"skill_id": 827,
+		"name": "Blizzard",
+		"slot": "weapon",
+		"sp": 400,
+		"description": "Grants Res+3. Grants bonus to unit's Atk equal to total penalties on foe during combat.",
+		"hp": 0,
+		"atk": 14,
+		"spd": 0,
+		"def": 0,
+		"res": 3,
+		"charge": 0,
+		"inheritrule": "unique",
+		"affectsduel": 1
+	}, {
+		"skill_id": 828,
+		"name": "Chilling Seal",
+		"slot": "b",
+		"sp": 300,
+		"description": "At the start of each turn, if unit's HP >= 50%, inflicts Atk\/Spd-6 on foe on the enemy team with the lowest Def through its next action. (Skill cannot be inherited.)",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "unique",
+		"affectsduel": 0
 	}
 ]

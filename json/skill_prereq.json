@@ -1943,5 +1943,8 @@
 	}, {
 		"skill_id": 825,
 		"required_id": 824
+	}, {
+		"skill_id": 827,
+		"required_id": 58
 	}
 ]
