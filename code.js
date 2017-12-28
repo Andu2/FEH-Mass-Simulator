@@ -5411,7 +5411,6 @@ function activeHero(hero){
 			if (enemy.panicked){
 				atkbonus += Math.max(enemy.buffs.atk,enemy.combatBuffs.atk) + Math.max(enemy.buffs.spd,enemy.combatBuffs.spd) + Math.max(enemy.buffs.def,enemy.combatBuffs.def) + Math.max(enemy.buffs.res,enemy.combatBuffs.res);
 			}
-			console.log(atkbonus);
 			thisEffAtk += atkbonus;
 			if(!AOE && atkbonus != 0){damageText += this.name + " gains +" + atkbonus + " atk from " + data.skills[this.weaponIndex].name + ".<br>";}
 		}
