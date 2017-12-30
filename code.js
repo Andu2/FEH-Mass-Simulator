@@ -1185,6 +1185,8 @@ function setStats(hero){
 				hero.spd += 3 * hero.blessStack;
 				break;
 			case "wind":
+				hero.hp += 3 * hero.blessStack;
+				hero.res += 4 * hero.blessStack;
 				break;
 			case "earth":
 				break;
