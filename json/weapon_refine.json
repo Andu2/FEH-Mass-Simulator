@@ -47,7 +47,7 @@
 		"category": "Spring Melee",
 		"name": "Atk Bonus",
 		"sp": 350,
-		"description": "Restores 4 HP after combat.",
+		"description": "After combat, if unit attacked, restores 4 HP.",
 		"hp": 5,
 		"atk": 3,
 		"spd": 0,
@@ -58,7 +58,7 @@
 		"category": "Spring Melee",
 		"name": "Spd Bonus",
 		"sp": 350,
-		"description": "Restores 4 HP after combat.",
+		"description": "After combat, if unit attacked, restores 4 HP.",
 		"hp": 5,
 		"atk": 1,
 		"spd": 3,
@@ -69,7 +69,7 @@
 		"category": "Spring Melee",
 		"name": "Def Bonus",
 		"sp": 350,
-		"description": "Restores 4 HP after combat.",
+		"description": "After combat, if unit attacked, restores 4 HP.",
 		"hp": 5,
 		"atk": 1,
 		"spd": 0,
@@ -80,7 +80,7 @@
 		"category": "Spring Melee",
 		"name": "Res Bonus",
 		"sp": 350,
-		"description": "Restores 4 HP after combat.",
+		"description": "After combat, if unit attacked, restores 4 HP.",
 		"hp": 5,
 		"atk": 1,
 		"spd": 0,
@@ -135,7 +135,7 @@
 		"category": "Spring Ranged",
 		"name": "Atk Bonus",
 		"sp": 350,
-		"description": "Restores 4 HP after combat.",
+		"description": "After combat, if unit attacked, restores 4 HP.",
 		"hp": 2,
 		"atk": 2,
 		"spd": 0,
@@ -146,7 +146,7 @@
 		"category": "Spring Ranged",
 		"name": "Spd Bonus",
 		"sp": 350,
-		"description": "Restores 4 HP after combat.",
+		"description": "After combat, if unit attacked, restores 4 HP.",
 		"hp": 2,
 		"atk": 1,
 		"spd": 2,
@@ -157,7 +157,7 @@
 		"category": "Spring Ranged",
 		"name": "Def Bonus",
 		"sp": 350,
-		"description": "Restores 4 HP after combat.",
+		"description": "After combat, if unit attacked, restores 4 HP.",
 		"hp": 2,
 		"atk": 1,
 		"spd": 0,
@@ -168,7 +168,7 @@
 		"category": "Spring Ranged",
 		"name": "Res Bonus",
 		"sp": 350,
-		"description": "Restores 4 HP after combat.",
+		"description": "After combat, if unit attacked, restores 4 HP.",
 		"hp": 2,
 		"atk": 1,
 		"spd": 0,
@@ -229,7 +229,7 @@
 		"spd": 0,
 		"def": 0,
 		"res": 0,
-		"prereq": "Slaying Edge+,Slaying Lance+,Slaying Axe+,Deft Harpoon+,Melon Crusher+,Lilith Floatie+"
+		"prereq": "Slaying Edge+,Slaying Lance+,Slaying Axe+,Deft Harpoon+,Melon Crusher+,Lilith Floatie+,Sack o' Gifts+,Handbell+,Tannenboom!+,Hagoita+,Kadomatsu+"
 	},	{
 		"category": "Advanced Melee",
 		"name": "Spd Bonus",
@@ -240,7 +240,7 @@
 		"spd": 3,
 		"def": 0,
 		"res": 0,
-		"prereq": "Slaying Edge+,Slaying Lance+,Slaying Axe+,Deft Harpoon+,Melon Crusher+,Lilith Floatie+"
+		"prereq": "Slaying Edge+,Slaying Lance+,Slaying Axe+,Deft Harpoon+,Melon Crusher+,Lilith Floatie+,Sack o' Gifts+,Handbell+,Tannenboom!+,Hagoita+,Kadomatsu+"
 	},	{
 		"category": "Advanced Melee",
 		"name": "Def Bonus",
@@ -251,7 +251,7 @@
 		"spd": 0,
 		"def": 4,
 		"res": 0,
-		"prereq": "Slaying Edge+,Slaying Lance+,Slaying Axe+,Deft Harpoon+,Melon Crusher+,Lilith Floatie+"
+		"prereq": "Slaying Edge+,Slaying Lance+,Slaying Axe+,Deft Harpoon+,Melon Crusher+,Lilith Floatie+,Sack o' Gifts+,Handbell+,Tannenboom!+,Hagoita+,Kadomatsu+"
 	},	{
 		"category": "Advanced Melee",
 		"name": "Res Bonus",
@@ -262,7 +262,7 @@
 		"spd": 0,
 		"def": 0,
 		"res": 4,
-		"prereq": "Slaying Edge+,Slaying Lance+,Slaying Axe+,Deft Harpoon+,Melon Crusher+,Lilith Floatie+"
+		"prereq": "Slaying Edge+,Slaying Lance+,Slaying Axe+,Deft Harpoon+,Melon Crusher+,Lilith Floatie+,Sack o' Gifts+,Handbell+,Tannenboom!+,Hagoita+,Kadomatsu+"
 	},	{
 		"category": "Wedding Melee",
 		"name": "Atk Bonus",
@@ -311,7 +311,7 @@
 		"category": "Warding Melee",
 		"name": "Atk Bonus",
 		"sp": 350,
-		"description": "Grants Res+7 when unit is attacked. ",
+		"description": "Grants Res+7 when unit is attacked.",
 		"hp": 5,
 		"atk": 2,
 		"spd": 0,
@@ -322,7 +322,7 @@
 		"category": "Warding Melee",
 		"name": "Spd Bonus",
 		"sp": 350,
-		"description": "Grants Res+7 when unit is attacked. ",
+		"description": "Grants Res+7 when unit is attacked.",
 		"hp": 5,
 		"atk": 0,
 		"spd": 3,
@@ -333,7 +333,7 @@
 		"category": "Warding Melee",
 		"name": "Def Bonus",
 		"sp": 350,
-		"description": "Grants Res+7 when unit is attacked. ",
+		"description": "Grants Res+7 when unit is attacked.",
 		"hp": 5,
 		"atk": 0,
 		"spd": 0,
@@ -344,7 +344,7 @@
 		"category": "Warding Melee",
 		"name": "Res Bonus",
 		"sp": 350,
-		"description": "Grants Res+7 when unit is attacked. ",
+		"description": "Grants Res+7 when unit is attacked.",
 		"hp": 5,
 		"atk": 0,
 		"spd": 0,
@@ -405,7 +405,7 @@
 		"spd": 0,
 		"def": 0,
 		"res": 0,
-		"prereq": "Slaying Bow+,Refreshing Bolt+,Tomato Tome+,Sealife Tome+,Hibiscus Tome+,Dancer's Score+,Dancer's Ring+,Guard Bow+"
+		"prereq": "Slaying Bow+,Refreshing Bolt+,Tomato Tome+,Sealife Tome+,Hibiscus Tome+,Dancer's Score+,Dancer's Ring+,Guard Bow+,Candelabra+,Hama Ya+,Kagami Mochi+"
 	},	{
 		"category": "Advanced Ranged",
 		"name": "Spd Bonus",
@@ -416,7 +416,7 @@
 		"spd": 2,
 		"def": 0,
 		"res": 0,
-		"prereq": "Slaying Bow+,Refreshing Bolt+,Tomato Tome+,Sealife Tome+,Hibiscus Tome+,Dancer's Score+,Dancer's Ring+,Guard Bow+"
+		"prereq": "Slaying Bow+,Refreshing Bolt+,Tomato Tome+,Sealife Tome+,Hibiscus Tome+,Dancer's Score+,Dancer's Ring+,Guard Bow+,Candelabra+,Hama Ya+,Kagami Mochi+"
 	},	{
 		"category": "Advanced Ranged",
 		"name": "Def Bonus",
@@ -427,7 +427,7 @@
 		"spd": 0,
 		"def": 3,
 		"res": 0,
-		"prereq": "Slaying Bow+,Refreshing Bolt+,Tomato Tome+,Sealife Tome+,Hibiscus Tome+,Dancer's Score+,Dancer's Ring+,Guard Bow+"
+		"prereq": "Slaying Bow+,Refreshing Bolt+,Tomato Tome+,Sealife Tome+,Hibiscus Tome+,Dancer's Score+,Dancer's Ring+,Guard Bow+,Candelabra+,Hama Ya+,Kagami Mochi+"
 	},	{
 		"category": "Advanced Ranged",
 		"name": "Res Bonus",
@@ -438,7 +438,7 @@
 		"spd": 0,
 		"def": 0,
 		"res": 3,
-		"prereq": "Slaying Bow+,Refreshing Bolt+,Tomato Tome+,Sealife Tome+,Hibiscus Tome+,Dancer's Score+,Dancer's Ring+,Guard Bow+"
+		"prereq": "Slaying Bow+,Refreshing Bolt+,Tomato Tome+,Sealife Tome+,Hibiscus Tome+,Dancer's Score+,Dancer's Ring+,Guard Bow+,Candelabra+,Hama Ya+,Kagami Mochi+"
 	},	{
 		"category": "Dark Ranged",
 		"name": "Atk Bonus",
