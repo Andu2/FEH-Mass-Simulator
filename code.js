@@ -962,7 +962,7 @@ function getCDChange(skill, slot){
 			|| skillName.indexOf("Killer Bow") != -1	|| skillName.indexOf("Slaying Bow") != -1 	|| skillName.indexOf("Slaying Edge") != -1
 			|| skillName.indexOf("Slaying Axe") != -1	|| skillName.indexOf("Slaying Lance") != -1	|| skillName.indexOf("Cursed Lance") != -1
 			|| skillName.indexOf("Mystletainn") != -1	|| skillName.indexOf("Hauteclere") != -1	|| skillName.indexOf("Urvan") != -1
-			|| skillName.indexOf("Audhulma") != -1
+			|| skillName.indexOf("Audhulma") != -1		|| skillName.indexOf("Kagami Mochi") != -1
 			){
 				return -1;
 		}
@@ -5181,7 +5181,7 @@ function activeHero(hero){
 			if (this.hasExactly("Deathly Dagger")){
 				sealStats(data.skills[this.weaponIndex].name, ["def","res"], [-7]);
 			}
-			if (this.has("Silver Dagger") || this.has("Seashell") || this.has("Dancer's Fan")){
+			if (this.has("Silver Dagger") || this.has("Seashell") || this.has("Dancer's Fan") || this.has("Kagami Mochi")){
 				sealStats(data.skills[this.weaponIndex].name, ["def","res"], [-5, -7]);
 			}
 			if (this.has("Kitty Paddle") && (enemy.weaponType == "redtome" || enemy.weaponType == "bluetome" || enemy.weaponType == "greentome")){
