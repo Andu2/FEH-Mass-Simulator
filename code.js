@@ -18,6 +18,7 @@ google.charts.load('current', {packages: ['corechart', 'bar']});
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 var hideOptions = localStorage['hideOptions'] || "false";
+var menuOption = localStorage['menuOption'] || "options";
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -407,8 +408,11 @@ $(document).ready(function(){
 	$("#enemies_mode").html(listHTML).select2({dropdownAutoWidth : true, width: '145px'});
 
 	//Set Options UI
-	showOptions(hideOptions == "false");
-
+	showOptions(menuOption);
+	
+	
+	
+	
 	setSkillOptions(enemies.fl);
 	initEnemyList();
 	updateFullUI();
@@ -1705,7 +1709,14 @@ function updateFlEnemies(){
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //TODO: Clean all these mid UI functions up
-function showOptions(show){
+function showOptions(option){
+	if (option == "close"){
+		$("#frame_adj").hide();
+		localStorage["menuOption"] = "close";
+		setWideUI(false);
+	}
+	
+	/*
 	if (show){
 		setWideUI(true);
 		toggleMidUI("options");
@@ -1721,6 +1732,7 @@ function showOptions(show){
 			setWideUI(false);
 		}		
 	}
+	*/
 }
 
 function toggleStat(){

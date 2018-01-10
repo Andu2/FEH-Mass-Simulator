@@ -968,6 +968,10 @@ svg > g > g:last-child { pointer-events: none }
 	height:128px;
 }
 
+.menu_options{
+	font-size:15px;
+}
+
 #rules_bar_top{
 	text-align:center;
 	height:34px;
@@ -1090,6 +1094,7 @@ svg > g > g:last-child { pointer-events: none }
 	left:208px;
 	right:0;
 	border-left:2px solid #000000;
+	width:320px;
 }
 
 #turn_first{
