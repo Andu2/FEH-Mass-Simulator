@@ -1985,5 +1985,14 @@
 	}, {
 		"skill_id": 848,
 		"required_id": 137
+	}, {
+		"skill_id": 849,
+		"required_id": 116
+	}, {
+		"skill_id": 851,
+		"required_id": 850
+	}, {
+		"skill_id": 850,
+		"required_id": 340
 	}
 ]

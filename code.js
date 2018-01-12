@@ -5233,6 +5233,9 @@ function activeHero(hero){
 			if (this.hasExactly("Iron Dagger") || this.hasExactly("Steel Dagger")){
 				sealStats(data.skills[this.weaponIndex].name, ["def","res"], [-7]);
 			}
+			if (this.hasExactly("Peshkatz")){
+				sealStats(data.skills[this.weaponIndex].name, ["atk","spd","def","res"], [-4]);
+			}
 			if (this.hasExactly("Smoke Dagger+") && this.refineIndex != -1){
 				sealStats(data.skills[this.weaponIndex].name, ["atk","spd","def","res"], [-6]);
 			}
@@ -5295,7 +5298,10 @@ function activeHero(hero){
 			if((this.hasExactly("First Bite+") || this.hasExactly("Cupid's Arrow+") || this.hasExactly("Blessed Bouquet+")) && this.refineIndex != -1){
 				buffStat(data.skills[this.weaponIndex].name + " (Refined)", ["def", "res"], 5);
 			}
-
+			
+			if (this.hasExactly("Peshkatz")){
+				buffStat(data.skills[this.weaponIndex].name, ["atk","spd","def","res"], 4);
+			}
 			if((this.hasExactly("Light Breath+")) && this.refineIndex != -1){
 				buffStat(data.skills[this.weaponIndex].name + " (Refined)", ["atk", "spd", "def", "res"], 5);
 			}
