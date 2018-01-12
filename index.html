@@ -162,7 +162,7 @@
 					</div>
 				</div>
 			</div>
-			<div id="frame_adj">
+			<div id="frame_settings">
 				<div id="rules_bar_top">
 					Options
 				</div>
@@ -171,17 +171,27 @@
 					<div class="status_challenger"><input type="checkbox" data-var="options.defensive_challenger" id="defensive_challenger"/></div>
 					<div class="status_title">Defensive Tile</div>
 					<div class="status_enemy"><input type="checkbox" data-var="options.defensive_enemy" id="defensive_enemy"/></div>
-				</div>
+				</div>				
+				<div class="adj_status">
+					<div class="status_challenger"><input type="checkbox" data-var="options.candlelight_challenger" id="candlelight_challenger"/></div>
+					<div class="status_title">Candlelight</div>
+					<div class="status_enemy"><input type="checkbox" data-var="options.candlelight_enemy" id="candlelight_enemy"/></div>
+				</div>	
+				<div class="adj_status">
+					<div class="status_challenger"><input type="checkbox" data-var="options.blizzard" id="blizzard_challenger"/></div>
+					<div class="status_title">Blizzard (WIP)</div>
+					<div class="status_enemy"><input type="checkbox" data-var="options.blizzard_enemy" id="blizzard_enemy"/></div>
+				</div>				
 				<div class="adj_status">
 					<div class="status_challenger"><input type="checkbox" data-var="options.panic_challenger" id="panic_challenger"/></div>
 					<div class="status_title">Panic</div>
 					<div class="status_enemy"><input type="checkbox" data-var="options.panic_enemy" id="panic_enemy"/></div>
 				</div>
 				<div class="adj_status">
-					<div class="status_challenger"><input type="checkbox" data-var="options.candlelight_challenger" id="candlelight_challenger"/></div>
-					<div class="status_title">Candlelight</div>
-					<div class="status_enemy"><input type="checkbox" data-var="options.candlelight_enemy" id="candlelight_enemy"/></div>
-				</div>
+					<div class="status_challenger"><input type="checkbox" data-var="options.harshCommand_challenger" id="harshCommand_challenger"/></div>
+					<div class="status_title">Harsh Command (WIP)</div>
+					<div class="status_enemy"><input type="checkbox" data-var="options.harshCommand_enemy" id="harshCommand_enemy"/></div>
+				</div>				
 				<div style="line-height:20%;"><br></div>
 				<div id="adj_title">Mechanics:</div>
 				<div class="adj_status">
@@ -195,7 +205,46 @@
 					<div class="status_enemy"><input type="checkbox" data-var="options.galeforce_enemy" id="galeforce_enemy" checked/></div>
 				</div>
 				<div style="line-height:20%;"><br></div>
-				<div id="adj_title">Custom List Adjustments:</div>
+				<div id="adj_title">Simulator Settings:</div>
+				<div class="adj_status">
+					<div class="status_desc_long">Turn to start Renewal: </div>
+					<div class="status_select">
+						<input class="adj_input smallnuminput" type="number" data-var="options.startTurn" min=1 max=5 id="rules_renewal" value=1 />
+					</div>
+				</div>
+				<div class="adj_status">
+					<div class="status_desc_long">Ranged attack angle: </div>
+					<div class="status_select">
+						<select class="adj_select_long" id="rules_ploy" data-var="options.ployBehavior">
+							<option>Orthogonal</option>
+							<option>Diagonal</option>
+						</select>
+					</div>
+				</div>
+				<div class="adj_status">
+					<div class="status_desc_long">Show only max skills: </div>
+					<div class="status_select_long">
+						<input class="status_select" type="checkbox" data-var="options.showOnlyMaxSkills" id="rules_prereqs" checked="checked" />
+					</div>
+				</div>
+				<div class="adj_status">
+					<div class="status_desc_long">Show only duel skills: </div>
+					<div class="status_select_long">
+						<input class="status_select" type="checkbox" data-var="options.hideUnaffectingSkills" id="rules_hideunaffecting" checked="checked" />
+					</div>
+				</div>
+				<div class="adj_status">
+					<div class="status_desc_long">Auto-calculate: </div>
+					<div class="status_select_long">
+						<input class="status_select" type="checkbox" data-var="options.autoCalculate" id="autocalculate" checked="checked"/>
+					</div>
+				</div>
+			</div>
+			<div id="frame_adjustments" style="display: none;">
+				<div id="rules_bar_top">
+					Adjustments
+				</div>
+				<div id="adj_title">Custom List:</div>
 				<div class="adj_status">
 					<div class="status_desc">Hero Merge:</div>
 					<div class="status_select">
@@ -278,42 +327,42 @@
 					<div class="button adj_reset_button" id="reset_buff">Reset All Buffs</div>
 				</div>
 				<div style="line-height:20%;"><br></div>
-				<div id="adj_title">Simulator Settings:</div>
+				<div id="adj_title">Challenger:</div>
 				<div class="adj_status">
-					<div class="status_desc_long">Turn to start Renewal: </div>
+					<div class="status_desc">Total Health:</div>
 					<div class="status_select">
-						<input class="adj_input smallnuminput" type="number" data-var="options.startTurn" min=1 max=5 id="rules_renewal" value=1 />
-					</div>
-				</div>
-				<div class="adj_status">
-					<div class="status_desc_long">Ranged attack angle: </div>
-					<div class="status_select">
-						<select class="adj_select_long" id="rules_ploy" data-var="options.ployBehavior">
-							<option>Orthogonal</option>
-							<option>Diagonal</option>
+						<select class="adj_select_long" data-var="challenger.HpPercent" id="challenger_HpPercent">
+							<option value="4" selected>100%</option>
+							<option value="3">75%</option>
+							<option value="2">50%</option>
+							<option value="1">25%</option>
 						</select>
 					</div>
+					<div class="button adj_apply_button" id="apply_total_health">WIP</div>
 				</div>
 				<div class="adj_status">
-					<div class="status_desc_long">Show only max skills: </div>
-					<div class="status_select_long">
-						<input class="status_select" type="checkbox" data-var="options.showOnlyMaxSkills" id="rules_prereqs" checked="checked" />
-					</div>
+					<div class="button adj_reset_button" id="reset_health">Reset Health (WIP)</div>
 				</div>
 				<div class="adj_status">
-					<div class="status_desc_long">Show only duel skills: </div>
-					<div class="status_select_long">
-						<input class="status_select" type="checkbox" data-var="options.hideUnaffectingSkills" id="rules_hideunaffecting" checked="checked" />
+					<div class="status_desc">Buff:</div>
+					<div class="status_select">
+						<select class="adj_select_long" data-var="challenger.movementbuff" id="challenger_movementbuff">
+							<option value="hone" selected>Hone</option>
+							<option value="fortify">Fortify</option>
+							<option value="goad">Goad</option>
+							<option value="goad x2">Goad x2</option>
+							<option value="ward">Ward</option>
+							<option value="ward x2">Ward x2</option>
+						</select>
 					</div>
+					<div class="button adj_apply_button" id="apply_total_health">WIP</div>
 				</div>
 				<div class="adj_status">
-					<div class="status_desc_long">Auto-calculate: </div>
-					<div class="status_select_long">
-						<input class="status_select" type="checkbox" data-var="options.autoCalculate" id="autocalculate" checked="checked"/>
-					</div>
+					<div class="button adj_reset_button" id="reset_buff">Reset Buffs (WIP)</div>
 				</div>
+				<div style="line-height:20%;"><br></div>
 			</div>
-			<div id="frame_stat" style="display: none;">
+			<div id="frame_statistics" style="display: none;">
 				<div id="rules_bar_top">
 					Statistics
 				</div>
@@ -630,13 +679,17 @@
 			<div class="frame_options">
 				<div id="rules_bar_top">
 					Menu
+				</div>				
+				<div class="menu_options">
+					<div class="menu_filler"></div>
+					<div class="menu_radio">
+						<input type="radio" name="menu" class="menu_button" value="options" checked> Options<br>
+						<input type="radio" name="menu" class="menu_button" value="adjustments"> Adjustments<br>
+						<input type="radio" name="menu" class="menu_button" value="statistics"> Statistics<br>
+						<input type="radio" name="menu" class="menu_button" value="close"> Close
+					</div>
+					<div class="menu_filler"></div>
 				</div>
-				<form class="menu_options">
-				  <input type="radio" name="menu" value="options" checked> Options<br>
-				  <input type="radio" name="menu" value="adjustments"> Adjustments<br>
-				  <input type="radio" name="menu" value="statistics"> Statistics<br>
-				  <input type="radio" name="menu" value="close"> Close
-				</form> 
 				<!--
 				<div id="display_left">
 					<div class="button button_options" id="toggle_stat">Show Statistics</div>
@@ -685,8 +738,8 @@
 					</select>
 					<span class="bar_label">Sort:</span>
 					<select id="sort_results" data-var="options.sortOrder">
-						<option value=1 >Best</option>
-						<option value=-1 selected>Worst</option>
+						<option value="best" >Best</option>
+						<option value="worst" selected>Worst</option>
 					</select>
 					<div class="button" id="button_exportcalc" onclick="exportCalc();">Export results</div>
 				</div>

@@ -17,8 +17,12 @@ google.charts.load('current', {packages: ['corechart', 'bar']});
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-var hideOptions = localStorage['hideOptions'] || "false";
-var menuOption = localStorage['menuOption'] || "options";
+var option_menu = localStorage['option_menu'] || "options";
+var option_colorFilter = localStorage['option_colorFilter'] || "all";
+var option_rangeFilter = localStorage['option_rangeFilter'] || "all";
+var option_typeFilter = localStorage['option_typeFilter'] || "all";
+var option_viewFilter = localStorage['option_viewFilter'] || "all";
+var option_sortOrder = localStorage['option_sortOrder'] || "worst";
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -32,9 +36,9 @@ var data = {};
 
 // Load JSON text from server hosted file and return JSON parsed object
 function loadJSON(filePath) {
-	// Load json file;
+	// Load JSON file;
 	var json = loadTextFileAjaxSync(filePath, "application/json");
-	// Parse json
+	// Parse JSON
 	return JSON.parse(json);
 }
 
@@ -169,9 +173,9 @@ function initOptions(){
 	options.rangeFilter = "all";
 	options.typeFilter = "all";
 	options.viewFilter = "all";
+	options.sortOrder = "worst";
 	options.customEnemyList = 0;
-	options.customEnemySelected = -1;
-	options.sortOrder = -1;
+	options.customEnemySelected = -1;	
 	options.roundInitiators = ["Challenger","Enemy"];
 
 	//Holder for side-specific options
@@ -408,8 +412,10 @@ $(document).ready(function(){
 	$("#enemies_mode").html(listHTML).select2({dropdownAutoWidth : true, width: '145px'});
 
 	//Set Options UI
-	showOptions(menuOption);
+	showOptions(option_menu);
+	$('input:radio[class=menu_button][value=' + option_menu + ']').prop('checked', true);
 	
+	//Set filter UI
 	
 	
 	
@@ -648,16 +654,6 @@ $(document).ready(function(){
 		calculate();
 	})
 
-	//Show Options Buttons
-	$(".button_options").click(function(){
-		if (this.id == "toggle_options"){
-			showOptions(hideOptions == "true");
-		}
-		if (this.id == "toggle_stat"){
-			toggleStat();
-		}
-	})
-
 	//Import/Export Buttons
 	$(".button_importexport").click(function(){
 		var target = "challenger";
@@ -671,6 +667,10 @@ $(document).ready(function(){
 		showImportDialog(target,type);
 	})
 
+	$(".menu_button").click(function() {	  
+	  showOptions($('input[name=menu]:checked').val());
+	});
+	
 	$("#import_exit").click(function(){
 		hideImportDialog();
 	})
@@ -1710,73 +1710,41 @@ function updateFlEnemies(){
 
 //TODO: Clean all these mid UI functions up
 function showOptions(option){
-	if (option == "close"){
-		$("#frame_adj").hide();
-		localStorage["menuOption"] = "close";
-		setWideUI(false);
-	}
-	
-	/*
-	if (show){
-		setWideUI(true);
-		toggleMidUI("options");
+	if (option == "options"){
+		$("#frame_settings").show();
 	}
 	else{
-		if (!$("#frame_stat").is(':hidden') && $("#toggle_options").text() == "Show Options"){
-			toggleMidUI("stat_close");
-		}else{
-			$("#frame_adj").hide();
-			$("#toggle_options").text("Show Options");
-			hideOptions = "true";
-			localStorage["hideOptions"] = "true";
-			setWideUI(false);
-		}		
+		$("#frame_settings").hide();
 	}
-	*/
-}
-
-function toggleStat(){
-	if ($("#frame_stat").is(':hidden')){
-		setWideUI(true);
-		toggleMidUI("stat");		
-	}else{
-		toggleMidUI("stat_close");
+	
+	if (option == "adjustments"){
+		$("#frame_adjustments").show();
+	}
+	else{
+		$("#frame_adjustments").hide();
+	}
+	
+	if (option == "statistics"){
+		$("#frame_statistics").show();
+	}
+	else{
+		$("#frame_statistics").hide();
+	}
+	
+	if (option == "close"){
 		setWideUI(false);
 	}
-}
-
-function toggleMidUI(ui){
-	if (ui == "options"){
-		$("#frame_adj").show();
-		$("#toggle_options").text("Hide Options");
-		hideOptions = "false";
-		localStorage["hideOptions"] = "false";
-		$("#frame_stat").hide();
-		$("#toggle_stat").text("Show Statistics");
-	}	
-	if (ui == "stat"){
-		//Change options to show
-		$("#toggle_options").text("Show Options");
-		//Show statistics UI
-		$("#frame_stat").show();
-		$("#toggle_stat").text("Hide Statistics");	
-		drawChart();
+	else{
+		setWideUI(true);
 	}
-	if (ui == "stat_close"){
-		//If options UI is open, change button to hide
-		if (!$("#frame_adj").is(':hidden')){
-			$("#toggle_options").text("Hide Options");
-		}
-		//Hide statistics UI
-		$("#frame_stat").hide();
-		$("#toggle_stat").text("Show Statistics");
-	}
+	
+	localStorage["option_menu"] = option;
 }
 
 function setWideUI(setWide){	
 	//If another mid UI is open, do not change width
 	if (!setWide){
-		if (!$("#frame_stat").is(':hidden') || !$("#frame_adj").is(':hidden')){
+		if (!$("#frame_statistics").is(':hidden') || !$("#frame_adjustments").is(':hidden') || !$("#frame_settings").is(':hidden')){
 			return;
 		}
 	}	
@@ -3522,19 +3490,18 @@ function getComparisonWeight(fightResult){
 
 function outputResults(){
 	//function separate from calculation so user can re-sort without recalculating
-	//options.sortOrder is 1 or -1
 	//Hide results that aren't different if view is set to changed only
 	//options.viewFilter is 0 or 1 or 2
 	var outputHTML = "";
 
-	if(options.sortOrder==1){
+	if(options.sortOrder == "best"){
 		for(var i = 0; i < resultHTML.length; i++){
 			if(filterResult(i)){
 				outputHTML += resultHTML[i].html;
 			}
 		}
 	}
-	else if(options.sortOrder==-1){
+	else if(options.sortOrder == "worst"){
 		for(var i = resultHTML.length-1; i >= 0; i--){
 			if(filterResult(i)){
 				outputHTML += resultHTML[i].html;
