@@ -163,6 +163,7 @@ function initOptions(){
 
 	//Holder for options that aren't hero-specific
 	options = {};
+	options.saveSettings
 	options.autoCalculate = true;
 	options.startTurn = 1;
 	//options.threatenRule = "Neither";
