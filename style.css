@@ -1000,6 +1000,7 @@ svg > g > g:last-child { pointer-events: none }
 	padding-left:30px;
 	padding-right:10px;
 	min-width:120px;
+	min-height:92px;
 }
 
 #rules_bar_top{
