@@ -258,7 +258,7 @@ svg > g > g:last-child { pointer-events: none }
 }
 
 * + .bar_label{
-	margin-left:8px;
+	margin-left:5px;
 }
 
 #frame_challenger .bar_top_options{
@@ -1299,6 +1299,25 @@ svg > g > g:last-child { pointer-events: none }
 	background-color: #444444;
 }
 
+#button_resetFilter{
+	display:inline-block;
+	position:relative;
+	border-radius:2px;
+	font-size:12px;
+	width:44px;
+	text-align:center;
+	line-height:20px;
+	margin-left:4px;
+	margin-right:4px;
+	background-color: #888888;
+	color:#ffffff;
+}
+
+#button_resetFilter:hover{
+	background-color: #444444;
+	font-weight:bold;
+}
+
 #button_exportcalc{
 	position:relative;
 	border-radius:2px;
@@ -1307,7 +1326,6 @@ svg > g > g:last-child { pointer-events: none }
 	width:116px;
 	text-align:center;
 	line-height:26px;
-	margin-left:12px;
 	display:inline-block;
 	background-color: #888888;
 	color:#ffffff;

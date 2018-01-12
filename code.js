@@ -417,15 +417,15 @@ $(document).ready(function(){
 	$('input:radio[class=menu_button][value=' + option_menu + ']').prop('checked', true);
 	
 	//Set filter UI
-	options.colorFilter = option_colorFilter
+	options.colorFilter = option_colorFilter;
 	$('#color_results').val(option_colorFilter).trigger('change.select2');
-	options.rangeFilter = option_rangeFilter
+	options.rangeFilter = option_rangeFilter;
 	$('#range_results').val(option_rangeFilter).trigger('change.select2');
-	options.typeFilter = option_typeFilter
+	options.typeFilter = option_typeFilter;
 	$('#type_results').val(option_typeFilter).trigger('change.select2');
-	options.viewFilter = option_viewFilter
+	options.viewFilter = option_viewFilter;
 	$('#view_results').val(option_viewFilter).trigger('change.select2');
-	options.sortOrder = option_sortOrder
+	options.sortOrder = option_sortOrder;
 	$('#sort_results').val(option_sortOrder).trigger('change.select2');
 	
 	//Set chart UI
@@ -1794,6 +1794,26 @@ function setWideUI(setWide){
 	$("#results_graph_back").width($("#frame_main").width() - 4);
 	$("#results_graph_wins").width($("#results_graph_wins").width() * $("#results_graph_back").width() / originBarWidth);
 	$("#results_graph_losses").width($("#results_graph_losses").width() * $("#results_graph_back").width() / originBarWidth);
+}
+
+//Reset filter select options
+function resetFilter(){
+	//Set filter UI
+	options.colorFilter = "all";
+	localStorage['option_colorFilter'] = "all";
+	$('#color_results').val(options.colorFilter).trigger('change.select2');	
+	options.rangeFilter = "all";
+	localStorage['option_rangeFilter'] = "all";
+	$('#range_results').val(options.rangeFilter).trigger('change.select2');
+	options.typeFilter = "all";
+	localStorage['option_typeFilter'] = "all";
+	$('#type_results').val(options.typeFilter).trigger('change.select2');
+	options.viewFilter = "all";
+	localStorage['option_viewFilter'] = "all";
+	$('#view_results').val(options.viewFilter).trigger('change.select2');
+	options.sortOrder = "worst";
+	localStorage['option_sortOrder'] = "worst";
+	$('#sort_results').val(options.sortOrder).trigger('change.select2');
 }
 
 //Select2 match function for matching starting characters

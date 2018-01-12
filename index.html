@@ -725,7 +725,7 @@
 						<option value="ranged" >Ranged</option>
 					</select>
 					<span class="bar_label">Type:</span>
-					<select id="range_results" data-var="options.typeFilter">
+					<select id="type_results" data-var="options.typeFilter">
 						<option value="all" >All</option>
 						<option value="infantry" >Infantry</option>
 						<option value="armored" >Armored</option>
@@ -747,7 +747,8 @@
 						<option value="best" >Best</option>
 						<option value="worst" selected>Worst</option>
 					</select>
-					<div class="button" id="button_exportcalc" onclick="exportCalc();">Export results</div>
+					<div class="button" id="button_resetFilter" onclick="resetFilter();">Reset</div>
+					<div class="button" id="button_exportcalc" onclick="exportCalc();">Export</div>
 				</div>
 			</div>
 			<div id="results_graph_back">
