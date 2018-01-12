@@ -129,8 +129,8 @@ data.heroBaseSkills = [];
 data.heroMaxSkills = [[],[],[],[],[]]; //2d array; 1st num rarity, 2nd num skillindex
 
 data.skillsThatArePrereq = [];
-//Prereq exceptions are Sol, Luna, Astra, Assault, Sacred Cowl
-data.skillPrereqExceptions = [125,162,168,170,193];
+//Prereq exceptions are Sol, Ardent Sacrifice, Luna, Astra, Assault, Sacred Cowl
+data.skillPrereqExceptions = [125,137,162,168,170,193];
 
 data.enemyPrompts = {
 	//Just for fun, special messages for some of my favorites ;)
@@ -5803,7 +5803,8 @@ function activeHero(hero){
 			var effectiveBonus = 1;
 			if(enemy.moveType == "armored" && (this.has("Hammer") || this.has("Slaying Hammer")
 				|| this.has("Armorslayer") || this.has("Armorsmasher")
-				|| this.has("Heavy Spear") || this.has("Slaying Spear"))){
+				|| this.has("Heavy Spear") || this.has("Slaying Spear")
+				|| this.hasExactly("Thani"))){
 				effectiveBonus = (enemy.has("Svalinn Shield")) ? 1 : 1.5;
 			}
 			else if(enemy.moveType == "flying" && (this.hasExactly("Excalibur") || this.weaponType=="bow")){
@@ -5813,7 +5814,8 @@ function activeHero(hero){
 				effectiveBonus = 1.5;
 			}
 			else if(enemy.moveType == "cavalry" && (this.has("Zanbato") || this.has("Ridersbane")
-				|| this.has("Raudrwolf") || this.has("Blarwolf") || this.has("Gronnwolf"))){
+				|| this.has("Raudrwolf") || this.has("Blarwolf") || this.has("Gronnwolf")
+				|| this.hasExactly("Thani"))){
 				effectiveBonus = (enemy.has("Grani's Shield")) ? 1 : 1.5;
 			}
 			else if(enemy.weaponType == "dragon" && (this.hasExactly("Falchion") || this.hasExactly("Naga") || this.hasExactly("Divine Naga"))){
@@ -5855,6 +5857,10 @@ function activeHero(hero){
 				if (enemy.hasExactly("Divine Tyrfing") && (this.weaponType == "redtome" || this.weaponType == "bluetome" || this.weaponType == "greentome")){
 					dmgReduction *= 0.5;
 					damageText += enemy.name + "'s Divine Tyrfing reduces " + this.name + "'s magic damage by 50%.<br>";
+				}
+				if (enemy.hasExactly("Thani") && (this.moveType == "armored" || this.moveType == "cavalry") && (this.range == "ranged")){
+					dmgReduction *= 0.7;
+					damageText += enemy.name + "'s Thani reduces " + this.name + "'s damage by 30%.<br>";
 				}
 			}
 
