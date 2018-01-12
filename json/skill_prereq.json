@@ -1970,5 +1970,29 @@
 	}, {
 		"skill_id": 835,
 		"required_id": 115
+	}, {
+		"skill_id": 846,
+		"required_id": 845
+	}, {
+		"skill_id": 845,
+		"required_id": 844
+	}, {
+		"skill_id": 844,
+		"required_id": 843
+	}, {
+		"skill_id": 847,
+		"required_id": 845
+	}, {
+		"skill_id": 848,
+		"required_id": 137
+	}, {
+		"skill_id": 849,
+		"required_id": 116
+	}, {
+		"skill_id": 851,
+		"required_id": 850
+	}, {
+		"skill_id": 850,
+		"required_id": 340
 	}
 ]
