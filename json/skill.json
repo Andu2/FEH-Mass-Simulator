@@ -11913,5 +11913,19 @@
 		"charge": 0,
 		"inheritrule": "",
 		"affectsduel": 0
+	}, {
+		"skill_id": 852,
+		"name": "Warp Powder",
+		"slot": "b",
+		"sp": 300,
+		"description": "If unit's HP >= 80%, unit can move adjacent to any ally within 2 spaces.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "unique",
+		"affectsduel": 0
 	}
 ]

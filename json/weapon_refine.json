@@ -97,7 +97,7 @@
 		"spd": 0,
 		"def": 0,
 		"res": 0,
-		"prereq": "Silver Bow+,Bolganone+,Fenrir+,Thoron+,Rexcalibur+,Raudrowl+,Blarowl+,Gronnowl+"
+		"prereq": "Silver Bow+,Bolganone+,Fenrir+,Thoron+,Rexcalibur+,Raudrowl+,Blarowl+,Gronnowl+,Shine+"
 	},	{
 		"category": "Standard Ranged",
 		"name": "Spd Bonus",
@@ -108,7 +108,7 @@
 		"spd": 2,
 		"def": 0,
 		"res": 0,
-		"prereq": "Silver Bow+,Bolganone+,Fenrir+,Thoron+,Rexcalibur+,Raudrowl+,Blarowl+,Gronnowl+"
+		"prereq": "Silver Bow+,Bolganone+,Fenrir+,Thoron+,Rexcalibur+,Raudrowl+,Blarowl+,Gronnowl+,Shine+"
 	},	{
 		"category": "Standard Ranged",
 		"name": "Def Bonus",
@@ -119,7 +119,7 @@
 		"spd": 0,
 		"def": 3,
 		"res": 0,
-		"prereq": "Silver Bow+,Bolganone+,Fenrir+,Thoron+,Rexcalibur+,Raudrowl+,Blarowl+,Gronnowl+"
+		"prereq": "Silver Bow+,Bolganone+,Fenrir+,Thoron+,Rexcalibur+,Raudrowl+,Blarowl+,Gronnowl+,Shine+"
 	},	{
 		"category": "Standard Ranged",
 		"name": "Res Bonus",
@@ -130,7 +130,7 @@
 		"spd": 0,
 		"def": 0,
 		"res": 3,
-		"prereq": "Silver Bow+,Bolganone+,Fenrir+,Thoron+,Rexcalibur+,Raudrowl+,Blarowl+,Gronnowl+"
+		"prereq": "Silver Bow+,Bolganone+,Fenrir+,Thoron+,Rexcalibur+,Raudrowl+,Blarowl+,Gronnowl+,Shine+"
 	},	{
 		"category": "Spring Ranged",
 		"name": "Atk Bonus",
