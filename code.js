@@ -4336,7 +4336,7 @@ function activeHero(hero){
 	}
 
 	//Checks if refine name matches refine index exactly and returns boolean
-	//eg. this.hasExactlyAtIndex("Refine Option", this.refineIndex)
+	//eg. this.hasAtRefineIndex("Refine Option", this.refineIndex)
 	this.hasAtRefineIndex = function(skill, index){
 		if(index != -1){
 			if (data.refine[index].name == skill){
@@ -4746,47 +4746,54 @@ function activeHero(hero){
 			}
 
 			//Bond skills
-			if (this.has("Atk Spd Bond")){
-				buffVal = this.has("Atk Spd Bond") + 2;
+			if (this.hasAtIndex("Atk Spd Bond", this.aIndex)){
+				buffVal = this.hasAtIndex("Atk Spd Bond", this.aIndex) + 2;
 				skillName = data.skills[this.aIndex].name;
 				this.combatSpur.atk += buffVal;
 				this.combatSpur.spd += buffVal;
 				boostText += this.name + " gets +" + buffVal + " Atk/Spd from being adjacent to an ally with " + skillName + ".<br>";
 			}
-			if (this.has("Atk Def Bond")){
-				buffVal = this.has("Atk Def Bond") + 2;
+			if (this.hasAtIndex("Atk Def Bond", this.aIndex)){
+				buffVal = this.hasAtIndex("Atk Def Bond", this.aIndex) + 2;
 				skillName = data.skills[this.aIndex].name;
 				this.combatSpur.atk += buffVal;
 				this.combatSpur.def += buffVal;
 				boostText += this.name + " gets +" + buffVal + " Atk/Def from being adjacent to an ally with " + skillName + ".<br>";
 			}
-			if (this.has("Atk Res Bond")){
-				buffVal = this.has("Atk Res Bond") + 2;
+			if (this.hasAtIndex("Atk Res Bond", this.aIndex)){
+				buffVal = this.hasAtIndex("Atk Res Bond", this.aIndex) + 2;
 				skillName = data.skills[this.aIndex].name;
 				this.combatSpur.atk += buffVal;
 				this.combatSpur.res += buffVal;
 				boostText += this.name + " gets +" + buffVal + " Atk/Res from being adjacent to an ally with " + skillName + ".<br>";
 			}
-			if (this.has("Spd Def Bond")){
-				buffVal = this.has("Spd Def Bond") + 2;
+			if (this.hasAtIndex("Spd Def Bond", this.aIndex)){
+				buffVal = this.hasAtIndex("Spd Def Bond", this.aIndex) + 2;
 				skillName = data.skills[this.aIndex].name;
 				this.combatSpur.spd += buffVal;
 				this.combatSpur.def += buffVal;
 				boostText += this.name + " gets +" + buffVal + " Spd/Def from being adjacent to an ally with " + skillName + ".<br>";
 			}
-			if (this.has("Spd Res Bond")){
-				buffVal = this.has("Spd Res Bond") + 2;
+			if (this.hasAtIndex("Spd Res Bond", this.aIndex)){
+				buffVal = this.hasAtIndex("Spd Res Bond", this.aIndex) + 2;
 				skillName = data.skills[this.aIndex].name;
 				this.combatSpur.spd += buffVal;
 				this.combatSpur.res += buffVal;
 				boostText += this.name + " gets +" + buffVal + " Spd/Res from being adjacent to an ally with " + skillName + ".<br>";
 			}
-			if (this.has("Def Res Bond")){
-				buffVal = this.has("Def Res Bond") + 2;
+			if (this.hasAtIndex("Def Res Bond", this.aIndex)){
+				buffVal = this.hasAtIndex("Def Res Bond", this.aIndex) + 2;
 				skillName = data.skills[this.aIndex].name;
 				this.combatSpur.def += buffVal;
 				this.combatSpur.res += buffVal;
 				boostText += this.name + " gets +" + buffVal + " Def/Res from being adjacent to an ally with " + skillName + ".<br>";
+			}
+			if (this.hasAtRefineIndex("Flying Atk Res Bond", this.refineIndex)){
+				buffVal = 5;
+				skillName = "Flying Atk Res Bond";
+				this.combatSpur.atk += buffVal;
+				this.combatSpur.res += buffVal;
+				boostText += this.name + " gets +" + buffVal + " Atk/Res from being adjacent to a flying ally with " + skillName + " (Refined).<br>";
 			}
 		}
 
@@ -4808,9 +4815,13 @@ function activeHero(hero){
 				this.combatSpur.def += 4;
 				boostText += this.name + " gets +4 Def in combat from " + data.skills[this.weaponIndex].name + " with <= 50% health.<br>";
 			}
-			if(this.hasExactly("Parthia")){
+			if(this.hasExactly("Parthia") && this.refineIndex == -1){
 				this.combatSpur.res += 4;
 				boostText += this.name + " gets +4 Res from initiating with " + data.skills[this.weaponIndex].name + ".<br>";
+			}
+			if (this.hasAtRefineIndex("Distant Atk", this.refineIndex) && enemy.range == "ranged"){
+				this.combatSpur.atk += 6;
+				boostText += this.name + " gets +6 Atk from initiating with " + data.refine[this.refineIndex].name + " (Refined).<br>";
 			}
 			if(this.hasExactly("Dark Greatsword")){
 				this.combatSpur.atk += 4;
@@ -5867,6 +5878,10 @@ function activeHero(hero){
 				if (enemy.hasExactly("Thani") && (this.moveType == "armored" || this.moveType == "cavalry") && (this.range == "ranged")){
 					dmgReduction *= 0.7;
 					damageText += enemy.name + "'s Thani reduces " + this.name + "'s damage by 30%.<br>";
+				}
+				if (enemy.hasExactly("Parthia") && enemy.refineIndex != -1 && (this.weaponType == "redtome" || this.weaponType == "bluetome" || this.weaponType == "greentome")){
+					dmgReduction *= 0.7;
+					damageText += enemy.name + "'s Parthia (Refined) reduces " + this.name + "'s magic damage by 30%.<br>";
 				}
 			}
 

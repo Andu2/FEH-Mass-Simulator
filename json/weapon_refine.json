@@ -572,6 +572,116 @@
 		"res": 3,
 		"prereq": "Cupid Arrow+,Blessed Bouquet+"
 	},	{
+		"category": "Cymbeline",
+		"name": "Flying Atk Res Bond",
+		"sp": 350,
+		"description": "Grants allies within 2 spaces Atk+3 during combat. Grants Atk/Res+5 during combat if within 2 spaces of a flying ally.",
+		"hp": 2,
+		"atk": 1,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"prereq": "Cymbeline"
+	},	{
+		"category": "Cymbeline",
+		"name": "Atk Bonus",
+		"sp": 350,
+		"description": "Grants allies within 2 spaces Atk+3 during combat.",
+		"hp": 2,
+		"atk": 1,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"prereq": "Cymbeline"
+	},	{
+		"category": "Cymbeline",
+		"name": "Spd Bonus",
+		"sp": 350,
+		"description": "Grants allies within 2 spaces Atk+3 during combat.",
+		"hp": 2,
+		"atk": 0,
+		"spd": 2,
+		"def": 0,
+		"res": 0,
+		"prereq": "Cymbeline"
+	},	{
+		"category": "Cymbeline",
+		"name": "Def Bonus",
+		"sp": 350,
+		"description": "Grants allies within 2 spaces Atk+3 during combat.",
+		"hp": 2,
+		"atk": 0,
+		"spd": 0,
+		"def": 3,
+		"res": 0,
+		"prereq": "Cymbeline"
+	},	{
+		"category": "Cymbeline",
+		"name": "Res Bonus",
+		"sp": 350,
+		"description": "Grants allies within 2 spaces Atk+3 during combat.",
+		"hp": 2,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 3,
+		"prereq": "Cymbeline"
+	},	{
+		"category": "Parthia",
+		"name": "Distant Atk",
+		"sp": 350,
+		"description": "If foe uses magic, damage from first attack received by unit during combat reduced by 30%. Grants Atk+6 during combat if foe uses bow, dagger, magic, or staff.",
+		"hp": 2,
+		"atk": 1,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"prereq": "Parthia"
+	},	{
+		"category": "Parthia",
+		"name": "Atk Bonus",
+		"sp": 350,
+		"description": "If foe uses magic, damage from first attack received by unit during combat reduced by 30%.",
+		"hp": 2,
+		"atk": 1,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"prereq": "Parthia"
+	},	{
+		"category": "Parthia",
+		"name": "Spd Bonus",
+		"sp": 350,
+		"description": "If foe uses magic, damage from first attack received by unit during combat reduced by 30%.",
+		"hp": 2,
+		"atk": 0,
+		"spd": 2,
+		"def": 0,
+		"res": 0,
+		"prereq": "Parthia"
+	},	{
+		"category": "Parthia",
+		"name": "Def Bonus",
+		"sp": 350,
+		"description": "If foe uses magic, damage from first attack received by unit during combat reduced by 30%.",
+		"hp": 2,
+		"atk": 0,
+		"spd": 0,
+		"def": 3,
+		"res": 0,
+		"prereq": "Parthia"
+	},	{
+		"category": "Parthia",
+		"name": "Res Bonus",
+		"sp": 350,
+		"description": "If foe uses magic, damage from first attack received by unit during combat reduced by 30%.",
+		"hp": 2,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 3,
+		"prereq": "Parthia"
+	},	{
 		"category": "Advanced Dagger",
 		"name": "Atk Bonus",
 		"sp": 350,

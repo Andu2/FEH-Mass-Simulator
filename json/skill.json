@@ -1572,7 +1572,7 @@
 		"name": "Parthia",
 		"slot": "weapon",
 		"sp": 400,
-		"description": "Effective against flying units. Grants Res+4 during combat if initiating an attack",
+		"description": "Effective against flying units. Grants Res+4 during combat if initiating an attack (inactive if weapon is refined).",
 		"hp": 0,
 		"atk": 14,
 		"spd": 0,
