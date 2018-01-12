@@ -416,8 +416,20 @@ $(document).ready(function(){
 	$('input:radio[class=menu_button][value=' + option_menu + ']').prop('checked', true);
 	
 	//Set filter UI
+	options.colorFilter = option_colorFilter
+	$('#color_results').val(option_colorFilter).trigger('change.select2');
+	options.rangeFilter = option_rangeFilter
+	$('#range_results').val(option_rangeFilter).trigger('change.select2');
+	options.typeFilter = option_typeFilter
+	$('#type_results').val(option_typeFilter).trigger('change.select2');
+	options.viewFilter = option_viewFilter
+	$('#view_results').val(option_viewFilter).trigger('change.select2');
+	options.sortOrder = option_sortOrder
+	$('#sort_results').val(option_sortOrder).trigger('change.select2');
 	
-	
+	//Set chart UI
+	//TODO: cache this as well
+	$('#chart_type').val("enemies by color").trigger('change.select2');
 	
 	setSkillOptions(enemies.fl);
 	initEnemyList();
@@ -458,7 +470,7 @@ $(document).ready(function(){
 			}
 
 			var inputType = $(this).attr("type");
-			if(inputType=="number"){
+			if(inputType == "number"){
 				var min = $(this).attr("min");
 				var max = $(this).attr("max");
 				useCalcuwait = true;
@@ -469,7 +481,7 @@ $(document).ready(function(){
 					newVal = parseInt(newVal);
 				}
 			}
-			else if(inputType=="checkbox"){
+			else if(inputType == "checkbox"){
 				newVal = $(this).is(":checked");
 			}
 
@@ -535,6 +547,28 @@ $(document).ready(function(){
 					blockCalculate = true;
 				}
 			}
+			
+			//Stuff specific to changing filter
+			if(endsWith(dataVar,".colorFilter")){
+				localStorage['option_colorFilter'] = newVal;
+			}
+			if(endsWith(dataVar,".rangeFilter")){
+				localStorage['option_rangeFilter'] = newVal;
+			}
+			if(endsWith(dataVar,".typeFilter")){
+				localStorage['option_typeFilter'] = newVal;
+			}
+			if(endsWith(dataVar,".viewFilter")){
+				localStorage['option_viewFilter'] = newVal;
+			}
+			if(endsWith(dataVar,".sortOrder")){
+				localStorage['option_sortOrder'] = newVal;
+			}
+			/*TODO: chartType cache
+			if(endsWith(dataVar,".chartType")){
+				localStorage['option_chartType'] = newVal;
+			}
+			*/
 
 			for(var i = 0; i < varsThatUpdateFl.length; i++){
 				if(endsWith(dataVar,varsThatUpdateFl[i])){
@@ -692,7 +726,7 @@ $(document).ready(function(){
 			resetHero(enemies.cl.list[options.customEnemySelected]);
 		}
 	})
-
+	
 	$(document).mousemove(function(e){
 		if(showingTooltip){
 			var tooltipHeight =    $("#frame_tooltip").height();
