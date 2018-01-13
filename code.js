@@ -1859,6 +1859,7 @@ function resetFilter(){
 	options.sortOrder = "worst";
 	localStorage['option_sortOrder'] = "worst";
 	$('#sort_results').val(options.sortOrder).trigger('change.select2');
+	calculate();
 }
 
 //Select2 match function for matching starting characters
