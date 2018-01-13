@@ -23,6 +23,10 @@ var option_rangeFilter = localStorage['option_rangeFilter'] || "all";
 var option_typeFilter = localStorage['option_typeFilter'] || "all";
 var option_viewFilter = localStorage['option_viewFilter'] || "all";
 var option_sortOrder = localStorage['option_sortOrder'] || "worst";
+var option_showOnlyMaxSkills = localStorage['option_showOnlyMaxSkills'] || "true";
+var option_showOnlyDuelSkills = localStorage['option_showOnlyDuelSkills'] || "true";
+var option_autoCalculate = localStorage['option_autoCalculate'] || "true";
+var option_saveSettings = localStorage['option_saveSettings'] || "true";
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -163,7 +167,7 @@ function initOptions(){
 
 	//Holder for options that aren't hero-specific
 	options = {};
-	options.saveSettings
+	options.saveSettings = true;
 	options.autoCalculate = true;
 	options.startTurn = 1;
 	//options.threatenRule = "Neither";
@@ -393,6 +397,9 @@ $(document).ready(function(){
 		console.log("Unsupported JavaScript");
 		$("#update_text").html("Your browser does not appear to support some of the code this app uses (JavaScript ES5). The app probably won't work.");
 	}
+	
+	//Load or Reset Settings
+	if (option_saveSettings == "false"){initSettings();}
 
 	//Populate hero select options
 	heroHTML = "<option value=-1 class=\"hero_option\">Select Hero</option>";
@@ -435,6 +442,15 @@ $(document).ready(function(){
 	//Set chart UI
 	//TODO: cache this as well
 	$('#chart_type').val("enemies by color").trigger('change.select2');
+	
+	//Set Settings UI
+	$('#saveSettings').prop('checked', (option_saveSettings == "true"));
+	options.showOnlyMaxSkills = (option_showOnlyMaxSkills == "true");
+	$('#rules_prereqs').prop('checked', (option_showOnlyMaxSkills == "true"));
+	options.hideUnaffectingSkills = (option_showOnlyDuelSkills == "true");
+	$('#rules_hideunaffecting').prop('checked', (option_showOnlyDuelSkills == "true"));
+	options.autoCalculate = (option_autoCalculate == "true");
+	$('#autoCalculate').prop('checked', (option_autoCalculate == "true"));
 	
 	setSkillOptions(enemies.fl);
 	initEnemyList();
@@ -574,6 +590,20 @@ $(document).ready(function(){
 				localStorage['option_chartType'] = newVal;
 			}
 			*/
+			
+			//Cache Settings
+			if(endsWith(dataVar,".showOnlyMaxSkills")){
+				localStorage['option_showOnlyMaxSkills'] = (options.showOnlyMaxSkills ? "true" : "false");
+			}
+			if(endsWith(dataVar,".hideUnaffectingSkills")){
+				localStorage['option_showOnlyDuelSkills'] = (options.hideUnaffectingSkills ? "true" : "false");
+			}
+			if(endsWith(dataVar,".autoCalculate")){
+				localStorage['option_autoCalculate'] = (options.autoCalculate ? "true" : "false");
+			}
+			if(endsWith(dataVar,".saveSettings")){
+				localStorage['option_saveSettings'] = (options.saveSettings ? "true" : "false");
+			}
 
 			for(var i = 0; i < varsThatUpdateFl.length; i++){
 				if(endsWith(dataVar,varsThatUpdateFl[i])){
@@ -769,6 +799,18 @@ $(document).ready(function(){
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function initSettings(){
+	localStorage['option_menu'] = "options";
+	localStorage['option_colorFilter'] = "all";
+	localStorage['option_rangeFilter'] = "all";
+	localStorage['option_typeFilter'] = "all";
+	localStorage['option_viewFilter'] = "all";
+	localStorage['option_sortOrder'] = "worst";
+	localStorage['option_showOnlyMaxSkills'] = "true";
+	localStorage['option_showOnlyDuelSkills'] = "true";
+	localStorage['option_autoCalculate'] = "true";
+}
 
 function initHero(hero, alreadyHasSkills){
 	if(hero.index != -1){
@@ -4555,7 +4597,7 @@ function activeHero(hero){
 		var debuffVal = {"atk":0,"spd":0,"def":0,"res":0};
 		
 		//Chilling Seal Debuff
-		if (enemy.challenger && options.chilled_challenger || !enemy.chalenger && options.chilled_enemy){
+		if ((enemy.challenger && options.chilled_challenger) || (!enemy.chalenger && options.chilled_enemy)){
 			debuffVal.atk = -6;
 			debuffVal.spd = -6;
 			skillNames.push("Chilling Seal");
