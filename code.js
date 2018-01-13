@@ -180,8 +180,12 @@ function initOptions(){
 	options.roundInitiators = ["Challenger","Enemy"];
 
 	//Holder for side-specific options
+	options.chilled_challenger = false;
+	options.chilled_enemy = false;
 	options.panic_challenger = false;
 	options.panic_enemy = false;
+	options.harsh_command_challenger = false;
+	options.harsh_command_enemy = false;
 	options.candlelight_challenger = false;
 	options.candlelight_enemy = false;
 	options.defensive_challenger = false;
@@ -4544,13 +4548,41 @@ function activeHero(hero){
 
 		return chargingText;
 	}
+	
+	this.turnStartDebuff = function(enemy){
+		var debuffText = "";
+		var skillNames = [];
+		var debuffVal = {"atk":0,"spd":0,"def":0,"res":0};
+		
+		//Chilling Seal Debuff
+		if (enemy.challenger && options.chilled_challenger || !enemy.chalenger && options.chilled_enemy){
+			debuffVal.atk = -6;
+			debuffVal.spd = -6;
+			skillNames.push("Chilling Seal");
+		}
+		
+		if(skillNames.length > 0){
+			var statChanges = [];
+			for(var stat in debuffVal){
+				if(debuffVal[stat] < Math.min(enemy.debuffs[stat], enemy.combatDebuffs[stat])){
+					enemy.combatDebuffs[stat] = debuffVal[stat];
+					statChanges.push(stat + " " + debuffVal[stat]);
+				}
+			}
 
+			if(statChanges.length > 0){
+				debuffText += enemy.name + " is affected by turn-start skills: " + skillNames.join(", ") + ".<br>"  + enemy.name + " receives the following: " + statChanges.join(", ") + ".<br>";
+			}
+		}
+		
+		return debuffText;
+	}
+	
 	this.defiant = function(){
 		var defiantText = "";
 		var skillName = "";
-		var statBonus = 0;
 		
-		//All defiant sklls trigger at or below 50% HP
+		//All defiant skills trigger at or below 50% HP
 		if(this.hp / this.maxHp <= 0.5){
 			var defiantAtk = 0;
 			if(this.has("Defiant Atk")){
@@ -4598,6 +4630,7 @@ function activeHero(hero){
 				defiantText += this.name + " activates " + skillName + " for +" + defiantRes + " res.<br>";
 			}
 		}
+		
 		return defiantText;
 	}
 
@@ -6223,7 +6256,11 @@ function activeHero(hero){
 		if(!galeforce){
 			//Check self buffs (defiant skills)
 			roundText += this.defiant();
-
+			
+			//Check for enemy debuffs
+			roundText += this.turnStartDebuff(this);
+			roundText += this.turnStartDebuff(enemy);
+			
 			//Apply renewal effects
 			roundText += this.renewal(renew);
 
