@@ -2221,22 +2221,13 @@ function showHeroTooltip(heroType){
 	if (hero != -1 && hero.index != -1){
 		showingTooltip = true;
 		
-		tooltipText = "<span class=\"bold\">" + data.heroes[hero.index].name + "</span><br>";
+		tooltipText = "<span class=\"bold\">" + data.heroes[hero.index].name + "</span>";
+		tooltipText += " ☆☆☆☆☆" + "<br>";
 		tooltipText += " Base HP: <font color=\"#fefec8\">" + data.heroes[hero.index].basehp + "</font><br>";
 		tooltipText += " Base Atk: <font color=\"#fefec8\">" + data.heroes[hero.index].baseatk + "</font><br>";
 		tooltipText += " Base Spd: <font color=\"#fefec8\">" + data.heroes[hero.index].basespd + "</font><br>";
 		tooltipText += " Base Def: <font color=\"#fefec8\">" + data.heroes[hero.index].basedef + "</font><br>";
 		tooltipText += " Base Res: <font color=\"#fefec8\">" + data.heroes[hero.index].baseres + "</font><br>";
-		/*		
-		tooltipText += "<span class=\"bold\">" +  + "</span>";
-		tooltipText += " SP: <font color=\"#fefec8\">" +  + "</font><br>";
-		tooltipText += " HP: <font color=\"#fefec8\">" +  + "</font>";
-		tooltipText += " Atk: <font color=\"#fefec8\">" +  + "</font>";
-		tooltipText += " Spd: <font color=\"#fefec8\">" +  + "</font>";
-		tooltipText += " Def: <font color=\"#fefec8\">" +  + "</font>";
-		tooltipText += " Res: <font color=\"#fefec8\">" +  + "</font><br>";
-		tooltipText += data.refine[skillID].description;
-		*/
 
 		$("#frame_tooltip").html(tooltipText).show();
 	}
