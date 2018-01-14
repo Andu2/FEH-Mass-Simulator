@@ -1154,11 +1154,11 @@ function setStats(hero){
 	}
 	else if(typeof hero.index != "undefined" && hero.index != -1){
 		var growthValMod = {"hp":0,"atk":0,"spd":0,"def":0,"res":0};
-		if(hero.boon!="none"){
-			growthValMod[hero.boon]+=1;
+		if(hero.boon != "none"){
+			growthValMod[hero.boon] += 1;
 		}
-		if(hero.bane!="none"){
-			growthValMod[hero.bane]-=1;
+		if(hero.bane != "none"){
+			growthValMod[hero.bane] -= 1;
 		}
 
 		var base = {};
@@ -2201,9 +2201,45 @@ function showResultsTooltip(e,resultDiv){
 	$("#frame_tooltip").html(fightResults[resultId].fightText).show();
 }
 
-function hideResultsTooltip(){
-	showingTooltip = false;
-	$("#frame_tooltip").hide();
+function showHeroTooltip(heroType){
+	var hero;
+	var tooltipText;
+	
+	//Set hero to selected hero type
+	switch (heroType){
+		case "challenger":
+			hero = challenger;
+			break;
+		case "list":
+			hero = enemies.fl;
+			break;
+		case "custom":
+			(options.customEnemySelected == -1) ? hero = -1 : hero = enemies.cl.list[options.customEnemySelected];
+			break;
+	}
+	
+	if (hero != -1 && hero.index != -1){
+		showingTooltip = true;
+		
+		tooltipText = "<span class=\"bold\">" + data.heroes[hero.index].name + "</span><br>";
+		tooltipText += " Base HP: <font color=\"#fefec8\">" + data.heroes[hero.index].basehp + "</font><br>";
+		tooltipText += " Base Atk: <font color=\"#fefec8\">" + data.heroes[hero.index].baseatk + "</font><br>";
+		tooltipText += " Base Spd: <font color=\"#fefec8\">" + data.heroes[hero.index].basespd + "</font><br>";
+		tooltipText += " Base Def: <font color=\"#fefec8\">" + data.heroes[hero.index].basedef + "</font><br>";
+		tooltipText += " Base Res: <font color=\"#fefec8\">" + data.heroes[hero.index].baseres + "</font><br>";
+		/*		
+		tooltipText += "<span class=\"bold\">" +  + "</span>";
+		tooltipText += " SP: <font color=\"#fefec8\">" +  + "</font><br>";
+		tooltipText += " HP: <font color=\"#fefec8\">" +  + "</font>";
+		tooltipText += " Atk: <font color=\"#fefec8\">" +  + "</font>";
+		tooltipText += " Spd: <font color=\"#fefec8\">" +  + "</font>";
+		tooltipText += " Def: <font color=\"#fefec8\">" +  + "</font>";
+		tooltipText += " Res: <font color=\"#fefec8\">" +  + "</font><br>";
+		tooltipText += data.refine[skillID].description;
+		*/
+
+		$("#frame_tooltip").html(tooltipText).show();
+	}
 }
 
 function showSkillTooltip(heroType, skillType){
@@ -2285,7 +2321,7 @@ function showSkillTooltip(heroType, skillType){
 	}
 }
 
-function hideSkillTooltip(){
+function hideTooltip(){
 	showingTooltip = false;
 	$("#frame_tooltip").hide();
 }
@@ -3426,7 +3462,7 @@ function fight(enemyIndex,resultIndex){
 	collectStatistics(ahChallenger, ahEnemy, outcome);
 
 	//Generate fight HTML
-	fightHTML = ["<div class=\"results_entry\" id=\"result_" + resultIndex + "\" onmouseover=\"showResultsTooltip(event,this);\" onmouseout=\"hideResultsTooltip();\">",
+	fightHTML = ["<div class=\"results_entry\" id=\"result_" + resultIndex + "\" onmouseover=\"showResultsTooltip(event,this);\" onmouseout=\"hideTooltip();\">",
 		"<div class=\"results_hpbox\">",
 			"<div class=\"results_hplabel\">HP</div>",
 			"<div class=\"results_hpnums\">",

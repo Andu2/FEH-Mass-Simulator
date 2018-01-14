@@ -17,8 +17,8 @@
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
 	<script src="select2/select2.min.js"></script>
 
-	<link rel="stylesheet" type="text/css" href="style.css?v=201801131001"/>
-	<script type="text/javascript" src="code.js?v=201801131001"></script>
+	<link rel="stylesheet" type="text/css" href="style.css?v=201801132229"/>
+	<script type="text/javascript" src="code.js?v=201801132229"></script>
 </head>
 
 <body>
@@ -46,7 +46,7 @@
 						<div class="bar_top_options_right"><span class="bar_label">Rarity:</span><input id="challenger_rarity" data-var="challenger.rarity" type="number" class="rarityinput smallnuminput" value=5 min=1 max=5 /><span class="bar_label">Lvl 40+</span><input id="challenger_merge" data-var="challenger.merge" class="smallnuminput" type="number" value=0 min=0 max=10 /><div class="button reset_button" id="reset_challenger">Reset</div></div>
 					</div>
 					<div class="frame_hero_main_top">
-						<div class="frame_hero_picture"><img class="hero_picture" id="challenger_picture" src="heroes/nohero.png"/><img id="challenger_weapon_icon" class="weaponIcon" src="weapons/noweapon.png"/><img id="challenger_movement_icon" class="movementIcon" src="weapons/noweapon.png"/></div>
+						<div class="frame_hero_picture"><img class="hero_picture" id="challenger_picture" src="heroes/nohero.png" onmouseover="showHeroTooltip('challenger');" onmouseout="hideTooltip();"/><img id="challenger_weapon_icon" class="weaponIcon" src="weapons/noweapon.png"/><img id="challenger_movement_icon" class="movementIcon" src="weapons/noweapon.png"/></div>
 						<div class="frame_stats">
 							<div class="bufflabel">Buff</div><div class="debufflabel">Debuff</div><div class="spurlabel">Spur</div>
 							<div class="stat_row">HP: <span class="stat_number" id="challenger_hp">-</span><input id="challenger_hp_buff" data-var="challenger.buffs.hp" class="buff_input smallnuminput" type="number" value=0 min=0 max=99 /><input id="challenger_hp_debuff" data-var="challenger.debuffs.hp" class="debuff_input smallnuminput" type="number" value=0 min=-99 max=0 /></div>
@@ -59,39 +59,39 @@
 					<div class="frame_hero_main_bottom">
 						<div class="hero_skills">
 							<div class="skill_row">
-								<img class="skill_picture" id="challenger_weapon_picture" src="skills/weapon.png" onmouseover="showSkillTooltip('challenger', 'weapon');" onmouseout="hideSkillTooltip();">
+								<img class="skill_picture" id="challenger_weapon_picture" src="skills/weapon.png" onmouseover="showSkillTooltip('challenger', 'weapon');" onmouseout="hideTooltip();">
 								<select class="skill_select" data-var="challenger.weapon" id="challenger_weapon"></select>
 							</div>
 							<div class="skill_tabbed_row">
-								<img class="skill_picture" id="challenger_refine_picture" src="skills/noskill.png" onmouseover="showSkillTooltip('challenger', 'refine');" onmouseout="hideSkillTooltip();">
+								<img class="skill_picture" id="challenger_refine_picture" src="skills/noskill.png" onmouseover="showSkillTooltip('challenger', 'refine');" onmouseout="hideTooltip();">
 								<img class="skill_letter" id="challenger_refine_weapon_picture" src="skills/weapon.png">
 								<select class="skill_select_short" data-var="challenger.refine" id="challenger_refine"></select>
 							</div>
 							<div class="skill_row">
-								<img class="skill_picture" id="challenger_assist_picture" src="skills/assist.png" onmouseover="showSkillTooltip('challenger', 'assist');" onmouseout="hideSkillTooltip();">
+								<img class="skill_picture" id="challenger_assist_picture" src="skills/assist.png" onmouseover="showSkillTooltip('challenger', 'assist');" onmouseout="hideTooltip();">
 								<select class="skill_select" data-var="challenger.assist" id="challenger_assist"></select>
 							</div>
 							<div class="skill_row">
-								<img class="skill_picture" id="challenger_special_picture" src="skills/special.png" onmouseover="showSkillTooltip('challenger', 'special');" onmouseout="hideSkillTooltip();">
+								<img class="skill_picture" id="challenger_special_picture" src="skills/special.png" onmouseover="showSkillTooltip('challenger', 'special');" onmouseout="hideTooltip();">
 								<select class="skill_select" data-var="challenger.special" id="challenger_special"></select>
 							</div>
 							<div class="skill_row">
-								<img class="skill_picture" id="challenger_a_picture" src="skills/noskill.png" onmouseover="showSkillTooltip('challenger', 'a');" onmouseout="hideSkillTooltip();">
+								<img class="skill_picture" id="challenger_a_picture" src="skills/noskill.png" onmouseover="showSkillTooltip('challenger', 'a');" onmouseout="hideTooltip();">
 								<div class="skill_letter red">A</div>
 								<select class="skill_select" data-var="challenger.a" id="challenger_a"></select>
 								</div>
 							<div class="skill_row">
-								<img class="skill_picture" id="challenger_b_picture" src="skills/noskill.png" onmouseover="showSkillTooltip('challenger', 'b');" onmouseout="hideSkillTooltip();">
+								<img class="skill_picture" id="challenger_b_picture" src="skills/noskill.png" onmouseover="showSkillTooltip('challenger', 'b');" onmouseout="hideTooltip();">
 								<div class="skill_letter blue">B</div>
 								<select class="skill_select" data-var="challenger.b" id="challenger_b"></select>
 							</div>
 							<div class="skill_row">
-								<img class="skill_picture" id="challenger_c_picture" src="skills/noskill.png" onmouseover="showSkillTooltip('challenger', 'c');" onmouseout="hideSkillTooltip();">
+								<img class="skill_picture" id="challenger_c_picture" src="skills/noskill.png" onmouseover="showSkillTooltip('challenger', 'c');" onmouseout="hideTooltip();">
 								<div class="skill_letter green">C</div>
 								<select class="skill_select" data-var="challenger.c" id="challenger_c"></select>
 							</div>
 							<div class="skill_row">
-								<img class="skill_picture" id="challenger_s_picture" src="skills/noskill.png" onmouseover="showSkillTooltip('challenger', 's');" onmouseout="hideSkillTooltip();">
+								<img class="skill_picture" id="challenger_s_picture" src="skills/noskill.png" onmouseover="showSkillTooltip('challenger', 's');" onmouseout="hideTooltip();">
 								<div class="skill_letter yellow">S</div>
 								<select class="skill_select" data-var="challenger.s" id="challenger_s"></select>
 							</div>
@@ -449,32 +449,32 @@
 					<div class="frame_hero_main_bottom">
 						<div class="hero_skills">
 							<div class="skill_row">
-								<img class="skill_picture" id="enemies_weapon_picture" src="skills/weapon.png" onmouseover="showSkillTooltip('list', 'weapon');" onmouseout="hideSkillTooltip();"><select class="skill_select" data-var="enemies.fl.weapon" id="enemies_weapon"></select>
+								<img class="skill_picture" id="enemies_weapon_picture" src="skills/weapon.png" onmouseover="showSkillTooltip('list', 'weapon');" onmouseout="hideTooltip();"><select class="skill_select" data-var="enemies.fl.weapon" id="enemies_weapon"></select>
 								<select class="skill_overwrite" data-var="enemies.fl.replaceWeapon" id="enemies_weapon_overwrite">
 									<option value=0>If empty</option>
 									<option value=1>Overwrite</option>
 								</select>
 							</div>
 							<div class="skill_tabbed_row">
-								<img class="skill_picture" id="enemies_refine_picture" src="skills/noskill.png" onmouseover="showSkillTooltip('list', 'refine');" onmouseout="hideSkillTooltip();"><img class="skill_letter" id="enemies_refine_weapon_picture" src="skills/weapon.png"><select class="skill_select_short" data-var="enemies.fl.refine" id="enemies_refine"></select>
+								<img class="skill_picture" id="enemies_refine_picture" src="skills/noskill.png" onmouseover="showSkillTooltip('list', 'refine');" onmouseout="hideTooltip();"><img class="skill_letter" id="enemies_refine_weapon_picture" src="skills/weapon.png"><select class="skill_select_short" data-var="enemies.fl.refine" id="enemies_refine"></select>
 							</div>
 							<div class="skill_row">
-								<img class="skill_picture" id="enemies_assist_picture" src="skills/assist.png"  onmouseover="showSkillTooltip('list', 'assist');" onmouseout="hideSkillTooltip();"><select class="skill_select" data-var="enemies.fl.assist" id="enemies_assist"></select>
+								<img class="skill_picture" id="enemies_assist_picture" src="skills/assist.png"  onmouseover="showSkillTooltip('list', 'assist');" onmouseout="hideTooltip();"><select class="skill_select" data-var="enemies.fl.assist" id="enemies_assist"></select>
 								<select class="skill_overwrite" data-var="enemies.fl.replaceAssist" id="enemies_assist_overwrite"><option value=0>If empty</option><option value=1>Overwrite</option></select>
 							</div>
-							<div class="skill_row"><img class="skill_picture" id="enemies_special_picture" src="skills/special.png"  onmouseover="showSkillTooltip('list', 'special');" onmouseout="hideSkillTooltip();"><select class="skill_select" data-var="enemies.fl.special" id="enemies_special"></select>
+							<div class="skill_row"><img class="skill_picture" id="enemies_special_picture" src="skills/special.png"  onmouseover="showSkillTooltip('list', 'special');" onmouseout="hideTooltip();"><select class="skill_select" data-var="enemies.fl.special" id="enemies_special"></select>
 								<select class="skill_overwrite" data-var="enemies.fl.replaceSpecial" id="enemies_special_overwrite"><option value=0>If empty</option><option value=1>Overwrite</option></select>
 							</div>
-							<div class="skill_row"><img class="skill_picture" id="enemies_a_picture" src="skills/noskill.png" onmouseover="showSkillTooltip('list', 'a');" onmouseout="hideSkillTooltip();"><div class="skill_letter red">A</div><select class="skill_select" data-var="enemies.fl.a" id="enemies_a"></select>
+							<div class="skill_row"><img class="skill_picture" id="enemies_a_picture" src="skills/noskill.png" onmouseover="showSkillTooltip('list', 'a');" onmouseout="hideTooltip();"><div class="skill_letter red">A</div><select class="skill_select" data-var="enemies.fl.a" id="enemies_a"></select>
 								<select class="skill_overwrite" data-var="enemies.fl.replaceA" id="enemies_a_overwrite"><option value=0>If empty</option><option value=1>Overwrite</option></select>
 							</div>
-							<div class="skill_row"><img class="skill_picture" id="enemies_b_picture" src="skills/noskill.png" onmouseover="showSkillTooltip('list', 'b');" onmouseout="hideSkillTooltip();"><div class="skill_letter blue">B</div><select class="skill_select" data-var="enemies.fl.b" id="enemies_b"></select>
+							<div class="skill_row"><img class="skill_picture" id="enemies_b_picture" src="skills/noskill.png" onmouseover="showSkillTooltip('list', 'b');" onmouseout="hideTooltip();"><div class="skill_letter blue">B</div><select class="skill_select" data-var="enemies.fl.b" id="enemies_b"></select>
 								<select class="skill_overwrite" data-var="enemies.fl.replaceB" id="enemies_b_overwrite"><option value=0>If empty</option><option value=1>Overwrite</option></select>
 							</div>
-							<div class="skill_row"><img class="skill_picture" id="enemies_c_picture" src="skills/noskill.png" onmouseover="showSkillTooltip('list', 'c');" onmouseout="hideSkillTooltip();"><div class="skill_letter green">C</div><select class="skill_select" data-var="enemies.fl.c" id="enemies_c"></select>
+							<div class="skill_row"><img class="skill_picture" id="enemies_c_picture" src="skills/noskill.png" onmouseover="showSkillTooltip('list', 'c');" onmouseout="hideTooltip();"><div class="skill_letter green">C</div><select class="skill_select" data-var="enemies.fl.c" id="enemies_c"></select>
 								<select class="skill_overwrite" data-var="enemies.fl.replaceC" id="enemies_c_overwrite"><option value=0>If empty</option><option value=1>Overwrite</option></select>
 							</div>
-							<div class="skill_row"><img class="skill_picture" id="enemies_s_picture" src="skills/noskill.png" onmouseover="showSkillTooltip('list', 's');" onmouseout="hideSkillTooltip();"><div class="skill_letter yellow">S</div><select class="skill_select" data-var="enemies.fl.s" id="enemies_s"></select></div>
+							<div class="skill_row"><img class="skill_picture" id="enemies_s_picture" src="skills/noskill.png" onmouseover="showSkillTooltip('list', 's');" onmouseout="hideTooltip();"><div class="skill_letter yellow">S</div><select class="skill_select" data-var="enemies.fl.s" id="enemies_s"></select></div>
 						</div>
 						<div class="hero_misc">
 							<div class="misc_row">IV:
@@ -534,7 +534,7 @@
 						<div class="bar_top_options"><select id="cl_enemy_name" data-var="enemies.cl.list.index"></select><div class="bar_top_options_right"><span class="bar_label">Rarity:</span><input id="cl_enemy_rarity" data-var="enemies.cl.list.rarity" type="number" class="rarityinput smallnuminput" value=5 min=1 max=5 /><span class="bar_label">Lvl 40+</span><input id="cl_enemy_merge" data-var="enemies.cl.list.merge" class="smallnuminput" type="number" value=0 min=0 max=10 /><div class="button reset_button reset_enemies" id="reset_cl_enemy">Reset</div></div></div>
 						<div class="frame_hero_main_top">
 							<div class="frame_hero_picture">
-								<img class="hero_picture" id="cl_enemy_picture" src="heroes/nohero.png"/>
+								<img class="hero_picture" id="cl_enemy_picture" src="heroes/nohero.png" onmouseover="showHeroTooltip('custom');" onmouseout="hideTooltip();"/>
 								<img id="cl_enemy_weapon_icon" class="weaponIcon" src="weapons/noweapon.png"/>
 								<img id="cl_enemy_movement_icon" class="movementIcon" src="weapons/noweapon.png"/>
 							</div>
@@ -550,17 +550,17 @@
 						<div class="frame_hero_main_bottom">
 							<div class="hero_skills">
 								<div class="skill_row">
-									<img class="skill_picture" id="cl_enemy_weapon_picture" src="skills/weapon.png" onmouseover="showSkillTooltip('custom', 'weapon');" onmouseout="hideSkillTooltip();"><select class="skill_select" data-var="enemies.cl.list.weapon" id="cl_enemy_weapon"></select>
+									<img class="skill_picture" id="cl_enemy_weapon_picture" src="skills/weapon.png" onmouseover="showSkillTooltip('custom', 'weapon');" onmouseout="hideTooltip();"><select class="skill_select" data-var="enemies.cl.list.weapon" id="cl_enemy_weapon"></select>
 								</div>
 								<div class="skill_tabbed_row">
-									<img class="skill_picture" id="cl_enemy_refine_picture" src="skills/noskill.png" onmouseover="showSkillTooltip('custom', 'refine');" onmouseout="hideSkillTooltip();"><img class="skill_letter" id="cl_enemy_refine_weapon_picture" src="skills/weapon.png"><select class="skill_select_short" data-var="enemies.cl.list.refine" id="cl_enemy_refine"></select>
+									<img class="skill_picture" id="cl_enemy_refine_picture" src="skills/noskill.png" onmouseover="showSkillTooltip('custom', 'refine');" onmouseout="hideTooltip();"><img class="skill_letter" id="cl_enemy_refine_weapon_picture" src="skills/weapon.png"><select class="skill_select_short" data-var="enemies.cl.list.refine" id="cl_enemy_refine"></select>
 								</div>
-								<div class="skill_row"><img class="skill_picture" id="cl_enemy_assist_picture" src="skills/assist.png" onmouseover="showSkillTooltip('custom', 'assist');" onmouseout="hideSkillTooltip();"><select class="skill_select" data-var="enemies.cl.list.assist" id="cl_enemy_assist"></select></div>
-								<div class="skill_row"><img class="skill_picture" id="cl_enemy_special_picture" src="skills/special.png" onmouseover="showSkillTooltip('custom', 'special');" onmouseout="hideSkillTooltip();"><select class="skill_select" data-var="enemies.cl.list.special" id="cl_enemy_special"></select></div>
-								<div class="skill_row"><img class="skill_picture" id="cl_enemy_a_picture" src="skills/noskill.png" onmouseover="showSkillTooltip('custom', 'a');" onmouseout="hideSkillTooltip();"><div class="skill_letter red">A</div><select class="skill_select" data-var="enemies.cl.list.a" id="cl_enemy_a"></select></div>
-								<div class="skill_row"><img class="skill_picture" id="cl_enemy_b_picture" src="skills/noskill.png" onmouseover="showSkillTooltip('custom', 'b');" onmouseout="hideSkillTooltip();"><div class="skill_letter blue">B</div><select class="skill_select" data-var="enemies.cl.list.b" id="cl_enemy_b"></select></div>
-								<div class="skill_row"><img class="skill_picture" id="cl_enemy_c_picture" src="skills/noskill.png" onmouseover="showSkillTooltip('custom', 'c');" onmouseout="hideSkillTooltip();"><div class="skill_letter green">C</div><select class="skill_select" data-var="enemies.cl.list.c" id="cl_enemy_c"></select></div>
-								<div class="skill_row"><img class="skill_picture" id="cl_enemy_s_picture" src="skills/noskill.png" onmouseover="showSkillTooltip('custom', 's');" onmouseout="hideSkillTooltip();"><div class="skill_letter yellow">S</div><select class="skill_select" data-var="enemies.cl.list.s" id="cl_enemy_s"></select></div>
+								<div class="skill_row"><img class="skill_picture" id="cl_enemy_assist_picture" src="skills/assist.png" onmouseover="showSkillTooltip('custom', 'assist');" onmouseout="hideTooltip();"><select class="skill_select" data-var="enemies.cl.list.assist" id="cl_enemy_assist"></select></div>
+								<div class="skill_row"><img class="skill_picture" id="cl_enemy_special_picture" src="skills/special.png" onmouseover="showSkillTooltip('custom', 'special');" onmouseout="hideTooltip();"><select class="skill_select" data-var="enemies.cl.list.special" id="cl_enemy_special"></select></div>
+								<div class="skill_row"><img class="skill_picture" id="cl_enemy_a_picture" src="skills/noskill.png" onmouseover="showSkillTooltip('custom', 'a');" onmouseout="hideTooltip();"><div class="skill_letter red">A</div><select class="skill_select" data-var="enemies.cl.list.a" id="cl_enemy_a"></select></div>
+								<div class="skill_row"><img class="skill_picture" id="cl_enemy_b_picture" src="skills/noskill.png" onmouseover="showSkillTooltip('custom', 'b');" onmouseout="hideTooltip();"><div class="skill_letter blue">B</div><select class="skill_select" data-var="enemies.cl.list.b" id="cl_enemy_b"></select></div>
+								<div class="skill_row"><img class="skill_picture" id="cl_enemy_c_picture" src="skills/noskill.png" onmouseover="showSkillTooltip('custom', 'c');" onmouseout="hideTooltip();"><div class="skill_letter green">C</div><select class="skill_select" data-var="enemies.cl.list.c" id="cl_enemy_c"></select></div>
+								<div class="skill_row"><img class="skill_picture" id="cl_enemy_s_picture" src="skills/noskill.png" onmouseover="showSkillTooltip('custom', 's');" onmouseout="hideTooltip();"><div class="skill_letter yellow">S</div><select class="skill_select" data-var="enemies.cl.list.s" id="cl_enemy_s"></select></div>
 							</div>
 							<div class="hero_misc">
 								<div class="misc_row">IV:
