@@ -2233,6 +2233,14 @@ function showHeroTooltip(heroType){
 	base.res = data.heroes[hero.index].baseres;
 	
 	if (hero.rarity < 5){
+		//Subtract 2 from every stat to revert 5* base stats to 1*
+		base.hp -= 2;
+		base.atk -= 2;
+		base.spd -= 2;
+		base.def -= 2;
+		base.res -= 2;
+		
+		//Sort stat bonus order of base stats
 		var rarityBaseOrder = ["atk","spd","def","res"];
 		var boostPriority = {"hp":4,"atk":3,"spd":2,"def":1,"res":0};
 		rarityBaseOrder.sort(function(a,b){
@@ -2251,19 +2259,12 @@ function showHeroTooltip(heroType){
 				}
 			}
 		});
-
-		rarityBaseOrder.push("hp");
-		var rarityBoostCount = Math.floor((hero.rarity-1) * 2.5);
 		
-		//Subtract 2 from every stat to revert 5* base stats to 1*
-		//***Shouldn't this be done before sorting rarityBaseOrder?***
-		base.hp -= 2;
-		base.atk -= 2;
-		base.spd -= 2;
-		base.def -= 2;
-		base.res -= 2;
+		//Push hp last for 3* and 5* since it is 2 stat boost per * (2 stat -> 2 stat -> 2 stat + hp -> 2 stat -> 2 stat + hp)
+		rarityBaseOrder.push("hp");
 		
 		//Add bonus to 1* base stats to rarity values
+		var rarityBoostCount = Math.floor((hero.rarity-1) * 2.5);		
 		for(var i = 0; i < rarityBoostCount; i++){
 			base[rarityBaseOrder[i%5]]++;
 		}
