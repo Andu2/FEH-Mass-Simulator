@@ -1559,7 +1559,7 @@ svg > g > g:last-child { pointer-events: none }
 
 /*Tooltip///////////////////////////////////////////////////*/
 #frame_tooltip{
-	width:500px;
+	max-width:600px;
 	font-size:13px;
 	position:absolute;
 	border:3px solid #eeeeee;
