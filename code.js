@@ -2260,7 +2260,7 @@ function showHeroTooltip(heroType){
 			}
 		});
 		
-		//Push hp last for 3* and 5* since it is 2 stat boost per * (2 stat -> 2 stat -> 2 stat + hp -> 2 stat -> 2 stat + hp)
+		//Push hp last for 3* and 5* since it is 2 stat boost per * (Base -> +2 stat -> +2 stat + hp -> +2 stat -> +2 stat + hp)
 		rarityBaseOrder.push("hp");
 		
 		//Add bonus to 1* base stats to rarity values
@@ -4571,6 +4571,18 @@ function activeHero(hero){
 					threatDebuffs.atk = Math.min(threatDebuffs.atk,-this.hasAtIndex("Atk Ploy", this.sIndex)-2);
 					skillNames.push(data.skills[this.sIndex].name + " (Seal)");
 				}
+				if(this.hasAtIndex("Spd Ploy", this.sIndex)){
+					threatDebuffs.spd = Math.min(threatDebuffs.spd,-this.hasAtIndex("Spd Ploy", this.sIndex)-2);
+					skillNames.push(data.skills[this.sIndex].name + " (Seal)");
+				}
+				if(this.hasAtIndex("Def Ploy", this.sIndex)){
+					threatDebuffs.def = Math.min(threatDebuffs.def,-this.hasAtIndex("Def Ploy", this.sIndex)-2);
+					skillNames.push(data.skills[this.sIndex].name + " (Seal)");
+				}
+				if(this.hasAtIndex("Res Ploy", this.sIndex)){
+					threatDebuffs.res = Math.min(threatDebuffs.res,-this.hasAtIndex("Res Ploy", this.sIndex)-2);
+					skillNames.push(data.skills[this.sIndex].name + " (Seal)");
+				}
 			}
 			//Panic Ploy
 			if(this.hasAtIndex("Panic Ploy", this.cIndex) && this.hp > enemy.hp + 6 - this.hasAtIndex("Panic Ploy", this.cIndex) * 2){
@@ -5368,33 +5380,62 @@ function activeHero(hero){
 		}
 
 		//Seals
-		if(this.has("Seal Atk")){ //Will count for seal atk speed as well
-			sealValue.atk = -this.has("Seal Atk") * 2 - 1;
+		var debuffValue = 0;
+		if (this.hasAtIndex("Seal Atk", this.bIndex)){
+			debuffValue = -this.hasAtIndex("Seal Atk", this.bIndex) * 2 - 1;
+			sealValue.atk = (sealValue.atk < debuffValue) ? sealValue.atk : debuffValue;
 			skillNames.push(data.skills[this.bIndex].name);
 		}
-		if(this.has("Seal Atk Spd")){
-			sealValue.spd = -this.has("Seal Atk Spd") * 2 - 1;
+		if (this.hasAtIndex("Seal Atk", this.sIndex)){
+			debuffValue = -this.hasAtIndex("Seal Atk", this.sIndex) * 2 - 1;
+			sealValue.atk = (sealValue.atk < debuffValue) ? sealValue.atk : debuffValue;
+			skillNames.push(data.skills[this.sIndex].name + " (Seal)");
+		}		
+		if (this.hasAtIndex("Seal Spd", this.bIndex)){
+			debuffValue = -this.hasAtIndex("Seal Spd", this.bIndex) * 2 - 1;
+			sealValue.spd = (sealValue.spd < debuffValue) ? sealValue.spd : debuffValue;
 			skillNames.push(data.skills[this.bIndex].name);
 		}
-		if(this.has("Seal Atk Def")){
-			sealValue.def = -this.has("Seal Atk Def") * 2 - 1;
+		if (this.hasAtIndex("Seal Spd", this.sIndex)){
+			debuffValue = -this.hasAtIndex("Seal Spd", this.sIndex) * 2 - 1;
+			sealValue.spd = (sealValue.spd < debuffValue) ? sealValue.spd : debuffValue;
+			skillNames.push(data.skills[this.sIndex].name + " (Seal)");
+		}
+		if (this.hasAtIndex("Seal Def", this.bIndex)){
+			debuffValue = -this.hasAtIndex("Seal Def", this.bIndex) * 2 - 1;
+			sealValue.def = (sealValue.def < debuffValue) ? sealValue.def : debuffValue;
 			skillNames.push(data.skills[this.bIndex].name);
 		}
-		if(this.has("Seal Spd")){
-			sealValue.spd = -this.has("Seal Spd") * 2 - 1;
+		if (this.hasAtIndex("Seal Def", this.sIndex)){
+			debuffValue = -this.hasAtIndex("Seal Def", this.sIndex) * 2 - 1;
+			sealValue.def = (sealValue.def < debuffValue) ? sealValue.def : debuffValue;
+			skillNames.push(data.skills[this.sIndex].name + " (Seal)");
+		}
+		if (this.hasAtIndex("Seal Res", this.bIndex)){
+			debuffValue = -this.hasAtIndex("Seal Res", this.bIndex) * 2 - 1;
+			sealValue.res = (sealValue.res < debuffValue) ? sealValue.res : debuffValue;
 			skillNames.push(data.skills[this.bIndex].name);
 		}
-		if(this.has("Seal Def")){
-			sealValue.def = -this.has("Seal Def") * 2 - 1;
+		if( this.hasAtIndex("Seal Res", this.sIndex)){
+			debuffValue = -this.hasAtIndex("Seal Res", this.sIndex) * 2 - 1;
+			sealValue.res = (sealValue.res < debuffValue) ? sealValue.res : debuffValue;
+			skillNames.push(data.skills[this.sIndex].name + " (Seal)");
+		}
+		if (this.hasAtIndex("Seal Atk Spd", this.bIndex)){
+			debuffValue = -this.hasAtIndex("Seal Atk Spd", this.bIndex) * 2 - 1;
+			sealValue.atk = (sealValue.atk < debuffValue) ? sealValue.atk : debuffValue;
+			sealValue.spd = (sealValue.spd < debuffValue) ? sealValue.spd : debuffValue;
 			skillNames.push(data.skills[this.bIndex].name);
 		}
-		if(this.has("Seal Res")){
-			sealValue.res = -this.has("Seal Res") * 2 - 1;
+		if (this.hasAtIndex("Seal Atk Def", this.bIndex)){
+			debuffValue = -this.hasAtIndex("Seal Atk Def", this.bIndex) * 2 - 1;
+			sealValue.atk = (sealValue.atk < debuffValue) ? sealValue.atk : debuffValue;
+			sealValue.def = (sealValue.def < debuffValue) ? sealValue.def : debuffValue;
 			skillNames.push(data.skills[this.bIndex].name);
 		}
 
 		//These only take effect if the unit performed an attack
-		if(this.didAttack){
+		if (this.didAttack){
 			//Staves
 			if (this.has("Fear")){
 				sealStats(data.skills[this.weaponIndex].name, ["atk"], [-6, -7]);
@@ -5444,14 +5485,14 @@ function activeHero(hero){
 		//Set debuff values
 		var statChanges = [];
 
-		for(var stat in sealValue){
+		for (var stat in sealValue){
 			if(sealValue[stat] < enemy.combatDebuffs[stat]){
 				enemy.combatDebuffs[stat] = sealValue[stat];
 				statChanges.push(enemy.combatDebuffs[stat] + " " + stat);
 			}
 		}
 
-		if(skillNames.length > 0){
+		if (skillNames.length > 0){
 			if(statChanges.length > 0){
 				sealText += this.name + " applies " + statChanges.join(",") + " on " + enemy.name + " with " + skillNames.join(", ") + ".<br>";
 			}
@@ -6524,7 +6565,10 @@ function activeHero(hero){
 		//Check for quick riposte and auto follow-up counters
 		var quickRiposte = false;
 		if(enemy.has("Quick Riposte")){
-			if(enemy.combatStartHp/enemy.maxHp >= 1 - 0.1 * enemy.has("Quick Riposte")){
+			if(enemy.combatStartHp/enemy.maxHp >= 1 - 0.1 * enemy.hasAtIndex("Quick Riposte", enemy.bIndex)){
+				quickRiposte = true;
+			}
+			if(enemy.combatStartHp/enemy.maxHp >= 1 - 0.1 * enemy.hasAtIndex("Quick Riposte", enemy.sIndex)){
 				quickRiposte = true;
 			}
 		}
