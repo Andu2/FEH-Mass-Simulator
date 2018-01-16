@@ -5654,7 +5654,7 @@ function activeHero(hero){
 		} else if(this.has("Raudrblade") || this.has("Blarblade") || this.has("Gronnblade")){
 			var bladebonus = Math.max(this.buffs.atk,this.combatBuffs.atk) + Math.max(this.buffs.spd,this.combatBuffs.spd) + Math.max(this.buffs.def,this.combatBuffs.def) + Math.max(this.buffs.res,this.combatBuffs.res);
 			thisEffAtk += bladebonus;
-			if(!AOE && bladebonus != 0){damageText += this.name + " gains " + bladebonus + " damage from " + data.skills[this.weaponIndex].name + ".<br>";}
+			if(!AOE && bladebonus != 0){damageText += this.name + " gains +" + bladebonus + " atk from " + data.skills[this.weaponIndex].name + ".<br>";}
 		}
 		
 		//Defender relevant stats
@@ -5672,12 +5672,15 @@ function activeHero(hero){
 			enemyEffDef = enemy.def + Math.min(enemy.debuffs.def,enemy.combatDebuffs.def) + enemy.spur.def + enemy.combatSpur.def;
 			enemyEffRes = enemy.res + Math.min(enemy.debuffs.res,enemy.combatDebuffs.res) + enemy.spur.res + enemy.combatSpur.res;
 			if(!AOE){damageText += enemy.name + "'s buffs are nullified by opponent's skill.<br>";}
-		//Bladetome bonus
-		} else if(enemy.has("Raudrblade") || enemy.has("Blarblade") || enemy.has("Gronnblade")){
-			var bladebonus = Math.max(this.buffs.atk,this.combatBuffs.atk) + Math.max(this.buffs.spd,this.combatBuffs.spd) + Math.max(this.buffs.def,this.combatBuffs.def) + Math.max(this.buffs.res,this.combatBuffs.res);
-			enemyEffAtk += bladebonus;
-			if(!AOE && bladebonus != 0){damageText += this.name + " gains " + bladebonus + " damage from " + data.skills[enemy.weaponIndex].name + ".<br>";}
+		
 		}
+		//Bladetome bonus
+		//***Does this happen? eg. Heavy Blade vs bladetome user, is bladetome bonus relevant on defense against Heavy Blade??***
+		/*else if(enemy.has("Raudrblade") || enemy.has("Blarblade") || enemy.has("Gronnblade")){
+			var bladebonus = Math.max(enemy.buffs.atk,enemy.combatBuffs.atk) + Math.max(enemy.buffs.spd,enemy.combatBuffs.spd) + Math.max(enemy.buffs.def,enemy.combatBuffs.def) + Math.max(enemy.buffs.res,enemy.combatBuffs.res);
+			enemyEffAtk += bladebonus;
+			if(!AOE && bladebonus != 0){damageText += enemy.name + " gains +" + bladebonus + " atk from " + data.skills[enemy.weaponIndex].name + ".<br>";}
+		}*/
 
 		//Blizzard bonus
 		//TODO: Check panic debuff interaction
