@@ -1154,11 +1154,11 @@ function setStats(hero){
 	}
 	else if(typeof hero.index != "undefined" && hero.index != -1){
 		var growthValMod = {"hp":0,"atk":0,"spd":0,"def":0,"res":0};
-		if(hero.boon!="none"){
-			growthValMod[hero.boon]+=1;
+		if(hero.boon != "none"){
+			growthValMod[hero.boon] += 1;
 		}
-		if(hero.bane!="none"){
-			growthValMod[hero.bane]-=1;
+		if(hero.bane != "none"){
+			growthValMod[hero.bane] -= 1;
 		}
 
 		var base = {};
@@ -1859,6 +1859,7 @@ function resetFilter(){
 	options.sortOrder = "worst";
 	localStorage['option_sortOrder'] = "worst";
 	$('#sort_results').val(options.sortOrder).trigger('change.select2');
+	calculate();
 }
 
 //Select2 match function for matching starting characters
@@ -2200,9 +2201,115 @@ function showResultsTooltip(e,resultDiv){
 	$("#frame_tooltip").html(fightResults[resultId].fightText).show();
 }
 
-function hideResultsTooltip(){
-	showingTooltip = false;
-	$("#frame_tooltip").hide();
+function showHeroTooltip(heroType){
+	var hero;
+	var tooltipText;
+	
+	//Set hero to selected hero type
+	switch (heroType){
+		case "challenger":
+			hero = challenger;
+			break;
+		case "list":
+			hero = enemies.fl;
+			break;
+		case "custom":
+			(options.customEnemySelected == -1) ? hero = -1 : hero = enemies.cl.list[options.customEnemySelected];
+			break;
+	}
+	
+	//If hero is undefined or empty, do nothing
+	if (hero == -1 || hero.index == -1){
+		return;
+	}
+	
+	//Show tooltip
+	showingTooltip = true;
+	var base = {};
+	base.hp = data.heroes[hero.index].basehp;
+	base.atk = data.heroes[hero.index].baseatk;
+	base.spd = data.heroes[hero.index].basespd;
+	base.def = data.heroes[hero.index].basedef;
+	base.res = data.heroes[hero.index].baseres;
+	
+	if (hero.rarity < 5){
+		//Subtract 2 from every stat to revert 5* base stats to 1*
+		base.hp -= 2;
+		base.atk -= 2;
+		base.spd -= 2;
+		base.def -= 2;
+		base.res -= 2;
+		
+		//Sort stat bonus order of base stats
+		var rarityBaseOrder = ["atk","spd","def","res"];
+		var boostPriority = {"hp":4,"atk":3,"spd":2,"def":1,"res":0};
+		rarityBaseOrder.sort(function(a,b){
+			if(base[a]>base[b]){
+				return -1;
+			}
+			else if(base[a]<base[b]){
+				return 1;
+			}
+			else{
+				if(boostPriority[a]>boostPriority[b]){
+					return -1;
+				}
+				else{
+					return 1;
+				}
+			}
+		});
+		
+		//Push hp last for 3* and 5* since it is 2 stat boost per * (Base -> +2 stat -> +2 stat + hp -> +2 stat -> +2 stat + hp)
+		rarityBaseOrder.push("hp");
+		
+		//Add bonus to 1* base stats to rarity values
+		var rarityBoostCount = Math.floor((hero.rarity-1) * 2.5);		
+		for(var i = 0; i < rarityBoostCount; i++){
+			base[rarityBaseOrder[i%5]]++;
+		}
+	}
+	
+	//Add IV stats
+	var growthValMod = {"hp":0,"atk":0,"spd":0,"def":0,"res":0};
+	if(hero.boon != "none"){
+		growthValMod[hero.boon] += 1;
+	}
+	if(hero.bane != "none"){
+		growthValMod[hero.bane] -= 1;
+	}	
+	base.hp += growthValMod.hp;
+	base.atk += growthValMod.atk;
+	base.spd += growthValMod.spd;
+	base.def += growthValMod.def;
+	base.res += growthValMod.res;
+	
+	//Print tooltip text
+	tooltipText = "<span class=\"bold\">" + data.heroes[hero.index].name + " (";	
+	if ((hero.boon == "none" && hero.bane == "none") || hero.boon == hero.bane){
+		tooltipText += "Neutral";
+	}else{
+		//Print boon first
+		for (var stat in growthValMod){
+			if (growthValMod.hasOwnProperty(stat) && growthValMod[stat] > 0) {
+				tooltipText += "+" + stat;
+			}
+		}
+		//Print bane second
+		for (var stat in growthValMod){
+			if (growthValMod.hasOwnProperty(stat) && growthValMod[stat] < 0) {
+				tooltipText += "-" + stat;
+			}
+		}
+	}	
+	tooltipText += ") " + "☆".repeat(hero.rarity) + " </span><br>";
+	tooltipText += " Base HP: <font color=\"#fefec8\">" + base.hp + "</font><br>";
+	tooltipText += " Base Atk: <font color=\"#fefec8\">" + base.atk + "</font><br>";
+	tooltipText += " Base Spd: <font color=\"#fefec8\">" + base.spd + "</font><br>";
+	tooltipText += " Base Def: <font color=\"#fefec8\">" + base.def + "</font><br>";
+	tooltipText += " Base Res: <font color=\"#fefec8\">" + base.res + "</font><br>";
+
+	$("#frame_tooltip").html(tooltipText).show();
 }
 
 function showSkillTooltip(heroType, skillType){
@@ -2284,7 +2391,7 @@ function showSkillTooltip(heroType, skillType){
 	}
 }
 
-function hideSkillTooltip(){
+function hideTooltip(){
 	showingTooltip = false;
 	$("#frame_tooltip").hide();
 }
@@ -3425,7 +3532,7 @@ function fight(enemyIndex,resultIndex){
 	collectStatistics(ahChallenger, ahEnemy, outcome);
 
 	//Generate fight HTML
-	fightHTML = ["<div class=\"results_entry\" id=\"result_" + resultIndex + "\" onmouseover=\"showResultsTooltip(event,this);\" onmouseout=\"hideResultsTooltip();\">",
+	fightHTML = ["<div class=\"results_entry\" id=\"result_" + resultIndex + "\" onmouseover=\"showResultsTooltip(event,this);\" onmouseout=\"hideTooltip();\">",
 		"<div class=\"results_hpbox\">",
 			"<div class=\"results_hplabel\">HP</div>",
 			"<div class=\"results_hpnums\">",
@@ -4464,6 +4571,18 @@ function activeHero(hero){
 					threatDebuffs.atk = Math.min(threatDebuffs.atk,-this.hasAtIndex("Atk Ploy", this.sIndex)-2);
 					skillNames.push(data.skills[this.sIndex].name + " (Seal)");
 				}
+				if(this.hasAtIndex("Spd Ploy", this.sIndex)){
+					threatDebuffs.spd = Math.min(threatDebuffs.spd,-this.hasAtIndex("Spd Ploy", this.sIndex)-2);
+					skillNames.push(data.skills[this.sIndex].name + " (Seal)");
+				}
+				if(this.hasAtIndex("Def Ploy", this.sIndex)){
+					threatDebuffs.def = Math.min(threatDebuffs.def,-this.hasAtIndex("Def Ploy", this.sIndex)-2);
+					skillNames.push(data.skills[this.sIndex].name + " (Seal)");
+				}
+				if(this.hasAtIndex("Res Ploy", this.sIndex)){
+					threatDebuffs.res = Math.min(threatDebuffs.res,-this.hasAtIndex("Res Ploy", this.sIndex)-2);
+					skillNames.push(data.skills[this.sIndex].name + " (Seal)");
+				}
 			}
 			//Panic Ploy
 			if(this.hasAtIndex("Panic Ploy", this.cIndex) && this.hp > enemy.hp + 6 - this.hasAtIndex("Panic Ploy", this.cIndex) * 2){
@@ -5261,33 +5380,62 @@ function activeHero(hero){
 		}
 
 		//Seals
-		if(this.has("Seal Atk")){ //Will count for seal atk speed as well
-			sealValue.atk = -this.has("Seal Atk") * 2 - 1;
+		var debuffValue = 0;
+		if (this.hasAtIndex("Seal Atk", this.bIndex)){
+			debuffValue = -this.hasAtIndex("Seal Atk", this.bIndex) * 2 - 1;
+			sealValue.atk = (sealValue.atk < debuffValue) ? sealValue.atk : debuffValue;
 			skillNames.push(data.skills[this.bIndex].name);
 		}
-		if(this.has("Seal Atk Spd")){
-			sealValue.spd = -this.has("Seal Atk Spd") * 2 - 1;
+		if (this.hasAtIndex("Seal Atk", this.sIndex)){
+			debuffValue = -this.hasAtIndex("Seal Atk", this.sIndex) * 2 - 1;
+			sealValue.atk = (sealValue.atk < debuffValue) ? sealValue.atk : debuffValue;
+			skillNames.push(data.skills[this.sIndex].name + " (Seal)");
+		}		
+		if (this.hasAtIndex("Seal Spd", this.bIndex)){
+			debuffValue = -this.hasAtIndex("Seal Spd", this.bIndex) * 2 - 1;
+			sealValue.spd = (sealValue.spd < debuffValue) ? sealValue.spd : debuffValue;
 			skillNames.push(data.skills[this.bIndex].name);
 		}
-		if(this.has("Seal Atk Def")){
-			sealValue.def = -this.has("Seal Atk Def") * 2 - 1;
+		if (this.hasAtIndex("Seal Spd", this.sIndex)){
+			debuffValue = -this.hasAtIndex("Seal Spd", this.sIndex) * 2 - 1;
+			sealValue.spd = (sealValue.spd < debuffValue) ? sealValue.spd : debuffValue;
+			skillNames.push(data.skills[this.sIndex].name + " (Seal)");
+		}
+		if (this.hasAtIndex("Seal Def", this.bIndex)){
+			debuffValue = -this.hasAtIndex("Seal Def", this.bIndex) * 2 - 1;
+			sealValue.def = (sealValue.def < debuffValue) ? sealValue.def : debuffValue;
 			skillNames.push(data.skills[this.bIndex].name);
 		}
-		if(this.has("Seal Spd")){
-			sealValue.spd = -this.has("Seal Spd") * 2 - 1;
+		if (this.hasAtIndex("Seal Def", this.sIndex)){
+			debuffValue = -this.hasAtIndex("Seal Def", this.sIndex) * 2 - 1;
+			sealValue.def = (sealValue.def < debuffValue) ? sealValue.def : debuffValue;
+			skillNames.push(data.skills[this.sIndex].name + " (Seal)");
+		}
+		if (this.hasAtIndex("Seal Res", this.bIndex)){
+			debuffValue = -this.hasAtIndex("Seal Res", this.bIndex) * 2 - 1;
+			sealValue.res = (sealValue.res < debuffValue) ? sealValue.res : debuffValue;
 			skillNames.push(data.skills[this.bIndex].name);
 		}
-		if(this.has("Seal Def")){
-			sealValue.def = -this.has("Seal Def") * 2 - 1;
+		if( this.hasAtIndex("Seal Res", this.sIndex)){
+			debuffValue = -this.hasAtIndex("Seal Res", this.sIndex) * 2 - 1;
+			sealValue.res = (sealValue.res < debuffValue) ? sealValue.res : debuffValue;
+			skillNames.push(data.skills[this.sIndex].name + " (Seal)");
+		}
+		if (this.hasAtIndex("Seal Atk Spd", this.bIndex)){
+			debuffValue = -this.hasAtIndex("Seal Atk Spd", this.bIndex) * 2 - 1;
+			sealValue.atk = (sealValue.atk < debuffValue) ? sealValue.atk : debuffValue;
+			sealValue.spd = (sealValue.spd < debuffValue) ? sealValue.spd : debuffValue;
 			skillNames.push(data.skills[this.bIndex].name);
 		}
-		if(this.has("Seal Res")){
-			sealValue.res = -this.has("Seal Res") * 2 - 1;
+		if (this.hasAtIndex("Seal Atk Def", this.bIndex)){
+			debuffValue = -this.hasAtIndex("Seal Atk Def", this.bIndex) * 2 - 1;
+			sealValue.atk = (sealValue.atk < debuffValue) ? sealValue.atk : debuffValue;
+			sealValue.def = (sealValue.def < debuffValue) ? sealValue.def : debuffValue;
 			skillNames.push(data.skills[this.bIndex].name);
 		}
 
 		//These only take effect if the unit performed an attack
-		if(this.didAttack){
+		if (this.didAttack){
 			//Staves
 			if (this.has("Fear")){
 				sealStats(data.skills[this.weaponIndex].name, ["atk"], [-6, -7]);
@@ -5337,14 +5485,14 @@ function activeHero(hero){
 		//Set debuff values
 		var statChanges = [];
 
-		for(var stat in sealValue){
+		for (var stat in sealValue){
 			if(sealValue[stat] < enemy.combatDebuffs[stat]){
 				enemy.combatDebuffs[stat] = sealValue[stat];
 				statChanges.push(enemy.combatDebuffs[stat] + " " + stat);
 			}
 		}
 
-		if(skillNames.length > 0){
+		if (skillNames.length > 0){
 			if(statChanges.length > 0){
 				sealText += this.name + " applies " + statChanges.join(",") + " on " + enemy.name + " with " + skillNames.join(", ") + ".<br>";
 			}
@@ -6417,7 +6565,10 @@ function activeHero(hero){
 		//Check for quick riposte and auto follow-up counters
 		var quickRiposte = false;
 		if(enemy.has("Quick Riposte")){
-			if(enemy.combatStartHp/enemy.maxHp >= 1 - 0.1 * enemy.has("Quick Riposte")){
+			if(enemy.combatStartHp/enemy.maxHp >= 1 - 0.1 * enemy.hasAtIndex("Quick Riposte", enemy.bIndex)){
+				quickRiposte = true;
+			}
+			if(enemy.combatStartHp/enemy.maxHp >= 1 - 0.1 * enemy.hasAtIndex("Quick Riposte", enemy.sIndex)){
 				quickRiposte = true;
 			}
 		}
