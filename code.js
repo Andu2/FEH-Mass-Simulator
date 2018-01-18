@@ -6631,34 +6631,43 @@ function activeHero(hero){
 		}
 		
 		//Check for auto follow-up skills
-		if(this.has("Brash Assault") && enemyCanCounter){
-			if(this.hp/this.maxHp <= .2 +  this.hasAtIndex("Brash Assault", this.bIndex) * 0.1){
-				thisAttackRank++;
-				thisAttackRankChanged = true;
+		if (enemyCanCounter){
+			if (this.hasAtIndex("Brash Assault", this.bIndex)){
+				if (this.hp/this.maxHp <= .2 +  this.hasAtIndex("Brash Assault", this.bIndex) * 0.1){
+					thisAttackRank++;
+					thisAttackRankChanged = true;
+				}
 			}
-			if(this.hp/this.maxHp <= .2 +  this.hasAtIndex("Brash Assault", this.sIndex) * 0.1){
-				thisAttackRank++;
-				thisAttackRankChanged = true;
+			if (this.hasAtIndex("Brash Assault", this.sIndex)){
+				if (this.hp/this.maxHp <= .2 +  this.hasAtIndex("Brash Assault", this.sIndex) * 0.1){
+					thisAttackRank++;
+					thisAttackRankChanged = true;
+				}			
 			}
-			
-		}
-		if (this.has("Sol Katti") && this.hasAtRefineIndex("Brash Assault", this.refineIndex) && enemyCanCounter && (this.hp / this.maxHp <= 0.75)){
-			thisAttackRank++;
-			thisAttackRankChanged = true;
-		}
+			if (this.has("Sol Katti") && this.hasAtRefineIndex("Brash Assault", this.refineIndex)){
+				if (this.hp / this.maxHp <= 0.75){
+					thisAttackRank++;
+					thisAttackRankChanged = true;
+				}				
+			}
+		}		
 		if (this.hasAtIndex("Bold Fighter", this.bIndex)){
 			if (this.hasAtIndex("Bold Fighter", this.bIndex) == 3 || (this.combatStartHp / this.maxHp >= 1.0 / this.hasAtIndex("Bold Fighter", this.bIndex))){
 				thisAttackRank++;
 				thisAttackRankChanged = true;
 			}
 		}
-		if (this.hasAtRefineIndex("Pursuit", this.refineIndex) && (this.combatStartHp / this.maxHp >= 0.9)){
-			thisAttackRank++;
-			thisAttackRankChanged = true;
+		if (this.hasAtRefineIndex("Pursuit", this.refineIndex)){
+			if (this.combatStartHp / this.maxHp >= 0.9){
+				thisAttackRank++;
+				thisAttackRankChanged = true;
+			}			
 		}
-		if (this.has("Follow-Up Ring") && (this.combatStartHp / this.maxHp >= 0.5)){
-			thisAttackRank++;
-			thisAttackRankChanged = true;
+		if (this.has("Follow-Up Ring")){
+			if (this.combatStartHp / this.maxHp >= 0.5){
+				thisAttackRank++;
+				thisAttackRankChanged = true;
+			}			
 		}
 		
 		//Check for auto follow-up counters
