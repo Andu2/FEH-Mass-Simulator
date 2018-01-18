@@ -6765,7 +6765,7 @@ function activeHero(hero){
 		if (enemyAttackRank > 0){
 			enemyFollowUp = true;
 			roundText += enemy.name + " can make an automatic follow-up attack.<br>";
-		}else if (enemyAttackRank > 0){
+		}else if (enemyAttackRank < 0){
 			enemyFollowUp = false;
 			roundText += enemy.name + " is prevented from making a follow-up attack.<br>";
 		}else{
