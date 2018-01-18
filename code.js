@@ -4849,6 +4849,12 @@ function activeHero(hero){
 				break;
 		}
 		
+		//Combat buff
+		if (this.hasAtRefineIndex("Distant Atk", this.refineIndex) && enemy.range == "ranged"){
+			this.combatSpur.atk += 6;
+			boostText += this.name + " gets +6 Atk from " + data.refine[this.refineIndex].name + " (Refined) against a ranged opponent.<br>";
+		}
+		
 		//Brazen skills
 		if(this.combatStartHp / this.maxHp <= 0.8){
 			if(this.has("Brazen Atk Def")){
@@ -5011,10 +5017,6 @@ function activeHero(hero){
 			if(this.hasExactly("Parthia") && this.refineIndex == -1){
 				this.combatSpur.res += 4;
 				boostText += this.name + " gets +4 Res from initiating with " + data.skills[this.weaponIndex].name + ".<br>";
-			}
-			if (this.hasAtRefineIndex("Distant Atk", this.refineIndex) && enemy.range == "ranged"){
-				this.combatSpur.atk += 6;
-				boostText += this.name + " gets +6 Atk from initiating with " + data.refine[this.refineIndex].name + " (Refined).<br>";
 			}
 			if(this.hasExactly("Dark Greatsword")){
 				this.combatSpur.atk += 4;
@@ -5200,7 +5202,7 @@ function activeHero(hero){
 			if(this.has("Guard Bow") && enemy.range == "ranged"){
 				this.combatSpur.def += 6;
 				this.combatSpur.res += 6;
-				boostText += this.name + " gets +6 Def/Res while defending with " + data.skills[this.weaponIndex].name + " against bow, dagger, magic, or staff.<br>";
+				boostText += this.name + " gets +6 Def/Res while defending with " + data.skills[this.weaponIndex].name + " against a ranged opponent.<br>";
 			}
 
 			//Skills
@@ -5654,7 +5656,7 @@ function activeHero(hero){
 		} else if(this.has("Raudrblade") || this.has("Blarblade") || this.has("Gronnblade")){
 			var bladebonus = Math.max(this.buffs.atk,this.combatBuffs.atk) + Math.max(this.buffs.spd,this.combatBuffs.spd) + Math.max(this.buffs.def,this.combatBuffs.def) + Math.max(this.buffs.res,this.combatBuffs.res);
 			thisEffAtk += bladebonus;
-			if(!AOE && bladebonus != 0){damageText += this.name + " gains " + bladebonus + " damage from " + data.skills[this.weaponIndex].name + ".<br>";}
+			if(!AOE && bladebonus != 0){damageText += this.name + " gains +" + bladebonus + " Atk from " + data.skills[this.weaponIndex].name + ".<br>";}
 		}
 		
 		//Defender relevant stats
@@ -5671,12 +5673,14 @@ function activeHero(hero){
 			enemyEffSpd = enemy.spd + Math.min(enemy.debuffs.spd,enemy.combatDebuffs.spd) + enemy.spur.spd + enemy.combatSpur.spd;
 			enemyEffDef = enemy.def + Math.min(enemy.debuffs.def,enemy.combatDebuffs.def) + enemy.spur.def + enemy.combatSpur.def;
 			enemyEffRes = enemy.res + Math.min(enemy.debuffs.res,enemy.combatDebuffs.res) + enemy.spur.res + enemy.combatSpur.res;
-			if(!AOE){damageText += enemy.name + "'s buffs are nullified by opponent's skill.<br>";}
+			if(!AOE){damageText += enemy.name + "'s buffs are nullified by opponent's skill.<br>";}		
 		//Bladetome bonus
-		} else if(enemy.has("Raudrblade") || enemy.has("Blarblade") || enemy.has("Gronnblade")){
-			var bladebonus = Math.max(this.buffs.atk,this.combatBuffs.atk) + Math.max(this.buffs.spd,this.combatBuffs.spd) + Math.max(this.buffs.def,this.combatBuffs.def) + Math.max(this.buffs.res,this.combatBuffs.res);
+		//TODO: Check if bladetome bonus is relevant in enemy phase against Heavy Blade
+		}		
+		else if(enemy.has("Raudrblade") || enemy.has("Blarblade") || enemy.has("Gronnblade")){
+			var bladebonus = Math.max(enemy.buffs.atk,enemy.combatBuffs.atk) + Math.max(enemy.buffs.spd,enemy.combatBuffs.spd) + Math.max(enemy.buffs.def,enemy.combatBuffs.def) + Math.max(enemy.buffs.res,enemy.combatBuffs.res);
 			enemyEffAtk += bladebonus;
-			if(!AOE && bladebonus != 0){damageText += this.name + " gains " + bladebonus + " damage from " + data.skills[enemy.weaponIndex].name + ".<br>";}
+			if(!AOE && bladebonus != 0){damageText += enemy.name + " gains +" + bladebonus + " Atk from " + data.skills[enemy.weaponIndex].name + ".<br>";}
 		}
 
 		//Blizzard bonus
