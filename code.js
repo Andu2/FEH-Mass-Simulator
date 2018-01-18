@@ -5691,7 +5691,7 @@ function activeHero(hero){
 				atkbonus += Math.max(enemy.buffs.atk,enemy.combatBuffs.atk) + Math.max(enemy.buffs.spd,enemy.combatBuffs.spd) + Math.max(enemy.buffs.def,enemy.combatBuffs.def) + Math.max(enemy.buffs.res,enemy.combatBuffs.res);
 			}
 			thisEffAtk += atkbonus;
-			if(!AOE && atkbonus != 0){damageText += this.name + " gains +" + atkbonus + " atk from " + data.skills[this.weaponIndex].name + ".<br>";}
+			if(!AOE && atkbonus != 0){damageText += this.name + " gains +" + atkbonus + " Atk from " + data.skills[this.weaponIndex].name + ".<br>";}
 		}
 		if(enemy.has("Blizzard")){
 			var atkbonus = -1 * (Math.min(this.debuffs.atk,this.combatDebuffs.atk) + Math.min(this.debuffs.spd,this.combatDebuffs.spd) + Math.min(this.debuffs.def,this.combatDebuffs.def) + Math.min(this.debuffs.res,this.combatDebuffs.res));
@@ -5699,7 +5699,7 @@ function activeHero(hero){
 				atkbonus += Math.max(this.buffs.atk,this.combatBuffs.atk) + Math.max(this.buffs.spd,this.combatBuffs.spd) + Math.max(this.buffs.def,this.combatBuffs.def) + Math.max(this.buffs.res,this.combatBuffs.res);
 			}
 			enemyEffAtk += atkbonus;
-			if(!AOE && atkbonus != 0){damageText += enemy.name + " gains +" + atkbonus + " atk from " + data.skills[enemy.weaponIndex].name + ".<br>";}
+			if(!AOE && atkbonus != 0){damageText += enemy.name + " gains +" + atkbonus + " Atk from " + data.skills[enemy.weaponIndex].name + ".<br>";}
 		}
 		
 		//Relevant defense stat
@@ -6655,11 +6655,11 @@ function activeHero(hero){
 		else if(this.weaponType=="bow" && enemy.has("Bowbreaker")){
 			thisBreakLevel = 1.1 - enemy.has("Bowbreaker") * 0.2;
 		}
-		else if(this.weaponType=="dagger" && enemy.has("Daggerbreaker")){
-			thisBreakLevel = 1.1 - enemy.has("Daggerbreaker") * 0.2;
-		}
 		else if(this.weaponType=="dagger" && enemy.has("Assassin's Bow")){
 			thisBreakLevel = 0;
+		}
+		else if(this.weaponType=="dagger" && enemy.has("Daggerbreaker")){
+			thisBreakLevel = 1.1 - enemy.has("Daggerbreaker") * 0.2;
 		}
 		var enemyBreakLevel = 2; // hp threshold
 		if(enemy.weaponType=="sword" && this.has("Swordbreaker")){
@@ -6683,11 +6683,11 @@ function activeHero(hero){
 		else if(enemy.weaponType=="bow" && this.has("Bowbreaker")){
 			enemyBreakLevel = 1.1 - this.has("Bowbreaker") * 0.2;
 		}
-		else if(enemy.weaponType=="dagger" && this.has("Daggerbreaker")){
-			enemyBreakLevel = 1.1 - this.has("Daggerbreaker") * 0.2;
-		}
 		else if(enemy.weaponType=="dagger" && this.has("Assassin's Bow")){
 			enemyBreakLevel = 0;
+		}
+		else if(enemy.weaponType=="dagger" && this.has("Daggerbreaker")){
+			enemyBreakLevel = 1.1 - this.has("Daggerbreaker") * 0.2;
 		}
 		if(enemy.hp / enemy.maxHp >= thisBreakLevel){
 			thisAttackRank--;
