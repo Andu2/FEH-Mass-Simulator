@@ -5653,6 +5653,7 @@ function activeHero(hero){
 			thisEffRes = this.res + Math.min(this.debuffs.res,this.combatDebuffs.res) + this.spur.res + this.combatSpur.res;
 			if(!AOE){damageText += this.name + "'s buffs are nullified by opponent's skill.<br>";}
 		//Bladetome bonus
+		//TODO: Find out if bladetomes affect AOE specials
 		} else if(this.has("Raudrblade") || this.has("Blarblade") || this.has("Gronnblade")){
 			var bladebonus = Math.max(this.buffs.atk,this.combatBuffs.atk) + Math.max(this.buffs.spd,this.combatBuffs.spd) + Math.max(this.buffs.def,this.combatBuffs.def) + Math.max(this.buffs.res,this.combatBuffs.res);
 			thisEffAtk += bladebonus;
@@ -5675,7 +5676,6 @@ function activeHero(hero){
 			enemyEffRes = enemy.res + Math.min(enemy.debuffs.res,enemy.combatDebuffs.res) + enemy.spur.res + enemy.combatSpur.res;
 			if(!AOE){damageText += enemy.name + "'s buffs are nullified by opponent's skill.<br>";}		
 		//Bladetome bonus
-		//TODO: Check if bladetome bonus is relevant in enemy phase against Heavy Blade
 		}		
 		else if(enemy.has("Raudrblade") || enemy.has("Blarblade") || enemy.has("Gronnblade")){
 			var bladebonus = Math.max(enemy.buffs.atk,enemy.combatBuffs.atk) + Math.max(enemy.buffs.spd,enemy.combatBuffs.spd) + Math.max(enemy.buffs.def,enemy.combatBuffs.def) + Math.max(enemy.buffs.res,enemy.combatBuffs.res);
@@ -6703,7 +6703,6 @@ function activeHero(hero){
 		}
 
 		//Check for Sweep skills
-		//***Mind the split location for various sweep calculations***
 		var firesweep = false;
 		var windsweep = 0;
 		var watersweep = 0;
