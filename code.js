@@ -5737,17 +5737,6 @@ function activeHero(hero){
 						AOEDamage += 10;
 						damageText += this.name + " gains 10 damage from " + data.skills[hero.weapon].name + ".<br>";
 					}
-					//Wrath damage is checked when special is activated
-					//***Apparently Wrath does not affect AOE skills***
-					/*
-					if(this.has("Wrath")){
-						if(this.hp/this.maxHp <= .25 * this.has("Wrath")){
-							AOEDamage += 10;
-							damageText += this.name + " gains 10 damage from " + data.skills[this.bIndex].name + ".<br>";
-						}
-					}
-					*/
-
 					if(enemy.has("Embla's Ward")){
 						AOEDamage = 0;
 					}
@@ -5883,7 +5872,7 @@ function activeHero(hero){
 						Cancel Affinity 1 = negate extra disadvantage	(Extra -20% to 0%)		(Total -20%)
 						Cancel Affinity 2 = negate extra disadvantage	(Extra -20% to 0%)		(Total -20%)
 						Cancel Affinity 3 = reverse extra disadvantage	(Extra -20% to +20%)	(Total 0%)
-					Disadvantarged Gem Weapon or Triangle Adept:								(Base +20%)
+					Disadvantaged Gem Weapon or Triangle Adept:								(Base +20%)
 						Cancel Affinity 1 = negate extra advantage		(Extra +20% to 0%)		(Total +20%)
 						Cancel Affinity 2 = keep extra advantage		(Extra +20% to +20%)	(Total +40%)
 						Cancel Affinity 3 = keep extra advantage		(Extra +20% to +20%)	(Total +40%)
@@ -6514,7 +6503,6 @@ function activeHero(hero){
 		var thisEffSpd = this.spd + Math.max(this.buffs.spd,this.combatBuffs.spd) + Math.min(this.debuffs.spd,this.combatDebuffs.spd) + this.spur.spd + this.combatSpur.spd;
 		var enemyEffSpd = enemy.spd + Math.max(enemy.buffs.spd,enemy.combatBuffs.spd) + Math.min(enemy.debuffs.spd,enemy.combatDebuffs.spd) + enemy.spur.spd + enemy.combatSpur.spd;
 		//Buff cancellation and reversion - Spd calculations
-		//***May require change depending on order of application between Panic and null skills***
 		if(this.panicked){
 			thisEffSpd = this.spd - Math.max(this.buffs.spd,this.combatBuffs.spd) + Math.min(this.debuffs.spd,this.combatDebuffs.spd) + this.spur.spd + this.combatSpur.spd;
 		} else if(isBuffCancelled(this, enemy)){
@@ -6531,8 +6519,15 @@ function activeHero(hero){
 
 		//Check for AOE special activation
 		roundText += this.doDamage(enemy, false, true, false);
-
-		//check for vantage before beginning combat
+		
+		//check for Brave weapons, brave will be passed to this.doDamage
+		var brave = false;
+		if(this.has("Brave Sword") || this.has("Brave Lance") || this.has("Brave Axe") || this.has("Brave Bow")
+			|| this.has("Dire Thunder") || this.has("Amiti")){
+			brave = true;
+		}
+		
+		//Check for Vantage
 		var vantage = false;
 		if(enemy.has("Vantage")){
 			if(enemy.hp/enemy.maxHp <= .25 * enemy.has("Vantage")){
@@ -6545,7 +6540,7 @@ function activeHero(hero){
 			}
 		}
 
-		//check for desperation before beginning combat
+		//Check for Desperation
 		var desperation = false;
 		if(this.has("Desperation")){
 			if(this.hp/this.maxHp <= .25 * this.has("Desperation")){
@@ -6565,59 +6560,71 @@ function activeHero(hero){
 			vantage = false;
 			desperation = false;
 		}
-
-		//Check for quick riposte and auto follow-up counters
-		var quickRiposte = false;
+		
+		//Combat attack rank for follow-up attacks
+		//<0 - no follow-up, 0 - speed check, >0 - guaranteed follow-up
+		var thisAttackRank = 0;
+		var enemyAttackRank = 0;
+		
+		//Check for auto follow-up skills
+		if((this.hasAtIndex("Brash Assault", this.bIndex) || this.hasAtIndex("Brash Assault", this.sIndex)) && (this.range == enemy.range || anyRangeCounter) && enemyCanCounter){
+			//Use highest level of Brash Assault between B passive and seal
+			if(this.hp/this.maxHp <= .2 +  Math.max(this.hasAtIndex("Brash Assault", this.bIndex), this.hasAtIndex("Brash Assault", this.sIndex)) * 0.1){
+				thisAttackRank++;
+			}
+		}
+		if (this.has("Sol Katti") && this.hp/this.maxHp <= .75 && this.hasAtRefineIndex("Brash Assault", this.refineIndex) && (this.range == enemy.range || anyRangeCounter) && enemyCanCounter){
+			thisAttackRank++;
+		}
+		if (this.hasAtIndex("Bold Fighter", this.bIndex)){
+			if (this.hasAtIndex("Bold Fighter", this.bIndex) == 3 || this.combatStartHp / this.maxHp >= 1.0 / this.hasAtIndex("Bold Fighter", this.bIndex)){
+				thisAttackRank++;
+			}
+		}
+		if (this.hasAtRefineIndex("Pursuit", this.refineIndex) && (this.combatStartHp / this.maxHp >= 0.9)){
+			thisAttackRank++;
+		}
+		if (this.has("Follow-Up Ring") && (this.combatStartHp / this.maxHp >= 0.5)){
+			thisAttackRank++;
+		}
+		
+		//Check for Quick Riposte and auto follow-up counters
 		if(enemy.has("Quick Riposte")){
 			if(enemy.combatStartHp/enemy.maxHp >= 1 - 0.1 * enemy.hasAtIndex("Quick Riposte", enemy.bIndex)){
-				quickRiposte = true;
+				enemyAttackRank++;
 			}
 			if(enemy.combatStartHp/enemy.maxHp >= 1 - 0.1 * enemy.hasAtIndex("Quick Riposte", enemy.sIndex)){
-				quickRiposte = true;
+				enemyAttackRank++;
 			}
 		}
 		if (enemy.hasAtIndex("Vengeful Fighter", enemy.bIndex)){
 			if (enemy.combatStartHp / enemy.maxHp >= (1.0 - (enemy.hasAtIndex("Vengeful Fighter", enemy.bIndex) * 0.1) - ((enemy.hasAtIndex("Vengeful Fighter", enemy.bIndex) - 1) * 0.1))){
-				quickRiposte = true;
+				enemyAttackRank++;
 			}
 		}
 		if (enemy.has("Armads") && enemy.combatStartHp/enemy.maxHp >= .8){
-			quickRiposte = true;
+			enemyAttackRank++;
 		}
 		if (enemy.has("Follow-Up Ring") && enemy.combatStartHp/enemy.maxHp >= .5){
-			quickRiposte = true;
+			enemyAttackRank++;
 		}
 
-		//Check for wary fighter
-		//Wary fighter can come from either unit
-		//But some interactions apparently depend on who has it
-		var waryFighter = false;
-		var thisWaryFighter = false;
-		var enemyWaryFighter = false;
+		//Check for Wary Fighter
 		if(this.has("Wary Fighter")){
 			if(this.hp/this.maxHp >= 1.1 - 0.2 * this.has("Wary Fighter")){
-				waryFighter = true;
-				thisWaryFighter = true;
+				thisAttackRank--;
+				enemyAttackRank--;
 			}
 		}
 		if(enemy.has("Wary Fighter")){
 			if(enemy.hp/enemy.maxHp >= 1.1 - 0.2 * enemy.has("Wary Fighter")){
-				waryFighter = true;
-				enemyWaryFighter = true;
+				thisAttackRank--;
+				enemyAttackRank--;
 			}
 		}
-
-		//check for brave
-		//brave will be passed to this.doDamage
-		var brave = false;
-		if(this.has("Brave Sword") || this.has("Brave Lance") || this.has("Brave Axe") || this.has("Brave Bow")
-			|| this.has("Dire Thunder") || this.has("Amiti")){
-			brave = true;
-		}
-
-		//check for breaker skills
+		
+		//Check for Breaker skills
 		//Need to redo this code to avoid repeating twice...
-		var thisBroken = false;
 		var thisBreakLevel = 2; // hp threshold
 		if(this.weaponType=="sword" && enemy.has("Swordbreaker")){
 			thisBreakLevel = 1.1 - enemy.has("Swordbreaker") * 0.2;
@@ -6646,8 +6653,6 @@ function activeHero(hero){
 		else if(this.weaponType=="dagger" && enemy.has("Assassin's Bow")){
 			thisBreakLevel = 0;
 		}
-
-		var enemyBroken = false;
 		var enemyBreakLevel = 2; // hp threshold
 		if(enemy.weaponType=="sword" && this.has("Swordbreaker")){
 			enemyBreakLevel = 1.1 - this.has("Swordbreaker") * 0.2;
@@ -6676,25 +6681,22 @@ function activeHero(hero){
 		else if(enemy.weaponType=="dagger" && this.has("Assassin's Bow")){
 			enemyBreakLevel = 0;
 		}
-
 		if(enemy.hp / enemy.maxHp >= thisBreakLevel){
-			thisBroken = true;
+			thisAttackRank--;
+			enemyAttackRank++;
 		}
 		if(this.hp / this.maxHp >= enemyBreakLevel){
-			enemyBroken = true;
+			thisAttackRank++;
+			enemyAttackRank--;
 		}
 
-		//Counterattack cancellation
+		//Check for Sweep skills
 		//***Mind the split location for various sweep calculations***
 		var firesweep = false;
 		var windsweep = 0;
 		var watersweep = 0;
 
-		if(this.has("Firesweep")){
-			firesweep = true;
-		}
-		if(enemy.has("Firesweep")){
-			firesweep = true;
+		if(this.has("Firesweep") || enemy.has("Firesweep")){
 			firesweep = true;
 		}
 		if(this.has("Windsweep")){
@@ -6709,45 +6711,13 @@ function activeHero(hero){
 				watersweep += -2 + (this.has("Phantom Spd") * -3);
 			}
 		}
-
-		var thisFollowUp = false;
-		var enemyCanCounter = false;
-		var enemyFollowUp = false;
-
-		//I split up the follow-up rules to be less confusing, so there are extra computations
-		var preventEnemyFollow = false;
-		var preventThisFollow = false;
-		var enemyAutoFollow = false;
-		var thisAutoFollow = false;
-		var thisOutspeeds = false;
-		var enemyOutspeeds = false;
-
-		if(waryFighter){
-			preventEnemyFollow = true;
-			preventThisFollow = true;
-		}
-		if(thisBroken){
-			preventThisFollow = true;
-			enemyAutoFollow = true;
-		}
-		if(enemyBroken){
-			preventEnemyFollow = true;
-			thisAutoFollow = true;
-		}
-
-		if(quickRiposte){
-			enemyAutoFollow = true;
-		}
 		if(windsweep || watersweep){
-			preventThisFollow = true;
+			thisAttackRank--;
 		}
-		if(thisEffSpd-enemyEffSpd >= 5){
-			thisOutspeeds = true;
-		}
-		else if(thisEffSpd-enemyEffSpd <= -5){
-			enemyOutspeeds = true;
-		}
-
+		
+		//Check if enemy can counter
+		var enemyCanCounter = false;
+		//TODO: Make this mess more readable
 		if(!firesweep
 			&& !(windsweep && data.physicalWeapons.indexOf(enemy.weaponType) != -1 && thisEffSpd - enemyEffSpd >= windsweep)
 			&& !(watersweep && data.magicalWeapons.indexOf(enemy.weaponType) != -1 && thisEffSpd - enemyEffSpd >= watersweep)){
@@ -6755,90 +6725,51 @@ function activeHero(hero){
 				enemyCanCounter = true;
 			}
 		}
-
-		//TODO: refactor these ifs and above ifs
 		if(this.has("Dazzling Staff") && enemyCanCounter){
 			if(this.combatStartHp / this.maxHp >= 1.5 + this.has("Dazzling Staff") * -0.5){
 				roundText += enemy.name + " cannot counterattack because of Dazzling Staff.<br>";
 				enemyCanCounter = false;
 			}
 		}
-
 		if(this.hasExactly("Dazzling") && enemyCanCounter){
 			roundText += enemy.name + " cannot counterattack because of Dazzling effect.<br>";
 			enemyCanCounter = false;
 		}
-
 		if(enemy.lit && enemyCanCounter){
-			roundText += enemy.name + " cannot counterattack because " + enemy.name + " is blinded by Candlelight.<br>";
+			roundText += enemy.name + " cannot counterattack because of Candlelight debuff.<br>";
 			enemyCanCounter = false;
 		}
-
 		if(this.has("Sacae's Blessing") && (enemy.weaponType == "axe" || enemy.weaponType == "sword" ||enemy.weaponType == "lance")){
 			roundText += enemy.name + " cannot counterattack because of Sacae's Blessing.<br>";
 			enemyCanCounter = false;
 		}
-
 		if(this.has("Magic Suppression") && (enemy.weaponType == "redtome" || enemy.weaponType == "bluetome" ||enemy.weaponType == "greentome")){
 			roundText += enemy.name + " cannot counterattack because of " + data.skills[this.weaponIndex].name + " (Refined).<br>";
 			enemyCanCounter = false;
 		}
+
+		//I split up the follow-up rules to be less confusing, so there are extra computations
+		var thisFollowUp = false;		
+		var enemyFollowUp = false;
 		
-		//Check for other auto follow-up attack skills
-		if((this.hasAtIndex("Brash Assault", this.bIndex) || this.hasAtIndex("Brash Assault", this.sIndex)) && (this.range == enemy.range || anyRangeCounter) && enemyCanCounter){
-			//Use highest level of Brash Assault between B passive and seal
-			if(this.hp/this.maxHp <= .2 +  Math.max(this.hasAtIndex("Brash Assault", this.bIndex), this.hasAtIndex("Brash Assault", this.sIndex)) * 0.1){
-				thisAutoFollow = true;
-			}
-		}
-		if (this.has("Sol Katti") && this.hp/this.maxHp <= .75 && this.hasAtRefineIndex("Brash Assault", this.refineIndex) && (this.range == enemy.range || anyRangeCounter) && enemyCanCounter){
-			thisAutoFollow = true;
-		}
-		if (this.hasAtIndex("Bold Fighter", this.bIndex)){
-			if (this.hasAtIndex("Bold Fighter", this.bIndex) == 3 || this.combatStartHp / this.maxHp >= 1.0 / this.hasAtIndex("Bold Fighter", this.bIndex)){
-				thisAutoFollow = true;
-			}
-		}
-		if (this.hasAtRefineIndex("Pursuit", this.refineIndex) && (this.combatStartHp / this.maxHp >= 0.9)){
-			thisAutoFollow = true;
-		}
-		if (this.has("Follow-Up Ring") && (this.combatStartHp / this.maxHp >= 0.5)){
-			thisAutoFollow = true;
-		}
-
 		//Cancel things out
-		//TODO: Add skill name into round text for follow-up triggers
-		if(preventThisFollow && thisAutoFollow){
-			preventThisFollow = false;
-			thisAutoFollow = false;
-			roundText += this.name + " is affected by conflicting follow-up skills, which cancel out.<br>";
-		}
-		if(thisAutoFollow){
-			roundText += this.name + " can make an automatic follow-up attack.<br>";
-		}
-		if(preventThisFollow){
-			roundText += this.name + " is prevented from making a follow-up attack.<br>";
-		}
-
-		if(enemyCanCounter){ //Don't show this text if the enemy can't counter anyway
-			if(preventEnemyFollow && enemyAutoFollow){
-				preventEnemyFollow = false;
-				enemyAutoFollow = false;
-				roundText += enemy.name + " is affected by conflicting follow-up skills, which cancel out.<br>";
-			}
-			if(enemyAutoFollow){
-				roundText += enemy.name + " can make an automatic follow-up attack.<br>";
-			}
-			if(preventEnemyFollow){
-				roundText += enemy.name + " is prevented from making a follow-up attack.<br>";
-			}
-		}
-
-		if((thisOutspeeds || thisAutoFollow) && !preventThisFollow){
+		if (thisAttackRank > 0){
 			thisFollowUp = true;
+			roundText += this.name + " can make an automatic follow-up attack.<br>";
+		}else if (thisAttackRank < 0){
+			thisFollowUp = false;
+			roundText += this.name + " is prevented from making a follow-up attack.<br>";
+		}else{
+			thisFollowUp = thisEffSpd-enemyEffSpd >= 5;
 		}
-		if((enemyOutspeeds || enemyAutoFollow) && !preventEnemyFollow){
+		if (enemyAttackRank > 0){
 			enemyFollowUp = true;
+			roundText += enemy.name + " can make an automatic follow-up attack.<br>";
+		}else if (enemyAttackRank > 0){
+			enemyFollowUp = false;
+			roundText += enemy.name + " is prevented from making a follow-up attack.<br>";
+		}else{
+			enemyFollowUp = thisEffSpd-enemyEffSpd <= -5;
 		}
 
 		//Combat Damage
@@ -6862,7 +6793,7 @@ function activeHero(hero){
 		}
 
 		//Non-Vantage: Enemy first attack
-		//Vantange: Enemy second attack
+		//Vantage: Enemy second attack
 		if(enemy.hp > 0 && this.hp > 0 && (!vantage || (vantage && enemyFollowUp && enemyCanCounter))){
 			if(enemyCanCounter){
 				roundText += enemy.doDamage(this, false, false, !vantage);
