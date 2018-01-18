@@ -6564,7 +6564,9 @@ function activeHero(hero){
 		//Combat attack rank for follow-up attacks
 		//<0 - no follow-up, 0 - speed check, >0 - guaranteed follow-up
 		var thisAttackRank = 0;
+		var thisAttackRankChanged = false;
 		var enemyAttackRank = 0;
+		var enemyAttackRankChanged = false;
 		
 		//Check for auto follow-up skills
 		if((this.hasAtIndex("Brash Assault", this.bIndex) || this.hasAtIndex("Brash Assault", this.sIndex)) && (this.range == enemy.range || anyRangeCounter) && enemyCanCounter){
@@ -6587,8 +6589,9 @@ function activeHero(hero){
 		if (this.has("Follow-Up Ring") && (this.combatStartHp / this.maxHp >= 0.5)){
 			thisAttackRank++;
 		}
+		thisAttackRankChanged = (thisAttackRank > 0);
 		
-		//Check for Quick Riposte and auto follow-up counters
+		//Check for auto follow-up counters
 		if(enemy.has("Quick Riposte")){
 			if(enemy.combatStartHp/enemy.maxHp >= 1 - 0.1 * enemy.hasAtIndex("Quick Riposte", enemy.bIndex)){
 				enemyAttackRank++;
@@ -6608,18 +6611,23 @@ function activeHero(hero){
 		if (enemy.has("Follow-Up Ring") && enemy.combatStartHp/enemy.maxHp >= .5){
 			enemyAttackRank++;
 		}
+		enemyAttackRankChanged = (enemyAttackRank > 0);
 
 		//Check for Wary Fighter
 		if(this.has("Wary Fighter")){
 			if(this.hp/this.maxHp >= 1.1 - 0.2 * this.has("Wary Fighter")){
 				thisAttackRank--;
 				enemyAttackRank--;
+				thisAttackRankChanged = true;
+				enemyAttackRankChanged = true;
 			}
 		}
 		if(enemy.has("Wary Fighter")){
 			if(enemy.hp/enemy.maxHp >= 1.1 - 0.2 * enemy.has("Wary Fighter")){
 				thisAttackRank--;
 				enemyAttackRank--;
+				thisAttackRankChanged = true;
+				enemyAttackRankChanged = true;
 			}
 		}
 		
@@ -6684,10 +6692,14 @@ function activeHero(hero){
 		if(enemy.hp / enemy.maxHp >= thisBreakLevel){
 			thisAttackRank--;
 			enemyAttackRank++;
+			thisAttackRankChanged = true;
+			enemyAttackRankChanged = true;
 		}
 		if(this.hp / this.maxHp >= enemyBreakLevel){
 			thisAttackRank++;
 			enemyAttackRank--;
+			thisAttackRankChanged = true;
+			enemyAttackRankChanged = true;
 		}
 
 		//Check for Sweep skills
@@ -6713,6 +6725,7 @@ function activeHero(hero){
 		}
 		if(windsweep || watersweep){
 			thisAttackRank--;
+			thisAttackRankChanged = true;
 		}
 		
 		//Check if enemy can counter
@@ -6748,11 +6761,10 @@ function activeHero(hero){
 			enemyCanCounter = false;
 		}
 
-		//I split up the follow-up rules to be less confusing, so there are extra computations
+		//Check if follow-up attacks occur
 		var thisFollowUp = false;		
 		var enemyFollowUp = false;
 		
-		//Cancel things out
 		if (thisAttackRank > 0){
 			thisFollowUp = true;
 			roundText += this.name + " can make an automatic follow-up attack.<br>";
@@ -6761,6 +6773,9 @@ function activeHero(hero){
 			roundText += this.name + " is prevented from making a follow-up attack.<br>";
 		}else{
 			thisFollowUp = thisEffSpd-enemyEffSpd >= 5;
+			if (thisAttackRankChanged){
+				roundText += this.name + " is affected by conflicting follow-up skills, which all cancels out.<br>";
+			}
 		}
 		if (enemyAttackRank > 0){
 			enemyFollowUp = true;
@@ -6770,6 +6785,9 @@ function activeHero(hero){
 			roundText += enemy.name + " is prevented from making a follow-up attack.<br>";
 		}else{
 			enemyFollowUp = thisEffSpd-enemyEffSpd <= -5;
+			if (enemyAttackRankChanged){
+				roundText += enemy.name + " is affected by conflicting follow-up skills, which all cancels out.<br>";
+			}
 		}
 
 		//Combat Damage
