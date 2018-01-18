@@ -6440,8 +6440,8 @@ function activeHero(hero){
 			roundText += this.defiant();
 			
 			//Check for enemy debuffs
-			roundText += this.turnStartDebuff(this);
 			roundText += this.turnStartDebuff(enemy);
+			roundText += enemy.turnStartDebuff(this);			
 			
 			//Apply renewal effects
 			roundText += this.renewal(renew);
@@ -6514,9 +6514,6 @@ function activeHero(hero){
 			enemyEffSpd = enemy.spd + Math.min(enemy.debuffs.spd,enemy.combatDebuffs.spd) + enemy.spur.spd + enemy.combatSpur.spd;
 		}
 
-		//check for any-distance counterattack
-		var anyRangeCounter = canCounterAnyRange(enemy);
-
 		//Check for AOE special activation
 		roundText += this.doDamage(enemy, false, true, false);
 		
@@ -6568,50 +6565,119 @@ function activeHero(hero){
 		var enemyAttackRank = 0;
 		var enemyAttackRankChanged = false;
 		
+		//Check for Sweep skills
+		var firesweep = false;
+		var windsweep = 0;
+		var watersweep = 0;
+
+		if(this.has("Firesweep") || enemy.has("Firesweep")){
+			firesweep = true;
+		}
+		if(this.has("Windsweep")){
+			windsweep = (this.has("Windsweep") * -2) + 7;
+			if(this.has("Phantom Spd")){
+				windsweep += -2 + (this.has("Phantom Spd") * -3);
+			}
+		}
+		if(this.has("Watersweep")){
+			watersweep = (this.has("Watersweep") * -2) + 7;
+			if(this.has("Phantom Spd")){
+				watersweep += -2 + (this.has("Phantom Spd") * -3);
+			}
+		}
+		if(windsweep || watersweep){
+			thisAttackRank--;
+			thisAttackRankChanged = true;
+		}
+		
+		//Check for any-distance counterattack
+		var anyRangeCounter = canCounterAnyRange(enemy);
+		
+		//Check if enemy can counter
+		var enemyCanCounter = false;		
+		//TODO: Make this mess more readable
+		if(!firesweep
+			&& !(windsweep && data.physicalWeapons.indexOf(enemy.weaponType) != -1 && thisEffSpd - enemyEffSpd >= windsweep)
+			&& !(watersweep && data.magicalWeapons.indexOf(enemy.weaponType) != -1 && thisEffSpd - enemyEffSpd >= watersweep)){
+			if(this.range == enemy.range || anyRangeCounter){
+				enemyCanCounter = true;
+			}
+		}
+		if(this.has("Dazzling Staff") && enemyCanCounter){
+			if(this.combatStartHp / this.maxHp >= 1.5 + this.has("Dazzling Staff") * -0.5){
+				roundText += enemy.name + " cannot counterattack because of Dazzling Staff.<br>";
+				enemyCanCounter = false;
+			}
+		}
+		if(this.hasExactly("Dazzling") && enemyCanCounter){
+			roundText += enemy.name + " cannot counterattack because of Dazzling effect.<br>";
+			enemyCanCounter = false;
+		}
+		if(enemy.lit && enemyCanCounter){
+			roundText += enemy.name + " cannot counterattack because of Candlelight debuff.<br>";
+			enemyCanCounter = false;
+		}
+		if(this.has("Sacae's Blessing") && (enemy.weaponType == "axe" || enemy.weaponType == "sword" ||enemy.weaponType == "lance")){
+			roundText += enemy.name + " cannot counterattack because of Sacae's Blessing.<br>";
+			enemyCanCounter = false;
+		}
+		if(this.has("Magic Suppression") && (enemy.weaponType == "redtome" || enemy.weaponType == "bluetome" ||enemy.weaponType == "greentome")){
+			roundText += enemy.name + " cannot counterattack because of " + data.skills[this.weaponIndex].name + " (Refined).<br>";
+			enemyCanCounter = false;
+		}
+		
 		//Check for auto follow-up skills
 		if((this.hasAtIndex("Brash Assault", this.bIndex) || this.hasAtIndex("Brash Assault", this.sIndex)) && (this.range == enemy.range || anyRangeCounter) && enemyCanCounter){
 			//Use highest level of Brash Assault between B passive and seal
 			if(this.hp/this.maxHp <= .2 +  Math.max(this.hasAtIndex("Brash Assault", this.bIndex), this.hasAtIndex("Brash Assault", this.sIndex)) * 0.1){
 				thisAttackRank++;
+				thisAttackRankChanged = true;
 			}
 		}
 		if (this.has("Sol Katti") && this.hp/this.maxHp <= .75 && this.hasAtRefineIndex("Brash Assault", this.refineIndex) && (this.range == enemy.range || anyRangeCounter) && enemyCanCounter){
 			thisAttackRank++;
+			thisAttackRankChanged = true;
 		}
 		if (this.hasAtIndex("Bold Fighter", this.bIndex)){
 			if (this.hasAtIndex("Bold Fighter", this.bIndex) == 3 || this.combatStartHp / this.maxHp >= 1.0 / this.hasAtIndex("Bold Fighter", this.bIndex)){
 				thisAttackRank++;
+				thisAttackRankChanged = true;
 			}
 		}
 		if (this.hasAtRefineIndex("Pursuit", this.refineIndex) && (this.combatStartHp / this.maxHp >= 0.9)){
 			thisAttackRank++;
+			thisAttackRankChanged = true;
 		}
 		if (this.has("Follow-Up Ring") && (this.combatStartHp / this.maxHp >= 0.5)){
 			thisAttackRank++;
+			thisAttackRankChanged = true;
 		}
-		thisAttackRankChanged = (thisAttackRank > 0);
 		
 		//Check for auto follow-up counters
 		if(enemy.has("Quick Riposte")){
 			if(enemy.combatStartHp/enemy.maxHp >= 1 - 0.1 * enemy.hasAtIndex("Quick Riposte", enemy.bIndex)){
 				enemyAttackRank++;
+				enemyAttackRankChanged = true;
 			}
 			if(enemy.combatStartHp/enemy.maxHp >= 1 - 0.1 * enemy.hasAtIndex("Quick Riposte", enemy.sIndex)){
 				enemyAttackRank++;
+				enemyAttackRankChanged = true;
 			}
 		}
 		if (enemy.hasAtIndex("Vengeful Fighter", enemy.bIndex)){
 			if (enemy.combatStartHp / enemy.maxHp >= (1.0 - (enemy.hasAtIndex("Vengeful Fighter", enemy.bIndex) * 0.1) - ((enemy.hasAtIndex("Vengeful Fighter", enemy.bIndex) - 1) * 0.1))){
 				enemyAttackRank++;
+				enemyAttackRankChanged = true;
 			}
 		}
 		if (enemy.has("Armads") && enemy.combatStartHp/enemy.maxHp >= .8){
 			enemyAttackRank++;
+			enemyAttackRankChanged = true;
 		}
 		if (enemy.has("Follow-Up Ring") && enemy.combatStartHp/enemy.maxHp >= .5){
 			enemyAttackRank++;
+			enemyAttackRankChanged = true;
 		}
-		enemyAttackRankChanged = (enemyAttackRank > 0);
 
 		//Check for Wary Fighter
 		if(this.has("Wary Fighter")){
@@ -6632,7 +6698,6 @@ function activeHero(hero){
 		}
 		
 		//Check for Breaker skills
-		//Need to redo this code to avoid repeating twice...
 		var thisBreakLevel = 2; // hp threshold
 		if(this.weaponType=="sword" && enemy.has("Swordbreaker")){
 			thisBreakLevel = 1.1 - enemy.has("Swordbreaker") * 0.2;
@@ -6709,64 +6774,6 @@ function activeHero(hero){
 			enemyAttackRankChanged = true;
 		}
 
-		//Check for Sweep skills
-		var firesweep = false;
-		var windsweep = 0;
-		var watersweep = 0;
-
-		if(this.has("Firesweep") || enemy.has("Firesweep")){
-			firesweep = true;
-		}
-		if(this.has("Windsweep")){
-			windsweep = (this.has("Windsweep") * -2) + 7;
-			if(this.has("Phantom Spd")){
-				windsweep += -2 + (this.has("Phantom Spd") * -3);
-			}
-		}
-		if(this.has("Watersweep")){
-			watersweep = (this.has("Watersweep") * -2) + 7;
-			if(this.has("Phantom Spd")){
-				watersweep += -2 + (this.has("Phantom Spd") * -3);
-			}
-		}
-		if(windsweep || watersweep){
-			thisAttackRank--;
-			thisAttackRankChanged = true;
-		}
-		
-		//Check if enemy can counter
-		var enemyCanCounter = false;
-		//TODO: Make this mess more readable
-		if(!firesweep
-			&& !(windsweep && data.physicalWeapons.indexOf(enemy.weaponType) != -1 && thisEffSpd - enemyEffSpd >= windsweep)
-			&& !(watersweep && data.magicalWeapons.indexOf(enemy.weaponType) != -1 && thisEffSpd - enemyEffSpd >= watersweep)){
-			if(this.range == enemy.range || anyRangeCounter){
-				enemyCanCounter = true;
-			}
-		}
-		if(this.has("Dazzling Staff") && enemyCanCounter){
-			if(this.combatStartHp / this.maxHp >= 1.5 + this.has("Dazzling Staff") * -0.5){
-				roundText += enemy.name + " cannot counterattack because of Dazzling Staff.<br>";
-				enemyCanCounter = false;
-			}
-		}
-		if(this.hasExactly("Dazzling") && enemyCanCounter){
-			roundText += enemy.name + " cannot counterattack because of Dazzling effect.<br>";
-			enemyCanCounter = false;
-		}
-		if(enemy.lit && enemyCanCounter){
-			roundText += enemy.name + " cannot counterattack because of Candlelight debuff.<br>";
-			enemyCanCounter = false;
-		}
-		if(this.has("Sacae's Blessing") && (enemy.weaponType == "axe" || enemy.weaponType == "sword" ||enemy.weaponType == "lance")){
-			roundText += enemy.name + " cannot counterattack because of Sacae's Blessing.<br>";
-			enemyCanCounter = false;
-		}
-		if(this.has("Magic Suppression") && (enemy.weaponType == "redtome" || enemy.weaponType == "bluetome" ||enemy.weaponType == "greentome")){
-			roundText += enemy.name + " cannot counterattack because of " + data.skills[this.weaponIndex].name + " (Refined).<br>";
-			enemyCanCounter = false;
-		}
-
 		//Check if follow-up attacks occur
 		var thisFollowUp = false;		
 		var enemyFollowUp = false;
@@ -6797,7 +6804,7 @@ function activeHero(hero){
 		}
 
 		//Combat Damage
-		//doDamage parameters - enemy, brave, AOE, firstAttack
+		//***doDamage parameters - (enemy, brave, AOE, firstAttack)***
 
 		//Vantage: Enemy first attack
 		if(vantage && enemyCanCounter){
