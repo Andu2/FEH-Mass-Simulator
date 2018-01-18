@@ -6671,11 +6671,13 @@ function activeHero(hero){
 		}
 		
 		//Check for auto follow-up counters
-		if(enemy.has("Quick Riposte")){
+		if(enemy.hasAtIndex("Quick Riposte", enemy.bIndex)){
 			if(enemy.combatStartHp/enemy.maxHp >= 1 - 0.1 * enemy.hasAtIndex("Quick Riposte", enemy.bIndex)){
 				enemyAttackRank++;
 				enemyAttackRankChanged = true;
 			}
+		}
+		if(enemy.hasAtIndex("Quick Riposte", enemy.sIndex)){
 			if(enemy.combatStartHp/enemy.maxHp >= 1 - 0.1 * enemy.hasAtIndex("Quick Riposte", enemy.sIndex)){
 				enemyAttackRank++;
 				enemyAttackRankChanged = true;
@@ -6687,13 +6689,17 @@ function activeHero(hero){
 				enemyAttackRankChanged = true;
 			}
 		}
-		if (enemy.has("Armads") && enemy.combatStartHp/enemy.maxHp >= .8){
-			enemyAttackRank++;
-			enemyAttackRankChanged = true;
+		if (enemy.has("Armads")){
+			if (enemy.combatStartHp/enemy.maxHp >= .8){
+				enemyAttackRank++;
+				enemyAttackRankChanged = true;
+			}			
 		}
-		if (enemy.has("Follow-Up Ring") && enemy.combatStartHp/enemy.maxHp >= .5){
-			enemyAttackRank++;
-			enemyAttackRankChanged = true;
+		if (enemy.has("Follow-Up Ring")){
+			if (enemy.combatStartHp/enemy.maxHp >= .5){
+				enemyAttackRank++;
+				enemyAttackRankChanged = true;
+			}			
 		}
 
 		//Check for Wary Fighter
