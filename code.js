@@ -6655,12 +6655,9 @@ function activeHero(hero){
 		else if(this.weaponType=="bow" && enemy.has("Bowbreaker")){
 			thisBreakLevel = 1.1 - enemy.has("Bowbreaker") * 0.2;
 		}
-		else if(this.weaponType=="dagger" && enemy.has("Assassin's Bow")){
-			thisBreakLevel = 0;
-		}
 		else if(this.weaponType=="dagger" && enemy.has("Daggerbreaker")){
 			thisBreakLevel = 1.1 - enemy.has("Daggerbreaker") * 0.2;
-		}
+		}		
 		var enemyBreakLevel = 2; // hp threshold
 		if(enemy.weaponType=="sword" && this.has("Swordbreaker")){
 			enemyBreakLevel = 1.1 - this.has("Swordbreaker") * 0.2;
@@ -6683,12 +6680,9 @@ function activeHero(hero){
 		else if(enemy.weaponType=="bow" && this.has("Bowbreaker")){
 			enemyBreakLevel = 1.1 - this.has("Bowbreaker") * 0.2;
 		}
-		else if(enemy.weaponType=="dagger" && this.has("Assassin's Bow")){
-			enemyBreakLevel = 0;
-		}
 		else if(enemy.weaponType=="dagger" && this.has("Daggerbreaker")){
 			enemyBreakLevel = 1.1 - this.has("Daggerbreaker") * 0.2;
-		}
+		}		
 		if(enemy.hp / enemy.maxHp >= thisBreakLevel){
 			thisAttackRank--;
 			enemyAttackRank++;
@@ -6696,6 +6690,19 @@ function activeHero(hero){
 			enemyAttackRankChanged = true;
 		}
 		if(this.hp / this.maxHp >= enemyBreakLevel){
+			thisAttackRank++;
+			enemyAttackRank--;
+			thisAttackRankChanged = true;
+			enemyAttackRankChanged = true;
+		}
+		//Other stacking Breaker skills
+		if(this.weaponType=="dagger" && enemy.has("Assassin's Bow")){
+			thisAttackRank--;
+			enemyAttackRank++;
+			thisAttackRankChanged = true;
+			enemyAttackRankChanged = true;
+		}
+		if(enemy.weaponType=="dagger" && this.has("Assassin's Bow")){
 			thisAttackRank++;
 			enemyAttackRank--;
 			thisAttackRankChanged = true;
