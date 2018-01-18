@@ -6559,7 +6559,7 @@ function activeHero(hero){
 		}
 		
 		//Combat attack rank for follow-up attacks
-		//<0 - no follow-up, 0 - speed check, >0 - guaranteed follow-up
+		//***<0 - no follow-up, 0 - speed check, >0 - guaranteed follow-up***
 		var thisAttackRank = 0;
 		var thisAttackRankChanged = false;
 		var enemyAttackRank = 0;
@@ -6585,7 +6585,11 @@ function activeHero(hero){
 				watersweep += -2 + (this.has("Phantom Spd") * -3);
 			}
 		}
-		if(windsweep || watersweep){
+		if(windsweep){
+			thisAttackRank--;
+			thisAttackRankChanged = true;
+		}
+		if(watersweep){
 			thisAttackRank--;
 			thisAttackRankChanged = true;
 		}
@@ -6594,7 +6598,7 @@ function activeHero(hero){
 		var anyRangeCounter = canCounterAnyRange(enemy);
 		
 		//Check if enemy can counter
-		var enemyCanCounter = false;		
+		var enemyCanCounter = false;
 		//TODO: Make this mess more readable
 		if(!firesweep
 			&& !(windsweep && data.physicalWeapons.indexOf(enemy.weaponType) != -1 && thisEffSpd - enemyEffSpd >= windsweep)
@@ -6627,19 +6631,23 @@ function activeHero(hero){
 		}
 		
 		//Check for auto follow-up skills
-		if((this.hasAtIndex("Brash Assault", this.bIndex) || this.hasAtIndex("Brash Assault", this.sIndex)) && (this.range == enemy.range || anyRangeCounter) && enemyCanCounter){
-			//Use highest level of Brash Assault between B passive and seal
-			if(this.hp/this.maxHp <= .2 +  Math.max(this.hasAtIndex("Brash Assault", this.bIndex), this.hasAtIndex("Brash Assault", this.sIndex)) * 0.1){
+		if(this.has("Brash Assault") && enemyCanCounter){
+			if(this.hp/this.maxHp <= .2 +  this.hasAtIndex("Brash Assault", this.bIndex) * 0.1){
 				thisAttackRank++;
 				thisAttackRankChanged = true;
 			}
+			if(this.hp/this.maxHp <= .2 +  this.hasAtIndex("Brash Assault", this.sIndex) * 0.1){
+				thisAttackRank++;
+				thisAttackRankChanged = true;
+			}
+			
 		}
-		if (this.has("Sol Katti") && this.hp/this.maxHp <= .75 && this.hasAtRefineIndex("Brash Assault", this.refineIndex) && (this.range == enemy.range || anyRangeCounter) && enemyCanCounter){
+		if (this.has("Sol Katti") && this.hasAtRefineIndex("Brash Assault", this.refineIndex) && enemyCanCounter && (this.hp / this.maxHp <= 0.75)){
 			thisAttackRank++;
 			thisAttackRankChanged = true;
 		}
 		if (this.hasAtIndex("Bold Fighter", this.bIndex)){
-			if (this.hasAtIndex("Bold Fighter", this.bIndex) == 3 || this.combatStartHp / this.maxHp >= 1.0 / this.hasAtIndex("Bold Fighter", this.bIndex)){
+			if (this.hasAtIndex("Bold Fighter", this.bIndex) == 3 || (this.combatStartHp / this.maxHp >= 1.0 / this.hasAtIndex("Bold Fighter", this.bIndex))){
 				thisAttackRank++;
 				thisAttackRankChanged = true;
 			}
