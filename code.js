@@ -179,7 +179,7 @@ function initOptions(){
 	options.viewFilter = "all";
 	options.sortOrder = "worst";
 	options.customEnemyList = 0;
-	options.customEnemySelected = -1;	
+	options.customEnemySelected = -1;
 	options.roundInitiators = ["Challenger","Enemy"];
 
 	//Holder for side-specific options
@@ -396,7 +396,7 @@ $(document).ready(function(){
 		console.log("Unsupported JavaScript");
 		$("#update_text").html("Your browser does not appear to support some of the code this app uses (JavaScript ES5). The app probably won't work.");
 	}
-	
+
 	//Load or Reset Settings
 	if (option_saveSettings == "false"){initSettings();}
 
@@ -406,14 +406,14 @@ $(document).ready(function(){
 		heroHTML += "<option value=" + i + " class=\"hero_option\">" + data.heroes[i].name + "</option>";
 	}
 	$("#challenger_name, #cl_enemy_name").html(heroHTML).select2({selectOnClose: true, dropdownAutoWidth : true, matcher: matchStart});
-	
+
 	//Inject select2 UI
 	$("#challenger_weapon, #challenger_refine, #challenger_assist, #challenger_special, #challenger_a, #challenger_b, #challenger_c, #challenger_s").select2({selectOnClose: true, dropdownAutoWidth : true, matcher: matchStart});
 	$("#enemies_weapon, #enemies_refine, #enemies_assist, #enemies_special, #enemies_a, #enemies_b, #enemies_c, #enemies_s").select2({selectOnClose: true, dropdownAutoWidth : true, matcher: matchStart});
 	$("#cl_enemy_weapon, #cl_enemy_refine, #cl_enemy_assist, #cl_enemy_special, #cl_enemy_a, #cl_enemy_b, #cl_enemy_c, #cl_enemy_s").select2({selectOnClose: true, dropdownAutoWidth : true, matcher: matchStart});
 	$("#enemies_weapon, #enemies_refine, #enemies_assist, #enemies_special, #enemies_a, #enemies_b, #enemies_c, #enemies_s").select2({selectOnClose: true, dropdownAutoWidth : true, matcher: matchStart});
 	$("#enemies_weapon_overwrite, #enemies_assist_overwrite, #enemies_special_overwrite, #enemies_a_overwrite, #enemies_b_overwrite, #enemies_c_overwrite").select2({selectOnClose: true, dropdownAutoWidth : true, minimumResultsForSearch: -1});
-	
+
 	//Load Custom Lists
 	listHTML = "<option value=0> Filtered Full List</option>";
 	listHTML += "<option value=1> Custom List</option>";
@@ -425,7 +425,7 @@ $(document).ready(function(){
 	//Set Options UI
 	showOptions(option_menu);
 	$('input:radio[class=menu_button][value=' + option_menu + ']').prop('checked', true);
-	
+
 	//Set filter UI
 	options.colorFilter = option_colorFilter;
 	$('#color_results').val(option_colorFilter).trigger('change.select2');
@@ -437,11 +437,11 @@ $(document).ready(function(){
 	$('#view_results').val(option_viewFilter).trigger('change.select2');
 	options.sortOrder = option_sortOrder;
 	$('#sort_results').val(option_sortOrder).trigger('change.select2');
-	
+
 	//Set chart UI
 	//TODO: cache this as well
 	$('#chart_type').val("enemies by color").trigger('change.select2');
-	
+
 	//Set Settings UI
 	$('#saveSettings').prop('checked', (option_saveSettings == "true"));
 	options.showOnlyMaxSkills = (option_showOnlyMaxSkills == "true");
@@ -450,7 +450,7 @@ $(document).ready(function(){
 	$('#rules_hideunaffecting').prop('checked', (option_showOnlyDuelSkills == "true"));
 	options.autoCalculate = (option_autoCalculate == "true");
 	$('#autoCalculate').prop('checked', (option_autoCalculate == "true"));
-	
+
 	setSkillOptions(enemies.fl);
 	initEnemyList();
 	updateFullUI();
@@ -532,13 +532,13 @@ $(document).ready(function(){
 				updateRefineUI(hero);
 				hero.refine = -1;
 			}
-			
+
 			//Stuff specific to changing chart type
 			if(endsWith(dataVar,".chartType")){
 				drawChart();
 				blockCalculate = true;
 			}
-			
+
 			//Stuff specific to changing hero
 			if(endsWith(dataVar,".index")){
 				if(newVal != -1){
@@ -567,7 +567,7 @@ $(document).ready(function(){
 					blockCalculate = true;
 				}
 			}
-			
+
 			//Stuff specific to changing filter
 			if(endsWith(dataVar,".colorFilter")){
 				localStorage['option_colorFilter'] = newVal;
@@ -589,7 +589,7 @@ $(document).ready(function(){
 				localStorage['option_chartType'] = newVal;
 			}
 			*/
-			
+
 			//Cache Settings
 			if(endsWith(dataVar,".showOnlyMaxSkills")){
 				localStorage['option_showOnlyMaxSkills'] = (options.showOnlyMaxSkills ? "true" : "false");
@@ -735,10 +735,10 @@ $(document).ready(function(){
 		showImportDialog(target,type);
 	})
 
-	$(".menu_button").click(function() {	  
+	$(".menu_button").click(function() {
 	  showOptions($('input[name=menu]:checked').val());
 	});
-	
+
 	$("#import_exit").click(function(){
 		hideImportDialog();
 	})
@@ -760,7 +760,7 @@ $(document).ready(function(){
 			resetHero(enemies.cl.list[options.customEnemySelected]);
 		}
 	})
-	
+
 	$(document).mousemove(function(e){
 		if(showingTooltip){
 			var tooltipHeight =    $("#frame_tooltip").height();
@@ -1256,10 +1256,10 @@ function setStats(hero){
 
 		//Add hero hp changes
 		hero.hp += hero.buffs.hp + hero.debuffs.hp;
-		
+
 		//Blessing bonuses are not(?) included in BST
 		//hero.bst += hero.buffs.hp + hero.debuffs.hp;
-		
+
 		//Confer Blessing
 		switch (hero.bless){
 			case "fire":
@@ -1417,7 +1417,7 @@ function adjustCustomListBuff(isStat){
 			enemies.cl.list.forEach(function(hero){
 				data.stats.forEach(function(stat){
 					if (stat != "hp"){
-						(enemies.cl.statusbuff > 0) ? hero.buffs[stat] = enemies.cl.statusbuff : hero.debuffs[stat] = enemies.cl.statusbuff;					
+						(enemies.cl.statusbuff > 0) ? hero.buffs[stat] = enemies.cl.statusbuff : hero.debuffs[stat] = enemies.cl.statusbuff;
 					}
 				});
 			});
@@ -1796,39 +1796,39 @@ function showOptions(option){
 	else{
 		$("#frame_settings").hide();
 	}
-	
+
 	if (option == "adjustments"){
 		$("#frame_adjustments").show();
 	}
 	else{
 		$("#frame_adjustments").hide();
 	}
-	
+
 	if (option == "statistics"){
 		$("#frame_statistics").show();
 	}
 	else{
 		$("#frame_statistics").hide();
 	}
-	
+
 	if (option == "close"){
 		setWideUI(false);
 	}
 	else{
 		setWideUI(true);
 	}
-	
+
 	localStorage["option_menu"] = option;
 }
 
-function setWideUI(setWide){	
+function setWideUI(setWide){
 	//If another mid UI is open, do not change width
 	if (!setWide){
 		if (!$("#frame_statistics").is(':hidden') || !$("#frame_adjustments").is(':hidden') || !$("#frame_settings").is(':hidden')){
 			return;
 		}
-	}	
-	
+	}
+
 	var originBarWidth = $("#results_graph_back").width();
 	if (setWide){
 		$("#frame_main").width(1125);
@@ -1846,7 +1846,7 @@ function resetFilter(){
 	//Set filter UI
 	options.colorFilter = "all";
 	localStorage['option_colorFilter'] = "all";
-	$('#color_results').val(options.colorFilter).trigger('change.select2');	
+	$('#color_results').val(options.colorFilter).trigger('change.select2');
 	options.rangeFilter = "all";
 	localStorage['option_rangeFilter'] = "all";
 	$('#range_results').val(options.rangeFilter).trigger('change.select2');
@@ -1873,7 +1873,7 @@ function matchStart(params, data) {
     if (typeof data.text === 'undefined') {
 		return null;
     }
-	
+
 	//If search term appears in the beginning of data's text
 	if (data.text.toUpperCase().indexOf(params.term.toUpperCase()) == 0) {
 		return data;
@@ -2204,7 +2204,7 @@ function showResultsTooltip(e,resultDiv){
 function showHeroTooltip(heroType){
 	var hero;
 	var tooltipText;
-	
+
 	//Set hero to selected hero type
 	switch (heroType){
 		case "challenger":
@@ -2217,12 +2217,12 @@ function showHeroTooltip(heroType){
 			(options.customEnemySelected == -1) ? hero = -1 : hero = enemies.cl.list[options.customEnemySelected];
 			break;
 	}
-	
+
 	//If hero is undefined or empty, do nothing
 	if (hero == -1 || hero.index == -1){
 		return;
 	}
-	
+
 	//Show tooltip
 	showingTooltip = true;
 	var base = {};
@@ -2231,7 +2231,7 @@ function showHeroTooltip(heroType){
 	base.spd = data.heroes[hero.index].basespd;
 	base.def = data.heroes[hero.index].basedef;
 	base.res = data.heroes[hero.index].baseres;
-	
+
 	if (hero.rarity < 5){
 		//Subtract 2 from every stat to revert 5* base stats to 1*
 		base.hp -= 2;
@@ -2239,7 +2239,7 @@ function showHeroTooltip(heroType){
 		base.spd -= 2;
 		base.def -= 2;
 		base.res -= 2;
-		
+
 		//Sort stat bonus order of base stats
 		var rarityBaseOrder = ["atk","spd","def","res"];
 		var boostPriority = {"hp":4,"atk":3,"spd":2,"def":1,"res":0};
@@ -2259,17 +2259,17 @@ function showHeroTooltip(heroType){
 				}
 			}
 		});
-		
+
 		//Push hp last for 3* and 5* since it is 2 stat boost per * (Base -> +2 stat -> +2 stat + hp -> +2 stat -> +2 stat + hp)
 		rarityBaseOrder.push("hp");
-		
+
 		//Add bonus to 1* base stats to rarity values
-		var rarityBoostCount = Math.floor((hero.rarity-1) * 2.5);		
+		var rarityBoostCount = Math.floor((hero.rarity-1) * 2.5);
 		for(var i = 0; i < rarityBoostCount; i++){
 			base[rarityBaseOrder[i%5]]++;
 		}
 	}
-	
+
 	//Add IV stats
 	var growthValMod = {"hp":0,"atk":0,"spd":0,"def":0,"res":0};
 	if(hero.boon != "none"){
@@ -2277,15 +2277,15 @@ function showHeroTooltip(heroType){
 	}
 	if(hero.bane != "none"){
 		growthValMod[hero.bane] -= 1;
-	}	
+	}
 	base.hp += growthValMod.hp;
 	base.atk += growthValMod.atk;
 	base.spd += growthValMod.spd;
 	base.def += growthValMod.def;
 	base.res += growthValMod.res;
-	
+
 	//Print tooltip text
-	tooltipText = "<span class=\"bold\">" + data.heroes[hero.index].name + " (";	
+	tooltipText = "<span class=\"bold\">" + data.heroes[hero.index].name + " (";
 	if ((hero.boon == "none" && hero.bane == "none") || hero.boon == hero.bane){
 		tooltipText += "Neutral";
 	}else{
@@ -2301,7 +2301,7 @@ function showHeroTooltip(heroType){
 				tooltipText += "-" + stat;
 			}
 		}
-	}	
+	}
 	tooltipText += ") " + "☆".repeat(hero.rarity) + " </span><br>";
 	tooltipText += " Base HP: <font color=\"#fefec8\">" + base.hp + "</font><br>";
 	tooltipText += " Base Atk: <font color=\"#fefec8\">" + base.atk + "</font><br>";
@@ -3511,7 +3511,7 @@ function fight(enemyIndex,resultIndex){
 			passFilters.push("changeDamage");
 		}
 	}
-	
+
 	//Do Buff and Debuff UI here
 	var statChange = {"hp":0,"atk":0,"spd":0,"def":0,"res":0};
 	data.stats.forEach(function(stat){
@@ -3527,7 +3527,7 @@ function fight(enemyIndex,resultIndex){
 			}
 		}
 	});
-	
+
 	//Do statistic collection here
 	collectStatistics(ahChallenger, ahEnemy, outcome);
 
@@ -4121,7 +4121,7 @@ function drawChart() {
 	var data;
 	var option;
 	var chart;
-	
+
 	switch (options.chartType){
 		case "enemies by color":
 			//Data
@@ -4293,8 +4293,8 @@ function drawChart() {
 			break;
 		default:
 			console.log("Invalid chart type.");
-	}	
-	
+	}
+
 	//Draw chart
 	chart.draw(data, option);
 }
@@ -4360,7 +4360,7 @@ function activeHero(hero){
 	this.spd = hero.spd;
 	this.def = hero.def;
 	this.res = hero.res;
-	
+
 	this.moveType = data.heroes[this.heroIndex].movetype;
 	this.weaponType = data.heroes[this.heroIndex].weapontype;
 	this.color = data.heroes[this.heroIndex].color;
@@ -4595,7 +4595,7 @@ function activeHero(hero){
 				threatenText += this.name + " activates " + data.skills[this.sIndex].name + " (Seal), inflicting panic on " + enemy.name + ".<br>";
 			}
 		}
-		
+
 		//Skills
 		if(this.hasAtIndex("Threaten Atk", this.cIndex)){
 			threatDebuffs.atk = Math.min(threatDebuffs.atk,-this.hasAtIndex("Threaten Atk", this.cIndex)-2);
@@ -4629,7 +4629,7 @@ function activeHero(hero){
 			threatDebuffs.res = Math.min(threatDebuffs.res,-this.hasAtIndex("Threaten Res", this.sIndex)-2);
 			skillNames.push(data.skills[this.sIndex].name + " (Seal)");
 		}
-		
+
 		//Weapons
 		if(this.has("Fensalir")){
 			threatDebuffs.atk = Math.min(threatDebuffs.atk,-4);
@@ -4639,7 +4639,7 @@ function activeHero(hero){
 			threatDebuffs.def = Math.min(threatDebuffs.def,-4);
 			skillNames.push("Eckesachs");
 		}
-		
+
 		if(skillNames.length > 0){
 			var statChanges = [];
 			for(var stat in threatDebuffs){
@@ -4708,19 +4708,19 @@ function activeHero(hero){
 
 		return chargingText;
 	}
-	
+
 	this.turnStartDebuff = function(enemy){
 		var debuffText = "";
 		var skillNames = [];
 		var debuffVal = {"atk":0,"spd":0,"def":0,"res":0};
-		
+
 		//Chilling Seal Debuff
 		if ((enemy.challenger && options.chilled_challenger) || (!enemy.chalenger && options.chilled_enemy)){
 			debuffVal.atk = -6;
 			debuffVal.spd = -6;
 			skillNames.push("Chilling Seal");
 		}
-		
+
 		if(skillNames.length > 0){
 			var statChanges = [];
 			for(var stat in debuffVal){
@@ -4734,14 +4734,14 @@ function activeHero(hero){
 				debuffText += enemy.name + " is affected by turn-start skills: " + skillNames.join(", ") + ".<br>"  + enemy.name + " receives the following: " + statChanges.join(", ") + ".<br>";
 			}
 		}
-		
+
 		return debuffText;
 	}
-	
+
 	this.defiant = function(){
 		var defiantText = "";
 		var skillName = "";
-		
+
 		//All defiant skills trigger at or below 50% HP
 		if(this.hp / this.maxHp <= 0.5){
 			var defiantAtk = 0;
@@ -4790,7 +4790,7 @@ function activeHero(hero){
 				defiantText += this.name + " activates " + skillName + " for +" + defiantRes + " res.<br>";
 			}
 		}
-		
+
 		return defiantText;
 	}
 
@@ -4798,7 +4798,7 @@ function activeHero(hero){
 	//Must be passed enemy for Earth Boost
 	this.startCombatSpur = function(enemy){
 		var boostText = "";
-		
+
 		//Ally Support
 		switch (this.ally){
 			case "s":
@@ -4848,13 +4848,13 @@ function activeHero(hero){
 			default:
 				break;
 		}
-		
+
 		//Combat buff
 		if (this.hasAtRefineIndex("Distant Atk", this.refineIndex) && enemy.range == "ranged"){
 			this.combatSpur.atk += 6;
 			boostText += this.name + " gets +6 Atk from " + data.refine[this.refineIndex].name + " (Refined) against a ranged opponent.<br>";
 		}
-		
+
 		//Brazen skills
 		if(this.combatStartHp / this.maxHp <= 0.8){
 			if(this.has("Brazen Atk Def")){
@@ -4872,7 +4872,7 @@ function activeHero(hero){
 				boostText += this.name + " activates " + skillName + " and gets +" + statBonus + " atk/spd.<br>";
 			}
 		}
-		
+
 		if(this.combatStartHp / this.maxHp >= 1){
 			if(this.has("Ragnarok")){
 				//Does this take effect when defending? Answer: yes
@@ -5392,7 +5392,7 @@ function activeHero(hero){
 			debuffValue = -this.hasAtIndex("Seal Atk", this.sIndex) * 2 - 1;
 			sealValue.atk = (sealValue.atk < debuffValue) ? sealValue.atk : debuffValue;
 			skillNames.push(data.skills[this.sIndex].name + " (Seal)");
-		}		
+		}
 		if (this.hasAtIndex("Seal Spd", this.bIndex)){
 			debuffValue = -this.hasAtIndex("Seal Spd", this.bIndex) * 2 - 1;
 			sealValue.spd = (sealValue.spd < debuffValue) ? sealValue.spd : debuffValue;
@@ -5533,7 +5533,7 @@ function activeHero(hero){
 			if((this.hasExactly("First Bite+") || this.hasExactly("Cupid's Arrow+") || this.hasExactly("Blessed Bouquet+")) && this.refineIndex != -1){
 				buffStat(data.skills[this.weaponIndex].name + " (Refined)", ["def", "res"], 5);
 			}
-			
+
 			if (this.hasExactly("Peshkatz")){
 				buffStat(data.skills[this.weaponIndex].name, ["atk","spd","def","res"], 4);
 			}
@@ -5566,7 +5566,7 @@ function activeHero(hero){
 		var postCombatHealText = "";
 		var skillname = "";
 		var healAmount = 0;
-		
+
 		if(this.has("Blue Egg") || this.has("Green Egg") || this.has("Carrot Axe") || this.has("Carrot Lance")){
 			if(this.initiator || (this.refineIndex != -1 && this.didAttack)){
 				skillName = data.skills[this.weaponIndex].name;
@@ -5659,7 +5659,7 @@ function activeHero(hero){
 			thisEffAtk += bladebonus;
 			if(!AOE && bladebonus != 0){damageText += this.name + " gains +" + bladebonus + " Atk from " + data.skills[this.weaponIndex].name + ".<br>";}
 		}
-		
+
 		//Defender relevant stats
 		//Panic Debuff
 		if(enemy.panicked){
@@ -5674,9 +5674,9 @@ function activeHero(hero){
 			enemyEffSpd = enemy.spd + Math.min(enemy.debuffs.spd,enemy.combatDebuffs.spd) + enemy.spur.spd + enemy.combatSpur.spd;
 			enemyEffDef = enemy.def + Math.min(enemy.debuffs.def,enemy.combatDebuffs.def) + enemy.spur.def + enemy.combatSpur.def;
 			enemyEffRes = enemy.res + Math.min(enemy.debuffs.res,enemy.combatDebuffs.res) + enemy.spur.res + enemy.combatSpur.res;
-			if(!AOE){damageText += enemy.name + "'s buffs are nullified by opponent's skill.<br>";}		
+			if(!AOE){damageText += enemy.name + "'s buffs are nullified by opponent's skill.<br>";}
 		//Bladetome bonus
-		}		
+		}
 		else if(enemy.has("Raudrblade") || enemy.has("Blarblade") || enemy.has("Gronnblade")){
 			var bladebonus = Math.max(enemy.buffs.atk,enemy.combatBuffs.atk) + Math.max(enemy.buffs.spd,enemy.combatBuffs.spd) + Math.max(enemy.buffs.def,enemy.combatBuffs.def) + Math.max(enemy.buffs.res,enemy.combatBuffs.res);
 			enemyEffAtk += bladebonus;
@@ -5701,7 +5701,7 @@ function activeHero(hero){
 			enemyEffAtk += atkbonus;
 			if(!AOE && atkbonus != 0){damageText += enemy.name + " gains +" + atkbonus + " Atk from " + data.skills[enemy.weaponIndex].name + ".<br>";}
 		}
-		
+
 		//Relevant defense stat
 		var relevantDef = (this.attackType == "magical") ? enemyEffRes : enemyEffDef;
 
@@ -6299,13 +6299,13 @@ function activeHero(hero){
 					if (this.hasAtIndex("Bold Fighter", this.bIndex) == 3 || this.combatStartHp / this.maxHp >= 1.0 / this.hasAtIndex("Bold Fighter", this.bIndex)){
 						gainCharge = Math.max(gainCharge, 1);
 						skillNames.push(data.skills[this.bIndex].name);
-					}				
+					}
 				}
 				if(!this.initiator && this.has("Vengeful Fighter")){
 					if (this.combatStartHp / this.maxHp >= (1.0 - (this.hasAtIndex("Vengeful Fighter", this.bIndex) * 0.1) - ((this.hasAtIndex("Vengeful Fighter", this.bIndex) - 1) * 0.1))){
 						gainCharge = Math.max(gainCharge, 1);
 						skillNames.push(data.skills[this.bIndex].name);
-					}					
+					}
 				}
 				if(this.hasAtIndex("Heavy Blade", this.aIndex)){
 					if(thisEffAtk - enemyEffAtk >= 7 - (this.hasAtIndex("Heavy Blade", this.aIndex) * 2)){
@@ -6396,7 +6396,7 @@ function activeHero(hero){
 				enemy.charge++;
 			}
 
-			//show hp
+			//Show hp
 			//Make sure challenger is first and in blue
 			if(this.challenger){
 				damageText += this.name + " <span class=\"blue\">" + this.hp + "</span> : " + enemy.name + " <span class=\"red\">" + enemy.hp + "</span><br>";
@@ -6405,7 +6405,7 @@ function activeHero(hero){
 				damageText += enemy.name + " <span class=\"blue\">" + enemy.hp + "</span> : " + this.name + " <span class=\"red\">" + this.hp + "</span><br>";
 			}
 
-			//do damage again if brave weapon
+			//Do damage again if using brave weapon
 			if(brave && enemy.hp > 0){
 				damageText += this.name + " attacks again with " + data.skills[this.weaponIndex].name + ".<br>";
 				damageText += this.doDamage(enemy, false, false, false);
@@ -6419,7 +6419,7 @@ function activeHero(hero){
 	this.attack = function(enemy,round,renew,galeforce){
 
 		//Initialize round
-		var roundText = "";//Common theme: text is returned by helper functions, so the functions are called by adding them to roundText
+		var roundText = "";			//Common theme: text is returned by helper functions, so the functions are called by adding them to roundText
 		this.initiator = true;
 		enemy.initiator = false;
 		enemy.didAttack = false;
@@ -6438,11 +6438,11 @@ function activeHero(hero){
 		if(!galeforce){
 			//Check self buffs (defiant skills)
 			roundText += this.defiant();
-			
+
 			//Check for enemy debuffs
 			roundText += this.turnStartDebuff(enemy);
-			roundText += enemy.turnStartDebuff(this);			
-			
+			roundText += enemy.turnStartDebuff(this);
+
 			//Apply renewal effects
 			roundText += this.renewal(renew);
 
@@ -6483,7 +6483,7 @@ function activeHero(hero){
 			*/
 
 			//Check for charge effects
-			//***Does turn start Wrath check for health after Renew?***
+			//***Does Wrath check for health after Renew?***
 			roundText += this.charging();
 		}
 
@@ -6516,15 +6516,16 @@ function activeHero(hero){
 
 		//Check for AOE special activation
 		roundText += this.doDamage(enemy, false, true, false);
-		
-		//check for Brave weapons, brave will be passed to this.doDamage
+
+		//Check for Brave weapons, brave will be passed to this.doDamage
 		var brave = false;
 		if(this.has("Brave Sword") || this.has("Brave Lance") || this.has("Brave Axe") || this.has("Brave Bow")
 			|| this.has("Dire Thunder") || this.has("Amiti")){
 			brave = true;
 		}
-		
+
 		//Check for Vantage
+		//***Does Vantage + Valaskjalf override Hardy Bearing?***
 		var vantage = false;
 		if(enemy.has("Vantage")){
 			if(enemy.hp/enemy.maxHp <= .25 * enemy.has("Vantage")){
@@ -6538,6 +6539,7 @@ function activeHero(hero){
 		}
 
 		//Check for Desperation
+		//***Does Desperation + Sol Katti override Hardy Bearing?***
 		var desperation = false;
 		if(this.has("Desperation")){
 			if(this.hp/this.maxHp <= .25 * this.has("Desperation")){
@@ -6557,14 +6559,14 @@ function activeHero(hero){
 			vantage = false;
 			desperation = false;
 		}
-		
+
 		//Combat attack rank for follow-up attacks
 		//***<0 - no follow-up, 0 - speed check, >0 - guaranteed follow-up***
 		var thisAttackRank = 0;
 		var thisAttackRankChanged = false;
 		var enemyAttackRank = 0;
 		var enemyAttackRankChanged = false;
-		
+
 		//Check for Sweep skills
 		var firesweep = false;
 		var windsweep = 0;
@@ -6593,10 +6595,10 @@ function activeHero(hero){
 			thisAttackRank--;
 			thisAttackRankChanged = true;
 		}
-		
+
 		//Check for any-distance counterattack
 		var anyRangeCounter = canCounterAnyRange(enemy);
-		
+
 		//Check if enemy can counter
 		var enemyCanCounter = false;
 		//TODO: Make this mess more readable
@@ -6629,7 +6631,7 @@ function activeHero(hero){
 			roundText += enemy.name + " cannot counterattack because of " + data.skills[this.weaponIndex].name + " (Refined).<br>";
 			enemyCanCounter = false;
 		}
-		
+
 		//Check for auto follow-up skills
 		if (enemyCanCounter){
 			if (this.hasAtIndex("Brash Assault", this.bIndex)){
@@ -6642,15 +6644,15 @@ function activeHero(hero){
 				if (this.hp/this.maxHp <= .2 +  this.hasAtIndex("Brash Assault", this.sIndex) * 0.1){
 					thisAttackRank++;
 					thisAttackRankChanged = true;
-				}			
+				}
 			}
 			if (this.has("Sol Katti") && this.hasAtRefineIndex("Brash Assault", this.refineIndex)){
 				if (this.hp / this.maxHp <= 0.75){
 					thisAttackRank++;
 					thisAttackRankChanged = true;
-				}				
+				}
 			}
-		}		
+		}
 		if (this.hasAtIndex("Bold Fighter", this.bIndex)){
 			if (this.hasAtIndex("Bold Fighter", this.bIndex) == 3 || (this.combatStartHp / this.maxHp >= 1.0 / this.hasAtIndex("Bold Fighter", this.bIndex))){
 				thisAttackRank++;
@@ -6661,24 +6663,24 @@ function activeHero(hero){
 			if (this.combatStartHp / this.maxHp >= 0.9){
 				thisAttackRank++;
 				thisAttackRankChanged = true;
-			}			
+			}
 		}
 		if (this.has("Follow-Up Ring")){
 			if (this.combatStartHp / this.maxHp >= 0.5){
 				thisAttackRank++;
 				thisAttackRankChanged = true;
-			}			
+			}
 		}
-		
+
 		//Check for auto follow-up counters
-		if(enemy.hasAtIndex("Quick Riposte", enemy.bIndex)){
-			if(enemy.combatStartHp/enemy.maxHp >= 1 - 0.1 * enemy.hasAtIndex("Quick Riposte", enemy.bIndex)){
+		if (enemy.hasAtIndex("Quick Riposte", enemy.bIndex)){
+			if (enemy.combatStartHp/enemy.maxHp >= 1 - 0.1 * enemy.hasAtIndex("Quick Riposte", enemy.bIndex)){
 				enemyAttackRank++;
 				enemyAttackRankChanged = true;
 			}
 		}
-		if(enemy.hasAtIndex("Quick Riposte", enemy.sIndex)){
-			if(enemy.combatStartHp/enemy.maxHp >= 1 - 0.1 * enemy.hasAtIndex("Quick Riposte", enemy.sIndex)){
+		if (enemy.hasAtIndex("Quick Riposte", enemy.sIndex)){
+			if (enemy.combatStartHp/enemy.maxHp >= 1 - 0.1 * enemy.hasAtIndex("Quick Riposte", enemy.sIndex)){
 				enemyAttackRank++;
 				enemyAttackRankChanged = true;
 			}
@@ -6693,33 +6695,33 @@ function activeHero(hero){
 			if (enemy.combatStartHp/enemy.maxHp >= .8){
 				enemyAttackRank++;
 				enemyAttackRankChanged = true;
-			}			
+			}
 		}
 		if (enemy.has("Follow-Up Ring")){
 			if (enemy.combatStartHp/enemy.maxHp >= .5){
 				enemyAttackRank++;
 				enemyAttackRankChanged = true;
-			}			
+			}
 		}
 
 		//Check for Wary Fighter
-		if(this.has("Wary Fighter")){
-			if(this.hp/this.maxHp >= 1.1 - 0.2 * this.has("Wary Fighter")){
+		if (this.has("Wary Fighter")){
+			if (this.hp/this.maxHp >= 1.1 - 0.2 * this.has("Wary Fighter")){
 				thisAttackRank--;
 				enemyAttackRank--;
 				thisAttackRankChanged = true;
 				enemyAttackRankChanged = true;
 			}
 		}
-		if(enemy.has("Wary Fighter")){
-			if(enemy.hp/enemy.maxHp >= 1.1 - 0.2 * enemy.has("Wary Fighter")){
+		if (enemy.has("Wary Fighter")){
+			if (enemy.hp/enemy.maxHp >= 1.1 - 0.2 * enemy.has("Wary Fighter")){
 				thisAttackRank--;
 				enemyAttackRank--;
 				thisAttackRankChanged = true;
 				enemyAttackRankChanged = true;
 			}
 		}
-		
+
 		//Check for Breaker skills
 		var thisBreakLevel = 2; // hp threshold
 		if(this.weaponType=="sword" && enemy.has("Swordbreaker")){
@@ -6745,7 +6747,7 @@ function activeHero(hero){
 		}
 		else if(this.weaponType=="dagger" && enemy.has("Daggerbreaker")){
 			thisBreakLevel = 1.1 - enemy.has("Daggerbreaker") * 0.2;
-		}		
+		}
 		var enemyBreakLevel = 2; // hp threshold
 		if(enemy.weaponType=="sword" && this.has("Swordbreaker")){
 			enemyBreakLevel = 1.1 - this.has("Swordbreaker") * 0.2;
@@ -6770,7 +6772,7 @@ function activeHero(hero){
 		}
 		else if(enemy.weaponType=="dagger" && this.has("Daggerbreaker")){
 			enemyBreakLevel = 1.1 - this.has("Daggerbreaker") * 0.2;
-		}		
+		}
 		if(enemy.hp / enemy.maxHp >= thisBreakLevel){
 			thisAttackRank--;
 			enemyAttackRank++;
@@ -6798,9 +6800,9 @@ function activeHero(hero){
 		}
 
 		//Check if follow-up attacks occur
-		var thisFollowUp = false;		
+		var thisFollowUp = false;
 		var enemyFollowUp = false;
-		
+
 		if (thisAttackRank > 0){
 			thisFollowUp = true;
 			roundText += this.name + " can make an automatic follow-up attack.<br>";
