@@ -12053,5 +12053,33 @@
 		"charge": 0,
 		"inheritrule": "",
 		"affectsduel": 1
+	}, {
+		"skill_id": 862,
+		"name": "Great Flame",
+		"slot": "weapon",
+		"sp": 400,
+		"description": "Grants Atk+3. If unit's Def - foe's Def >= 5, foe can't make a follow-up attack. If foe's Range = 2, damage calculated using the lower of foe's Def or Res.",
+		"hp": 0,
+		"atk": 19,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "unique",
+		"affectsduel": 1
+	}, {
+		"skill_id": 863,
+		"name": "Hone Dragons",
+		"slot": "c",
+		"sp": 200,
+		"description": "Grants adjacent dragon allies Atk/Spd+6 through their next actions at the start of each turn.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "dragon",
+		"affectsduel": 0
 	}
 ]

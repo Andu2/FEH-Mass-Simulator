@@ -2018,5 +2018,11 @@
 	}, {
 		"skill_id": 854,
 		"required_id": 853
+	}, {
+		"skill_id": 862,
+		"required_id": 94
+	}, {
+		"skill_id": 863,
+		"required_id": 329
 	}
 ]
