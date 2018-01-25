@@ -4883,7 +4883,7 @@ function activeHero(hero){
 				//Does this take effect when defending? Answer: yes
 				this.combatSpur.atk += 5;
 				this.combatSpur.spd += 5;
-				boostText += this.name + " gets +5 Atk/Spd from being at full health with Ragnarok.<br>";
+				boostText += this.name + " gets +5 Atk/Spd from being at full health with " + data.skills[this.weaponIndex].name + ".<br>";
 			}
 
 			if(this.has("Seashell") || this.has("Refreshing Bolt") || this.has("Deft Harpoon") || this.has("Melon Crusher")){
@@ -4899,7 +4899,13 @@ function activeHero(hero){
 			if(this.has("Regal Blade")){
 				this.combatSpur.atk += 2;
 				this.combatSpur.spd += 2;
-				boostText += this.name + " gets +2 Atk/Spd from " + enemy.name + " being at full health with Regal Blade.<br>";
+				boostText += this.name + " gets +2 Atk/Spd from " + enemy.name + " being at full health with " + data.skills[this.weaponIndex].name + ".<br>";
+			}
+			
+			if(this.hasExactly("Gleipnir")){
+				this.combatSpur.atk += 3;
+				this.combatSpur.spd += 3;
+				boostText += this.name + " gets +3 Atk/Spd from " + enemy.name + " being at full health with " + data.skills[this.weaponIndex].name + ".<br>";
 			}
 		}
 

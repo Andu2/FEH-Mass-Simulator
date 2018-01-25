@@ -12081,5 +12081,19 @@
 		"charge": 0,
 		"inheritrule": "dragon",
 		"affectsduel": 0
+	}, {
+		"skill_id": 864,
+		"name": "Gleipnir",
+		"slot": "weapon",
+		"sp": 400,
+		"description": "Grants Res+3. If foes' HP = 100% at start of combat, grants Atk\/Spd+3 during combat.",
+		"hp": 0,
+		"atk": 14,
+		"spd": 0,
+		"def": 0,
+		"res": 3,
+		"charge": 0,
+		"inheritrule": "unique",
+		"affectsduel": 1
 	}
 ]
