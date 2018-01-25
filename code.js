@@ -5691,7 +5691,7 @@ function activeHero(hero){
 				atkbonus += Math.max(enemy.buffs.atk,enemy.combatBuffs.atk) + Math.max(enemy.buffs.spd,enemy.combatBuffs.spd) + Math.max(enemy.buffs.def,enemy.combatBuffs.def) + Math.max(enemy.buffs.res,enemy.combatBuffs.res);
 			}
 			thisEffAtk += atkbonus;
-			if(!AOE && atkbonus != 0){damageText += this.name + " gains +" + atkbonus + " atk from " + data.skills[this.weaponIndex].name + ".<br>";}
+			if(!AOE && atkbonus != 0){damageText += this.name + " gains +" + atkbonus + " Atk from " + data.skills[this.weaponIndex].name + ".<br>";}
 		}
 		if(enemy.has("Blizzard")){
 			var atkbonus = -1 * (Math.min(this.debuffs.atk,this.combatDebuffs.atk) + Math.min(this.debuffs.spd,this.combatDebuffs.spd) + Math.min(this.debuffs.def,this.combatDebuffs.def) + Math.min(this.debuffs.res,this.combatDebuffs.res));
@@ -5699,7 +5699,7 @@ function activeHero(hero){
 				atkbonus += Math.max(this.buffs.atk,this.combatBuffs.atk) + Math.max(this.buffs.spd,this.combatBuffs.spd) + Math.max(this.buffs.def,this.combatBuffs.def) + Math.max(this.buffs.res,this.combatBuffs.res);
 			}
 			enemyEffAtk += atkbonus;
-			if(!AOE && atkbonus != 0){damageText += enemy.name + " gains +" + atkbonus + " atk from " + data.skills[enemy.weaponIndex].name + ".<br>";}
+			if(!AOE && atkbonus != 0){damageText += enemy.name + " gains +" + atkbonus + " Atk from " + data.skills[enemy.weaponIndex].name + ".<br>";}
 		}
 		
 		//Relevant defense stat
@@ -6440,8 +6440,8 @@ function activeHero(hero){
 			roundText += this.defiant();
 			
 			//Check for enemy debuffs
-			roundText += this.turnStartDebuff(this);
 			roundText += this.turnStartDebuff(enemy);
+			roundText += enemy.turnStartDebuff(this);			
 			
 			//Apply renewal effects
 			roundText += this.renewal(renew);
@@ -6514,9 +6514,6 @@ function activeHero(hero){
 			enemyEffSpd = enemy.spd + Math.min(enemy.debuffs.spd,enemy.combatDebuffs.spd) + enemy.spur.spd + enemy.combatSpur.spd;
 		}
 
-		//check for any-distance counterattack
-		var anyRangeCounter = canCounterAnyRange(enemy);
-
 		//Check for AOE special activation
 		roundText += this.doDamage(enemy, false, true, false);
 		
@@ -6562,146 +6559,12 @@ function activeHero(hero){
 		}
 		
 		//Combat attack rank for follow-up attacks
-		//<0 - no follow-up, 0 - speed check, >0 - guaranteed follow-up
+		//***<0 - no follow-up, 0 - speed check, >0 - guaranteed follow-up***
 		var thisAttackRank = 0;
 		var thisAttackRankChanged = false;
 		var enemyAttackRank = 0;
 		var enemyAttackRankChanged = false;
 		
-		//Check for auto follow-up skills
-		if((this.hasAtIndex("Brash Assault", this.bIndex) || this.hasAtIndex("Brash Assault", this.sIndex)) && (this.range == enemy.range || anyRangeCounter) && enemyCanCounter){
-			//Use highest level of Brash Assault between B passive and seal
-			if(this.hp/this.maxHp <= .2 +  Math.max(this.hasAtIndex("Brash Assault", this.bIndex), this.hasAtIndex("Brash Assault", this.sIndex)) * 0.1){
-				thisAttackRank++;
-			}
-		}
-		if (this.has("Sol Katti") && this.hp/this.maxHp <= .75 && this.hasAtRefineIndex("Brash Assault", this.refineIndex) && (this.range == enemy.range || anyRangeCounter) && enemyCanCounter){
-			thisAttackRank++;
-		}
-		if (this.hasAtIndex("Bold Fighter", this.bIndex)){
-			if (this.hasAtIndex("Bold Fighter", this.bIndex) == 3 || this.combatStartHp / this.maxHp >= 1.0 / this.hasAtIndex("Bold Fighter", this.bIndex)){
-				thisAttackRank++;
-			}
-		}
-		if (this.hasAtRefineIndex("Pursuit", this.refineIndex) && (this.combatStartHp / this.maxHp >= 0.9)){
-			thisAttackRank++;
-		}
-		if (this.has("Follow-Up Ring") && (this.combatStartHp / this.maxHp >= 0.5)){
-			thisAttackRank++;
-		}
-		thisAttackRankChanged = (thisAttackRank > 0);
-		
-		//Check for auto follow-up counters
-		if(enemy.has("Quick Riposte")){
-			if(enemy.combatStartHp/enemy.maxHp >= 1 - 0.1 * enemy.hasAtIndex("Quick Riposte", enemy.bIndex)){
-				enemyAttackRank++;
-			}
-			if(enemy.combatStartHp/enemy.maxHp >= 1 - 0.1 * enemy.hasAtIndex("Quick Riposte", enemy.sIndex)){
-				enemyAttackRank++;
-			}
-		}
-		if (enemy.hasAtIndex("Vengeful Fighter", enemy.bIndex)){
-			if (enemy.combatStartHp / enemy.maxHp >= (1.0 - (enemy.hasAtIndex("Vengeful Fighter", enemy.bIndex) * 0.1) - ((enemy.hasAtIndex("Vengeful Fighter", enemy.bIndex) - 1) * 0.1))){
-				enemyAttackRank++;
-			}
-		}
-		if (enemy.has("Armads") && enemy.combatStartHp/enemy.maxHp >= .8){
-			enemyAttackRank++;
-		}
-		if (enemy.has("Follow-Up Ring") && enemy.combatStartHp/enemy.maxHp >= .5){
-			enemyAttackRank++;
-		}
-		enemyAttackRankChanged = (enemyAttackRank > 0);
-
-		//Check for Wary Fighter
-		if(this.has("Wary Fighter")){
-			if(this.hp/this.maxHp >= 1.1 - 0.2 * this.has("Wary Fighter")){
-				thisAttackRank--;
-				enemyAttackRank--;
-				thisAttackRankChanged = true;
-				enemyAttackRankChanged = true;
-			}
-		}
-		if(enemy.has("Wary Fighter")){
-			if(enemy.hp/enemy.maxHp >= 1.1 - 0.2 * enemy.has("Wary Fighter")){
-				thisAttackRank--;
-				enemyAttackRank--;
-				thisAttackRankChanged = true;
-				enemyAttackRankChanged = true;
-			}
-		}
-		
-		//Check for Breaker skills
-		//Need to redo this code to avoid repeating twice...
-		var thisBreakLevel = 2; // hp threshold
-		if(this.weaponType=="sword" && enemy.has("Swordbreaker")){
-			thisBreakLevel = 1.1 - enemy.has("Swordbreaker") * 0.2;
-		}
-		else if(this.weaponType=="lance" && enemy.has("Lancebreaker")){
-			thisBreakLevel = 1.1 - enemy.has("Lancebreaker") * 0.2;
-		}
-		else if(this.weaponType=="axe" && enemy.has("Axebreaker")){
-			thisBreakLevel = 1.1 - enemy.has("Axebreaker") * 0.2;
-		}
-		else if(this.weaponType=="redtome" && enemy.has("R Tomebreaker")){
-			thisBreakLevel = 1.1 - enemy.has("R Tomebreaker") * 0.2;
-		}
-		else if(this.weaponType=="bluetome" && enemy.has("B Tomebreaker")){
-			thisBreakLevel = 1.1 - enemy.has("B Tomebreaker") * 0.2;
-		}
-		else if(this.weaponType=="greentome" && enemy.has("G Tomebreaker")){
-			thisBreakLevel = 1.1 - enemy.has("G Tomebreaker") * 0.2;
-		}
-		else if(this.weaponType=="bow" && enemy.has("Bowbreaker")){
-			thisBreakLevel = 1.1 - enemy.has("Bowbreaker") * 0.2;
-		}
-		else if(this.weaponType=="dagger" && enemy.has("Daggerbreaker")){
-			thisBreakLevel = 1.1 - enemy.has("Daggerbreaker") * 0.2;
-		}
-		else if(this.weaponType=="dagger" && enemy.has("Assassin's Bow")){
-			thisBreakLevel = 0;
-		}
-		var enemyBreakLevel = 2; // hp threshold
-		if(enemy.weaponType=="sword" && this.has("Swordbreaker")){
-			enemyBreakLevel = 1.1 - this.has("Swordbreaker") * 0.2;
-		}
-		else if(enemy.weaponType=="lance" && this.has("Lancebreaker")){
-			enemyBreakLevel = 1.1 - this.has("Lancebreaker") * 0.2;
-		}
-		else if(enemy.weaponType=="axe" && this.has("Axebreaker")){
-			enemyBreakLevel = 1.1 - this.has("Axebreaker") * 0.2;
-		}
-		else if(enemy.weaponType=="redtome" && this.has("R Tomebreaker")){
-			enemyBreakLevel = 1.1 - this.has("R Tomebreaker") * 0.2;
-		}
-		else if(enemy.weaponType=="bluetome" && this.has("B Tomebreaker")){
-			enemyBreakLevel = 1.1 - this.has("B Tomebreaker") * 0.2;
-		}
-		else if(enemy.weaponType=="greentome" && this.has("G Tomebreaker")){
-			enemyBreakLevel = 1.1 - this.has("G Tomebreaker") * 0.2;
-		}
-		else if(enemy.weaponType=="bow" && this.has("Bowbreaker")){
-			enemyBreakLevel = 1.1 - this.has("Bowbreaker") * 0.2;
-		}
-		else if(enemy.weaponType=="dagger" && this.has("Daggerbreaker")){
-			enemyBreakLevel = 1.1 - this.has("Daggerbreaker") * 0.2;
-		}
-		else if(enemy.weaponType=="dagger" && this.has("Assassin's Bow")){
-			enemyBreakLevel = 0;
-		}
-		if(enemy.hp / enemy.maxHp >= thisBreakLevel){
-			thisAttackRank--;
-			enemyAttackRank++;
-			thisAttackRankChanged = true;
-			enemyAttackRankChanged = true;
-		}
-		if(this.hp / this.maxHp >= enemyBreakLevel){
-			thisAttackRank++;
-			enemyAttackRank--;
-			thisAttackRankChanged = true;
-			enemyAttackRankChanged = true;
-		}
-
 		//Check for Sweep skills
 		var firesweep = false;
 		var windsweep = 0;
@@ -6722,10 +6585,17 @@ function activeHero(hero){
 				watersweep += -2 + (this.has("Phantom Spd") * -3);
 			}
 		}
-		if(windsweep || watersweep){
+		if(windsweep){
 			thisAttackRank--;
 			thisAttackRankChanged = true;
 		}
+		if(watersweep){
+			thisAttackRank--;
+			thisAttackRankChanged = true;
+		}
+		
+		//Check for any-distance counterattack
+		var anyRangeCounter = canCounterAnyRange(enemy);
 		
 		//Check if enemy can counter
 		var enemyCanCounter = false;
@@ -6759,6 +6629,173 @@ function activeHero(hero){
 			roundText += enemy.name + " cannot counterattack because of " + data.skills[this.weaponIndex].name + " (Refined).<br>";
 			enemyCanCounter = false;
 		}
+		
+		//Check for auto follow-up skills
+		if (enemyCanCounter){
+			if (this.hasAtIndex("Brash Assault", this.bIndex)){
+				if (this.hp/this.maxHp <= .2 +  this.hasAtIndex("Brash Assault", this.bIndex) * 0.1){
+					thisAttackRank++;
+					thisAttackRankChanged = true;
+				}
+			}
+			if (this.hasAtIndex("Brash Assault", this.sIndex)){
+				if (this.hp/this.maxHp <= .2 +  this.hasAtIndex("Brash Assault", this.sIndex) * 0.1){
+					thisAttackRank++;
+					thisAttackRankChanged = true;
+				}			
+			}
+			if (this.has("Sol Katti") && this.hasAtRefineIndex("Brash Assault", this.refineIndex)){
+				if (this.hp / this.maxHp <= 0.75){
+					thisAttackRank++;
+					thisAttackRankChanged = true;
+				}				
+			}
+		}		
+		if (this.hasAtIndex("Bold Fighter", this.bIndex)){
+			if (this.hasAtIndex("Bold Fighter", this.bIndex) == 3 || (this.combatStartHp / this.maxHp >= 1.0 / this.hasAtIndex("Bold Fighter", this.bIndex))){
+				thisAttackRank++;
+				thisAttackRankChanged = true;
+			}
+		}
+		if (this.hasAtRefineIndex("Pursuit", this.refineIndex)){
+			if (this.combatStartHp / this.maxHp >= 0.9){
+				thisAttackRank++;
+				thisAttackRankChanged = true;
+			}			
+		}
+		if (this.has("Follow-Up Ring")){
+			if (this.combatStartHp / this.maxHp >= 0.5){
+				thisAttackRank++;
+				thisAttackRankChanged = true;
+			}			
+		}
+		
+		//Check for auto follow-up counters
+		if(enemy.hasAtIndex("Quick Riposte", enemy.bIndex)){
+			if(enemy.combatStartHp/enemy.maxHp >= 1 - 0.1 * enemy.hasAtIndex("Quick Riposte", enemy.bIndex)){
+				enemyAttackRank++;
+				enemyAttackRankChanged = true;
+			}
+		}
+		if(enemy.hasAtIndex("Quick Riposte", enemy.sIndex)){
+			if(enemy.combatStartHp/enemy.maxHp >= 1 - 0.1 * enemy.hasAtIndex("Quick Riposte", enemy.sIndex)){
+				enemyAttackRank++;
+				enemyAttackRankChanged = true;
+			}
+		}
+		if (enemy.hasAtIndex("Vengeful Fighter", enemy.bIndex)){
+			if (enemy.combatStartHp / enemy.maxHp >= (1.0 - (enemy.hasAtIndex("Vengeful Fighter", enemy.bIndex) * 0.1) - ((enemy.hasAtIndex("Vengeful Fighter", enemy.bIndex) - 1) * 0.1))){
+				enemyAttackRank++;
+				enemyAttackRankChanged = true;
+			}
+		}
+		if (enemy.has("Armads")){
+			if (enemy.combatStartHp/enemy.maxHp >= .8){
+				enemyAttackRank++;
+				enemyAttackRankChanged = true;
+			}			
+		}
+		if (enemy.has("Follow-Up Ring")){
+			if (enemy.combatStartHp/enemy.maxHp >= .5){
+				enemyAttackRank++;
+				enemyAttackRankChanged = true;
+			}			
+		}
+
+		//Check for Wary Fighter
+		if(this.has("Wary Fighter")){
+			if(this.hp/this.maxHp >= 1.1 - 0.2 * this.has("Wary Fighter")){
+				thisAttackRank--;
+				enemyAttackRank--;
+				thisAttackRankChanged = true;
+				enemyAttackRankChanged = true;
+			}
+		}
+		if(enemy.has("Wary Fighter")){
+			if(enemy.hp/enemy.maxHp >= 1.1 - 0.2 * enemy.has("Wary Fighter")){
+				thisAttackRank--;
+				enemyAttackRank--;
+				thisAttackRankChanged = true;
+				enemyAttackRankChanged = true;
+			}
+		}
+		
+		//Check for Breaker skills
+		var thisBreakLevel = 2; // hp threshold
+		if(this.weaponType=="sword" && enemy.has("Swordbreaker")){
+			thisBreakLevel = 1.1 - enemy.has("Swordbreaker") * 0.2;
+		}
+		else if(this.weaponType=="lance" && enemy.has("Lancebreaker")){
+			thisBreakLevel = 1.1 - enemy.has("Lancebreaker") * 0.2;
+		}
+		else if(this.weaponType=="axe" && enemy.has("Axebreaker")){
+			thisBreakLevel = 1.1 - enemy.has("Axebreaker") * 0.2;
+		}
+		else if(this.weaponType=="redtome" && enemy.has("R Tomebreaker")){
+			thisBreakLevel = 1.1 - enemy.has("R Tomebreaker") * 0.2;
+		}
+		else if(this.weaponType=="bluetome" && enemy.has("B Tomebreaker")){
+			thisBreakLevel = 1.1 - enemy.has("B Tomebreaker") * 0.2;
+		}
+		else if(this.weaponType=="greentome" && enemy.has("G Tomebreaker")){
+			thisBreakLevel = 1.1 - enemy.has("G Tomebreaker") * 0.2;
+		}
+		else if(this.weaponType=="bow" && enemy.has("Bowbreaker")){
+			thisBreakLevel = 1.1 - enemy.has("Bowbreaker") * 0.2;
+		}
+		else if(this.weaponType=="dagger" && enemy.has("Daggerbreaker")){
+			thisBreakLevel = 1.1 - enemy.has("Daggerbreaker") * 0.2;
+		}		
+		var enemyBreakLevel = 2; // hp threshold
+		if(enemy.weaponType=="sword" && this.has("Swordbreaker")){
+			enemyBreakLevel = 1.1 - this.has("Swordbreaker") * 0.2;
+		}
+		else if(enemy.weaponType=="lance" && this.has("Lancebreaker")){
+			enemyBreakLevel = 1.1 - this.has("Lancebreaker") * 0.2;
+		}
+		else if(enemy.weaponType=="axe" && this.has("Axebreaker")){
+			enemyBreakLevel = 1.1 - this.has("Axebreaker") * 0.2;
+		}
+		else if(enemy.weaponType=="redtome" && this.has("R Tomebreaker")){
+			enemyBreakLevel = 1.1 - this.has("R Tomebreaker") * 0.2;
+		}
+		else if(enemy.weaponType=="bluetome" && this.has("B Tomebreaker")){
+			enemyBreakLevel = 1.1 - this.has("B Tomebreaker") * 0.2;
+		}
+		else if(enemy.weaponType=="greentome" && this.has("G Tomebreaker")){
+			enemyBreakLevel = 1.1 - this.has("G Tomebreaker") * 0.2;
+		}
+		else if(enemy.weaponType=="bow" && this.has("Bowbreaker")){
+			enemyBreakLevel = 1.1 - this.has("Bowbreaker") * 0.2;
+		}
+		else if(enemy.weaponType=="dagger" && this.has("Daggerbreaker")){
+			enemyBreakLevel = 1.1 - this.has("Daggerbreaker") * 0.2;
+		}		
+		if(enemy.hp / enemy.maxHp >= thisBreakLevel){
+			thisAttackRank--;
+			enemyAttackRank++;
+			thisAttackRankChanged = true;
+			enemyAttackRankChanged = true;
+		}
+		if(this.hp / this.maxHp >= enemyBreakLevel){
+			thisAttackRank++;
+			enemyAttackRank--;
+			thisAttackRankChanged = true;
+			enemyAttackRankChanged = true;
+		}
+		//Other stacking Breaker skills
+		if(this.weaponType=="dagger" && enemy.has("Assassin's Bow")){
+			thisAttackRank--;
+			enemyAttackRank++;
+			thisAttackRankChanged = true;
+			enemyAttackRankChanged = true;
+		}
+		if(enemy.weaponType=="dagger" && this.has("Assassin's Bow")){
+			thisAttackRank++;
+			enemyAttackRank--;
+			thisAttackRankChanged = true;
+			enemyAttackRankChanged = true;
+		}
 
 		//Check if follow-up attacks occur
 		var thisFollowUp = false;		
@@ -6790,7 +6827,7 @@ function activeHero(hero){
 		}
 
 		//Combat Damage
-		//doDamage parameters - enemy, brave, AOE, firstAttack
+		//***doDamage parameters - (enemy, brave, AOE, firstAttack)***
 
 		//Vantage: Enemy first attack
 		if(vantage && enemyCanCounter){
