@@ -4902,7 +4902,7 @@ function activeHero(hero){
 				boostText += this.name + " gets +2 Atk/Spd from " + enemy.name + " being at full health with " + data.skills[this.weaponIndex].name + ".<br>";
 			}
 			
-			if(this.hasExactly("Gleipnir")){
+			if(this.hasExactly("Gleipnir") || this.hasExactly("Ivaldi")){
 				this.combatSpur.atk += 3;
 				this.combatSpur.spd += 3;
 				boostText += this.name + " gets +3 Atk/Spd from " + enemy.name + " being at full health with " + data.skills[this.weaponIndex].name + ".<br>";

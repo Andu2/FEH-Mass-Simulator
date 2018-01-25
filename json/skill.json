@@ -12095,5 +12095,61 @@
 		"charge": 0,
 		"inheritrule": "unique",
 		"affectsduel": 1
+	}, {
+		"skill_id": 865,
+		"name": "Ivaldi",
+		"slot": "weapon",
+		"sp": 400,
+		"description": "Grants Res+3. If foes' HP = 100% at start of combat, grants Atk\/Spd+3 during combat.",
+		"hp": 0,
+		"atk": 14,
+		"spd": 0,
+		"def": 3,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "unique",
+		"affectsduel": 1
+	}, {
+		"skill_id": 866,
+		"name": "Res Tactic 1",
+		"slot": "c",
+		"sp": 60,
+		"description": "At start of turn, grants Res+2 to allies within 2 spaces for 1 turn. Granted only if number of that ally's movement type on current team <= 2.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 0
+	}, {
+		"skill_id": 867,
+		"name": "Res Tactic 2",
+		"slot": "c",
+		"sp": 120,
+		"description": "At start of turn, grants Res+4 to allies within 2 spaces for 1 turn. Granted only if number of that ally's movement type on current team <= 2.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 0
+	}, {
+		"skill_id": 868,
+		"name": "Res Tactic 3",
+		"slot": "c",
+		"sp": 240,
+		"description": "At start of turn, grants Res+6 to allies within 2 spaces for 1 turn. Granted only if number of that ally's movement type on current team <= 2.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 0
 	}
 ]
