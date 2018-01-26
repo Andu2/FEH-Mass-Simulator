@@ -5250,7 +5250,8 @@ function activeHero(hero){
 			return boostText;
 		}
 	}
-
+	
+	//Calculates effective combat stats used within a round
 	this.setCombatStats = function(enemy){
 		var statText = "";
 		var panicDebuff = {"atk":0,"spd":0,"def":0,"res":0};
@@ -5284,7 +5285,7 @@ function activeHero(hero){
 			this.combatBuffs = {"atk":0,"spd":0,"def":0,"res":0};
 			statText += this.name + "'s buffs are reversed by panic debuff.<br>";
 		//Buff cancelled - removes field buffs
-		}if (isBuffCancelled(this, enemy)){
+		}else if (isBuffCancelled(this, enemy)){
 			this.combatBuffs = {"atk":0,"spd":0,"def":0,"res":0};
 			statText += this.name + "'s buffs are nullified by opponent's skill.<br>";
 		}
@@ -6413,7 +6414,7 @@ function activeHero(hero){
 				enemy.charge++;
 			}
 
-			//show hp
+			//Show hp
 			//Make sure challenger is first and in blue
 			if(this.challenger){
 				damageText += this.name + " <span class=\"blue\">" + this.hp + "</span> : " + enemy.name + " <span class=\"red\">" + enemy.hp + "</span><br>";
@@ -6422,7 +6423,7 @@ function activeHero(hero){
 				damageText += enemy.name + " <span class=\"blue\">" + enemy.hp + "</span> : " + this.name + " <span class=\"red\">" + this.hp + "</span><br>";
 			}
 
-			//do damage again if brave weapon
+			//Do damage again if using a brave weapon
 			if(brave && enemy.hp > 0){
 				damageText += this.name + " attacks again with " + data.skills[this.weaponIndex].name + ".<br>";
 				damageText += this.doDamage(enemy, false, false, false);
@@ -6432,12 +6433,12 @@ function activeHero(hero){
 		return damageText;
 	}
 
-	//represents a full round of combat
+	//Represents a full round of combat
 	//TODO: Refactor 'this/enemy' duplicate codes into 'this.function(enemy)/enemy.function(this)' functions
 	this.attack = function(enemy,round,renew,galeforce){
 
 		//Initialize round
-		var roundText = "";//Common theme: text is returned by helper functions, so the functions are called by adding them to roundText
+		var roundText = "";			//Common theme: text is returned by helper functions, so the functions are called by adding them to roundText
 		this.initiator = true;
 		enemy.initiator = false;
 		enemy.didAttack = false;
@@ -6508,7 +6509,7 @@ function activeHero(hero){
 			*/
 
 			//Check for charge effects
-			//***Does turn start Wrath check for health after Renew?***
+			//***Does Wrath check for health after Renew?***
 			roundText += this.charging();
 		}
 
@@ -6555,7 +6556,7 @@ function activeHero(hero){
 		//Check for AOE special activation
 		roundText += this.doDamage(enemy, false, true, false);
 
-		//check for Brave weapons, brave will be passed to this.doDamage
+		//Check for Brave weapons, brave will be passed to this.doDamage
 		var brave = false;
 		if(this.has("Brave Sword") || this.has("Brave Lance") || this.has("Brave Axe") || this.has("Brave Bow")
 			|| this.has("Dire Thunder") || this.has("Amiti")){
@@ -6563,6 +6564,7 @@ function activeHero(hero){
 		}
 
 		//Check for Vantage
+		//***Does Vantage + Valaskjalf override Hardy Bearing?***
 		var vantage = false;
 		if(enemy.has("Vantage")){
 			if(enemy.hp/enemy.maxHp <= .25 * enemy.has("Vantage")){
@@ -6576,6 +6578,7 @@ function activeHero(hero){
 		}
 
 		//Check for Desperation
+		//***Does Desperation + Sol Katti override Hardy Bearing?***
 		var desperation = false;
 		if(this.has("Desperation")){
 			if(this.hp/this.maxHp <= .25 * this.has("Desperation")){
