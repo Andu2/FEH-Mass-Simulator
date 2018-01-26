@@ -4070,7 +4070,7 @@ function collectStatistics(challenger, enemy, outcome){
 		else if (outcome == "loss"){ statistics.enemies.ranged_outcome[1]++; }
 		else if (outcome == "inconclusive"){ statistics.enemies.ranged_outcome[2]++; }
 	}
-	//Tally  Type
+	//Tally Type
 	if (enemy.moveType == "infantry"){
 		statistics.enemies.infantry++;
 		if (outcome == "win"){ statistics.enemies.infantry_outcome[0]++; }
@@ -4312,8 +4312,8 @@ function drawChart() {
 //heroIndex is the index of the hero represented
 //challenger is true if challenger, false if enemy
 
-//Variable for keeping track of attacker for Urvan
-//***Currently does not including aoe damage in consecutive damage check, revise if required***
+//Variable for keeping track of attacker for Urvan and similar skills
+//***Currently does not include aoe damage in consecutive damage check, revise if required***
 var lastAttacker = "none";
 
 function activeHero(hero){
@@ -4862,19 +4862,47 @@ function activeHero(hero){
 
 		//Brazen skills
 		if(this.combatStartHp / this.maxHp <= 0.8){
-			if(this.has("Brazen Atk Def")){
-				statBonus = 1 + 2 * this.has("Brazen Atk Def");
-				this.combatSpur.atk += statBonus;
-				this.combatSpur.def += statBonus;
-				skillName = data.skills[this.aIndex].name;
-				boostText += this.name + " activates " + skillName + " and gets +" + statBonus + " atk/def.<br>";
-			}
 			if(this.has("Brazen Atk Spd")){
 				statBonus = 1 + 2 * this.has("Brazen Atk Spd");
 				this.combatSpur.atk += statBonus;
 				this.combatSpur.spd += statBonus;
 				skillName = data.skills[this.aIndex].name;
-				boostText += this.name + " activates " + skillName + " and gets +" + statBonus + " atk/spd.<br>";
+				boostText += this.name + " activates " + skillName + " and gets +" + statBonus + " Atk/Spd.<br>";
+			}
+			if(this.has("Brazen Atk Def")){
+				statBonus = 1 + 2 * this.has("Brazen Atk Def");
+				this.combatSpur.atk += statBonus;
+				this.combatSpur.def += statBonus;
+				skillName = data.skills[this.aIndex].name;
+				boostText += this.name + " activates " + skillName + " and gets +" + statBonus + " Atk/Def.<br>";
+			}
+			if(this.has("Brazen Atk Res")){
+				statBonus = 1 + 2 * this.has("Brazen Atk Res");
+				this.combatSpur.atk += statBonus;
+				this.combatSpur.res += statBonus;
+				skillName = data.skills[this.aIndex].name;
+				boostText += this.name + " activates " + skillName + " and gets +" + statBonus + " Atk/Res.<br>";
+			}
+			if(this.has("Brazen Spd Def")){
+				statBonus = 1 + 2 * this.has("Brazen Spd Def");
+				this.combatSpur.spd += statBonus;
+				this.combatSpur.def += statBonus;
+				skillName = data.skills[this.aIndex].name;
+				boostText += this.name + " activates " + skillName + " and gets +" + statBonus + " Spd/Def.<br>";
+			}
+			if(this.has("Brazen Spd Res")){
+				statBonus = 1 + 2 * this.has("Brazen Spd Res");
+				this.combatSpur.spd += statBonus;
+				this.combatSpur.res += statBonus;
+				skillName = data.skills[this.aIndex].name;
+				boostText += this.name + " activates " + skillName + " and gets +" + statBonus + " Spd/Res.<br>";
+			}
+				if(this.has("Brazen Def Res")){
+				statBonus = 1 + 2 * this.has("Brazen Def Res");
+				this.combatSpur.def += statBonus;
+				this.combatSpur.res += statBonus;
+				skillName = data.skills[this.aIndex].name;
+				boostText += this.name + " activates " + skillName + " and gets +" + statBonus + " Def/Res.<br>";
 			}
 		}
 
@@ -5141,7 +5169,7 @@ function activeHero(hero){
 
 		//this.defendBuff = function(relevantDefType){
 		if(!this.initiator){
-			//Not actually going to limit text from relevantDefType, beccause res/def may always be relevant for special attacks
+			//Not actually going to limit text from relevantDefType, because res/def may always be relevant for special attacks
 			var buffVal = 0;
 
 			//Close/Distant Def
@@ -5704,7 +5732,7 @@ function activeHero(hero){
 			return true;
 		}
 		//Not cancelled
-		return false
+		return false;
 	}
 
 	//represents one attack of combat
@@ -6516,7 +6544,10 @@ function activeHero(hero){
 		//Set after renewal
 		this.combatStartHp = this.hp;
 		enemy.combatStartHp = enemy.hp;
-
+		
+		//TODO: Reorganize to operate in this order: stats + field buff/debuff -> aoe specials -> add spurs (bladetome bonus can go in here)
+		//Current logic: calculate spurs -> stats + field buff/debuff + spurs -> aoe specials - spurs -> add bladetome bonus
+		
 		//Initialize combat spur
 		this.combatSpur = {"atk":0,"spd":0,"def":0,"res":0};
 		enemy.combatSpur = {"atk":0,"spd":0,"def":0,"res":0};
@@ -6529,7 +6560,11 @@ function activeHero(hero){
 		enemy.combatStat = {"atk":0,"spd":0,"def":0,"res":0};
 		roundText += this.setCombatStats(enemy);
 		roundText += enemy.setCombatStats(this);
-
+		
+		//Check for AOE special activation before combat
+		roundText += this.doDamage(enemy, false, true, false);
+		
+		//In-combat bonuses:
 		//Bladetome bonus
 		if (this.has("Raudrblade") || this.has("Blarblade") || this.has("Gronnblade")){
 			var atkbonus = this.combatBuffs.atk + this.combatBuffs.spd + this.combatBuffs.def + this.combatBuffs.res;
@@ -6541,7 +6576,7 @@ function activeHero(hero){
 			enemy.combatStat.atk += atkbonus;
 			if (atkbonus != 0){roundText += enemy.name + " gains +" + atkbonus + " Atk from " + data.skills[enemy.weaponIndex].name + ".<br>";}
 		}
-		//Blizzard bonus
+		//Blizzard bonus		
 		if(this.has("Blizzard")){
 			var atkbonus = -1 * (enemy.combatDebuffs.atk + enemy.combatDebuffs.spd + enemy.combatDebuffs.def + enemy.combatDebuffs.res);
 			this.combatStat.atk += atkbonus;
@@ -6552,9 +6587,6 @@ function activeHero(hero){
 			enemy.combatStat.atk += atkbonus;
 			if (atkbonus != 0){roundText += enemy.name + " gains +" + atkbonus + " Atk from " + data.skills[enemy.weaponIndex].name + ".<br>";}
 		}
-
-		//Check for AOE special activation
-		roundText += this.doDamage(enemy, false, true, false);
 
 		//Check for Brave weapons, brave will be passed to this.doDamage
 		var brave = false;
