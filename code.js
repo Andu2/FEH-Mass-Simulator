@@ -1491,12 +1491,7 @@ function adjustCustomListBuff(isStat){
 						hero.spur[stat] = buffVal;
 					}else{
 						if (enemies.cl.movement == "all"){
-							//Account for lack of dragon Hone buffs
-							if (stat == "atk" || stat == "spd"){
-								hero.buffs[stat] = (data.heroes[hero.index].movetype == "infantry") ? 4 : 6;
-							}else{
-								hero.buffs[stat] = (data.heroes[hero.index].movetype != "infantry" || data.heroes[hero.index].weapontype == "dragon") ? 6 : 4;
-							}
+							hero.buffs[stat] = (data.heroes[hero.index].movetype == "infantry" && data.heroes[hero.index].weapontype != "dragon") ? 4 : 6;
 						}else{
 							hero.buffs[stat] = buffVal;
 						}
