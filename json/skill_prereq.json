@@ -2018,5 +2018,26 @@
 	}, {
 		"skill_id": 854,
 		"required_id": 853
+	}, {
+		"skill_id": 862,
+		"required_id": 94
+	}, {
+		"skill_id": 863,
+		"required_id": 329
+	}, {
+		"skill_id": 864,
+		"required_id": 31
+	}, {
+		"skill_id": 865,
+		"required_id": 845
+	}, {
+		"skill_id": 868,
+		"required_id": 867
+	}, {
+		"skill_id": 867,
+		"required_id": 866
+	}, {
+		"skill_id": 869,
+		"required_id": 31
 	}
 ]
