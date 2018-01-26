@@ -2036,5 +2036,8 @@
 	}, {
 		"skill_id": 867,
 		"required_id": 866
+	}, {
+		"skill_id": 869,
+		"required_id": 31
 	}
 ]
