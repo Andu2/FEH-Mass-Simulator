@@ -4922,13 +4922,13 @@ function activeHero(hero){
 			if(this.has("Regal Blade")){
 				this.combatSpur.atk += 2;
 				this.combatSpur.spd += 2;
-				boostText += this.name + " gets +2 Atk/Spd from " + enemy.name + " being at full health with " + data.skills[this.weaponIndex].name + ".<br>";
+				boostText += this.name + " gets +2 Atk/Spd with " + data.skills[this.weaponIndex].name + " from " + enemy.name + " being at full health.<br>";
 			}
 
 			if(this.hasExactly("Gleipnir") || this.hasExactly("Ivaldi")){
 				this.combatSpur.atk += 3;
 				this.combatSpur.spd += 3;
-				boostText += this.name + " gets +3 Atk/Spd from " + enemy.name + " being at full health with " + data.skills[this.weaponIndex].name + ".<br>";
+				boostText += this.name + " gets +3 Atk/Spd with " + data.skills[this.weaponIndex].name + " from " + enemy.name + " being at full health.<br>";
 			}
 		}
 
