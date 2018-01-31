@@ -5242,32 +5242,32 @@ function activeHero(hero){
 			//Skills
 			if(this.has("Steady Breath")){
 				this.combatSpur.def += 4;
-				boostText += this.name + " gets +4 Def from defending with Steady Breath.<br>";
+				boostText += this.name + " gets +4 Def from defending with " + data.skills[this.aIndex].name + ".<br>";
+			}
+			if(this.has("Warding Breath")){
+				this.combatSpur.res += 4;
+				boostText += this.name + " gets +4 Res from defending with " + data.skills[this.aIndex].name + ".<br>";
 			}
 			if(this.has("Fierce Stance")){
 				buffVal = this.has("Fierce Stance") * 2;
-				skillName = data.skills[this.aIndex].name;
 				this.combatSpur.atk += buffVal;
-				boostText += this.name + " gets +" + buffVal + " Atk from defending with " + skillName + ".<br>";
+				boostText += this.name + " gets +" + buffVal + " Atk from defending with " + data.skills[this.aIndex].name + ".<br>";
 			}
 			//***Speed Stance not in game - need to rename***
 			if(this.has("Speed Stance")){
 				buffVal = this.has("Speed Stance") * 2;
-				skillName = data.skills[this.aIndex].name;
 				this.combatSpur.spd += buffVal;
-				boostText += this.name + " gets +" + buffVal + " Spd from defending with " + skillName + ".<br>";
+				boostText += this.name + " gets +" + buffVal + " Spd from defending with " + data.skills[this.aIndex].name + ".<br>";
 			}
 			if(this.has("Steady Stance")){
 				buffVal = this.has("Steady Stance") * 2;
-				skillName = data.skills[this.aIndex].name;
 				this.combatSpur.def += buffVal;
-				boostText += this.name + " gets +" + buffVal + " Def from defending with " + skillName + ".<br>";
+				boostText += this.name + " gets +" + buffVal + " Def from defending with " + data.skills[this.aIndex].name + ".<br>";
 			}
 			if(this.has("Warding Stance")){
 				buffVal = this.has("Warding Stance") * 2;
-				skillName = data.skills[this.aIndex].name;
 				this.combatSpur.res += buffVal;
-				boostText += this.name + " gets +" + buffVal + " Res from defending with " + skillName + ".<br>";
+				boostText += this.name + " gets +" + buffVal + " Res from defending with " + data.skills[this.aIndex].name + ".<br>";
 			}
 
 			return boostText;
@@ -5365,14 +5365,23 @@ function activeHero(hero){
 
 		if(!enemy.has("Embla's Ward")){
 			var poison = 0;
-			if(this.has("Poison Strike")){
-				poison = this.has("Poison Strike")*3+1;
+			if(this.hasAtIndex("Poison Strike", this.bIndex)){
+				poison = this.hasAtIndex("Poison Strike", this.bIndex)*3+1;
 				skillName = data.skills[this.bIndex].name;
 				if(enemy.hp - poison <= 0){
 					poison = enemy.hp - 1;
 				}
 				enemy.hp -= poison;
 				poisonEnemyText += enemy.name + " takes " + poison + " damage after combat from " + skillName + ".<br>";
+			}
+			if(this.hasAtIndex("Poison Strike", this.sIndex)){
+				poison = this.hasAtIndex("Poison Strike", this.sIndex)*3+1;
+				skillName = data.skills[this.sIndex].name;
+				if(enemy.hp - poison <= 0){
+					poison = enemy.hp - 1;
+				}
+				enemy.hp -= poison;
+				poisonEnemyText += enemy.name + " takes " + poison + " damage after combat from " + skillName + " (Seal).<br>";
 			}
 			if(this.has("Deathly Dagger") && this.refineIndex == -1){
 				poison = 7;
@@ -5857,7 +5866,7 @@ function activeHero(hero){
 					dmgBoost += (this.maxHp-this.hp) * 0.5;
 					offensiveSpecialActivated = true;
 				}
-				else if(this.hasExactly("Aether")){
+				else if(this.hasExactly("Aether") || this.hasExactly("Radiant Aether")){
 					enemyDefModifier = -0.5;
 					absorbPct = 0.5;
 					offensiveSpecialActivated = true;
@@ -6331,8 +6340,12 @@ function activeHero(hero){
 				var loseCharge = 0;
 				var skillNames = [];
 
-				//Steady Breath: Initiator has
+				//-Breath: Initiator has
 				if(!this.initiator && this.has("Steady Breath")){
+					gainCharge = Math.max(gainCharge, 1);
+					skillNames.push(data.skills[this.aIndex].name);
+				}
+				if(!this.initiator && this.has("Warding Breath")){
 					gainCharge = Math.max(gainCharge, 1);
 					skillNames.push(data.skills[this.aIndex].name);
 				}
@@ -6408,8 +6421,12 @@ function activeHero(hero){
 				var loseCharge = 0;
 				var skillNames = [];
 
-				//Steady Breath: Enemy has
+				//-Breath: Enemy has
 				if(this.initiator && enemy.has("Steady Breath")){
+					gainCharge = Math.max(gainCharge, 1);
+					skillNames.push(data.skills[enemy.aIndex].name);
+				}
+				if(this.initiator && enemy.has("Warding Breath")){
 					gainCharge = Math.max(gainCharge, 1);
 					skillNames.push(data.skills[enemy.aIndex].name);
 				}
