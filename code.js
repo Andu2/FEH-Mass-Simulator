@@ -846,6 +846,7 @@ function initHero(hero, alreadyHasSkills){
 
 function initEnemyList(){
 	setFlEnemies();
+	updateFlEnemies();
 	setSkills(enemies.fl);
 	setStats(enemies.fl);
 }
@@ -1622,6 +1623,7 @@ function resetHero(hero,blockInit){//also resets fl, despite singular name - pas
 		updateChallengerUI();
 	}
 	else{
+		//If current enemy list is Full List
 		if(options.customEnemyList == 0){
 			hero.weapon = -1;
 			hero.refine = -1;
@@ -1639,17 +1641,14 @@ function resetHero(hero,blockInit){//also resets fl, despite singular name - pas
 			hero.replaceB = 0;
 			hero.replaceC = 0;
 			hero.replaceS = 0;
-
 			hero.include = {"melee":1,"ranged":1,"red":1,"blue":1,"green":1,"gray":1,"physical":1,"magical":1,"infantry":1,"cavalry":1,"flying":1,"armored":1,"staff":0,"nonstaff":1};
 
 			if(!blockInit){
 				initEnemyList();
-			}
+			}			
 		}
-
 		updateEnemyUI();
 	}
-
 	calculate();
 }
 
