@@ -1645,7 +1645,7 @@ function resetHero(hero,blockInit){//also resets fl, despite singular name - pas
 
 			if(!blockInit){
 				initEnemyList();
-			}			
+			}
 		}
 		updateEnemyUI();
 	}
@@ -4716,7 +4716,7 @@ function activeHero(hero){
 		var debuffVal = {"atk":0,"spd":0,"def":0,"res":0};
 
 		//Chilling Seal Debuff
-		if ((enemy.challenger && options.chilled_challenger) || (!enemy.chalenger && options.chilled_enemy)){
+		if ((enemy.challenger && options.chilled_challenger) || (!enemy.challenger && options.chilled_enemy)){
 			debuffVal.atk = -6;
 			debuffVal.spd = -6;
 			skillNames.push("Chilling Seal");
@@ -5274,7 +5274,7 @@ function activeHero(hero){
 			return boostText;
 		}
 	}
-	
+
 	//Calculates effective combat stats used within a round
 	this.setCombatStats = function(enemy){
 		var statText = "";
@@ -6557,10 +6557,10 @@ function activeHero(hero){
 		//Set after renewal
 		this.combatStartHp = this.hp;
 		enemy.combatStartHp = enemy.hp;
-		
+
 		//TODO: Reorganize to operate in this order: stats + field buff/debuff -> aoe specials -> add spurs (bladetome bonus can go in here)
 		//Current logic: calculate spurs -> stats + field buff/debuff + spurs -> aoe specials - spurs -> add bladetome bonus
-		
+
 		//Initialize combat spur
 		this.combatSpur = {"atk":0,"spd":0,"def":0,"res":0};
 		enemy.combatSpur = {"atk":0,"spd":0,"def":0,"res":0};
@@ -6573,10 +6573,10 @@ function activeHero(hero){
 		enemy.combatStat = {"atk":0,"spd":0,"def":0,"res":0};
 		roundText += this.setCombatStats(enemy);
 		roundText += enemy.setCombatStats(this);
-		
+
 		//Check for AOE special activation before combat
 		roundText += this.doDamage(enemy, false, true, false);
-		
+
 		//In-combat bonuses:
 		//Bladetome bonus
 		if (this.has("Raudrblade") || this.has("Blarblade") || this.has("Gronnblade")){
@@ -6589,7 +6589,7 @@ function activeHero(hero){
 			enemy.combatStat.atk += atkbonus;
 			if (atkbonus != 0){roundText += enemy.name + " gains +" + atkbonus + " Atk from " + data.skills[enemy.weaponIndex].name + ".<br>";}
 		}
-		//Blizzard bonus		
+		//Blizzard bonus
 		if(this.has("Blizzard")){
 			var atkbonus = -1 * (enemy.combatDebuffs.atk + enemy.combatDebuffs.spd + enemy.combatDebuffs.def + enemy.combatDebuffs.res);
 			this.combatStat.atk += atkbonus;
