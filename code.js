@@ -407,7 +407,7 @@ $(document).ready(function(){
 	}
 	
 	//Inject select2 UI with matcher for data.heroes
-	$("#challenger_name, #cl_enemy_name").html(heroHTML).select2({selectOnClose: true, dropdownAutoWidth : true, matcher: matchStart});
+	$("#challenger_name, #cl_enemy_name").html(heroHTML).select2({selectOnClose: true, dropdownAutoWidth : true, matcher: matchStartHeroes});
 	//Inject select2 UI with matcher for data.skills
 	$("#challenger_weapon, #challenger_assist, #challenger_special, #challenger_a, #challenger_b, #challenger_c, #challenger_s").select2({selectOnClose: true, dropdownAutoWidth : true, matcher: matchStartSkills});
 	$("#enemies_weapon, #enemies_assist, #enemies_special, #enemies_a, #enemies_b, #enemies_c, #enemies_s").select2({selectOnClose: true, dropdownAutoWidth : true, matcher: matchStartSkills});
@@ -1863,7 +1863,7 @@ function resetFilter(){
 }
 
 //Select2 match function for matching starting characters
-function matchStart(params, data) {
+function matchStartHeroes(params, data) {
 	//If there are no search terms, return all of the data
     if ($.trim(params.term) === '') {
 		return data;
@@ -1877,6 +1877,20 @@ function matchStart(params, data) {
 	//If search term appears in the beginning of data's text
 	if (data.text.toUpperCase().indexOf(params.term.toUpperCase()) == 0) {
 		return data;
+	}
+	
+	//If search term is a number, match with BST that are greater than the number
+	if (isNaN(params.term) == false){		
+		if (data.id != -1){
+			if (this.data.heroes[data.id].basehp + this.data.growths[4][this.data.heroes[data.id].hpgrowth] 
+				+ this.data.heroes[data.id].baseatk + this.data.growths[4][this.data.heroes[data.id].atkgrowth]
+				+ this.data.heroes[data.id].basespd + this.data.growths[4][this.data.heroes[data.id].spdgrowth]
+				+ this.data.heroes[data.id].basedef + this.data.growths[4][this.data.heroes[data.id].defgrowth]
+				+ this.data.heroes[data.id].baseres + this.data.growths[4][this.data.heroes[data.id].resgrowth]
+				>= parseInt(params.term)){
+				return data;
+			}
+		}
 	}
 
     //Return `null` if the term should not be displayed
