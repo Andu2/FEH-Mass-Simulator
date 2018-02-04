@@ -12100,7 +12100,7 @@
 		"name": "Ivaldi",
 		"slot": "weapon",
 		"sp": 400,
-		"description": "Grants Res+3. If foes' HP = 100% at start of combat, grants Atk\/Spd+3 during combat.",
+		"description": "Grants Def+3. If foes' HP = 100% at start of combat, grants Atk\/Spd+3 during combat.",
 		"hp": 0,
 		"atk": 14,
 		"spd": 0,
