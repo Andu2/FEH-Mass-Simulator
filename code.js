@@ -1879,17 +1879,15 @@ function matchStartHeroes(params, data) {
 		return data;
 	}
 	
-	//If search term is a number, match with BST that are greater than the number
-	if (isNaN(params.term) == false){		
-		if (data.id != -1){
-			if (this.data.heroes[data.id].basehp + this.data.growths[4][this.data.heroes[data.id].hpgrowth] 
-				+ this.data.heroes[data.id].baseatk + this.data.growths[4][this.data.heroes[data.id].atkgrowth]
-				+ this.data.heroes[data.id].basespd + this.data.growths[4][this.data.heroes[data.id].spdgrowth]
-				+ this.data.heroes[data.id].basedef + this.data.growths[4][this.data.heroes[data.id].defgrowth]
-				+ this.data.heroes[data.id].baseres + this.data.growths[4][this.data.heroes[data.id].resgrowth]
-				>= parseInt(params.term)){
-				return data;
-			}
+	//If search term is a number, match with BST that are greater than the input
+	if (isNaN(params.term) == false && data.id != -1){
+		if (this.data.heroes[data.id].basehp + this.data.growths[4][this.data.heroes[data.id].hpgrowth] 
+			+ this.data.heroes[data.id].baseatk + this.data.growths[4][this.data.heroes[data.id].atkgrowth]
+			+ this.data.heroes[data.id].basespd + this.data.growths[4][this.data.heroes[data.id].spdgrowth]
+			+ this.data.heroes[data.id].basedef + this.data.growths[4][this.data.heroes[data.id].defgrowth]
+			+ this.data.heroes[data.id].baseres + this.data.growths[4][this.data.heroes[data.id].resgrowth]
+			>= parseInt(params.term)){
+			return data;
 		}
 	}
 
@@ -1914,12 +1912,10 @@ function matchStartSkills(params, data) {
 		return data;
 	}
 	
-	//If search term is a number, match with sp cost that are greater than the number
-	if (isNaN(params.term) == false){		
-		if (data.id != -1){
-			if (this.data.skills[data.id].sp >= parseInt(params.term)){
-				return data;
-			}
+	//If search term is a number, match with sp cost that are greater than the input
+	if (isNaN(params.term) == false && data.id != -1){
+		if (this.data.skills[data.id].sp >= parseInt(params.term)){
+			return data;
 		}
 	}
 
@@ -1944,12 +1940,10 @@ function matchStartRefine(params, data) {
 		return data;
 	}
 	
-	//If search term is a number, match with sp cost that are greater than the number
-	if (isNaN(params.term) == false){		
-		if (data.id != -1){
-			if (this.data.refine[data.id].sp >= parseInt(params.term)){
-				return data;
-			}
+	//If search term is a number, match with sp cost that are greater than the input
+	if (isNaN(params.term) == false && data.id != -1){
+		if (this.data.refine[data.id].sp >= parseInt(params.term)){
+			return data;
 		}
 	}
 
