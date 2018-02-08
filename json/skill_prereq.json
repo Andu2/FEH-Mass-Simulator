@@ -2093,5 +2093,17 @@
 	}, {
 		"skill_id": 894,
 		"required_id": 893
+	}, {
+		"skill_id": 897,
+		"required_id": 896
+	}, {
+		"skill_id": 896,
+		"required_id": 103
+	}, {
+		"skill_id": 900,
+		"required_id": 899
+	}, {
+		"skill_id": 899,
+		"required_id": 898
 	}
 ]
