@@ -4711,16 +4711,21 @@ function activeHero(hero){
 		}
 
 		//Weapons
-		if(this.has("Fensalir")){
-			threatDebuffs.atk = Math.min(threatDebuffs.atk,-4);
+		if (this.has("Fensalir")){
+			threatDebuffs.atk = Math.min(threatDebuffs.atk, -4);
 			skillNames.push("Fensalir");
 		}
-		if(this.has("Eckesachs")){
-			threatDebuffs.def = Math.min(threatDebuffs.def,-4);
-			skillNames.push("Eckesachs");
+		if (this.hasExactly("Eckesachs")){
+			if (this.refineIndex == -1){
+				threatDebuffs.def = Math.min(threatDebuffs.def, -4);
+				skillNames.push("Eckesachs");
+			}else if (enemy.weaponType != "dragon"){
+				threatDebuffs.def = Math.min(threatDebuffs.def, -6);
+				skillNames.push("Eckesachs (Refined)");
+			}
 		}
 
-		if(skillNames.length > 0){
+		if (skillNames.length > 0){
 			var statChanges = [];
 			for(var stat in threatDebuffs){
 				if(threatDebuffs[stat] < Math.min(enemy.debuffs[stat], enemy.combatDebuffs[stat])){
@@ -5269,6 +5274,12 @@ function activeHero(hero){
 					this.combatSpur.def += buffVal;
 					this.combatSpur.res += buffVal;
 					boostText += this.name + " gets +" + buffVal + " Def/Res from being attacked from range with " + data.skills[this.sIndex].name + " (Seal).<br>";
+				}
+				if(this.hasAtRefineIndex("Distant Def", this.refineIndex)){
+					buffVal = 6;
+					this.combatSpur.def += buffVal;
+					this.combatSpur.res += buffVal;
+					boostText += this.name + " gets +" + buffVal + " Def/Res from being attacked from range with " + data.skills[this.weaponIndex].name + " (Refined).<br>";
 				}
 			}
 			if(enemy.range == "melee"){

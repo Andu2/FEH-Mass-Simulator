@@ -550,6 +550,61 @@
 		"res": 4,
 		"prereq": "Winged Sword"
 	},	{
+		"category": "Eckesachs",
+		"name": "Distant Def",
+		"sp": 400,
+		"description": "Inflicts Def-6 on foes (excluding dragons) within 2 spaces at the start of each turn, through their next actions. If unit is attacked by foe using bow, daggers, magic, or staff, unit receives Def/Res+6 during combat.",
+		"hp": 3,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"prereq": "Eckesachs"
+	},	{
+		"category": "Eckesachs",
+		"name": "Atk Bonus",
+		"sp": 400,
+		"description": "Inflicts Def-6 on foes (excluding dragons) within 2 spaces at the start of each turn, through their next actions.",
+		"hp": 5,
+		"atk": 2,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"prereq": "Eckesachs"
+	},	{
+		"category": "Eckesachs",
+		"name": "Spd Bonus",
+		"sp": 400,
+		"description": "Inflicts Def-6 on foes (excluding dragons) within 2 spaces at the start of each turn, through their next actions.",
+		"hp": 5,
+		"atk": 0,
+		"spd": 3,
+		"def": 0,
+		"res": 0,
+		"prereq": "Eckesachs"
+	},	{
+		"category": "Eckesachs",
+		"name": "Def Bonus",
+		"sp": 400,
+		"description": "Inflicts Def-6 on foes (excluding dragons) within 2 spaces at the start of each turn, through their next actions.",
+		"hp": 5,
+		"atk": 0,
+		"spd": 0,
+		"def": 4,
+		"res": 0,
+		"prereq": "Eckesachs"
+	},	{
+		"category": "Eckesachs",
+		"name": "Res Bonus",
+		"sp": 400,
+		"description": "Inflicts Def-6 on foes (excluding dragons) within 2 spaces at the start of each turn, through their next actions.",
+		"hp": 5,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 4,
+		"prereq": "Eckesachs"
+	},	{
 		"category": "Advanced Ranged",
 		"name": "Atk Bonus",
 		"sp": 350,
