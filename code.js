@@ -5854,7 +5854,7 @@ function activeHero(hero){
 		if (opponent.hasExactly("Divine Naga")){
 			return true;
 		}
-		if ((opponent.has("Casa Blanca") || opponent.has("Green Gift"))&& hero.range == "ranged"){
+		if ((opponent.has("Casa Blanca") || opponent.has("Green Gift") || opponent.has("Blue Gift"))&& hero.range == "ranged"){
 			return true;
 		}
 		//Refinement
