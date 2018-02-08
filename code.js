@@ -5842,6 +5842,9 @@ function activeHero(hero){
 		if (opponent.hasExactly("Divine Naga")){
 			return true;
 		}
+		if (opponent.has("Casa Blanca") && hero.range == "ranged"){
+			return true;
+		}
 		//Refinement
 		if (opponent.hasExactly("Nullify Armored") && hero.moveType == "armored"){
 			return true;
