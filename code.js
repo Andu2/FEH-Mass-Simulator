@@ -132,8 +132,15 @@ data.heroBaseSkills = [];
 data.heroMaxSkills = [[],[],[],[],[]]; //2d array; 1st num rarity, 2nd num skillindex
 
 data.skillsThatArePrereq = [];
-//Prereq exceptions are Sol, Ardent Sacrifice, Luna, Astra, Assault, Sacred Cowl
-data.skillPrereqExceptions = [125,137,162,168,170,193];
+//Prereq exceptions are: 
+//Sol, Ardent Sacrifice, Luna, Astra, Assault, Sacred Cowl,
+//Armorslayer+, Killing Edge+, Raudrwolf+, Heavy Spear+, Killer Lance+, Blarwolf+,
+//Hammer+, Killer Axe+, Gronnwolf+, Assassin's Bow+, Killer Bow+
+data.skillPrereqExceptions = [
+	125, 137, 162, 168, 170, 193,
+	6, 10, 38, 74, 76, 87,
+	50, 52, 64,	107, 111
+	];
 
 data.enemyPrompts = {
 	//Just for fun, special messages for some of my favorites ;)
