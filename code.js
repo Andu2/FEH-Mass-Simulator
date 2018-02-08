@@ -3057,12 +3057,10 @@ function loadCustomList(index){
 	importText("enemies", listText);
 }
 
-//Search for refine index by name and category
-//TODO: Change from exporting refineName/category as key to exporting refineName/weaponName to match against name/prereq instead?
-// 		Can merge duplicate entries in DB using this logic.
+//Search for refine index by weapon name and refine name
 function searchRefineIndex(refine){
 	for (var i = 0; i < data.refine.length; i++){
-		if (refine[0] == data.refine[i].name.toLowerCase() && refine[1] == data.refine[i].category.toLowerCase()){
+		if (data.refine[i].prereq.toLowerCase().split(",").includes(refine[0]) && refine[1] == data.refine[i].name.toLowerCase()){
 			return i;
 		}
 	}
@@ -3209,7 +3207,7 @@ function getExportText(side){
 			data.skillSlots.forEach(function(slot){
 				if(hero[slot] != -1){
 					if(slot == "refine"){
-						heroExportText += capitalize(slot) + ": " + data.refine[hero[slot]].name + " - " + data.refine[hero[slot]].category + delimiter;
+						heroExportText += capitalize(slot) + ": " + data.skills[hero.weapon].name + " - " + data.refine[hero[slot]].name + delimiter;
 					}else{
 						heroExportText += capitalize(slot) + ": " + data.skills[hero[slot]].name + delimiter;
 					}

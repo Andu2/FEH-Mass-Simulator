@@ -220,171 +220,6 @@
 		"res": 3,
 		"prereq": "Silver Dagger+"
 	},	{
-		"category": "Advanced Melee",
-		"name": "Atk Bonus",
-		"sp": 350,
-		"description": "",
-		"hp": 5,
-		"atk": 2,
-		"spd": 0,
-		"def": 0,
-		"res": 0,
-		"prereq": "Slaying Edge+,Slaying Lance+,Slaying Axe+,Deft Harpoon+,Melon Crusher+,Lilith Floatie+,Sack o' Gifts+,Handbell+,Tannenboom!+,Hagoita+,Kadomatsu+"
-	},	{
-		"category": "Advanced Melee",
-		"name": "Spd Bonus",
-		"sp": 350,
-		"description": "",
-		"hp": 5,
-		"atk": 0,
-		"spd": 3,
-		"def": 0,
-		"res": 0,
-		"prereq": "Slaying Edge+,Slaying Lance+,Slaying Axe+,Deft Harpoon+,Melon Crusher+,Lilith Floatie+,Sack o' Gifts+,Handbell+,Tannenboom!+,Hagoita+,Kadomatsu+"
-	},	{
-		"category": "Advanced Melee",
-		"name": "Def Bonus",
-		"sp": 350,
-		"description": "",
-		"hp": 5,
-		"atk": 0,
-		"spd": 0,
-		"def": 4,
-		"res": 0,
-		"prereq": "Slaying Edge+,Slaying Lance+,Slaying Axe+,Deft Harpoon+,Melon Crusher+,Lilith Floatie+,Sack o' Gifts+,Handbell+,Tannenboom!+,Hagoita+,Kadomatsu+"
-	},	{
-		"category": "Advanced Melee",
-		"name": "Res Bonus",
-		"sp": 350,
-		"description": "",
-		"hp": 5,
-		"atk": 0,
-		"spd": 0,
-		"def": 0,
-		"res": 4,
-		"prereq": "Slaying Edge+,Slaying Lance+,Slaying Axe+,Deft Harpoon+,Melon Crusher+,Lilith Floatie+,Sack o' Gifts+,Handbell+,Tannenboom!+,Hagoita+,Kadomatsu+"
-	},	{
-		"category": "Wedding Melee",
-		"name": "Atk Bonus",
-		"sp": 350,
-		"description": "After combat, grants Def\/Res+5 to unit and allies within 2 spaces for 1 turn.",
-		"hp": 5,
-		"atk": 2,
-		"spd": 0,
-		"def": 0,
-		"res": 0,
-		"prereq": "First Bite+"
-	},	{
-		"category": "Wedding Melee",
-		"name": "Spd Bonus",
-		"sp": 350,
-		"description": "After combat, grants Def\/Res+5 to unit and allies within 2 spaces for 1 turn.",
-		"hp": 5,
-		"atk": 0,
-		"spd": 3,
-		"def": 0,
-		"res": 0,
-		"prereq": "First Bite+"
-	},	{
-		"category": "Wedding Melee",
-		"name": "Def Bonus",
-		"sp": 350,
-		"description": "After combat, grants Def\/Res+5 to unit and allies within 2 spaces for 1 turn.",
-		"hp": 5,
-		"atk": 0,
-		"spd": 0,
-		"def": 4,
-		"res": 0,
-		"prereq": "First Bite+"
-	},	{
-		"category": "Wedding Melee",
-		"name": "Res Bonus",
-		"sp": 350,
-		"description": "After combat, grants Def\/Res+5 to unit and allies within 2 spaces for 1 turn.",
-		"hp": 5,
-		"atk": 0,
-		"spd": 0,
-		"def": 0,
-		"res": 4,
-		"prereq": "First Bite+"
-	},	{
-		"category": "Warding Melee",
-		"name": "Atk Bonus",
-		"sp": 350,
-		"description": "Grants Res+7 when unit is attacked.",
-		"hp": 5,
-		"atk": 2,
-		"spd": 0,
-		"def": 0,
-		"res": 0,
-		"prereq": "Berkut's Lance+"
-	},	{
-		"category": "Warding Melee",
-		"name": "Spd Bonus",
-		"sp": 350,
-		"description": "Grants Res+7 when unit is attacked.",
-		"hp": 5,
-		"atk": 0,
-		"spd": 3,
-		"def": 0,
-		"res": 0,
-		"prereq": "Berkut's Lance+"
-	},	{
-		"category": "Warding Melee",
-		"name": "Def Bonus",
-		"sp": 350,
-		"description": "Grants Res+7 when unit is attacked.",
-		"hp": 5,
-		"atk": 0,
-		"spd": 0,
-		"def": 4,
-		"res": 0,
-		"prereq": "Berkut's Lance+"
-	},	{
-		"category": "Warding Melee",
-		"name": "Res Bonus",
-		"sp": 350,
-		"description": "Grants Res+7 when unit is attacked.",
-		"hp": 5,
-		"atk": 0,
-		"spd": 0,
-		"def": 0,
-		"res": 4,
-		"prereq": "Berkut's Lance+"
-	},	{
-		"category": "Panic Melee",
-		"name": "Atk Bonus",
-		"sp": 350,
-		"description": "After combat, bonuses on target and foes within 2 spaces of target become penalties through their next actions.",
-		"hp": 5,
-		"atk": 2,
-		"spd": 0,
-		"def": 0,
-		"res": 0,
-		"prereq": "Legion's Axe+"
-	},	{
-		"category": "Panic Melee",
-		"name": "Spd Bonus",
-		"sp": 350,
-		"description": "After combat, bonuses on target and foes within 2 spaces of target become penalties through their next actions.",
-		"hp": 5,
-		"atk": 0,
-		"spd": 3,
-		"def": 0,
-		"res": 0,
-		"prereq": "Legion's Axe+"
-	},	{
-		"category": "Panic Melee",
-		"name": "Def Bonus",
-		"sp": 350,
-		"description": "After combat, bonuses on target and foes within 2 spaces of target become penalties through their next actions.",
-		"hp": 5,
-		"atk": 0,
-		"spd": 0,
-		"def": 4,
-		"res": 0,
-		"prereq": "Legion's Axe+"
-	},	{
 		"category": "Basilikos",
 		"name": "Life and Death",
 		"sp": 400,
@@ -396,49 +231,16 @@
 		"res": -5,
 		"prereq": "Basilikos"
 	},	{
-		"category": "Basilikos",
-		"name": "Atk Bonus",
+		"category": "Hauteclere",
+		"name": "Special Damage",
 		"sp": 400,
-		"description": "",
-		"hp": 5,
-		"atk": 2,
-		"spd": 0,
-		"def": 0,
-		"res": 0,
-		"prereq": "Basilikos"
-	},	{
-		"category": "Basilikos",
-		"name": "Spd Bonus",
-		"sp": 400,
-		"description": "",
-		"hp": 5,
-		"atk": 0,
-		"spd": 3,
-		"def": 0,
-		"res": 0,
-		"prereq": "Basilikos"
-	},	{
-		"category": "Basilikos",
-		"name": "Def Bonus",
-		"sp": 400,
-		"description": "",
-		"hp": 5,
-		"atk": 0,
-		"spd": 0,
-		"def": 4,
-		"res": 0,
-		"prereq": "Basilikos"
-	},	{
-		"category": "Basilikos",
-		"name": "Res Bonus",
-		"sp": 400,
-		"description": "",
-		"hp": 5,
+		"description": "Deals +10 damage when Special triggers.",
+		"hp": 3,
 		"atk": 0,
 		"spd": 0,
 		"def": 0,
-		"res": 4,
-		"prereq": "Basilikos"
+		"res": 0,
+		"prereq": "Hauteclere"
 	},	{
 		"category": "Hinoka's Spear",
 		"name": "Flying Commander",
@@ -451,49 +253,16 @@
 		"res": 0,
 		"prereq": "Hinoka's Spear"
 	},	{
-		"category": "Hinoka's Spear",
-		"name": "Atk Bonus",
+		"category": "Mystletainn",
+		"name": "Fury",
 		"sp": 400,
-		"description": "",
-		"hp": 5,
-		"atk": 2,
-		"spd": 0,
-		"def": 0,
-		"res": 0,
-		"prereq": "Hinoka's Spear"
-	},	{
-		"category": "Hinoka's Spear",
-		"name": "Spd Bonus",
-		"sp": 400,
-		"description": "",
-		"hp": 5,
-		"atk": 0,
+		"description": "Grants Atk/Spd/Def/Res+3. Unit takes 6 damage after combat.",
+		"hp": 3,
+		"atk": 3,
 		"spd": 3,
-		"def": 0,
-		"res": 0,
-		"prereq": "Hinoka's Spear"
-	},	{
-		"category": "Hinoka's Spear",
-		"name": "Def Bonus",
-		"sp": 400,
-		"description": "",
-		"hp": 5,
-		"atk": 0,
-		"spd": 0,
-		"def": 4,
-		"res": 0,
-		"prereq": "Hinoka's Spear"
-	},	{
-		"category": "Hinoka's Spear",
-		"name": "Res Bonus",
-		"sp": 400,
-		"description": "",
-		"hp": 5,
-		"atk": 0,
-		"spd": 0,
-		"def": 0,
-		"res": 4,
-		"prereq": "Hinoka's Spear"
+		"def": 3,
+		"res": 3,
+		"prereq": "Mystletainn"
 	},	{
 		"category": "Winged Sword",
 		"name": "Flashing Blade",
@@ -506,49 +275,170 @@
 		"res": 0,
 		"prereq": "Winged Sword"
 	},	{
-		"category": "Winged Sword",
+		"category": "Advanced Melee",
 		"name": "Atk Bonus",
-		"sp": 400,
+		"sp": 350,
 		"description": "",
 		"hp": 5,
 		"atk": 2,
 		"spd": 0,
 		"def": 0,
 		"res": 0,
-		"prereq": "Winged Sword"
+		"prereq": "Slaying Edge+,Slaying Lance+,Slaying Axe+,Deft Harpoon+,Melon Crusher+,Lilith Floatie+,Sack o' Gifts+,Handbell+,Tannenboom!+,Hagoita+,Kadomatsu+,Basilikos,Hauteclere,Hinoka's Spear,Mystletainn,Winged Sword"
 	},	{
-		"category": "Winged Sword",
+		"category": "Advanced Melee",
 		"name": "Spd Bonus",
-		"sp": 400,
+		"sp": 350,
 		"description": "",
 		"hp": 5,
 		"atk": 0,
 		"spd": 3,
 		"def": 0,
 		"res": 0,
-		"prereq": "Winged Sword"
+		"prereq": "Slaying Edge+,Slaying Lance+,Slaying Axe+,Deft Harpoon+,Melon Crusher+,Lilith Floatie+,Sack o' Gifts+,Handbell+,Tannenboom!+,Hagoita+,Kadomatsu+,Basilikos,Hauteclere,Hinoka's Spear,Mystletainn,Winged Sword"
 	},	{
-		"category": "Winged Sword",
+		"category": "Advanced Melee",
 		"name": "Def Bonus",
-		"sp": 400,
+		"sp": 350,
 		"description": "",
 		"hp": 5,
 		"atk": 0,
 		"spd": 0,
 		"def": 4,
 		"res": 0,
-		"prereq": "Winged Sword"
+		"prereq": "Slaying Edge+,Slaying Lance+,Slaying Axe+,Deft Harpoon+,Melon Crusher+,Lilith Floatie+,Sack o' Gifts+,Handbell+,Tannenboom!+,Hagoita+,Kadomatsu+,Basilikos,Hauteclere,Hinoka's Spear,Mystletainn,Winged Sword"
 	},	{
-		"category": "Winged Sword",
+		"category": "Advanced Melee",
 		"name": "Res Bonus",
-		"sp": 400,
+		"sp": 350,
 		"description": "",
 		"hp": 5,
 		"atk": 0,
 		"spd": 0,
 		"def": 0,
 		"res": 4,
-		"prereq": "Winged Sword"
+		"prereq": "Slaying Edge+,Slaying Lance+,Slaying Axe+,Deft Harpoon+,Melon Crusher+,Lilith Floatie+,Sack o' Gifts+,Handbell+,Tannenboom!+,Hagoita+,Kadomatsu+,Basilikos,Hauteclere,Hinoka's Spear,Mystletainn,Winged Sword"
+	},	{
+		"category": "Wedding Melee",
+		"name": "Atk Bonus",
+		"sp": 350,
+		"description": "After combat, grants Def\/Res+5 to unit and allies within 2 spaces for 1 turn.",
+		"hp": 5,
+		"atk": 2,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"prereq": "First Bite+"
+	},	{
+		"category": "Wedding Melee",
+		"name": "Spd Bonus",
+		"sp": 350,
+		"description": "After combat, grants Def\/Res+5 to unit and allies within 2 spaces for 1 turn.",
+		"hp": 5,
+		"atk": 0,
+		"spd": 3,
+		"def": 0,
+		"res": 0,
+		"prereq": "First Bite+"
+	},	{
+		"category": "Wedding Melee",
+		"name": "Def Bonus",
+		"sp": 350,
+		"description": "After combat, grants Def\/Res+5 to unit and allies within 2 spaces for 1 turn.",
+		"hp": 5,
+		"atk": 0,
+		"spd": 0,
+		"def": 4,
+		"res": 0,
+		"prereq": "First Bite+"
+	},	{
+		"category": "Wedding Melee",
+		"name": "Res Bonus",
+		"sp": 350,
+		"description": "After combat, grants Def\/Res+5 to unit and allies within 2 spaces for 1 turn.",
+		"hp": 5,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 4,
+		"prereq": "First Bite+"
+	},	{
+		"category": "Warding Melee",
+		"name": "Atk Bonus",
+		"sp": 350,
+		"description": "Grants Res+7 when unit is attacked.",
+		"hp": 5,
+		"atk": 2,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"prereq": "Berkut's Lance+"
+	},	{
+		"category": "Warding Melee",
+		"name": "Spd Bonus",
+		"sp": 350,
+		"description": "Grants Res+7 when unit is attacked.",
+		"hp": 5,
+		"atk": 0,
+		"spd": 3,
+		"def": 0,
+		"res": 0,
+		"prereq": "Berkut's Lance+"
+	},	{
+		"category": "Warding Melee",
+		"name": "Def Bonus",
+		"sp": 350,
+		"description": "Grants Res+7 when unit is attacked.",
+		"hp": 5,
+		"atk": 0,
+		"spd": 0,
+		"def": 4,
+		"res": 0,
+		"prereq": "Berkut's Lance+"
+	},	{
+		"category": "Warding Melee",
+		"name": "Res Bonus",
+		"sp": 350,
+		"description": "Grants Res+7 when unit is attacked.",
+		"hp": 5,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 4,
+		"prereq": "Berkut's Lance+"
+	},	{
+		"category": "Panic Melee",
+		"name": "Atk Bonus",
+		"sp": 350,
+		"description": "After combat, bonuses on target and foes within 2 spaces of target become penalties through their next actions.",
+		"hp": 5,
+		"atk": 2,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"prereq": "Legion's Axe+"
+	},	{
+		"category": "Panic Melee",
+		"name": "Spd Bonus",
+		"sp": 350,
+		"description": "After combat, bonuses on target and foes within 2 spaces of target become penalties through their next actions.",
+		"hp": 5,
+		"atk": 0,
+		"spd": 3,
+		"def": 0,
+		"res": 0,
+		"prereq": "Legion's Axe+"
+	},	{
+		"category": "Panic Melee",
+		"name": "Def Bonus",
+		"sp": 350,
+		"description": "After combat, bonuses on target and foes within 2 spaces of target become penalties through their next actions.",
+		"hp": 5,
+		"atk": 0,
+		"spd": 0,
+		"def": 4,
+		"res": 0,
+		"prereq": "Legion's Axe+"
 	},	{
 		"category": "Eckesachs",
 		"name": "Distant Def",
@@ -605,6 +495,28 @@
 		"res": 4,
 		"prereq": "Eckesachs"
 	},	{
+		"category": "Felicia's Plate",
+		"name": "Magic Absorption",
+		"sp": 400,
+		"description": "Grants Special cooldown charge +1 if foe uses magic. (Only highest value applied. Does not stack.)",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"prereq": "Felicia's Plate"
+	},	{
+		"category": "Fujin Yumi",
+		"name": "Follow",
+		"sp": 400,
+		"description": "If unit's HP ≥ 50%, unit can move adjacent to any ally within 2 spaces.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"prereq": "Fujin Yumi"
+	},	{
 		"category": "Advanced Ranged",
 		"name": "Atk Bonus",
 		"sp": 350,
@@ -614,7 +526,7 @@
 		"spd": 0,
 		"def": 0,
 		"res": 0,
-		"prereq": "Slaying Bow+,Refreshing Bolt+,Tomato Tome+,Sealife Tome+,Hibiscus Tome+,Dancer's Score+,Dancer's Ring+,Guard Bow+,Candelabra+,Hama Ya+,Kagami Mochi+"
+		"prereq": "Slaying Bow+,Refreshing Bolt+,Tomato Tome+,Sealife Tome+,Hibiscus Tome+,Dancer's Score+,Dancer's Ring+,Guard Bow+,Candelabra+,Hama Ya+,Kagami Mochi+,Fujin Yumi,Felicia's Plate"
 	},	{
 		"category": "Advanced Ranged",
 		"name": "Spd Bonus",
@@ -625,7 +537,7 @@
 		"spd": 2,
 		"def": 0,
 		"res": 0,
-		"prereq": "Slaying Bow+,Refreshing Bolt+,Tomato Tome+,Sealife Tome+,Hibiscus Tome+,Dancer's Score+,Dancer's Ring+,Guard Bow+,Candelabra+,Hama Ya+,Kagami Mochi+"
+		"prereq": "Slaying Bow+,Refreshing Bolt+,Tomato Tome+,Sealife Tome+,Hibiscus Tome+,Dancer's Score+,Dancer's Ring+,Guard Bow+,Candelabra+,Hama Ya+,Kagami Mochi+,Fujin Yumi,Felicia's Plate"
 	},	{
 		"category": "Advanced Ranged",
 		"name": "Def Bonus",
@@ -636,7 +548,7 @@
 		"spd": 0,
 		"def": 3,
 		"res": 0,
-		"prereq": "Slaying Bow+,Refreshing Bolt+,Tomato Tome+,Sealife Tome+,Hibiscus Tome+,Dancer's Score+,Dancer's Ring+,Guard Bow+,Candelabra+,Hama Ya+,Kagami Mochi+"
+		"prereq": "Slaying Bow+,Refreshing Bolt+,Tomato Tome+,Sealife Tome+,Hibiscus Tome+,Dancer's Score+,Dancer's Ring+,Guard Bow+,Candelabra+,Hama Ya+,Kagami Mochi+,Fujin Yumi,Felicia's Plate"
 	},	{
 		"category": "Advanced Ranged",
 		"name": "Res Bonus",
@@ -647,7 +559,7 @@
 		"spd": 0,
 		"def": 0,
 		"res": 3,
-		"prereq": "Slaying Bow+,Refreshing Bolt+,Tomato Tome+,Sealife Tome+,Hibiscus Tome+,Dancer's Score+,Dancer's Ring+,Guard Bow+,Candelabra+,Hama Ya+,Kagami Mochi+"
+		"prereq": "Slaying Bow+,Refreshing Bolt+,Tomato Tome+,Sealife Tome+,Hibiscus Tome+,Dancer's Score+,Dancer's Ring+,Guard Bow+,Candelabra+,Hama Ya+,Kagami Mochi+,Fujin Yumi,Felicia's Plate"
 	},	{
 		"category": "Dark Ranged",
 		"name": "Atk Bonus",
@@ -707,7 +619,7 @@
 		"category": "Halloween Panic",
 		"name": "Spd Bonus",
 		"sp": 350,
-		"description": "",
+		"description": "After combat, bonuses on target and foes within 2 spaces of target become penalties through their next actions.",
 		"hp": 2,
 		"atk": 0,
 		"spd": 2,
@@ -1353,61 +1265,6 @@
 		"res": 4,
 		"prereq": "Sol Katti"
 	},	{
-		"category": "Mystletainn",
-		"name": "Fury",
-		"sp": 400,
-		"description": "Grants Atk/Spd/Def/Res+3. Unit takes 6 damage after combat.",
-		"hp": 3,
-		"atk": 3,
-		"spd": 3,
-		"def": 3,
-		"res": 3,
-		"prereq": "Mystletainn"
-	},	{
-		"category": "Mystletainn",
-		"name": "Atk Bonus",
-		"sp": 400,
-		"description": "",
-		"hp": 5,
-		"atk": 2,
-		"spd": 0,
-		"def": 0,
-		"res": 0,
-		"prereq": "Mystletainn"
-	},	{
-		"category": "Mystletainn",
-		"name": "Spd Bonus",
-		"sp": 400,
-		"description": "",
-		"hp": 5,
-		"atk": 0,
-		"spd": 3,
-		"def": 0,
-		"res": 0,
-		"prereq": "Mystletainn"
-	},	{
-		"category": "Mystletainn",
-		"name": "Def Bonus",
-		"sp": 400,
-		"description": "",
-		"hp": 5,
-		"atk": 0,
-		"spd": 0,
-		"def": 4,
-		"res": 0,
-		"prereq": "Mystletainn"
-	},	{
-		"category": "Mystletainn",
-		"name": "Res Bonus",
-		"sp": 400,
-		"description": "",
-		"hp": 5,
-		"atk": 0,
-		"spd": 0,
-		"def": 0,
-		"res": 4,
-		"prereq": "Mystletainn"
-	},	{
 		"category": "Siegmund",
 		"name": "Pursuit",
 		"sp": 400,
@@ -1463,116 +1320,6 @@
 		"res": 4,
 		"prereq": "Siegmund"
 	},	{
-		"category": "Hauteclere",
-		"name": "Special Damage",
-		"sp": 400,
-		"description": "Deals +10 damage when Special triggers.",
-		"hp": 3,
-		"atk": 0,
-		"spd": 0,
-		"def": 0,
-		"res": 0,
-		"prereq": "Hauteclere"
-	},	{
-		"category": "Hauteclere",
-		"name": "Atk Bonus",
-		"sp": 400,
-		"description": "",
-		"hp": 5,
-		"atk": 2,
-		"spd": 0,
-		"def": 0,
-		"res": 0,
-		"prereq": "Hauteclere"
-	},	{
-		"category": "Hauteclere",
-		"name": "Spd Bonus",
-		"sp": 400,
-		"description": "",
-		"hp": 5,
-		"atk": 0,
-		"spd": 3,
-		"def": 0,
-		"res": 0,
-		"prereq": "Hauteclere"
-	},	{
-		"category": "Hauteclere",
-		"name": "Def Bonus",
-		"sp": 400,
-		"description": "",
-		"hp": 5,
-		"atk": 0,
-		"spd": 0,
-		"def": 4,
-		"res": 0,
-		"prereq": "Hauteclere"
-	},	{
-		"category": "Hauteclere",
-		"name": "Res Bonus",
-		"sp": 400,
-		"description": "",
-		"hp": 5,
-		"atk": 0,
-		"spd": 0,
-		"def": 0,
-		"res": 4,
-		"prereq": "Hauteclere"
-	},	{
-		"category": "Fujin Yumi",
-		"name": "Follow",
-		"sp": 400,
-		"description": "If unit's HP ≥ 50%, unit can move adjacent to any ally within 2 spaces.",
-		"hp": 0,
-		"atk": 0,
-		"spd": 0,
-		"def": 0,
-		"res": 0,
-		"prereq": "Fujin Yumi"
-	},	{
-		"category": "Fujin Yumi",
-		"name": "Atk Bonus",
-		"sp": 400,
-		"description": "",
-		"hp": 2,
-		"atk": 1,
-		"spd": 0,
-		"def": 0,
-		"res": 0,
-		"prereq": "Fujin Yumi"
-	},	{
-		"category": "Fujin Yumi",
-		"name": "Spd Bonus",
-		"sp": 400,
-		"description": "",
-		"hp": 2,
-		"atk": 0,
-		"spd": 2,
-		"def": 0,
-		"res": 0,
-		"prereq": "Fujin Yumi"
-	},	{
-		"category": "Fujin Yumi",
-		"name": "Def Bonus",
-		"sp": 400,
-		"description": "",
-		"hp": 2,
-		"atk": 0,
-		"spd": 0,
-		"def": 3,
-		"res": 0,
-		"prereq": "Fujin Yumi"
-	},	{
-		"category": "Fujin Yumi",
-		"name": "Res Bonus",
-		"sp": 400,
-		"description": "",
-		"hp": 2,
-		"atk": 0,
-		"spd": 0,
-		"def": 0,
-		"res": 3,
-		"prereq": "Fujin Yumi"
-	},	{
 		"category": "Deathly Dagger",
 		"name": "Magic Suppression",
 		"sp": 400,
@@ -1627,60 +1374,5 @@
 		"def": 0,
 		"res": 3,
 		"prereq": "Deathly Dagger"
-	},	{
-		"category": "Felicia's Plate",
-		"name": "Magic Absorption",
-		"sp": 400,
-		"description": "Grants Special cooldown charge +1 if foe uses magic. (Only highest value applied. Does not stack.)",
-		"hp": 0,
-		"atk": 0,
-		"spd": 0,
-		"def": 0,
-		"res": 0,
-		"prereq": "Felicia's Plate"
-	},	{
-		"category": "Felicia's Plate",
-		"name": "Atk Bonus",
-		"sp": 400,
-		"description": "",
-		"hp": 2,
-		"atk": 1,
-		"spd": 0,
-		"def": 0,
-		"res": 0,
-		"prereq": "Felicia's Plate"
-	},	{
-		"category": "Felicia's Plate",
-		"name": "Spd Bonus",
-		"sp": 400,
-		"description": "",
-		"hp": 2,
-		"atk": 0,
-		"spd": 2,
-		"def": 0,
-		"res": 0,
-		"prereq": "Felicia's Plate"
-	},	{
-		"category": "Felicia's Plate",
-		"name": "Def Bonus",
-		"sp": 400,
-		"description": "",
-		"hp": 2,
-		"atk": 0,
-		"spd": 0,
-		"def": 3,
-		"res": 0,
-		"prereq": "Felicia's Plate"
-	},	{
-		"category": "Felicia's Plate",
-		"name": "Res Bonus",
-		"sp": 400,
-		"description": "",
-		"hp": 2,
-		"atk": 0,
-		"spd": 0,
-		"def": 0,
-		"res": 3,
-		"prereq": "Felicia's Plate"
 	}
 ]
