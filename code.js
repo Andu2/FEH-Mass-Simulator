@@ -5046,7 +5046,16 @@ function activeHero(hero){
 		if (this.adjacent > 0){
 			var skillName = "";
 			var buffVal = 0;
-
+			
+			//Weapons
+			if (this.hasExactly("Hinoka's Spear")){
+				buffVal = 4;
+				skillName = data.skills[this.weaponIndex].name;
+				this.combatSpur.atk += buffVal;
+				this.combatSpur.spd += buffVal;
+				boostText += this.name + " gets +" + buffVal + " Atk/Spd from being within 2 spaces of an infantry or flying ally with " + skillName + ".<br>";
+			}
+			
 			//Owl Tomes
 			if (this.has("Blarowl") || this.has("Gronnowl") || this.has("Raudrowl") || this.hasExactly("Nidhogg")){
 				buffVal = this.adjacent * 2;
@@ -5657,7 +5666,7 @@ function activeHero(hero){
 			if (this.hasExactly("Deathly Dagger")){
 				sealStats(data.skills[this.weaponIndex].name, ["def","res"], [-7]);
 			}
-			if (this.has("Silver Dagger") || this.has("Seashell") || this.has("Dancer's Fan") || this.has("Kagami Mochi")){
+			if (this.has("Silver Dagger") || this.has("Seashell") || this.has("Dancer's Fan") || this.has("Kagami Mochi") || this.has("Felicia's Plate")){
 				sealStats(data.skills[this.weaponIndex].name, ["def","res"], [-5, -7]);
 			}
 			if (this.has("Kitty Paddle") && (enemy.weaponType == "redtome" || enemy.weaponType == "bluetome" || enemy.weaponType == "greentome")){
@@ -5818,7 +5827,22 @@ function activeHero(hero){
 		//Not cancelled
 		return false;
 	}
-
+	
+	//Check if hero has adaptive attack
+	this.isAdaptive = function(enemy){
+		if (this.hasExactly("Felicia's Plate")){
+			return true;
+		}
+		if (this.hasExactly("Great Flame") && enemy.range == "ranged"){
+			return true;
+		}
+		if (this.weaponType == "dragon" && enemy.range == "ranged" && (this.refineIndex != -1)){
+			return true;
+		}
+		//Hero does not have adaptive attack
+		return false;
+	}
+	
 	//represents one attack of combat
 	this.doDamage = function(enemy, brave, AOE, firstAttack){
 		//didAttack variable for checking daggers and pain
@@ -5836,8 +5860,8 @@ function activeHero(hero){
 		//Relevant defense stat
 		var relevantDef = (this.attackType == "magical") ? enemy.combatStat.res : enemy.combatStat.def;
 
-		//Refined Dragonstones
-		if (this.weaponType == "dragon" && enemy.range == "ranged" && (this.refineIndex != -1 || this.hasExactly("Great Flame"))){
+		//Check for adaptive attack
+		if (this.isAdaptive(enemy)){
 			relevantDef = (enemy.combatStat.def > enemy.combatStat.res) ? enemy.combatStat.res : enemy.combatStat.def;
 			if (!AOE) {damageText += this.name + " is targeting foe's " + ((enemy.combatStat.def > enemy.combatStat.res) ? "Res" : "Def" ) + " with " + data.skills[hero.weapon].name + (this.refineIndex != -1 ? " (Refined)" : "") + ".<br>";}
 		}
@@ -6168,7 +6192,8 @@ function activeHero(hero){
 			if(enemy.moveType == "armored" && (this.has("Hammer") || this.has("Slaying Hammer")
 				|| this.has("Armorslayer") || this.has("Armorsmasher")
 				|| this.has("Heavy Spear") || this.has("Slaying Spear")
-				|| this.hasExactly("Thani"))){
+				|| this.hasExactly("Thani") || this.hasExactly("Winged Sword"))
+				){
 				effectiveBonus = (enemy.has("Svalinn Shield")) ? 1 : 1.5;
 			}
 			else if(enemy.moveType == "flying" && (this.hasExactly("Excalibur") || this.weaponType=="bow")){
@@ -6179,7 +6204,8 @@ function activeHero(hero){
 			}
 			else if(enemy.moveType == "cavalry" && (this.has("Zanbato") || this.has("Ridersbane")
 				|| this.has("Raudrwolf") || this.has("Blarwolf") || this.has("Gronnwolf")
-				|| this.hasExactly("Thani"))){
+				|| this.hasExactly("Thani") || this.hasExactly("Winged Sword"))
+				){
 				effectiveBonus = (enemy.has("Grani's Shield")) ? 1 : 1.5;
 			}
 			else if(enemy.weaponType == "dragon" && (this.hasExactly("Falchion") || this.hasExactly("Naga") || this.hasExactly("Divine Naga"))){
@@ -6461,16 +6487,28 @@ function activeHero(hero){
 						skillNames.push(data.skills[this.weaponIndex].name);
 					}
 				}
-				if(this.has("Flashing Blade")){
-					if(this.combatStat.spd + (this.has("Phantom Spd") ? (2 + this.has("Phantom Spd") * 3) : 0) - enemy.combatStat.spd >= 7 - (this.has("Flashing Blade") * 2)){
+				if(this.hasAtIndex("Flashing Blade", this.aIndex)){
+					if(this.combatStat.spd + (this.has("Phantom Spd") ? (2 + this.has("Phantom Spd") * 3) : 0) - enemy.combatStat.spd >= 7 - (this.hasAtIndex("Flashing Blade", this.aIndex) * 2)){
 						gainCharge = Math.max(gainCharge, 1);
 						skillNames.push(data.skills[this.aIndex].name);
+					}
+				}
+				if(this.hasAtRefineIndex("Flashing Blade", this.refineIndex)){
+					if(this.combatStat.spd + (this.has("Phantom Spd") ? (2 + this.has("Phantom Spd") * 3) : 0) - enemy.combatStat.spd >= 1){
+						gainCharge = Math.max(gainCharge, 1);
+						skillNames.push(data.skills[this.weaponIndex].name + " (Refined)");
 					}
 				}
 				if(this.hasExactly("Ayra's Blade")){
 					if(this.combatStat.spd + (this.has("Phantom Spd") ? (2 + this.has("Phantom Spd") * 3) : 0) - enemy.combatStat.spd >= 1){
 						gainCharge = Math.max(gainCharge, 1);
 						skillNames.push(data.skills[this.weaponIndex].name);
+					}
+				}
+				if(this.hasAtRefineIndex("Magic Absorption", this.refineIndex)){
+					if(enemy.weaponType == "redtome" || enemy.weaponType == "bluetome" || enemy.weaponType == "greentome"){
+						gainCharge = Math.max(gainCharge, 1);
+						skillNames.push(data.skills[this.weaponIndex].name + " (Refined)");
 					}
 				}
 

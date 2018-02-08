@@ -387,7 +387,7 @@
 	},	{
 		"category": "Basilikos",
 		"name": "Life and Death",
-		"sp": 350,
+		"sp": 400,
 		"description": "Grants Atk/Spd+5. Inflicts Def/Res-5",
 		"hp": 3,
 		"atk": 5,
@@ -398,7 +398,7 @@
 	},	{
 		"category": "Basilikos",
 		"name": "Atk Bonus",
-		"sp": 350,
+		"sp": 400,
 		"description": "",
 		"hp": 5,
 		"atk": 2,
@@ -409,7 +409,7 @@
 	},	{
 		"category": "Basilikos",
 		"name": "Spd Bonus",
-		"sp": 350,
+		"sp": 400,
 		"description": "",
 		"hp": 5,
 		"atk": 0,
@@ -420,7 +420,7 @@
 	},	{
 		"category": "Basilikos",
 		"name": "Def Bonus",
-		"sp": 350,
+		"sp": 400,
 		"description": "",
 		"hp": 5,
 		"atk": 0,
@@ -431,7 +431,7 @@
 	},	{
 		"category": "Basilikos",
 		"name": "Res Bonus",
-		"sp": 350,
+		"sp": 400,
 		"description": "",
 		"hp": 5,
 		"atk": 0,
@@ -439,6 +439,116 @@
 		"def": 0,
 		"res": 4,
 		"prereq": "Basilikos"
+	},	{
+		"category": "Hinoka's Spear",
+		"name": "Flying Commander",
+		"sp": 400,
+		"description": "Infantry and flying allies within 2 spaces can move to a space adjacent to unit.",
+		"hp": 3,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"prereq": "Hinoka's Spear"
+	},	{
+		"category": "Hinoka's Spear",
+		"name": "Atk Bonus",
+		"sp": 400,
+		"description": "",
+		"hp": 5,
+		"atk": 2,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"prereq": "Hinoka's Spear"
+	},	{
+		"category": "Hinoka's Spear",
+		"name": "Spd Bonus",
+		"sp": 400,
+		"description": "",
+		"hp": 5,
+		"atk": 0,
+		"spd": 3,
+		"def": 0,
+		"res": 0,
+		"prereq": "Hinoka's Spear"
+	},	{
+		"category": "Hinoka's Spear",
+		"name": "Def Bonus",
+		"sp": 400,
+		"description": "",
+		"hp": 5,
+		"atk": 0,
+		"spd": 0,
+		"def": 4,
+		"res": 0,
+		"prereq": "Hinoka's Spear"
+	},	{
+		"category": "Hinoka's Spear",
+		"name": "Res Bonus",
+		"sp": 400,
+		"description": "",
+		"hp": 5,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 4,
+		"prereq": "Hinoka's Spear"
+	},	{
+		"category": "Winged Sword",
+		"name": "Flashing Blade",
+		"sp": 400,
+		"description": "If unit's Spd - foe's Spd >= 1, unit gains Special cooldown charge +1 per attack. (If using other similar skill, only highest value applied.)",
+		"hp": 3,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"prereq": "Winged Sword"
+	},	{
+		"category": "Winged Sword",
+		"name": "Atk Bonus",
+		"sp": 400,
+		"description": "",
+		"hp": 5,
+		"atk": 2,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"prereq": "Winged Sword"
+	},	{
+		"category": "Winged Sword",
+		"name": "Spd Bonus",
+		"sp": 400,
+		"description": "",
+		"hp": 5,
+		"atk": 0,
+		"spd": 3,
+		"def": 0,
+		"res": 0,
+		"prereq": "Winged Sword"
+	},	{
+		"category": "Winged Sword",
+		"name": "Def Bonus",
+		"sp": 400,
+		"description": "",
+		"hp": 5,
+		"atk": 0,
+		"spd": 0,
+		"def": 4,
+		"res": 0,
+		"prereq": "Winged Sword"
+	},	{
+		"category": "Winged Sword",
+		"name": "Res Bonus",
+		"sp": 400,
+		"description": "",
+		"hp": 5,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 4,
+		"prereq": "Winged Sword"
 	},	{
 		"category": "Advanced Ranged",
 		"name": "Atk Bonus",
@@ -1462,5 +1572,60 @@
 		"def": 0,
 		"res": 3,
 		"prereq": "Deathly Dagger"
+	},	{
+		"category": "Felicia's Plate",
+		"name": "Magic Absorption",
+		"sp": 400,
+		"description": "Grants Special cooldown charge +1 if foe uses magic. (Only highest value applied. Does not stack.)",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"prereq": "Felicia's Plate"
+	},	{
+		"category": "Felicia's Plate",
+		"name": "Atk Bonus",
+		"sp": 400,
+		"description": "",
+		"hp": 2,
+		"atk": 1,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"prereq": "Felicia's Plate"
+	},	{
+		"category": "Felicia's Plate",
+		"name": "Spd Bonus",
+		"sp": 400,
+		"description": "",
+		"hp": 2,
+		"atk": 0,
+		"spd": 2,
+		"def": 0,
+		"res": 0,
+		"prereq": "Felicia's Plate"
+	},	{
+		"category": "Felicia's Plate",
+		"name": "Def Bonus",
+		"sp": 400,
+		"description": "",
+		"hp": 2,
+		"atk": 0,
+		"spd": 0,
+		"def": 3,
+		"res": 0,
+		"prereq": "Felicia's Plate"
+	},	{
+		"category": "Felicia's Plate",
+		"name": "Res Bonus",
+		"sp": 400,
+		"description": "",
+		"hp": 2,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 3,
+		"prereq": "Felicia's Plate"
 	}
 ]
