@@ -385,16 +385,60 @@
 		"res": 0,
 		"prereq": "Legion's Axe+"
 	},	{
-		"category": "Panic Melee",
+		"category": "Basilikos",
+		"name": "Life and Death",
+		"sp": 350,
+		"description": "Grants Atk/Spd+5. Inflicts Def/Res-5",
+		"hp": 3,
+		"atk": 5,
+		"spd": 5,
+		"def": -5,
+		"res": -5,
+		"prereq": "Basilikos"
+	},	{
+		"category": "Basilikos",
+		"name": "Atk Bonus",
+		"sp": 350,
+		"description": "",
+		"hp": 5,
+		"atk": 2,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"prereq": "Basilikos"
+	},	{
+		"category": "Basilikos",
+		"name": "Spd Bonus",
+		"sp": 350,
+		"description": "",
+		"hp": 5,
+		"atk": 0,
+		"spd": 3,
+		"def": 0,
+		"res": 0,
+		"prereq": "Basilikos"
+	},	{
+		"category": "Basilikos",
+		"name": "Def Bonus",
+		"sp": 350,
+		"description": "",
+		"hp": 5,
+		"atk": 0,
+		"spd": 0,
+		"def": 4,
+		"res": 0,
+		"prereq": "Basilikos"
+	},	{
+		"category": "Basilikos",
 		"name": "Res Bonus",
 		"sp": 350,
-		"description": "After combat, bonuses on target and foes within 2 spaces of target become penalties through their next actions.",
+		"description": "",
 		"hp": 5,
 		"atk": 0,
 		"spd": 0,
 		"def": 0,
 		"res": 4,
-		"prereq": "Legion's Axe+"
+		"prereq": "Basilikos"
 	},	{
 		"category": "Advanced Ranged",
 		"name": "Atk Bonus",
