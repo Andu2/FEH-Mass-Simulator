@@ -5861,6 +5861,10 @@ function activeHero(hero){
 						AOEDamage += 10;
 						damageText += this.name + " gains 10 damage from " + data.skills[hero.weapon].name + ".<br>";
 					}
+					if(this.has("Wrath") && (this.hp / this.maxHp <= .25 * this.has("Wrath"))){
+						AOEDamage += 10;
+						damageText += this.name + " gains 10 damage from " + data.skills[this.bIndex].name + ".<br>";
+					}
 					if(enemy.has("Embla's Ward")){
 						AOEDamage = 0;
 					}
@@ -5955,11 +5959,9 @@ function activeHero(hero){
 					damageText += this.name + " gains 10 damage from " + data.skills[hero.weapon].name + ".<br>";
 				}
 				//Wrath damage is checked when special is activated
-				if(this.has("Wrath")){
-					if(this.hp/this.maxHp <= .25 * this.has("Wrath")){
-						dmgBoostFlat += 10;
-						damageText += this.name + " gains 10 damage from " + data.skills[this.bIndex].name + ".<br>";
-					}
+				if(this.has("Wrath") && (this.hp/this.maxHp <= .25 * this.has("Wrath"))){
+					dmgBoostFlat += 10;
+					damageText += this.name + " gains 10 damage from " + data.skills[this.bIndex].name + ".<br>";
 				}
 			}
 		}
