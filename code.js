@@ -1061,6 +1061,7 @@ function getCDChange(skill, slot){
 			|| skillName.indexOf("Slaying Axe") != -1	|| skillName.indexOf("Slaying Lance") != -1	|| skillName.indexOf("Cursed Lance") != -1
 			|| skillName.indexOf("Mystletainn") != -1	|| skillName.indexOf("Hauteclere") != -1	|| skillName.indexOf("Urvan") != -1
 			|| skillName.indexOf("Audhulma") != -1		|| skillName.indexOf("Kagami Mochi") != -1	|| skillName.indexOf("Basilikos") != -1
+			|| skillName.indexOf("Berserk Armads") != -1
 			){
 				return -1;
 		}
@@ -4798,11 +4799,19 @@ function activeHero(hero){
 	this.charging = function(){
 		var chargingText = "";
 
+		//Weapon
+		//TODO: Check if Berserk Armads stacks with Wrath
+		if (this.hasExactly("Berserk Armads") && getSpecialType(data.skills[this.specialIndex]) == "offensive"){
+			if(this.hp/this.maxHp <= .75){
+				this.charge++;
+				chargingText += this.name + " gains 1 extra charge with " + data.skills[this.weaponIndex].name + ".<br>";
+			}
+		}
 		//Wrath
 		if (this.has("Wrath") && getSpecialType(data.skills[this.specialIndex]) == "offensive"){
 			if(this.hp/this.maxHp <= .25 * this.has("Wrath")){
 				this.charge++;
-				chargingText += this.name + " gains an extra charge with " + data.skills[this.bIndex].name + ".<br>";
+				chargingText += this.name + " gains 1 extra charge with " + data.skills[this.bIndex].name + ".<br>";
 			}
 		}
 
@@ -5930,6 +5939,10 @@ function activeHero(hero){
 						AOEDamage += 10;
 						damageText += this.name + " gains 10 damage from " + data.skills[hero.weapon].name + ".<br>";
 					}
+					if(this.has("Berserk Armads") && (this.hp / this.maxHp <= .75)){
+						AOEDamage += 10;
+						damageText += this.name + " gains 10 damage from " + data.skills[this.weaponIndex].name + ".<br>";
+					}
 					if(this.has("Wrath") && (this.hp / this.maxHp <= .25 * this.has("Wrath"))){
 						AOEDamage += 10;
 						damageText += this.name + " gains 10 damage from " + data.skills[this.bIndex].name + ".<br>";
@@ -6028,6 +6041,10 @@ function activeHero(hero){
 					damageText += this.name + " gains 10 damage from " + data.skills[hero.weapon].name + ".<br>";
 				}
 				//Wrath damage is checked when special is activated
+				if(this.has("Berserk Armads") && (this.hp/this.maxHp <= .75)){
+					dmgBoostFlat += 10;
+					damageText += this.name + " gains 10 damage from " + data.skills[this.weaponIndex].name + ".<br>";
+				}				
 				if(this.has("Wrath") && (this.hp/this.maxHp <= .25 * this.has("Wrath"))){
 					dmgBoostFlat += 10;
 					damageText += this.name + " gains 10 damage from " + data.skills[this.bIndex].name + ".<br>";
@@ -6938,7 +6955,7 @@ function activeHero(hero){
 				enemyAttackRankChanged = true;
 			}
 		}
-		if (enemy.has("Armads")){
+		if (enemy.hasExactly("Armads")){
 			if (enemy.combatStartHp/enemy.maxHp >= .8){
 				enemyAttackRank++;
 				enemyAttackRankChanged = true;

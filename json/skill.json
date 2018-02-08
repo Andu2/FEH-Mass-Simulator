@@ -12389,5 +12389,19 @@
 		"charge": 0,
 		"inheritrule": "",
 		"affectsduel": 1
+	}, {
+		"skill_id": 886,
+		"name": "Berserk Armads",
+		"slot": "weapon",
+		"sp": 300,
+		"description": "Accelerates Special trigger (cooldown count-1). If unit's HP <= 75% and Special triggers by attacking, Special cooldown count-1 at start of turn. Deals +10 damage when Special triggers.",
+		"hp": 0,
+		"atk": 16,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "unique",
+		"affectsduel": 1
 	}
 ]
