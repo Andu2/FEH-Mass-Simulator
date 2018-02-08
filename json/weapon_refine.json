@@ -9,7 +9,8 @@
 		"spd": 0,
 		"def": 0,
 		"res": 0,
-		"prereq": "Silver Sword+,Silver Axe+,Silver Lance+,Wo Dao+"
+		"prereq": "Silver Sword+,Silver Axe+,Silver Lance+,Wo Dao+",
+		"exclusive": ""
 	},	{
 		"category": "Standard Melee",
 		"name": "Spd Bonus",
@@ -20,7 +21,8 @@
 		"spd": 3,
 		"def": 0,
 		"res": 0,
-		"prereq": "Silver Sword+,Silver Axe+,Silver Lance+,Wo Dao+"
+		"prereq": "Silver Sword+,Silver Axe+,Silver Lance+,Wo Dao+",
+		"exclusive": ""
 	},	{
 		"category": "Standard Melee",
 		"name": "Def Bonus",
@@ -31,7 +33,8 @@
 		"spd": 0,
 		"def": 4,
 		"res": 0,
-		"prereq": "Silver Sword+,Silver Axe+,Silver Lance+,Wo Dao+"
+		"prereq": "Silver Sword+,Silver Axe+,Silver Lance+,Wo Dao+",
+		"exclusive": ""
 	},	{
 		"category": "Standard Melee",
 		"name": "Res Bonus",
@@ -42,7 +45,8 @@
 		"spd": 0,
 		"def": 0,
 		"res": 4,
-		"prereq": "Silver Sword+,Silver Axe+,Silver Lance+,Wo Dao+"
+		"prereq": "Silver Sword+,Silver Axe+,Silver Lance+,Wo Dao+",
+		"exclusive": ""
 	},	{
 		"category": "Spring Melee",
 		"name": "Atk Bonus",
@@ -53,7 +57,8 @@
 		"spd": 0,
 		"def": 0,
 		"res": 0,
-		"prereq": "Carrot Lance+,Carrot Axe+"
+		"prereq": "Carrot Lance+,Carrot Axe+",
+		"exclusive": ""
 	},	{
 		"category": "Spring Melee",
 		"name": "Spd Bonus",
@@ -64,7 +69,8 @@
 		"spd": 3,
 		"def": 0,
 		"res": 0,
-		"prereq": "Carrot Lance+,Carrot Axe+"
+		"prereq": "Carrot Lance+,Carrot Axe+",
+		"exclusive": ""
 	},	{
 		"category": "Spring Melee",
 		"name": "Def Bonus",
@@ -75,7 +81,8 @@
 		"spd": 0,
 		"def": 4,
 		"res": 0,
-		"prereq": "Carrot Lance+,Carrot Axe+"
+		"prereq": "Carrot Lance+,Carrot Axe+",
+		"exclusive": ""
 	},	{
 		"category": "Spring Melee",
 		"name": "Res Bonus",
@@ -86,7 +93,8 @@
 		"spd": 0,
 		"def": 0,
 		"res": 4,
-		"prereq": "Carrot Lance+,Carrot Axe+"
+		"prereq": "Carrot Lance+,Carrot Axe+",
+		"exclusive": ""
 	},	{
 		"category": "Standard Ranged",
 		"name": "Atk Bonus",
@@ -97,7 +105,8 @@
 		"spd": 0,
 		"def": 0,
 		"res": 0,
-		"prereq": "Silver Bow+,Bolganone+,Fenrir+,Thoron+,Rexcalibur+,Raudrowl+,Blarowl+,Gronnowl+,Shine+"
+		"prereq": "Silver Bow+,Bolganone+,Fenrir+,Thoron+,Rexcalibur+,Raudrowl+,Blarowl+,Gronnowl+,Shine+",
+		"exclusive": ""
 	},	{
 		"category": "Standard Ranged",
 		"name": "Spd Bonus",
@@ -108,7 +117,8 @@
 		"spd": 2,
 		"def": 0,
 		"res": 0,
-		"prereq": "Silver Bow+,Bolganone+,Fenrir+,Thoron+,Rexcalibur+,Raudrowl+,Blarowl+,Gronnowl+,Shine+"
+		"prereq": "Silver Bow+,Bolganone+,Fenrir+,Thoron+,Rexcalibur+,Raudrowl+,Blarowl+,Gronnowl+,Shine+",
+		"exclusive": ""
 	},	{
 		"category": "Standard Ranged",
 		"name": "Def Bonus",
@@ -119,7 +129,8 @@
 		"spd": 0,
 		"def": 3,
 		"res": 0,
-		"prereq": "Silver Bow+,Bolganone+,Fenrir+,Thoron+,Rexcalibur+,Raudrowl+,Blarowl+,Gronnowl+,Shine+"
+		"prereq": "Silver Bow+,Bolganone+,Fenrir+,Thoron+,Rexcalibur+,Raudrowl+,Blarowl+,Gronnowl+,Shine+",
+		"exclusive": ""
 	},	{
 		"category": "Standard Ranged",
 		"name": "Res Bonus",
@@ -130,7 +141,8 @@
 		"spd": 0,
 		"def": 0,
 		"res": 3,
-		"prereq": "Silver Bow+,Bolganone+,Fenrir+,Thoron+,Rexcalibur+,Raudrowl+,Blarowl+,Gronnowl+,Shine+"
+		"prereq": "Silver Bow+,Bolganone+,Fenrir+,Thoron+,Rexcalibur+,Raudrowl+,Blarowl+,Gronnowl+,Shine+",
+		"exclusive": ""
 	},	{
 		"category": "Spring Ranged",
 		"name": "Atk Bonus",
@@ -141,7 +153,8 @@
 		"spd": 0,
 		"def": 0,
 		"res": 0,
-		"prereq": "Blue Egg+,Green Egg+"
+		"prereq": "Blue Egg+,Green Egg+",
+		"exclusive": ""
 	},	{
 		"category": "Spring Ranged",
 		"name": "Spd Bonus",
@@ -152,7 +165,8 @@
 		"spd": 2,
 		"def": 0,
 		"res": 0,
-		"prereq": "Blue Egg+,Green Egg+"
+		"prereq": "Blue Egg+,Green Egg+",
+		"exclusive": ""
 	},	{
 		"category": "Spring Ranged",
 		"name": "Def Bonus",
@@ -163,7 +177,8 @@
 		"spd": 0,
 		"def": 3,
 		"res": 0,
-		"prereq": "Blue Egg+,Green Egg+"
+		"prereq": "Blue Egg+,Green Egg+",
+		"exclusive": ""
 	},	{
 		"category": "Spring Ranged",
 		"name": "Res Bonus",
@@ -174,7 +189,8 @@
 		"spd": 0,
 		"def": 0,
 		"res": 3,
-		"prereq": "Blue Egg+,Green Egg+"
+		"prereq": "Blue Egg+,Green Egg+",
+		"exclusive": ""
 	},	{
 		"category": "Standard Dagger",
 		"name": "Atk Bonus",
@@ -185,7 +201,8 @@
 		"spd": 0,
 		"def": 0,
 		"res": 0,
-		"prereq": "Silver Dagger+"
+		"prereq": "Silver Dagger+",
+		"exclusive": ""
 	},	{
 		"category": "Standard Dagger",
 		"name": "Spd Bonus",
@@ -196,7 +213,8 @@
 		"spd": 2,
 		"def": 0,
 		"res": 0,
-		"prereq": "Silver Dagger+"
+		"prereq": "Silver Dagger+",
+		"exclusive": ""
 	},	{
 		"category": "Standard Dagger",
 		"name": "Def Bonus",
@@ -207,7 +225,8 @@
 		"spd": 0,
 		"def": 3,
 		"res": 0,
-		"prereq": "Silver Dagger+"
+		"prereq": "Silver Dagger+",
+		"exclusive": ""
 	},	{
 		"category": "Standard Dagger",
 		"name": "Res Bonus",
@@ -218,7 +237,8 @@
 		"spd": 0,
 		"def": 0,
 		"res": 3,
-		"prereq": "Silver Dagger+"
+		"prereq": "Silver Dagger+",
+		"exclusive": ""
 	},	{
 		"category": "Basilikos",
 		"name": "Life and Death",
@@ -229,7 +249,8 @@
 		"spd": 5,
 		"def": -5,
 		"res": -5,
-		"prereq": "Basilikos"
+		"prereq": "Basilikos",
+		"exclusive": ""
 	},	{
 		"category": "Hauteclere",
 		"name": "Special Damage",
@@ -240,7 +261,8 @@
 		"spd": 0,
 		"def": 0,
 		"res": 0,
-		"prereq": "Hauteclere"
+		"prereq": "Hauteclere",
+		"exclusive": ""
 	},	{
 		"category": "Hinoka's Spear",
 		"name": "Flying Commander",
@@ -251,7 +273,8 @@
 		"spd": 0,
 		"def": 0,
 		"res": 0,
-		"prereq": "Hinoka's Spear"
+		"prereq": "Hinoka's Spear",
+		"exclusive": ""
 	},	{
 		"category": "Mystletainn",
 		"name": "Fury",
@@ -262,7 +285,8 @@
 		"spd": 3,
 		"def": 3,
 		"res": 3,
-		"prereq": "Mystletainn"
+		"prereq": "Mystletainn",
+		"exclusive": ""
 	},	{
 		"category": "Winged Sword",
 		"name": "Flashing Blade",
@@ -273,7 +297,8 @@
 		"spd": 0,
 		"def": 0,
 		"res": 0,
-		"prereq": "Winged Sword"
+		"prereq": "Winged Sword",
+		"exclusive": ""
 	},	{
 		"category": "Advanced Melee",
 		"name": "Atk Bonus",
@@ -284,7 +309,8 @@
 		"spd": 0,
 		"def": 0,
 		"res": 0,
-		"prereq": "Slaying Edge+,Slaying Lance+,Slaying Axe+,Deft Harpoon+,Melon Crusher+,Lilith Floatie+,Sack o' Gifts+,Handbell+,Tannenboom!+,Hagoita+,Kadomatsu+,Basilikos,Hauteclere,Hinoka's Spear,Mystletainn,Winged Sword"
+		"prereq": "Slaying Edge+,Slaying Lance+,Slaying Axe+,Deft Harpoon+,Melon Crusher+,Lilith Floatie+,Sack o' Gifts+,Handbell+,Tannenboom!+,Hagoita+,Kadomatsu+,Basilikos,Hauteclere,Hinoka's Spear,Mystletainn,Winged Sword",
+		"exclusive": ""
 	},	{
 		"category": "Advanced Melee",
 		"name": "Spd Bonus",
@@ -295,7 +321,8 @@
 		"spd": 3,
 		"def": 0,
 		"res": 0,
-		"prereq": "Slaying Edge+,Slaying Lance+,Slaying Axe+,Deft Harpoon+,Melon Crusher+,Lilith Floatie+,Sack o' Gifts+,Handbell+,Tannenboom!+,Hagoita+,Kadomatsu+,Basilikos,Hauteclere,Hinoka's Spear,Mystletainn,Winged Sword"
+		"prereq": "Slaying Edge+,Slaying Lance+,Slaying Axe+,Deft Harpoon+,Melon Crusher+,Lilith Floatie+,Sack o' Gifts+,Handbell+,Tannenboom!+,Hagoita+,Kadomatsu+,Basilikos,Hauteclere,Hinoka's Spear,Mystletainn,Winged Sword",
+		"exclusive": ""
 	},	{
 		"category": "Advanced Melee",
 		"name": "Def Bonus",
@@ -306,7 +333,8 @@
 		"spd": 0,
 		"def": 4,
 		"res": 0,
-		"prereq": "Slaying Edge+,Slaying Lance+,Slaying Axe+,Deft Harpoon+,Melon Crusher+,Lilith Floatie+,Sack o' Gifts+,Handbell+,Tannenboom!+,Hagoita+,Kadomatsu+,Basilikos,Hauteclere,Hinoka's Spear,Mystletainn,Winged Sword"
+		"prereq": "Slaying Edge+,Slaying Lance+,Slaying Axe+,Deft Harpoon+,Melon Crusher+,Lilith Floatie+,Sack o' Gifts+,Handbell+,Tannenboom!+,Hagoita+,Kadomatsu+,Basilikos,Hauteclere,Hinoka's Spear,Mystletainn,Winged Sword",
+		"exclusive": ""
 	},	{
 		"category": "Advanced Melee",
 		"name": "Res Bonus",
@@ -317,7 +345,8 @@
 		"spd": 0,
 		"def": 0,
 		"res": 4,
-		"prereq": "Slaying Edge+,Slaying Lance+,Slaying Axe+,Deft Harpoon+,Melon Crusher+,Lilith Floatie+,Sack o' Gifts+,Handbell+,Tannenboom!+,Hagoita+,Kadomatsu+,Basilikos,Hauteclere,Hinoka's Spear,Mystletainn,Winged Sword"
+		"prereq": "Slaying Edge+,Slaying Lance+,Slaying Axe+,Deft Harpoon+,Melon Crusher+,Lilith Floatie+,Sack o' Gifts+,Handbell+,Tannenboom!+,Hagoita+,Kadomatsu+,Basilikos,Hauteclere,Hinoka's Spear,Mystletainn,Winged Sword",
+		"exclusive": ""
 	},	{
 		"category": "Wedding Melee",
 		"name": "Atk Bonus",
@@ -328,7 +357,8 @@
 		"spd": 0,
 		"def": 0,
 		"res": 0,
-		"prereq": "First Bite+"
+		"prereq": "First Bite+",
+		"exclusive": ""
 	},	{
 		"category": "Wedding Melee",
 		"name": "Spd Bonus",
@@ -339,7 +369,8 @@
 		"spd": 3,
 		"def": 0,
 		"res": 0,
-		"prereq": "First Bite+"
+		"prereq": "First Bite+",
+		"exclusive": ""
 	},	{
 		"category": "Wedding Melee",
 		"name": "Def Bonus",
@@ -350,7 +381,8 @@
 		"spd": 0,
 		"def": 4,
 		"res": 0,
-		"prereq": "First Bite+"
+		"prereq": "First Bite+",
+		"exclusive": ""
 	},	{
 		"category": "Wedding Melee",
 		"name": "Res Bonus",
@@ -361,7 +393,8 @@
 		"spd": 0,
 		"def": 0,
 		"res": 4,
-		"prereq": "First Bite+"
+		"prereq": "First Bite+",
+		"exclusive": ""
 	},	{
 		"category": "Warding Melee",
 		"name": "Atk Bonus",
@@ -372,7 +405,8 @@
 		"spd": 0,
 		"def": 0,
 		"res": 0,
-		"prereq": "Berkut's Lance+"
+		"prereq": "Berkut's Lance+",
+		"exclusive": ""
 	},	{
 		"category": "Warding Melee",
 		"name": "Spd Bonus",
@@ -383,7 +417,8 @@
 		"spd": 3,
 		"def": 0,
 		"res": 0,
-		"prereq": "Berkut's Lance+"
+		"prereq": "Berkut's Lance+",
+		"exclusive": ""
 	},	{
 		"category": "Warding Melee",
 		"name": "Def Bonus",
@@ -394,7 +429,8 @@
 		"spd": 0,
 		"def": 4,
 		"res": 0,
-		"prereq": "Berkut's Lance+"
+		"prereq": "Berkut's Lance+",
+		"exclusive": ""
 	},	{
 		"category": "Warding Melee",
 		"name": "Res Bonus",
@@ -405,7 +441,8 @@
 		"spd": 0,
 		"def": 0,
 		"res": 4,
-		"prereq": "Berkut's Lance+"
+		"prereq": "Berkut's Lance+",
+		"exclusive": ""
 	},	{
 		"category": "Panic Melee",
 		"name": "Atk Bonus",
@@ -416,7 +453,8 @@
 		"spd": 0,
 		"def": 0,
 		"res": 0,
-		"prereq": "Legion's Axe+"
+		"prereq": "Legion's Axe+",
+		"exclusive": ""
 	},	{
 		"category": "Panic Melee",
 		"name": "Spd Bonus",
@@ -427,7 +465,8 @@
 		"spd": 3,
 		"def": 0,
 		"res": 0,
-		"prereq": "Legion's Axe+"
+		"prereq": "Legion's Axe+",
+		"exclusive": ""
 	},	{
 		"category": "Panic Melee",
 		"name": "Def Bonus",
@@ -438,7 +477,20 @@
 		"spd": 0,
 		"def": 4,
 		"res": 0,
-		"prereq": "Legion's Axe+"
+		"prereq": "Legion's Axe+",
+		"exclusive": ""
+	},	{
+		"category": "Panic Melee",
+		"name": "Res Bonus",
+		"sp": 350,
+		"description": "After combat, bonuses on target and foes within 2 spaces of target become penalties through their next actions.",
+		"hp": 5,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 4,
+		"prereq": "Legion's Axe+",
+		"exclusive": ""
 	},	{
 		"category": "Eckesachs",
 		"name": "Distant Def",
@@ -449,7 +501,8 @@
 		"spd": 0,
 		"def": 0,
 		"res": 0,
-		"prereq": "Eckesachs"
+		"prereq": "Eckesachs",
+		"exclusive": ""
 	},	{
 		"category": "Eckesachs",
 		"name": "Atk Bonus",
@@ -460,7 +513,8 @@
 		"spd": 0,
 		"def": 0,
 		"res": 0,
-		"prereq": "Eckesachs"
+		"prereq": "Eckesachs",
+		"exclusive": ""
 	},	{
 		"category": "Eckesachs",
 		"name": "Spd Bonus",
@@ -471,7 +525,8 @@
 		"spd": 3,
 		"def": 0,
 		"res": 0,
-		"prereq": "Eckesachs"
+		"prereq": "Eckesachs",
+		"exclusive": ""
 	},	{
 		"category": "Eckesachs",
 		"name": "Def Bonus",
@@ -482,7 +537,8 @@
 		"spd": 0,
 		"def": 4,
 		"res": 0,
-		"prereq": "Eckesachs"
+		"prereq": "Eckesachs",
+		"exclusive": ""
 	},	{
 		"category": "Eckesachs",
 		"name": "Res Bonus",
@@ -493,7 +549,8 @@
 		"spd": 0,
 		"def": 0,
 		"res": 4,
-		"prereq": "Eckesachs"
+		"prereq": "Eckesachs",
+		"exclusive": ""
 	},	{
 		"category": "Felicia's Plate",
 		"name": "Magic Absorption",
@@ -504,7 +561,8 @@
 		"spd": 0,
 		"def": 0,
 		"res": 0,
-		"prereq": "Felicia's Plate"
+		"prereq": "Felicia's Plate",
+		"exclusive": ""
 	},	{
 		"category": "Fujin Yumi",
 		"name": "Follow",
@@ -515,7 +573,8 @@
 		"spd": 0,
 		"def": 0,
 		"res": 0,
-		"prereq": "Fujin Yumi"
+		"prereq": "Fujin Yumi",
+		"exclusive": ""
 	},	{
 		"category": "Advanced Ranged",
 		"name": "Atk Bonus",
@@ -526,7 +585,8 @@
 		"spd": 0,
 		"def": 0,
 		"res": 0,
-		"prereq": "Slaying Bow+,Refreshing Bolt+,Tomato Tome+,Sealife Tome+,Hibiscus Tome+,Dancer's Score+,Dancer's Ring+,Guard Bow+,Candelabra+,Hama Ya+,Kagami Mochi+,Fujin Yumi,Felicia's Plate"
+		"prereq": "Slaying Bow+,Refreshing Bolt+,Tomato Tome+,Sealife Tome+,Hibiscus Tome+,Dancer's Score+,Dancer's Ring+,Guard Bow+,Candelabra+,Hama Ya+,Kagami Mochi+,Fujin Yumi,Felicia's Plate",
+		"exclusive": ""
 	},	{
 		"category": "Advanced Ranged",
 		"name": "Spd Bonus",
@@ -537,7 +597,8 @@
 		"spd": 2,
 		"def": 0,
 		"res": 0,
-		"prereq": "Slaying Bow+,Refreshing Bolt+,Tomato Tome+,Sealife Tome+,Hibiscus Tome+,Dancer's Score+,Dancer's Ring+,Guard Bow+,Candelabra+,Hama Ya+,Kagami Mochi+,Fujin Yumi,Felicia's Plate"
+		"prereq": "Slaying Bow+,Refreshing Bolt+,Tomato Tome+,Sealife Tome+,Hibiscus Tome+,Dancer's Score+,Dancer's Ring+,Guard Bow+,Candelabra+,Hama Ya+,Kagami Mochi+,Fujin Yumi,Felicia's Plate",
+		"exclusive": ""
 	},	{
 		"category": "Advanced Ranged",
 		"name": "Def Bonus",
@@ -548,7 +609,8 @@
 		"spd": 0,
 		"def": 3,
 		"res": 0,
-		"prereq": "Slaying Bow+,Refreshing Bolt+,Tomato Tome+,Sealife Tome+,Hibiscus Tome+,Dancer's Score+,Dancer's Ring+,Guard Bow+,Candelabra+,Hama Ya+,Kagami Mochi+,Fujin Yumi,Felicia's Plate"
+		"prereq": "Slaying Bow+,Refreshing Bolt+,Tomato Tome+,Sealife Tome+,Hibiscus Tome+,Dancer's Score+,Dancer's Ring+,Guard Bow+,Candelabra+,Hama Ya+,Kagami Mochi+,Fujin Yumi,Felicia's Plate",
+		"exclusive": ""
 	},	{
 		"category": "Advanced Ranged",
 		"name": "Res Bonus",
@@ -559,7 +621,8 @@
 		"spd": 0,
 		"def": 0,
 		"res": 3,
-		"prereq": "Slaying Bow+,Refreshing Bolt+,Tomato Tome+,Sealife Tome+,Hibiscus Tome+,Dancer's Score+,Dancer's Ring+,Guard Bow+,Candelabra+,Hama Ya+,Kagami Mochi+,Fujin Yumi,Felicia's Plate"
+		"prereq": "Slaying Bow+,Refreshing Bolt+,Tomato Tome+,Sealife Tome+,Hibiscus Tome+,Dancer's Score+,Dancer's Ring+,Guard Bow+,Candelabra+,Hama Ya+,Kagami Mochi+,Fujin Yumi,Felicia's Plate",
+		"exclusive": ""
 	},	{
 		"category": "Dark Ranged",
 		"name": "Atk Bonus",
@@ -570,7 +633,8 @@
 		"spd": 0,
 		"def": 0,
 		"res": 0,
-		"prereq": "Clarisse's Bow+"
+		"prereq": "Clarisse's Bow+",
+		"exclusive": ""
 	},	{
 		"category": "Dark Ranged",
 		"name": "Spd Bonus",
@@ -581,7 +645,8 @@
 		"spd": 2,
 		"def": 0,
 		"res": 0,
-		"prereq": "Clarisse's Bow+"
+		"prereq": "Clarisse's Bow+",
+		"exclusive": ""
 	},	{
 		"category": "Dark Ranged",
 		"name": "Def Bonus",
@@ -592,7 +657,8 @@
 		"spd": 0,
 		"def": 3,
 		"res": 0,
-		"prereq": "Clarisse's Bow+"
+		"prereq": "Clarisse's Bow+",
+		"exclusive": ""
 	},	{
 		"category": "Dark Ranged",
 		"name": "Res Bonus",
@@ -603,7 +669,8 @@
 		"spd": 0,
 		"def": 0,
 		"res": 3,
-		"prereq": "Clarisse's Bow+"
+		"prereq": "Clarisse's Bow+",
+		"exclusive": ""
 	},	{
 		"category": "Halloween Panic",
 		"name": "Atk Bonus",
@@ -614,7 +681,8 @@
 		"spd": 0,
 		"def": 0,
 		"res": 0,
-		"prereq": "Monstrous Bow+,Spectral Tome+"
+		"prereq": "Monstrous Bow+,Spectral Tome+",
+		"exclusive": ""
 	},	{
 		"category": "Halloween Panic",
 		"name": "Spd Bonus",
@@ -625,7 +693,8 @@
 		"spd": 2,
 		"def": 0,
 		"res": 0,
-		"prereq": "Monstrous Bow+,Spectral Tome+"
+		"prereq": "Monstrous Bow+,Spectral Tome+",
+		"exclusive": ""
 	},	{
 		"category": "Halloween Panic",
 		"name": "Def Bonus",
@@ -636,7 +705,8 @@
 		"spd": 0,
 		"def": 3,
 		"res": 0,
-		"prereq": "Monstrous Bow+,Spectral Tome+"
+		"prereq": "Monstrous Bow+,Spectral Tome+",
+		"exclusive": ""
 	},	{
 		"category": "Halloween Panic",
 		"name": "Res Bonus",
@@ -647,7 +717,8 @@
 		"spd": 0,
 		"def": 0,
 		"res": 3,
-		"prereq": "Monstrous Bow+,Spectral Tome+"
+		"prereq": "Monstrous Bow+,Spectral Tome+",
+		"exclusive": ""
 	},	{
 		"category": "Wedding Ranged",
 		"name": "Atk Bonus",
@@ -658,7 +729,8 @@
 		"spd": 0,
 		"def": 0,
 		"res": 0,
-		"prereq": "Cupid Arrow+,Blessed Bouquet+"
+		"prereq": "Cupid Arrow+,Blessed Bouquet+",
+		"exclusive": ""
 	},	{
 		"category": "Wedding Ranged",
 		"name": "Spd Bonus",
@@ -669,7 +741,8 @@
 		"spd": 2,
 		"def": 0,
 		"res": 0,
-		"prereq": "Cupid Arrow+,Blessed Bouquet+"
+		"prereq": "Cupid Arrow+,Blessed Bouquet+",
+		"exclusive": ""
 	},	{
 		"category": "Wedding Ranged",
 		"name": "Def Bonus",
@@ -680,9 +753,10 @@
 		"spd": 0,
 		"def": 3,
 		"res": 0,
-		"prereq": "Cupid Arrow+,Blessed Bouquet+"
+		"prereq": "Cupid Arrow+,Blessed Bouquet+",
+		"exclusive": ""
 	},	{
-		"category": "Wedding Buff Ranged",
+		"category": "Wedding Ranged",
 		"name": "Res Bonus",
 		"sp": 350,
 		"description": "After combat, grants Def\/Res+5 to unit and allies within 2 spaces for 1 turn.",
@@ -691,7 +765,8 @@
 		"spd": 0,
 		"def": 0,
 		"res": 3,
-		"prereq": "Cupid Arrow+,Blessed Bouquet+"
+		"prereq": "Cupid Arrow+,Blessed Bouquet+",
+		"exclusive": ""
 	},	{
 		"category": "Cymbeline",
 		"name": "Flying Atk Res Bond",
@@ -702,7 +777,8 @@
 		"spd": 0,
 		"def": 0,
 		"res": 0,
-		"prereq": "Cymbeline"
+		"prereq": "Cymbeline",
+		"exclusive": ""
 	},	{
 		"category": "Cymbeline",
 		"name": "Atk Bonus",
@@ -713,7 +789,8 @@
 		"spd": 0,
 		"def": 0,
 		"res": 0,
-		"prereq": "Cymbeline"
+		"prereq": "Cymbeline",
+		"exclusive": ""
 	},	{
 		"category": "Cymbeline",
 		"name": "Spd Bonus",
@@ -724,7 +801,8 @@
 		"spd": 2,
 		"def": 0,
 		"res": 0,
-		"prereq": "Cymbeline"
+		"prereq": "Cymbeline",
+		"exclusive": ""
 	},	{
 		"category": "Cymbeline",
 		"name": "Def Bonus",
@@ -735,7 +813,8 @@
 		"spd": 0,
 		"def": 3,
 		"res": 0,
-		"prereq": "Cymbeline"
+		"prereq": "Cymbeline",
+		"exclusive": ""
 	},	{
 		"category": "Cymbeline",
 		"name": "Res Bonus",
@@ -746,7 +825,8 @@
 		"spd": 0,
 		"def": 0,
 		"res": 3,
-		"prereq": "Cymbeline"
+		"prereq": "Cymbeline",
+		"exclusive": ""
 	},	{
 		"category": "Parthia",
 		"name": "Distant Atk",
@@ -757,7 +837,8 @@
 		"spd": 0,
 		"def": 0,
 		"res": 0,
-		"prereq": "Parthia"
+		"prereq": "Parthia",
+		"exclusive": ""
 	},	{
 		"category": "Parthia",
 		"name": "Atk Bonus",
@@ -768,7 +849,8 @@
 		"spd": 0,
 		"def": 0,
 		"res": 0,
-		"prereq": "Parthia"
+		"prereq": "Parthia",
+		"exclusive": ""
 	},	{
 		"category": "Parthia",
 		"name": "Spd Bonus",
@@ -779,7 +861,8 @@
 		"spd": 2,
 		"def": 0,
 		"res": 0,
-		"prereq": "Parthia"
+		"prereq": "Parthia",
+		"exclusive": ""
 	},	{
 		"category": "Parthia",
 		"name": "Def Bonus",
@@ -790,7 +873,8 @@
 		"spd": 0,
 		"def": 3,
 		"res": 0,
-		"prereq": "Parthia"
+		"prereq": "Parthia",
+		"exclusive": ""
 	},	{
 		"category": "Parthia",
 		"name": "Res Bonus",
@@ -801,7 +885,8 @@
 		"spd": 0,
 		"def": 0,
 		"res": 3,
-		"prereq": "Parthia"
+		"prereq": "Parthia",
+		"exclusive": ""
 	},	{
 		"category": "Advanced Dagger",
 		"name": "Atk Bonus",
@@ -812,7 +897,8 @@
 		"spd": 0,
 		"def": 0,
 		"res": 0,
-		"prereq": "Seashell+,Dancer's Fan+"
+		"prereq": "Seashell+,Dancer's Fan+",
+		"exclusive": ""
 	},	{
 		"category": "Advanced Dagger",
 		"name": "Spd Bonus",
@@ -823,7 +909,8 @@
 		"spd": 2,
 		"def": 0,
 		"res": 0,
-		"prereq": "Seashell+,Dancer's Fan+"
+		"prereq": "Seashell+,Dancer's Fan+",
+		"exclusive": ""
 	},	{
 		"category": "Advanced Dagger",
 		"name": "Def Bonus",
@@ -834,7 +921,8 @@
 		"spd": 0,
 		"def": 3,
 		"res": 0,
-		"prereq": "Seashell+,Dancer's Fan+"
+		"prereq": "Seashell+,Dancer's Fan+",
+		"exclusive": ""
 	},	{
 		"category": "Advanced Dagger",
 		"name": "Res Bonus",
@@ -845,7 +933,8 @@
 		"spd": 0,
 		"def": 0,
 		"res": 3,
-		"prereq": "Seashell+,Dancer's Fan+"
+		"prereq": "Seashell+,Dancer's Fan+",
+		"exclusive": ""
 	},	{
 		"category": "Smoke Dagger",
 		"name": "Atk Bonus",
@@ -856,7 +945,8 @@
 		"spd": 0,
 		"def": 0,
 		"res": 0,
-		"prereq": "Smoke Dagger+"
+		"prereq": "Smoke Dagger+",
+		"exclusive": ""
 	},	{
 		"category": "Smoke Dagger",
 		"name": "Spd Bonus",
@@ -867,7 +957,8 @@
 		"spd": 2,
 		"def": 0,
 		"res": 0,
-		"prereq": "Smoke Dagger+"
+		"prereq": "Smoke Dagger+",
+		"exclusive": ""
 	},	{
 		"category": "Smoke Dagger",
 		"name": "Def Bonus",
@@ -878,7 +969,8 @@
 		"spd": 0,
 		"def": 3,
 		"res": 0,
-		"prereq": "Smoke Dagger+"
+		"prereq": "Smoke Dagger+",
+		"exclusive": ""
 	},	{
 		"category": "Smoke Dagger",
 		"name": "Res Bonus",
@@ -889,7 +981,8 @@
 		"spd": 0,
 		"def": 0,
 		"res": 3,
-		"prereq": "Smoke Dagger+"
+		"prereq": "Smoke Dagger+",
+		"exclusive": ""
 	},	{
 		"category": "Rogue Dagger",
 		"name": "Atk Bonus",
@@ -900,7 +993,8 @@
 		"spd": 0,
 		"def": 0,
 		"res": 0,
-		"prereq": "Rogue Dagger+"
+		"prereq": "Rogue Dagger+",
+		"exclusive": ""
 	},	{
 		"category": "Rogue Dagger",
 		"name": "Spd Bonus",
@@ -911,7 +1005,8 @@
 		"spd": 2,
 		"def": 0,
 		"res": 0,
-		"prereq": "Rogue Dagger+"
+		"prereq": "Rogue Dagger+",
+		"exclusive": ""
 	},	{
 		"category": "Rogue Dagger",
 		"name": "Def Bonus",
@@ -922,7 +1017,8 @@
 		"spd": 0,
 		"def": 3,
 		"res": 0,
-		"prereq": "Rogue Dagger+"
+		"prereq": "Rogue Dagger+",
+		"exclusive": ""
 	},	{
 		"category": "Rogue Dagger",
 		"name": "Res Bonus",
@@ -933,9 +1029,10 @@
 		"spd": 0,
 		"def": 0,
 		"res": 3,
-		"prereq": "Rogue Dagger+"
+		"prereq": "Rogue Dagger+",
+		"exclusive": ""
 	},	{
-		"category": "Effective Melee",
+		"category": "Effective Armored Melee",
 		"name": "Nullify Armored",
 		"sp": 350,
 		"description": "If in combat against an armored foe, nullifies foe's bonuses (from skills like Fortify, Rally, etc.) during combat.",
@@ -944,9 +1041,10 @@
 		"spd": 0,
 		"def": 0,
 		"res": 0,
-		"prereq": "Armorsmasher+,Slaying Spear+,Slaying Hammer+"
+		"prereq": "Armorsmasher+,Slaying Spear+,Slaying Hammer+",
+		"exclusive": ""
 	},	{
-		"category": "Effective Melee",
+		"category": "Effective Cavalry Melee",
 		"name": "Nullify Cavalry",
 		"sp": 350,
 		"description": "If in combat against a cavalry foe, nullifies foe's bonuses (from skills like Fortify, Rally, etc.) during combat.",
@@ -955,7 +1053,8 @@
 		"spd": 0,
 		"def": 0,
 		"res": 0,
-		"prereq": "Zanbato+,Ridersbane+"
+		"prereq": "Zanbato+,Ridersbane+",
+		"exclusive": ""
 	},	{
 		"category": "Effective Melee",
 		"name": "Atk Bonus",
@@ -966,7 +1065,8 @@
 		"spd": 0,
 		"def": 0,
 		"res": 0,
-		"prereq": "Armorsmasher+,Slaying Spear+,Slaying Hammer+,Zanbato+,Ridersbane+"
+		"prereq": "Armorsmasher+,Slaying Spear+,Slaying Hammer+,Zanbato+,Ridersbane+",
+		"exclusive": ""
 	},	{
 		"category": "Effective Melee",
 		"name": "Spd Bonus",
@@ -977,7 +1077,8 @@
 		"spd": 3,
 		"def": 0,
 		"res": 0,
-		"prereq": "Armorsmasher+,Slaying Spear+,Slaying Hammer+,Zanbato+,Ridersbane+"
+		"prereq": "Armorsmasher+,Slaying Spear+,Slaying Hammer+,Zanbato+,Ridersbane+",
+		"exclusive": ""
 	},	{
 		"category": "Effective Melee",
 		"name": "Def Bonus",
@@ -988,7 +1089,8 @@
 		"spd": 0,
 		"def": 4,
 		"res": 0,
-		"prereq": "Armorsmasher+,Slaying Spear+,Slaying Hammer+,Zanbato+,Ridersbane+"
+		"prereq": "Armorsmasher+,Slaying Spear+,Slaying Hammer+,Zanbato+,Ridersbane+",
+		"exclusive": ""
 	},	{
 		"category": "Effective Melee",
 		"name": "Res Bonus",
@@ -999,7 +1101,8 @@
 		"spd": 0,
 		"def": 0,
 		"res": 4,
-		"prereq": "Armorsmasher+,Slaying Spear+,Slaying Hammer+,Zanbato+,Ridersbane+"
+		"prereq": "Armorsmasher+,Slaying Spear+,Slaying Hammer+,Zanbato+,Ridersbane+",
+		"exclusive": ""
 	},	{
 		"category": "Effective Tomes",
 		"name": "Nullify Cavalry",
@@ -1010,7 +1113,8 @@
 		"spd": 0,
 		"def": 0,
 		"res": 0,
-		"prereq": "Keen Raudrwolf+,Keen Blarwolf+,Keen Gronnwolf+"
+		"prereq": "Keen Raudrwolf+,Keen Blarwolf+,Keen Gronnwolf+",
+		"exclusive": ""
 	},	{
 		"category": "Effective Tomes",
 		"name": "Atk Bonus",
@@ -1021,7 +1125,8 @@
 		"spd": 0,
 		"def": 0,
 		"res": 0,
-		"prereq": "Keen Raudrwolf+,Keen Blarwolf+,Keen Gronnwolf+"
+		"prereq": "Keen Raudrwolf+,Keen Blarwolf+,Keen Gronnwolf+",
+		"exclusive": ""
 	},	{
 		"category": "Effective Tomes",
 		"name": "Spd Bonus",
@@ -1032,7 +1137,8 @@
 		"spd": 2,
 		"def": 0,
 		"res": 0,
-		"prereq": "Keen Raudrwolf+,Keen Blarwolf+,Keen Gronnwolf+"
+		"prereq": "Keen Raudrwolf+,Keen Blarwolf+,Keen Gronnwolf+",
+		"exclusive": ""
 	},	{
 		"category": "Effective Tomes",
 		"name": "Def Bonus",
@@ -1043,7 +1149,8 @@
 		"spd": 0,
 		"def": 3,
 		"res": 0,
-		"prereq": "Keen Raudrwolf+,Keen Blarwolf+,Keen Gronnwolf+"
+		"prereq": "Keen Raudrwolf+,Keen Blarwolf+,Keen Gronnwolf+",
+		"exclusive": ""
 	},	{
 		"category": "Effective Tomes",
 		"name": "Res Bonus",
@@ -1054,7 +1161,8 @@
 		"spd": 0,
 		"def": 0,
 		"res": 3,
-		"prereq": "Keen Raudrwolf+,Keen Blarwolf+,Keen Gronnwolf+"
+		"prereq": "Keen Raudrwolf+,Keen Blarwolf+,Keen Gronnwolf+",
+		"exclusive": ""
 	},	{
 		"category": "Staves",
 		"name": "Wrathful",
@@ -1065,7 +1173,8 @@
 		"spd": 0,
 		"def": 0,
 		"res": 0,
-		"prereq": "Absorb+,Fear+,Slow+,Gravity+,Pain+,Panic+,Candlelight+"
+		"prereq": "Absorb+,Fear+,Slow+,Gravity+,Pain+,Panic+,Candlelight+",
+		"exclusive": ""
 	},	{
 		"category": "Staves",
 		"name": "Dazzling",
@@ -1076,7 +1185,8 @@
 		"spd": 0,
 		"def": 0,
 		"res": 0,
-		"prereq": "Absorb+,Fear+,Slow+,Gravity+,Pain+,Panic+,Candlelight+"
+		"prereq": "Absorb+,Fear+,Slow+,Gravity+,Pain+,Panic+,Candlelight+",
+		"exclusive": ""
 	},	{
 		"category": "Dragonstone",
 		"name": "Atk Bonus",
@@ -1087,7 +1197,8 @@
 		"spd": 0,
 		"def": 0,
 		"res": 0,
-		"prereq": "Flametongue+,Lightning Breath+"
+		"prereq": "Flametongue+,Lightning Breath+",
+		"exclusive": ""
 	},	{
 		"category": "Dragonstone",
 		"name": "Spd Bonus",
@@ -1098,7 +1209,8 @@
 		"spd": 3,
 		"def": 0,
 		"res": 0,
-		"prereq": "Flametongue+,Lightning Breath+"
+		"prereq": "Flametongue+,Lightning Breath+",
+		"exclusive": ""
 	},	{
 		"category": "Dragonstone",
 		"name": "Def Bonus",
@@ -1109,7 +1221,8 @@
 		"spd": 0,
 		"def": 4,
 		"res": 0,
-		"prereq": "Flametongue+,Lightning Breath+"
+		"prereq": "Flametongue+,Lightning Breath+",
+		"exclusive": ""
 	},	{
 		"category": "Dragonstone",
 		"name": "Res Bonus",
@@ -1120,7 +1233,8 @@
 		"spd": 0,
 		"def": 0,
 		"res": 4,
-		"prereq": "Flametongue+,Lightning Breath+"
+		"prereq": "Flametongue+,Lightning Breath+",
+		"exclusive": ""
 	},	{
 		"category": "Light Dragonstone",
 		"name": "Atk Bonus",
@@ -1131,7 +1245,8 @@
 		"spd": 0,
 		"def": 0,
 		"res": 0,
-		"prereq": "Light Breath+"
+		"prereq": "Light Breath+",
+		"exclusive": ""
 	},	{
 		"category": "Light Dragonstone",
 		"name": "Spd Bonus",
@@ -1142,7 +1257,8 @@
 		"spd": 3,
 		"def": 0,
 		"res": 0,
-		"prereq": "Light Breath+"
+		"prereq": "Light Breath+",
+		"exclusive": ""
 	},	{
 		"category": "Light Dragonstone",
 		"name": "Def Bonus",
@@ -1153,7 +1269,8 @@
 		"spd": 0,
 		"def": 4,
 		"res": 0,
-		"prereq": "Light Breath+"
+		"prereq": "Light Breath+",
+		"exclusive": ""
 	},	{
 		"category": "Light Dragonstone",
 		"name": "Res Bonus",
@@ -1164,7 +1281,8 @@
 		"spd": 0,
 		"def": 0,
 		"res": 4,
-		"prereq": "Light Breath+"
+		"prereq": "Light Breath+",
+		"exclusive": ""
 	},	{
 		"category": "Dark Dragonstone",
 		"name": "Atk Bonus",
@@ -1175,7 +1293,8 @@
 		"spd": 0,
 		"def": 0,
 		"res": 0,
-		"prereq": "Dark Breath+"
+		"prereq": "Dark Breath+",
+		"exclusive": ""
 	},	{
 		"category": "Dark Dragonstone",
 		"name": "Spd Bonus",
@@ -1186,7 +1305,8 @@
 		"spd": 3,
 		"def": 0,
 		"res": 0,
-		"prereq": "Dark Breath+"
+		"prereq": "Dark Breath+",
+		"exclusive": ""
 	},	{
 		"category": "Dark Dragonstone",
 		"name": "Def Bonus",
@@ -1197,7 +1317,8 @@
 		"spd": 0,
 		"def": 4,
 		"res": 0,
-		"prereq": "Dark Breath+"
+		"prereq": "Dark Breath+",
+		"exclusive": ""
 	},	{
 		"category": "Dark Dragonstone",
 		"name": "Res Bonus",
@@ -1208,7 +1329,8 @@
 		"spd": 0,
 		"def": 0,
 		"res": 4,
-		"prereq": "Dark Breath+"
+		"prereq": "Dark Breath+",
+		"exclusive": ""
 	},	{
 		"category": "Sol Katti",
 		"name": "Brash Assault",
@@ -1219,7 +1341,8 @@
 		"spd": 0,
 		"def": 0,
 		"res": 0,
-		"prereq": "Sol Katti"
+		"prereq": "Sol Katti",
+		"exclusive": ""
 	},	{
 		"category": "Sol Katti",
 		"name": "Atk Bonus",
@@ -1230,7 +1353,8 @@
 		"spd": 0,
 		"def": 0,
 		"res": 0,
-		"prereq": "Sol Katti"
+		"prereq": "Sol Katti",
+		"exclusive": ""
 	},	{
 		"category": "Sol Katti",
 		"name": "Spd Bonus",
@@ -1241,7 +1365,8 @@
 		"spd": 3,
 		"def": 0,
 		"res": 0,
-		"prereq": "Sol Katti"
+		"prereq": "Sol Katti",
+		"exclusive": ""
 	},	{
 		"category": "Sol Katti",
 		"name": "Def Bonus",
@@ -1252,7 +1377,8 @@
 		"spd": 0,
 		"def": 4,
 		"res": 0,
-		"prereq": "Sol Katti"
+		"prereq": "Sol Katti",
+		"exclusive": ""
 	},	{
 		"category": "Sol Katti",
 		"name": "Res Bonus",
@@ -1263,7 +1389,8 @@
 		"spd": 0,
 		"def": 0,
 		"res": 4,
-		"prereq": "Sol Katti"
+		"prereq": "Sol Katti",
+		"exclusive": ""
 	},	{
 		"category": "Siegmund",
 		"name": "Pursuit",
@@ -1274,7 +1401,8 @@
 		"spd": 0,
 		"def": 0,
 		"res": 0,
-		"prereq": "Siegmund"
+		"prereq": "Siegmund",
+		"exclusive": ""
 	},	{
 		"category": "Siegmund",
 		"name": "Atk Bonus",
@@ -1285,7 +1413,8 @@
 		"spd": 0,
 		"def": 0,
 		"res": 0,
-		"prereq": "Siegmund"
+		"prereq": "Siegmund",
+		"exclusive": ""
 	},	{
 		"category": "Siegmund",
 		"name": "Spd Bonus",
@@ -1296,7 +1425,8 @@
 		"spd": 3,
 		"def": 0,
 		"res": 0,
-		"prereq": "Siegmund"
+		"prereq": "Siegmund",
+		"exclusive": ""
 	},	{
 		"category": "Siegmund",
 		"name": "Def Bonus",
@@ -1307,7 +1437,8 @@
 		"spd": 0,
 		"def": 4,
 		"res": 0,
-		"prereq": "Siegmund"
+		"prereq": "Siegmund",
+		"exclusive": ""
 	},	{
 		"category": "Siegmund",
 		"name": "Res Bonus",
@@ -1318,7 +1449,92 @@
 		"spd": 0,
 		"def": 0,
 		"res": 4,
-		"prereq": "Siegmund"
+		"prereq": "Siegmund",
+		"exclusive": ""
+	},	{
+		"category": "Falchion",
+		"name": "All Bond",
+		"sp": 400,
+		"description": "Restores 10 HP at the start of every second turn. Grants Atk/Spd/Def/Res+4 during combat if unit is adjacent to an ally.",
+		"hp": 3,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"prereq": "Falchion",
+		"exclusive": "Chrom,Marth (Masked),Lucina"
+	},	{
+		"category": "Falchion",
+		"name": "Falchion Drive",
+		"sp": 400,
+		"description": "Restores 10 HP at the start of every second turn. Grants Atk/Spd/Def/Res+2 to allies within 2 spaces during combat.",
+		"hp": 3,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"prereq": "Falchion",
+		"exclusive": "Marth"
+	},	{
+		"category": "Falchion",
+		"name": "Falchion Pursuit",
+		"sp": 400,
+		"description": "If unit's HP = 100% at start of combat and unit initiates combat, unit attacks twice then takes 5 damage after combat.",
+		"hp": 3,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"prereq": "Falchion",
+		"exclusive": "Alm"
+	},	{
+		"category": "Falchion",
+		"name": "Atk Bonus",
+		"sp": 400,
+		"description": "Restores 10 HP at the start of every second turn.",
+		"hp": 5,
+		"atk": 2,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"prereq": "Falchion",
+		"exclusive": ""
+	},	{
+		"category": "Falchion",
+		"name": "Spd Bonus",
+		"sp": 400,
+		"description": "Restores 10 HP at the start of every second turn.",
+		"hp": 5,
+		"atk": 0,
+		"spd": 3,
+		"def": 0,
+		"res": 0,
+		"prereq": "Falchion",
+		"exclusive": ""
+	},	{
+		"category": "Falchion",
+		"name": "Def Bonus",
+		"sp": 400,
+		"description": "Restores 10 HP at the start of every second turn.",
+		"hp": 5,
+		"atk": 0,
+		"spd": 0,
+		"def": 4,
+		"res": 0,
+		"prereq": "Falchion",
+		"exclusive": ""
+	},	{
+		"category": "Falchion",
+		"name": "Res Bonus",
+		"sp": 400,
+		"description": "Restores 10 HP at the start of every second turn.",
+		"hp": 5,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 4,
+		"prereq": "Falchion",
+		"exclusive": ""
 	},	{
 		"category": "Deathly Dagger",
 		"name": "Magic Suppression",
@@ -1329,7 +1545,8 @@
 		"spd": 0,
 		"def": 0,
 		"res": 0,
-		"prereq": "Deathly Dagger"
+		"prereq": "Deathly Dagger",
+		"exclusive": ""
 	},	{
 		"category": "Deathly Dagger",
 		"name": "Atk Bonus",
@@ -1340,7 +1557,8 @@
 		"spd": 0,
 		"def": 0,
 		"res": 0,
-		"prereq": "Deathly Dagger"
+		"prereq": "Deathly Dagger",
+		"exclusive": ""
 	},	{
 		"category": "Deathly Dagger",
 		"name": "Spd Bonus",
@@ -1351,7 +1569,8 @@
 		"spd": 2,
 		"def": 0,
 		"res": 0,
-		"prereq": "Deathly Dagger"
+		"prereq": "Deathly Dagger",
+		"exclusive": ""
 	},	{
 		"category": "Deathly Dagger",
 		"name": "Def Bonus",
@@ -1362,7 +1581,8 @@
 		"spd": 0,
 		"def": 3,
 		"res": 0,
-		"prereq": "Deathly Dagger"
+		"prereq": "Deathly Dagger",
+		"exclusive": ""
 	},	{
 		"category": "Deathly Dagger",
 		"name": "Res Bonus",
@@ -1373,6 +1593,7 @@
 		"spd": 0,
 		"def": 0,
 		"res": 3,
-		"prereq": "Deathly Dagger"
+		"prereq": "Deathly Dagger",
+		"exclusive": ""
 	}
 ]

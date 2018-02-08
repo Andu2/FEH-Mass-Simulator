@@ -132,7 +132,7 @@ data.heroBaseSkills = [];
 data.heroMaxSkills = [[],[],[],[],[]]; //2d array; 1st num rarity, 2nd num skillindex
 
 data.skillsThatArePrereq = [];
-//Prereq exceptions are: 
+//Prereq exceptions are:
 //Sol, Ardent Sacrifice, Luna, Astra, Assault, Sacred Cowl,
 //Armorslayer+, Killing Edge+, Raudrwolf+, Heavy Spear+, Killer Lance+, Blarwolf+,
 //Hammer+, Killer Axe+, Gronnwolf+, Assassin's Bow+, Killer Bow+
@@ -412,19 +412,19 @@ $(document).ready(function(){
 	for(var i = 0; i < data.heroes.length; i++){
 		heroHTML += "<option value=" + i + " class=\"hero_option\">" + data.heroes[i].name + "</option>";
 	}
-	
+
 	//Inject select2 UI with matcher for data.heroes
 	$("#challenger_name, #cl_enemy_name").html(heroHTML).select2({selectOnClose: true, dropdownAutoWidth : true, matcher: matchStartHeroes});
 	//Inject select2 UI with matcher for data.skills
 	$("#challenger_weapon, #challenger_assist, #challenger_special, #challenger_a, #challenger_b, #challenger_c, #challenger_s").select2({selectOnClose: true, dropdownAutoWidth : true, matcher: matchStartSkills});
 	$("#enemies_weapon, #enemies_assist, #enemies_special, #enemies_a, #enemies_b, #enemies_c, #enemies_s").select2({selectOnClose: true, dropdownAutoWidth : true, matcher: matchStartSkills});
 	$("#cl_enemy_weapon, #cl_enemy_assist, #cl_enemy_special, #cl_enemy_a, #cl_enemy_b, #cl_enemy_c, #cl_enemy_s").select2({selectOnClose: true, dropdownAutoWidth : true, matcher: matchStartSkills});
-	$("#enemies_weapon, #enemies_assist, #enemies_special, #enemies_a, #enemies_b, #enemies_c, #enemies_s").select2({selectOnClose: true, dropdownAutoWidth : true, matcher: matchStartSkills});	
+	$("#enemies_weapon, #enemies_assist, #enemies_special, #enemies_a, #enemies_b, #enemies_c, #enemies_s").select2({selectOnClose: true, dropdownAutoWidth : true, matcher: matchStartSkills});
 	//Inject select2 UI with matcher for data.refine
-	$("#challenger_refine, #enemies_refine, #cl_enemy_refine, #enemies_refine").select2({selectOnClose: true, dropdownAutoWidth : true, matcher: matchStartRefine});	
+	$("#challenger_refine, #enemies_refine, #cl_enemy_refine, #enemies_refine").select2({selectOnClose: true, dropdownAutoWidth : true, matcher: matchStartRefine});
 	//Inject select2 UI for Full List overwrite options
 	$("#enemies_weapon_overwrite, #enemies_assist_overwrite, #enemies_special_overwrite, #enemies_a_overwrite, #enemies_b_overwrite, #enemies_c_overwrite").select2({selectOnClose: true, dropdownAutoWidth : true, minimumResultsForSearch: -1});
-	
+
 	//Load Custom Lists
 	listHTML = "<option value=0> Filtered Full List</option>";
 	listHTML += "<option value=1> Custom List</option>";
@@ -995,7 +995,9 @@ function getValidRefineSkills(hero){
 		//For each prereq in prereqList, each if it matches hero weapon name EXACTLY
 		for (var prereq = 0; prereq < prereqList.length; prereq++){
 			if (heroWeaponName == prereqList[prereq]){
-				isPrereq = true;
+				if (data.refine[i].exclusive == "" || data.refine[i].exclusive.split(",").indexOf(data.heroes[hero.index].name) != -1){
+					isPrereq = true;
+				}
 			}
 		}
 		//If refine option is valid, push the option's index into the list
@@ -1058,7 +1060,7 @@ function getCDChange(skill, slot){
 			|| skillName.indexOf("Killer Bow") != -1	|| skillName.indexOf("Slaying Bow") != -1 	|| skillName.indexOf("Slaying Edge") != -1
 			|| skillName.indexOf("Slaying Axe") != -1	|| skillName.indexOf("Slaying Lance") != -1	|| skillName.indexOf("Cursed Lance") != -1
 			|| skillName.indexOf("Mystletainn") != -1	|| skillName.indexOf("Hauteclere") != -1	|| skillName.indexOf("Urvan") != -1
-			|| skillName.indexOf("Audhulma") != -1		|| skillName.indexOf("Kagami Mochi") != -1	|| skillName.indexOf("Basilikos") != -1	
+			|| skillName.indexOf("Audhulma") != -1		|| skillName.indexOf("Kagami Mochi") != -1	|| skillName.indexOf("Basilikos") != -1
 			){
 				return -1;
 		}
@@ -1885,10 +1887,10 @@ function matchStartHeroes(params, data) {
 	if (data.text.toUpperCase().indexOf(params.term.toUpperCase()) == 0) {
 		return data;
 	}
-	
+
 	//If search term is a number, match with BST that are greater than the input
 	if (isNaN(params.term) == false && data.id != -1){
-		if (this.data.heroes[data.id].basehp + this.data.growths[4][this.data.heroes[data.id].hpgrowth] 
+		if (this.data.heroes[data.id].basehp + this.data.growths[4][this.data.heroes[data.id].hpgrowth]
 			+ this.data.heroes[data.id].baseatk + this.data.growths[4][this.data.heroes[data.id].atkgrowth]
 			+ this.data.heroes[data.id].basespd + this.data.growths[4][this.data.heroes[data.id].spdgrowth]
 			+ this.data.heroes[data.id].basedef + this.data.growths[4][this.data.heroes[data.id].defgrowth]
@@ -1918,7 +1920,7 @@ function matchStartSkills(params, data) {
 	if (data.text.toUpperCase().indexOf(params.term.toUpperCase()) == 0) {
 		return data;
 	}
-	
+
 	//If search term is a number, match with sp cost that are greater than the input
 	if (isNaN(params.term) == false && data.id != -1){
 		if (this.data.skills[data.id].sp >= parseInt(params.term)){
@@ -1946,7 +1948,7 @@ function matchStartRefine(params, data) {
 	if (data.text.toUpperCase().indexOf(params.term.toUpperCase()) == 0) {
 		return data;
 	}
-	
+
 	//If search term is a number, match with sp cost that are greater than the input
 	if (isNaN(params.term) == false && data.id != -1){
 		if (this.data.refine[data.id].sp >= parseInt(params.term)){
@@ -3060,7 +3062,7 @@ function loadCustomList(index){
 //Search for refine index by weapon name and refine name
 function searchRefineIndex(refine){
 	for (var i = 0; i < data.refine.length; i++){
-		if (data.refine[i].prereq.toLowerCase().split(",").includes(refine[0]) && refine[1] == data.refine[i].name.toLowerCase()){
+		if (data.refine[i].prereq.toLowerCase().split(",").indexOf(refine[0]) != -1 && refine[1] == data.refine[i].name.toLowerCase()){
 			return i;
 		}
 	}
@@ -4741,14 +4743,15 @@ function activeHero(hero){
 	}
 
 	//Turn counting is complicated due to mix & matching turn order, will revisit later if necessary.
-	//Currently repeat effects are not applied since there are only 4 rounds (2 exchanges max) in this simulator
+	//Currently renew repeat effects are not applied since there are only 4 rounds (2 exchanges max) in this simulator
+	//TODO: Implement Turn counting properly for more than 4 rounds
 	this.renewal = function(renew){
 		var renewText = "";
 
 		//Effects that apply on renewal turn
 		if (renew){
-			if(this.has("Renewal")){
-				//if(turn % (5 - this.has("Renewal")) == 0){
+			if (this.has("Renewal")){
+				//Every other turn - if(turn % (5 - this.has("Renewal")) == 0){
 				if(this.hp + 10 > this.maxHp){
 					this.hp = this.maxHp;
 				} else{
@@ -4757,14 +4760,25 @@ function activeHero(hero){
 				renewText += this.name + " heals 10 HP due to Renewal.<br>";
 			}
 
-			if(this.has("Falchion")){
-				//if(turn % 3 == 0){
-				if(this.hp + 10 > this.maxHp){
-					this.hp = this.maxHp;
-				} else{
-					this.hp += 10;
+			if (this.has("Falchion")){
+				//Not refined - every third turn - if(turn % 3 == 0){
+				if (this.refineIndex == -1){
+					if(this.hp + 10 > this.maxHp){
+						this.hp = this.maxHp;
+					} else{
+						this.hp += 10;
+					}
+					renewText += this.name + " heals 10 HP due to Falchion.<br>";
 				}
-				renewText += this.name + " heals 10 HP due to Falchion.<br>";
+				//Refined - every other turn
+				else {
+					if(this.hp + 10 > this.maxHp){
+						this.hp = this.maxHp;
+					} else{
+						this.hp += 10;
+					}
+					renewText += this.name + " heals 10 HP due to Falchion (Refined).<br>";
+				}
 			}
 		}
 
@@ -5049,7 +5063,7 @@ function activeHero(hero){
 		if (this.adjacent > 0){
 			var skillName = "";
 			var buffVal = 0;
-			
+
 			//Weapons
 			if (this.hasExactly("Hinoka's Spear")){
 				buffVal = 4;
@@ -5058,7 +5072,16 @@ function activeHero(hero){
 				this.combatSpur.spd += buffVal;
 				boostText += this.name + " gets +" + buffVal + " Atk/Spd from being within 2 spaces of an infantry or flying ally with " + skillName + ".<br>";
 			}
-			
+			if (this.hasAtRefineIndex("All Bond", this.refineIndex)){
+				buffVal = 4;
+				skillName = data.skills[this.weaponIndex].name;
+				this.combatSpur.atk += buffVal;
+				this.combatSpur.spd += buffVal;
+				this.combatSpur.def += buffVal;
+				this.combatSpur.res += buffVal;
+				boostText += this.name + " gets +" + buffVal + " Atk/Spd/Def/Res from being adjacent to an ally with " + skillName + " (Refined).<br>";
+			}
+
 			//Owl Tomes
 			if (this.has("Blarowl") || this.has("Gronnowl") || this.has("Raudrowl") || this.hasExactly("Nidhogg")){
 				buffVal = this.adjacent * 2;
@@ -5836,7 +5859,7 @@ function activeHero(hero){
 		//Not cancelled
 		return false;
 	}
-	
+
 	//Check if hero has adaptive attack
 	this.isAdaptive = function(enemy){
 		if (this.hasExactly("Felicia's Plate")){
@@ -5851,7 +5874,7 @@ function activeHero(hero){
 		//Hero does not have adaptive attack
 		return false;
 	}
-	
+
 	//represents one attack of combat
 	this.doDamage = function(enemy, brave, AOE, firstAttack){
 		//didAttack variable for checking daggers and pain
@@ -6883,6 +6906,12 @@ function activeHero(hero){
 				thisAttackRankChanged = true;
 			}
 		}
+		if (this.hasAtRefineIndex("Falchion Pursuit", this.refineIndex)){
+			if (this.combatStartHp / this.maxHp == 1){
+				thisAttackRank++;
+				thisAttackRankChanged = true;
+			}
+		}
 
 		//Check for auto follow-up counters
 		if(enemy.hasAtIndex("Quick Riposte", enemy.bIndex)){
@@ -6911,6 +6940,12 @@ function activeHero(hero){
 		}
 		if (enemy.has("Follow-Up Ring")){
 			if (enemy.combatStartHp/enemy.maxHp >= .5){
+				enemyAttackRank++;
+				enemyAttackRankChanged = true;
+			}
+		}
+		if (enemy.hasAtRefineIndex("Falchion Pursuit", enemy.refineIndex)){
+			if (enemy.combatStartHp / enemy.maxHp == 1){
 				enemyAttackRank++;
 				enemyAttackRankChanged = true;
 			}
