@@ -3620,5 +3620,22 @@
 		"weapontype": "sword",
 		"movetype": "infantry",
 		"minrarity": 4
+	}, {
+		"hero_id": 216,
+		"name": "Ike (Vanguard Legend)",
+		"basehp": 19,
+		"baseatk": 10,
+		"basespd": 6,
+		"basedef": 9,
+		"baseres": 4,
+		"hpgrowth": 6,
+		"atkgrowth": 8,
+		"spdgrowth": 7,
+		"defgrowth": 8,
+		"resgrowth": 4,
+		"color": "red",
+		"weapontype": "sword",
+		"movetype": "infantry",
+		"minrarity": 5
 	}
 ]

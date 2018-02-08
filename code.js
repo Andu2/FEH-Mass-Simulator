@@ -132,8 +132,15 @@ data.heroBaseSkills = [];
 data.heroMaxSkills = [[],[],[],[],[]]; //2d array; 1st num rarity, 2nd num skillindex
 
 data.skillsThatArePrereq = [];
-//Prereq exceptions are Sol, Ardent Sacrifice, Luna, Astra, Assault, Sacred Cowl
-data.skillPrereqExceptions = [125,137,162,168,170,193];
+//Prereq exceptions are: 
+//Sol, Ardent Sacrifice, Luna, Astra, Assault, Sacred Cowl,
+//Armorslayer+, Killing Edge+, Raudrwolf+, Heavy Spear+, Killer Lance+, Blarwolf+,
+//Hammer+, Killer Axe+, Gronnwolf+, Assassin's Bow+, Killer Bow+
+data.skillPrereqExceptions = [
+	125, 137, 162, 168, 170, 193,
+	6, 10, 38, 74, 76, 87,
+	50, 52, 64,	107, 111
+	];
 
 data.enemyPrompts = {
 	//Just for fun, special messages for some of my favorites ;)
@@ -405,15 +412,19 @@ $(document).ready(function(){
 	for(var i = 0; i < data.heroes.length; i++){
 		heroHTML += "<option value=" + i + " class=\"hero_option\">" + data.heroes[i].name + "</option>";
 	}
-	$("#challenger_name, #cl_enemy_name").html(heroHTML).select2({selectOnClose: true, dropdownAutoWidth : true, matcher: matchStart});
-
-	//Inject select2 UI
-	$("#challenger_weapon, #challenger_refine, #challenger_assist, #challenger_special, #challenger_a, #challenger_b, #challenger_c, #challenger_s").select2({selectOnClose: true, dropdownAutoWidth : true, matcher: matchStart});
-	$("#enemies_weapon, #enemies_refine, #enemies_assist, #enemies_special, #enemies_a, #enemies_b, #enemies_c, #enemies_s").select2({selectOnClose: true, dropdownAutoWidth : true, matcher: matchStart});
-	$("#cl_enemy_weapon, #cl_enemy_refine, #cl_enemy_assist, #cl_enemy_special, #cl_enemy_a, #cl_enemy_b, #cl_enemy_c, #cl_enemy_s").select2({selectOnClose: true, dropdownAutoWidth : true, matcher: matchStart});
-	$("#enemies_weapon, #enemies_refine, #enemies_assist, #enemies_special, #enemies_a, #enemies_b, #enemies_c, #enemies_s").select2({selectOnClose: true, dropdownAutoWidth : true, matcher: matchStart});
+	
+	//Inject select2 UI with matcher for data.heroes
+	$("#challenger_name, #cl_enemy_name").html(heroHTML).select2({selectOnClose: true, dropdownAutoWidth : true, matcher: matchStartHeroes});
+	//Inject select2 UI with matcher for data.skills
+	$("#challenger_weapon, #challenger_assist, #challenger_special, #challenger_a, #challenger_b, #challenger_c, #challenger_s").select2({selectOnClose: true, dropdownAutoWidth : true, matcher: matchStartSkills});
+	$("#enemies_weapon, #enemies_assist, #enemies_special, #enemies_a, #enemies_b, #enemies_c, #enemies_s").select2({selectOnClose: true, dropdownAutoWidth : true, matcher: matchStartSkills});
+	$("#cl_enemy_weapon, #cl_enemy_assist, #cl_enemy_special, #cl_enemy_a, #cl_enemy_b, #cl_enemy_c, #cl_enemy_s").select2({selectOnClose: true, dropdownAutoWidth : true, matcher: matchStartSkills});
+	$("#enemies_weapon, #enemies_assist, #enemies_special, #enemies_a, #enemies_b, #enemies_c, #enemies_s").select2({selectOnClose: true, dropdownAutoWidth : true, matcher: matchStartSkills});	
+	//Inject select2 UI with matcher for data.refine
+	$("#challenger_refine, #enemies_refine, #cl_enemy_refine, #enemies_refine").select2({selectOnClose: true, dropdownAutoWidth : true, matcher: matchStartRefine});	
+	//Inject select2 UI for Full List overwrite options
 	$("#enemies_weapon_overwrite, #enemies_assist_overwrite, #enemies_special_overwrite, #enemies_a_overwrite, #enemies_b_overwrite, #enemies_c_overwrite").select2({selectOnClose: true, dropdownAutoWidth : true, minimumResultsForSearch: -1});
-
+	
 	//Load Custom Lists
 	listHTML = "<option value=0> Filtered Full List</option>";
 	listHTML += "<option value=1> Custom List</option>";
@@ -846,6 +857,7 @@ function initHero(hero, alreadyHasSkills){
 
 function initEnemyList(){
 	setFlEnemies();
+	updateFlEnemies();
 	setSkills(enemies.fl);
 	setStats(enemies.fl);
 }
@@ -1273,6 +1285,8 @@ function setStats(hero){
 				hero.res += 4 * hero.blessStack;
 				break;
 			case "earth":
+				hero.hp += 3 * hero.blessStack;
+				hero.atk += 2 * hero.blessStack;
 				break;
 			default:
 				break;
@@ -1491,12 +1505,7 @@ function adjustCustomListBuff(isStat){
 						hero.spur[stat] = buffVal;
 					}else{
 						if (enemies.cl.movement == "all"){
-							//Account for lack of dragon Hone buffs
-							if (stat == "atk" || stat == "spd"){
-								hero.buffs[stat] = (data.heroes[hero.index].movetype == "infantry") ? 4 : 6;
-							}else{
-								hero.buffs[stat] = (data.heroes[hero.index].movetype != "infantry" || data.heroes[hero.index].weapontype == "dragon") ? 6 : 4;
-							}
+							hero.buffs[stat] = (data.heroes[hero.index].movetype == "infantry" && data.heroes[hero.index].weapontype != "dragon") ? 4 : 6;
 						}else{
 							hero.buffs[stat] = buffVal;
 						}
@@ -1625,6 +1634,7 @@ function resetHero(hero,blockInit){//also resets fl, despite singular name - pas
 		updateChallengerUI();
 	}
 	else{
+		//If current enemy list is Full List
 		if(options.customEnemyList == 0){
 			hero.weapon = -1;
 			hero.refine = -1;
@@ -1642,17 +1652,14 @@ function resetHero(hero,blockInit){//also resets fl, despite singular name - pas
 			hero.replaceB = 0;
 			hero.replaceC = 0;
 			hero.replaceS = 0;
-
 			hero.include = {"melee":1,"ranged":1,"red":1,"blue":1,"green":1,"gray":1,"physical":1,"magical":1,"infantry":1,"cavalry":1,"flying":1,"armored":1,"staff":0,"nonstaff":1};
 
 			if(!blockInit){
 				initEnemyList();
 			}
 		}
-
 		updateEnemyUI();
 	}
-
 	calculate();
 }
 
@@ -1863,7 +1870,7 @@ function resetFilter(){
 }
 
 //Select2 match function for matching starting characters
-function matchStart(params, data) {
+function matchStartHeroes(params, data) {
 	//If there are no search terms, return all of the data
     if ($.trim(params.term) === '') {
 		return data;
@@ -1877,6 +1884,74 @@ function matchStart(params, data) {
 	//If search term appears in the beginning of data's text
 	if (data.text.toUpperCase().indexOf(params.term.toUpperCase()) == 0) {
 		return data;
+	}
+	
+	//If search term is a number, match with BST that are greater than the input
+	if (isNaN(params.term) == false && data.id != -1){
+		if (this.data.heroes[data.id].basehp + this.data.growths[4][this.data.heroes[data.id].hpgrowth] 
+			+ this.data.heroes[data.id].baseatk + this.data.growths[4][this.data.heroes[data.id].atkgrowth]
+			+ this.data.heroes[data.id].basespd + this.data.growths[4][this.data.heroes[data.id].spdgrowth]
+			+ this.data.heroes[data.id].basedef + this.data.growths[4][this.data.heroes[data.id].defgrowth]
+			+ this.data.heroes[data.id].baseres + this.data.growths[4][this.data.heroes[data.id].resgrowth]
+			>= parseInt(params.term)){
+			return data;
+		}
+	}
+
+    //Return `null` if the term should not be displayed
+    return null;
+}
+
+//Select2 match function for matching starting characters - Uses data.skills
+function matchStartSkills(params, data) {
+	//If there are no search terms, return all of the data
+    if ($.trim(params.term) === '') {
+		return data;
+    }
+
+    //Do not display the item if there is no 'text' property
+    if (typeof data.text === 'undefined') {
+		return null;
+    }
+
+	//If search term appears in the beginning of data's text
+	if (data.text.toUpperCase().indexOf(params.term.toUpperCase()) == 0) {
+		return data;
+	}
+	
+	//If search term is a number, match with sp cost that are greater than the input
+	if (isNaN(params.term) == false && data.id != -1){
+		if (this.data.skills[data.id].sp >= parseInt(params.term)){
+			return data;
+		}
+	}
+
+    //Return `null` if the term should not be displayed
+    return null;
+}
+
+//Select2 match function for matching starting characters - Uses data.refine
+function matchStartRefine(params, data) {
+	//If there are no search terms, return all of the data
+    if ($.trim(params.term) === '') {
+		return data;
+    }
+
+    //Do not display the item if there is no 'text' property
+    if (typeof data.text === 'undefined') {
+		return null;
+    }
+
+	//If search term appears in the beginning of data's text
+	if (data.text.toUpperCase().indexOf(params.term.toUpperCase()) == 0) {
+		return data;
+	}
+	
+	//If search term is a number, match with sp cost that are greater than the input
+	if (isNaN(params.term) == false && data.id != -1){
+		if (this.data.refine[data.id].sp >= parseInt(params.term)){
+			return data;
+		}
 	}
 
     //Return `null` if the term should not be displayed
@@ -4070,7 +4145,7 @@ function collectStatistics(challenger, enemy, outcome){
 		else if (outcome == "loss"){ statistics.enemies.ranged_outcome[1]++; }
 		else if (outcome == "inconclusive"){ statistics.enemies.ranged_outcome[2]++; }
 	}
-	//Tally  Type
+	//Tally Type
 	if (enemy.moveType == "infantry"){
 		statistics.enemies.infantry++;
 		if (outcome == "win"){ statistics.enemies.infantry_outcome[0]++; }
@@ -4312,8 +4387,8 @@ function drawChart() {
 //heroIndex is the index of the hero represented
 //challenger is true if challenger, false if enemy
 
-//Variable for keeping track of attacker for Urvan
-//***Currently does not including aoe damage in consecutive damage check, revise if required***
+//Variable for keeping track of attacker for Urvan and similar skills
+//***Currently does not include aoe damage in consecutive damage check, revise if required***
 var lastAttacker = "none";
 
 function activeHero(hero){
@@ -4720,7 +4795,7 @@ function activeHero(hero){
 		var debuffVal = {"atk":0,"spd":0,"def":0,"res":0};
 
 		//Chilling Seal Debuff
-		if ((enemy.challenger && options.chilled_challenger) || (!enemy.chalenger && options.chilled_enemy)){
+		if ((enemy.challenger && options.chilled_challenger) || (!enemy.challenger && options.chilled_enemy)){
 			debuffVal.atk = -6;
 			debuffVal.spd = -6;
 			skillNames.push("Chilling Seal");
@@ -4862,19 +4937,47 @@ function activeHero(hero){
 
 		//Brazen skills
 		if(this.combatStartHp / this.maxHp <= 0.8){
-			if(this.has("Brazen Atk Def")){
-				statBonus = 1 + 2 * this.has("Brazen Atk Def");
-				this.combatSpur.atk += statBonus;
-				this.combatSpur.def += statBonus;
-				skillName = data.skills[this.aIndex].name;
-				boostText += this.name + " activates " + skillName + " and gets +" + statBonus + " atk/def.<br>";
-			}
 			if(this.has("Brazen Atk Spd")){
 				statBonus = 1 + 2 * this.has("Brazen Atk Spd");
 				this.combatSpur.atk += statBonus;
 				this.combatSpur.spd += statBonus;
 				skillName = data.skills[this.aIndex].name;
-				boostText += this.name + " activates " + skillName + " and gets +" + statBonus + " atk/spd.<br>";
+				boostText += this.name + " activates " + skillName + " and gets +" + statBonus + " Atk/Spd.<br>";
+			}
+			if(this.has("Brazen Atk Def")){
+				statBonus = 1 + 2 * this.has("Brazen Atk Def");
+				this.combatSpur.atk += statBonus;
+				this.combatSpur.def += statBonus;
+				skillName = data.skills[this.aIndex].name;
+				boostText += this.name + " activates " + skillName + " and gets +" + statBonus + " Atk/Def.<br>";
+			}
+			if(this.has("Brazen Atk Res")){
+				statBonus = 1 + 2 * this.has("Brazen Atk Res");
+				this.combatSpur.atk += statBonus;
+				this.combatSpur.res += statBonus;
+				skillName = data.skills[this.aIndex].name;
+				boostText += this.name + " activates " + skillName + " and gets +" + statBonus + " Atk/Res.<br>";
+			}
+			if(this.has("Brazen Spd Def")){
+				statBonus = 1 + 2 * this.has("Brazen Spd Def");
+				this.combatSpur.spd += statBonus;
+				this.combatSpur.def += statBonus;
+				skillName = data.skills[this.aIndex].name;
+				boostText += this.name + " activates " + skillName + " and gets +" + statBonus + " Spd/Def.<br>";
+			}
+			if(this.has("Brazen Spd Res")){
+				statBonus = 1 + 2 * this.has("Brazen Spd Res");
+				this.combatSpur.spd += statBonus;
+				this.combatSpur.res += statBonus;
+				skillName = data.skills[this.aIndex].name;
+				boostText += this.name + " activates " + skillName + " and gets +" + statBonus + " Spd/Res.<br>";
+			}
+				if(this.has("Brazen Def Res")){
+				statBonus = 1 + 2 * this.has("Brazen Def Res");
+				this.combatSpur.def += statBonus;
+				this.combatSpur.res += statBonus;
+				skillName = data.skills[this.aIndex].name;
+				boostText += this.name + " activates " + skillName + " and gets +" + statBonus + " Def/Res.<br>";
 			}
 		}
 
@@ -4899,13 +5002,13 @@ function activeHero(hero){
 			if(this.has("Regal Blade")){
 				this.combatSpur.atk += 2;
 				this.combatSpur.spd += 2;
-				boostText += this.name + " gets +2 Atk/Spd from " + enemy.name + " being at full health with " + data.skills[this.weaponIndex].name + ".<br>";
+				boostText += this.name + " gets +2 Atk/Spd with " + data.skills[this.weaponIndex].name + " from " + enemy.name + " being at full health.<br>";
 			}
 
 			if(this.hasExactly("Gleipnir") || this.hasExactly("Ivaldi")){
 				this.combatSpur.atk += 3;
 				this.combatSpur.spd += 3;
-				boostText += this.name + " gets +3 Atk/Spd from " + enemy.name + " being at full health with " + data.skills[this.weaponIndex].name + ".<br>";
+				boostText += this.name + " gets +3 Atk/Spd with " + data.skills[this.weaponIndex].name + " from " + enemy.name + " being at full health.<br>";
 			}
 		}
 
@@ -5141,7 +5244,7 @@ function activeHero(hero){
 
 		//this.defendBuff = function(relevantDefType){
 		if(!this.initiator){
-			//Not actually going to limit text from relevantDefType, beccause res/def may always be relevant for special attacks
+			//Not actually going to limit text from relevantDefType, because res/def may always be relevant for special attacks
 			var buffVal = 0;
 
 			//Close/Distant Def
@@ -5219,38 +5322,39 @@ function activeHero(hero){
 			//Skills
 			if(this.has("Steady Breath")){
 				this.combatSpur.def += 4;
-				boostText += this.name + " gets +4 Def from defending with Steady Breath.<br>";
+				boostText += this.name + " gets +4 Def from defending with " + data.skills[this.aIndex].name + ".<br>";
+			}
+			if(this.has("Warding Breath")){
+				this.combatSpur.res += 4;
+				boostText += this.name + " gets +4 Res from defending with " + data.skills[this.aIndex].name + ".<br>";
 			}
 			if(this.has("Fierce Stance")){
 				buffVal = this.has("Fierce Stance") * 2;
-				skillName = data.skills[this.aIndex].name;
 				this.combatSpur.atk += buffVal;
-				boostText += this.name + " gets +" + buffVal + " Atk from defending with " + skillName + ".<br>";
+				boostText += this.name + " gets +" + buffVal + " Atk from defending with " + data.skills[this.aIndex].name + ".<br>";
 			}
 			//***Speed Stance not in game - need to rename***
 			if(this.has("Speed Stance")){
 				buffVal = this.has("Speed Stance") * 2;
-				skillName = data.skills[this.aIndex].name;
 				this.combatSpur.spd += buffVal;
-				boostText += this.name + " gets +" + buffVal + " Spd from defending with " + skillName + ".<br>";
+				boostText += this.name + " gets +" + buffVal + " Spd from defending with " + data.skills[this.aIndex].name + ".<br>";
 			}
 			if(this.has("Steady Stance")){
 				buffVal = this.has("Steady Stance") * 2;
-				skillName = data.skills[this.aIndex].name;
 				this.combatSpur.def += buffVal;
-				boostText += this.name + " gets +" + buffVal + " Def from defending with " + skillName + ".<br>";
+				boostText += this.name + " gets +" + buffVal + " Def from defending with " + data.skills[this.aIndex].name + ".<br>";
 			}
 			if(this.has("Warding Stance")){
 				buffVal = this.has("Warding Stance") * 2;
-				skillName = data.skills[this.aIndex].name;
 				this.combatSpur.res += buffVal;
-				boostText += this.name + " gets +" + buffVal + " Res from defending with " + skillName + ".<br>";
+				boostText += this.name + " gets +" + buffVal + " Res from defending with " + data.skills[this.aIndex].name + ".<br>";
 			}
 
 			return boostText;
 		}
 	}
 
+	//Calculates effective combat stats used within a round
 	this.setCombatStats = function(enemy){
 		var statText = "";
 		var panicDebuff = {"atk":0,"spd":0,"def":0,"res":0};
@@ -5284,7 +5388,7 @@ function activeHero(hero){
 			this.combatBuffs = {"atk":0,"spd":0,"def":0,"res":0};
 			statText += this.name + "'s buffs are reversed by panic debuff.<br>";
 		//Buff cancelled - removes field buffs
-		}if (isBuffCancelled(this, enemy)){
+		}else if (isBuffCancelled(this, enemy)){
 			this.combatBuffs = {"atk":0,"spd":0,"def":0,"res":0};
 			statText += this.name + "'s buffs are nullified by opponent's skill.<br>";
 		}
@@ -5341,14 +5445,23 @@ function activeHero(hero){
 
 		if(!enemy.has("Embla's Ward")){
 			var poison = 0;
-			if(this.has("Poison Strike")){
-				poison = this.has("Poison Strike")*3+1;
+			if(this.hasAtIndex("Poison Strike", this.bIndex)){
+				poison = this.hasAtIndex("Poison Strike", this.bIndex)*3+1;
 				skillName = data.skills[this.bIndex].name;
 				if(enemy.hp - poison <= 0){
 					poison = enemy.hp - 1;
 				}
 				enemy.hp -= poison;
 				poisonEnemyText += enemy.name + " takes " + poison + " damage after combat from " + skillName + ".<br>";
+			}
+			if(this.hasAtIndex("Poison Strike", this.sIndex)){
+				poison = this.hasAtIndex("Poison Strike", this.sIndex)*3+1;
+				skillName = data.skills[this.sIndex].name;
+				if(enemy.hp - poison <= 0){
+					poison = enemy.hp - 1;
+				}
+				enemy.hp -= poison;
+				poisonEnemyText += enemy.name + " takes " + poison + " damage after combat from " + skillName + " (Seal).<br>";
 			}
 			if(this.has("Deathly Dagger") && this.refineIndex == -1){
 				poison = 7;
@@ -5703,7 +5816,7 @@ function activeHero(hero){
 			return true;
 		}
 		//Not cancelled
-		return false
+		return false;
 	}
 
 	//represents one attack of combat
@@ -5754,6 +5867,10 @@ function activeHero(hero){
 					if(this.has("Wo Dao") || this.hasExactly("Dark Excalibur") || this.hasExactly("Resolute Blade") || this.has("Special Damage")){
 						AOEDamage += 10;
 						damageText += this.name + " gains 10 damage from " + data.skills[hero.weapon].name + ".<br>";
+					}
+					if(this.has("Wrath") && (this.hp / this.maxHp <= .25 * this.has("Wrath"))){
+						AOEDamage += 10;
+						damageText += this.name + " gains 10 damage from " + data.skills[this.bIndex].name + ".<br>";
 					}
 					if(enemy.has("Embla's Ward")){
 						AOEDamage = 0;
@@ -5833,7 +5950,7 @@ function activeHero(hero){
 					dmgBoost += (this.maxHp-this.hp) * 0.5;
 					offensiveSpecialActivated = true;
 				}
-				else if(this.hasExactly("Aether")){
+				else if(this.hasExactly("Aether") || this.hasExactly("Radiant Aether")){
 					enemyDefModifier = -0.5;
 					absorbPct = 0.5;
 					offensiveSpecialActivated = true;
@@ -5849,11 +5966,9 @@ function activeHero(hero){
 					damageText += this.name + " gains 10 damage from " + data.skills[hero.weapon].name + ".<br>";
 				}
 				//Wrath damage is checked when special is activated
-				if(this.has("Wrath")){
-					if(this.hp/this.maxHp <= .25 * this.has("Wrath")){
-						dmgBoostFlat += 10;
-						damageText += this.name + " gains 10 damage from " + data.skills[this.bIndex].name + ".<br>";
-					}
+				if(this.has("Wrath") && (this.hp/this.maxHp <= .25 * this.has("Wrath"))){
+					dmgBoostFlat += 10;
+					damageText += this.name + " gains 10 damage from " + data.skills[this.bIndex].name + ".<br>";
 				}
 			}
 		}
@@ -6307,8 +6422,12 @@ function activeHero(hero){
 				var loseCharge = 0;
 				var skillNames = [];
 
-				//Steady Breath: Initiator has
+				//-Breath: Initiator has
 				if(!this.initiator && this.has("Steady Breath")){
+					gainCharge = Math.max(gainCharge, 1);
+					skillNames.push(data.skills[this.aIndex].name);
+				}
+				if(!this.initiator && this.has("Warding Breath")){
 					gainCharge = Math.max(gainCharge, 1);
 					skillNames.push(data.skills[this.aIndex].name);
 				}
@@ -6384,8 +6503,12 @@ function activeHero(hero){
 				var loseCharge = 0;
 				var skillNames = [];
 
-				//Steady Breath: Enemy has
+				//-Breath: Enemy has
 				if(this.initiator && enemy.has("Steady Breath")){
+					gainCharge = Math.max(gainCharge, 1);
+					skillNames.push(data.skills[enemy.aIndex].name);
+				}
+				if(this.initiator && enemy.has("Warding Breath")){
 					gainCharge = Math.max(gainCharge, 1);
 					skillNames.push(data.skills[enemy.aIndex].name);
 				}
@@ -6413,7 +6536,7 @@ function activeHero(hero){
 				enemy.charge++;
 			}
 
-			//show hp
+			//Show hp
 			//Make sure challenger is first and in blue
 			if(this.challenger){
 				damageText += this.name + " <span class=\"blue\">" + this.hp + "</span> : " + enemy.name + " <span class=\"red\">" + enemy.hp + "</span><br>";
@@ -6422,7 +6545,7 @@ function activeHero(hero){
 				damageText += enemy.name + " <span class=\"blue\">" + enemy.hp + "</span> : " + this.name + " <span class=\"red\">" + this.hp + "</span><br>";
 			}
 
-			//do damage again if brave weapon
+			//Do damage again if using a brave weapon
 			if(brave && enemy.hp > 0){
 				damageText += this.name + " attacks again with " + data.skills[this.weaponIndex].name + ".<br>";
 				damageText += this.doDamage(enemy, false, false, false);
@@ -6432,12 +6555,12 @@ function activeHero(hero){
 		return damageText;
 	}
 
-	//represents a full round of combat
+	//Represents a full round of combat
 	//TODO: Refactor 'this/enemy' duplicate codes into 'this.function(enemy)/enemy.function(this)' functions
 	this.attack = function(enemy,round,renew,galeforce){
 
 		//Initialize round
-		var roundText = "";//Common theme: text is returned by helper functions, so the functions are called by adding them to roundText
+		var roundText = "";			//Common theme: text is returned by helper functions, so the functions are called by adding them to roundText
 		this.initiator = true;
 		enemy.initiator = false;
 		enemy.didAttack = false;
@@ -6508,13 +6631,16 @@ function activeHero(hero){
 			*/
 
 			//Check for charge effects
-			//***Does turn start Wrath check for health after Renew?***
+			//***Does Wrath check for health after Renew?***
 			roundText += this.charging();
 		}
 
 		//Set after renewal
 		this.combatStartHp = this.hp;
 		enemy.combatStartHp = enemy.hp;
+
+		//TODO: Reorganize to operate in this order: stats + field buff/debuff -> aoe specials -> add spurs (bladetome bonus can go in here)
+		//Current logic: calculate spurs -> stats + field buff/debuff + spurs -> aoe specials - spurs -> add bladetome bonus
 
 		//Initialize combat spur
 		this.combatSpur = {"atk":0,"spd":0,"def":0,"res":0};
@@ -6529,6 +6655,10 @@ function activeHero(hero){
 		roundText += this.setCombatStats(enemy);
 		roundText += enemy.setCombatStats(this);
 
+		//Check for AOE special activation before combat
+		roundText += this.doDamage(enemy, false, true, false);
+
+		//In-combat bonuses:
 		//Bladetome bonus
 		if (this.has("Raudrblade") || this.has("Blarblade") || this.has("Gronnblade")){
 			var atkbonus = this.combatBuffs.atk + this.combatBuffs.spd + this.combatBuffs.def + this.combatBuffs.res;
@@ -6552,10 +6682,7 @@ function activeHero(hero){
 			if (atkbonus != 0){roundText += enemy.name + " gains +" + atkbonus + " Atk from " + data.skills[enemy.weaponIndex].name + ".<br>";}
 		}
 
-		//Check for AOE special activation
-		roundText += this.doDamage(enemy, false, true, false);
-
-		//check for Brave weapons, brave will be passed to this.doDamage
+		//Check for Brave weapons, brave will be passed to this.doDamage
 		var brave = false;
 		if(this.has("Brave Sword") || this.has("Brave Lance") || this.has("Brave Axe") || this.has("Brave Bow")
 			|| this.has("Dire Thunder") || this.has("Amiti")){
@@ -6563,6 +6690,7 @@ function activeHero(hero){
 		}
 
 		//Check for Vantage
+		//***Does Vantage + Valaskjalf override Hardy Bearing?***
 		var vantage = false;
 		if(enemy.has("Vantage")){
 			if(enemy.hp/enemy.maxHp <= .25 * enemy.has("Vantage")){
@@ -6576,6 +6704,7 @@ function activeHero(hero){
 		}
 
 		//Check for Desperation
+		//***Does Desperation + Sol Katti override Hardy Bearing?***
 		var desperation = false;
 		if(this.has("Desperation")){
 			if(this.hp/this.maxHp <= .25 * this.has("Desperation")){

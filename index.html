@@ -17,8 +17,8 @@
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
 	<script src="select2/select2.min.js"></script>
 
-	<link rel="stylesheet" type="text/css" href="style.css?v=201801132229"/>
-	<script type="text/javascript" src="code.js?v=201801132229"></script>
+	<link rel="stylesheet" type="text/css" href="style.css?v=201801261413"/>
+	<script type="text/javascript" src="code.js?v=201801261413"></script>
 </head>
 
 <body>
@@ -192,7 +192,7 @@
 					<div class="status_title">Harsh Command (WIP)</div>
 					<div class="status_enemy"><input type="checkbox" data-var="options.harsh_command_enemy" id="harsh_command_enemy"/></div>
 				</div>				
-				<div style="line-height:20%;"><br></div>
+				<div style="line-height:40%;"><br></div>
 				<div id="adj_title">Mechanics:</div>
 				<div class="adj_status">
 					<div class="status_challenger"><input type="checkbox" data-var="options.threaten_challenger" id="threaten_challenger"/></div>
@@ -204,7 +204,7 @@
 					<div class="status_title">Galeforce Initiates Again</div>
 					<div class="status_enemy"><input type="checkbox" data-var="options.galeforce_enemy" id="galeforce_enemy" checked/></div>
 				</div>
-				<div style="line-height:20%;"><br></div>
+				<div style="line-height:40%;"><br></div>
 				<div id="adj_title">Simulator:</div>
 				<div class="adj_status">
 					<div class="status_desc_long">Turn to start Renewal: </div>
@@ -250,11 +250,45 @@
 				<div id="rules_bar_top">
 					Adjustments
 				</div>
+				<div id="adj_title">Challenger:</div>
+				<div class="adj_status">
+					<div class="status_desc">Total Health:</div>
+					<div class="status_select">
+						<select class="adj_select_long" data-var="challenger.HpPercent" id="challenger_HpPercent">
+							<option value="4" selected>100%</option>
+							<option value="3">75%</option>
+							<option value="2">50%</option>
+							<option value="1">25%</option>
+						</select>
+					</div>
+					<div class="button adj_apply_button" id="apply_total_health">WIP</div>
+				</div>
+				<div class="adj_status">
+					<div class="button adj_reset_button" id="reset_health">Reset Health (WIP)</div>
+				</div>
+				<div class="adj_status">
+					<div class="status_desc">Buff:</div>
+					<div class="status_select">
+						<select class="adj_select_long" data-var="challenger.movementbuff" id="challenger_movementbuff">
+							<option value="hone" selected>Hone</option>
+							<option value="fortify">Fortify</option>
+							<option value="goad">Goad</option>
+							<option value="goad x2">Goad x2</option>
+							<option value="ward">Ward</option>
+							<option value="ward x2">Ward x2</option>
+						</select>
+					</div>
+					<div class="button adj_apply_button" id="apply_total_health">WIP</div>
+				</div>
+				<div class="adj_status">
+					<div class="button adj_reset_button" id="reset_buff">Reset Buffs (WIP)</div>
+				</div>
+				<div style="line-height:40%;"><br></div>
 				<div id="adj_title">Custom List:</div>
 				<div class="adj_status">
 					<div class="status_desc">Hero Merge:</div>
 					<div class="status_select">
-						<input class="adj_input smallnuminput" id="enemies_cl_merges" data-var="enemies.cl.merges" type="number" value=0 min=0 max=10 />
+						<input class="adj_input smallnuminput" id="enemies_cl_merges" data-var="enemies.cl.merges" type="number" value=10 min=0 max=10 />
 					</div>
 					<div class="button adj_apply_button" id="apply_hero_merge">Apply</div>
 				</div>
@@ -332,41 +366,7 @@
 				<div class="adj_status">
 					<div class="button adj_reset_button" id="reset_buff">Reset All Buffs</div>
 				</div>
-				<div style="line-height:20%;"><br></div>
-				<div id="adj_title">Challenger:</div>
-				<div class="adj_status">
-					<div class="status_desc">Total Health:</div>
-					<div class="status_select">
-						<select class="adj_select_long" data-var="challenger.HpPercent" id="challenger_HpPercent">
-							<option value="4" selected>100%</option>
-							<option value="3">75%</option>
-							<option value="2">50%</option>
-							<option value="1">25%</option>
-						</select>
-					</div>
-					<div class="button adj_apply_button" id="apply_total_health">WIP</div>
-				</div>
-				<div class="adj_status">
-					<div class="button adj_reset_button" id="reset_health">Reset Health (WIP)</div>
-				</div>
-				<div class="adj_status">
-					<div class="status_desc">Buff:</div>
-					<div class="status_select">
-						<select class="adj_select_long" data-var="challenger.movementbuff" id="challenger_movementbuff">
-							<option value="hone" selected>Hone</option>
-							<option value="fortify">Fortify</option>
-							<option value="goad">Goad</option>
-							<option value="goad x2">Goad x2</option>
-							<option value="ward">Ward</option>
-							<option value="ward x2">Ward x2</option>
-						</select>
-					</div>
-					<div class="button adj_apply_button" id="apply_total_health">WIP</div>
-				</div>
-				<div class="adj_status">
-					<div class="button adj_reset_button" id="reset_buff">Reset Buffs (WIP)</div>
-				</div>
-				<div style="line-height:20%;"><br></div>
+				<div style="line-height:40%;"><br></div>
 			</div>
 			<div id="frame_statistics" style="display: none;">
 				<div id="rules_bar_top">
@@ -385,7 +385,7 @@
 					<div class="stat_desc">Resulting HP: Average</div>
 					<div class="stat_value" id="challenger_res_hp_avg">-</div>
 				</div>
-				<div style="line-height:20%;"><br></div>
+				<div style="line-height:40%;"><br></div>
 				<div id="adj_title">Enemies</div>
 				<div class="adj_status">
 					<div class="stat_desc">Resulting HP: Maximum</div>
@@ -399,7 +399,7 @@
 					<div class="stat_desc">Resulting HP: Average</div>
 					<div class="stat_value" id="enemies_res_hp_avg">-</div>
 				</div>
-				<div style="line-height:20%;"><br></div>
+				<div style="line-height:40%;"><br></div>
 				<div id="adj_title">Charts</div>
 				<div class="adj_status">
 					<select class="stat_select" id="chart_type" data-var="options.chartType">
