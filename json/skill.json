@@ -7185,7 +7185,7 @@
 		"skill_id": 514,
 		"name": "HP Def 1",
 		"slot": "a",
-		"sp": 80,
+		"sp": 100,
 		"description": "Grants HP+3, Def+1.",
 		"hp": 3,
 		"atk": 0,
@@ -7199,7 +7199,7 @@
 		"skill_id": 515,
 		"name": "HP Def 2",
 		"slot": "a",
-		"sp": 160,
+		"sp": 200,
 		"description": "Grants HP+4, Def+2.",
 		"hp": 4,
 		"atk": 0,
@@ -12373,7 +12373,7 @@
 		"def": 0,
 		"res": 0,
 		"charge": 0,
-		"inheritrule": "",
+		"inheritrule": "lance",
 		"affectsduel": 1
 	}, {
 		"skill_id": 885,
@@ -12387,7 +12387,7 @@
 		"def": 0,
 		"res": 0,
 		"charge": 0,
-		"inheritrule": "",
+		"inheritrule": "lance",
 		"affectsduel": 1
 	}, {
 		"skill_id": 886,
@@ -12402,6 +12402,62 @@
 		"res": 0,
 		"charge": 0,
 		"inheritrule": "unique",
+		"affectsduel": 1
+	}, {
+		"skill_id": 887,
+		"name": "Green Gift",
+		"slot": "weapon",
+		"sp": 200,
+		"description": "If foe uses bow, dagger, magic, or staff, neutralizes foe's bonuses (from skills like Fortify, Rally, etc.) during combat.",
+		"hp": 0,
+		"atk": 8,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "greentome",
+		"affectsduel": 1
+	}, {
+		"skill_id": 888,
+		"name": "Green Gift+",
+		"slot": "weapon",
+		"sp": 300,
+		"description": "If foe uses bow, dagger, magic, or staff, neutralizes foe's bonuses (from skills like Fortify, Rally, etc.) during combat.",
+		"hp": 0,
+		"atk": 12,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "greentome",
+		"affectsduel": 1
+	}, {
+		"skill_id": 889,
+		"name": "HP Atk 1",
+		"slot": "a",
+		"sp": 100,
+		"description": "Grants HP+3, Atk+1.",
+		"hp": 3,
+		"atk": 1,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 1
+	}, {
+		"skill_id": 890,
+		"name": "HP Atk 2",
+		"slot": "a",
+		"sp": 200,
+		"description": "Grants HP+4, Atk+2.",
+		"hp": 4,
+		"atk": 2,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
 		"affectsduel": 1
 	}
 ]
