@@ -42,7 +42,7 @@ I (Andy) had created a database updater for my own personal use to handle this (
 
 ## WEAPON REFINES TABLE - weapon_refine.json
 
-Seperates weapon refinements into categories that has different descriptions.
+Separates weapon refinements into categories that has different descriptions.
 
 Holds individual prereq information for each refinement.
 
@@ -56,6 +56,6 @@ Allows modifiers to specify range to read.
 
 The Google Sheet MUST be public and published on the web.
 
-The KEY is aquired from the URL of the Google Sheet. (For example, https://docs.google.com/spreadsheets/d/1vwymjyksChc84apCilDJtU2oit2xh--tcx9neeziF1M/)
+The KEY is acquired from the URL of the Google Sheet. (For example, https://docs.google.com/spreadsheets/d/1vwymjyksChc84apCilDJtU2oit2xh--tcx9neeziF1M/)
 
 If you want to submit a list, add an entry to the JSON and make a new pull request.
