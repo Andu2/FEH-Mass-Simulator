@@ -1061,6 +1061,7 @@ function getCDChange(skill, slot){
 			|| skillName.indexOf("Slaying Axe") != -1	|| skillName.indexOf("Slaying Lance") != -1	|| skillName.indexOf("Cursed Lance") != -1
 			|| skillName.indexOf("Mystletainn") != -1	|| skillName.indexOf("Hauteclere") != -1	|| skillName.indexOf("Urvan") != -1
 			|| skillName.indexOf("Audhulma") != -1		|| skillName.indexOf("Kagami Mochi") != -1	|| skillName.indexOf("Basilikos") != -1
+			|| skillName.indexOf("Berserk Armads") != -1
 			){
 				return -1;
 		}
@@ -1366,8 +1367,11 @@ function updateHealth(value, hero){
 //Calculate total SP cost for hero
 function updateSpt(hero){
 	hero.spt = 0;
-	hero.spt += (hero.weapon != -1 ? data.skills[hero.weapon].sp : 0);
-	hero.spt += (hero.refine != -1 ? (data.refine[hero.refine].sp - data.skills[hero.weapon].sp) : 0);
+	hero.spt += (hero.weapon != -1 ? data.skills[hero.weapon].sp : 0);	
+	//TODO: Look into this and refine db to prevent negative sp from being added
+	if (hero.refine != -1 && data.refine[hero.refine].sp > data.skills[hero.weapon].sp){
+		hero.spt += data.refine[hero.refine].sp - data.skills[hero.weapon].sp
+	}	
 	hero.spt += (hero.assist != -1 ? data.skills[hero.assist].sp : 0);
 	hero.spt += (hero.special != -1 ? data.skills[hero.special].sp : 0);
 	hero.spt += (hero.a != -1 ? data.skills[hero.a].sp : 0);
@@ -4795,11 +4799,19 @@ function activeHero(hero){
 	this.charging = function(){
 		var chargingText = "";
 
+		//Weapon
+		//TODO: Check if Berserk Armads stacks with Wrath
+		if (this.hasExactly("Berserk Armads") && getSpecialType(data.skills[this.specialIndex]) == "offensive"){
+			if(this.hp/this.maxHp <= .75){
+				this.charge++;
+				chargingText += this.name + " gains 1 extra charge with " + data.skills[this.weaponIndex].name + ".<br>";
+			}
+		}
 		//Wrath
 		if (this.has("Wrath") && getSpecialType(data.skills[this.specialIndex]) == "offensive"){
 			if(this.hp/this.maxHp <= .25 * this.has("Wrath")){
 				this.charge++;
-				chargingText += this.name + " gains an extra charge with " + data.skills[this.bIndex].name + ".<br>";
+				chargingText += this.name + " gains 1 extra charge with " + data.skills[this.bIndex].name + ".<br>";
 			}
 		}
 
@@ -5842,6 +5854,9 @@ function activeHero(hero){
 		if (opponent.hasExactly("Divine Naga")){
 			return true;
 		}
+		if ((opponent.has("Casa Blanca") || opponent.has("Green Gift") || opponent.has("Blue Gift") || opponent.has("Gratia"))&& hero.range == "ranged"){
+			return true;
+		}
 		//Refinement
 		if (opponent.hasExactly("Nullify Armored") && hero.moveType == "armored"){
 			return true;
@@ -5923,6 +5938,10 @@ function activeHero(hero){
 					if(this.has("Wo Dao") || this.hasExactly("Dark Excalibur") || this.hasExactly("Resolute Blade") || this.has("Special Damage")){
 						AOEDamage += 10;
 						damageText += this.name + " gains 10 damage from " + data.skills[hero.weapon].name + ".<br>";
+					}
+					if(this.has("Berserk Armads") && (this.hp / this.maxHp <= .75)){
+						AOEDamage += 10;
+						damageText += this.name + " gains 10 damage from " + data.skills[this.weaponIndex].name + ".<br>";
 					}
 					if(this.has("Wrath") && (this.hp / this.maxHp <= .25 * this.has("Wrath"))){
 						AOEDamage += 10;
@@ -6022,6 +6041,10 @@ function activeHero(hero){
 					damageText += this.name + " gains 10 damage from " + data.skills[hero.weapon].name + ".<br>";
 				}
 				//Wrath damage is checked when special is activated
+				if(this.has("Berserk Armads") && (this.hp/this.maxHp <= .75)){
+					dmgBoostFlat += 10;
+					damageText += this.name + " gains 10 damage from " + data.skills[this.weaponIndex].name + ".<br>";
+				}				
 				if(this.has("Wrath") && (this.hp/this.maxHp <= .25 * this.has("Wrath"))){
 					dmgBoostFlat += 10;
 					damageText += this.name + " gains 10 damage from " + data.skills[this.bIndex].name + ".<br>";
@@ -6932,7 +6955,7 @@ function activeHero(hero){
 				enemyAttackRankChanged = true;
 			}
 		}
-		if (enemy.has("Armads")){
+		if (enemy.hasExactly("Armads")){
 			if (enemy.combatStartHp/enemy.maxHp >= .8){
 				enemyAttackRank++;
 				enemyAttackRankChanged = true;
