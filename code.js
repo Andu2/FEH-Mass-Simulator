@@ -5546,7 +5546,7 @@ function activeHero(hero){
 					painDmg = enemy.hp - 1;
 				}
 				enemy.hp -= painDmg;
-				painEnemyText += enemy.name + " takes " + painDmg + " damage after combat from " + data.skills[this.weaponIndex].name + (this.refineIndex != -1 ? " (refined)" : "") + ".<br>";
+				painEnemyText += enemy.name + " takes " + painDmg + " damage after combat from " + data.skills[this.weaponIndex].name + (this.refineIndex != -1 ? " (Refined)" : "") + ".<br>";
 			}
 		}
 
@@ -5595,6 +5595,12 @@ function activeHero(hero){
 					}
 					skillName = data.skills[this.weaponIndex].name;
 					damageText += this.name + " takes " + damage + " damage after combat from attacking with " + skillName + ".<br>";
+					totalDamage += damage;
+				}
+				if (this.initiator && this.hasAtRefineIndex("Brave Falchion", this.refineIndex) && (this.combatStartHp / this.maxHp == 1)){
+					damage = 5;
+					skillName = data.skills[this.weaponIndex].name;
+					damageText += this.name + " takes " + damage + " damage after combat from initiating with " + skillName + " (Refined).<br>";
 					totalDamage += damage;
 				}
 			}
@@ -6640,7 +6646,7 @@ function activeHero(hero){
 
 			//Do damage again if using a brave weapon
 			if(brave && enemy.hp > 0){
-				damageText += this.name + " attacks again with " + data.skills[this.weaponIndex].name + ".<br>";
+				damageText += this.name + " attacks again with " + data.skills[this.weaponIndex].name + (this.refineIndex != -1 ? " (Refined)" : "") + ".<br>";
 				damageText += this.doDamage(enemy, false, false, false);
 			}
 		}
@@ -6777,8 +6783,11 @@ function activeHero(hero){
 
 		//Check for Brave weapons, brave will be passed to this.doDamage
 		var brave = false;
-		if(this.has("Brave Sword") || this.has("Brave Lance") || this.has("Brave Axe") || this.has("Brave Bow")
+		if (this.has("Brave Sword") || this.has("Brave Lance") || this.has("Brave Axe") || this.has("Brave Bow")
 			|| this.has("Dire Thunder") || this.has("Amiti")){
+			brave = true;
+		}
+		if (this.hasAtRefineIndex("Brave Falchion", this.refineIndex) && (this.combatStartHp / this.maxHp == 1)){
 			brave = true;
 		}
 
@@ -6929,12 +6938,6 @@ function activeHero(hero){
 				thisAttackRankChanged = true;
 			}
 		}
-		if (this.hasAtRefineIndex("Falchion Pursuit", this.refineIndex)){
-			if (this.combatStartHp / this.maxHp == 1){
-				thisAttackRank++;
-				thisAttackRankChanged = true;
-			}
-		}
 
 		//Check for auto follow-up counters
 		if(enemy.hasAtIndex("Quick Riposte", enemy.bIndex)){
@@ -6963,12 +6966,6 @@ function activeHero(hero){
 		}
 		if (enemy.has("Follow-Up Ring")){
 			if (enemy.combatStartHp/enemy.maxHp >= .5){
-				enemyAttackRank++;
-				enemyAttackRankChanged = true;
-			}
-		}
-		if (enemy.hasAtRefineIndex("Falchion Pursuit", enemy.refineIndex)){
-			if (enemy.combatStartHp / enemy.maxHp == 1){
 				enemyAttackRank++;
 				enemyAttackRankChanged = true;
 			}

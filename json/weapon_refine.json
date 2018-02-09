@@ -1477,7 +1477,7 @@
 		"exclusive": "Marth"
 	},	{
 		"category": "Falchion",
-		"name": "Falchion Pursuit",
+		"name": "Brave Falchion",
 		"sp": 400,
 		"description": "If unit's HP = 100% at start of combat and unit initiates combat, unit attacks twice then takes 5 damage after combat.",
 		"hp": 3,
