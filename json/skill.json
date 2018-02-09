@@ -5783,7 +5783,7 @@
 		"affectsduel": 1
 	}, {
 		"skill_id": 414,
-		"name": "Bow Experience 1",
+		"name": "Bow Exp. 1",
 		"slot": "c",
 		"sp": 50,
 		"description": "If unit survives and uses a bow, unit gets 1.5x EXP. (If similar skill effects also used, only highest multiplier applies.)",
@@ -5797,7 +5797,7 @@
 		"affectsduel": 0
 	}, {
 		"skill_id": 415,
-		"name": "Bow Experience 2",
+		"name": "Bow Exp. 2",
 		"slot": "c",
 		"sp": 100,
 		"description": "If unit survives, all bow users on team get 1.5x EXP. (If similar skill effects also used, only highest multiplier applies.)",
@@ -5811,7 +5811,7 @@
 		"affectsduel": 0
 	}, {
 		"skill_id": 416,
-		"name": "Bow Experience 3",
+		"name": "Bow Exp. 3",
 		"slot": "c",
 		"sp": 200,
 		"description": "If unit survives, all bow users on team get 2x EXP. (If similar skill effects also used, only highest multiplier applies.)",
