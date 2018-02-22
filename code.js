@@ -1081,7 +1081,7 @@ function getCDChange(skill, slot){
 	//Assist
 	if (slot == "assist"){
 		//Cooldown increase
-		if (skillName.indexOf("Martyr") != -1			|| skillName.indexOf("Rehabilitate") != -1	|| skillName.indexOf("Recover") != -1){
+		if (skillName == "Maryyr" || skillName == "Rehabilitate" || skillName == "Recover"){
 				return 1;
 		}
 	}
@@ -1128,9 +1128,10 @@ function getSpecialType(skill){
 //Return true if hero can counter any range
 function canCounterAnyRange(hero){
 	if(hero.has("Close Counter")	|| hero.has("Distant Counter")	|| hero.has("Lightning Breath")
-		|| hero.has("Raijinto")		|| hero.has("Siegfried")		|| hero.has("Ragnell")
-		|| hero.has("Gradivus")		|| hero.has("Alondite")			|| hero.has("Stout Tomahawk")
-		|| hero.has("Leiptr")){
+		|| hero.has("Raijinto")			|| hero.has("Siegfried")				|| hero.has("Ragnell")
+		|| hero.has("Gradivus")			|| hero.has("Alondite")					|| hero.has("Stout Tomahawk")
+		|| hero.has("Leiptr")				|| hero.has("Expiration")
+	){
 		return true;
 	}
 	return false;
@@ -1367,11 +1368,11 @@ function updateHealth(value, hero){
 //Calculate total SP cost for hero
 function updateSpt(hero){
 	hero.spt = 0;
-	hero.spt += (hero.weapon != -1 ? data.skills[hero.weapon].sp : 0);	
+	hero.spt += (hero.weapon != -1 ? data.skills[hero.weapon].sp : 0);
 	//TODO: Look into this and refine db to prevent negative sp from being added
 	if (hero.refine != -1 && data.refine[hero.refine].sp > data.skills[hero.weapon].sp){
 		hero.spt += data.refine[hero.refine].sp - data.skills[hero.weapon].sp
-	}	
+	}
 	hero.spt += (hero.assist != -1 ? data.skills[hero.assist].sp : 0);
 	hero.spt += (hero.special != -1 ? data.skills[hero.special].sp : 0);
 	hero.spt += (hero.a != -1 ? data.skills[hero.a].sp : 0);
@@ -5018,6 +5019,14 @@ function activeHero(hero){
 				boostText += this.name + " gets +5 Atk/Spd from being at full health with " + data.skills[this.weaponIndex].name + ".<br>";
 			}
 
+			if(this.has("Beloved Zofia")){
+				this.combatSpur.atk += 4;
+				this.combatSpur.spd += 4;
+				this.combatSpur.def += 4;
+				this.combatSpur.res += 4;
+				boostText += this.name + " gets +4 Atk/Spd/Def/Res from being at full health with " + data.skills[this.weaponIndex].name + ".<br>";
+			}
+
 			if(this.has("Seashell") || this.has("Refreshing Bolt") || this.has("Deft Harpoon") || this.has("Melon Crusher")){
 				this.combatSpur.atk += 2;
 				this.combatSpur.spd += 2;
@@ -5561,7 +5570,6 @@ function activeHero(hero){
 		var totalDamage = 0;
 
 		if(!this.has("Embla's Ward")){
-
 			//Fury
 			if(this.hasAtIndex("Fury", this.aIndex)){
 				damage = this.hasAtIndex("Fury", this.aIndex) * 2;
@@ -5587,18 +5595,28 @@ function activeHero(hero){
 			//Activate only when attacking
 			if(this.didAttack && this.combatStartHp / this.maxHp >= 1){
 				//Weapons
-				if(this.has("Ragnarok") || this.has("Seashell") || this.has("Refreshing Bolt") || this.has("Deft Harpoon") || this.has("Melon Crusher")){
-					if (data.skills[this.weaponIndex].name == "Ragnarok"){
-						damage = 5;
-					} else{
-						damage = 2;
-					}
+				damage = 0;
+				if (this.has("Seashell") || this.has("Refreshing Bolt") || this.has("Deft Harpoon") || this.has("Melon Crusher")){
+					damage = 2;
+				}
+				if (this.hasExactly("Beloved Zofia")){
+					damage = 4;
+				}
+				if (this.hasExactly("Ragnarok")){
+					damage = 5;
+				}
+				if (damage != 0){
 					skillName = data.skills[this.weaponIndex].name;
 					damageText += this.name + " takes " + damage + " damage after combat from attacking with " + skillName + ".<br>";
 					totalDamage += damage;
 				}
+
+				//Refinement
+				damage = 0;
 				if (this.initiator && this.hasAtRefineIndex("Brave Falchion", this.refineIndex) && (this.combatStartHp / this.maxHp == 1)){
 					damage = 5;
+				}
+				if (damage != 0){
 					skillName = data.skills[this.weaponIndex].name;
 					damageText += this.name + " takes " + damage + " damage after combat from initiating with " + skillName + " (Refined).<br>";
 					totalDamage += damage;
@@ -5886,12 +5904,15 @@ function activeHero(hero){
 		if (this.hasExactly("Felicia's Plate")){
 			return true;
 		}
-		if (this.hasExactly("Great Flame") && enemy.range == "ranged"){
-			return true;
+		if (enemy.range == "ranged"){
+			if (this.hasExactly("Great Flame") || this.hasExactly("Expiration")){
+				return true;
+			}
+			if (this.weaponType == "dragon" && (this.refineIndex != -1)){
+				return true;
+			}
 		}
-		if (this.weaponType == "dragon" && enemy.range == "ranged" && (this.refineIndex != -1)){
-			return true;
-		}
+
 		//Hero does not have adaptive attack
 		return false;
 	}
@@ -6050,7 +6071,7 @@ function activeHero(hero){
 				if(this.has("Berserk Armads") && (this.hp/this.maxHp <= .75)){
 					dmgBoostFlat += 10;
 					damageText += this.name + " gains 10 damage from " + data.skills[this.weaponIndex].name + ".<br>";
-				}				
+				}
 				if(this.has("Wrath") && (this.hp/this.maxHp <= .25 * this.has("Wrath"))){
 					dmgBoostFlat += 10;
 					damageText += this.name + " gains 10 damage from " + data.skills[this.bIndex].name + ".<br>";
