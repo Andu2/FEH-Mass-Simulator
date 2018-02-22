@@ -175,7 +175,8 @@ function initOptions(){
 	options = {};
 	options.saveSettings = true;
 	options.autoCalculate = true;
-	options.startTurn = 1;
+	options.buffStartTurn = 1;
+	options.debuffStartTurn = 1;
 	//options.threatenRule = "Neither";
 	options.ployBehavior = "Orthogonal";
 	options.showOnlyMaxSkills = true;
@@ -3399,21 +3400,25 @@ function fight(enemyIndex,resultIndex){
 	ahEnemy = new activeHero(enemyList[enemyIndex]);
 
 	var rounds = 0;
-	var challengerRound = 0;
-	var enemyRound = 0;
+	var challengerBuffRound = 0;
+	var challengerDebuffRound = 0;
+	var enemyBuffRound = 0;
+	var enemyDebuffRound = 0;
 
 	for(var round = 1; round <= options.roundInitiators.length;round++){
 		rounds = round;
 		fightText += "<div class=\"fight_round\"><span class=\"bold\">Round " + round + ": ";
 		if(options.roundInitiators[round-1]=="Challenger"){
 			fightText += ahChallenger.name + " initiates</span><br>";
-			if (round >= options.startTurn) challengerRound++;
-			fightText += ahChallenger.attack(ahEnemy, round, challengerRound == 1, false);
+			if (round >= options.buffStartTurn) challengerBuffRound++;
+			if (round >= options.debuffStartTurn) challengerDebuffRound++;
+			fightText += ahChallenger.attack(ahEnemy, round, challengerBuffRound, challengerDebuffRound, false);
 		}
 		else{
 			fightText += ahEnemy.name + " initiates</span><br>";
-			if (round >= options.startTurn) enemyRound++;
-			fightText +=  ahEnemy.attack(ahChallenger, round, enemyRound == 1, false);
+			if (round >= options.buffStartTurn) enemyBuffRound++;
+			if (round >= options.debuffStartTurn) enemyDebuffRound++;
+			fightText +=  ahEnemy.attack(ahChallenger, round, enemyBuffRound, enemyDebuffRound, false);
 		}
 		if(ahEnemy.hp <= 0 || ahChallenger.hp <= 0){
 			break;
@@ -3837,7 +3842,7 @@ function exportCalc(){
 		//Should take out buffs and stuff that aren't used to minimize columns?
 		csvString += "Challenger,cColor,cMovetype,cWeapontype,cRarity,cMerge,cBoon,cBane,cMaxHP,cStartHP,cAtk,cSpd,cDef,cRes,cWeapon,cRefine,cAssist,cSpecial,cPrecharge,cAdjacent,cA,cB,cC,cS,cBuffAtk,cBuffSpd,cBuffDef,cBuffRes,cDebuffAtk,cDebuffSpd,cDebuffDef,cDebuffRes,cSpurAtk,cSpurSpd,cSpurDef,cSpurRes,";
 		csvString += "Enemy,eColor,eMovetype,eWeapontype,eRarity,eMerge,eBoon,eBane,eMaxHP,eStartHP,eAtk,eSpd,eDef,eRes,eWeapon,eRefine,eAssist,eSpecial,ePrecharge,eAdjacent,eA,eB,eC,eS,eBuffAtk,eBuffSpd,eBuffDef,eBuffRes,eDebuffAtk,eDebuffSpd,eDebuffDef,eDebuffRes,eSpurAtk,eSpurSpd,eSpurDef,eSpurRes,";
-		csvString += "InitialThreatenChallenger,InitialThreatenEnemy,StartTurn,GaleforceChallenger,GaleforceEnemy,Initiator1,Initiator2,Initiator3,Initiator4,Outcome,cEndHP,eEndHP,Rounds,Overkill,BattleLog\n";
+		csvString += "InitialThreatenChallenger,InitialThreatenEnemy,buffStartTurn,debuffStartTurn,GaleforceChallenger,GaleforceEnemy,Initiator1,Initiator2,Initiator3,Initiator4,Outcome,cEndHP,eEndHP,Rounds,Overkill,BattleLog\n";
 
 		fightResults.forEach(function(result){
 			csvString += data.heroes[challenger.index].name + ",";
@@ -3997,7 +4002,8 @@ function exportCalc(){
 
 			csvString += options.threaten_challenger + ",";
 			csvString += options.threaten_enemy + ",";
-			csvString += options.startTurn + ",";
+			csvString += options.buffstartTurn + ",";
+			csvString += options.debuffstartTurn + ",";
 			csvString += options.galeforce_challenger + ",";
 			csvString += options.galeforce_enemy + ",";
 			for(var rnd = 0; rnd < 4;rnd++){
@@ -4750,11 +4756,12 @@ function activeHero(hero){
 	//Turn counting is complicated due to mix & matching turn order, will revisit later if necessary.
 	//Currently renew repeat effects are not applied since there are only 4 rounds (2 exchanges max) in this simulator
 	//TODO: Implement Turn counting properly for more than 4 rounds
-	this.renewal = function(renew){
-		var renewText = "";
+	this.buffStart = function(buffRound){
+		var startText = "";
 
 		//Effects that apply on renewal turn
-		if (renew){
+		//TODO: Fix round counting for renewal effects
+		if (buffRound == 1){
 			if (this.has("Renewal")){
 				//Every other turn - if(turn % (5 - this.has("Renewal")) == 0){
 				if(this.hp + 10 > this.maxHp){
@@ -4762,27 +4769,27 @@ function activeHero(hero){
 				} else{
 					this.hp += 10;
 				}
-				renewText += this.name + " heals 10 HP due to Renewal.<br>";
+				startText += this.name + " heals 10 HP due to Renewal.<br>";
 			}
 
 			if (this.has("Falchion")){
 				//Not refined - every third turn - if(turn % 3 == 0){
 				if (this.refineIndex == -1){
-					if(this.hp + 10 > this.maxHp){
+					if (this.hp + 10 > this.maxHp){
 						this.hp = this.maxHp;
 					} else{
 						this.hp += 10;
 					}
-					renewText += this.name + " heals 10 HP due to Falchion.<br>";
+					startText += this.name + " heals 10 HP due to Falchion.<br>";
 				}
 				//Refined - every other turn
 				else {
-					if(this.hp + 10 > this.maxHp){
+					if (this.hp + 10 > this.maxHp){
 						this.hp = this.maxHp;
 					} else{
 						this.hp += 10;
 					}
-					renewText += this.name + " heals 10 HP due to Falchion (Refined).<br>";
+					startText += this.name + " heals 10 HP due to Falchion (Refined).<br>";
 				}
 			}
 		}
@@ -4790,10 +4797,39 @@ function activeHero(hero){
 		//Effects that apply every turn
 		if (this.hasExactly("Recover Ring")){
 			this.hp += 10;
-			renewText += this.name + " heals 10 HP due to Recover Ring.<br>";
+			startText += this.name + " heals 10 HP due to Recover Ring.<br>";
 		}
 
-		return renewText;
+		return startText;
+	}
+
+	this.debuffStart = function(debuffRound, enemy){
+		var startText = "";
+		var skillName = "";
+		var damage = 0;
+
+		//TODO: Fix round counting for skadi effects
+		if (debuffRound == 1){
+			if (this.has("Skadi")){
+				skillName = "Skadi";
+				damage = 10;
+				enemy.panicked = true;
+				startText += this.name + " activates " + data.skills[this.weaponIndex].name + ", inflicting panic on " + enemy.name + ".<br>";
+			}
+		}
+
+		//Poison damage does not kill
+		if(enemy.hp - damage <= 0){
+			damage = enemy.hp - 1;
+		}
+
+		//Deal damage
+		if (damage != 0){
+			enemy.hp -= damage;
+			startText += enemy.name + " takes " + damage + " damage at start of turn from " + skillName + ".<br>";
+		}
+
+		return startText;
 	}
 
 	//Turn start charge effects
@@ -6677,7 +6713,7 @@ function activeHero(hero){
 
 	//Represents a full round of combat
 	//TODO: Refactor 'this/enemy' duplicate codes into 'this.function(enemy)/enemy.function(this)' functions
-	this.attack = function(enemy,round,renew,galeforce){
+	this.attack = function(enemy, round, buffRound, debuffRound, galeforce){
 
 		//Initialize round
 		var roundText = "";			//Common theme: text is returned by helper functions, so the functions are called by adding them to roundText
@@ -6705,8 +6741,9 @@ function activeHero(hero){
 			roundText += this.turnStartDebuff(enemy);
 			roundText += enemy.turnStartDebuff(this);
 
-			//Apply renewal effects
-			roundText += this.renewal(renew);
+			//Apply turnStart effects
+			roundText += this.buffStart(buffRound);
+			roundText += this.debuffStart(debuffRound, enemy);
 
 			//Set initial status
 			if (round == 1){
@@ -7225,7 +7262,7 @@ function activeHero(hero){
 			if(!galeforce && this.has("Galeforce") && data.skills[this.specialIndex].charge <= this.charge && (this.challenger ? options.galeforce_challenger : options.galeforce_enemy)){
 				roundText += this.name + " initiates again with Galeforce!<br>";
 				this.resetCharge();
-				roundText += this.attack(enemy,round,false,true);
+				roundText += this.attack(enemy, round, 0, 0, true);
 			}
 		}
 
