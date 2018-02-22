@@ -1128,9 +1128,10 @@ function getSpecialType(skill){
 //Return true if hero can counter any range
 function canCounterAnyRange(hero){
 	if(hero.has("Close Counter")	|| hero.has("Distant Counter")	|| hero.has("Lightning Breath")
-		|| hero.has("Raijinto")		|| hero.has("Siegfried")		|| hero.has("Ragnell")
-		|| hero.has("Gradivus")		|| hero.has("Alondite")			|| hero.has("Stout Tomahawk")
-		|| hero.has("Leiptr")){
+		|| hero.has("Raijinto")			|| hero.has("Siegfried")				|| hero.has("Ragnell")
+		|| hero.has("Gradivus")			|| hero.has("Alondite")					|| hero.has("Stout Tomahawk")
+		|| hero.has("Leiptr")				|| hero.has("Expiration")
+	){
 		return true;
 	}
 	return false;
@@ -5886,12 +5887,15 @@ function activeHero(hero){
 		if (this.hasExactly("Felicia's Plate")){
 			return true;
 		}
-		if (this.hasExactly("Great Flame") && enemy.range == "ranged"){
-			return true;
+		if (enemy.range == "ranged"){
+			if (this.hasExactly("Great Flame") || this.hasExactly("Expiration")){
+				return true;
+			}
+			if (this.weaponType == "dragon" && (this.refineIndex != -1)){
+				return true;
+			}
 		}
-		if (this.weaponType == "dragon" && enemy.range == "ranged" && (this.refineIndex != -1)){
-			return true;
-		}
+
 		//Hero does not have adaptive attack
 		return false;
 	}

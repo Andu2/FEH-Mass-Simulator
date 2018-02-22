@@ -12697,5 +12697,33 @@
 		"charge": 0,
 		"inheritrule": "armored",
 		"affectsduel": 0
+	}, {
+		"skill_id": 908,
+		"name": "Expiration",
+		"slot": "weapon",
+		"sp": 400,
+		"description": "If attacked, unit can counterattack regardless of foe's range. If foe's Range = 2, damage calculated using the lower of foe's Def or Res.",
+		"hp": 0,
+		"atk": 16,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "unique",
+		"affectsduel": 1
+	}, {
+		"skill_id": 909,
+		"name": "Ward Dragons",
+		"slot": "c",
+		"sp": 200,
+		"description": "Grants dragon allies within 2 spaces Def/Res+4 during combat.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "dragon",
+		"affectsduel": 0
 	}
 ]
