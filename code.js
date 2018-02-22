@@ -8,6 +8,8 @@
 
 google.charts.load('current', {packages: ['corechart']});
 
+//test
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -1367,11 +1369,11 @@ function updateHealth(value, hero){
 //Calculate total SP cost for hero
 function updateSpt(hero){
 	hero.spt = 0;
-	hero.spt += (hero.weapon != -1 ? data.skills[hero.weapon].sp : 0);	
+	hero.spt += (hero.weapon != -1 ? data.skills[hero.weapon].sp : 0);
 	//TODO: Look into this and refine db to prevent negative sp from being added
 	if (hero.refine != -1 && data.refine[hero.refine].sp > data.skills[hero.weapon].sp){
 		hero.spt += data.refine[hero.refine].sp - data.skills[hero.weapon].sp
-	}	
+	}
 	hero.spt += (hero.assist != -1 ? data.skills[hero.assist].sp : 0);
 	hero.spt += (hero.special != -1 ? data.skills[hero.special].sp : 0);
 	hero.spt += (hero.a != -1 ? data.skills[hero.a].sp : 0);
@@ -6050,7 +6052,7 @@ function activeHero(hero){
 				if(this.has("Berserk Armads") && (this.hp/this.maxHp <= .75)){
 					dmgBoostFlat += 10;
 					damageText += this.name + " gains 10 damage from " + data.skills[this.weaponIndex].name + ".<br>";
-				}				
+				}
 				if(this.has("Wrath") && (this.hp/this.maxHp <= .25 * this.has("Wrath"))){
 					dmgBoostFlat += 10;
 					damageText += this.name + " gains 10 damage from " + data.skills[this.bIndex].name + ".<br>";
