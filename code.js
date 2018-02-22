@@ -5019,6 +5019,14 @@ function activeHero(hero){
 				boostText += this.name + " gets +5 Atk/Spd from being at full health with " + data.skills[this.weaponIndex].name + ".<br>";
 			}
 
+			if(this.has("Beloved Zofia")){
+				this.combatSpur.atk += 4;
+				this.combatSpur.spd += 4;
+				this.combatSpur.def += 4;
+				this.combatSpur.res += 4;
+				boostText += this.name + " gets +4 Atk/Spd/Def/Res from being at full health with " + data.skills[this.weaponIndex].name + ".<br>";
+			}
+
 			if(this.has("Seashell") || this.has("Refreshing Bolt") || this.has("Deft Harpoon") || this.has("Melon Crusher")){
 				this.combatSpur.atk += 2;
 				this.combatSpur.spd += 2;
@@ -5562,7 +5570,6 @@ function activeHero(hero){
 		var totalDamage = 0;
 
 		if(!this.has("Embla's Ward")){
-
 			//Fury
 			if(this.hasAtIndex("Fury", this.aIndex)){
 				damage = this.hasAtIndex("Fury", this.aIndex) * 2;
@@ -5588,18 +5595,28 @@ function activeHero(hero){
 			//Activate only when attacking
 			if(this.didAttack && this.combatStartHp / this.maxHp >= 1){
 				//Weapons
-				if(this.has("Ragnarok") || this.has("Seashell") || this.has("Refreshing Bolt") || this.has("Deft Harpoon") || this.has("Melon Crusher")){
-					if (data.skills[this.weaponIndex].name == "Ragnarok"){
-						damage = 5;
-					} else{
-						damage = 2;
-					}
+				damage = 0;
+				if (this.has("Seashell") || this.has("Refreshing Bolt") || this.has("Deft Harpoon") || this.has("Melon Crusher")){
+					damage = 2;
+				}
+				if (this.hasExactly("Beloved Zofia")){
+					damage = 4;
+				}
+				if (this.hasExactly("Ragnarok")){
+					damage = 5;
+				}
+				if (damage != 0){
 					skillName = data.skills[this.weaponIndex].name;
 					damageText += this.name + " takes " + damage + " damage after combat from attacking with " + skillName + ".<br>";
 					totalDamage += damage;
 				}
+
+				//Refinement
+				damage = 0;
 				if (this.initiator && this.hasAtRefineIndex("Brave Falchion", this.refineIndex) && (this.combatStartHp / this.maxHp == 1)){
 					damage = 5;
+				}
+				if (damage != 0){
 					skillName = data.skills[this.weaponIndex].name;
 					damageText += this.name + " takes " + damage + " damage after combat from initiating with " + skillName + " (Refined).<br>";
 					totalDamage += damage;
