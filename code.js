@@ -1081,7 +1081,7 @@ function getCDChange(skill, slot){
 	//Assist
 	if (slot == "assist"){
 		//Cooldown increase
-		if (skillName.indexOf("Martyr") != -1			|| skillName.indexOf("Rehabilitate") != -1	|| skillName.indexOf("Recover") != -1){
+		if (skillName == "Maryyr" || skillName == "Rehabilitate" || skillName == "Recover"){
 				return 1;
 		}
 	}
