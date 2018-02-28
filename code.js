@@ -7008,7 +7008,8 @@ function activeHero(hero){
 				thisAttackRank++;
 				thisAttackRankChanged = true;
 			}
-		}if (this.hasExactly("Flame Siegmund")){
+		}
+		if (this.hasExactly("Flame Siegmund")){
 			if (this.adjacent <= 1){
 				thisAttackRank++;
 				thisAttackRankChanged = true;
@@ -7042,6 +7043,12 @@ function activeHero(hero){
 		}
 		if (enemy.has("Follow-Up Ring")){
 			if (enemy.combatStartHp/enemy.maxHp >= .5){
+				enemyAttackRank++;
+				enemyAttackRankChanged = true;
+			}
+		}
+		if (enemy.hasExactly("Flame Siegmund")){
+			if (enemy.adjacent <= 1){
 				enemyAttackRank++;
 				enemyAttackRankChanged = true;
 			}
