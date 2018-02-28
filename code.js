@@ -1280,6 +1280,8 @@ function setStats(hero){
 		//Confer Blessing
 		switch (hero.bless){
 			case "fire":
+				hero.hp += 3 * hero.blessStack;
+				hero.def += 4 * hero.blessStack;
 				break;
 			case "water":
 				hero.hp += 3 * hero.blessStack;
