@@ -3790,5 +3790,22 @@
 		"weapontype": "bow",
 		"movetype": "infantry",
 		"minrarity": 5
+	}, {
+		"hero_id": 226,
+		"name": "Ephraim (Legendary Lord)",
+		"basehp": 19,
+		"baseatk": 10,
+		"basespd": 5,
+		"basedef": 9,
+		"baseres": 3,
+		"hpgrowth": 7,
+		"atkgrowth": 8,
+		"spdgrowth": 6,
+		"defgrowth": 7,
+		"resgrowth": 3,
+		"color": "blue",
+		"weapontype": "lance",
+		"movetype": "cavalry",
+		"minrarity": 5
 	}
 ]

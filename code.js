@@ -5447,6 +5447,12 @@ function activeHero(hero){
 				this.combatSpur.res += buffVal;
 				boostText += this.name + " gets +" + buffVal + " Res from defending with " + data.skills[this.aIndex].name + ".<br>";
 			}
+			if(this.has("Sturdy Stance")){
+				buffVal = this.has("Sturdy Stance") * 2;
+				this.combatSpur.atk += buffVal;
+				this.combatSpur.def += buffVal;
+				boostText += this.name + " gets +" + buffVal + " Atk/Def from defending with " + data.skills[this.aIndex].name + ".<br>";
+			}
 
 			return boostText;
 		}
@@ -6111,6 +6117,13 @@ function activeHero(hero){
 				if(this.has("Wrath") && (this.hp/this.maxHp <= .25 * this.has("Wrath"))){
 					dmgBoostFlat += 10;
 					damageText += this.name + " gains 10 damage from " + data.skills[this.bIndex].name + ".<br>";
+				}
+				
+				//Solar Brace
+				//***Does it activate with defensive specials? Does it stack with Absorb?***
+				if (!AOE && this.hasExactly("Solar Brace")){
+					damageText += this.name + "'s " + data.skills[this.bIndex].name + " restores an additional 30% of damage dealt.<br>";
+					absorbPct += 0.3;
 				}
 			}
 		}
@@ -6992,6 +7005,11 @@ function activeHero(hero){
 		}
 		if (this.has("Follow-Up Ring")){
 			if (this.combatStartHp / this.maxHp >= 0.5){
+				thisAttackRank++;
+				thisAttackRankChanged = true;
+			}
+		}if (this.hasExactly("Flame Siegmund")){
+			if (this.adjacent > 1){
 				thisAttackRank++;
 				thisAttackRankChanged = true;
 			}

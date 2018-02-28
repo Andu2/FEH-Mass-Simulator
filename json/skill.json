@@ -12837,5 +12837,61 @@
 		"charge": 0,
 		"inheritrule": "unique",
 		"affectsduel": 1
+	}, {
+		"skill_id": 918,
+		"name": "Flame Siegmund",
+		"slot": "weapon",
+		"sp": 400,
+		"description": "Grants Atk+3. If the number of foes within 2 spaces (excluding target) >= the number of allies within 2 spaces (excluding unit), unit makes a guaranteed follow-up attack.",
+		"hp": 0,
+		"atk": 19,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "unique",
+		"affectsduel": 1
+	}, {
+		"skill_id": 919,
+		"name": "Sturdy Stance 1",
+		"slot": "a",
+		"sp": 120,
+		"description": "Grants Atk\/Def+2 during combat when this unit is attacked.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "nonstaff",
+		"affectsduel": 1
+	}, {
+		"skill_id": 920,
+		"name": "Sturdy Stance 2",
+		"slot": "a",
+		"sp": 240,
+		"description": "Grants Atk\/Def+4 during combat when this unit is attacked.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "nonstaff",
+		"affectsduel": 1
+	}, {
+		"skill_id": 921,
+		"name": "Solar Brace",
+		"slot": "b",
+		"sp": 300,
+		"description": "Restores 30% of damage dealt when Special triggers during combat. (Stacks with effects of skills like Sol.)",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "unique",
+		"affectsduel": 1
 	}
 ]
