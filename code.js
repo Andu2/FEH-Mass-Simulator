@@ -7009,7 +7009,7 @@ function activeHero(hero){
 				thisAttackRankChanged = true;
 			}
 		}if (this.hasExactly("Flame Siegmund")){
-			if (this.adjacent > 1){
+			if (this.adjacent < 1){
 				thisAttackRank++;
 				thisAttackRankChanged = true;
 			}
