@@ -5138,6 +5138,15 @@ function activeHero(hero){
 				this.combatSpur.res += buffVal;
 				boostText += this.name + " gets +" + buffVal + " Atk/Spd/Def/Res from being adjacent to an ally with " + skillName + " (Refined).<br>";
 			}
+			if (this.hasAtRefineIndex("Owl Bond", this.refineIndex)){
+				buffVal = 2;
+				skillName = data.skills[this.weaponIndex].name;
+				this.combatSpur.atk += buffVal;
+				this.combatSpur.spd += buffVal;
+				this.combatSpur.def += buffVal;
+				this.combatSpur.res += buffVal;
+				boostText += this.name + " gets +" + buffVal + " Atk/Spd/Def/Res from being adjacent to an ally with " + skillName + " (Refined).<br>";
+			}
 
 			//Owl Tomes
 			if (this.has("Blarowl") || this.has("Gronnowl") || this.has("Raudrowl") || this.hasExactly("Nidhogg")){
@@ -6370,6 +6379,11 @@ function activeHero(hero){
 					dmgReduction *= 0.7;
 					damageText += enemy.name + "'s Thani reduces " + this.name + "'s damage by 30%.<br>";
 				}
+				//Refinement
+				if (enemy.hasExactly("Brynhildr") && enemy.refineIndex != -1 && (this.weaponType == "redtome" || this.weaponType == "bluetome" || this.weaponType == "greentome")){
+					dmgReduction *= 0.7;
+					damageText += enemy.name + "'s Brynhildr (Refined) reduces " + this.name + "'s magic damage by 30%.<br>";
+				}
 				if (enemy.hasExactly("Parthia") && enemy.refineIndex != -1 && (this.weaponType == "redtome" || this.weaponType == "bluetome" || this.weaponType == "greentome")){
 					dmgReduction *= 0.7;
 					damageText += enemy.name + "'s Parthia (Refined) reduces " + this.name + "'s magic damage by 30%.<br>";
@@ -7051,6 +7065,14 @@ function activeHero(hero){
 			enemyAttackRankChanged = true;
 		}
 		if(enemy.hasExactly("Great Flame") && enemy.combatStat.def >= this.combatStat.def + 5){
+			thisAttackRank--;
+			thisAttackRankChanged = true;
+		}
+		if(this.hasAtRefineIndex("Wary Ranged", this.refineIndex) && enemy.range == "ranged" && this.combatStat.def >= enemy.combatStat.def + 1){
+			enemyAttackRank--;
+			enemyAttackRankChanged = true;
+		}
+		if(enemy.hasAtRefineIndex("Wary Ranged", enemy.refineIndex) && this.range == "ranged" && enemy.combatStat.def >= this.combatStat.def + 1){
 			thisAttackRank--;
 			thisAttackRankChanged = true;
 		}

@@ -12837,5 +12837,19 @@
 		"charge": 0,
 		"inheritrule": "unique",
 		"affectsduel": 1
+	}, {
+		"skill_id": 918,
+		"name": "Wind's Brand",
+		"slot": "weapon",
+		"sp": 400,
+		"description": "At start of turn, inflicts Atk-7 on foe on the enemy team with the highest Atk through its next action.",
+		"hp": 0,
+		"atk": 14,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "unique",
+		"affectsduel": 1
 	}
 ]
