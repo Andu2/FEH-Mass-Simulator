@@ -5147,16 +5147,7 @@ function activeHero(hero){
 				this.combatSpur.def += buffVal;
 				this.combatSpur.res += buffVal;
 				boostText += this.name + " gets +" + buffVal + " Atk/Spd/Def/Res from being adjacent to an ally with " + skillName + " (Refined).<br>";
-			}
-			if (this.hasAtRefineIndex("Owl Bond", this.refineIndex)){
-				buffVal = 2;
-				skillName = data.skills[this.weaponIndex].name;
-				this.combatSpur.atk += buffVal;
-				this.combatSpur.spd += buffVal;
-				this.combatSpur.def += buffVal;
-				this.combatSpur.res += buffVal;
-				boostText += this.name + " gets +" + buffVal + " Atk/Spd/Def/Res from being adjacent to an ally with " + skillName + " (Refined).<br>";
-			}
+			}			
 
 			//Owl Tomes
 			if (this.has("Blarowl") || this.has("Gronnowl") || this.has("Raudrowl") || this.hasExactly("Nidhogg")){
@@ -5167,6 +5158,15 @@ function activeHero(hero){
 				this.combatSpur.def += buffVal;
 				this.combatSpur.res += buffVal;
 				boostText += this.name + " gets +" + buffVal + " Atk/Spd/Def/Res from being adjacent to " + this.adjacent + " allies with " + skillName + ".<br>";
+			}
+			if (this.hasAtRefineIndex("Owl Bond", this.refineIndex)){
+				buffVal = this.adjacent * 2;
+				skillName = data.skills[this.weaponIndex].name;
+				this.combatSpur.atk += buffVal;
+				this.combatSpur.spd += buffVal;
+				this.combatSpur.def += buffVal;
+				this.combatSpur.res += buffVal;
+				boostText += this.name + " gets +" + buffVal + " Atk/Spd/Def/Res from being adjacent to an ally with " + skillName + " (Refined).<br>";
 			}
 
 			//Bond skills
