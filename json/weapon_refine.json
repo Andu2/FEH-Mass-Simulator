@@ -567,7 +567,7 @@
 		"category": "Fujin Yumi",
 		"name": "Follow",
 		"sp": 400,
-		"description": "If unit's HP ≥ 50%, unit can move adjacent to any ally within 2 spaces.",
+		"description": "If unit's HP >= 50%, unit can move adjacent to any ally within 2 spaces.",
 		"hp": 0,
 		"atk": 0,
 		"spd": 0,
@@ -576,6 +576,18 @@
 		"prereq": "Fujin Yumi",
 		"exclusive": ""
 	},	{
+		"category": "Wind's Brand",
+		"name": "Owl Bond",
+		"sp": 400,
+		"description": "During combat, boosts Atk/Spd/Def/Res by number of adjacent allies × 2.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"prereq": "Wind's Brand",
+		"exclusive": ""
+	},	{
 		"category": "Advanced Ranged",
 		"name": "Atk Bonus",
 		"sp": 350,
@@ -585,7 +597,7 @@
 		"spd": 0,
 		"def": 0,
 		"res": 0,
-		"prereq": "Slaying Bow+,Refreshing Bolt+,Tomato Tome+,Sealife Tome+,Hibiscus Tome+,Dancer's Score+,Dancer's Ring+,Guard Bow+,Candelabra+,Hama Ya+,Kagami Mochi+,Fujin Yumi,Felicia's Plate,Green Gift+,Blue Gift+,Gratia+",
+		"prereq": "Slaying Bow+,Refreshing Bolt+,Tomato Tome+,Sealife Tome+,Hibiscus Tome+,Dancer's Score+,Dancer's Ring+,Guard Bow+,Candelabra+,Hama Ya+,Kagami Mochi+,Fujin Yumi,Felicia's Plate,Green Gift+,Blue Gift+,Gratia+,Wind's Brand",
 		"exclusive": ""
 	},	{
 		"category": "Advanced Ranged",
@@ -597,7 +609,7 @@
 		"spd": 2,
 		"def": 0,
 		"res": 0,
-		"prereq": "Slaying Bow+,Refreshing Bolt+,Tomato Tome+,Sealife Tome+,Hibiscus Tome+,Dancer's Score+,Dancer's Ring+,Guard Bow+,Candelabra+,Hama Ya+,Kagami Mochi+,Fujin Yumi,Felicia's Plate,Green Gift+,Blue Gift+,Gratia+",
+		"prereq": "Slaying Bow+,Refreshing Bolt+,Tomato Tome+,Sealife Tome+,Hibiscus Tome+,Dancer's Score+,Dancer's Ring+,Guard Bow+,Candelabra+,Hama Ya+,Kagami Mochi+,Fujin Yumi,Felicia's Plate,Green Gift+,Blue Gift+,Gratia+,Wind's Brand",
 		"exclusive": ""
 	},	{
 		"category": "Advanced Ranged",
@@ -609,7 +621,7 @@
 		"spd": 0,
 		"def": 3,
 		"res": 0,
-		"prereq": "Slaying Bow+,Refreshing Bolt+,Tomato Tome+,Sealife Tome+,Hibiscus Tome+,Dancer's Score+,Dancer's Ring+,Guard Bow+,Candelabra+,Hama Ya+,Kagami Mochi+,Fujin Yumi,Felicia's Plate,Green Gift+,Blue Gift+,Gratia+",
+		"prereq": "Slaying Bow+,Refreshing Bolt+,Tomato Tome+,Sealife Tome+,Hibiscus Tome+,Dancer's Score+,Dancer's Ring+,Guard Bow+,Candelabra+,Hama Ya+,Kagami Mochi+,Fujin Yumi,Felicia's Plate,Green Gift+,Blue Gift+,Gratia+,Wind's Brand",
 		"exclusive": ""
 	},	{
 		"category": "Advanced Ranged",
@@ -621,7 +633,7 @@
 		"spd": 0,
 		"def": 0,
 		"res": 3,
-		"prereq": "Slaying Bow+,Refreshing Bolt+,Tomato Tome+,Sealife Tome+,Hibiscus Tome+,Dancer's Score+,Dancer's Ring+,Guard Bow+,Candelabra+,Hama Ya+,Kagami Mochi+,Fujin Yumi,Felicia's Plate,Green Gift+,Blue Gift+,Gratia+",
+		"prereq": "Slaying Bow+,Refreshing Bolt+,Tomato Tome+,Sealife Tome+,Hibiscus Tome+,Dancer's Score+,Dancer's Ring+,Guard Bow+,Candelabra+,Hama Ya+,Kagami Mochi+,Fujin Yumi,Felicia's Plate,Green Gift+,Blue Gift+,Gratia+,Wind's Brand",
 		"exclusive": ""
 	},	{
 		"category": "Dark Ranged",
@@ -670,6 +682,66 @@
 		"def": 0,
 		"res": 3,
 		"prereq": "Clarisse's Bow+",
+		"exclusive": ""
+	},	{
+		"category": "Brynhildr",
+		"name": "Wary Ranged",
+		"sp": 400,
+		"description": "If in combat against magic foe, reduces damage from foe's first attack by 30%. If foe uses bow, dagger, magic, or staff and unit's Def >= foe's Def+1, foe cannot make a follow-up attack.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"prereq": "Brynhildr",
+		"exclusive": ""
+	},	{
+		"category": "Brynhildr",
+		"name": "Atk Bonus",
+		"sp": 400,
+		"description": "If in combat against magic foe, reduces damage from foe's first attack by 30%.",
+		"hp": 2,
+		"atk": 1,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"prereq": "Brynhildr",
+		"exclusive": ""
+	},	{
+		"category": "Brynhildr",
+		"name": "Spd Bonus",
+		"sp": 400,
+		"description": "If in combat against magic foe, reduces damage from foe's first attack by 30%.",
+		"hp": 2,
+		"atk": 0,
+		"spd": 2,
+		"def": 0,
+		"res": 0,
+		"prereq": "Brynhildr",
+		"exclusive": ""
+	},	{
+		"category": "Brynhildr",
+		"name": "Def Bonus",
+		"sp": 400,
+		"description": "If in combat against magic foe, reduces damage from foe's first attack by 30%.",
+		"hp": 2,
+		"atk": 0,
+		"spd": 0,
+		"def": 3,
+		"res": 0,
+		"prereq": "Brynhildr",
+		"exclusive": ""
+	},	{
+		"category": "Brynhildr",
+		"name": "Res Bonus",
+		"sp": 400,
+		"description": "If in combat against magic foe, reduces damage from foe's first attack by 30%.",
+		"hp": 2,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 3,
+		"prereq": "Brynhildr",
 		"exclusive": ""
 	},	{
 		"category": "Halloween Panic",
@@ -1450,6 +1522,66 @@
 		"def": 0,
 		"res": 4,
 		"prereq": "Siegmund",
+		"exclusive": ""
+	},	{
+		"category": "Sieglinde",
+		"name": "Allied Bond",
+		"sp": 400,
+		"description": "At start of turn, grants adjacent allies Atk+4 for 1 turn. During combat, grants bonus to Atk\/Spd\/Def\/Res = highest bonus on allies within 2 spaces. Each stat bonus calculated independently.",
+		"hp": 3,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"prereq": "Sieglinde",
+		"exclusive": ""
+	},	{
+		"category": "Sieglinde",
+		"name": "Atk Bonus",
+		"sp": 400,
+		"description": "At start of turn, grants adjacent allies Atk+4 for 1 turn.",
+		"hp": 5,
+		"atk": 2,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"prereq": "Sieglinde",
+		"exclusive": ""
+	},	{
+		"category": "Sieglinde",
+		"name": "Spd Bonus",
+		"sp": 400,
+		"description": "At start of turn, grants adjacent allies Atk+4 for 1 turn.",
+		"hp": 5,
+		"atk": 0,
+		"spd": 3,
+		"def": 0,
+		"res": 0,
+		"prereq": "Sieglinde",
+		"exclusive": ""
+	},	{
+		"category": "Sieglinde",
+		"name": "Def Bonus",
+		"sp": 400,
+		"description": "At start of turn, grants adjacent allies Atk+4 for 1 turn.",
+		"hp": 5,
+		"atk": 0,
+		"spd": 0,
+		"def": 4,
+		"res": 0,
+		"prereq": "Sieglinde",
+		"exclusive": ""
+	},	{
+		"category": "Sieglinde",
+		"name": "Res Bonus",
+		"sp": 400,
+		"description": "At start of turn, grants adjacent allies Atk+4 for 1 turn.",
+		"hp": 5,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 4,
+		"prereq": "Sieglinde",
 		"exclusive": ""
 	},	{
 		"category": "Falchion",
