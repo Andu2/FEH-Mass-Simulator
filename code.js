@@ -26,6 +26,7 @@ var option_showOnlyMaxSkills = localStorage['option_showOnlyMaxSkills'] || "true
 var option_showOnlyDuelSkills = localStorage['option_showOnlyDuelSkills'] || "true";
 var option_autoCalculate = localStorage['option_autoCalculate'] || "true";
 var option_saveSettings = localStorage['option_saveSettings'] || "true";
+var option_saveFilters = localStorage['option_saveFilters'] || "false";
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -437,18 +438,23 @@ $(document).ready(function(){
 	//Set Options UI
 	showOptions(option_menu);
 	$('input:radio[class=menu_button][value=' + option_menu + ']').prop('checked', true);
-
+	
+	console.log(option_saveFilters);
 	//Set filter UI
-	options.colorFilter = option_colorFilter;
-	$('#color_results').val(option_colorFilter).trigger('change.select2');
-	options.rangeFilter = option_rangeFilter;
-	$('#range_results').val(option_rangeFilter).trigger('change.select2');
-	options.typeFilter = option_typeFilter;
-	$('#type_results').val(option_typeFilter).trigger('change.select2');
-	options.viewFilter = option_viewFilter;
-	$('#view_results').val(option_viewFilter).trigger('change.select2');
-	options.sortOrder = option_sortOrder;
-	$('#sort_results').val(option_sortOrder).trigger('change.select2');
+	if (option_saveFilters == "true"){		
+		options.colorFilter = option_colorFilter;
+		$('#color_results').val(option_colorFilter).trigger('change.select2');
+		options.rangeFilter = option_rangeFilter;
+		$('#range_results').val(option_rangeFilter).trigger('change.select2');
+		options.typeFilter = option_typeFilter;
+		$('#type_results').val(option_typeFilter).trigger('change.select2');
+		options.viewFilter = option_viewFilter;
+		$('#view_results').val(option_viewFilter).trigger('change.select2');
+		options.sortOrder = option_sortOrder;
+		$('#sort_results').val(option_sortOrder).trigger('change.select2');
+	}else{
+		resetFilter();
+	}
 
 	//Set chart UI
 	//TODO: cache this as well
@@ -614,6 +620,9 @@ $(document).ready(function(){
 			}
 			if(endsWith(dataVar,".saveSettings")){
 				localStorage['option_saveSettings'] = (options.saveSettings ? "true" : "false");
+			}
+			if(endsWith(dataVar,".saveFilters")){
+				localStorage['option_saveFilters'] = (options.saveFilters ? "true" : "false");
 			}
 
 			for(var i = 0; i < varsThatUpdateFl.length; i++){
