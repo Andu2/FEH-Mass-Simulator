@@ -438,8 +438,7 @@ $(document).ready(function(){
 	//Set Options UI
 	showOptions(option_menu);
 	$('input:radio[class=menu_button][value=' + option_menu + ']').prop('checked', true);
-	
-	console.log(option_saveFilters);
+
 	//Set filter UI
 	if (option_saveFilters == "true"){		
 		options.colorFilter = option_colorFilter;
@@ -6034,7 +6033,7 @@ function activeHero(hero){
 		var absorbPct = 0;
 
 		var damageText = "";
-
+		
 		//Relevant defense stat
 		var relevantDef = (this.attackType == "magical") ? enemy.combatStat.res : enemy.combatStat.def;
 
@@ -6871,6 +6870,14 @@ function activeHero(hero){
 			//***Does Wrath check for health after Renew?***
 			roundText += this.charging();
 		}
+		
+		//Check for unarmed weapon
+		//TODO: Check for issues.
+		//***Having the function return this early skips the rest of the combat scripts, need to check for issues with post-combat effects***
+		if (this.weaponIndex == -1){
+			roundText += this.name + " is unarmed and cannot attack.";
+			return roundText;
+		}
 
 		//Set after renewal
 		this.combatStartHp = this.hp;
@@ -7005,14 +7012,26 @@ function activeHero(hero){
 		var anyRangeCounter = canCounterAnyRange(enemy);
 
 		//Check if enemy can counter
-		var enemyCanCounter = false;
-		//TODO: Make this mess more readable
-		if(!firesweep
-			&& !(windsweep && data.physicalWeapons.indexOf(enemy.weaponType) != -1 && this.combatStat.spd - enemy.combatStat.spd >= windsweep)
-			&& !(watersweep && data.magicalWeapons.indexOf(enemy.weaponType) != -1 && this.combatStat.spd - enemy.combatStat.spd >= watersweep)){
-			if(this.range == enemy.range || anyRangeCounter){
-				enemyCanCounter = true;
-			}
+		var enemyCanCounter = true;
+		
+		if (this.range != enemy.range && !anyRangeCounter){
+			enemyCanCounter = false;
+		}		
+		if (enemy.weaponIndex == -1){
+			enemyCanCounter = false;
+			roundText += enemy.name + " is unarmed and cannot counterattack.<br>";
+		}		
+		if (firesweep){
+			enemyCanCounter = false;
+			roundText += enemy.name + " cannot counterattack because of Firesweep effect.<br>";
+		}
+		if (windsweep && data.physicalWeapons.indexOf(enemy.weaponType) != -1 && this.combatStat.spd - enemy.combatStat.spd >= windsweep){
+			enemyCanCounter = false;
+			roundText += enemy.name + " cannot counterattack because of Windsweep effect.<br>";
+		}
+		if (watersweep && data.magicalWeapons.indexOf(enemy.weaponType) != -1 && this.combatStat.spd - enemy.combatStat.spd >= watersweep){
+			enemyCanCounter = false;
+			roundText += enemy.name + " cannot counterattack because of Watersweep effect.<br>";
 		}
 		if(this.has("Dazzling Staff") && enemyCanCounter){
 			if(this.combatStartHp / this.maxHp >= 1.5 + this.has("Dazzling Staff") * -0.5){
