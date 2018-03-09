@@ -4862,11 +4862,21 @@ function activeHero(hero){
 		var skillNames = [];
 		var debuffVal = {"atk":0,"spd":0,"def":0,"res":0};
 
-		//Chilling Seal Debuff
+		//Chill Debuff
 		if ((enemy.challenger && options.chilled_challenger) || (!enemy.challenger && options.chilled_enemy)){
-			debuffVal.atk = -6;
-			debuffVal.spd = -6;
-			skillNames.push("Chilling Seal");
+			if (this.hasExactly("Chilling Seal")){
+				debuffVal.atk = -6;
+				debuffVal.spd = -6;
+				skillNames.push("Chilling Seal");
+			}
+			if (this.has("Chill Spd")){
+				debuffVal.spd = -this.hasAtIndex("Chill Spd", this.bIndex) * 2 - 1;
+				skillNames.push("Chill Spd");
+			}
+			if (this.has("Chill Def")){
+				debuffVal.def = -this.hasAtIndex("Chill Def", this.bIndex) * 2 - 1;
+				skillNames.push("Chill Def");
+			}
 		}
 
 		if(skillNames.length > 0){
