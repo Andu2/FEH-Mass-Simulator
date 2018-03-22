@@ -4872,10 +4872,24 @@ function activeHero(hero){
 
 		//Chill Debuff
 		if ((enemy.challenger && options.chilled_challenger) || (!enemy.challenger && options.chilled_enemy)){
+			if (this.hasExactly("Huginn's Egg") && this.hp / this.maxHp >= 0.5 ){
+				debuffVal.atk = -5;
+				debuffVal.def = -5;
+				skillNames.push("Huginn's Egg");
+			}
+			if (this.hasExactly("Muninn's Egg") && this.hp / this.maxHp >= 0.5 ){
+				debuffVal.atk = -5;
+				debuffVal.res = -5;
+				skillNames.push("Muninn's Egg");
+			}
 			if (this.hasExactly("Chilling Seal")){
 				debuffVal.atk = -6;
 				debuffVal.spd = -6;
 				skillNames.push("Chilling Seal");
+			}
+			if (this.has("Chill Atk")){
+				debuffVal.atk = -this.hasAtIndex("Chill Atk", this.bIndex) * 2 - 1;
+				skillNames.push("Chill Atk");
 			}
 			if (this.has("Chill Spd")){
 				debuffVal.spd = -this.hasAtIndex("Chill Spd", this.bIndex) * 2 - 1;
@@ -4884,6 +4898,10 @@ function activeHero(hero){
 			if (this.has("Chill Def")){
 				debuffVal.def = -this.hasAtIndex("Chill Def", this.bIndex) * 2 - 1;
 				skillNames.push("Chill Def");
+			}
+			if (this.has("Chill Res")){
+				debuffVal.res = -this.hasAtIndex("Chill Res", this.bIndex) * 2 - 1;
+				skillNames.push("Chill Res");
 			}
 		}
 
@@ -5821,7 +5839,7 @@ function activeHero(hero){
 			}
 
 			//Daggers
-			if (this.hasExactly("Deathly Dagger")){
+			if (this.hasExactly("Deathly Dagger") || this.has("Lethal Carrot")){
 				sealStats(data.skills[this.weaponIndex].name, ["def","res"], [-7]);
 			}
 			if (this.has("Silver Dagger") || this.has("Seashell") || this.has("Dancer's Fan") || this.has("Kagami Mochi") || this.has("Felicia's Plate")){
@@ -6065,7 +6083,7 @@ function activeHero(hero){
 				if(AOEActivated){
 					this.resetCharge();
 
-					if(this.has("Wo Dao") || this.hasExactly("Dark Excalibur") || this.hasExactly("Resolute Blade") || this.has("Special Damage")){
+					if(this.has("Wo Dao") || this.has("Giant Spoon") || this.has("Lethal Carrot") || this.hasExactly("Dark Excalibur") || this.hasExactly("Resolute Blade") || this.has("Special Damage")){
 						AOEDamage += 10;
 						damageText += this.name + " gains 10 damage from " + data.skills[hero.weapon].name + ".<br>";
 					}
@@ -6166,7 +6184,7 @@ function activeHero(hero){
 				this.resetCharge();
 				damageText += this.name + " activates " + data.skills[this.specialIndex].name + ".<br>";
 
-				if(this.has("Wo Dao") || this.hasExactly("Dark Excalibur") || this.hasExactly("Resolute Blade") || this.has("Special Damage")){
+				if(this.has("Wo Dao") || this.has("Giant Spoon") || this.has("Lethal Carrot") || this.hasExactly("Dark Excalibur") || this.hasExactly("Resolute Blade") || this.has("Special Damage")){
 					dmgBoostFlat += 10;
 					damageText += this.name + " gains 10 damage from " + data.skills[hero.weapon].name + ".<br>";
 				}
