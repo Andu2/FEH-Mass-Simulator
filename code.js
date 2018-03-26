@@ -26,6 +26,7 @@ var option_showOnlyMaxSkills = localStorage['option_showOnlyMaxSkills'] || "true
 var option_showOnlyDuelSkills = localStorage['option_showOnlyDuelSkills'] || "true";
 var option_autoCalculate = localStorage['option_autoCalculate'] || "true";
 var option_saveSettings = localStorage['option_saveSettings'] || "true";
+var option_saveFilters = localStorage['option_saveFilters'] || "false";
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -439,16 +440,20 @@ $(document).ready(function(){
 	$('input:radio[class=menu_button][value=' + option_menu + ']').prop('checked', true);
 
 	//Set filter UI
-	options.colorFilter = option_colorFilter;
-	$('#color_results').val(option_colorFilter).trigger('change.select2');
-	options.rangeFilter = option_rangeFilter;
-	$('#range_results').val(option_rangeFilter).trigger('change.select2');
-	options.typeFilter = option_typeFilter;
-	$('#type_results').val(option_typeFilter).trigger('change.select2');
-	options.viewFilter = option_viewFilter;
-	$('#view_results').val(option_viewFilter).trigger('change.select2');
-	options.sortOrder = option_sortOrder;
-	$('#sort_results').val(option_sortOrder).trigger('change.select2');
+	if (option_saveFilters == "true"){
+		options.colorFilter = option_colorFilter;
+		$('#color_results').val(option_colorFilter).trigger('change.select2');
+		options.rangeFilter = option_rangeFilter;
+		$('#range_results').val(option_rangeFilter).trigger('change.select2');
+		options.typeFilter = option_typeFilter;
+		$('#type_results').val(option_typeFilter).trigger('change.select2');
+		options.viewFilter = option_viewFilter;
+		$('#view_results').val(option_viewFilter).trigger('change.select2');
+		options.sortOrder = option_sortOrder;
+		$('#sort_results').val(option_sortOrder).trigger('change.select2');
+	}else{
+		resetFilter();
+	}
 
 	//Set chart UI
 	//TODO: cache this as well
@@ -614,6 +619,9 @@ $(document).ready(function(){
 			}
 			if(endsWith(dataVar,".saveSettings")){
 				localStorage['option_saveSettings'] = (options.saveSettings ? "true" : "false");
+			}
+			if(endsWith(dataVar,".saveFilters")){
+				localStorage['option_saveFilters'] = (options.saveFilters ? "true" : "false");
 			}
 
 			for(var i = 0; i < varsThatUpdateFl.length; i++){
@@ -4862,11 +4870,39 @@ function activeHero(hero){
 		var skillNames = [];
 		var debuffVal = {"atk":0,"spd":0,"def":0,"res":0};
 
-		//Chilling Seal Debuff
+		//Chill Debuff
 		if ((enemy.challenger && options.chilled_challenger) || (!enemy.challenger && options.chilled_enemy)){
-			debuffVal.atk = -6;
-			debuffVal.spd = -6;
-			skillNames.push("Chilling Seal");
+			if (this.hasExactly("Huginn's Egg") && this.hp / this.maxHp >= 0.5 ){
+				debuffVal.atk = -5;
+				debuffVal.def = -5;
+				skillNames.push("Huginn's Egg");
+			}
+			if (this.hasExactly("Muninn's Egg") && this.hp / this.maxHp >= 0.5 ){
+				debuffVal.atk = -5;
+				debuffVal.res = -5;
+				skillNames.push("Muninn's Egg");
+			}
+			if (this.hasExactly("Chilling Seal")){
+				debuffVal.atk = -6;
+				debuffVal.spd = -6;
+				skillNames.push("Chilling Seal");
+			}
+			if (this.has("Chill Atk")){
+				debuffVal.atk = -this.hasAtIndex("Chill Atk", this.bIndex) * 2 - 1;
+				skillNames.push("Chill Atk");
+			}
+			if (this.has("Chill Spd")){
+				debuffVal.spd = -this.hasAtIndex("Chill Spd", this.bIndex) * 2 - 1;
+				skillNames.push("Chill Spd");
+			}
+			if (this.has("Chill Def")){
+				debuffVal.def = -this.hasAtIndex("Chill Def", this.bIndex) * 2 - 1;
+				skillNames.push("Chill Def");
+			}
+			if (this.has("Chill Res")){
+				debuffVal.res = -this.hasAtIndex("Chill Res", this.bIndex) * 2 - 1;
+				skillNames.push("Chill Res");
+			}
 		}
 
 		if(skillNames.length > 0){
@@ -5048,7 +5084,7 @@ function activeHero(hero){
 				boostText += this.name + " activates " + skillName + " and gets +" + statBonus + " Def/Res.<br>";
 			}
 		}
-		
+
 		if(this.combatStartHp / this.maxHp >= 1){
 			if(this.hasExactly("Ragnarok")){
 				//Does this take effect when defending? Answer: yes
@@ -5148,15 +5184,6 @@ function activeHero(hero){
 				this.combatSpur.res += buffVal;
 				boostText += this.name + " gets +" + buffVal + " Atk/Spd/Def/Res from being adjacent to an ally with " + skillName + " (Refined).<br>";
 			}
-			if (this.hasAtRefineIndex("Owl Bond", this.refineIndex)){
-				buffVal = 2;
-				skillName = data.skills[this.weaponIndex].name;
-				this.combatSpur.atk += buffVal;
-				this.combatSpur.spd += buffVal;
-				this.combatSpur.def += buffVal;
-				this.combatSpur.res += buffVal;
-				boostText += this.name + " gets +" + buffVal + " Atk/Spd/Def/Res from being adjacent to an ally with " + skillName + " (Refined).<br>";
-			}
 
 			//Owl Tomes
 			if (this.has("Blarowl") || this.has("Gronnowl") || this.has("Raudrowl") || this.hasExactly("Nidhogg")){
@@ -5167,6 +5194,15 @@ function activeHero(hero){
 				this.combatSpur.def += buffVal;
 				this.combatSpur.res += buffVal;
 				boostText += this.name + " gets +" + buffVal + " Atk/Spd/Def/Res from being adjacent to " + this.adjacent + " allies with " + skillName + ".<br>";
+			}
+			if (this.hasAtRefineIndex("Owl Bond", this.refineIndex)){
+				buffVal = this.adjacent * 2;
+				skillName = data.skills[this.weaponIndex].name;
+				this.combatSpur.atk += buffVal;
+				this.combatSpur.spd += buffVal;
+				this.combatSpur.def += buffVal;
+				this.combatSpur.res += buffVal;
+				boostText += this.name + " gets +" + buffVal + " Atk/Spd/Def/Res from being adjacent to " + this.adjacent + " allies with " + skillName + " (Refined).<br>";
 			}
 
 			//Bond skills
@@ -5803,7 +5839,7 @@ function activeHero(hero){
 			}
 
 			//Daggers
-			if (this.hasExactly("Deathly Dagger")){
+			if (this.hasExactly("Deathly Dagger") || this.has("Lethal Carrot")){
 				sealStats(data.skills[this.weaponIndex].name, ["def","res"], [-7]);
 			}
 			if (this.has("Silver Dagger") || this.has("Seashell") || this.has("Dancer's Fan") || this.has("Kagami Mochi") || this.has("Felicia's Plate")){
@@ -5837,10 +5873,10 @@ function activeHero(hero){
 			}
 			if (this.hasExactly("Clarisse's Bow+") && this.refineIndex != -1){
 				sealStats(data.skills[this.weaponIndex].name, ["atk","spd"], [-5]);
-			}			
+			}
 			if (this.hasExactly("Dark Breath+") && this.refineIndex != -1){
 				sealStats(data.skills[this.weaponIndex].name, ["atk","spd"], [-7]);
-			}			
+			}
 		}
 
 		//Set debuff values
@@ -5892,7 +5928,7 @@ function activeHero(hero){
 			if((this.hasExactly("First Bite+") || this.hasExactly("Cupid's Arrow+") || this.hasExactly("Blessed Bouquet+")) && this.refineIndex != -1){
 				buffStat(data.skills[this.weaponIndex].name + " (Refined)", ["def", "res"], 5);
 			}
-			
+
 			if(this.hasExactly("Grima's Truth")){
 				buffStat(data.skills[this.weaponIndex].name, ["atk", "spd"], 5);
 			}
@@ -6047,7 +6083,7 @@ function activeHero(hero){
 				if(AOEActivated){
 					this.resetCharge();
 
-					if(this.has("Wo Dao") || this.hasExactly("Dark Excalibur") || this.hasExactly("Resolute Blade") || this.has("Special Damage")){
+					if(this.has("Wo Dao") || this.has("Giant Spoon") || this.has("Lethal Carrot") || this.hasExactly("Dark Excalibur") || this.hasExactly("Resolute Blade") || this.has("Special Damage")){
 						AOEDamage += 10;
 						damageText += this.name + " gains 10 damage from " + data.skills[hero.weapon].name + ".<br>";
 					}
@@ -6148,7 +6184,7 @@ function activeHero(hero){
 				this.resetCharge();
 				damageText += this.name + " activates " + data.skills[this.specialIndex].name + ".<br>";
 
-				if(this.has("Wo Dao") || this.hasExactly("Dark Excalibur") || this.hasExactly("Resolute Blade") || this.has("Special Damage")){
+				if(this.has("Wo Dao") || this.has("Giant Spoon") || this.has("Lethal Carrot") || this.hasExactly("Dark Excalibur") || this.hasExactly("Resolute Blade") || this.has("Special Damage")){
 					dmgBoostFlat += 10;
 					damageText += this.name + " gains 10 damage from " + data.skills[hero.weapon].name + ".<br>";
 				}
@@ -6161,7 +6197,7 @@ function activeHero(hero){
 					dmgBoostFlat += 10;
 					damageText += this.name + " gains 10 damage from " + data.skills[this.bIndex].name + ".<br>";
 				}
-				
+
 				//Solar Brace
 				//***Does it activate with defensive specials? Does it stack with Absorb?***
 				if (!AOE && this.hasExactly("Solar Brace")){
@@ -6363,33 +6399,35 @@ function activeHero(hero){
 
 			//Check weapon effective against
 			var effectiveBonus = 1;
-			if(enemy.moveType == "armored" && (this.has("Hammer") || this.has("Slaying Hammer")
-				|| this.has("Armorslayer") || this.has("Armorsmasher")
-				|| this.has("Heavy Spear") || this.has("Slaying Spear")
+			if (enemy.moveType == "armored"
+				&& (this.has("Hammer") 		|| this.has("Slaying Hammer")
+				|| this.has("Armorslayer") 	|| this.has("Armorsmasher")
+				|| this.has("Heavy Spear") 	|| this.has("Slaying Spear")
 				|| this.hasExactly("Thani") || this.hasExactly("Winged Sword"))
 				){
 				effectiveBonus = (enemy.has("Svalinn Shield")) ? 1 : 1.5;
 			}
-			else if(enemy.moveType == "flying" && (this.hasExactly("Excalibur") || this.weaponType=="bow")){
+			else if (enemy.moveType == "flying" && (this.hasExactly("Excalibur") || this.weaponType=="bow")){
 				effectiveBonus = (enemy.has("Iote's Shield")) ? 1 : 1.5;
 			}
-			else if(enemy.moveType == "infantry" && (this.has("Poison Dagger"))){
+			else if (enemy.moveType == "infantry" && (this.has("Poison Dagger"))){
 				effectiveBonus = 1.5;
 			}
-			else if(enemy.moveType == "cavalry" && (this.has("Zanbato") || this.has("Ridersbane")
-				|| this.has("Raudrwolf") || this.has("Blarwolf") || this.has("Gronnwolf")
+			else if (enemy.moveType == "cavalry"
+				&& (this.has("Zanbato") 	|| this.has("Ridersbane")	|| this.has("Poleaxe")
+				|| this.has("Raudrwolf") 	|| this.has("Blarwolf") 	|| this.has("Gronnwolf")
 				|| this.hasExactly("Thani") || this.hasExactly("Winged Sword"))
 				){
 				effectiveBonus = (enemy.has("Grani's Shield")) ? 1 : 1.5;
 			}
-			else if(enemy.weaponType == "dragon" && (this.hasExactly("Falchion") || this.hasExactly("Sealed Falchion") || this.hasExactly("Naga") || this.hasExactly("Divine Naga"))){
+			else if (enemy.weaponType == "dragon" && (this.hasExactly("Falchion") || this.hasExactly("Sealed Falchion") || this.hasExactly("Naga") || this.hasExactly("Divine Naga"))){
 				effectiveBonus = 1.5;
 			}
-			else if((enemy.weaponType == "redtome" || enemy.weaponType == "bluetome" || enemy.weaponType == "greentome")&& (this.has("Kitty Paddle"))){
+			else if ((enemy.weaponType == "redtome" || enemy.weaponType == "bluetome" || enemy.weaponType == "greentome")&& (this.has("Kitty Paddle"))){
 				effectiveBonus = 1.5;
 			}
 
-			if(effectiveBonus > 1 ){
+			if (effectiveBonus > 1 ){
 				damageText += this.name + "'s attack is increased by " + (effectiveBonus * 100 - 100) + "% from weapon effectiveness.<br>";
 			}
 
@@ -6729,6 +6767,12 @@ function activeHero(hero){
 					gainCharge = Math.max(gainCharge, 1);
 					skillNames.push(data.skills[enemy.aIndex].name);
 				}
+				if(enemy.hasAtRefineIndex("Magic Absorption", enemy.refineIndex)){
+					if(this.weaponType == "redtome" || this.weaponType == "bluetome" || this.weaponType == "greentome"){
+						gainCharge = Math.max(gainCharge, 1);
+						skillNames.push(data.skills[enemy.weaponIndex].name + " (Refined)");
+					}
+				}
 				if (gainCharge > 0){
 					enemy.charge += gainCharge;
 					damageText += enemy.name + " gains " + gainCharge + " charge with " + skillNames.join(", ") + ".<br>";
@@ -6851,6 +6895,14 @@ function activeHero(hero){
 			//Check for charge effects
 			//***Does Wrath check for health after Renew?***
 			roundText += this.charging();
+		}
+
+		//Check for unarmed weapon
+		//TODO: Check for issues.
+		//***Having the function return this early skips the rest of the combat scripts, need to check for issues with post-combat effects***
+		if (this.weaponIndex == -1){
+			roundText += this.name + " is unarmed and cannot attack.";
+			return roundText;
 		}
 
 		//Set after renewal
@@ -6986,14 +7038,26 @@ function activeHero(hero){
 		var anyRangeCounter = canCounterAnyRange(enemy);
 
 		//Check if enemy can counter
-		var enemyCanCounter = false;
-		//TODO: Make this mess more readable
-		if(!firesweep
-			&& !(windsweep && data.physicalWeapons.indexOf(enemy.weaponType) != -1 && this.combatStat.spd - enemy.combatStat.spd >= windsweep)
-			&& !(watersweep && data.magicalWeapons.indexOf(enemy.weaponType) != -1 && this.combatStat.spd - enemy.combatStat.spd >= watersweep)){
-			if(this.range == enemy.range || anyRangeCounter){
-				enemyCanCounter = true;
-			}
+		var enemyCanCounter = true;
+
+		if (this.range != enemy.range && !anyRangeCounter){
+			enemyCanCounter = false;
+		}
+		if (enemy.weaponIndex == -1){
+			enemyCanCounter = false;
+			roundText += enemy.name + " is unarmed and cannot counterattack.<br>";
+		}
+		if (firesweep){
+			enemyCanCounter = false;
+			roundText += enemy.name + " cannot counterattack because of Firesweep effect.<br>";
+		}
+		if (windsweep && data.physicalWeapons.indexOf(enemy.weaponType) != -1 && this.combatStat.spd - enemy.combatStat.spd >= windsweep){
+			enemyCanCounter = false;
+			roundText += enemy.name + " cannot counterattack because of Windsweep effect.<br>";
+		}
+		if (watersweep && data.magicalWeapons.indexOf(enemy.weaponType) != -1 && this.combatStat.spd - enemy.combatStat.spd >= watersweep){
+			enemyCanCounter = false;
+			roundText += enemy.name + " cannot counterattack because of Watersweep effect.<br>";
 		}
 		if(this.has("Dazzling Staff") && enemyCanCounter){
 			if(this.combatStartHp / this.maxHp >= 1.5 + this.has("Dazzling Staff") * -0.5){
