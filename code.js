@@ -6767,7 +6767,7 @@ function activeHero(hero){
 					gainCharge = Math.max(gainCharge, 1);
 					skillNames.push(data.skills[enemy.aIndex].name);
 				}
-				if(this.initiator && enemy.hasAtRefineIndex("Magic Absorption", enemy.refineIndex)){
+				if(enemy.hasAtRefineIndex("Magic Absorption", enemy.refineIndex)){
 					if(this.weaponType == "redtome" || this.weaponType == "bluetome" || this.weaponType == "greentome"){
 						gainCharge = Math.max(gainCharge, 1);
 						skillNames.push(data.skills[enemy.weaponIndex].name + " (Refined)");
