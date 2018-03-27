@@ -9,7 +9,7 @@
 		"spd": 0,
 		"def": 0,
 		"res": 0,
-		"prereq": "Silver Sword+,Silver Axe+,Silver Lance+,Wo Dao+,Giant Spoon+",
+		"prereq": "Silver Sword+,Silver Axe+,Silver Lance+,Wo Dao+",
 		"exclusive": ""
 	},	{
 		"category": "Standard Melee",
@@ -21,7 +21,7 @@
 		"spd": 3,
 		"def": 0,
 		"res": 0,
-		"prereq": "Silver Sword+,Silver Axe+,Silver Lance+,Wo Dao+,Giant Spoon+",
+		"prereq": "Silver Sword+,Silver Axe+,Silver Lance+,Wo Dao+",
 		"exclusive": ""
 	},	{
 		"category": "Standard Melee",
@@ -33,7 +33,7 @@
 		"spd": 0,
 		"def": 4,
 		"res": 0,
-		"prereq": "Silver Sword+,Silver Axe+,Silver Lance+,Wo Dao+,Giant Spoon+",
+		"prereq": "Silver Sword+,Silver Axe+,Silver Lance+,Wo Dao+",
 		"exclusive": ""
 	},	{
 		"category": "Standard Melee",
@@ -45,7 +45,7 @@
 		"spd": 0,
 		"def": 0,
 		"res": 4,
-		"prereq": "Silver Sword+,Silver Axe+,Silver Lance+,Wo Dao+,Giant Spoon+",
+		"prereq": "Silver Sword+,Silver Axe+,Silver Lance+,Wo Dao+",
 		"exclusive": ""
 	},	{
 		"category": "Spring Melee",
@@ -597,7 +597,7 @@
 		"spd": 0,
 		"def": 0,
 		"res": 0,
-		"prereq": "Slaying Bow+,Refreshing Bolt+,Tomato Tome+,Sealife Tome+,Hibiscus Tome+,Dancer's Score+,Dancer's Ring+,Guard Bow+,Candelabra+,Hama Ya+,Kagami Mochi+,Fujin Yumi,Felicia's Plate,Green Gift+,Blue Gift+,Gratia+,Wind's Brand,Blarserpent+,Lethal Carrot+",
+		"prereq": "Slaying Bow+,Refreshing Bolt+,Tomato Tome+,Sealife Tome+,Hibiscus Tome+,Dancer's Score+,Dancer's Ring+,Guard Bow+,Candelabra+,Hama Ya+,Kagami Mochi+,Fujin Yumi,Felicia's Plate,Green Gift+,Blue Gift+,Gratia+,Wind's Brand",
 		"exclusive": ""
 	},	{
 		"category": "Advanced Ranged",
@@ -609,7 +609,7 @@
 		"spd": 2,
 		"def": 0,
 		"res": 0,
-		"prereq": "Slaying Bow+,Refreshing Bolt+,Tomato Tome+,Sealife Tome+,Hibiscus Tome+,Dancer's Score+,Dancer's Ring+,Guard Bow+,Candelabra+,Hama Ya+,Kagami Mochi+,Fujin Yumi,Felicia's Plate,Green Gift+,Blue Gift+,Gratia+,Wind's Brand,Blarserpent+,Lethal Carrot+",
+		"prereq": "Slaying Bow+,Refreshing Bolt+,Tomato Tome+,Sealife Tome+,Hibiscus Tome+,Dancer's Score+,Dancer's Ring+,Guard Bow+,Candelabra+,Hama Ya+,Kagami Mochi+,Fujin Yumi,Felicia's Plate,Green Gift+,Blue Gift+,Gratia+,Wind's Brand",
 		"exclusive": ""
 	},	{
 		"category": "Advanced Ranged",
@@ -621,7 +621,7 @@
 		"spd": 0,
 		"def": 3,
 		"res": 0,
-		"prereq": "Slaying Bow+,Refreshing Bolt+,Tomato Tome+,Sealife Tome+,Hibiscus Tome+,Dancer's Score+,Dancer's Ring+,Guard Bow+,Candelabra+,Hama Ya+,Kagami Mochi+,Fujin Yumi,Felicia's Plate,Green Gift+,Blue Gift+,Gratia+,Wind's Brand,Blarserpent+,Lethal Carrot+",
+		"prereq": "Slaying Bow+,Refreshing Bolt+,Tomato Tome+,Sealife Tome+,Hibiscus Tome+,Dancer's Score+,Dancer's Ring+,Guard Bow+,Candelabra+,Hama Ya+,Kagami Mochi+,Fujin Yumi,Felicia's Plate,Green Gift+,Blue Gift+,Gratia+,Wind's Brand",
 		"exclusive": ""
 	},	{
 		"category": "Advanced Ranged",
@@ -633,7 +633,7 @@
 		"spd": 0,
 		"def": 0,
 		"res": 3,
-		"prereq": "Slaying Bow+,Refreshing Bolt+,Tomato Tome+,Sealife Tome+,Hibiscus Tome+,Dancer's Score+,Dancer's Ring+,Guard Bow+,Candelabra+,Hama Ya+,Kagami Mochi+,Fujin Yumi,Felicia's Plate,Green Gift+,Blue Gift+,Gratia+,Wind's Brand,Blarserpent+,Lethal Carrot+",
+		"prereq": "Slaying Bow+,Refreshing Bolt+,Tomato Tome+,Sealife Tome+,Hibiscus Tome+,Dancer's Score+,Dancer's Ring+,Guard Bow+,Candelabra+,Hama Ya+,Kagami Mochi+,Fujin Yumi,Felicia's Plate,Green Gift+,Blue Gift+,Gratia+,Wind's Brand",
 		"exclusive": ""
 	},	{
 		"category": "Dark Ranged",
@@ -1125,7 +1125,7 @@
 		"spd": 0,
 		"def": 0,
 		"res": 0,
-		"prereq": "Zanbato+,Ridersbane+,Poleaxe+",
+		"prereq": "Zanbato+,Ridersbane+",
 		"exclusive": ""
 	},	{
 		"category": "Effective Melee",
@@ -1137,7 +1137,7 @@
 		"spd": 0,
 		"def": 0,
 		"res": 0,
-		"prereq": "Armorsmasher+,Slaying Spear+,Slaying Hammer+,Zanbato+,Ridersbane+,Poleaxe+",
+		"prereq": "Armorsmasher+,Slaying Spear+,Slaying Hammer+,Zanbato+,Ridersbane+",
 		"exclusive": ""
 	},	{
 		"category": "Effective Melee",
@@ -1149,7 +1149,7 @@
 		"spd": 3,
 		"def": 0,
 		"res": 0,
-		"prereq": "Armorsmasher+,Slaying Spear+,Slaying Hammer+,Zanbato+,Ridersbane+,Poleaxe+",
+		"prereq": "Armorsmasher+,Slaying Spear+,Slaying Hammer+,Zanbato+,Ridersbane+",
 		"exclusive": ""
 	},	{
 		"category": "Effective Melee",
@@ -1161,7 +1161,7 @@
 		"spd": 0,
 		"def": 4,
 		"res": 0,
-		"prereq": "Armorsmasher+,Slaying Spear+,Slaying Hammer+,Zanbato+,Ridersbane+,Poleaxe+",
+		"prereq": "Armorsmasher+,Slaying Spear+,Slaying Hammer+,Zanbato+,Ridersbane+",
 		"exclusive": ""
 	},	{
 		"category": "Effective Melee",
@@ -1173,7 +1173,7 @@
 		"spd": 0,
 		"def": 0,
 		"res": 4,
-		"prereq": "Armorsmasher+,Slaying Spear+,Slaying Hammer+,Zanbato+,Ridersbane+,Poleaxe+",
+		"prereq": "Armorsmasher+,Slaying Spear+,Slaying Hammer+,Zanbato+,Ridersbane+",
 		"exclusive": ""
 	},	{
 		"category": "Effective Tomes",
