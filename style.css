@@ -323,21 +323,21 @@ svg > g > g:last-child { pointer-events: none }
 }
 
 .bufflabel{
-	font-size:11px;
+	font-size:12px;
 	position:absolute;
 	right:104px;
 	top:-3px;
 }
 
 .debufflabel{
-	font-size:11px;
+	font-size:12px;
 	position:absolute;
 	right:54px;
 	top:-3px;
 }
 
 .spurlabel{
-	font-size:11px;
+	font-size:12px;
 	position:absolute;
 	right:18px;
 	top:-3px;
@@ -675,7 +675,7 @@ svg > g > g:last-child { pointer-events: none }
 	border-radius:2px;
 	height:16px;
 	line-height:16px;
-	font-size:11px;
+	font-size:12px;
 	text-align:center;
 	background-color: #222222;
 }
@@ -695,7 +695,7 @@ svg > g > g:last-child { pointer-events: none }
 }
 
 .cl_enemy{
-	font-size:11px;
+	font-size:12px;
 	position:relative;
 	width:auto;
 	margin: 3px;
@@ -772,6 +772,7 @@ svg > g > g:last-child { pointer-events: none }
 }
 
 .stat_desc {
+	font-family: 'Cousine', monospace;
 	width: 80%;
 	text-align:left;
 	margin-left:5px;
@@ -835,7 +836,7 @@ svg > g > g:last-child { pointer-events: none }
 .adj_status {
 	display: flex;
 	width: 100%;
-	font-size:11px;
+	font-size:12px;
 }
 
 .status_title {
@@ -1195,7 +1196,7 @@ svg > g > g:last-child { pointer-events: none }
 	position:absolute;
 	top:30px;
 	bottom:0;
-	font-size:11px;
+	font-size:12px;
 	line-height:18px;
 	left:580px;
 	padding:8px;
@@ -1375,7 +1376,7 @@ svg > g > g:last-child { pointer-events: none }
 	top:0;
 	left:0;
 	right:0;
-	font-size: 11px;
+	font-size: 12px;
 	height:20px;
 	line-height:20px;
 	background-color: #444444;
