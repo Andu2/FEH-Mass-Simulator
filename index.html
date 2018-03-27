@@ -5,7 +5,7 @@
 <head>
 	<title>FEH Mass Duel Simulator</title>
 	<meta name="description" content="A calculator for Fire Emblem Heroes that simulates lots of one-on-one duels at once. Pick your hero, pick your enemies, and see how you do!"/>
-	<link href="https://fonts.googleapis.com/css?family=Merriweather" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Merriweather|Cousine" rel="stylesheet">
 	<link rel="shortcut icon" href="ui/favicon.ico" />
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -19,6 +19,7 @@
 
 	<link rel="stylesheet" type="text/css" href="style.css?v=201803091247"/>
 	<script type="text/javascript" src="code.js?v=201803091247"></script>
+	
 </head>
 
 <body>
@@ -201,7 +202,7 @@
 				</div>
 				<div class="adj_status">
 					<div class="status_challenger"><input type="checkbox" data-var="options.galeforce_challenger" id="galeforce_challenger" checked/></div>
-					<div class="status_title">Galeforce Initiates Again</div>
+					<div class="status_title">Galeforce</div>
 					<div class="status_enemy"><input type="checkbox" data-var="options.galeforce_enemy" id="galeforce_enemy" checked/></div>
 				</div>
 				<div class="adj_status">
@@ -384,32 +385,24 @@
 				<div id="rules_bar_top">
 					Statistics
 				</div>
-				<div id="adj_title">Challenger</div>
+				<div id="adj_title">Outcomes</div>
 				<div class="adj_status">
-					<div class="stat_desc">Resulting HP: Maximum</div>
+					<select class="stat_select" id="unit_type" data-var="options.unit_type">
+						<option value="challenger">Challenger</option>
+						<option value="enemy">Enemy</option>
+					</select>
+				</div>
+				<div class="adj_status">
+					<div class="stat_desc">MAX HP:</div>
 					<div class="stat_value" id="challenger_res_hp_max">-</div>
 				</div>
 				<div class="adj_status">
-					<div class="stat_desc">Resulting HP: Minimum</div>
+					<div class="stat_desc">MIN HP:</div>
 					<div class="stat_value" id="challenger_res_hp_min">-</div>
 				</div>
 				<div class="adj_status">
-					<div class="stat_desc">Resulting HP: Average</div>
+					<div class="stat_desc">AVG HP:</div>
 					<div class="stat_value" id="challenger_res_hp_avg">-</div>
-				</div>
-				<div style="line-height:40%;"><br></div>
-				<div id="adj_title">Enemies</div>
-				<div class="adj_status">
-					<div class="stat_desc">Resulting HP: Maximum</div>
-					<div class="stat_value" id="enemies_res_hp_max">-</div>
-				</div>
-				<div class="adj_status">
-					<div class="stat_desc">Resulting HP: Minimum</div>
-					<div class="stat_value" id="enemies_res_hp_min">-</div>
-				</div>
-				<div class="adj_status">
-					<div class="stat_desc">Resulting HP: Average</div>
-					<div class="stat_value" id="enemies_res_hp_avg">-</div>
 				</div>
 				<div style="line-height:40%;"><br></div>
 				<div id="adj_title">Charts</div>
