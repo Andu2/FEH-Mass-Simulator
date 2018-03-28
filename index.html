@@ -383,34 +383,70 @@
 			<div id="frame_statistics" style="display: none;">
 				<div id="rules_bar_top">
 					Statistics
-				</div>
-				<div id="adj_title">Challenger</div>
-				<div class="adj_status">
-					<div class="stat_desc">Resulting HP: Maximum</div>
-					<div class="stat_value" id="challenger_res_hp_max">-</div>
-				</div>
-				<div class="adj_status">
-					<div class="stat_desc">Resulting HP: Minimum</div>
-					<div class="stat_value" id="challenger_res_hp_min">-</div>
-				</div>
-				<div class="adj_status">
-					<div class="stat_desc">Resulting HP: Average</div>
-					<div class="stat_value" id="challenger_res_hp_avg">-</div>
-				</div>
-				<div style="line-height:40%;"><br></div>
-				<div id="adj_title">Enemies</div>
-				<div class="adj_status">
-					<div class="stat_desc">Resulting HP: Maximum</div>
-					<div class="stat_value" id="enemies_res_hp_max">-</div>
-				</div>
-				<div class="adj_status">
-					<div class="stat_desc">Resulting HP: Minimum</div>
-					<div class="stat_value" id="enemies_res_hp_min">-</div>
-				</div>
-				<div class="adj_status">
-					<div class="stat_desc">Resulting HP: Average</div>
-					<div class="stat_value" id="enemies_res_hp_avg">-</div>
-				</div>
+                </div>
+
+                <div id="adj_title"><span id="wins_res_count">-</span> Wins <span>(Challenger HP)</span></div>
+                <div class='adj_status_compact'>
+                    <label>
+                        <span>max</span>
+                        <span id="wins_res_hp_max">-</span>
+                    </label>
+                    <label>
+                        <span>avg</span>
+                        <span id="wins_res_hp_avg">-</span>
+                    </label>
+                    <label>
+                        <span>min</span>
+                        <span id="wins_res_hp_min">-</span>
+                    </label>
+                </div>
+
+                <div id="adj_title"><span id="losses_res_count">-</span> Losses <span>(Enemy HP)</span></div>
+                <div class='adj_status_compact'>
+                    <label>
+                        <span>max</span>
+                        <span id="losses_res_hp_max">-</span>
+                    </label>
+                    <label>
+                        <span>avg</span>
+                        <span id="losses_res_hp_avg">-</span>
+                    </label>
+                    <label>
+                        <span>min</span>
+                        <span id="losses_res_hp_min">-</span>
+                    </label>
+                </div>
+
+                <div id="adj_title"><span id="inconclusive_res_count">-</span> Inconclusives</div>
+                <div class='adj_status_compact'>
+                    <label>
+                        <span>max</span>
+                        <span id="inconclusives_challenger_res_hp_max">-</span>
+                    </label>
+                    <label>
+                        <span>avg</span>
+                        <span id="inconclusives_challenger_res_hp_avg">-</span>
+                    </label>
+                    <label>
+                        <span>min</span>
+                        <span id="inconclusives_challenger_res_hp_min">-</span>
+                    </label>
+                </div>
+                <div class='adj_status_compact'>
+                    <label>
+                        <span>max</span>
+                        <span id="inconclusives_enemy_res_hp_max">-</span>
+                    </label>
+                    <label>
+                        <span>avg</span>
+                        <span id="inconclusives_enemy_res_hp_avg">-</span>
+                    </label>
+                    <label>
+                        <span>min</span>
+                        <span id="inconclusives_enemy_res_hp_min">-</span>
+                    </label>
+                </div>
+
 				<div style="line-height:40%;"><br></div>
 				<div id="adj_title">Charts</div>
 				<div class="adj_status">
