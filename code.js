@@ -238,7 +238,12 @@ function initOptions(){
 	statistics.enemies.melee = 0;
 	statistics.enemies.melee_outcome = [0,0,0];
 	statistics.enemies.ranged = 0;
-	statistics.enemies.ranged_outcome = [0,0,0];
+    statistics.enemies.ranged_outcome = [0,0,0];
+    
+    statistics.wins = { min: 0, average: 0, max: 0, count: 0};
+    statistics.losses = { min: 0, average: 0, max: 0, count: 0};
+    statistics.inconclusives_challenger = { min: 0, average: 0, max: 0, count: 0};
+    statistics.inconclusives_enemy = { min: 0, average: 0, max: 0, count: 0};
 
 	//Holder for challenger options and pre-calculated stats
 	challenger = {};
@@ -4094,10 +4099,46 @@ function resetStatistics(){
 	statistics.enemies.melee = 0;
 	statistics.enemies.melee_outcome = [0,0,0];
 	statistics.enemies.ranged = 0;
-	statistics.enemies.ranged_outcome = [0,0,0];
+    statistics.enemies.ranged_outcome = [0,0,0];
+    
+    // OUTCOME ORIENTED
+    let keys = ['wins', 'losses', 'inconclusives_challenger', 'inconclusives_enemy'];
+    keys.map(key => statistics[key]).forEach(stat => {
+        stat.min = Number.MAX_SAFE_INTEGER;
+        stat.max = -Number.MAX_SAFE_INTEGER;
+        stat.average = 0;
+        stat.count = 0;
+    });
+    // OUTCOME ORIENTED END
 }
 
 function collectStatistics(challenger, enemy, outcome){
+
+    // OUTCOME ORIENTED
+    let key_hp_pair = [];
+    switch (outcome) {
+        case 'win': 
+            key_hp_pair.push(['wins', challenger.hp]); 
+            break;
+        case 'loss': 
+            key_hp_pair.push(['losses', enemy.hp]); 
+            break;
+        default:
+            key_hp_pair.push(['inconclusives_challenger', challenger.hp]);
+            key_hp_pair.push(['inconclusives_enemy', enemy.hp]);
+            break;
+    }
+    key_hp_pair.forEach(pair => {
+        let key = pair[0];
+        let hp = pair[1];
+        let stat = statistics[key];
+        stat.min = Math.min(stat.min, hp);
+        stat.max = Math.max(stat.max, hp);
+        stat.average += hp;
+        stat.count++;
+    })
+    // OUTCOME ORIENTED END
+
 	//Challenger
 	if (statistics.challenger.res_hp_max == -1){
 		statistics.challenger.res_hp_max = challenger.hp;
@@ -4193,7 +4234,17 @@ function collectStatistics(challenger, enemy, outcome){
 function calculateStatistics(){
 	//console.log(statistics.enemies.list);
 	statistics.challenger.res_hp_avg = Math.round(statistics.challenger.res_hp_avg / statistics.enemies.list.length);
-	statistics.enemies.res_hp_avg = Math.round(statistics.enemies.res_hp_avg / statistics.enemies.list.length);
+    statistics.enemies.res_hp_avg = Math.round(statistics.enemies.res_hp_avg / statistics.enemies.list.length);
+    
+    // OUTCOME ORIENTED
+    let keys = ['wins', 'losses', 'inconclusives_challenger', 'inconclusives_enemy'];
+    keys.map(key => statistics[key]).forEach(stat => {
+        if (stat.min == Number.MAX_SAFE_INTEGER) stat.min = '-';
+        if (stat.max == -Number.MAX_SAFE_INTEGER) stat.max = '-';
+        if (stat.count == 0) stat.average = '-';
+        else stat.average = Math.round(stat.average / stat.count);
+    });
+    // OUTCOME ORIENTED END
 }
 
 function updateStatisticsUI(){
@@ -4207,7 +4258,29 @@ function updateStatisticsUI(){
 
 	$("#enemies_res_hp_max").html(statistics.enemies.res_hp_max);
 	$("#enemies_res_hp_min").html(statistics.enemies.res_hp_min);
-	$("#enemies_res_hp_avg").html(statistics.enemies.res_hp_avg);
+    $("#enemies_res_hp_avg").html(statistics.enemies.res_hp_avg);
+    
+    // OUTCOME ORIENTED
+    $("#wins_res_hp_max").html(statistics.wins.max);
+    $("#wins_res_hp_min").html(statistics.wins.min);
+    $("#wins_res_hp_avg").html(statistics.wins.average);
+
+    $("#losses_res_hp_max").html(statistics.losses.max);
+    $("#losses_res_hp_min").html(statistics.losses.min);
+    $("#losses_res_hp_avg").html(statistics.losses.average);
+
+    $("#inconclusives_challenger_res_hp_max").html(statistics.inconclusives_challenger.max);
+    $("#inconclusives_challenger_res_hp_min").html(statistics.inconclusives_challenger.min);
+    $("#inconclusives_challenger_res_hp_avg").html(statistics.inconclusives_challenger.average);
+
+    $("#inconclusives_enemy_res_hp_max").html(statistics.inconclusives_enemy.max);
+    $("#inconclusives_enemy_res_hp_min").html(statistics.inconclusives_enemy.min);
+    $("#inconclusives_enemy_res_hp_avg").html(statistics.inconclusives_enemy.average);
+
+    $("#wins_res_count").html(statistics.wins.count);
+    $("#losses_res_count").html(statistics.losses.count);
+    $("#inconclusive_res_count").html(statistics.inconclusives_enemy.count + statistics.inconclusives_challenger.count);
+    // OUTCOME ORIENTED END
 
 	//Draw Chart
 	drawChart();
