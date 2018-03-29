@@ -13509,5 +13509,61 @@
 		"charge": 0,
 		"inheritrule": "nonstaff",
 		"affectsduel": 1
+	}, {
+		"skill_id": 966,
+		"name": "Dragonskin",
+		"slot": "a",
+		"sp": 300,
+		"description": "Neutralizes 'effective against flying' bonuses. Grants Def\/Res+4 during combat if foe initiates combat.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "unique",
+		"affectsduel": 1
+	}, {
+		"skill_id": 967,
+		"name": "Res Smoke 1",
+		"slot": "c",
+		"sp": 60,
+		"description": "After combat, inflicts Res-3 on foes within 2 spaces of target through their next actions.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "nonstaff",
+		"affectsduel": 0
+	}, {
+		"skill_id": 968,
+		"name": "Res Smoke 2",
+		"slot": "c",
+		"sp": 120,
+		"description": "After combat, inflicts Res-5 on foes within 2 spaces of target through their next actions.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "nonstaff",
+		"affectsduel": 0
+	}, {
+		"skill_id": 969,
+		"name": "Res Smoke 3",
+		"slot": "c",
+		"sp": 240,
+		"description": "After combat, inflicts Res-7 on foes within 2 spaces of target through their next actions.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "nonstaff",
+		"affectsduel": 0
 	}
 ]

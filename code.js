@@ -5592,6 +5592,12 @@ function activeHero(hero){
 				this.combatSpur.res += buffVal;
 				boostText += this.name + " gets +" + buffVal + " Atk/Res from defending with " + data.skills[this.aIndex].name + ".<br>";
 			}
+			if(this.has("Dragonskin")){
+				buffVal = 4;
+				this.combatSpur.def += buffVal;
+				this.combatSpur.res += buffVal;
+				boostText += this.name + " gets +" + buffVal + " Def/Res from defending with " + data.skills[this.aIndex].name + ".<br>";
+			}
 
 			return boostText;
 		}
@@ -6481,7 +6487,7 @@ function activeHero(hero){
 				effectiveBonus = (enemy.has("Svalinn Shield")) ? 1 : 1.5;
 			}
 			else if (enemy.moveType == "flying" && (this.hasExactly("Excalibur") || this.weaponType=="bow")){
-				effectiveBonus = (enemy.has("Iote's Shield")) ? 1 : 1.5;
+				effectiveBonus = (enemy.has("Iote's Shield") || enemy.has("Dragonskin")) ? 1 : 1.5;
 			}
 			else if (enemy.moveType == "infantry" && (this.has("Poison Dagger"))){
 				effectiveBonus = 1.5;

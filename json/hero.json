@@ -3943,5 +3943,22 @@
 		"weapontype": "greentome",
 		"movetype": "infantry",
 		"minrarity": 5
+	}, {
+		"hero_id": 235,
+		"name": "Robin (F) (Fell Vessel)",
+		"basehp": 16,
+		"baseatk": 8,
+		"basespd": 9,
+		"basedef": 8,
+		"baseres": 6,
+		"hpgrowth": 7,
+		"atkgrowth": 7,
+		"spdgrowth": 8,
+		"defgrowth": 6,
+		"resgrowth": 5,
+		"color": "gray",
+		"weapontype": "dragon",
+		"movetype": "flying",
+		"minrarity": 5
 	}
 ]
