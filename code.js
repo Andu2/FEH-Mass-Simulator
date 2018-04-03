@@ -5592,6 +5592,12 @@ function activeHero(hero){
 				this.combatSpur.res += buffVal;
 				boostText += this.name + " gets +" + buffVal + " Atk/Res from defending with " + data.skills[this.aIndex].name + ".<br>";
 			}
+			if(this.has("Swift Stance")){
+				buffVal = this.has("Swift Stance") * 2;
+				this.combatSpur.spd += buffVal;
+				this.combatSpur.res += buffVal;
+				boostText += this.name + " gets +" + buffVal + " Spd/Res from defending with " + data.skills[this.aIndex].name + ".<br>";
+			}
 			if(this.has("Dragonskin")){
 				buffVal = 4;
 				this.combatSpur.def += buffVal;
