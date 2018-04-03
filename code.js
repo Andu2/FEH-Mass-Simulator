@@ -5564,9 +5564,8 @@ function activeHero(hero){
 				this.combatSpur.atk += buffVal;
 				boostText += this.name + " gets +" + buffVal + " Atk from defending with " + data.skills[this.aIndex].name + ".<br>";
 			}
-			//***Speed Stance not in game - need to rename***
-			if(this.has("Speed Stance")){
-				buffVal = this.has("Speed Stance") * 2;
+			if(this.has("Darting Stance")){
+				buffVal = this.has("Darting Stance") * 2;
 				this.combatSpur.spd += buffVal;
 				boostText += this.name + " gets +" + buffVal + " Spd from defending with " + data.skills[this.aIndex].name + ".<br>";
 			}
