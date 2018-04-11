@@ -588,6 +588,18 @@
 		"prereq": "Wind's Brand",
 		"exclusive": ""
 	},	{
+		"category": "Forblaze",
+		"name": "Death Blow",
+		"sp": 400,
+		"description": "If unit initiates combat, grants Atk+6 during combat.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"prereq": "Forblaze",
+		"exclusive": ""
+	},	{
 		"category": "Advanced Ranged",
 		"name": "Atk Bonus",
 		"sp": 350,
@@ -1738,18 +1750,6 @@
 		"def": 0,
 		"res": 0,
 		"prereq": "Nameless Blade",
-		"exclusive": ""
-	},	{
-		"category": "Forblaze",
-		"name": "Death Blow",
-		"sp": 400,
-		"description": "If unit initiates combat, grants Atk+6 during combat.",
-		"hp": 0,
-		"atk": 0,
-		"spd": 0,
-		"def": 0,
-		"res": 0,
-		"prereq": "Forblaze",
 		"exclusive": ""
 	},	{
 		"category": "Regal Blade",

@@ -5382,8 +5382,8 @@ function activeHero(hero){
 			}
 
 			//Skills
-			if(this.has("Death Blow")){
-				buffVal = this.has("Death Blow") * 2;
+			if(this.hasAtIndex("Death Blow", this.aIndex)){
+				buffVal = this.hasAtIndex("Death Blow", this.aIndex) * 2;
 				skillName = data.skills[this.aIndex].name;
 				this.combatSpur.atk += buffVal;
 				boostText += this.name + " gets +" + buffVal + " Atk from initiating with " + skillName + ".<br>";
