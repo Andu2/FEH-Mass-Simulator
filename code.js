@@ -7125,7 +7125,7 @@ function activeHero(hero){
 		if (this.hasAtRefineIndex("Brave Falchion", this.refineIndex) && (this.combatStartHp / this.maxHp == 1)){
 			doubleInitiate = true;
 		}
-		if (this.hasExactly("Meisterschwert")){
+		if (enemy.hasExactly("Meisterschwert")){
 			doubleCounter = true;
 		}
 
