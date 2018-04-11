@@ -5233,15 +5233,15 @@ function activeHero(hero){
 
 		if(enemy.combatStartHp / enemy.maxHp >= 1){
 			if(this.has("Regal Blade")){
-                                if (this.refineIndex == -1) {
-				       this.combatSpur.atk += 2;
-				       this.combatSpur.spd += 2;
-				       boostText += this.name + " gets +2 Atk/Spd with " + data.skills[this.weaponIndex].name + " from " + enemy.name + " being at full health.<br>";
-                                } else {
-				       this.combatSpur.atk += 3;
-				       this.combatSpur.spd += 3;
-				       boostText += this.name + " gets +3 Atk/Spd with " + data.skills[this.weaponIndex].name + " from " + enemy.name + " being at full health.<br>";
-                                }
+				if (this.refineIndex == -1) {
+					this.combatSpur.atk += 2;
+					this.combatSpur.spd += 2;
+					boostText += this.name + " gets +2 Atk/Spd with " + data.skills[this.weaponIndex].name + " from " + enemy.name + " being at full health.<br>";
+				} else {
+					this.combatSpur.atk += 3;
+					this.combatSpur.spd += 3;
+					boostText += this.name + " gets +3 Atk/Spd with " + data.skills[this.weaponIndex].name + " (Refined) from " + enemy.name + " being at full health.<br>";
+				}
 			}
 
 			if(this.hasExactly("Gleipnir") || this.hasExactly("Ivaldi")){
@@ -5379,7 +5379,7 @@ function activeHero(hero){
 				skillName = "Magic All Bond";
 				this.combatSpur.atk += buffVal;
 				this.combatSpur.spd += buffVal;
-				this.combatSpur.deg += buffVal;
+				this.combatSpur.def += buffVal;
 				this.combatSpur.res += buffVal;
 				boostText += this.name + " gets +" + buffVal + " Atk/Spd/Def/Res from being adjacent to a infantry magic ally with " + skillName + " (Refined).<br>";
 			}
@@ -5414,7 +5414,7 @@ function activeHero(hero){
 			}
 			if (this.hasAtRefineIndex("Death Blow", this.refineIndex)){
 				this.combatSpur.atk += 6;
-				boostText += this.name + " gets +6 Atk from initiating with " + data.skills[this.weaponIndex].name + ".<br>"
+				boostText += this.name + " gets +6 Atk from initiating with " + data.skills[this.weaponIndex].name + " (Refined).<br>"
 			}
 
 			//Skills
@@ -6237,7 +6237,7 @@ function activeHero(hero){
 				if(AOEActivated){
 					this.resetCharge();
 
-					if(this.has("Wo Dao") || this.has("Giant Spoon") || this.has("Lethal Carrot") || this.hasExactly("Dark Excalibur") || this.hasExactly("Resolute Blade") || this.hasExactly("Nameless Blade") || this.has("Special Damage")){
+					if(this.has("Wo Dao") || this.has("Giant Spoon") || this.has("Lethal Carrot") || this.hasExactly("Dark Excalibur") || this.hasExactly("Resolute Blade") || this.has("Special Damage")){
 						AOEDamage += 10;
 						damageText += this.name + " gains 10 damage from " + data.skills[hero.weapon].name + ".<br>";
 					}
@@ -6338,7 +6338,7 @@ function activeHero(hero){
 				this.resetCharge();
 				damageText += this.name + " activates " + data.skills[this.specialIndex].name + ".<br>";
 
-				if(this.has("Wo Dao") || this.has("Giant Spoon") || this.has("Lethal Carrot") || this.hasExactly("Dark Excalibur") || this.hasExactly("Resolute Blade") || this.hasExactly("Nameless Blade") || this.has("Special Damage")){
+				if(this.has("Wo Dao") || this.has("Giant Spoon") || this.has("Lethal Carrot") || this.hasExactly("Dark Excalibur") || this.hasExactly("Resolute Blade") || this.has("Special Damage")){
 					dmgBoostFlat += 10;
 					damageText += this.name + " gains 10 damage from " + data.skills[hero.weapon].name + ".<br>";
 				}
