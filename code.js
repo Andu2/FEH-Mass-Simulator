@@ -239,7 +239,7 @@ function initOptions(){
 	statistics.enemies.melee_outcome = [0,0,0];
 	statistics.enemies.ranged = 0;
     statistics.enemies.ranged_outcome = [0,0,0];
-    
+
     statistics.wins = { min: 0, average: 0, max: 0, count: 0};
     statistics.losses = { min: 0, average: 0, max: 0, count: 0};
     statistics.inconclusives_challenger = { min: 0, average: 0, max: 0, count: 0};
@@ -1059,7 +1059,6 @@ function getMaxSkills(skillset,rarity){
 
 //Return cooldown changes of skill
 function getCDChange(skill, slot){
-
 	//If skill slot is empty, return 0
 	if (skill == undefined){
 		return 0;
@@ -1102,7 +1101,30 @@ function getCDChange(skill, slot){
 
 	//Seal
 	if (slot == "s"){
-		//Precharge Increase
+
+	}
+
+	//No Change
+	return 0;
+}
+
+function getPrechargeChange(skill, slot){
+	//If skill slot is empty, return 0
+	if (skill == undefined){
+		return 0;
+	}
+
+	var skillName = skill.name;
+
+	//B Skill
+	if (slot == "b"){
+		if(skillName.indexOf("S Drink") != -1){
+			return 1;
+		}
+	}
+
+	//Seal
+	if (slot == "s"){
 		if(skillName.indexOf("Quickened Pulse") != -1){
 			return 1;
 		}
@@ -2212,11 +2234,6 @@ function updateHeroUI(hero){
 				specialCharge += getCDChange(data.skills[hero.assist], "assist");
 			}
 
-			//Special Item
-			if(hero.s != -1){
-				precharge += getCDChange(data.skills[hero.s], "s")
-			}
-
 			//B Skill
 			if(hero.b != -1){
 				var bName = data.skills[hero.b].name;
@@ -2228,6 +2245,13 @@ function updateHeroUI(hero){
 						precharge += 1;
 					}
 				}
+				precharge += getPrechargeChange(data.skills[hero.b], "b");
+			}
+
+			//Special Item
+			if(hero.s != -1){
+				specialCharge += getCDChange(data.skills[hero.s], "s");
+				precharge += getPrechargeChange(data.skills[hero.s], "s");
 			}
 
 			//Display before precharge calculation to ignore precharge changes on UI (Old UI includes precharge changes for displayed value)
@@ -4100,7 +4124,7 @@ function resetStatistics(){
 	statistics.enemies.melee_outcome = [0,0,0];
 	statistics.enemies.ranged = 0;
     statistics.enemies.ranged_outcome = [0,0,0];
-    
+
     // OUTCOME ORIENTED
     let keys = ['wins', 'losses', 'inconclusives_challenger', 'inconclusives_enemy'];
     keys.map(key => statistics[key]).forEach(stat => {
@@ -4117,11 +4141,11 @@ function collectStatistics(challenger, enemy, outcome){
     // OUTCOME ORIENTED
     let key_hp_pair = [];
     switch (outcome) {
-        case 'win': 
-            key_hp_pair.push(['wins', challenger.hp]); 
+        case 'win':
+            key_hp_pair.push(['wins', challenger.hp]);
             break;
-        case 'loss': 
-            key_hp_pair.push(['losses', enemy.hp]); 
+        case 'loss':
+            key_hp_pair.push(['losses', enemy.hp]);
             break;
         default:
             key_hp_pair.push(['inconclusives_challenger', challenger.hp]);
@@ -4235,7 +4259,7 @@ function calculateStatistics(){
 	//console.log(statistics.enemies.list);
 	statistics.challenger.res_hp_avg = Math.round(statistics.challenger.res_hp_avg / statistics.enemies.list.length);
     statistics.enemies.res_hp_avg = Math.round(statistics.enemies.res_hp_avg / statistics.enemies.list.length);
-    
+
     // OUTCOME ORIENTED
     let keys = ['wins', 'losses', 'inconclusives_challenger', 'inconclusives_enemy'];
     keys.map(key => statistics[key]).forEach(stat => {
@@ -4259,7 +4283,7 @@ function updateStatisticsUI(){
 	$("#enemies_res_hp_max").html(statistics.enemies.res_hp_max);
 	$("#enemies_res_hp_min").html(statistics.enemies.res_hp_min);
     $("#enemies_res_hp_avg").html(statistics.enemies.res_hp_avg);
-    
+
     // OUTCOME ORIENTED
     $("#wins_res_hp_max").html(statistics.wins.max);
     $("#wins_res_hp_min").html(statistics.wins.min);
@@ -4689,10 +4713,13 @@ function activeHero(hero){
 	this.resetCharge();
 	this.charge += this.precharge;
 
+	//***Precharge is confusing here: Why is it added into charge first then added again from skills?***
 	if(this.has("Quickened Pulse")){
 		this.charge++;
 	}
-
+	if(this.has("S Drink")){
+		this.charge++;
+	}
 	//Shield Pulse charge at beginning
 	if (getSpecialType(data.skills[this.specialIndex]) == "defensive"){
 		if(this.has("Shield Pulse 3")){
@@ -4853,6 +4880,15 @@ function activeHero(hero){
 					this.hp += 10;
 				}
 				startText += this.name + " heals 10 HP due to Renewal.<br>";
+			}
+
+			if (this.hasExactly("S Drink")){
+				if(this.hp + 99 > this.maxHp){
+					this.hp = this.maxHp;
+				} else{
+					this.hp += 99;
+				}
+				startText += this.name + " heals 99 HP due to S Drink.<br>";
 			}
 
 			if (this.hasExactly("Falchion")){
@@ -6670,9 +6706,9 @@ function activeHero(hero){
 			}
 
 			//Before damage defensive special effects
-			if(defensiveSpecialActivated){
+			if (defensiveSpecialActivated){
 				//Shield Pulse flat damage reduction check
-				if(dmgReduction < 1){
+				if (dmgReduction < 1){
 					if (enemy.has("Shield Pulse 2") || enemy.has("Shield Pulse 3")){
 						dmgReductionFlat += 5;
 						damageText += enemy.name + "'s Shield Pulse reduces " + this.name + "'s damage by an additional 5.<br>";
@@ -6681,8 +6717,17 @@ function activeHero(hero){
 			}
 
 			//Absorb check
-			if(this.has("Absorb")){
+			if (this.has("Absorb")){
 				absorbPct = 0.5;
+			}
+
+			//Flat damage
+			//*** Is Light Brand damage bonus flat damage or bonus attack? ***
+			if (this.hasExactly("Light Brand")){
+				if (this.combatStat.def >= enemy.combatStat.res + 5){
+					dmgBoostFlat += 7;
+					damageText += this.name + " gains 7 damage from Light Brand.<br>";
+				}
 			}
 
 			//Release charged damage
@@ -7048,12 +7093,12 @@ function activeHero(hero){
 
 		//In-combat bonuses:
 		//Bladetome bonus
-		if (this.has("Raudrblade") || this.has("Blarblade") || this.has("Gronnblade")){
+		if (this.has("Raudrblade") || this.has("Blarblade") || this.has("Gronnblade") || this.hasExactly("Thunderhead")){
 			var atkbonus = this.combatBuffs.atk + this.combatBuffs.spd + this.combatBuffs.def + this.combatBuffs.res;
 			this.combatStat.atk += atkbonus;
 			if (atkbonus != 0){roundText += this.name + " gains +" + atkbonus + " Atk from " + data.skills[this.weaponIndex].name + ".<br>";}
 		}
-		if (enemy.has("Raudrblade") || enemy.has("Blarblade") || enemy.has("Gronnblade")){
+		if (enemy.has("Raudrblade") || enemy.has("Blarblade") || enemy.has("Gronnblade") || enemy.hasExactly("Thunderhead")){
 			var atkbonus = enemy.combatBuffs.atk + enemy.combatBuffs.spd + enemy.combatBuffs.def + enemy.combatBuffs.res;
 			enemy.combatStat.atk += atkbonus;
 			if (atkbonus != 0){roundText += enemy.name + " gains +" + atkbonus + " Atk from " + data.skills[enemy.weaponIndex].name + ".<br>";}
@@ -7245,6 +7290,10 @@ function activeHero(hero){
 				thisAttackRankChanged = true;
 			}
 		}
+		if (this.hasExactly("Meisterschwert")){
+			thisAttackRank++;
+			thisAttackRankChanged = true;
+		}
 
 		//Check for auto follow-up counters
 		if(enemy.hasAtIndex("Quick Riposte", enemy.bIndex)){
@@ -7255,6 +7304,12 @@ function activeHero(hero){
 		}
 		if(enemy.hasAtIndex("Quick Riposte", enemy.sIndex)){
 			if(enemy.combatStartHp/enemy.maxHp >= 1 - 0.1 * enemy.hasAtIndex("Quick Riposte", enemy.sIndex)){
+				enemyAttackRank++;
+				enemyAttackRankChanged = true;
+			}
+		}
+		if (enemy.hasAtRefineIndex("Quick Riposte", enemy.refineIndex)){
+			if (enemy.combatStartHp/enemy.maxHp >= .5){
 				enemyAttackRank++;
 				enemyAttackRankChanged = true;
 			}
@@ -7283,11 +7338,9 @@ function activeHero(hero){
 				enemyAttackRankChanged = true;
 			}
 		}
-		if (enemy.hasAtRefineIndex("Quick Riposte", enemy.refineIndex)){
-			if (enemy.combatStartHp/enemy.maxHp >= .5){
-				enemyAttackRank++;
-				enemyAttackRankChanged = true;
-			}
+		if (enemy.hasExactly("Meisterschwert")){
+			enemyAttackRank++;
+			enemyAttackRankChanged = true;
 		}
 
 		//Check for Wary Fighter
