@@ -794,6 +794,30 @@ svg > g > g:last-child { pointer-events: none }
 	border-radius:3px;
 }
 
+.adj_status_compact {
+    display: flex;
+    font-size: 12px;
+    line-height: 1.5em;
+}
+.adj_status_compact label {
+    display: block;
+    flex: 1;
+    padding: 0px 12px;
+}
+.adj_status_compact label span:nth-of-type(1) {
+    float: left;
+    opacity: 0.6;
+}
+.adj_status_compact label span:nth-of-type(2) {
+    float: right;
+}
+#adj_title span {
+    opacity: 0.5;
+    font-size: 12px;
+    line-height: 24px;
+    vertical-align: top;
+}
+
 /*Options///////////////////////////////////////*/
 #frame_settings{
 	border-radius:4px;

@@ -1,4 +1,4 @@
-[
+﻿[
 	{
 		"category": "Standard Melee",
 		"name": "Atk Bonus",
@@ -309,7 +309,7 @@
 		"spd": 0,
 		"def": 0,
 		"res": 0,
-		"prereq": "Slaying Edge+,Slaying Lance+,Slaying Axe+,Deft Harpoon+,Melon Crusher+,Lilith Floatie+,Sack o' Gifts+,Handbell+,Tannenboom!+,Hagoita+,Kadomatsu+,Basilikos,Hauteclere,Hinoka's Spear,Mystletainn,Winged Sword,Casa Blanca+",
+		"prereq": "Slaying Edge+,Slaying Lance+,Slaying Axe+,Deft Harpoon+,Melon Crusher+,Lilith Floatie+,Sack o' Gifts+,Handbell+,Tannenboom!+,Hagoita+,Kadomatsu+,Basilikos,Hauteclere,Hinoka's Spear,Mystletainn,Winged Sword,Casa Blanca+,Nameless Blade",
 		"exclusive": ""
 	},	{
 		"category": "Advanced Melee",
@@ -321,7 +321,7 @@
 		"spd": 3,
 		"def": 0,
 		"res": 0,
-		"prereq": "Slaying Edge+,Slaying Lance+,Slaying Axe+,Deft Harpoon+,Melon Crusher+,Lilith Floatie+,Sack o' Gifts+,Handbell+,Tannenboom!+,Hagoita+,Kadomatsu+,Basilikos,Hauteclere,Hinoka's Spear,Mystletainn,Winged Sword,Casa Blanca+",
+		"prereq": "Slaying Edge+,Slaying Lance+,Slaying Axe+,Deft Harpoon+,Melon Crusher+,Lilith Floatie+,Sack o' Gifts+,Handbell+,Tannenboom!+,Hagoita+,Kadomatsu+,Basilikos,Hauteclere,Hinoka's Spear,Mystletainn,Winged Sword,Casa Blanca+,Nameless Blade",
 		"exclusive": ""
 	},	{
 		"category": "Advanced Melee",
@@ -333,7 +333,7 @@
 		"spd": 0,
 		"def": 4,
 		"res": 0,
-		"prereq": "Slaying Edge+,Slaying Lance+,Slaying Axe+,Deft Harpoon+,Melon Crusher+,Lilith Floatie+,Sack o' Gifts+,Handbell+,Tannenboom!+,Hagoita+,Kadomatsu+,Basilikos,Hauteclere,Hinoka's Spear,Mystletainn,Winged Sword,Casa Blanca+",
+		"prereq": "Slaying Edge+,Slaying Lance+,Slaying Axe+,Deft Harpoon+,Melon Crusher+,Lilith Floatie+,Sack o' Gifts+,Handbell+,Tannenboom!+,Hagoita+,Kadomatsu+,Basilikos,Hauteclere,Hinoka's Spear,Mystletainn,Winged Sword,Casa Blanca+,Nameless Blade",
 		"exclusive": ""
 	},	{
 		"category": "Advanced Melee",
@@ -345,7 +345,7 @@
 		"spd": 0,
 		"def": 0,
 		"res": 4,
-		"prereq": "Slaying Edge+,Slaying Lance+,Slaying Axe+,Deft Harpoon+,Melon Crusher+,Lilith Floatie+,Sack o' Gifts+,Handbell+,Tannenboom!+,Hagoita+,Kadomatsu+,Basilikos,Hauteclere,Hinoka's Spear,Mystletainn,Winged Sword,Casa Blanca+",
+		"prereq": "Slaying Edge+,Slaying Lance+,Slaying Axe+,Deft Harpoon+,Melon Crusher+,Lilith Floatie+,Sack o' Gifts+,Handbell+,Tannenboom!+,Hagoita+,Kadomatsu+,Basilikos,Hauteclere,Hinoka's Spear,Mystletainn,Winged Sword,Casa Blanca+,Nameless Blade",
 		"exclusive": ""
 	},	{
 		"category": "Wedding Melee",
@@ -588,6 +588,18 @@
 		"prereq": "Wind's Brand",
 		"exclusive": ""
 	},	{
+		"category": "Forblaze",
+		"name": "Death Blow",
+		"sp": 400,
+		"description": "If unit initiates combat, grants Atk+6 during combat.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"prereq": "Forblaze",
+		"exclusive": ""
+	},	{
 		"category": "Advanced Ranged",
 		"name": "Atk Bonus",
 		"sp": 350,
@@ -597,7 +609,7 @@
 		"spd": 0,
 		"def": 0,
 		"res": 0,
-		"prereq": "Slaying Bow+,Refreshing Bolt+,Tomato Tome+,Sealife Tome+,Hibiscus Tome+,Dancer's Score+,Dancer's Ring+,Guard Bow+,Candelabra+,Hama Ya+,Kagami Mochi+,Fujin Yumi,Felicia's Plate,Green Gift+,Blue Gift+,Gratia+,Wind's Brand,Blarserpent+,Lethal Carrot+",
+		"prereq": "Slaying Bow+,Refreshing Bolt+,Tomato Tome+,Sealife Tome+,Hibiscus Tome+,Dancer's Score+,Dancer's Ring+,Guard Bow+,Candelabra+,Hama Ya+,Kagami Mochi+,Fujin Yumi,Felicia's Plate,Green Gift+,Blue Gift+,Gratia+,Wind's Brand,Blarserpent+,Lethal Carrot+,Forblaze",
 		"exclusive": ""
 	},	{
 		"category": "Advanced Ranged",
@@ -609,7 +621,7 @@
 		"spd": 2,
 		"def": 0,
 		"res": 0,
-		"prereq": "Slaying Bow+,Refreshing Bolt+,Tomato Tome+,Sealife Tome+,Hibiscus Tome+,Dancer's Score+,Dancer's Ring+,Guard Bow+,Candelabra+,Hama Ya+,Kagami Mochi+,Fujin Yumi,Felicia's Plate,Green Gift+,Blue Gift+,Gratia+,Wind's Brand,Blarserpent+,Lethal Carrot+",
+		"prereq": "Slaying Bow+,Refreshing Bolt+,Tomato Tome+,Sealife Tome+,Hibiscus Tome+,Dancer's Score+,Dancer's Ring+,Guard Bow+,Candelabra+,Hama Ya+,Kagami Mochi+,Fujin Yumi,Felicia's Plate,Green Gift+,Blue Gift+,Gratia+,Wind's Brand,Blarserpent+,Lethal Carrot+,Forblaze",
 		"exclusive": ""
 	},	{
 		"category": "Advanced Ranged",
@@ -621,7 +633,7 @@
 		"spd": 0,
 		"def": 3,
 		"res": 0,
-		"prereq": "Slaying Bow+,Refreshing Bolt+,Tomato Tome+,Sealife Tome+,Hibiscus Tome+,Dancer's Score+,Dancer's Ring+,Guard Bow+,Candelabra+,Hama Ya+,Kagami Mochi+,Fujin Yumi,Felicia's Plate,Green Gift+,Blue Gift+,Gratia+,Wind's Brand,Blarserpent+,Lethal Carrot+",
+		"prereq": "Slaying Bow+,Refreshing Bolt+,Tomato Tome+,Sealife Tome+,Hibiscus Tome+,Dancer's Score+,Dancer's Ring+,Guard Bow+,Candelabra+,Hama Ya+,Kagami Mochi+,Fujin Yumi,Felicia's Plate,Green Gift+,Blue Gift+,Gratia+,Wind's Brand,Blarserpent+,Lethal Carrot+,Forblaze",
 		"exclusive": ""
 	},	{
 		"category": "Advanced Ranged",
@@ -633,7 +645,7 @@
 		"spd": 0,
 		"def": 0,
 		"res": 3,
-		"prereq": "Slaying Bow+,Refreshing Bolt+,Tomato Tome+,Sealife Tome+,Hibiscus Tome+,Dancer's Score+,Dancer's Ring+,Guard Bow+,Candelabra+,Hama Ya+,Kagami Mochi+,Fujin Yumi,Felicia's Plate,Green Gift+,Blue Gift+,Gratia+,Wind's Brand,Blarserpent+,Lethal Carrot+",
+		"prereq": "Slaying Bow+,Refreshing Bolt+,Tomato Tome+,Sealife Tome+,Hibiscus Tome+,Dancer's Score+,Dancer's Ring+,Guard Bow+,Candelabra+,Hama Ya+,Kagami Mochi+,Fujin Yumi,Felicia's Plate,Green Gift+,Blue Gift+,Gratia+,Wind's Brand,Blarserpent+,Lethal Carrot+,Forblaze",
 		"exclusive": ""
 	},	{
 		"category": "Dark Ranged",
@@ -1726,6 +1738,138 @@
 		"def": 0,
 		"res": 3,
 		"prereq": "Deathly Dagger",
+		"exclusive": ""
+	},	{
+		"category": "Nameless Blade",
+		"name": "Special Damage",
+		"sp": 400,
+		"description": "Deals +10 damage when Special triggers.",
+		"hp": 3,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"prereq": "Nameless Blade",
+		"exclusive": ""
+	},	{
+		"category": "Regal Blade",
+		"name": "Magic All Bond",
+		"sp": 400,
+		"description": "At start of combat, if foe's HP = 100%, grants Atk/Spd+3 during combat. If unit is within 2 spaces of an infantry magic ally, grants Atk/Spd/Def/Res+3 during combat.",
+		"hp": 3,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"prereq": "Regal Blade",
+		"exclusive": ""
+	},	{
+		"category": "Regal Blade",
+		"name": "Atk Bonus",
+		"sp": 400,
+		"description": "At start of combat, if foe's HP = 100%, grants Atk/Spd+3 during combat.",
+		"hp": 5,
+		"atk": 2,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"prereq": "Regal Blade",
+		"exclusive": ""
+	},	{
+		"category": "Regal Blade",
+		"name": "Spd Bonus",
+		"sp": 400,
+		"description": "At start of combat, if foe's HP = 100%, grants Atk/Spd+3 during combat.",
+		"hp": 5,
+		"atk": 0,
+		"spd": 3,
+		"def": 0,
+		"res": 0,
+		"prereq": "Regal Blade",
+		"exclusive": ""
+	},	{
+		"category": "Regal Blade",
+		"name": "Def Bonus",
+		"sp": 400,
+		"description": "At start of combat, if foe's HP = 100%, grants Atk/Spd+3 during combat.",
+		"hp": 5,
+		"atk": 0,
+		"spd": 0,
+		"def": 4,
+		"res": 0,
+		"prereq": "Regal Blade",
+		"exclusive": ""
+	},	{
+		"category": "Regal Blade",
+		"name": "Res Bonus",
+		"sp": 400,
+		"description": "At start of combat, if foe's HP = 100%, grants Atk/Spd+3 during combat.",
+		"hp": 5,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 4,
+		"prereq": "Regal Blade",
+		"exclusive": ""
+	},	{
+		"category": "Binding Blade",
+		"name": "Quick Riposte",
+		"sp": 400,
+		"description": "Effective against dragon foes. If foe initiates combat, grants Def/Res+4 during combat. If unit's HP > 50% and for initiates combat, unit makes a guaranteed follow-up attack.",
+		"hp": 3,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"prereq": "Binding Blade",
+		"exclusive": ""
+	},	{
+		"category": "Binding Blade",
+		"name": "Atk Bonus",
+		"sp": 400,
+		"description": "Effective against dragon foes. If foe initiates combat, grants Def/Res+4 during combat..",
+		"hp": 5,
+		"atk": 2,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"prereq": "Binding Blade",
+		"exclusive": ""
+	},	{
+		"category": "Binding Blade",
+		"name": "Spd Bonus",
+		"sp": 400,
+		"description": "Effective against dragon foes. If foe initiates combat, grants Def/Res+4 during combat.",
+		"hp": 5,
+		"atk": 0,
+		"spd": 3,
+		"def": 0,
+		"res": 0,
+		"prereq": "Binding Blade",
+		"exclusive": ""
+	},	{
+		"category": "Binding Blade",
+		"name": "Def Bonus",
+		"sp": 400,
+		"description": "Effective against dragon foes. If foe initiates combat, grants Def/Res+4 during combat.",
+		"hp": 5,
+		"atk": 0,
+		"spd": 0,
+		"def": 4,
+		"res": 0,
+		"prereq": "Binding Blade",
+		"exclusive": ""
+	},	{
+		"category": "Binding Blade",
+		"name": "Res Bonus",
+		"sp": 400,
+		"description": "Effective against dragon foes. If foe initiates combat, grants Def/Res+4 during combat.",
+		"hp": 5,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 4,
+		"prereq": "Binding Blade",
 		"exclusive": ""
 	}
 ]

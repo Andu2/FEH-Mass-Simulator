@@ -1,4 +1,4 @@
-//////////////////////////////////////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //Load resource from Google
@@ -238,7 +238,12 @@ function initOptions(){
 	statistics.enemies.melee = 0;
 	statistics.enemies.melee_outcome = [0,0,0];
 	statistics.enemies.ranged = 0;
-	statistics.enemies.ranged_outcome = [0,0,0];
+    statistics.enemies.ranged_outcome = [0,0,0];
+    
+    statistics.wins = { min: 0, average: 0, max: 0, count: 0};
+    statistics.losses = { min: 0, average: 0, max: 0, count: 0};
+    statistics.inconclusives_challenger = { min: 0, average: 0, max: 0, count: 0};
+    statistics.inconclusives_enemy = { min: 0, average: 0, max: 0, count: 0};
 
 	//Holder for challenger options and pre-calculated stats
 	challenger = {};
@@ -1070,7 +1075,7 @@ function getCDChange(skill, slot){
 			|| skillName.indexOf("Slaying Axe") != -1	|| skillName.indexOf("Slaying Lance") != -1	|| skillName.indexOf("Cursed Lance") != -1
 			|| skillName.indexOf("Mystletainn") != -1	|| skillName.indexOf("Hauteclere") != -1	|| skillName.indexOf("Urvan") != -1
 			|| skillName.indexOf("Audhulma") != -1		|| skillName.indexOf("Kagami Mochi") != -1	|| skillName.indexOf("Basilikos") != -1
-			|| skillName.indexOf("Berserk Armads") != -1
+			|| skillName.indexOf("Berserk Armads") != -1    || skillName.indexOf("Nameless Blade") != -1
 			){
 				return -1;
 		}
@@ -4094,10 +4099,46 @@ function resetStatistics(){
 	statistics.enemies.melee = 0;
 	statistics.enemies.melee_outcome = [0,0,0];
 	statistics.enemies.ranged = 0;
-	statistics.enemies.ranged_outcome = [0,0,0];
+    statistics.enemies.ranged_outcome = [0,0,0];
+    
+    // OUTCOME ORIENTED
+    let keys = ['wins', 'losses', 'inconclusives_challenger', 'inconclusives_enemy'];
+    keys.map(key => statistics[key]).forEach(stat => {
+        stat.min = Number.MAX_SAFE_INTEGER;
+        stat.max = -Number.MAX_SAFE_INTEGER;
+        stat.average = 0;
+        stat.count = 0;
+    });
+    // OUTCOME ORIENTED END
 }
 
 function collectStatistics(challenger, enemy, outcome){
+
+    // OUTCOME ORIENTED
+    let key_hp_pair = [];
+    switch (outcome) {
+        case 'win': 
+            key_hp_pair.push(['wins', challenger.hp]); 
+            break;
+        case 'loss': 
+            key_hp_pair.push(['losses', enemy.hp]); 
+            break;
+        default:
+            key_hp_pair.push(['inconclusives_challenger', challenger.hp]);
+            key_hp_pair.push(['inconclusives_enemy', enemy.hp]);
+            break;
+    }
+    key_hp_pair.forEach(pair => {
+        let key = pair[0];
+        let hp = pair[1];
+        let stat = statistics[key];
+        stat.min = Math.min(stat.min, hp);
+        stat.max = Math.max(stat.max, hp);
+        stat.average += hp;
+        stat.count++;
+    })
+    // OUTCOME ORIENTED END
+
 	//Challenger
 	if (statistics.challenger.res_hp_max == -1){
 		statistics.challenger.res_hp_max = challenger.hp;
@@ -4193,7 +4234,17 @@ function collectStatistics(challenger, enemy, outcome){
 function calculateStatistics(){
 	//console.log(statistics.enemies.list);
 	statistics.challenger.res_hp_avg = Math.round(statistics.challenger.res_hp_avg / statistics.enemies.list.length);
-	statistics.enemies.res_hp_avg = Math.round(statistics.enemies.res_hp_avg / statistics.enemies.list.length);
+    statistics.enemies.res_hp_avg = Math.round(statistics.enemies.res_hp_avg / statistics.enemies.list.length);
+    
+    // OUTCOME ORIENTED
+    let keys = ['wins', 'losses', 'inconclusives_challenger', 'inconclusives_enemy'];
+    keys.map(key => statistics[key]).forEach(stat => {
+        if (stat.min == Number.MAX_SAFE_INTEGER) stat.min = '-';
+        if (stat.max == -Number.MAX_SAFE_INTEGER) stat.max = '-';
+        if (stat.count == 0) stat.average = '-';
+        else stat.average = Math.round(stat.average / stat.count);
+    });
+    // OUTCOME ORIENTED END
 }
 
 function updateStatisticsUI(){
@@ -4207,7 +4258,29 @@ function updateStatisticsUI(){
 
 	$("#enemies_res_hp_max").html(statistics.enemies.res_hp_max);
 	$("#enemies_res_hp_min").html(statistics.enemies.res_hp_min);
-	$("#enemies_res_hp_avg").html(statistics.enemies.res_hp_avg);
+    $("#enemies_res_hp_avg").html(statistics.enemies.res_hp_avg);
+    
+    // OUTCOME ORIENTED
+    $("#wins_res_hp_max").html(statistics.wins.max);
+    $("#wins_res_hp_min").html(statistics.wins.min);
+    $("#wins_res_hp_avg").html(statistics.wins.average);
+
+    $("#losses_res_hp_max").html(statistics.losses.max);
+    $("#losses_res_hp_min").html(statistics.losses.min);
+    $("#losses_res_hp_avg").html(statistics.losses.average);
+
+    $("#inconclusives_challenger_res_hp_max").html(statistics.inconclusives_challenger.max);
+    $("#inconclusives_challenger_res_hp_min").html(statistics.inconclusives_challenger.min);
+    $("#inconclusives_challenger_res_hp_avg").html(statistics.inconclusives_challenger.average);
+
+    $("#inconclusives_enemy_res_hp_max").html(statistics.inconclusives_enemy.max);
+    $("#inconclusives_enemy_res_hp_min").html(statistics.inconclusives_enemy.min);
+    $("#inconclusives_enemy_res_hp_avg").html(statistics.inconclusives_enemy.average);
+
+    $("#wins_res_count").html(statistics.wins.count);
+    $("#losses_res_count").html(statistics.losses.count);
+    $("#inconclusive_res_count").html(statistics.inconclusives_enemy.count + statistics.inconclusives_challenger.count);
+    // OUTCOME ORIENTED END
 
 	//Draw Chart
 	drawChart();
@@ -4903,6 +4976,10 @@ function activeHero(hero){
 				debuffVal.res = -this.hasAtIndex("Chill Res", this.bIndex) * 2 - 1;
 				skillNames.push("Chill Res");
 			}
+			if (this.hasExactly("Forblaze")){
+				debuffVal.res = -7;
+				skillNames.push("Forblaze");
+			}
 		}
 
 		if(skillNames.length > 0){
@@ -5120,9 +5197,15 @@ function activeHero(hero){
 
 		if(enemy.combatStartHp / enemy.maxHp >= 1){
 			if(this.has("Regal Blade")){
-				this.combatSpur.atk += 2;
-				this.combatSpur.spd += 2;
-				boostText += this.name + " gets +2 Atk/Spd with " + data.skills[this.weaponIndex].name + " from " + enemy.name + " being at full health.<br>";
+                                if (this.refineIndex == -1) {
+				       this.combatSpur.atk += 2;
+				       this.combatSpur.spd += 2;
+				       boostText += this.name + " gets +2 Atk/Spd with " + data.skills[this.weaponIndex].name + " from " + enemy.name + " being at full health.<br>";
+                                } else {
+				       this.combatSpur.atk += 3;
+				       this.combatSpur.spd += 3;
+				       boostText += this.name + " gets +3 Atk/Spd with " + data.skills[this.weaponIndex].name + " from " + enemy.name + " being at full health.<br>";
+                                }
 			}
 
 			if(this.hasExactly("Gleipnir") || this.hasExactly("Ivaldi")){
@@ -5255,6 +5338,15 @@ function activeHero(hero){
 				this.combatSpur.res += buffVal;
 				boostText += this.name + " gets +" + buffVal + " Atk/Res from being adjacent to a flying ally with " + skillName + " (Refined).<br>";
 			}
+			if (this.hasAtRefineIndex("Magic All Bond", this.refineIndex)){
+				buffVal = 3;
+				skillName = "Magic All Bond";
+				this.combatSpur.atk += buffVal;
+				this.combatSpur.spd += buffVal;
+				this.combatSpur.deg += buffVal;
+				this.combatSpur.res += buffVal;
+				boostText += this.name + " gets +" + buffVal + " Atk/Spd/Def/Res from being adjacent to a infantry magic ally with " + skillName + " (Refined).<br>";
+			}
 		}
 
 		//this.blow = function(){
@@ -5284,10 +5376,14 @@ function activeHero(hero){
 				this.combatSpur.spd += 4;
 				boostText += this.name + " gets +4 Atk/Spd from initiating with " + data.skills[this.weaponIndex].name + ".<br>";
 			}
+			if (this.hasAtRefineIndex("Death Blow", this.refineIndex)){
+				this.combatSpur.atk += 6;
+				boostText += this.name + " gets +6 Atk from initiating with " + data.skills[this.weaponIndex].name + ".<br>"
+			}
 
 			//Skills
-			if(this.has("Death Blow")){
-				buffVal = this.has("Death Blow") * 2;
+			if(this.hasAtIndex("Death Blow", this.aIndex)){
+				buffVal = this.hasAtIndex("Death Blow", this.aIndex) * 2;
 				skillName = data.skills[this.aIndex].name;
 				this.combatSpur.atk += buffVal;
 				boostText += this.name + " gets +" + buffVal + " Atk from initiating with " + skillName + ".<br>";
@@ -5431,7 +5527,18 @@ function activeHero(hero){
 			}
 
 			//Weapons
-			if(this.hasExactly("Binding Blade") || this.hasExactly("Naga")){
+			if(this.hasExactly("Binding Blade")){
+                                if (this.refineIndex == -1) {
+				       this.combatSpur.def += 2;
+				       this.combatSpur.res += 2;
+				       boostText += this.name + " gets +2 Def/Res while defending with " + data.skills[this.weaponIndex].name + ".<br>";
+                                } else {
+				       this.combatSpur.def += 4;
+				       this.combatSpur.res += 4;
+				       boostText += this.name + " gets +4 Def/Res while defending with " + data.skills[this.weaponIndex].name + ".<br>";
+                                }
+			}
+			if(this.hasExactly("Naga")){
 				this.combatSpur.def += 2;
 				this.combatSpur.res += 2;
 				boostText += this.name + " gets +2 Def/Res while defending with " + data.skills[this.weaponIndex].name + ".<br>";
@@ -5491,9 +5598,8 @@ function activeHero(hero){
 				this.combatSpur.atk += buffVal;
 				boostText += this.name + " gets +" + buffVal + " Atk from defending with " + data.skills[this.aIndex].name + ".<br>";
 			}
-			//***Speed Stance not in game - need to rename***
-			if(this.has("Speed Stance")){
-				buffVal = this.has("Speed Stance") * 2;
+			if(this.has("Darting Stance")){
+				buffVal = this.has("Darting Stance") * 2;
 				this.combatSpur.spd += buffVal;
 				boostText += this.name + " gets +" + buffVal + " Spd from defending with " + data.skills[this.aIndex].name + ".<br>";
 			}
@@ -5518,6 +5624,18 @@ function activeHero(hero){
 				this.combatSpur.atk += buffVal;
 				this.combatSpur.res += buffVal;
 				boostText += this.name + " gets +" + buffVal + " Atk/Res from defending with " + data.skills[this.aIndex].name + ".<br>";
+			}
+			if(this.has("Swift Stance")){
+				buffVal = this.has("Swift Stance") * 2;
+				this.combatSpur.spd += buffVal;
+				this.combatSpur.res += buffVal;
+				boostText += this.name + " gets +" + buffVal + " Spd/Res from defending with " + data.skills[this.aIndex].name + ".<br>";
+			}
+			if(this.has("Dragonskin")){
+				buffVal = 4;
+				this.combatSpur.def += buffVal;
+				this.combatSpur.res += buffVal;
+				boostText += this.name + " gets +" + buffVal + " Def/Res from defending with " + data.skills[this.aIndex].name + ".<br>";
 			}
 
 			return boostText;
@@ -6083,7 +6201,7 @@ function activeHero(hero){
 				if(AOEActivated){
 					this.resetCharge();
 
-					if(this.has("Wo Dao") || this.has("Giant Spoon") || this.has("Lethal Carrot") || this.hasExactly("Dark Excalibur") || this.hasExactly("Resolute Blade") || this.has("Special Damage")){
+					if(this.has("Wo Dao") || this.has("Giant Spoon") || this.has("Lethal Carrot") || this.hasExactly("Dark Excalibur") || this.hasExactly("Resolute Blade") || this.hasExactly("Nameless Blade") || this.has("Special Damage")){
 						AOEDamage += 10;
 						damageText += this.name + " gains 10 damage from " + data.skills[hero.weapon].name + ".<br>";
 					}
@@ -6184,7 +6302,7 @@ function activeHero(hero){
 				this.resetCharge();
 				damageText += this.name + " activates " + data.skills[this.specialIndex].name + ".<br>";
 
-				if(this.has("Wo Dao") || this.has("Giant Spoon") || this.has("Lethal Carrot") || this.hasExactly("Dark Excalibur") || this.hasExactly("Resolute Blade") || this.has("Special Damage")){
+				if(this.has("Wo Dao") || this.has("Giant Spoon") || this.has("Lethal Carrot") || this.hasExactly("Dark Excalibur") || this.hasExactly("Resolute Blade") || this.hasExactly("Nameless Blade") || this.has("Special Damage")){
 					dmgBoostFlat += 10;
 					damageText += this.name + " gains 10 damage from " + data.skills[hero.weapon].name + ".<br>";
 				}
@@ -6408,7 +6526,7 @@ function activeHero(hero){
 				effectiveBonus = (enemy.has("Svalinn Shield")) ? 1 : 1.5;
 			}
 			else if (enemy.moveType == "flying" && (this.hasExactly("Excalibur") || this.weaponType=="bow")){
-				effectiveBonus = (enemy.has("Iote's Shield")) ? 1 : 1.5;
+				effectiveBonus = (enemy.has("Iote's Shield") || enemy.has("Dragonskin")) ? 1 : 1.5;
 			}
 			else if (enemy.moveType == "infantry" && (this.has("Poison Dagger"))){
 				effectiveBonus = 1.5;
@@ -6420,7 +6538,7 @@ function activeHero(hero){
 				){
 				effectiveBonus = (enemy.has("Grani's Shield")) ? 1 : 1.5;
 			}
-			else if (enemy.weaponType == "dragon" && (this.hasExactly("Falchion") || this.hasExactly("Sealed Falchion") || this.hasExactly("Naga") || this.hasExactly("Divine Naga"))){
+			else if (enemy.weaponType == "dragon" && (this.hasExactly("Falchion") || this.hasExactly("Sealed Falchion") || this.hasExactly("Naga") || this.hasExactly("Divine Naga") || (this.hasExactly("Binding Blade") && this.refineIndex != -1))){
 				effectiveBonus = 1.5;
 			}
 			else if ((enemy.weaponType == "redtome" || enemy.weaponType == "bluetome" || enemy.weaponType == "greentome")&& (this.has("Kitty Paddle"))){
@@ -7161,6 +7279,12 @@ function activeHero(hero){
 		}
 		if (enemy.hasExactly("Flame Siegmund")){
 			if (enemy.adjacent <= 1){
+				enemyAttackRank++;
+				enemyAttackRankChanged = true;
+			}
+		}
+		if (enemy.hasAtRefineIndex("Quick Riposte", enemy.refineIndex)){
+			if (enemy.combatStartHp/enemy.maxHp >= .5){
 				enemyAttackRank++;
 				enemyAttackRankChanged = true;
 			}
