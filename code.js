@@ -7116,13 +7116,17 @@ function activeHero(hero){
 		}
 
 		//Check for Brave weapons, brave will be passed to this.doDamage
-		var brave = false;
+		var doubleInitiate = false;
+		var doubleCounter = false;
 		if (this.has("Brave Sword") || this.has("Brave Lance") || this.has("Brave Axe") || this.has("Brave Bow")
-			|| this.has("Dire Thunder") || this.has("Amiti")){
-			brave = true;
+			|| this.hasExactly("Dire Thunder") || this.hasExactly("Amiti") || this.hasExactly("Meisterschwert")){
+			doubleInitiate = true;
 		}
 		if (this.hasAtRefineIndex("Brave Falchion", this.refineIndex) && (this.combatStartHp / this.maxHp == 1)){
-			brave = true;
+			doubleInitiate = true;
+		}
+		if (this.hasExactly("Meisterschwert")){
+			doubleCounter = true;
 		}
 
 		//Check for Vantage
@@ -7290,10 +7294,6 @@ function activeHero(hero){
 				thisAttackRankChanged = true;
 			}
 		}
-		if (this.hasExactly("Meisterschwert")){
-			thisAttackRank++;
-			thisAttackRankChanged = true;
-		}
 
 		//Check for auto follow-up counters
 		if(enemy.hasAtIndex("Quick Riposte", enemy.bIndex)){
@@ -7337,10 +7337,6 @@ function activeHero(hero){
 				enemyAttackRank++;
 				enemyAttackRankChanged = true;
 			}
-		}
-		if (enemy.hasExactly("Meisterschwert")){
-			enemyAttackRank++;
-			enemyAttackRankChanged = true;
 		}
 
 		//Check for Wary Fighter
@@ -7489,36 +7485,36 @@ function activeHero(hero){
 		//Vantage: Enemy first attack
 		if(vantage && enemyCanCounter){
 			roundText += enemy.name + " counterattacks first with vantage.<br>";
-			roundText += enemy.doDamage(this, false, false, true);
+			roundText += enemy.doDamage(this, doubleCounter, false, true);
 		}
 
 		//Initiator first attack
 		if(this.hp > 0){
-			roundText += this.doDamage(enemy, brave, false, true);
+			roundText += this.doDamage(enemy, doubleInitiate, false, true);
 		}
 
 		//Desperation: Initiator second attack
 		if(this.hp > 0 && enemy.hp > 0 && desperation && thisFollowUp){
 			roundText += this.name + " attacks again immediately with desperation.<br>";
-			roundText += this.doDamage(enemy, brave, false, false);
+			roundText += this.doDamage(enemy, doubleInitiate, false, false);
 		}
 
 		//Non-Vantage: Enemy first attack
 		//Vantage: Enemy second attack
 		if(enemy.hp > 0 && this.hp > 0 && (!vantage || (vantage && enemyFollowUp && enemyCanCounter))){
 			if(enemyCanCounter){
-				roundText += enemy.doDamage(this, false, false, !vantage);
+				roundText += enemy.doDamage(this, doubleCounter, false, !vantage);
 			}
 		}
 
 		//Non-Desperation: Initiator second attack
 		if(this.hp > 0 && enemy.hp > 0 && !desperation && thisFollowUp){
-			roundText += this.doDamage(enemy, brave, false, false);
+			roundText += this.doDamage(enemy, doubleInitiate, false, false);
 		}
 
 		//Non-Vantage: Enemy second attack
 		if(this.hp > 0 && enemy.hp > 0 && !vantage && enemyCanCounter && enemyFollowUp){
-			roundText += enemy.doDamage(this, false, false, false);
+			roundText += enemy.doDamage(this, doubleCounter, false, false);
 		}
 
 		//Do post-combat damage to enemy if enemy isn't dead
