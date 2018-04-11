@@ -5379,7 +5379,7 @@ function activeHero(hero){
 				skillName = "Magic All Bond";
 				this.combatSpur.atk += buffVal;
 				this.combatSpur.spd += buffVal;
-				this.combatSpur.deg += buffVal;
+				this.combatSpur.def += buffVal;
 				this.combatSpur.res += buffVal;
 				boostText += this.name + " gets +" + buffVal + " Atk/Spd/Def/Res from being adjacent to a infantry magic ally with " + skillName + " (Refined).<br>";
 			}
