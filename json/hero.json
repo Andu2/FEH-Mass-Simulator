@@ -3960,5 +3960,39 @@
 		"weapontype": "dragon",
 		"movetype": "flying",
 		"minrarity": 5
+	}, {
+		"hero_id": 236,
+		"name": "Reinhardt (World of Thracia)",
+		"basehp": 18,
+		"baseatk": 9,
+		"basespd": 6,
+		"basedef": 7,
+		"baseres": 6,
+		"hpgrowth": 6,
+		"atkgrowth": 8,
+		"spdgrowth": 4,
+		"defgrowth": 7,
+		"resgrowth": 6,
+		"color": "red",
+		"weapontype": "sword",
+		"movetype": "cavalry",
+		"minrarity": 5
+	}, {
+		"hero_id": 237,
+		"name": "Olwen (World of Thracia)",
+		"basehp": 17,
+		"baseatk": 8,
+		"basespd": 9,
+		"basedef": 4,
+		"baseres": 5,
+		"hpgrowth": 4,
+		"atkgrowth": 6,
+		"spdgrowth": 3,
+		"defgrowth": 8,
+		"resgrowth": 6,
+		"color": "green",
+		"weapontype": "greentome",
+		"movetype": "cavalry",
+		"minrarity": 5
 	}
 ]

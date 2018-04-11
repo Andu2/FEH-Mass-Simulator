@@ -7048,12 +7048,12 @@ function activeHero(hero){
 
 		//In-combat bonuses:
 		//Bladetome bonus
-		if (this.has("Raudrblade") || this.has("Blarblade") || this.has("Gronnblade")){
+		if (this.has("Raudrblade") || this.has("Blarblade") || this.has("Gronnblade") || this.hasExactly("Thunderhead")){
 			var atkbonus = this.combatBuffs.atk + this.combatBuffs.spd + this.combatBuffs.def + this.combatBuffs.res;
 			this.combatStat.atk += atkbonus;
 			if (atkbonus != 0){roundText += this.name + " gains +" + atkbonus + " Atk from " + data.skills[this.weaponIndex].name + ".<br>";}
 		}
-		if (enemy.has("Raudrblade") || enemy.has("Blarblade") || enemy.has("Gronnblade")){
+		if (enemy.has("Raudrblade") || enemy.has("Blarblade") || enemy.has("Gronnblade") || enemy.hasExactly("Thunderhead")){
 			var atkbonus = enemy.combatBuffs.atk + enemy.combatBuffs.spd + enemy.combatBuffs.def + enemy.combatBuffs.res;
 			enemy.combatStat.atk += atkbonus;
 			if (atkbonus != 0){roundText += enemy.name + " gains +" + atkbonus + " Atk from " + data.skills[enemy.weaponIndex].name + ".<br>";}
@@ -7245,6 +7245,10 @@ function activeHero(hero){
 				thisAttackRankChanged = true;
 			}
 		}
+		if (this.hasExactly("Meisterschwert")){
+			thisAttackRank++;
+			thisAttackRankChanged = true;
+		}
 
 		//Check for auto follow-up counters
 		if(enemy.hasAtIndex("Quick Riposte", enemy.bIndex)){
@@ -7255,6 +7259,12 @@ function activeHero(hero){
 		}
 		if(enemy.hasAtIndex("Quick Riposte", enemy.sIndex)){
 			if(enemy.combatStartHp/enemy.maxHp >= 1 - 0.1 * enemy.hasAtIndex("Quick Riposte", enemy.sIndex)){
+				enemyAttackRank++;
+				enemyAttackRankChanged = true;
+			}
+		}
+		if (enemy.hasAtRefineIndex("Quick Riposte", enemy.refineIndex)){
+			if (enemy.combatStartHp/enemy.maxHp >= .5){
 				enemyAttackRank++;
 				enemyAttackRankChanged = true;
 			}
@@ -7282,12 +7292,10 @@ function activeHero(hero){
 				enemyAttackRank++;
 				enemyAttackRankChanged = true;
 			}
-		}
-		if (enemy.hasAtRefineIndex("Quick Riposte", enemy.refineIndex)){
-			if (enemy.combatStartHp/enemy.maxHp >= .5){
-				enemyAttackRank++;
-				enemyAttackRankChanged = true;
-			}
+		}		
+		if (enemy.hasExactly("Meisterschwert")){
+			enemyAttackRank++;
+			enemyAttackRankChanged = true;
 		}
 
 		//Check for Wary Fighter
