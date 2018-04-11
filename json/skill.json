@@ -13691,5 +13691,61 @@
 		"charge": 0,
 		"inheritrule": "greentome",
 		"affectsduel": 0
+	}, {
+		"skill_id": 979,
+		"name": "Light Brand",
+		"slot": "weapon",
+		"sp": 400,
+		"description": "Grants Def+3. If foe's Def >= foe's Res+5, deals +7 damage.",
+		"hp": 0,
+		"atk": 16,
+		"spd": 0,
+		"def": 3,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "unique",
+		"affectsduel": 1
+	}, {
+		"skill_id": 980,
+		"name": "S Drink",
+		"slot": "b",
+		"sp": 300,
+		"description": "At the start of turn 1, restores 99 HP and grants Special cooldown count-1.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "unique",
+		"affectsduel": 1
+	}, {
+		"skill_id": 981,
+		"name": "Restore",
+		"slot": "assist",
+		"sp": 200,
+		"description": "Restores 8 HP. Neutralizes ally's penalties (from skills like Panic, Threaten, etc.) and negative status effects (preventing counterattacks, restricting movement, etc.) that last through ally's next action.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "staff",
+		"affectsduel": 0
+	}, {
+		"skill_id": 982,
+		"name": "Restore+",
+		"slot": "assist",
+		"sp": 300,
+		"description": "Restores HP = 50% of Atk. (Minimum of 8 HP.) Neutralizes ally's penalties (from skills like Panic, Threaten, etc.) and negative status effects (preventing counterattacks, restricting movement, etc.) that last through ally's next action.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "staff",
+		"affectsduel": 0
 	}
 ]
