@@ -6237,7 +6237,7 @@ function activeHero(hero){
 				if(AOEActivated){
 					this.resetCharge();
 
-					if(this.has("Wo Dao") || this.has("Giant Spoon") || this.has("Lethal Carrot") || this.hasExactly("Dark Excalibur") || this.hasExactly("Resolute Blade") || this.hasExactly("Nameless Blade") || this.has("Special Damage")){
+					if(this.has("Wo Dao") || this.has("Giant Spoon") || this.has("Lethal Carrot") || this.hasExactly("Dark Excalibur") || this.hasExactly("Resolute Blade") || this.has("Special Damage")){
 						AOEDamage += 10;
 						damageText += this.name + " gains 10 damage from " + data.skills[hero.weapon].name + ".<br>";
 					}
@@ -6338,7 +6338,7 @@ function activeHero(hero){
 				this.resetCharge();
 				damageText += this.name + " activates " + data.skills[this.specialIndex].name + ".<br>";
 
-				if(this.has("Wo Dao") || this.has("Giant Spoon") || this.has("Lethal Carrot") || this.hasExactly("Dark Excalibur") || this.hasExactly("Resolute Blade") || this.hasExactly("Nameless Blade") || this.has("Special Damage")){
+				if(this.has("Wo Dao") || this.has("Giant Spoon") || this.has("Lethal Carrot") || this.hasExactly("Dark Excalibur") || this.hasExactly("Resolute Blade") || this.has("Special Damage")){
 					dmgBoostFlat += 10;
 					damageText += this.name + " gains 10 damage from " + data.skills[hero.weapon].name + ".<br>";
 				}
