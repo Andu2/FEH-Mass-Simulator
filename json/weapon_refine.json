@@ -300,6 +300,18 @@
 		"prereq": "Winged Sword",
 		"exclusive": ""
 	},	{
+		"category": "Nameless Blade",
+		"name": "Special Damage",
+		"sp": 400,
+		"description": "Deals +10 damage when Special triggers.",
+		"hp": 3,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"prereq": "Nameless Blade",
+		"exclusive": ""
+	},	{
 		"category": "Advanced Melee",
 		"name": "Atk Bonus",
 		"sp": 350,
@@ -1738,18 +1750,6 @@
 		"def": 0,
 		"res": 3,
 		"prereq": "Deathly Dagger",
-		"exclusive": ""
-	},	{
-		"category": "Nameless Blade",
-		"name": "Special Damage",
-		"sp": 400,
-		"description": "Deals +10 damage when Special triggers.",
-		"hp": 3,
-		"atk": 0,
-		"spd": 0,
-		"def": 0,
-		"res": 0,
-		"prereq": "Nameless Blade",
 		"exclusive": ""
 	},	{
 		"category": "Regal Blade",
