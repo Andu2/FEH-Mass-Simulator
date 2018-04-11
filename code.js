@@ -5233,15 +5233,15 @@ function activeHero(hero){
 
 		if(enemy.combatStartHp / enemy.maxHp >= 1){
 			if(this.has("Regal Blade")){
-                                if (this.refineIndex == -1) {
-				       this.combatSpur.atk += 2;
-				       this.combatSpur.spd += 2;
-				       boostText += this.name + " gets +2 Atk/Spd with " + data.skills[this.weaponIndex].name + " from " + enemy.name + " being at full health.<br>";
-                                } else {
-				       this.combatSpur.atk += 3;
-				       this.combatSpur.spd += 3;
-				       boostText += this.name + " gets +3 Atk/Spd with " + data.skills[this.weaponIndex].name + " from " + enemy.name + " being at full health.<br>";
-                                }
+				if (this.refineIndex == -1) {
+					this.combatSpur.atk += 2;
+					this.combatSpur.spd += 2;
+					boostText += this.name + " gets +2 Atk/Spd with " + data.skills[this.weaponIndex].name + " from " + enemy.name + " being at full health.<br>";
+				} else {
+					this.combatSpur.atk += 3;
+					this.combatSpur.spd += 3;
+					boostText += this.name + " gets +3 Atk/Spd with " + data.skills[this.weaponIndex].name + " (Refined) from " + enemy.name + " being at full health.<br>";
+				}
 			}
 
 			if(this.hasExactly("Gleipnir") || this.hasExactly("Ivaldi")){
@@ -5414,7 +5414,7 @@ function activeHero(hero){
 			}
 			if (this.hasAtRefineIndex("Death Blow", this.refineIndex)){
 				this.combatSpur.atk += 6;
-				boostText += this.name + " gets +6 Atk from initiating with " + data.skills[this.weaponIndex].name + ".<br>"
+				boostText += this.name + " gets +6 Atk from initiating with " + data.skills[this.weaponIndex].name + " (Refined).<br>"
 			}
 
 			//Skills
