@@ -6243,12 +6243,6 @@ function activeHero(hero){
 						AOEDamage += 10;
 						damageText += this.name + " gains 10 damage from " + data.skills[this.weaponIndex].name + ".<br>";
 					}
-					if (this.hasExactly("Light Brand")){
-						if (enemy.combatStat.def >= enemy.combatStat.res + 5){
-							AOEDamage += 7;
-							damageText += this.name + " gains 7 damage from " + data.skills[this.weaponIndex].name + ".<br>";
-						}
-					}
 					if(this.has("Berserk Armads") && (this.hp / this.maxHp <= .75)){
 						AOEDamage += 10;
 						damageText += this.name + " gains 10 damage from " + data.skills[this.weaponIndex].name + ".<br>";
