@@ -6245,6 +6245,12 @@ function activeHero(hero){
 						AOEDamage += 10;
 						damageText += this.name + " gains 10 damage from " + data.skills[this.weaponIndex].name + ".<br>";
 					}
+					if (this.hasExactly("Light Brand")){
+						if (enemy.combatStat.def >= enemy.combatStat.res + 5){
+							AOEDamage += 7;
+							damageText += this.name + " gains 7 damage from " + data.skills[this.weaponIndex].name + ".<br>";
+						}
+					}
 					if(this.has("Wrath") && (this.hp / this.maxHp <= .25 * this.has("Wrath"))){
 						AOEDamage += 10;
 						damageText += this.name + " gains 10 damage from " + data.skills[this.bIndex].name + ".<br>";
@@ -6724,7 +6730,7 @@ function activeHero(hero){
 			//Flat damage
 			//*** Is Light Brand damage bonus flat damage or bonus attack? ***
 			if (this.hasExactly("Light Brand")){
-				if (this.combatStat.def >= enemy.combatStat.res + 5){
+				if (enemy.combatStat.def >= enemy.combatStat.res + 5){
 					dmgBoostFlat += 7;
 					damageText += this.name + " gains 7 damage from Light Brand.<br>";
 				}
