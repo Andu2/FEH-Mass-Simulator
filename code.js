@@ -5418,6 +5418,8 @@ function activeHero(hero){
 			}
 
 			//Skills
+			//TODO: Combine skills with separated parts such as Swift Sparrow into one if statement
+			//TODO: Add checks for possible overlapping buffs with future skills
 			if(this.hasAtIndex("Death Blow", this.aIndex)){
 				buffVal = this.hasAtIndex("Death Blow", this.aIndex) * 2;
 				skillName = data.skills[this.aIndex].name;
@@ -6239,7 +6241,13 @@ function activeHero(hero){
 
 					if(this.has("Wo Dao") || this.has("Giant Spoon") || this.has("Lethal Carrot") || this.hasExactly("Dark Excalibur") || this.hasExactly("Resolute Blade") || this.has("Special Damage")){
 						AOEDamage += 10;
-						damageText += this.name + " gains 10 damage from " + data.skills[hero.weapon].name + ".<br>";
+						damageText += this.name + " gains 10 damage from " + data.skills[this.weaponIndex].name + ".<br>";
+					}
+					if (this.hasExactly("Light Brand")){
+						if (enemy.combatStat.def >= enemy.combatStat.res + 5){
+							AOEDamage += 7;
+							damageText += this.name + " gains 7 damage from " + data.skills[this.weaponIndex].name + ".<br>";
+						}
 					}
 					if(this.has("Berserk Armads") && (this.hp / this.maxHp <= .75)){
 						AOEDamage += 10;
@@ -6724,7 +6732,7 @@ function activeHero(hero){
 			//Flat damage
 			//*** Is Light Brand damage bonus flat damage or bonus attack? ***
 			if (this.hasExactly("Light Brand")){
-				if (this.combatStat.def >= enemy.combatStat.res + 5){
+				if (enemy.combatStat.def >= enemy.combatStat.res + 5){
 					dmgBoostFlat += 7;
 					damageText += this.name + " gains 7 damage from Light Brand.<br>";
 				}
