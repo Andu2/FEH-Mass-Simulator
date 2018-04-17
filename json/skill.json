@@ -13747,5 +13747,19 @@
 		"charge": 0,
 		"inheritrule": "staff",
 		"affectsduel": 0
+	}, {
+		"skill_id": 983,
+		"name": "Wargod's Tome",
+		"slot": "weapon",
+		"sp": 400,
+		"description": "At start of turn, inflicts Atk/Res-4 on foes in cardinal directions with Res < unit's Res through their next actions.",
+		"hp": 0,
+		"atk": 14,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "unique",
+		"affectsduel": 1
 	}
 ]

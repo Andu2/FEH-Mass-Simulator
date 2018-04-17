@@ -4746,6 +4746,11 @@ function activeHero(hero){
 					threatDebuffs.res = Math.min(threatDebuffs.res, -4);
 					skillNames.push(data.skills[this.weaponIndex].name);
 				}
+				if (this.hasExactly("Wargod's Tome")){
+					threatDebuffs.atk = Math.min(threatDebuffs.atk, -4);
+					threatDebuffs.res = Math.min(threatDebuffs.res, -4);
+					skillNames.push(data.skills[this.weaponIndex].name);
+				}
 				if (this.hasExactly("Weirding Tome")){
 					threatDebuffs.spd = Math.min(threatDebuffs.spd, -5);
 					skillNames.push(data.skills[this.weaponIndex].name);

@@ -4045,5 +4045,22 @@
 		"weapontype": "staff",
 		"movetype": "cavalry",
 		"minrarity": 5
+	}, {
+		"hero_id": 241,
+		"name": "Saias",
+		"basehp": 17,
+		"baseatk": 7,
+		"basespd": 8,
+		"basedef": 5,
+		"baseres": 8,
+		"hpgrowth": 5,
+		"atkgrowth": 8,
+		"spdgrowth": 6,
+		"defgrowth": 2,
+		"resgrowth": 8,
+		"color": "blue",
+		"weapontype": "bluetome",
+		"movetype": "infantry",
+		"minrarity": 3
 	}
 ]
