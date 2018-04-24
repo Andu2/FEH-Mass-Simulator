@@ -2303,5 +2303,35 @@
 	}, {
 		"skill_id": 991,
 		"required_id": 990
+	}, {
+		"skill_id": 993,
+		"required_id": 992
+	}, {
+		"skill_id": 992,
+		"required_id": 115
+	}, {
+		"skill_id": 994,
+		"required_id": 104
+	}, {
+		"skill_id": 997,
+		"required_id": 996
+	}, {
+		"skill_id": 996,
+		"required_id": 995
+	}, {
+		"skill_id": 999,
+		"required_id": 998
+	}, {
+		"skill_id": 998,
+		"required_id": 93
+	}, {
+		"skill_id": 1000,
+		"required_id": 341
+	}, {
+		"skill_id": 1002,
+		"required_id": 1001
+	}, {
+		"skill_id": 1001,
+		"required_id": 68
 	}
 ]

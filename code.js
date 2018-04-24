@@ -1069,12 +1069,12 @@ function getCDChange(skill, slot){
 	//Weapon
 	if (slot == "weapon"){
 		//Cooldown decrease
-		if (skillName.indexOf("Killing Edge") != -1 	|| skillName.indexOf("Killer Axe") != -1	|| skillName.indexOf("Killer Lance") != -1
-			|| skillName.indexOf("Killer Bow") != -1	|| skillName.indexOf("Slaying Bow") != -1 	|| skillName.indexOf("Slaying Edge") != -1
-			|| skillName.indexOf("Slaying Axe") != -1	|| skillName.indexOf("Slaying Lance") != -1	|| skillName.indexOf("Cursed Lance") != -1
-			|| skillName.indexOf("Mystletainn") != -1	|| skillName.indexOf("Hauteclere") != -1	|| skillName.indexOf("Urvan") != -1
-			|| skillName.indexOf("Audhulma") != -1		|| skillName.indexOf("Kagami Mochi") != -1	|| skillName.indexOf("Basilikos") != -1
-			|| skillName.indexOf("Berserk Armads") != -1    || skillName.indexOf("Nameless Blade") != -1
+		if (skillName.indexOf("Killing Edge") != -1 		|| skillName.indexOf("Killer Axe") != -1		|| skillName.indexOf("Killer Lance") != -1
+			|| skillName.indexOf("Killer Bow") != -1		|| skillName.indexOf("Slaying Bow") != -1 		|| skillName.indexOf("Slaying Edge") != -1
+			|| skillName.indexOf("Slaying Axe") != -1		|| skillName.indexOf("Slaying Lance") != -1		|| skillName.indexOf("Cursed Lance") != -1
+			|| skillName.indexOf("Mystletainn") != -1		|| skillName.indexOf("Hauteclere") != -1		|| skillName.indexOf("Urvan") != -1
+			|| skillName.indexOf("Audhulma") != -1			|| skillName.indexOf("Kagami Mochi") != -1		|| skillName.indexOf("Basilikos") != -1
+			|| skillName.indexOf("Berserk Armads") != -1    || skillName.indexOf("Nameless Blade") != -1	|| skillName.indexOf("Barb Shuriken") != -1
 			){
 				return -1;
 		}
@@ -5616,6 +5616,11 @@ function activeHero(hero){
 				this.combatSpur.def += 4;
 				boostText += this.name + " gets +4 Atk/Def while defending with " + data.skills[this.weaponIndex].name + ".<br>";
 			}
+			if(this.has("Water Breath")){
+				this.combatSpur.def += 4;
+				this.combatSpur.res += 4;
+				boostText += this.name + " gets +4 Def/Res while defending with " + data.skills[this.weaponIndex].name + ".<br>";
+			}
 			if(this.has("Guard Bow") && enemy.range == "ranged"){
 				this.combatSpur.def += 6;
 				this.combatSpur.res += 6;
@@ -6003,7 +6008,7 @@ function activeHero(hero){
 			if (this.hasExactly("Deathly Dagger") || this.has("Lethal Carrot")){
 				sealStats(data.skills[this.weaponIndex].name, ["def","res"], [-7]);
 			}
-			if (this.has("Silver Dagger") || this.has("Seashell") || this.has("Dancer's Fan") || this.has("Kagami Mochi") || this.has("Felicia's Plate")){
+			if (this.has("Silver Dagger") || this.has("Seashell") || this.has("Dancer's Fan") || this.has("Kagami Mochi") || this.has("Barb Shuriken") || this.has("Felicia's Plate")){
 				sealStats(data.skills[this.weaponIndex].name, ["def","res"], [-5, -7]);
 			}
 			if (this.has("Kitty Paddle") && (enemy.weaponType == "redtome" || enemy.weaponType == "bluetome" || enemy.weaponType == "greentome")){
@@ -6187,7 +6192,7 @@ function activeHero(hero){
 			return true;
 		}
 		if (enemy.range == "ranged"){
-			if (this.hasExactly("Great Flame") || this.hasExactly("Expiration")){
+			if (this.hasExactly("Great Flame") || this.hasExactly("Expiration") || this.has("Water Breath")){
 				return true;
 			}
 			if (this.weaponType == "dragon" && (this.refineIndex != -1)){
@@ -6567,10 +6572,9 @@ function activeHero(hero){
 			//Check weapon effective against
 			var effectiveBonus = 1;
 			if (enemy.moveType == "armored"
-				&& (this.has("Hammer") 		|| this.has("Slaying Hammer")
-				|| this.has("Armorslayer") 	|| this.has("Armorsmasher")
-				|| this.has("Heavy Spear") 	|| this.has("Slaying Spear")
-				|| this.hasExactly("Thani") || this.hasExactly("Winged Sword"))
+				&& (this.has("Hammer") 		|| this.has("Slaying Hammer")	|| this.has("Armorslayer") 	|| this.has("Armorsmasher")				
+				|| this.has("Heavy Spear") 	|| this.has("Slaying Spear")	|| this.hasExactly("Thani") || this.hasExactly("Winged Sword"))
+				|| this.has("Warrior Princess")
 				){
 				effectiveBonus = (enemy.has("Svalinn Shield")) ? 1 : 1.5;
 			}
