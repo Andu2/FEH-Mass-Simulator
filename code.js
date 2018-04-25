@@ -6578,8 +6578,8 @@ function activeHero(hero){
 			var effectiveBonus = 1;
 			if (enemy.moveType == "armored"
 				&& (this.has("Hammer") 		|| this.has("Slaying Hammer")	|| this.has("Armorslayer") 	|| this.has("Armorsmasher")				
-				|| this.has("Heavy Spear") 	|| this.has("Slaying Spear")	|| this.hasExactly("Thani") || this.hasExactly("Winged Sword"))
-				|| this.has("Warrior Princess")
+				|| this.has("Heavy Spear") 	|| this.has("Slaying Spear")	|| this.hasExactly("Thani") || this.hasExactly("Winged Sword")
+				|| this.has("Warrior Princess"))
 				){
 				effectiveBonus = (enemy.has("Svalinn Shield")) ? 1 : 1.5;
 			}
