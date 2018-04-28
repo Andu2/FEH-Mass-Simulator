@@ -5402,17 +5402,6 @@ function activeHero(hero){
 				this.combatSpur.spd += buffVal;
 				boostText += this.name + " gets +" + buffVal + " Atk/Spd from having more adjacent allies with " + skillName + ".<br>";
 			}
-			
-			//Multiple Adjacent Skills
-			if (this.hasAtIndex("Laws of Sacae", this.aIndex) && this.adjacent >= 2){
-				buffVal = 4;
-				skillName = data.skills[this.aIndex].name;
-				this.combatSpur.atk += buffVal;
-				this.combatSpur.spd += buffVal;
-				this.combatSpur.def += buffVal;
-				this.combatSpur.res += buffVal;
-				boostText += this.name + " gets +" + buffVal + " Atk/Spd/Def/Res from being adjacent to >= 2 allies within 2 spaces with " + skillName + ".<br>";
-			}
 		}
 
 		//this.blow = function(){
@@ -5549,7 +5538,6 @@ function activeHero(hero){
 				this.combatSpur.res += buffVal;
 				boostText += this.name + " gets +" + buffVal + " Res from initiating with " + skillName + ".<br>";
 			}
-
 			return boostText;
 		}
 
@@ -5557,7 +5545,18 @@ function activeHero(hero){
 		if(!this.initiator){
 			//Not actually going to limit text from relevantDefType, because res/def may always be relevant for special attacks
 			var buffVal = 0;
-
+			
+			//Skills
+			if (this.hasAtIndex("Laws of Sacae", this.aIndex) && this.adjacent >= 2){
+				buffVal = 4;
+				skillName = data.skills[this.aIndex].name;
+				this.combatSpur.atk += buffVal;
+				this.combatSpur.spd += buffVal;
+				this.combatSpur.def += buffVal;
+				this.combatSpur.res += buffVal;
+				boostText += this.name + " gets +" + buffVal + " Atk/Spd/Def/Res from being adjacent to >= 2 allies within 2 spaces with " + skillName + ".<br>";
+			}
+			
 			//Close/Distant Def
 			if(enemy.range == "ranged"){
 				if(this.hasAtIndex("Distant Def", this.aIndex)){
