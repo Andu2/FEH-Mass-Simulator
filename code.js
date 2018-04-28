@@ -5103,7 +5103,7 @@ function activeHero(hero){
 
 	//For buffs that act like spur and stack
 	//Must be passed enemy for Earth Boost
-	this.startCombatSpur = function(enemy){
+	this.setCombatSpur = function(enemy){
 		var boostText = "";
 
 		//Ally Support
@@ -5162,7 +5162,7 @@ function activeHero(hero){
 			boostText += this.name + " gets +6 Atk from " + data.refine[this.refineIndex].name + " (Refined) against a ranged opponent.<br>";
 		}
 
-		//Brazen skills
+		//Brazen Skills
 		if(this.combatStartHp / this.maxHp <= 0.8){
 			if(this.has("Brazen Atk Spd")){
 				statBonus = 1 + 2 * this.has("Brazen Atk Spd");
@@ -5208,6 +5208,7 @@ function activeHero(hero){
 			}
 		}
 
+		//Full Health Skills
 		if(this.combatStartHp / this.maxHp >= 1){
 			if(this.hasExactly("Ragnarok")){
 				//Does this take effect when defending? Answer: yes
@@ -5241,6 +5242,7 @@ function activeHero(hero){
 			}
 		}
 
+		//Enemy Full Health Skills
 		if(enemy.combatStartHp / enemy.maxHp >= 1){
 			if(this.has("Regal Blade")){
 				if (this.refineIndex == -1) {
@@ -5261,6 +5263,7 @@ function activeHero(hero){
 			}
 		}
 
+		//Boost Skills
 		if(this.hp >= enemy.hp + 3){
 			var skillName = "";
 			var buffVal = 0;
@@ -5404,7 +5407,7 @@ function activeHero(hero){
 			}
 		}
 
-		//this.blow = function(){
+		//Blow Skills
 		if(this.initiator){
 			var skillName = "";
 			var buffVal = 0;
@@ -5541,7 +5544,7 @@ function activeHero(hero){
 			return boostText;
 		}
 
-		//this.defendBuff = function(relevantDefType){
+		//Defensive Skills
 		if(!this.initiator){
 			//Not actually going to limit text from relevantDefType, because res/def may always be relevant for special attacks
 			var buffVal = 0;
@@ -5754,50 +5757,42 @@ function activeHero(hero){
 		}
 
 		//Calculate effective combat stats
-		this.combatStat.atk = Math.max(this.atk + this.combatBuffs.atk + this.combatDebuffs.atk + this.spur.atk + this.combatSpur.atk - panicDebuff.atk, 0);
-		this.combatStat.spd = Math.max(this.spd + this.combatBuffs.spd + this.combatDebuffs.spd + this.spur.spd + this.combatSpur.spd - panicDebuff.spd, 0);
-		this.combatStat.def = Math.max(this.def + this.combatBuffs.def + this.combatDebuffs.def + this.spur.def + this.combatSpur.def - panicDebuff.def, 0);
-		this.combatStat.res = Math.max(this.res + this.combatBuffs.res + this.combatDebuffs.res + this.spur.res + this.combatSpur.res - panicDebuff.res, 0);
-
-		/***Old script used in doDamage()***
-		//Buff cancellation and reversion - Atk, Def, Res calculations
-		//***May require changes depending on order of application between Panic and other debuff skills***
-		//Attacker relevant stats
-		//Panic debuff
-		if(this.panicked){
-			this.combatStat.atk = this.atk - Math.max(this.buffs.atk,this.combatBuffs.atk) + Math.min(this.debuffs.atk,this.combatDebuffs.atk) + this.spur.atk + this.combatSpur.atk;
-			this.combatStat.spd = this.spd - Math.max(this.buffs.spd,this.combatBuffs.spd) + Math.min(this.debuffs.spd,this.combatDebuffs.spd) + this.spur.spd + this.combatSpur.spd;
-			this.combatStat.def = this.def - Math.max(this.buffs.def,this.combatBuffs.def) + Math.min(this.debuffs.def,this.combatDebuffs.def) + this.spur.def + this.combatSpur.def;
-			this.combatStat.res = this.res - Math.max(this.buffs.res,this.combatBuffs.res) + Math.min(this.debuffs.res,this.combatDebuffs.res) + this.spur.res + this.combatSpur.res;
-			if(!AOE){damageText += this.name + "'s buffs are reversed by debuff.<br>";}
-		//Buff cancellation
-		} else if(isBuffCancelled(this, enemy)){
-			this.combatStat.atk = this.atk + Math.min(this.debuffs.atk,this.combatDebuffs.atk) + this.spur.atk + this.combatSpur.atk;
-			this.combatStat.spd = this.spd + Math.min(this.debuffs.spd,this.combatDebuffs.spd) + this.spur.spd + this.combatSpur.spd;
-			this.combatStat.def = this.def + Math.min(this.debuffs.def,this.combatDebuffs.def) + this.spur.def + this.combatSpur.def;
-			this.combatStat.res = this.res + Math.min(this.debuffs.res,this.combatDebuffs.res) + this.spur.res + this.combatSpur.res;
-			if(!AOE){damageText += this.name + "'s buffs are nullified by opponent's skill.<br>";}
-		//Bladetome bonus
-		//TODO: Find out if bladetomes affect AOE specials
-		} else if(this.has("Raudrblade") || this.has("Blarblade") || this.has("Gronnblade")){
-			var bladebonus = Math.max(this.buffs.atk,this.combatBuffs.atk) + Math.max(this.buffs.spd,this.combatBuffs.spd) + Math.max(this.buffs.def,this.combatBuffs.def) + Math.max(this.buffs.res,this.combatBuffs.res);
-			this.combatStat.atk += bladebonus;
-			if(!AOE && bladebonus != 0){damageText += this.name + " gains +" + bladebonus + " Atk from " + data.skills[this.weaponIndex].name + ".<br>";}
-		}
-		//Blizzard bonus
-		if(this.has("Blizzard")){
-			var atkbonus = -1 * (Math.min(enemy.debuffs.atk,enemy.combatDebuffs.atk) + Math.min(enemy.debuffs.spd,enemy.combatDebuffs.spd) + Math.min(enemy.debuffs.def,enemy.combatDebuffs.def) + Math.min(enemy.debuffs.res,enemy.combatDebuffs.res));
-			if (enemy.panicked){
-				atkbonus += Math.max(enemy.buffs.atk,enemy.combatBuffs.atk) + Math.max(enemy.buffs.spd,enemy.combatBuffs.spd) + Math.max(enemy.buffs.def,enemy.combatBuffs.def) + Math.max(enemy.buffs.res,enemy.combatBuffs.res);
-			}
-			this.combatStat.atk += atkbonus;
-			if(!AOE && atkbonus != 0){damageText += this.name + " gains +" + atkbonus + " Atk from " + data.skills[this.weaponIndex].name + ".<br>";}
-		}
-		*/
+		//TODO: Check if stats can be negative
+		this.combatStat.atk = Math.max(0, this.atk + this.combatBuffs.atk + this.combatDebuffs.atk - panicDebuff.atk);
+		this.combatStat.spd = Math.max(0, this.spd + this.combatBuffs.spd + this.combatDebuffs.spd - panicDebuff.spd);
+		this.combatStat.def = Math.max(0, this.def + this.combatBuffs.def + this.combatDebuffs.def - panicDebuff.def);
+		this.combatStat.res = Math.max(0, this.res + this.combatBuffs.res + this.combatDebuffs.res - panicDebuff.res);
 
 		return statText;
 	}
+	
+	//Adds in-combat spurs and bonus into combat stats
+	this.setCombatBonus = function(enemy){
+		var statText = "";
+		
+		//TODO: Check if negative total buffs from field buffs affect this
+		this.combatStat.atk = Math.max(0, this.combatStat.atk + this.spur.atk + this.combatSpur.atk);
+		this.combatStat.spd = Math.max(0, this.combatStat.spd + this.spur.spd + this.combatSpur.spd);
+		this.combatStat.def = Math.max(0, this.combatStat.def + this.spur.def + this.combatSpur.def);
+		this.combatStat.res = Math.max(0, this.combatStat.res + this.spur.res + this.combatSpur.res);
 
+		//Bladetome bonus
+		if (this.has("Raudrblade") || this.has("Blarblade") || this.has("Gronnblade") || this.hasExactly("Thunderhead")){
+			var atkbonus = this.combatBuffs.atk + this.combatBuffs.spd + this.combatBuffs.def + this.combatBuffs.res;
+			this.combatStat.atk += atkbonus;
+			if (atkbonus != 0){statText += this.name + " gains +" + atkbonus + " Atk from buffs with " + data.skills[this.weaponIndex].name + ".<br>";}
+		}
+
+		//Blizzard bonus
+		if(this.has("Blizzard")){
+			var atkbonus = -1 * (enemy.combatDebuffs.atk + enemy.combatDebuffs.spd + enemy.combatDebuffs.def + enemy.combatDebuffs.res);
+			this.combatStat.atk += atkbonus;
+			if (atkbonus != 0){statText += this.name + " gains +" + atkbonus + " Atk from enemy penalties with " + data.skills[this.weaponIndex].name + ".<br>";}
+		}
+		
+		return statText;
+	}
+	
 	//poison only happens when the user initiates
 	this.poisonEnemy = function(enemy){
 		var poisonEnemyText ="";
@@ -6258,15 +6253,13 @@ function activeHero(hero){
 			if(AOE){
 				var AOEActivated = false;
 				var AOEDamage = 0;
-				//AOE specials don't take spur into effect
-				var AOEthisEffAtk = this.combatStat.atk - this.spur.atk - this.combatSpur.atk;
-
+				
 				if(this.has("Rising Thunder") || this.has("Rising Wind") || this.has("Rising Light") || this.has("Rising Flame") || this.has("Growing Thunder") || this.has("Growing Wind") || this.has("Growing Light") || this.has("Growing Flame")){
-					AOEDamage = Math.max(0, AOEthisEffAtk - relevantDef);
+					AOEDamage = Math.max(0, this.combatStat.atk - relevantDef);
 					AOEActivated = true;
 				}
 				else if(this.has("Blazing Thunder") || this.has("Blazing Wind") || this.has("Blazing Light") || this.has("Blazing Flame")){
-					AOEDamage = Math.floor(1.5 * Math.max(0, AOEthisEffAtk - relevantDef));
+					AOEDamage = Math.floor(1.5 * Math.max(0, this.combatStat.atk - relevantDef));
 					AOEActivated = true;
 				}
 
@@ -6798,15 +6791,18 @@ function activeHero(hero){
 			var statBoost = dmgBoost;
 			var reduceDmg = relevantDef + (relevantDef * enemyDefModifier | 0);
 
-			//Total damage = base damage + weapon advantage boost + stat-reliant special boost - relevant defense mitigation
-			var totalDmg = (rawDmg + advBoost + statBoost - reduceDmg);
+			//Total damage = base damage + weapon advantage boost + stat-reliant special boost - relevant defense mitigation (should not be reduced below 0)
+			var totalDmg = Math.max(0, rawDmg + advBoost + statBoost - reduceDmg);
 			//Total damage is modified by weapon modifier (ie. healer staff reduction)
 			totalDmg = (totalDmg * weaponModifier | 0);
 			//Total damage is modified by damage multiplier from specials + flat damage bonus
+			//TODO: Check if flat damage affected by weapon triangle multiplier.
 			totalDmg = (totalDmg * dmgMultiplier | 0) + dmgBoostFlat;
 			//Final damage is total damage - damage reduction from specials - flat damage reduction
 			var dmg = totalDmg - (totalDmg * (1 - dmgReduction) | 0) - dmgReductionFlat;
-
+			//Final damage cannot be negative
+			dmg = Math.max(0, dmg);			
+			
 			/*	Old damage formula
 			var rawDmg = (this.combatStat.atk * effectiveBonus | 0) + ((this.combatStat.atk * effectiveBonus | 0) * weaponAdvantageBonus | 0) + (dmgBoost | 0);
 			var reduceDmg = relevantDef + (relevantDef * enemyDefModifier | 0);
@@ -6815,10 +6811,7 @@ function activeHero(hero){
 			dmg -= dmg * (1 - dmgReduction) | 0;
 			dmg -= dmgReductionFlat | 0;
 			*/
-
-			//Final damage calculations
-			dmg = Math.max(dmg,0);
-
+			
 			if(enemy.has("Embla's Ward")){
 				dmg = 0;
 			}
@@ -7118,25 +7111,30 @@ function activeHero(hero){
 		this.combatStartHp = this.hp;
 		enemy.combatStartHp = enemy.hp;
 
-		//TODO: Reorganize to operate in this order: stats + field buff/debuff -> aoe specials -> add spurs (bladetome bonus can go in here)
-		//Current logic: calculate spurs -> stats + field buff/debuff + spurs -> aoe specials - spurs -> add bladetome bonus
-
-		//Initialize combat spur
-		this.combatSpur = {"atk":0,"spd":0,"def":0,"res":0};
-		enemy.combatSpur = {"atk":0,"spd":0,"def":0,"res":0};
-		roundText += this.startCombatSpur(enemy);
-		roundText += enemy.startCombatSpur(this);
-
-		//Initialize combat stats
+		//Current Logic: Initial stats + field buffs -> aoe specials -> add spurs (bladetome bonus goes in here) 
+		//Previous logic: calculate spurs -> stats + field buff/debuff + spurs -> aoe specials - spurs -> add bladetome bonus
+		
+		//Initialize combat stats + field buffs
 		//***Replaces effAtk, effSpd, etc. so stats only have to be calculated once per round and used in both attack() and doDamage()***
 		this.combatStat = {"atk":0,"spd":0,"def":0,"res":0};
 		enemy.combatStat = {"atk":0,"spd":0,"def":0,"res":0};
 		roundText += this.setCombatStats(enemy);
-		roundText += enemy.setCombatStats(this);
-
+		roundText += enemy.setCombatStats(this);		
+		
 		//Check for AOE special activation before combat
 		roundText += this.doDamage(enemy, false, true, false);
-
+		
+		//Initialize combat spurs
+		this.combatSpur = {"atk":0,"spd":0,"def":0,"res":0};
+		enemy.combatSpur = {"atk":0,"spd":0,"def":0,"res":0};
+		roundText += this.setCombatSpur(enemy);
+		roundText += enemy.setCombatSpur(this);
+		
+		//Add manual spur and combat spur into combat stats
+		roundText += this.setCombatBonus(enemy);
+		roundText += enemy.setCombatBonus(this);		
+		
+		/* Moved into setCombatBonus()
 		//In-combat bonuses:
 		//Bladetome bonus
 		if (this.has("Raudrblade") || this.has("Blarblade") || this.has("Gronnblade") || this.hasExactly("Thunderhead")){
@@ -7160,6 +7158,7 @@ function activeHero(hero){
 			enemy.combatStat.atk += atkbonus;
 			if (atkbonus != 0){roundText += enemy.name + " gains +" + atkbonus + " Atk from " + data.skills[enemy.weaponIndex].name + ".<br>";}
 		}
+		*/
 
 		//Check for Brave weapons, brave will be passed to this.doDamage
 		var doubleInitiate = false;
