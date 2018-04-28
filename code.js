@@ -3539,7 +3539,7 @@ function fight(enemyIndex,resultIndex){
 	}
 	
 	//Set weapon icon name for bow
-	if (weaponTypeName == "bow" && ahEnemy.color != "gray"){
+	if (weaponTypeName == "bow"){
 		weaponTypeName = ahEnemy.color + "bow";
 	}
 
