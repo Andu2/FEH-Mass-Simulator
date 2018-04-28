@@ -6197,7 +6197,7 @@ function activeHero(hero){
 		if (opponent.has("Beorc's Blessing") && (hero.moveType == "cavalry" || hero.moveType == "flying")){
 			return true;
 		}
-		if (opponent.has("Mulagir") && (hero.weaponType == "redtome" || hero.weaponType == "bluetome" || hero.weaponType == "greentome")){
+		if (opponent.hasExactly("Mulagir") && (hero.weaponType == "redtome" || hero.weaponType == "bluetome" || hero.weaponType == "greentome")){
 			return true;
 		}
 		if (opponent.has("Dull Ranged") && hero.range == "ranged"){
