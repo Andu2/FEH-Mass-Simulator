@@ -5395,8 +5395,7 @@ function activeHero(hero){
 			}
 			
 			//Comparative Adjacent Skills
-			//TODO: Change from >=1 to actual quantity comparison
-			if (this.hasAtIndex("Swift Mulagir", this.weaponIndex) && this.adjacent >= 1){
+			if (this.hasAtIndex("Swift Mulagir", this.weaponIndex) && this.adjacent > enemy.adjacent){
 				buffVal = 5;
 				skillName = data.skills[this.weaponIndex].name;
 				this.combatSpur.atk += buffVal;
