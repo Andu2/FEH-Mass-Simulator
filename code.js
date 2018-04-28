@@ -90,10 +90,10 @@ data.lists = loadJSON('json/custom_lists.json')
 
 var debug = false;
 
-data.weaponTypes = ["sword","lance","axe","redtome","bluetome","greentome","dragon","bow","dagger","staff"];
-data.rangedWeapons = ["redtome","bluetome","greentome","bow","dagger","staff"];
+data.weaponTypes = ["sword","lance","axe","redtome","bluetome","greentome","dragon","redbow","bluebow","greenbow","bow","dagger","staff"];
+data.rangedWeapons = ["redtome","bluetome","greentome","redbow","bluebow","greenbow","bow","dagger","staff"];
 data.meleeWeapons = ["sword","lance","axe","dragon"];
-data.physicalWeapons = ["sword","lance","axe","bow","dagger"];
+data.physicalWeapons = ["sword","lance","axe","redbow","bluebow","greenbow","bow","dagger"];
 data.magicalWeapons = ["redtome","bluetome","greentome","dragon","staff"];
 data.moveTypes = ["infantry","armored","flying","cavalry","mounted"];
 data.colors = ["red","blue","green","gray"];
@@ -2205,11 +2205,11 @@ function updateHeroUI(hero){
 		$("#" + htmlPrefix + "res").html(hero.res);
 		$("#" + htmlPrefix + "bst").html(hero.bst + " / " + hero.spt);
 		$("#" + htmlPrefix + "asc").html(Math.round(100*(588.5 + 4*((hero.bst / 8) + (hero.spt / 240) + hero.merge + 5*(hero.rarity - 5)))) * 0.01);
-		if(data.heroes[hero.index].weapontype != "dragon"){
-			$("#" + htmlPrefix + "weapon_icon").attr("src","weapons/" + data.heroes[hero.index].weapontype + ".png");
+		if(data.heroes[hero.index].weapontype == "dragon" || data.heroes[hero.index].weapontype == "bow" ){			
+			$("#" + htmlPrefix + "weapon_icon").attr("src","weapons/" + data.heroes[hero.index].color + data.heroes[hero.index].weapontype + ".png");
 		}
 		else{
-			$("#" + htmlPrefix + "weapon_icon").attr("src","weapons/" + data.heroes[hero.index].color + "dragon.png");
+			$("#" + htmlPrefix + "weapon_icon").attr("src","weapons/" + data.heroes[hero.index].weapontype + ".png");
 		}
 		$("#" + htmlPrefix + "movement_icon").attr("src","weapons/" + data.heroes[hero.index].movetype + ".png");
 
@@ -3537,6 +3537,11 @@ function fight(enemyIndex,resultIndex){
 	if(weaponTypeName == "dragon"){
 		weaponTypeName = ahEnemy.color + "dragon";
 	}
+	
+	//Set weapon icon name for bow
+	if (weaponTypeName == "bow" && ahEnemy.color != "gray"){
+		weaponTypeName = ahEnemy.color + "bow";
+	}
 
 	if(typeof enemyList[enemyIndex].lastFightResult == "undefined"){
 		enemyList[enemyIndex].lastFightResult = "";
@@ -3546,11 +3551,11 @@ function fight(enemyIndex,resultIndex){
 	passFilters.push(outcome);
 
 	//Filter Color
-	if (weaponTypeName == "sword" || weaponTypeName == "redtome" || weaponTypeName == "reddragon"){
+	if (weaponTypeName == "sword" || weaponTypeName == "redtome" || weaponTypeName == "redbow" ||weaponTypeName == "reddragon"){
 		passFilters.push("red");
-	}else if (weaponTypeName == "lance" || weaponTypeName == "bluetome" || weaponTypeName == "bluedragon"){
+	}else if (weaponTypeName == "lance" || weaponTypeName == "bluetome" || weaponTypeName == "bluebow" ||weaponTypeName == "bluedragon"){
 		passFilters.push("blue");
-	}else if (weaponTypeName == "axe" || weaponTypeName == "greentome" || weaponTypeName == "greendragon"){
+	}else if (weaponTypeName == "axe" || weaponTypeName == "greentome" || weaponTypeName == "greenbow" ||weaponTypeName == "greendragon"){
 		passFilters.push("green");
 	}else{
 		passFilters.push("gray");
@@ -5387,6 +5392,27 @@ function activeHero(hero){
 				this.combatSpur.def += buffVal;
 				this.combatSpur.res += buffVal;
 				boostText += this.name + " gets +" + buffVal + " Atk/Spd/Def/Res from being adjacent to a infantry magic ally with " + skillName + " (Refined).<br>";
+			}
+			
+			//Comparative Adjacent Skills
+			//TODO: Change from >=1 to actual quantity comparison
+			if (this.hasAtIndex("Swift Mulagir", this.weaponIndex) && this.adjacent >= 1){
+				buffVal = 5;
+				skillName = data.skills[this.weaponIndex].name;
+				this.combatSpur.atk += buffVal;
+				this.combatSpur.spd += buffVal;
+				boostText += this.name + " gets +" + buffVal + " Atk/Spd from having more adjacent allies with " + skillName + ".<br>";
+			}
+			
+			//Multiple Adjacent Skills
+			if (this.hasAtIndex("Laws of Sacae", this.aIndex) && this.adjacent >= 2){
+				buffVal = 4;
+				skillName = data.skills[this.aIndex].name;
+				this.combatSpur.atk += buffVal;
+				this.combatSpur.spd += buffVal;
+				this.combatSpur.def += buffVal;
+				this.combatSpur.res += buffVal;
+				boostText += this.name + " gets +" + buffVal + " Atk/Spd/Def/Res from being adjacent to >= 2 allies within 2 spaces with " + skillName + ".<br>";
 			}
 		}
 
