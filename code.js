@@ -6594,9 +6594,9 @@ function activeHero(hero){
 			//Check weapon effective against
 			var effectiveBonus = 1;
 			if (enemy.moveType == "armored"
-				&& (this.has("Hammer") 		|| this.has("Slaying Hammer")	|| this.has("Armorslayer") 	|| this.has("Armorsmasher")				
-				|| this.has("Heavy Spear") 	|| this.has("Slaying Spear")	|| this.hasExactly("Thani") || this.hasExactly("Winged Sword")
-				|| this.has("Warrior Princess"))
+				&& (this.has("Hammer") 			|| this.has("Slaying Hammer")	|| this.has("Armorslayer") 	|| this.has("Armorsmasher")				
+					|| this.has("Heavy Spear") 	|| this.has("Slaying Spear")	|| this.hasExactly("Thani")	|| this.hasExactly("Winged Sword")
+					|| this.has("Warrior Princess"))
 				){
 				effectiveBonus = (enemy.has("Svalinn Shield")) ? 1 : 1.5;
 			}
@@ -6796,12 +6796,9 @@ function activeHero(hero){
 			//Total damage is modified by weapon modifier (ie. healer staff reduction)
 			totalDmg = (totalDmg * weaponModifier | 0);
 			//Total damage is modified by damage multiplier from specials + flat damage bonus
-			//TODO: Check if flat damage affected by weapon triangle multiplier.
 			totalDmg = (totalDmg * dmgMultiplier | 0) + dmgBoostFlat;
-			//Final damage is total damage - damage reduction from specials - flat damage reduction
-			var dmg = totalDmg - (totalDmg * (1 - dmgReduction) | 0) - dmgReductionFlat;
-			//Final damage cannot be negative
-			dmg = Math.max(0, dmg);			
+			//Final damage is total damage - damage reduction from specials - flat damage reduction (should not be reduced below 0)
+			var dmg = Math.max(0, totalDmg - (totalDmg * (1 - dmgReduction) | 0) - dmgReductionFlat);
 			
 			/*	Old damage formula
 			var rawDmg = (this.combatStat.atk * effectiveBonus | 0) + ((this.combatStat.atk * effectiveBonus | 0) * weaponAdvantageBonus | 0) + (dmgBoost | 0);
@@ -7438,7 +7435,7 @@ function activeHero(hero){
 		else if(this.weaponType=="greentome" && enemy.has("G Tomebreaker")){
 			thisBreakLevel = 1.1 - enemy.has("G Tomebreaker") * 0.2;
 		}
-		else if(this.weaponType=="bow" && enemy.has("Bowbreaker")){
+		else if(this.weaponType=="bow" && this.color=="gray" && enemy.has("Bowbreaker")){
 			thisBreakLevel = 1.1 - enemy.has("Bowbreaker") * 0.2;
 		}
 		else if(this.weaponType=="dagger" && enemy.has("Daggerbreaker")){
@@ -7463,7 +7460,7 @@ function activeHero(hero){
 		else if(enemy.weaponType=="greentome" && this.has("G Tomebreaker")){
 			enemyBreakLevel = 1.1 - this.has("G Tomebreaker") * 0.2;
 		}
-		else if(enemy.weaponType=="bow" && this.has("Bowbreaker")){
+		else if(enemy.weaponType=="bow" && enemy.color=="gray" && this.has("Bowbreaker")){
 			enemyBreakLevel = 1.1 - this.has("Bowbreaker") * 0.2;
 		}
 		else if(enemy.weaponType=="dagger" && this.has("Daggerbreaker")){
