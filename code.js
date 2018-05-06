@@ -415,11 +415,16 @@ $(document).ready(function(){
 	if (option_saveSettings == "false"){initSettings();}
 
 	//Populate hero select options
-	heroHTML = "<option value=-1 class=\"hero_option\">Select Hero</option>";
+	var heroHTML = "<option value=-1 class=\"hero_option\">Select Hero</option>";
 	for(var i = 0; i < data.heroes.length; i++){
 		heroHTML += "<option value=" + i + " class=\"hero_option\">" + data.heroes[i].name + "</option>";
 	}
-
+	
+	//Initiate hero lists
+	var listHTML = "<option value=-1 class=\"hero_option\">New List</option>";
+	
+	//Inject select2 UI with matcher for hero lists
+	$("#challenger_list, #cl_enemy_list").html(listHTML).select2({selectOnClose: true, dropdownAutoWidth : true, matcher: matchStartHeroesList});
 	//Inject select2 UI with matcher for data.heroes
 	$("#challenger_name, #cl_enemy_name").html(heroHTML).select2({selectOnClose: true, dropdownAutoWidth : true, matcher: matchStartHeroes});
 	//Inject select2 UI with matcher for data.skills
@@ -479,8 +484,9 @@ $(document).ready(function(){
 
 	//Create listener on whole body and check data-var to see which var to replace
 	//TODO: make click listeners work similarly
-	$("input, select").on("change", function(e){
+	$("input, select").on("change", function(e){		
 		var dataVar = $(this).attr("data-var");
+		console.log(dataVar);
 		if(dataVar){
 			var varsThatChangeStats = [
 				".buffs.hp",".debuffs.hp",".rarity",".merge",".boon",".bane",".summoner",".ally",".bless_1",".bless_2",".weapon",".refine",".a",".s",".replaceWeapon",".replaceRefine",".replaceA"
@@ -510,7 +516,7 @@ $(document).ready(function(){
 				}
 				hero = enemies.cl.list[options.customEnemySelected];
 			}
-
+			
 			var inputType = $(this).attr("type");
 			if(inputType == "number"){
 				var min = $(this).attr("min");
@@ -648,6 +654,11 @@ $(document).ready(function(){
 					setStats(hero);
 					break;
 				}
+			}
+			
+			//Update custom enemy
+			if (endsWith(dataVar, ".customEnemySelected")){
+				updateEnemyUI();
 			}
 
 			//Update health
@@ -1967,6 +1978,39 @@ function matchStartHeroes(params, data) {
     return null;
 }
 
+//Select2 match function for matching starting characters
+function matchStartHeroesList(params, data) {
+	//If there are no search terms, return all of the data
+    if ($.trim(params.term) === '') {
+		return data;
+    }
+
+    //Do not display the item if there is no 'text' property
+    if (typeof data.text === 'undefined') {
+		return null;
+    }
+
+	//If search term appears in the beginning of data's text
+	if (data.text.toUpperCase().indexOf(params.term.toUpperCase()) == 0) {
+		return data;
+	}
+
+	//If search term is a number, match with BST that are greater than the input
+	if (isNaN(params.term) == false && data.id != -1){
+		if (this.data.heroes[data.id].basehp + this.data.growths[4][this.data.heroes[data.id].hpgrowth]
+			+ this.data.heroes[data.id].baseatk + this.data.growths[4][this.data.heroes[data.id].atkgrowth]
+			+ this.data.heroes[data.id].basespd + this.data.growths[4][this.data.heroes[data.id].spdgrowth]
+			+ this.data.heroes[data.id].basedef + this.data.growths[4][this.data.heroes[data.id].defgrowth]
+			+ this.data.heroes[data.id].baseres + this.data.growths[4][this.data.heroes[data.id].resgrowth]
+			>= parseInt(params.term)){
+			return data;
+		}
+	}
+
+    //Return `null` if the term should not be displayed
+    return null;
+}
+
 //Select2 match function for matching starting characters - Uses data.skills
 function matchStartSkills(params, data) {
 	//If there are no search terms, return all of the data
@@ -2126,6 +2170,25 @@ function updateRefineUI(hero){
 
 	//Set html for specified hero type
 	$("#" + htmlPrefix + "refine").html(slotHTML);
+}
+
+function updateEnemyList(){
+	var listHTML = "";
+	
+	//Add each valid hero into html string
+	if (enemies.cl.list.length == 0){
+		listHTML = "<option value=-1 class=\"hero_option\">New List</option>";
+	}else{
+		for(var i = 0; i < enemies.cl.list.length; i++){
+			if (enemies.cl.list[i].index <= 0){
+					listHTML += "<option value=" + i + ">" + "New Hero" + "</option>";
+			}else{
+				listHTML += "<option value=" + i + ">" + data.heroes[enemies.cl.list[i].index].name + "</option>";
+			}
+		}
+	}
+	
+	$("#cl_enemy_list").html(listHTML).val(options.customEnemySelected).trigger('change.select2');
 }
 
 function updateFullUI(){
@@ -3369,7 +3432,7 @@ function switchEnemySelect(newVal){
 }
 
 //changedNumber: Whether the number of enemies has changed - must do more intensive updating if this is the case
-function updateClList(){
+function updateClList(){	
 	var lastEnemy = enemies.cl.list.length - 1;
 	//Set selected enemy if there are enemies but none is selected
 	if(lastEnemy != -1 && options.customEnemySelected == -1){
@@ -3387,7 +3450,7 @@ function updateClList(){
 		if(clIndex <= lastEnemy){
 			//Update the text of the items in the list
 			var enemyIndex = enemies.cl.list[clIndex].index;
-			var enemyName = "New enemy";
+			var enemyName = "New Hero";
 			if(enemyIndex >= 0){
 				enemyName = data.heroes[enemyIndex].name;
 			}
@@ -3422,6 +3485,9 @@ function updateClList(){
 			+ ");\" onmouseover=\"undoClStyle(this)\" onmouseout=\"redoClStyle(this)\">x</div></div>";
 		$("#cl_enemylist_list").append(clEnemyHTML);
 	}
+	
+	//Update select2 List
+	updateEnemyList();
 }
 
 function undoClStyle(element){

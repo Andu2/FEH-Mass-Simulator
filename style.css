@@ -97,7 +97,7 @@ svg > g > g:last-child { pointer-events: none }
 
 #frame_options{
 	position: relative;
-	height: 444px;
+	height: 474px;
 }
 
 #frame_results{
@@ -158,6 +158,11 @@ svg > g > g:last-child { pointer-events: none }
 
 .bar_top_options .select2{
 	width:128px!important;
+	height:22px!important;
+}
+
+.bar_top_list .select2{
+	width:192px!important;
 	height:22px!important;
 }
 
@@ -237,11 +242,30 @@ svg > g > g:last-child { pointer-events: none }
 	font-weight:bold;
 }
 
+.bar_top_list{
+	position:absolute;
+	height:30px;
+	line-height:28px;
+	left:0;right:0;top:0;
+	padding: 0 6px;
+	font-size:14px;
+}
+
+#frame_challenger .bar_top_list{
+	background-color: #4a6de2;
+	border-bottom:2px solid #7797ff;
+}
+
+#frame_enemies .bar_top_list{
+	background-color: #d82a3e;
+	border-bottom:2px solid #ff5165;
+}
+
 .bar_top_options{
 	position:absolute;
 	height:30px;
-	line-height:30px;
-	left:0;right:0;top:0;
+	line-height:28px;
+	left:0;right:0;top:32px;
 	padding: 0 6px;
 	font-size:14px;
 }
@@ -262,12 +286,10 @@ svg > g > g:last-child { pointer-events: none }
 }
 
 #frame_challenger .bar_top_options{
-	background-color: #4a6de2;
 	border-bottom:2px solid #7797ff;
 }
 
 #frame_enemies .bar_top_options{
-	background-color: #d82a3e;
 	border-bottom:2px solid #ff5165;
 }
 
@@ -301,14 +323,19 @@ svg > g > g:last-child { pointer-events: none }
 
 .frame_hero_main_top{
 	position:absolute;
-	left:0;right:0;top:32px;
+	left:0;
+	right:0;
+	top:64px;
 	height:150px;
 	border-bottom:2px solid #7797ff;
 }
 
 .frame_hero_main_bottom{
 	position:absolute;
-	left:0;right:0;bottom:0;top:184px;
+	left:0;
+	right:0;
+	top:216px;
+	bottom:0;	
 }
 
 .frame_stats{
