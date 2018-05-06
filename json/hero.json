@@ -1,5 +1,22 @@
 [
 	{
+		"hero_id": 0,
+		"name": "*Generic Hero*",
+		"basehp": 0,
+		"baseatk": 0,
+		"basespd": 0,
+		"basedef": 0,
+		"baseres": 0,
+		"hpgrowth": 0,
+		"atkgrowth": 0,
+		"spdgrowth": 0,
+		"defgrowth": 0,
+		"resgrowth": 0,
+		"color": "red",
+		"weapontype": "sword",
+		"movetype": "infantry",
+		"minrarity": 5
+	},{
 		"hero_id": 1,
 		"name": "Alfonse",
 		"basehp": 19,
