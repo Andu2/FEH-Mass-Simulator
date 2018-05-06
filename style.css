@@ -501,16 +501,16 @@ svg > g > g:last-child { pointer-events: none }
 	position: absolute;
 	right:0;
 	top:2px;
-	width:55px;
+	width:60px;
 	border-radius:3px;
 	font-size:12px;
 }
 
 .misc_input_left{
 	position: absolute;
-	right:58px;
+	right:64px;
 	top:2px;
-	width:55px;
+	width:60px;
 	border-radius:3px;
 	font-size:12px;
 }
