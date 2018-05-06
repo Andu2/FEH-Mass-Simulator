@@ -294,8 +294,10 @@ function initOptions(){
 
 	challenger.currenthp = 0;
 	challenger.damage = 0;
+	challenger.HpPercent = 4;
 	challenger.precharge = 0;
 	challenger.adjacent = 1;
+	challenger.movementbuff = "hone";
 
 	//Holder for enemy options and pre-calculated stats
 	enemies = {};
@@ -735,17 +737,23 @@ $(document).ready(function(){
 
 	//Custom List Adjustment Buttons
 	$(".adj_apply_button").click(function(){
+		if (this.id == "apply_total_health_challenger"){
+			adjustHp(false, true);
+		}else if (this.id == "apply_movement_buff_challenger"){
+			adjustBuff(false, true);
+		}
+		
 		if (enemies.cl.list.length > 0){
 			if (this.id == "apply_hero_merge"){
 				adjustCustomListMerge();
 			}else if (this.id == "apply_damage_taken"){
-				adjustCustomListHp(true);
+				adjustHp(true);
 			}else if (this.id == "apply_total_health"){
-				adjustCustomListHp(false);
+				adjustHp(false);
 			}else if (this.id == "apply_status_buff"){
-				adjustCustomListBuff(true);
+				adjustBuff(true);
 			}else if (this.id == "apply_movement_buff"){
-				adjustCustomListBuff(false);
+				adjustBuff(false);
 			}
 			calculate();
 		}
@@ -753,10 +761,14 @@ $(document).ready(function(){
 
 	//Custom List Reset Buttons
 	$(".adj_reset_button").click(function(){
-		if (this.id == "reset_health"){
-			resetCustomListHp();
+		if (this.id == "reset_health_challenger"){
+			resetHp(true);
+		}else if (this.id == "reset_buff_challenger"){
+			resetBuffs(true);
+		}else if (this.id == "reset_health"){
+			resetHp(false);
 		}else if (this.id == "reset_buff"){
-			resetCustomListBuffs();
+			resetBuffs(false);
 		}
 		calculate();
 	})
@@ -1486,166 +1498,239 @@ function adjustCustomListMerge(){
 }
 
 //Adjust HP for heroes in custom list
-function adjustCustomListHp(isFlat){
-	//Adjust the amount of damage each hero took
-	enemies.cl.list.forEach(function(hero){
-		if (isFlat){
-			hero.damage = enemies.cl.damages;
+function adjustHp(isFlat, isChallenger){
+	if (isChallenger){
+		if (!isFlat){
+			challenger.damage = Math.ceil(challenger.hp * (1.00 - (challenger.HpPercent * 0.25)));
 		}
-		else{
-			//HP is floored, but this is rounded towards positive infinity since it is calculating damage
-			hero.damage = Math.ceil(hero.hp * (1.00 - (enemies.cl.HpPercent * 0.25)));
-		}
-	});
+		updateChallengerUI();
+	}else{
+		//Adjust the amount of damage each hero took
+		enemies.cl.list.forEach(function(hero){
+			if (isFlat){
+				hero.damage = enemies.cl.damages;
+			}else{
+				//HP is floored, but this is rounded towards positive infinity since it is calculating damage
+				hero.damage = Math.ceil(hero.hp * (1.00 - (enemies.cl.HpPercent * 0.25)));
+			}
+		});
 
-	//Update enemy UI
-	updateEnemyUI();
+		//Update enemy UI
+		updateEnemyUI();
+	}
 }
 
 //Reset HP for heroes in custom list
-function resetCustomListHp(){
-	//Reset all custom list hero damage to 0
-	if (enemies.cl.list.length > 0){
-		enemies.cl.list.forEach(function(hero){
-			hero.damage = 0;
-		});
+function resetHp(isChallenger){
+	if (isChallenger){
+		challenger.damage = 0;
+		$("#challenger_HpPercent").val('4');
+		challenger.HpPercent = 4;
+		updateChallengerUI();
+	}else{
+		//Reset all custom list hero damage to 0
+		if (enemies.cl.list.length > 0){
+			enemies.cl.list.forEach(function(hero){
+				hero.damage = 0;
+			});
+		}		
+		//Initialize custom list damage adjustment UI
+		$("#enemies_cl_damage").val("0");
+		enemies.cl.damages = 0;
+		$("#enemies_cl_HpPercent").val('4');
+		enemies.cl.HpPercent = 4;		
+		//Update enemy UI
+		updateEnemyUI();
 	}
-
-	//Initialize custom list damage adjustment UI
-	$("#enemies_cl_damage").val("0");
-	enemies.cl.damages = 0;
-	$("#enemies_cl_HpPercent").val('4');
-	enemies.cl.HpPercent = 4;
-
-	//Update enemy UI
-	updateEnemyUI();
 }
 
 //Adjust buffs for heroes in custom list
-function adjustCustomListBuff(isStat){
-	//For single stat adjustments
-	if (isStat){
-		//Adjust all stats except hp
-		if (enemies.cl.status == "all"){
-			enemies.cl.list.forEach(function(hero){
-				data.stats.forEach(function(stat){
-					if (stat != "hp"){
-						(enemies.cl.statusbuff > 0) ? hero.buffs[stat] = enemies.cl.statusbuff : hero.debuffs[stat] = enemies.cl.statusbuff;
-					}
-				});
-			});
-		}
-		//Adjust single stats
-		else{
-			enemies.cl.list.forEach(function(hero){
-				if (enemies.cl.statusbuff > 0){
-					hero.buffs[enemies.cl.status] = enemies.cl.statusbuff;
+function adjustBuff(isStat, isChallenger){
+	if (isChallenger){
+		if (!isStat){
+			var buffStats = [];
+			var buffVal = (challenger.movement == "infantry") ? 4 : 6;
+			var isSpur = false;
+
+			//Set type of buff and adjusted stats
+			switch (challenger.movementbuff){
+				case "hone":
+					isSpur = false;
+					buffStats.push("atk");
+					buffStats.push("spd");
+					break;
+				case "fortify":
+					isSpur = false;
+					buffStats.push("def");
+					buffStats.push("res");
+					break;
+				case "goad":
+					isSpur = true;
+					buffStats.push("atk");
+					buffStats.push("spd");
+					buffVal = 4;
+					break;
+				case "goad x2":
+					isSpur = true;
+					buffStats.push("atk");
+					buffStats.push("spd");
+					buffVal = 8;
+					break;
+				case "ward":
+					isSpur = true;
+					buffStats.push("def");
+					buffStats.push("res");
+					buffVal = 4;
+					break;
+				case "ward x2":
+					isSpur = true;
+					buffStats.push("def");
+					buffStats.push("res");
+					buffVal = 8;
+					break;
+				default:
+					console.log("Invalid Skill Buff input.")
+			}
+
+			//Add buffs for challenger based on buffStats, buffVal, and isSpur
+			buffStats.forEach(function(stat){
+				if (isSpur){
+					challenger.spur[stat] = buffVal;
 				}else{
-					hero.debuffs[enemies.cl.status] = enemies.cl.statusbuff;
-				}
-				if (enemies.cl.status == "hp"){
-					setStats(hero);
+					if (enemies.cl.movement == "all"){
+						challenger.buffs[stat] = (data.heroes[challenger.index].movetype == "infantry" && data.heroes[challenger.index].weapontype != "dragon") ? 4 : 6;
+					}else{
+						challenger.buffs[stat] = buffVal;
+					}
 				}
 			});
 		}
-	}
-	//For multiple stat adjustments
-	else{
-		var buffStats = [];
-		var buffVal = (enemies.cl.movement == "infantry") ? 4 : 6;
-		var isSpur = false;
-
-		//Set type of buff and adjusted stats
-		switch (enemies.cl.movementbuff){
-			case "hone":
-				isSpur = false;
-				buffStats.push("atk");
-				buffStats.push("spd");
-				break;
-			case "fortify":
-				isSpur = false;
-				buffStats.push("def");
-				buffStats.push("res");
-				break;
-			case "goad":
-				isSpur = true;
-				buffStats.push("atk");
-				buffStats.push("spd");
-				buffVal = 4;
-				break;
-			case "goad x2":
-				isSpur = true;
-				buffStats.push("atk");
-				buffStats.push("spd");
-				buffVal = 8;
-				break;
-			case "ward":
-				isSpur = true;
-				buffStats.push("def");
-				buffStats.push("res");
-				buffVal = 4;
-				break;
-			case "ward x2":
-				isSpur = true;
-				buffStats.push("def");
-				buffStats.push("res");
-				buffVal = 8;
-				break;
-			default:
-				console.log("Invalid Skill Buff input.")
-		}
-
-		//Add buffs for each hero based on buffStats, buffVal, and isSpur
-		enemies.cl.list.forEach(function(hero){
-			if (enemies.cl.movement == "all" || data.heroes[hero.index].movetype == enemies.cl.movement || data.heroes[hero.index].weapontype == enemies.cl.movement){
-				//console.log(data.heroes[hero.index].movetype + " " + enemies.cl.movement + " " + buffVal + " " + isSpur);
-				buffStats.forEach(function(stat){
-					if (isSpur){
-						hero.spur[stat] = buffVal;
-					}else{
-						if (enemies.cl.movement == "all"){
-							hero.buffs[stat] = (data.heroes[hero.index].movetype == "infantry" && data.heroes[hero.index].weapontype != "dragon") ? 4 : 6;
-						}else{
-							hero.buffs[stat] = buffVal;
+		updateChallengerUI();
+	}else{
+		//For single stat adjustments
+		if (isStat){
+			//Adjust all stats except hp
+			if (enemies.cl.status == "all"){
+				enemies.cl.list.forEach(function(hero){
+					data.stats.forEach(function(stat){
+						if (stat != "hp"){
+							(enemies.cl.statusbuff > 0) ? hero.buffs[stat] = enemies.cl.statusbuff : hero.debuffs[stat] = enemies.cl.statusbuff;
 						}
+					});
+				});
+			}
+			//Adjust single stats
+			else{
+				enemies.cl.list.forEach(function(hero){
+					if (enemies.cl.statusbuff > 0){
+						hero.buffs[enemies.cl.status] = enemies.cl.statusbuff;
+					}else{
+						hero.debuffs[enemies.cl.status] = enemies.cl.statusbuff;
+					}
+					if (enemies.cl.status == "hp"){
+						setStats(hero);
 					}
 				});
 			}
-		});
-	}
+		}
+		//For multiple stat adjustments
+		else{
+			var buffStats = [];
+			var buffVal = (enemies.cl.movement == "infantry") ? 4 : 6;
+			var isSpur = false;
 
-	//Update enemy UI
-	updateEnemyUI();
+			//Set type of buff and adjusted stats
+			switch (enemies.cl.movementbuff){
+				case "hone":
+					isSpur = false;
+					buffStats.push("atk");
+					buffStats.push("spd");
+					break;
+				case "fortify":
+					isSpur = false;
+					buffStats.push("def");
+					buffStats.push("res");
+					break;
+				case "goad":
+					isSpur = true;
+					buffStats.push("atk");
+					buffStats.push("spd");
+					buffVal = 4;
+					break;
+				case "goad x2":
+					isSpur = true;
+					buffStats.push("atk");
+					buffStats.push("spd");
+					buffVal = 8;
+					break;
+				case "ward":
+					isSpur = true;
+					buffStats.push("def");
+					buffStats.push("res");
+					buffVal = 4;
+					break;
+				case "ward x2":
+					isSpur = true;
+					buffStats.push("def");
+					buffStats.push("res");
+					buffVal = 8;
+					break;
+				default:
+					console.log("Invalid Skill Buff input.")
+			}
+
+			//Add buffs for each hero based on buffStats, buffVal, and isSpur
+			enemies.cl.list.forEach(function(hero){
+				if (enemies.cl.movement == "all" || data.heroes[hero.index].movetype == enemies.cl.movement || data.heroes[hero.index].weapontype == enemies.cl.movement){
+					//console.log(data.heroes[hero.index].movetype + " " + enemies.cl.movement + " " + buffVal + " " + isSpur);
+					buffStats.forEach(function(stat){
+						if (isSpur){
+							hero.spur[stat] = buffVal;
+						}else{
+							if (enemies.cl.movement == "all"){
+								hero.buffs[stat] = (data.heroes[hero.index].movetype == "infantry" && data.heroes[hero.index].weapontype != "dragon") ? 4 : 6;
+							}else{
+								hero.buffs[stat] = buffVal;
+							}
+						}
+					});
+				}
+			});
+		}
+
+		//Update enemy UI
+		updateEnemyUI();
+	}	
 }
 
 //Reset buffs for heroes in custom list
-function resetCustomListBuffs(isFlat){
-	//Reset all custom list hero buffs and debuffs to 0
-	enemies.cl.list.forEach(function(hero){
-		if (hero.buffs.hp != 0 || hero.debuffs.hp != 0){
-			hero.buffs.hp = 0;
-			hero.debuffs.hp = 0;
-			setStats(hero);
+function resetBuffs(isChallenger){
+	if (isChallenger){
+		if (challenger.buffs.hp != 0 || challenger.debuffs.hp != 0){
+			challenger.buffs.hp = 0;
+			challenger.debuffs.hp = 0;
+			setStats(challenger);
 		}
-		hero.buffs = {"hp":0,"atk":0,"spd":0,"def":0,"res":0};
-		hero.debuffs = {"hp":0,"atk":0,"spd":0,"def":0,"res":0};
-		hero.spur = {"hp":0,"atk":0,"spd":0,"def":0,"res":0};
-	});
-
-	/* This isn't intuitive and causes user error
-	//Initialize custom list buff adjustment UI
-	$("#enemies_cl_status").val('hp');
-	enemies.cl.status = "hp";
-	$("#enemies_cl_statusbuff").val('4');
-	enemies.cl.statusbuff = 4;
-	$("#enemies_cl_movement").val('infantry');
-	enemies.cl.movement = "infantry";
-	$("#enemies_cl_movementbuff").val('hone');
-	enemies.cl.movementbuff = "hone";
-	*/
-
-	//Update enemy UI
-	updateEnemyUI();
+		challenger.buffs = {"hp":0,"atk":0,"spd":0,"def":0,"res":0};
+		challenger.debuffs = {"hp":0,"atk":0,"spd":0,"def":0,"res":0};
+		challenger.spur = {"hp":0,"atk":0,"spd":0,"def":0,"res":0};
+		updateChallengerUI();
+	}else{
+		//Reset all custom list hero buffs and debuffs to 0
+		enemies.cl.list.forEach(function(hero){
+			if (hero.buffs.hp != 0 || hero.debuffs.hp != 0){
+				hero.buffs.hp = 0;
+				hero.debuffs.hp = 0;
+				setStats(hero);
+			}
+			hero.buffs = {"hp":0,"atk":0,"spd":0,"def":0,"res":0};
+			hero.debuffs = {"hp":0,"atk":0,"spd":0,"def":0,"res":0};
+			hero.spur = {"hp":0,"atk":0,"spd":0,"def":0,"res":0};
+		});
+		
+		//Update enemy UI
+		updateEnemyUI();
+	}
 }
 
 function setSkills(hero){

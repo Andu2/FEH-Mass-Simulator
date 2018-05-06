@@ -14,7 +14,7 @@ body{
 	font-family:"Segoe UI",sans-serif;
 	color:#ffffff;
 	min-width:920px;
-	font-size: 18px;
+	font-size: 16px;
 }
 
 sup { 
@@ -249,6 +249,13 @@ svg > g > g:last-child { pointer-events: none }
 	left:0;right:0;top:0;
 	padding: 0 6px;
 	font-size:14px;
+}
+
+.bar_top_full_list{
+	text-align:center;
+	font-family: "Merriweather";
+	font-size:18px;
+	line-height:32px;
 }
 
 .bar_top_list_right{

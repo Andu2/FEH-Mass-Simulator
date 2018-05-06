@@ -44,9 +44,11 @@
 				<div class="frame_hero_main">
 					<div class="bar_top_list">
 						<!--
-						<select id="challenger_list" data-var="challenger.index"></select>
-						<div class="bar_top_options_right">
-							<div class="button reset_button" id="reset_challenger">Reset</div>
+						<select id="cl_enemy_list" data-var="options.customEnemySelected"></select>
+						<div class="button bar_top_button reset_challenger" id="reset_challenger" onclick="addClEnemy();">Add</div>
+						<div class="button bar_top_button reset_challenger" id="reset_challenger" onclick="deleteSelectedClEnemy();">Delete</div>
+						<div class="bar_top_list_right">								
+							<div class=" bar_top_list_right button bar_top_button reset_challenger" id="reset_challenger" onclick="removeAllClEnemies();">Clear List</div>
 						</div>
 						-->
 					</div>
@@ -291,10 +293,10 @@
 							<option value="1">25%</option>
 						</select>
 					</div>
-					<div class="button adj_apply_button" id="apply_total_health">WIP</div>
+					<div class="button adj_apply_button" id="apply_total_health_challenger">Apply</div>
 				</div>
 				<div class="adj_status">
-					<div class="button adj_reset_button" id="reset_health">Reset Health (WIP)</div>
+					<div class="button adj_reset_button" id="reset_health_challenger">Reset Health</div>
 				</div>
 				<div class="adj_status">
 					<div class="status_desc">Buff:</div>
@@ -308,10 +310,10 @@
 							<option value="ward x2">Ward x2</option>
 						</select>
 					</div>
-					<div class="button adj_apply_button" id="apply_total_health">WIP</div>
+					<div class="button adj_apply_button" id="apply_movement_buff_challenger">Apply</div>
 				</div>
 				<div class="adj_status">
-					<div class="button adj_reset_button" id="reset_buff">Reset Buffs (WIP)</div>
+					<div class="button adj_reset_button" id="reset_buff_challenger">Reset Buffs</div>
 				</div>
 				<div style="line-height:40%;"><br></div>
 				<div id="adj_title">Custom List:</div>
@@ -490,7 +492,8 @@
 					</div>
 				</div>
 				<div id="enemies_full_list" class="frame_hero_main">
-					<div class="bar_top_list">
+					<div class="bar_top_list bar_top_full_list">
+						All Heroes
 					</div>
 					<div class="bar_top_options"><span class="bar_label">Rarity:</span><input id="enemies_rarity" data-var="enemies.fl.rarity" type="number" class="rarityinput smallnuminput" value=5 min=1 max=5 /><span class="bar_label">Lvl 40+</span><input id="enemies_merge" data-var="enemies.fl.merge" class="smallnuminput" type="number" value=0 min=0 max=10 /><div class="bar_top_options_right"><div class="button reset_button reset_enemies" id="reset_enemies">Reset</div></div></div>
 					<div class="frame_hero_main_top">
