@@ -162,7 +162,7 @@ svg > g > g:last-child { pointer-events: none }
 }
 
 .bar_top_list .select2{
-	width:128px!important;
+	width:192px!important;
 	height:22px!important;
 }
 
@@ -513,6 +513,33 @@ svg > g > g:last-child { pointer-events: none }
 	width:55px;
 	border-radius:3px;
 	font-size:12px;
+}
+
+.misc_input_small_left{
+	position: absolute;
+	right:84px;
+	top:4.5px;
+	width:40px;
+	border-radius:3px;
+	font-size:10px;
+}
+
+.misc_input_small_center{
+	position: absolute;
+	right:42px;
+	top:4.5px;
+	width:40px;
+	border-radius:3px;
+	font-size:10px;
+}
+
+.misc_input_small_right{
+	position: absolute;
+	right:0;
+	top:4.5px;
+	width:40px;
+	border-radius:3px;
+	font-size:10px;
 }
 
 .misc_separator{
