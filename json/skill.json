@@ -11590,7 +11590,7 @@
 		"res": 0,
 		"charge": 0,
 		"inheritrule": "unique",
-		"affectsduel": 0
+		"affectsduel": 1
 	}, {
 		"skill_id": 829,
 		"name": "Hagoita",
@@ -12794,7 +12794,7 @@
 		"res": 0,
 		"charge": 0,
 		"inheritrule": "",
-		"affectsduel": 0
+		"affectsduel": 1
 	}, {
 		"skill_id": 915,
 		"name": "Chill Spd 2",
@@ -12808,7 +12808,7 @@
 		"res": 0,
 		"charge": 0,
 		"inheritrule": "",
-		"affectsduel": 0
+		"affectsduel": 1
 	}, {
 		"skill_id": 916,
 		"name": "Chill Spd 3",
@@ -12822,7 +12822,7 @@
 		"res": 0,
 		"charge": 0,
 		"inheritrule": "",
-		"affectsduel": 0
+		"affectsduel": 1
 	}, {
 		"skill_id": 917,
 		"name": "Skadi",
@@ -13046,7 +13046,7 @@
 		"res": 0,
 		"charge": 0,
 		"inheritrule": "",
-		"affectsduel": 0
+		"affectsduel": 1
 	}, {
 		"skill_id": 933,
 		"name": "Chill Def 2",
@@ -13060,7 +13060,7 @@
 		"res": 0,
 		"charge": 0,
 		"inheritrule": "",
-		"affectsduel": 0
+		"affectsduel": 1
 	}, {
 		"skill_id": 934,
 		"name": "Chill Def 3",
@@ -13074,7 +13074,7 @@
 		"res": 0,
 		"charge": 0,
 		"inheritrule": "",
-		"affectsduel": 0
+		"affectsduel": 1
 	}, {
 		"skill_id": 935,
 		"name": "Poleaxe",
@@ -13326,7 +13326,7 @@
 		"res": 0,
 		"charge": 0,
 		"inheritrule": "",
-		"affectsduel": 0
+		"affectsduel": 1
 	}, {
 		"skill_id": 953,
 		"name": "Chill Res 2",
@@ -13340,7 +13340,7 @@
 		"res": 0,
 		"charge": 0,
 		"inheritrule": "",
-		"affectsduel": 0
+		"affectsduel": 1
 	}, {
 		"skill_id": 954,
 		"name": "Chill Res 3",
@@ -13354,7 +13354,7 @@
 		"res": 0,
 		"charge": 0,
 		"inheritrule": "",
-		"affectsduel": 0
+		"affectsduel": 1
 	}, {
 		"skill_id": 955,
 		"name": "Lethal Carrot",
@@ -13746,6 +13746,356 @@
 		"res": 0,
 		"charge": 0,
 		"inheritrule": "staff",
+		"affectsduel": 0
+	}, {
+		"skill_id": 983,
+		"name": "Wargod's Tome",
+		"slot": "weapon",
+		"sp": 400,
+		"description": "At start of turn, inflicts Atk/Res-4 on foes in cardinal directions with Res < unit's Res through their next actions.",
+		"hp": 0,
+		"atk": 14,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "unique",
+		"affectsduel": 1
+	}, {
+		"skill_id": 984,
+		"name": "Seal Spd 1",
+		"slot": "s",
+		"sp": 40,
+		"description": "After combat, foe suffers Spd-3 through its next action",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "nonstaff",
+		"affectsduel": 1
+	}, {
+		"skill_id": 985,
+		"name": "Seal Spd 2",
+		"slot": "s",
+		"sp": 80,
+		"description": "After combat, foe suffers Spd-5 through its next action",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "nonstaff",
+		"affectsduel": 1
+	}, {
+		"skill_id": 986,
+		"name": "Seal Spd 3",
+		"slot": "s",
+		"sp": 160,
+		"description": "After combat, foe suffers Spd-7 through its next action",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "nonstaff",
+		"affectsduel": 1
+	}, {
+		"skill_id": 987,
+		"name": "Fortress Def 1",
+		"slot": "s",
+		"sp": 50,
+		"description": "Grants Def+3. Inflicts Atk-3.",
+		"hp": 0,
+		"atk": -3,
+		"spd": 0,
+		"def": 3,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 1
+	}, {
+		"skill_id": 988,
+		"name": "Fortress Def 2",
+		"slot": "s",
+		"sp": 100,
+		"description": "Grants Def+4. Inflicts Atk-3.",
+		"hp": 0,
+		"atk": -3,
+		"spd": 0,
+		"def": 4,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 1
+	}, {
+		"skill_id": 989,
+		"name": "Fortress Def 3",
+		"slot": "s",
+		"sp": 200,
+		"description": "Grants Def+5. Inflicts Atk-3.",
+		"hp": 0,
+		"atk": -3,
+		"spd": 0,
+		"def": 5,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 1
+	}, {
+		"skill_id": 990,
+		"name": "Drive Atk 1",
+		"slot": "s",
+		"sp": 120,
+		"description": "Grants allies within 2 spaces Atk+2 during combat.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 0
+	}, {
+		"skill_id": 991,
+		"name": "Drive Atk 2",
+		"slot": "s",
+		"sp": 240,
+		"description": "Grants allies within 2 spaces Atk+3 during combat.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 0
+	}, {
+		"skill_id": 992,
+		"name": "Barb Shuriken",
+		"slot": "weapon",
+		"sp": 200,
+		"description": "Accelerates Special trigger (cooldown count-1). After combat, if unit attacked, inflicts Def\/Res-5 on target and foes within 2 spaces of target through their next actions.",
+		"hp": 0,
+		"atk": 8,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "dagger",
+		"affectsduel": 1
+	}, {
+		"skill_id": 993,
+		"name": "Barb Shuriken+",
+		"slot": "weapon",
+		"sp": 300,
+		"description": "Accelerates Special trigger (cooldown count-1). After combat, if unit attacked, inflicts Def\/Res-7 on target and foes within 2 spaces of target through their next actions.",
+		"hp": 0,
+		"atk": 12,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "dagger",
+		"affectsduel": 1
+	}, {
+		"skill_id": 994,
+		"name": "Warrior Princess",
+		"slot": "weapon",
+		"sp": 400,
+		"description": "Effective against flying and armored foes. Grants Spd+3. Grants Atk+3 to allies within 2 spaces during combat.",
+		"hp": 0,
+		"atk": 14,
+		"spd": 3,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "unique",
+		"affectsduel": 1
+	}, {
+		"skill_id": 995,
+		"name": "Flier Guidance 1",
+		"slot": "c",
+		"sp": 60,
+		"description": "If unit's HP = 100%, flying allies within 2 spaces can move to a space adjacent to unit.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "flying",
+		"affectsduel": 0
+	}, {
+		"skill_id": 996,
+		"name": "Flier Guidance 2",
+		"slot": "c",
+		"sp": 120,
+		"description": "If unit's HP >= 50% HP, flying allies within 2 spaces can move to a space adjacent to unit.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "flying",
+		"affectsduel": 0
+	}, {
+		"skill_id": 997,
+		"name": "Flier Guidance 3",
+		"slot": "c",
+		"sp": 240,
+		"description": "Flying allies within 2 spaces can move to a space adjacent to unit.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "flying",
+		"affectsduel": 0
+	}, {
+		"skill_id": 998,
+		"name": "Water Breath",
+		"slot": "weapon",
+		"sp": 200,
+		"description": "If foe initiates combat, grants Def/Res+4 during combat. If foe's Range = 2, calculates damage using the lower of foe's Def or Res.",
+		"hp": 0,
+		"atk": 10,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "dragon",
+		"affectsduel": 1
+	}, {
+		"skill_id": 999,
+		"name": "Water Breath+",
+		"slot": "weapon",
+		"sp": 200,
+		"description": "If foe initiates combat, grants Def/Res+4 during combat. If foe's Range = 2, calculates damage using the lower of foe's Def or Res.",
+		"hp": 0,
+		"atk": 14,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "dragon",
+		"affectsduel": 1
+	}, {
+		"skill_id": 1000,
+		"name": "Goad Dragons",
+		"slot": "c",
+		"sp": 200,
+		"description": "Grants Atk\/Spd+4 to dragon allies within 2 spaces during combat.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "dragon",
+		"affectsduel": 0
+	}, {
+		"skill_id": 1001,
+		"name": "Harmonic Lance",
+		"slot": "weapon",
+		"sp": 200,
+		"description": "Deals +10 damage when Special triggers.",
+		"hp": 0,
+		"atk": 9,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "lance",
+		"affectsduel": 1
+	}, {
+		"skill_id": 1002,
+		"name": "Harmonic Lance+",
+		"slot": "weapon",
+		"sp": 300,
+		"description": "Deals +10 damage when Special triggers.",
+		"hp": 0,
+		"atk": 13,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "lance",
+		"affectsduel": 1
+	}, {
+		"skill_id": 1003,
+		"name": "Swift Mulagir",
+		"slot": "weapon",
+		"sp": 400,
+		"description": "Effective against flying foes. Grants Res+3. If the number of allies within 2 spaces (excluding unit) > the number of foes within 2 spaces (excluding target), grants Atk/Spd+5 during combat.",
+		"hp": 0,
+		"atk": 14,
+		"spd": 0,
+		"def": 0,
+		"res": 3,
+		"charge": 0,
+		"inheritrule": "unique",
+		"affectsduel": 1
+	}, {
+		"skill_id": 1004,
+		"name": "Laws of Sacae",
+		"slot": "a",
+		"sp": 300,
+		"description": "If foe initiates combat and the number of allies within 2 spaces ≥ 2, grants Atk/Spd/Def/Res+4 during combat.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "unique",
+		"affectsduel": 1
+	}, {
+		"skill_id": 1005,
+		"name": "Spd Tactic 1",
+		"slot": "c",
+		"sp": 60,
+		"description": "At start of turn, grants Spd+2 to allies within 2 spaces for 1 turn. Granted only if number of that ally's movement type on current team <= 2.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 0
+	}, {
+		"skill_id": 1006,
+		"name": "Spd Tactic 2",
+		"slot": "c",
+		"sp": 120,
+		"description": "At start of turn, grants Spd+4 to allies within 2 spaces for 1 turn. Granted only if number of that ally's movement type on current team <= 2.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 0
+	}, {
+		"skill_id": 1007,
+		"name": "Spd Tactic 3",
+		"slot": "c",
+		"sp": 240,
+		"description": "At start of turn, grants Spd+6 to allies within 2 spaces for 1 turn. Granted only if number of that ally's movement type on current team <= 2.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
 		"affectsduel": 0
 	}
 ]
