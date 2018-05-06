@@ -609,13 +609,11 @@
 					<div class="frame_hero_main_right">
 						<div class="bar_top_list">
 							<select id="cl_enemy_list" data-var="options.customEnemySelected"></select>
-							
-							<!--
-							<select id="enemies_list" data-var="challenger.index"></select>
-							<div class="bar_top_options_right">
-								<div class="button reset_button reset_enemies" id="reset_enemies">Reset</div>
+							<div class="button bar_top_button reset_enemies" id="reset_cl_enemy" onclick="addClEnemy();">Add</div>
+							<div class="button bar_top_button reset_enemies" id="reset_cl_enemy" onclick="deleteSelectedClEnemy();">Delete</div>
+							<div class="bar_top_list_right">								
+								<div class=" bar_top_list_right button bar_top_button reset_enemies" id="reset_cl_enemy" onclick="removeAllClEnemies();">Clear List</div>
 							</div>
-							-->
 						</div>
 						<div class="bar_top_options"><select id="cl_enemy_name" data-var="enemies.cl.list.index"></select><div class="bar_top_options_right"><span class="bar_label">Rarity:</span><input id="cl_enemy_rarity" data-var="enemies.cl.list.rarity" type="number" class="rarityinput smallnuminput" value=5 min=1 max=5 /><span class="bar_label">Lvl 40+</span><input id="cl_enemy_merge" data-var="enemies.cl.list.merge" class="smallnuminput" type="number" value=0 min=0 max=10 /><div class="button reset_button reset_enemies" id="reset_cl_enemy">Reset</div></div></div>
 						<div class="frame_hero_main_top">
