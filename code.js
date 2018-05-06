@@ -486,7 +486,6 @@ $(document).ready(function(){
 	//TODO: make click listeners work similarly
 	$("input, select").on("change", function(e){		
 		var dataVar = $(this).attr("data-var");
-		console.log(dataVar);
 		if(dataVar){
 			var varsThatChangeStats = [
 				".buffs.hp",".debuffs.hp",".rarity",".merge",".boon",".bane",".summoner",".ally",".bless_1",".bless_2",".weapon",".refine",".a",".s",".replaceWeapon",".replaceRefine",".replaceA"
@@ -1961,18 +1960,35 @@ function matchStartHeroes(params, data) {
 	if (data.text.toUpperCase().indexOf(params.term.toUpperCase()) == 0) {
 		return data;
 	}
-
-	//If search term is a number, match with BST that are greater than the input
-	if (isNaN(params.term) == false && data.id != -1){
-		if (this.data.heroes[data.id].basehp + this.data.growths[4][this.data.heroes[data.id].hpgrowth]
-			+ this.data.heroes[data.id].baseatk + this.data.growths[4][this.data.heroes[data.id].atkgrowth]
-			+ this.data.heroes[data.id].basespd + this.data.growths[4][this.data.heroes[data.id].spdgrowth]
-			+ this.data.heroes[data.id].basedef + this.data.growths[4][this.data.heroes[data.id].defgrowth]
-			+ this.data.heroes[data.id].baseres + this.data.growths[4][this.data.heroes[data.id].resgrowth]
-			>= parseInt(params.term)){
-			return data;
+	
+	if (data.id != -1){
+		//BST Search: If search term is a number, match with BST that are greater than the input
+		if (isNaN(params.term) == false){
+			if (this.data.heroes[data.id].basehp + this.data.growths[4][this.data.heroes[data.id].hpgrowth]
+				+ this.data.heroes[data.id].baseatk + this.data.growths[4][this.data.heroes[data.id].atkgrowth]
+				+ this.data.heroes[data.id].basespd + this.data.growths[4][this.data.heroes[data.id].spdgrowth]
+				+ this.data.heroes[data.id].basedef + this.data.growths[4][this.data.heroes[data.id].defgrowth]
+				+ this.data.heroes[data.id].baseres + this.data.growths[4][this.data.heroes[data.id].resgrowth]
+				>= parseInt(params.term)){
+				return data;
+			}
+		}
+		
+		//Move type search
+		if (this.data.moveTypes.indexOf(params.term.toLowerCase()) != -1){
+			if (this.data.heroes[data.id].movetype === params.term.toLowerCase()){
+				return data;
+			}
+		}
+		
+		//Color search
+		if (this.data.colors.indexOf(params.term.toLowerCase()) != -1){
+			if (this.data.heroes[data.id].color === params.term.toLowerCase()){
+				return data;
+			}
 		}
 	}
+	
 
     //Return `null` if the term should not be displayed
     return null;
@@ -1993,20 +2009,39 @@ function matchStartHeroesList(params, data) {
 	//If search term appears in the beginning of data's text
 	if (data.text.toUpperCase().indexOf(params.term.toUpperCase()) == 0) {
 		return data;
-	}
+	}	
+	
+	if (enemies.cl.list[data.id] != -1){
+		//If search term is a number, match with BST that are greater than the input
+		//TODO:Add IVs into bst search param
+		if (isNaN(params.term) == false){
+			if (this.data.heroes[enemies.cl.list[data.id].index].basehp + this.data.growths[4][this.data.heroes[enemies.cl.list[data.id].index].hpgrowth]
+				+ this.data.heroes[enemies.cl.list[data.id].index].baseatk + this.data.growths[4][this.data.heroes[enemies.cl.list[data.id].index].atkgrowth]
+				+ this.data.heroes[enemies.cl.list[data.id].index].basespd + this.data.growths[4][this.data.heroes[enemies.cl.list[data.id].index].spdgrowth]
+				+ this.data.heroes[enemies.cl.list[data.id].index].basedef + this.data.growths[4][this.data.heroes[enemies.cl.list[data.id].index].defgrowth]
+				+ this.data.heroes[enemies.cl.list[data.id].index].baseres + this.data.growths[4][this.data.heroes[enemies.cl.list[data.id].index].resgrowth]
+				>= parseInt(params.term)){
+				return data;
+			}
+		}
 
-	//If search term is a number, match with BST that are greater than the input
-	if (isNaN(params.term) == false && data.id != -1){
-		if (this.data.heroes[data.id].basehp + this.data.growths[4][this.data.heroes[data.id].hpgrowth]
-			+ this.data.heroes[data.id].baseatk + this.data.growths[4][this.data.heroes[data.id].atkgrowth]
-			+ this.data.heroes[data.id].basespd + this.data.growths[4][this.data.heroes[data.id].spdgrowth]
-			+ this.data.heroes[data.id].basedef + this.data.growths[4][this.data.heroes[data.id].defgrowth]
-			+ this.data.heroes[data.id].baseres + this.data.growths[4][this.data.heroes[data.id].resgrowth]
-			>= parseInt(params.term)){
-			return data;
+		//Move type search
+		if (this.data.moveTypes.indexOf(params.term.toLowerCase()) != -1){
+			if (this.data.heroes[enemies.cl.list[data.id].index].movetype === params.term.toLowerCase()){
+				return data;
+			}
+		}
+		
+		//Color search
+		if (this.data.colors.indexOf(params.term.toLowerCase()) != -1){
+			if (this.data.heroes[enemies.cl.list[data.id].index].color === params.term.toLowerCase()){
+				return data;
+			}
 		}
 	}
-
+	
+	
+	
     //Return `null` if the term should not be displayed
     return null;
 }
