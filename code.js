@@ -2459,8 +2459,12 @@ function updateHeroUI(hero){
 		$("#" + htmlPrefix + "asc").html(Math.round(100*(588.5 + 4*((hero.bst / 8) + (hero.spt / 240) + hero.merge + 5*(hero.rarity - 5)))) * 0.01);
 
 		//Hero portrait
-		if (hero.index == 0){
-			$("#" + htmlPrefix + "picture").attr("src","heroes/generic/" + data.heroes[hero.index].movetype + "_" + data.heroes[hero.index].weapontype + ".png");
+		if (data.heroes[hero.index].name.indexOf("Generic") != -1){
+			if(data.heroes[hero.index].weapontype == "dragon" || data.heroes[hero.index].weapontype == "bow" ){
+				$("#" + htmlPrefix + "picture").attr("src","heroes/generic/" + data.heroes[hero.index].movetype + "_" + data.heroes[hero.index].color + data.heroes[hero.index].weapontype + ".png");
+			}else{
+				$("#" + htmlPrefix + "picture").attr("src","heroes/generic/" + data.heroes[hero.index].movetype + "_" + data.heroes[hero.index].weapontype + ".png");
+			}
 		}else{
 			$("#" + htmlPrefix + "picture").attr("src","heroes/" + data.heroes[hero.index].name + ".png");
 		}
@@ -3967,8 +3971,12 @@ function fight(enemyIndex,resultIndex){
 
 	//Hero portrait
 	var portraitName = ahEnemy.realName;
-	if (ahEnemy.heroIndex == 0){
-		portraitName = "generic/" + data.heroes[ahEnemy.heroIndex].movetype + "_" + data.heroes[ahEnemy.heroIndex].weapontype;
+	if (data.heroes[ahEnemy.heroIndex].name.indexOf("Generic") != -1){
+		if(data.heroes[ahEnemy.heroIndex].weapontype == "dragon" || data.heroes[ahEnemy.heroIndex].weapontype == "bow" ){
+			portraitName = "generic/" + data.heroes[ahEnemy.heroIndex].movetype + "_" + data.heroes[ahEnemy.heroIndex].color + data.heroes[ahEnemy.heroIndex].weapontype;
+		}else{
+			portraitName = "generic/" + data.heroes[ahEnemy.heroIndex].movetype + "_" + data.heroes[ahEnemy.heroIndex].weapontype;
+		}
 	}
 
 	//Generate fight HTML
