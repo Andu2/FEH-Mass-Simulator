@@ -374,24 +374,31 @@ svg > g > g:last-child { pointer-events: none }
 	border-left: 2px solid #7797ff;
 }
 
+.statlabel{
+	font-size:12px;
+	position:absolute;
+	right:165px;
+	top:-3px;
+}
+
 .bufflabel{
 	font-size:12px;
 	position:absolute;
-	right:104px;
+	right:102px;
 	top:-3px;
 }
 
 .debufflabel{
 	font-size:12px;
 	position:absolute;
-	right:54px;
+	right:51px;
 	top:-3px;
 }
 
 .spurlabel{
 	font-size:12px;
 	position:absolute;
-	right:18px;
+	right:13px;
 	top:-3px;
 }
 
@@ -402,7 +409,7 @@ svg > g > g:last-child { pointer-events: none }
 
 .stat_number{
 	position:absolute;
-	left:40px;
+	left:35px;
 	top:0;
 }
 
