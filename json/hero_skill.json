@@ -1,9 +1,5 @@
 [
 	{
-		"hero_id": 0,
-		"skill_id": 0,
-		"rarity": 0
-	}, {
 		"hero_id": 1,
 		"skill_id": 1,
 		"rarity": 1
@@ -4849,43 +4845,31 @@
 		"rarity": 4
 	}, {
 		"hero_id": 107,
-		"skill_id": 102,
-		"rarity": 1
-	}, {
-		"hero_id": 107,
-		"skill_id": 103,
-		"rarity": 2
-	}, {
-		"hero_id": 107,
-		"skill_id": 104,
-		"rarity": 3
-	}, {
-		"hero_id": 107,
 		"skill_id": 112,
 		"rarity": 5
 	}, {
 		"hero_id": 107,
-		"skill_id": 160,
-		"rarity": 2
+		"skill_id": 105,
+		"rarity": 4
 	}, {
 		"hero_id": 107,
 		"skill_id": 174,
+		"rarity": 5
+	}, {
+		"hero_id": 107,
+		"skill_id": 160,
 		"rarity": 4
 	}, {
 		"hero_id": 107,
 		"skill_id": 250,
-		"rarity": 3
-	}, {
-		"hero_id": 107,
-		"skill_id": 355,
-		"rarity": 1
-	}, {
-		"hero_id": 107,
-		"skill_id": 356,
-		"rarity": 2
+		"rarity": 5
 	}, {
 		"hero_id": 107,
 		"skill_id": 357,
+		"rarity": 5
+	}, {
+		"hero_id": 107,
+		"skill_id": 356,
 		"rarity": 4
 	}, {
 		"hero_id": 108,
