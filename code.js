@@ -3555,7 +3555,7 @@ function getExportText(side){
 			if(hero.ally != "none"){
 				heroExportText += " Ally: " + hero.ally;
 			}
-			if(hero.bless_1 != "none" || hero.bless_2 != 0 || hero.bless_3 != 0){
+			if(hero.bless_1 != "none" || hero.bless_2 != "none" || hero.bless_3 != "none"){
 				heroExportText += " Bless: " + (hero.bless_1 == "none" ? "" : hero.bless_1) + (hero.bless_2 == "none" ? "" : hero.bless_2) + (hero.bless_3 == "none" ? "" : hero.bless_3);
 			}
 			heroExportText += ")" + delimiter;
