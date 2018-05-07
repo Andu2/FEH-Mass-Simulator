@@ -1935,6 +1935,10 @@ function setFlEnemies(){
 		}
 
 		var confirmed = true;
+		//check generic heroes
+		if(data.heroes[i].hero_id >= 9999){
+			confirmed = false;
+		}	
 		//check color
 		if(!enemies.fl.include[data.heroes[i].color]){
 			confirmed = false;
