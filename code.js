@@ -206,6 +206,8 @@ function initOptions(){
 	options.threaten_enemy = false;
 	options.galeforce_challenger = true;
 	options.galeforce_enemy = true;
+	options.odd_buff_challenger = true;
+	options.odd_buff_enemy = true;
 
 	//Holder for statistic values;
 	options.chartType = "enemies by color";
@@ -278,7 +280,8 @@ function initOptions(){
 	challenger.b = -1;
 	challenger.c = -1;
 	challenger.s = -1;
-
+	
+	challenger.statOffset = {"hp":0,"atk":0,"spd":0,"def":0,"res":0};
 	challenger.hp = 0;
 	challenger.atk = 0;
 	challenger.spd = 0;
@@ -291,7 +294,7 @@ function initOptions(){
 	challenger.buffs = {"hp":0,"atk":0,"spd":0,"def":0,"res":0};
 	challenger.debuffs = {"hp":0,"atk":0,"spd":0,"def":0,"res":0};
 	challenger.spur = {"hp":0,"atk":0,"spd":0,"def":0,"res":0};
-
+	
 	challenger.currenthp = 0;
 	challenger.damage = 0;
 	challenger.HpPercent = 4;
@@ -1106,6 +1109,7 @@ function getCDChange(skill, slot){
 			|| skillName.indexOf("Mystletainn") != -1		|| skillName.indexOf("Hauteclere") != -1		|| skillName.indexOf("Urvan") != -1
 			|| skillName.indexOf("Audhulma") != -1			|| skillName.indexOf("Kagami Mochi") != -1		|| skillName.indexOf("Basilikos") != -1
 			|| skillName.indexOf("Berserk Armads") != -1    || skillName.indexOf("Nameless Blade") != -1	|| skillName.indexOf("Barb Shuriken") != -1
+			|| skillName.indexOf("Mjolnir") != -1
 			){
 				return -1;
 		}
@@ -4846,7 +4850,7 @@ function activeHero(hero){
 	this.combatDebuffs = {"atk":0,"spd":0,"def":0,"res":0};
 	this.combatSpur = {"atk":0,"spd":0,"def":0,"res":0};
 	this.combatStat = {"atk":0,"spd":0,"def":0,"res":0};
-
+	
 	this.skillNames = [];
 
 	this.challenger = !!hero.challenger; //Will be undefined if not challenger
@@ -4880,13 +4884,16 @@ function activeHero(hero){
 
 	//Charged damage to be released during combat, resets at end of combat
 	this.chargedDamage = 0;
-
+	//Triggered is true if a special activates
+	this.triggered = false;
+	
+	this.statOffset = {"hp":0,"atk":0,"spd":0,"def":0,"res":0};
 	this.maxHp = hero.hp;
 	this.atk = hero.atk;
 	this.spd = hero.spd;
 	this.def = hero.def;
-	this.res = hero.res;
-
+	this.res = hero.res;	
+	
 	this.moveType = data.heroes[this.heroIndex].movetype;
 	this.weaponType = data.heroes[this.heroIndex].weapontype;
 	this.color = data.heroes[this.heroIndex].color;
@@ -5369,10 +5376,21 @@ function activeHero(hero){
 		return debuffText;
 	}
 
-	this.defiant = function(){
-		var defiantText = "";
+	this.turnStartBuff = function(){
+		var buffText = "";
 		var skillName = "";
-
+		
+		if ((this.challenger && options.odd_buff_challenger) || (!this.challenger && options.odd_buff_enemy)){
+			if(this.has("Odd Atk Wave")){
+				var bonusAtk = this.has("Odd Atk Wave") * 2;
+				skillName = data.skills[this.cIndex].name;
+			}
+		}
+		if(bonusAtk > this.combatBuffs.atk){
+			this.combatBuffs.atk = bonusAtk;
+			buffText += this.name + " activates " + skillName + " for +" + bonusAtk + " atk.<br>";
+		}
+		
 		//All defiant skills trigger at or below 50% HP
 		if(this.hp / this.maxHp <= 0.5){
 			var defiantAtk = 0;
@@ -5388,7 +5406,7 @@ function activeHero(hero){
 			}
 			if(defiantAtk > this.combatBuffs.atk){
 				this.combatBuffs.atk = defiantAtk;
-				defiantText += this.name + " activates " + skillName + " for +" + defiantAtk + " atk.<br>";
+				buffText += this.name + " activates " + skillName + " for +" + defiantAtk + " atk.<br>";
 			}
 
 			var defiantSpd = 0;
@@ -5398,7 +5416,7 @@ function activeHero(hero){
 			}
 			if(defiantSpd > this.combatBuffs.spd){
 				this.combatBuffs.spd = defiantSpd;
-				defiantText += this.name + " activates " + skillName + " for +" + defiantSpd + " spd.<br>";
+				buffText += this.name + " activates " + skillName + " for +" + defiantSpd + " spd.<br>";
 			}
 
 			var defiantDef = 0;
@@ -5408,7 +5426,7 @@ function activeHero(hero){
 			}
 			if(defiantDef > this.combatBuffs.def){
 				this.combatBuffs.def = defiantDef;
-				defiantText += this.name + " activates " + skillName + " for +" + defiantDef + " def.<br>";
+				buffText += this.name + " activates " + skillName + " for +" + defiantDef + " def.<br>";
 			}
 
 			var defiantRes = 0;
@@ -5418,11 +5436,11 @@ function activeHero(hero){
 			}
 			if(defiantRes > this.combatBuffs.res){
 				this.combatBuffs.res = defiantRes;
-				defiantText += this.name + " activates " + skillName + " for +" + defiantRes + " res.<br>";
+				buffText += this.name + " activates " + skillName + " for +" + defiantRes + " res.<br>";
 			}
 		}
 
-		return defiantText;
+		return buffText;
 	}
 
 	//For buffs that act like spur and stack
@@ -5745,6 +5763,10 @@ function activeHero(hero){
 				this.combatSpur.spd += 4;
 				boostText += this.name + " gets +4 Spd from initiating with " + data.skills[this.weaponIndex].name + ".<br>";
 			}
+			if(this.hasExactly("Mjolnir")){
+				this.combatSpur.spd += 6;
+				boostText += this.name + " gets +6 Spd from initiating with " + data.skills[this.weaponIndex].name + ".<br>";
+			}
 			if(this.hasExactly("Tyrfing") && this.hp / this.maxHp <= 0.5){
 				this.combatSpur.def += 4;
 				boostText += this.name + " gets +4 Def in combat from " + data.skills[this.weaponIndex].name + " with <= 50% health.<br>";
@@ -5981,6 +6003,11 @@ function activeHero(hero){
 				this.combatSpur.def += 6;
 				this.combatSpur.res += 6;
 				boostText += this.name + " gets +6 Def/Res while defending with " + data.skills[this.weaponIndex].name + " against a ranged opponent.<br>";
+			}
+			if(this.has("Safeguard")){
+				buffVal = 7;
+				this.combatSpur.def += buffVal;
+				boostText += this.name + " gets +" + buffVal + " Def from defending with " + data.skills[this.weaponIndex].name + ".<br>";
 			}
 
 			//Skills
@@ -6336,6 +6363,12 @@ function activeHero(hero){
 			sealValue.def = (sealValue.def < debuffValue) ? sealValue.def : debuffValue;
 			skillNames.push(data.skills[this.bIndex].name);
 		}
+		if (this.hasAtIndex("Seal Def Res", this.bIndex)){
+			debuffValue = -this.hasAtIndex("Seal Def Res", this.bIndex) * 2 - 1;
+			sealValue.def = (sealValue.def < debuffValue) ? sealValue.def : debuffValue;
+			sealValue.res = (sealValue.res < debuffValue) ? sealValue.res : debuffValue;
+			skillNames.push(data.skills[this.bIndex].name);
+		}
 
 		//These only take effect if the unit performed an attack
 		if (this.didAttack){
@@ -6412,7 +6445,7 @@ function activeHero(hero){
 		var postCombatBuffText = "";
 		var buffValue = {"atk":0,"spd":0,"def":0,"res":0};
 		var skillNames = [];
-
+		
 		//Check and set highest buff value
 		function buffStat(skillName, statTypes, value){
 			for (var i = 0; i < statTypes.length; i++){
@@ -6464,7 +6497,15 @@ function activeHero(hero){
 				postCombatBuffText += this.name + " gains " + statChanges.join(",") + " with " + skillNames.join(", ") + ".<br>";
 			}
 		}
-
+		
+				
+		//Post-combat buff for special triggered during combat
+		if (this.triggered){
+			if (this.hasExactly("Dark Mystletainn")){
+				this.charge = this.charge + 2;
+				postCombatBuffText += this.name + " gains 2 extra charge from triggering a Special with " + data.skills[this.weaponIndex].name + ".<br>";;
+			}
+		}
 		return postCombatBuffText;
 	}
 
@@ -6570,12 +6611,13 @@ function activeHero(hero){
 			if (!AOE) {damageText += this.name + " is targeting foe's " + ((enemy.combatStat.def > enemy.combatStat.res) ? "Res" : "Def" ) + " with " + data.skills[hero.weapon].name + (this.refineIndex != -1 ? " (Refined)" : "") + ".<br>";}
 		}
 
-		//Specials
+		//Offensive Specials
+		var AOEActivated = false;
 		var offensiveSpecialActivated = false;
+		
 		if(this.specialIndex != -1 && data.skills[this.specialIndex].charge <= this.charge){
 			//Do AOE specials
-			if(AOE){
-				var AOEActivated = false;
+			if(AOE){				
 				var AOEDamage = 0;
 
 				if(this.has("Rising Thunder") || this.has("Rising Wind") || this.has("Rising Light") || this.has("Rising Flame") || this.has("Growing Thunder") || this.has("Growing Wind") || this.has("Growing Light") || this.has("Growing Flame")){
@@ -6699,7 +6741,7 @@ function activeHero(hero){
 			if(offensiveSpecialActivated){
 				this.resetCharge();
 				damageText += this.name + " activates " + data.skills[this.specialIndex].name + ".<br>";
-
+				
 				if(this.has("Wo Dao") 						|| this.has("Giant Spoon") 				|| this.has("Lethal Carrot")
 					|| this.hasExactly("Dark Excalibur") 	|| this.hasExactly("Resolute Blade") 	|| this.has("Harmonic Lance")
 					|| this.has("Special Damage")){
@@ -6715,7 +6757,6 @@ function activeHero(hero){
 					dmgBoostFlat += 10;
 					damageText += this.name + " gains 10 damage from " + data.skills[this.bIndex].name + ".<br>";
 				}
-
 				//Solar Brace
 				//***Does it activate with defensive specials? Does it stack with Absorb?***
 				if (!AOE && this.hasExactly("Solar Brace")){
@@ -7138,7 +7179,7 @@ function activeHero(hero){
 			}
 
 			damageText += this.name + " attacks " + enemy.name + " for <span class=\"highlight\">" + dmg + "</span> damage.<br>";
-
+			
 			//After damage defensive special effects
 			if(defensiveSpecialActivated){
 				//Ice Mirror damage charge up check
@@ -7336,6 +7377,11 @@ function activeHero(hero){
 			}
 		}
 
+		//Special trigger check
+		if (AOEActivated || offensiveSpecialActivated || defensiveSpecialActivated){
+			this.triggered = true;
+		}
+		
 		return damageText;
 	}
 
@@ -7351,6 +7397,8 @@ function activeHero(hero){
 		lastAttacker = "none";
 		this.chargedDamage = 0;
 		enemy.chargedDamage = 0;
+		this.triggered = false;
+		enemy.triggered = false;
 
 		//Get relevant defense for simplified text output
 		//***This variable isn't used???***
@@ -7363,7 +7411,7 @@ function activeHero(hero){
 		//***These are turn start skill effects***
 		if(!galeforce){
 			//Check self buffs (defiant skills)
-			roundText += this.defiant();
+			roundText += this.turnStartBuff(enemy);
 
 			//Check for enemy debuffs
 			roundText += this.turnStartDebuff(enemy);
@@ -7917,7 +7965,7 @@ function activeHero(hero){
 			//Apply post-combat debuffs (seal)
 			roundText += this.seal(enemy);
 			roundText += enemy.seal(this);
-
+			
 			//Panic
 			if(this.has("Panic") || this.has("Legion's Axe")
 				|| ((this.hasExactly("Monstrous Bow+") || this.hasExactly("Spectral Tome+")) && this.refineIndex != -1)
