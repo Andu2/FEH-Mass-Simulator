@@ -7378,8 +7378,11 @@ function activeHero(hero){
 		}
 
 		//Special trigger check
-		if (AOEActivated || offensiveSpecialActivated || defensiveSpecialActivated){
+		if (AOEActivated || offensiveSpecialActivated){
 			this.triggered = true;
+		}
+		if (defensiveSpecialActivated){
+			enemy.triggered = true;
 		}
 		
 		return damageText;
