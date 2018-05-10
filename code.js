@@ -1747,6 +1747,10 @@ function setSkills(hero){
 		for(var i = 0; i < enemies.fl.list.length;i++){
 			//Set default skills
 			setSkills(enemies.fl.list[i]);
+			//If current enemy does not have a weapon, skip and continue to the next enemy
+			if (!data.skills[enemies.fl.list[i].weapon]){
+				continue;
+			}			
 			//Find if skill needs replacement based on inputs
 			data.skillSlots.forEach(function(slot){
 				//For refine slot: Check if enemy weapon matches selected weapon filter
