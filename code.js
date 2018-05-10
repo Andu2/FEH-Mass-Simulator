@@ -5649,6 +5649,13 @@ function activeHero(hero){
 				this.combatSpur.spd += buffVal;
 				boostText += this.name + " gets +" + buffVal + " Atk/Spd from being within 2 spaces of an infantry or flying ally with " + skillName + ".<br>";
 			}
+			if (this.hasExactly("Camilla's Axe")){
+				buffVal = 4;
+				skillName = data.skills[this.weaponIndex].name;
+				this.combatSpur.atk += buffVal;
+				this.combatSpur.spd += buffVal;
+				boostText += this.name + " gets +" + buffVal + " Atk/Spd from being within 2 spaces of an cavalry or flying ally with " + skillName + ".<br>";
+			}
 			if (this.hasAtRefineIndex("All Bond", this.refineIndex)){
 				buffVal = 4;
 				skillName = data.skills[this.weaponIndex].name;
@@ -6959,9 +6966,9 @@ function activeHero(hero){
 			//Check weapon effective against
 			var effectiveBonus = 1;
 			if (enemy.moveType == "armored"
-				&& (this.has("Hammer") 			|| this.has("Slaying Hammer")	|| this.has("Armorslayer") 	|| this.has("Armorsmasher")
-					|| this.has("Heavy Spear") 	|| this.has("Slaying Spear")	|| this.hasExactly("Thani")	|| this.hasExactly("Winged Sword")
-					|| this.has("Warrior Princess"))
+				&& (this.has("Hammer") 						|| this.has("Slaying Hammer")	|| this.has("Armorslayer") 	|| this.has("Armorsmasher")
+					|| this.has("Heavy Spear") 				|| this.has("Slaying Spear")	|| this.hasExactly("Thani")	|| this.hasExactly("Winged Sword")
+					|| this.hasExactly("Warrior Princess"))	|| this.hasExactly("Rhomphaia")
 				){
 				effectiveBonus = (enemy.has("Svalinn Shield")) ? 1 : 1.5;
 			}
@@ -6972,9 +6979,9 @@ function activeHero(hero){
 				effectiveBonus = 1.5;
 			}
 			else if (enemy.moveType == "cavalry"
-				&& (this.has("Zanbato") 	|| this.has("Ridersbane")	|| this.has("Poleaxe")
-				|| this.has("Raudrwolf") 	|| this.has("Blarwolf") 	|| this.has("Gronnwolf")
-				|| this.hasExactly("Thani") || this.hasExactly("Winged Sword"))
+				&& (this.has("Zanbato") 	|| this.has("Ridersbane")			|| this.has("Poleaxe")
+				|| this.has("Raudrwolf") 	|| this.has("Blarwolf") 			|| this.has("Gronnwolf")
+				|| this.hasExactly("Thani") || this.hasExactly("Winged Sword"))	|| this.hasExactly("Rhomphaia")
 				){
 				effectiveBonus = (enemy.has("Grani's Shield")) ? 1 : 1.5;
 			}
@@ -7994,6 +8001,7 @@ function activeHero(hero){
 			}
 
 			//Finally, Galeforce!
+			//***Check if this works with Dark Mystletainn***
 			if(!galeforce && this.has("Galeforce") && data.skills[this.specialIndex].charge <= this.charge && (this.challenger ? options.galeforce_challenger : options.galeforce_enemy)){
 				roundText += this.name + " initiates again with Galeforce!<br>";
 				this.resetCharge();

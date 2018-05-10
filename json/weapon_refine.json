@@ -288,7 +288,7 @@
 		"prereq": "Mystletainn",
 		"exclusive": ""
 	},	{
-		"category": "Winged Sword",
+		"category": "Flashing Blade",
 		"name": "Flashing Blade",
 		"sp": 400,
 		"description": "If unit's Spd - foe's Spd >= 1, unit gains Special cooldown charge +1 per attack. (If using other similar skill, only highest value applied.)",
@@ -297,7 +297,7 @@
 		"spd": 0,
 		"def": 0,
 		"res": 0,
-		"prereq": "Winged Sword",
+		"prereq": "Winged Sword,Rhomphaia",
 		"exclusive": ""
 	},	{
 		"category": "Nameless Blade",
@@ -312,6 +312,18 @@
 		"prereq": "Nameless Blade",
 		"exclusive": ""
 	},	{
+		"category": "Camilla's Axe",
+		"name": "Drive Mounted Atk Spd",
+		"sp": 400,
+		"description": "Grants Atk/Spd+3 to cavalry and flying allies within 2 spaces during combat.",
+		"hp": 3,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"prereq": "Camilla's Axe",
+		"exclusive": ""
+	},	{
 		"category": "Advanced Melee",
 		"name": "Atk Bonus",
 		"sp": 350,
@@ -321,7 +333,7 @@
 		"spd": 0,
 		"def": 0,
 		"res": 0,
-		"prereq": "Slaying Edge+,Slaying Lance+,Slaying Axe+,Deft Harpoon+,Melon Crusher+,Lilith Floatie+,Sack o' Gifts+,Handbell+,Tannenboom!+,Hagoita+,Kadomatsu+,Basilikos,Hauteclere,Hinoka's Spear,Mystletainn,Winged Sword,Casa Blanca+,Nameless Blade,Water Breath+,Safeguard+",
+		"prereq": "Slaying Edge+,Slaying Lance+,Slaying Axe+,Deft Harpoon+,Melon Crusher+,Lilith Floatie+,Sack o' Gifts+,Handbell+,Tannenboom!+,Hagoita+,Kadomatsu+,Basilikos,Hauteclere,Hinoka's Spear,Mystletainn,Winged Sword,Casa Blanca+,Nameless Blade,Water Breath+,Safeguard+,Camilla's Axe,Rhomphaia",
 		"exclusive": ""
 	},	{
 		"category": "Advanced Melee",
@@ -333,7 +345,7 @@
 		"spd": 3,
 		"def": 0,
 		"res": 0,
-		"prereq": "Slaying Edge+,Slaying Lance+,Slaying Axe+,Deft Harpoon+,Melon Crusher+,Lilith Floatie+,Sack o' Gifts+,Handbell+,Tannenboom!+,Hagoita+,Kadomatsu+,Basilikos,Hauteclere,Hinoka's Spear,Mystletainn,Winged Sword,Casa Blanca+,Nameless Blade,Water Breath+,Safeguard+",
+		"prereq": "Slaying Edge+,Slaying Lance+,Slaying Axe+,Deft Harpoon+,Melon Crusher+,Lilith Floatie+,Sack o' Gifts+,Handbell+,Tannenboom!+,Hagoita+,Kadomatsu+,Basilikos,Hauteclere,Hinoka's Spear,Mystletainn,Winged Sword,Casa Blanca+,Nameless Blade,Water Breath+,Safeguard+,Camilla's Axe,Rhomphaia",
 		"exclusive": ""
 	},	{
 		"category": "Advanced Melee",
@@ -345,7 +357,7 @@
 		"spd": 0,
 		"def": 4,
 		"res": 0,
-		"prereq": "Slaying Edge+,Slaying Lance+,Slaying Axe+,Deft Harpoon+,Melon Crusher+,Lilith Floatie+,Sack o' Gifts+,Handbell+,Tannenboom!+,Hagoita+,Kadomatsu+,Basilikos,Hauteclere,Hinoka's Spear,Mystletainn,Winged Sword,Casa Blanca+,Nameless Blade,Water Breath+,Safeguard+",
+		"prereq": "Slaying Edge+,Slaying Lance+,Slaying Axe+,Deft Harpoon+,Melon Crusher+,Lilith Floatie+,Sack o' Gifts+,Handbell+,Tannenboom!+,Hagoita+,Kadomatsu+,Basilikos,Hauteclere,Hinoka's Spear,Mystletainn,Winged Sword,Casa Blanca+,Nameless Blade,Water Breath+,Safeguard+,Camilla's Axe,Rhomphaia",
 		"exclusive": ""
 	},	{
 		"category": "Advanced Melee",
@@ -357,7 +369,7 @@
 		"spd": 0,
 		"def": 0,
 		"res": 4,
-		"prereq": "Slaying Edge+,Slaying Lance+,Slaying Axe+,Deft Harpoon+,Melon Crusher+,Lilith Floatie+,Sack o' Gifts+,Handbell+,Tannenboom!+,Hagoita+,Kadomatsu+,Basilikos,Hauteclere,Hinoka's Spear,Mystletainn,Winged Sword,Casa Blanca+,Nameless Blade,Water Breath+,Safeguard+",
+		"prereq": "Slaying Edge+,Slaying Lance+,Slaying Axe+,Deft Harpoon+,Melon Crusher+,Lilith Floatie+,Sack o' Gifts+,Handbell+,Tannenboom!+,Hagoita+,Kadomatsu+,Basilikos,Hauteclere,Hinoka's Spear,Mystletainn,Winged Sword,Casa Blanca+,Nameless Blade,Water Breath+,Safeguard+,Camilla's Axe,Rhomphaia",
 		"exclusive": ""
 	},	{
 		"category": "Wedding Melee",
@@ -502,6 +514,66 @@
 		"def": 0,
 		"res": 4,
 		"prereq": "Legion's Axe+",
+		"exclusive": ""
+	},	{
+		"category": "Yato",
+		"name": "Drive Support",
+		"sp": 400,
+		"description": "Grants Atk/Spd/Def/Res+2. If unit is within 2 spaces of support partner, grants Atk/Spd/Def/Res+4 to that ally during combat.",
+		"hp": 3,
+		"atk": 2,
+		"spd": 2,
+		"def": 2,
+		"res": 2,
+		"prereq": "Yato",
+		"exclusive": ""
+	},	{
+		"category": "Yato",
+		"name": "Atk Bonus",
+		"sp": 400,
+		"description": "Grants Atk/Spd/Def/Res+2.",
+		"hp": 5,
+		"atk": 4,
+		"spd": 2,
+		"def": 2,
+		"res": 2,
+		"prereq": "Yato",
+		"exclusive": ""
+	},	{
+		"category": "Yato",
+		"name": "Spd Bonus",
+		"sp": 400,
+		"description": "Grants Atk/Spd/Def/Res+2.",
+		"hp": 5,
+		"atk": 2,
+		"spd": 5,
+		"def": 2,
+		"res": 2,
+		"prereq": "Yato",
+		"exclusive": ""
+	},	{
+		"category": "Yato",
+		"name": "Def Bonus",
+		"sp": 400,
+		"description": "Grants Atk/Spd/Def/Res+2.",
+		"hp": 5,
+		"atk": 2,
+		"spd": 2,
+		"def": 6,
+		"res": 2,
+		"prereq": "Yato",
+		"exclusive": ""
+	},	{
+		"category": "Yato",
+		"name": "Res Bonus",
+		"sp": 400,
+		"description": "Grants Atk/Spd/Def/Res+2.",
+		"hp": 5,
+		"atk": 2,
+		"spd": 2,
+		"def": 2,
+		"res": 6,
+		"prereq": "Yato",
 		"exclusive": ""
 	},	{
 		"category": "Eckesachs",
