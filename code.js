@@ -6980,21 +6980,27 @@ function activeHero(hero){
 				){
 				effectiveBonus = (enemy.has("Svalinn Shield")) ? 1 : 1.5;
 			}
-			else if (enemy.moveType == "flying" && (this.hasExactly("Excalibur") || this.weaponType=="bow")){
+			else if (enemy.moveType == "flying" 
+				&& (this.hasExactly("Excalibur") || this.weaponType=="bow")){
 				effectiveBonus = (enemy.has("Iote's Shield") || enemy.has("Dragonskin")) ? 1 : 1.5;
 			}
-			else if (enemy.moveType == "infantry" && (this.has("Poison Dagger"))){
+			else if (enemy.moveType == "infantry" 
+				&& (this.has("Poison Dagger"))){
 				effectiveBonus = 1.5;
 			}
 			else if (enemy.moveType == "cavalry"
 				&& (this.has("Zanbato") 		|| this.has("Ridersbane")			|| this.has("Poleaxe")
 					|| this.has("Raudrwolf") 	|| this.has("Blarwolf") 			|| this.has("Gronnwolf")
-					|| this.hasExactly("Thani") || this.hasExactly("Winged Sword")	|| this.hasExactly("Rhomphaia")
+					|| this.hasExactly("Thani")	|| this.hasExactly("Winged Sword")	|| this.hasExactly("Rhomphaia")
 					)
 				){
 				effectiveBonus = (enemy.has("Grani's Shield")) ? 1 : 1.5;
 			}
-			else if (enemy.weaponType == "dragon" && (this.hasExactly("Falchion") || this.hasExactly("Sealed Falchion") || this.hasExactly("Naga") || this.hasExactly("Divine Naga") || (this.hasExactly("Binding Blade") && this.refineIndex != -1))){
+			else if (enemy.weaponType == "dragon" 
+				&& (this.hasExactly("Falchion") || this.hasExactly("Sealed Falchion") || this.hasExactly("Naga")
+					|| this.hasExactly("Divine Naga") || (this.hasExactly("Binding Blade") && this.refineIndex != -1)
+					)
+				){
 				effectiveBonus = 1.5;
 			}
 			else if ((enemy.weaponType == "redtome" || enemy.weaponType == "bluetome" || enemy.weaponType == "greentome")&& (this.has("Kitty Paddle"))){
