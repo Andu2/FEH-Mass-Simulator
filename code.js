@@ -2923,6 +2923,7 @@ function showImportDialog(side,type){
 	$("#frame_import").show();
 }
 
+//Import dialog UI is used for export as well
 function hideImportDialog(){
 	$("#screen_fade").hide();
 	$("#frame_import").hide();
@@ -3619,6 +3620,8 @@ function copyExportText(){
 	if(!successful){
 		$("#button_import").html("Ctrl+C to finish the job")
 	}
+	
+	hideImportDialog();
 }
 
 function switchEnemySelect(newVal){
