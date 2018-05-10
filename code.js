@@ -5587,7 +5587,7 @@ function activeHero(hero){
 				this.combatSpur.spd += 5;
 				this.combatSpur.def += 5;
 				this.combatSpur.res += 5;
-				boostText += this.name + " gets +5 Atk/Spd/Def/Res from not being at full health with " + data.skills[this.weaponIndex].name + ".<br>";
+				boostText += this.name + " gets +5 Atk/Spd/Def/Res from having less than full health with " + data.skills[this.weaponIndex].name + ".<br>";
 			}
 		}
 
@@ -6975,7 +6975,8 @@ function activeHero(hero){
 			if (enemy.moveType == "armored"
 				&& (this.has("Hammer") 						|| this.has("Slaying Hammer")	|| this.has("Armorslayer") 	|| this.has("Armorsmasher")
 					|| this.has("Heavy Spear") 				|| this.has("Slaying Spear")	|| this.hasExactly("Thani")	|| this.hasExactly("Winged Sword")
-					|| this.hasExactly("Warrior Princess"))	|| this.hasExactly("Rhomphaia")
+					|| this.hasExactly("Warrior Princess")	|| this.hasExactly("Rhomphaia")
+					)
 				){
 				effectiveBonus = (enemy.has("Svalinn Shield")) ? 1 : 1.5;
 			}
@@ -6986,9 +6987,10 @@ function activeHero(hero){
 				effectiveBonus = 1.5;
 			}
 			else if (enemy.moveType == "cavalry"
-				&& (this.has("Zanbato") 	|| this.has("Ridersbane")			|| this.has("Poleaxe")
-				|| this.has("Raudrwolf") 	|| this.has("Blarwolf") 			|| this.has("Gronnwolf")
-				|| this.hasExactly("Thani") || this.hasExactly("Winged Sword"))	|| this.hasExactly("Rhomphaia")
+				&& (this.has("Zanbato") 		|| this.has("Ridersbane")			|| this.has("Poleaxe")
+					|| this.has("Raudrwolf") 	|| this.has("Blarwolf") 			|| this.has("Gronnwolf")
+					|| this.hasExactly("Thani") || this.hasExactly("Winged Sword")	|| this.hasExactly("Rhomphaia")
+					)
 				){
 				effectiveBonus = (enemy.has("Grani's Shield")) ? 1 : 1.5;
 			}
