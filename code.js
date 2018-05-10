@@ -5773,7 +5773,7 @@ function activeHero(hero){
 				this.combatSpur.atk += 4;
 				boostText += this.name + " gets +4 Atk from initiating with " + data.skills[this.weaponIndex].name + ".<br>"
 			}
-			if(this.hasExactly("Yato")){
+			if(this.hasExactly("Yato") && this.refineIndex != -1){
 				this.combatSpur.spd += 4;
 				boostText += this.name + " gets +4 Spd from initiating with " + data.skills[this.weaponIndex].name + ".<br>";
 			}
