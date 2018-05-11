@@ -14279,5 +14279,19 @@
 		"charge": 0,
 		"inheritrule": "unique",
 		"affectsduel": 1
+	}, {
+		"skill_id": 1021,
+		"name": "Loptous",
+		"slot": "weapon",
+		"sp": 400,
+		"description": "Grants Res+3. Skills with \"effective against dragons\" are effective against unit. If foe has no skills with \"effective against dragons\", inflicts Atk-6 on foe during combat.",
+		"hp": 0,
+		"atk": 16,
+		"spd": 0,
+		"def": 0,
+		"res": 3,
+		"charge": 0,
+		"inheritrule": "unique",
+		"affectsduel": 1
 	}
 ]
