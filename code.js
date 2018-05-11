@@ -5330,38 +5330,38 @@ function activeHero(hero){
 		//Chill Debuff
 		if ((enemy.challenger && options.chilled_challenger) || (!enemy.challenger && options.chilled_enemy)){
 			if (this.hasExactly("Huginn's Egg") && this.hp / this.maxHp >= 0.5 ){
-				debuffVal.atk = -5;
-				debuffVal.def = -5;
+				debuffVal.atk = Math.min(debuffVal.atk, -5);
+				debuffVal.def = Math.min(debuffVal.def, -5);
 				skillNames.push("Huginn's Egg");
 			}
 			if (this.hasExactly("Muninn's Egg") && this.hp / this.maxHp >= 0.5 ){
-				debuffVal.atk = -5;
-				debuffVal.res = -5;
+				debuffVal.atk = Math.min(debuffVal.atk, -5);
+				debuffVal.res = Math.min(debuffVal.res, -5);
 				skillNames.push("Muninn's Egg");
 			}
 			if (this.hasExactly("Chilling Seal")){
-				debuffVal.atk = -6;
-				debuffVal.spd = -6;
+				debuffVal.atk = Math.min(debuffVal.atk, -6);
+				debuffVal.spd = Math.min(debuffVal.spd, -6);
 				skillNames.push("Chilling Seal");
 			}
 			if (this.has("Chill Atk")){
-				debuffVal.atk = -this.hasAtIndex("Chill Atk", this.bIndex) * 2 - 1;
+				debuffVal.atk = Math.min(debuffVal.atk, -this.hasAtIndex("Chill Atk", this.bIndex) * 2 - 1);
 				skillNames.push("Chill Atk");
 			}
 			if (this.has("Chill Spd")){
-				debuffVal.spd = -this.hasAtIndex("Chill Spd", this.bIndex) * 2 - 1;
+				debuffVal.spd = Math.min(debuffVal.spd, -this.hasAtIndex("Chill Spd", this.bIndex) * 2 - 1);
 				skillNames.push("Chill Spd");
 			}
 			if (this.has("Chill Def")){
-				debuffVal.def = -this.hasAtIndex("Chill Def", this.bIndex) * 2 - 1;
+				debuffVal.def = Math.min(debuffVal.def, -this.hasAtIndex("Chill Def", this.bIndex) * 2 - 1);
 				skillNames.push("Chill Def");
 			}
 			if (this.has("Chill Res")){
-				debuffVal.res = -this.hasAtIndex("Chill Res", this.bIndex) * 2 - 1;
+				debuffVal.res = Math.min(debuffVal.res, -this.hasAtIndex("Chill Res", this.bIndex) * 2 - 1);
 				skillNames.push("Chill Res");
 			}
 			if (this.hasExactly("Forblaze")){
-				debuffVal.res = -7;
+				debuffVal.res = Math.min(debuffVal.res, -7);
 				skillNames.push("Forblaze");
 			}
 		}
@@ -5376,7 +5376,7 @@ function activeHero(hero){
 			}
 
 			if(statChanges.length > 0){
-				debuffText += enemy.name + " is affected by turn-start skills: " + skillNames.join(", ") + ".<br>"  + enemy.name + " receives the following: " + statChanges.join(", ") + ".<br>";
+				debuffText += enemy.name + " is affected by turn-start skills: " + skillNames.join(", ") + ".<br>" + enemy.name + " receives the following: " + statChanges.join(", ") + ".<br>";
 			}
 		}
 
@@ -5385,65 +5385,59 @@ function activeHero(hero){
 
 	this.turnStartBuff = function(){
 		var buffText = "";
-		var skillName = "";
-
+		var skillNames = [];
+		var buffVal = {"atk":0,"spd":0,"def":0,"res":0};
+		
+		//Odd turn buffs
 		if ((this.challenger && options.odd_buff_challenger) || (!this.challenger && options.odd_buff_enemy)){
 			if(this.has("Odd Atk Wave")){
-				var bonusAtk = this.has("Odd Atk Wave") * 2;
-				skillName = data.skills[this.cIndex].name;
+				buffVal.atk = Math.max(buffVal.atk, this.has("Odd Atk Wave") * 2);
+				skillNames.push(data.skills[this.cIndex].name);
 			}
-		}
-		if(bonusAtk > this.combatBuffs.atk){
-			this.combatBuffs.atk = bonusAtk;
-			buffText += this.name + " activates " + skillName + " for +" + bonusAtk + " atk.<br>";
+			if(this.hasExactly("Byleistr")){
+				buffVal.atk = Math.max(buffVal.atk, 4);
+				buffVal.spd = Math.max(buffVal.spd, 4);
+				buffVal.def = Math.max(buffVal.def, 4);
+				buffVal.res = Math.max(buffVal.res, 4);
+				skillNames.push(data.skills[this.weaponIndex].name);
+			}
 		}
 
 		//All defiant skills trigger at or below 50% HP
 		if(this.hp / this.maxHp <= 0.5){
-			var defiantAtk = 0;
-			if(this.has("Defiant Atk")){
-				defiantAtk = this.has("Defiant Atk") * 2 + 1;
-				skillName = data.skills[this.aIndex].name;
-			}
 			if(this.has("Folkvangr")){
-				if(defiantAtk<5){
-					defiantAtk = 5;
-					skillName = data.skills[this.weaponIndex].name;
+				buffVal.atk = Math.max(buffVal.atk, 5);
+				skillNames.push(data.skills[this.weaponIndex].name);
+			}
+			if(this.has("Defiant Atk")){
+				buffVal.atk = Math.max(buffVal.atk, this.has("Defiant Atk") * 2 + 1);
+				skillNames.push(data.skills[this.aIndex].name);
+			}
+			if(this.has("Defiant Spd")){
+				buffVal.spd = Math.max(buffVal.spd, this.has("Defiant Spd") * 2 + 1);
+				skillNames.push(data.skills[this.aIndex].name);
+			}
+			if(this.has("Defiant Def")){
+				buffVal.def = Math.max(buffVal.def, this.has("Defiant Def") * 2 + 1);
+				skillNames.push(data.skills[this.aIndex].name);
+			}
+			if(this.has("Defiant Res")){
+				buffVal.res = Math.max(buffVal.res, this.has("Defiant Res") * 2 + 1);
+				skillNames.push(data.skills[this.aIndex].name);
+			}
+		}
+		
+		if(skillNames.length > 0){
+			var statChanges = [];
+			for(var stat in buffVal){
+				if(buffVal[stat] > Math.max(this.buffs[stat], this.combatBuffs[stat])){
+					this.combatBuffs[stat] = buffVal[stat];
+					statChanges.push(stat + " +" + buffVal[stat]);
 				}
 			}
-			if(defiantAtk > this.combatBuffs.atk){
-				this.combatBuffs.atk = defiantAtk;
-				buffText += this.name + " activates " + skillName + " for +" + defiantAtk + " atk.<br>";
-			}
 
-			var defiantSpd = 0;
-			if(this.has("Defiant Spd")){
-				defiantSpd = this.has("Defiant Spd") * 2 + 1;
-				skillName = data.skills[this.aIndex].name;
-			}
-			if(defiantSpd > this.combatBuffs.spd){
-				this.combatBuffs.spd = defiantSpd;
-				buffText += this.name + " activates " + skillName + " for +" + defiantSpd + " spd.<br>";
-			}
-
-			var defiantDef = 0;
-			if(this.has("Defiant Def")){
-				defiantDef = this.has("Defiant Def") * 2 + 1;
-				skillName = data.skills[this.aIndex].name;
-			}
-			if(defiantDef > this.combatBuffs.def){
-				this.combatBuffs.def = defiantDef;
-				buffText += this.name + " activates " + skillName + " for +" + defiantDef + " def.<br>";
-			}
-
-			var defiantRes = 0;
-			if(this.has("Defiant Res")){
-				defiantRes = this.has("Defiant Res") * 2 + 1;
-				skillName = data.skills[this.aIndex].name;
-			}
-			if(defiantRes > this.combatBuffs.res){
-				this.combatBuffs.res = defiantRes;
-				buffText += this.name + " activates " + skillName + " for +" + defiantRes + " res.<br>";
+			if(statChanges.length > 0){
+				buffText += this.name + " is affected by turn-start skills: " + skillNames.join(", ") + ".<br>" + this.name + " receives the following: " + statChanges.join(", ") + ".<br>";
 			}
 		}
 
@@ -5511,7 +5505,7 @@ function activeHero(hero){
 			boostText += this.name + " gets +6 Atk from " + data.refine[this.refineIndex].name + " (Refined) against a ranged opponent.<br>";
 		}
 
-		//Combat debuff
+		//Combat debuff ***does this stack like spurs?***
 		if (enemy.hasExactly("Loptous")
 			&& !(this.hasExactly("Falchion")	|| this.hasExactly("Sealed Falchion")
 				|| this.hasExactly("Naga")		|| this.hasExactly("Divine Naga")
