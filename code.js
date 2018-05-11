@@ -2362,7 +2362,7 @@ function updateEnemyList(){
 		listHTML = "<option value=-1 class=\"hero_option\">New List</option>";
 	}else{
 		for(var i = 0; i < enemies.cl.list.length; i++){
-			if (enemies.cl.list[i].index <= 0){
+			if (enemies.cl.list[i].index < 0){
 					listHTML += "<option value=" + i + ">" + "New Hero" + "</option>";
 			}else{
 				listHTML += "<option value=" + i + ">" + data.heroes[enemies.cl.list[i].index].name + "</option>";
