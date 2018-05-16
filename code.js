@@ -5376,7 +5376,7 @@ function activeHero(hero){
 			}
 
 			if(statChanges.length > 0){
-				debuffText += enemy.name + " is affected by turn-start skills: " + skillNames.join(", ") + ".<br>" + enemy.name + " receives the following: " + statChanges.join(", ") + ".<br>";
+				debuffText += enemy.name + " is affected by turn-start debuffs: " + skillNames.join(", ") + ".<br>" + enemy.name + " receives the following: " + statChanges.join(", ") + ".<br>";
 			}
 		}
 
@@ -5437,7 +5437,7 @@ function activeHero(hero){
 			}
 
 			if(statChanges.length > 0){
-				buffText += this.name + " is affected by turn-start skills: " + skillNames.join(", ") + ".<br>" + this.name + " receives the following: " + statChanges.join(", ") + ".<br>";
+				buffText += this.name + " is affected by turn-start buffs: " + skillNames.join(", ") + ".<br>" + this.name + " receives the following: " + statChanges.join(", ") + ".<br>";
 			}
 		}
 
@@ -5503,17 +5503,6 @@ function activeHero(hero){
 		if (this.hasAtRefineIndex("Distant Atk", this.refineIndex) && enemy.range == "ranged"){
 			this.combatSpur.atk += 6;
 			boostText += this.name + " gets +6 Atk from " + data.refine[this.refineIndex].name + " (Refined) against a ranged opponent.<br>";
-		}
-
-		//Combat debuff ***does this stack like spurs?***
-		if (enemy.hasExactly("Loptous")
-			&& !(this.hasExactly("Falchion")	|| this.hasExactly("Sealed Falchion")
-				|| this.hasExactly("Naga")		|| this.hasExactly("Divine Naga")
-				|| (this.hasExactly("Binding Blade") && this.refineIndex != -1)
-			)
-		){
-			this.combatDebuffs.atk -= 6;
-			boostText += this.name + " gets -6 Atk from not having an \"effective against dragons\" skill against the opponent's " + data.skills[enemy.weaponIndex].name + ".<br>";
 		}
 
 		//Brazen Skills
@@ -6124,6 +6113,18 @@ function activeHero(hero){
 		}else if (isBuffCancelled(this, enemy)){
 			this.combatBuffs = {"atk":0,"spd":0,"def":0,"res":0};
 			statText += this.name + "'s buffs are nullified by opponent's skill.<br>";
+		}
+		
+		//Combat debuff ***does this stack like spurs?***
+		//TODO: Move combat debuffs into setCombatBonus
+		if (enemy.hasExactly("Loptous")
+			&& !(this.hasExactly("Falchion")	|| this.hasExactly("Sealed Falchion")
+				|| this.hasExactly("Naga")		|| this.hasExactly("Divine Naga")
+				|| (this.hasExactly("Binding Blade") && this.refineIndex != -1)
+			)
+		){
+			this.combatDebuffs.atk -= 6;
+			statText += this.name + " gets -6 Atk from not having an \"effective against dragons\" skill against the opponent's " + data.skills[enemy.weaponIndex].name + ".<br>";
 		}
 
 		//Calculate effective combat stats
