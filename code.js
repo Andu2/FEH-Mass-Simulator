@@ -5668,7 +5668,7 @@ function activeHero(hero){
 				this.combatSpur.spd += buffVal;
 				boostText += this.name + " gets +" + buffVal + " Atk/Spd from being within 2 spaces of an cavalry or flying ally with " + skillName + ".<br>";
 			}
-			if (this.hasExactly("Nifl Frostflowers") || this.hasExactly("Muspell Fireposys")){
+			if (this.hasExactly("Nifl Frostflowers") || this.hasExactly("Muspell Fireposy")){
 				buffVal = 2 * Math.min(3, this.adjacent);
 				skillName = data.skills[this.weaponIndex].name;
 				this.combatSpur.atk += buffVal;
