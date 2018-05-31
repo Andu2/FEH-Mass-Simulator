@@ -6619,6 +6619,30 @@ function activeHero(hero){
 		//Hero does not have adaptive attack
 		return false;
 	}
+	
+	this.getBonusDamage = function(){
+		var damage = 0;
+		var skillNames = [];		
+
+		//Weapons
+		if(this.has("Wo Dao") 						|| this.has("Giant Spoon") 				|| this.has("Lethal Carrot")
+			|| this.hasExactly("Dark Excalibur") 	|| this.hasExactly("Resolute Blade")	|| this.has("Harmonic Lance")
+			|| this.has("Special Damage")
+			|| (this.has("Berserk Armads") && (this.hp / this.maxHp <= .75))
+		){
+			damage += 10;
+			skillNames.push(data.skills[this.weaponIndex].name);
+		}
+		//B Skills
+		if(this.hasExactly("Bushido")
+			|| (this.has("Wrath") && (this.hp / this.maxHp <= .25 * this.has("Wrath")))
+		){
+			damage += 10;
+			skillNames.push(data.skills[this.bIndex].name);
+		}
+		
+		return {"damage":damage, "skillNames":skillNames.join(", ").replace(/,(?!.*,)/gmi, ', and')};
+	}
 
 	//represents one attack of combat
 	this.doDamage = function(enemy, brave, AOE, firstAttack){
@@ -6664,30 +6688,20 @@ function activeHero(hero){
 				if(AOEActivated){
 					this.resetCharge();
 					
-					//TODO: Combine weapon check for damage boost from here and offensive special activate into one function
-					if(this.has("Wo Dao") 						|| this.has("Giant Spoon") 				|| this.has("Lethal Carrot")
-						|| this.hasExactly("Dark Excalibur") 	|| this.hasExactly("Resolute Blade")	|| this.has("Harmonic Lance")
-						|| this.has("Special Damage")
-					){
-						AOEDamage += 10;
-						damageText += this.name + " gains 10 damage from " + data.skills[this.weaponIndex].name + ".<br>";
+					//Bonus Special Damage
+					var bonusDamage = this.getBonusDamage();
+
+					if (bonusDamage.damage != 0){
+						AOEDamage += bonusDamage.damage;
+						damageText += this.name + " gains " + bonusDamage.damage + " damage from " + bonusDamage.skillNames + ".<br>";
 					}
-					if(this.has("Berserk Armads") && (this.hp / this.maxHp <= .75)){
-						AOEDamage += 10;
-						damageText += this.name + " gains 10 damage from " + data.skills[this.weaponIndex].name + ".<br>";
-					}
+					
+					//Bonus Flat Damage
 					if (this.hasExactly("Light Brand")){
 						if (enemy.combatStat.def >= enemy.combatStat.res + 5){
 							AOEDamage += 7;
 							damageText += this.name + " gains 7 damage from " + data.skills[this.weaponIndex].name + ".<br>";
 						}
-					}
-					//B skill bonus damage
-					if(this.hasExactly("Bushido")
-						|| (this.has("Wrath") && (this.hp / this.maxHp <= .25 * this.has("Wrath")))
-					){
-						AOEDamage += 10;
-						damageText += this.name + " gains 10 damage from " + data.skills[this.bIndex].name + ".<br>";
 					}
 					if(enemy.has("Embla's Ward")){
 						AOEDamage = 0;
@@ -6777,26 +6791,15 @@ function activeHero(hero){
 			if(offensiveSpecialActivated){
 				this.resetCharge();
 				damageText += this.name + " activates " + data.skills[this.specialIndex].name + ".<br>";
+				
+				//Bonus Special Damage
+				var bonusDamage = this.getBonusDamage();
 
-				if(this.has("Wo Dao") 						|| this.has("Giant Spoon") 				|| this.has("Lethal Carrot")
-					|| this.hasExactly("Dark Excalibur") 	|| this.hasExactly("Resolute Blade") 	|| this.has("Harmonic Lance")
-					|| this.has("Special Damage")
-				){
-					dmgBoostFlat += 10;
-					damageText += this.name + " gains 10 damage from " + data.skills[hero.weapon].name + ".<br>";
+				if (bonusDamage.damage != 0){
+					dmgBoostFlat += bonusDamage.damage;
+					damageText += this.name + " gains " + bonusDamage.damage + " damage from " + bonusDamage.skillNames + ".<br>";
 				}
-				//Wrath damage is checked when special is activated
-				if(this.has("Berserk Armads") && (this.hp/this.maxHp <= .75)){
-					dmgBoostFlat += 10;
-					damageText += this.name + " gains 10 damage from " + data.skills[this.weaponIndex].name + ".<br>";
-				}
-				//B skill bonus damage
-				if(this.hasExactly("Bushido")
-					|| (this.has("Wrath") && (this.hp/this.maxHp <= .25 * this.has("Wrath")))
-				){
-					dmgBoostFlat += 10;
-					damageText += this.name + " gains 10 damage from " + data.skills[this.bIndex].name + ".<br>";
-				}
+				
 				//Solar Brace
 				//***Does it activate with defensive specials? Does it stack with Absorb?***
 				if (!AOE && this.hasExactly("Solar Brace")){
