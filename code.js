@@ -6083,6 +6083,12 @@ function activeHero(hero){
 				this.combatSpur.res += buffVal;
 				boostText += this.name + " gets +" + buffVal + " Spd/Res from defending with " + data.skills[this.aIndex].name + ".<br>";
 			}
+			if(this.has("Kestrel Stance")){
+				buffVal = this.has("Kestrel Stance") * 2;
+				this.combatSpur.atk += buffVal;
+				this.combatSpur.spd += buffVal;
+				boostText += this.name + " gets +" + buffVal + " Atk/Spd from defending with " + data.skills[this.aIndex].name + ".<br>";
+			}
 			if(this.has("Dragonskin")){
 				buffVal = 4;
 				this.combatSpur.def += buffVal;
@@ -6657,6 +6663,7 @@ function activeHero(hero){
 
 				if(AOEActivated){
 					this.resetCharge();
+					
 					//TODO: Combine weapon check for damage boost from here and offensive special activate into one function
 					if(this.has("Wo Dao") 						|| this.has("Giant Spoon") 				|| this.has("Lethal Carrot")
 						|| this.hasExactly("Dark Excalibur") 	|| this.hasExactly("Resolute Blade")	|| this.has("Harmonic Lance")
@@ -6675,7 +6682,10 @@ function activeHero(hero){
 							damageText += this.name + " gains 7 damage from " + data.skills[this.weaponIndex].name + ".<br>";
 						}
 					}
-					if(this.has("Wrath") && (this.hp / this.maxHp <= .25 * this.has("Wrath"))){
+					//B skill bonus damage
+					if(this.hasExactly("Bushido")
+						|| (this.has("Wrath") && (this.hp / this.maxHp <= .25 * this.has("Wrath")))
+					){
 						AOEDamage += 10;
 						damageText += this.name + " gains 10 damage from " + data.skills[this.bIndex].name + ".<br>";
 					}
@@ -6770,7 +6780,8 @@ function activeHero(hero){
 
 				if(this.has("Wo Dao") 						|| this.has("Giant Spoon") 				|| this.has("Lethal Carrot")
 					|| this.hasExactly("Dark Excalibur") 	|| this.hasExactly("Resolute Blade") 	|| this.has("Harmonic Lance")
-					|| this.has("Special Damage")){
+					|| this.has("Special Damage")
+				){
 					dmgBoostFlat += 10;
 					damageText += this.name + " gains 10 damage from " + data.skills[hero.weapon].name + ".<br>";
 				}
@@ -6779,7 +6790,10 @@ function activeHero(hero){
 					dmgBoostFlat += 10;
 					damageText += this.name + " gains 10 damage from " + data.skills[this.weaponIndex].name + ".<br>";
 				}
-				if(this.has("Wrath") && (this.hp/this.maxHp <= .25 * this.has("Wrath"))){
+				//B skill bonus damage
+				if(this.hasExactly("Bushido")
+					|| (this.has("Wrath") && (this.hp/this.maxHp <= .25 * this.has("Wrath")))
+				){
 					dmgBoostFlat += 10;
 					damageText += this.name + " gains 10 damage from " + data.skills[this.bIndex].name + ".<br>";
 				}

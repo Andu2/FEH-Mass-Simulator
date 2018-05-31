@@ -14629,5 +14629,47 @@
 		"charge": 0,
 		"inheritrule": "flying",
 		"affectsduel": 0
+	}, {
+		"skill_id": 1046,
+		"name": "Kestrel Stance 1",
+		"slot": "a",
+		"sp": 120,
+		"description": "If foe initiates combat, grants Atk\/Spd+2 during combat.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "nonstaff",
+		"affectsduel": 1
+	}, {
+		"skill_id": 1047,
+		"name": "Kestrel Stance 2",
+		"slot": "a",
+		"sp": 240,
+		"description": "If foe initiates combat, grants Atk\/Spd+4 during combat.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "nonstaff",
+		"affectsduel": 1
+	}, {
+		"skill_id": 1048,
+		"name": "Bushido",
+		"slot": "b",
+		"sp": 300,
+		"description": "Deals +10 damage when Special triggers.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "unique",
+		"affectsduel": 1
 	}
 ]
