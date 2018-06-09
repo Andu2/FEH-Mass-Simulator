@@ -7207,7 +7207,7 @@ function activeHero(hero){
 				var damageBonus = Math.min((this.combatStat.spd + (this.has("Phantom Spd") ? (2 + this.has("Phantom Spd") * 3) : 0) - enemy.combatStat.spd) * 0.7 | 0, 7);
 				if(damageBonus > 0){
 					dmgBoostFlat += damageBonus;
-					damageText += this.name + " gains " + damageBonus + " damage from Vassal's Blade.<br>";
+					damageText += this.name + " gains " + damageBonus + " damage from " + data.skills[this.weaponIndex].name + ".<br>";
 				}
 			}
 
