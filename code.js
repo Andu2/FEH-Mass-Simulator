@@ -1109,7 +1109,7 @@ function getCDChange(skill, slot){
 			|| skillName.indexOf("Mystletainn") != -1		|| skillName.indexOf("Hauteclere") != -1		|| skillName.indexOf("Urvan") != -1
 			|| skillName.indexOf("Audhulma") != -1			|| skillName.indexOf("Kagami Mochi") != -1		|| skillName.indexOf("Basilikos") != -1
 			|| skillName.indexOf("Berserk Armads") != -1    || skillName.indexOf("Nameless Blade") != -1	|| skillName.indexOf("Barb Shuriken") != -1
-			|| skillName.indexOf("Mjolnir") != -1
+			|| skillName.indexOf("Mjolnir") != -1			|| skillName.indexOf("Vassal's Blade") != -1
 			){
 				return -1;
 		}
@@ -5388,8 +5388,9 @@ function activeHero(hero){
 		var skillNames = [];
 		var buffVal = {"atk":0,"spd":0,"def":0,"res":0};
 		
-		//Odd turn buffs
+		//Odd/Even turn buffs
 		if ((this.challenger && options.odd_buff_challenger) || (!this.challenger && options.odd_buff_enemy)){
+			//Odd
 			if(this.has("Odd Atk Wave")){
 				buffVal.atk = Math.max(buffVal.atk, this.has("Odd Atk Wave") * 2);
 				skillNames.push(data.skills[this.cIndex].name);
@@ -5401,7 +5402,12 @@ function activeHero(hero){
 				buffVal.res = Math.max(buffVal.res, 4);
 				skillNames.push(data.skills[this.weaponIndex].name);
 			}
-		}
+			//Even
+			if(this.has("Even Spd Wave")){
+				buffVal.spd = Math.max(buffVal.atk, this.has("Even Spd Wave") * 2);
+				skillNames.push(data.skills[this.cIndex].name);
+			}
+		}		
 
 		//All defiant skills trigger at or below 50% HP
 		if(this.hp / this.maxHp <= 0.5){
@@ -6165,12 +6171,17 @@ function activeHero(hero){
 			this.combatStat.atk += atkbonus;
 			if (atkbonus != 0){statText += this.name + " gains +" + atkbonus + " Atk from buffs with " + data.skills[this.weaponIndex].name + ".<br>";}
 		}
-
 		//Blizzard bonus
-		if(this.has("Blizzard")){
+		if (this.has("Blizzard")){
 			var atkbonus = -1 * (enemy.combatDebuffs.atk + enemy.combatDebuffs.spd + enemy.combatDebuffs.def + enemy.combatDebuffs.res);
 			this.combatStat.atk += atkbonus;
 			if (atkbonus != 0){statText += this.name + " gains +" + atkbonus + " Atk from enemy penalties with " + data.skills[this.weaponIndex].name + ".<br>";}
+		}		
+		//Cleaner bonus
+		if (this.has("The Cleaner")){
+			var atkbonus = enemy.combatBuffs.atk + enemy.combatBuffs.spd + enemy.combatBuffs.def + enemy.combatBuffs.res;
+			this.combatStat.atk += atkbonus;
+			if (atkbonus != 0){statText += this.name + " gains +" + atkbonus + " Atk from enemy buffs with " + data.skills[this.weaponIndex].name + ".<br>";}
 		}
 
 		return statText;
@@ -6697,12 +6708,21 @@ function activeHero(hero){
 					}
 					
 					//Bonus Flat Damage
+					//TODO: Merge duplicate flat damage code into one function
 					if (this.hasExactly("Light Brand")){
 						if (enemy.combatStat.def >= enemy.combatStat.res + 5){
 							AOEDamage += 7;
 							damageText += this.name + " gains 7 damage from " + data.skills[this.weaponIndex].name + ".<br>";
 						}
 					}
+					if(this.hasExactly("Vassal's Blade") || this.hasExactly("Giga Excalibur")){
+						var damageBonus = Math.min((this.combatStat.spd + (this.has("Phantom Spd") ? (2 + this.has("Phantom Spd") * 3) : 0) - enemy.combatStat.spd) * 0.7 | 0, 7);
+						if(damageBonus > 0){
+							AOEDamage += damageBonus;
+							damageText += this.name + " gains " + damageBonus + " damage from " + data.skills[this.weaponIndex].name + ".<br>";
+						}
+					}
+					
 					if(enemy.has("Embla's Ward")){
 						AOEDamage = 0;
 					}
@@ -7181,6 +7201,13 @@ function activeHero(hero){
 				if (enemy.combatStat.def >= enemy.combatStat.res + 5){
 					dmgBoostFlat += 7;
 					damageText += this.name + " gains 7 damage from Light Brand.<br>";
+				}
+			}
+			if(this.hasExactly("Vassal's Blade") || this.hasExactly("Giga Excalibur")){
+				var damageBonus = Math.min((this.combatStat.spd + (this.has("Phantom Spd") ? (2 + this.has("Phantom Spd") * 3) : 0) - enemy.combatStat.spd) * 0.7 | 0, 7);
+				if(damageBonus > 0){
+					dmgBoostFlat += damageBonus;
+					damageText += this.name + " gains " + damageBonus + " damage from Vassal's Blade.<br>";
 				}
 			}
 
