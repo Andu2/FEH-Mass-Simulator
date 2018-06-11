@@ -1943,5 +1943,70 @@
 		"res": 4,
 		"prereq": "Binding Blade",
 		"exclusive": ""
+    },
+    {
+		"category": "Cooldown Decrease Ranged",
+		"name": "Magic & Staff Atk Spd Bond",
+		"sp": 400,
+		"description": "Accelerates Special trigger (cooldown count-1) If unit is within 2 spaces of a magic or staff ally, grants Atk/Spd+5 during combat.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"prereq": "Excalibur",
+		"exclusive": "Merric"
+    },
+    {
+		"category": "Cooldown Decrease Ranged",
+		"name": "Atk Bonus",
+		"sp": 400,
+		"description": "Accelerates Special trigger (cooldown count-1)",
+		"hp": 2,
+		"atk": 1,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"prereq": "Excalibur",
+		"exclusive": ""
+	},
+    {
+		"category": "Cooldown Decrease Ranged",
+		"name": "Spd Bonus",
+		"sp": 400,
+		"description": "Accelerates Special trigger (cooldown count-1)",
+		"hp": 2,
+		"atk": 0,
+		"spd": 2,
+		"def": 0,
+		"res": 0,
+		"prereq": "Excalibur",
+		"exclusive": ""
+	},
+    {
+		"category": "Cooldown Decrease Ranged",
+		"name": "Def Bonus",
+		"sp": 400,
+		"description": "Accelerates Special trigger (cooldown count-1)",
+		"hp": 2,
+		"atk": 0,
+		"spd": 0,
+		"def": 3,
+		"res": 0,
+		"prereq": "Excalibur",
+		"exclusive": ""
+	},
+    {
+		"category": "Cooldown Decrease Ranged",
+		"name": "Res Bonus",
+		"sp": 400,
+		"description": "Accelerates Special trigger (cooldown count-1)",
+		"hp": 2,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 3,
+		"prereq": "Excalibur",
+		"exclusive": ""
 	}
 ]
