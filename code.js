@@ -7019,17 +7019,6 @@ function activeHero(hero){
 				}
 			}
 
-<<<<<<< HEAD
-            //Check weapon effective against
-            var effectiveBonus = 1;
-            if (enemy.moveType == "armored" && (
-                this.has("Hammer") || this.has("Slaying Hammer") || this.has("Armorslayer") || this.has("Armorsmasher")
-                || this.has("Heavy Spear") || this.has("Slaying Spear") || this.hasExactly("Thani") || this.hasExactly("Winged Sword")
-                || this.has("Warrior Princess")
-            )) {
-                effectiveBonus = (enemy.has("Svalinn Shield")) ? 1 : 1.5;
-            }
-=======
 			//Check weapon effective against
 			var effectiveBonus = 1;
 			if (enemy.moveType == "armored"
@@ -7040,7 +7029,6 @@ function activeHero(hero){
 			){
 				effectiveBonus = (enemy.has("Svalinn Shield")) ? 1 : 1.5;
 			}
->>>>>>> b12f8c7d8e8032ee38a40ddb3c0dd320c3a6c0ad
 			else if (enemy.moveType == "flying" && (this.hasExactly("Excalibur") || this.weaponType=="bow")){
 				effectiveBonus = (enemy.has("Iote's Shield") || enemy.has("Dragonskin")) ? 1 : 1.5;
 			}
