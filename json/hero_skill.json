@@ -1600,6 +1600,10 @@
 		"skill_id": 351,
 		"rarity": 5
 	}, {
+		"hero_id": 34,
+		"skill_id": 1055,
+		"rarity": 6
+	}, {
 		"hero_id": 35,
 		"skill_id": 92,
 		"rarity": 1
@@ -1647,6 +1651,10 @@
 		"hero_id": 35,
 		"skill_id": 369,
 		"rarity": 5
+	}, {
+		"hero_id": 35,
+		"skill_id": 1055,
+		"rarity": 6
 	}, {
 		"hero_id": 36,
 		"skill_id": 41,

@@ -5232,7 +5232,6 @@ function activeHero(hero){
 				}
 				startText += this.name + " heals 10 HP due to Renewal.<br>";
 			}
-
 			if (this.hasExactly("S Drink")){
 				if(this.hp + 99 > this.maxHp){
 					this.hp = this.maxHp;
@@ -5241,7 +5240,15 @@ function activeHero(hero){
 				}
 				startText += this.name + " heals 99 HP due to S Drink.<br>";
 			}
-
+			if (this.has("Breath of Fog")){
+				//Every other turn
+				if(this.hp + 10 > this.maxHp){
+					this.hp = this.maxHp;
+				} else{
+					this.hp += 10;
+				}
+				startText += this.name + " heals 10 HP due to " + data.skills[this.weaponIndex].name + ".<br>";
+			}
 			if (this.hasExactly("Falchion")){
 				//Not refined - every third turn - if(turn % 3 == 0){
 				if (this.refineIndex == -1){
@@ -5698,7 +5705,14 @@ function activeHero(hero){
 				skillName = data.skills[this.weaponIndex].name;
 				this.combatSpur.atk += buffVal;
 				this.combatSpur.spd += buffVal;
-				boostText += this.name + " gets +" + buffVal + " Atk/Spd from being within 2 spaces of an magic or staff ally with " + skillName + ".<br>";
+				boostText += this.name + " gets +" + buffVal + " Atk/Spd from being within 2 spaces of a magic or staff ally with " + skillName + " (Refined).<br>";
+			}
+			if (this.hasAtRefineIndex("Dragon & Sword Atk Def Bond", this.refineIndex)){
+				buffVal = 5;
+				skillName = data.skills[this.weaponIndex].name;
+				this.combatSpur.atk += buffVal;
+				this.combatSpur.def += buffVal;
+				boostText += this.name + " gets +" + buffVal + " Atk/Def from being within 2 spaces of a dragon or sword ally with " + skillName + " (Refined).<br>";
 			}
 
 			//Owl Tomes
@@ -6629,7 +6643,9 @@ function activeHero(hero){
 			return true;
 		}
 		if (enemy.range == "ranged"){
-			if (this.hasExactly("Great Flame") || this.hasExactly("Expiration") || this.has("Water Breath")){
+			if (this.hasExactly("Great Flame")	|| this.hasExactly("Expiration")
+				|| this.has("Water Breath")		|| this.hasExactly("Breath of Fog")
+			){
 				return true;
 			}
 			if (this.weaponType == "dragon" && (this.refineIndex != -1)){
@@ -7056,6 +7072,7 @@ function activeHero(hero){
 			else if ((enemy.weaponType == "dragon" || enemy.hasExactly("Loptous"))
 				&& (this.hasExactly("Falchion") || this.hasExactly("Sealed Falchion")
 					|| this.hasExactly("Naga") 	|| this.hasExactly("Divine Naga")
+					|| this.hasExactly("Breath of Fog")
 					|| (this.hasExactly("Binding Blade") && this.refineIndex != -1)
 				)
 			){

@@ -14811,5 +14811,19 @@
 		"charge": 0,
 		"inheritrule": "",
 		"affectsduel": 0
+	}, {
+		"skill_id": 1055,
+		"name": "Breath of Fog",
+		"slot": "weapon",
+		"sp": 400,
+		"description": "Effective against dragon foes. At the start of every second turn, restores 10 HP. If foe's Range = 2, calculates damage using the lower of foe's Def or Res.",
+		"hp": 0,
+		"atk": 16,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "unique",
+		"affectsduel": 1
 	}
 ]
