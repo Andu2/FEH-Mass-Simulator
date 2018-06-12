@@ -1112,7 +1112,7 @@ function getCDChange(skill, slot){
 			|| skillName.indexOf("Mjolnir") != -1			|| skillName.indexOf("Vassal's Blade") != -1
 			){
 				return -1;
-		}
+        }
 		//Cooldown increase
 		if (skillName.indexOf("Raudrblade") != -1 		|| skillName.indexOf("Blarblade") != -1 	|| skillName.indexOf("Gronnblade") != -1
 			|| skillName.indexOf("Lightning Breath") != -1
@@ -1123,7 +1123,10 @@ function getCDChange(skill, slot){
 
 	//Refine
 	if	(slot == "refine"){
-		//Refinement changes to cooldown go here
+        //Refinement changes to cooldown go here
+        if (skill.category == 'Cooldown Decrease Ranged') {
+            return -1;
+        }
 	}
 
 	//Assist
@@ -5048,7 +5051,7 @@ function activeHero(hero){
 		//***Important: Append a slot whenever a new slot gains a skill that affects CD***
 		this.charge = 0;
 		this.charge += -1 * getCDChange(data.skills[this.weaponIndex], "weapon");
-		this.charge += -1 * getCDChange(data.skills[this.refineIndex], "refine");
+		this.charge += -1 * getCDChange(data.refine[this.refineIndex], "refine");
 		this.charge += -1 * getCDChange(data.skills[this.assistIndex], "assist");
 	}
 
@@ -5689,6 +5692,13 @@ function activeHero(hero){
 				this.combatSpur.def += buffVal;
 				this.combatSpur.res += buffVal;
 				boostText += this.name + " gets +" + buffVal + " Atk/Spd/Def/Res from being adjacent to an ally with " + skillName + " (Refined).<br>";
+            }
+            if (this.hasAtRefineIndex("Magic & Staff Atk Spd Bond", this.refineIndex)){
+				buffVal = 5;
+				skillName = data.skills[this.weaponIndex].name;
+				this.combatSpur.atk += buffVal;
+				this.combatSpur.spd += buffVal;
+				boostText += this.name + " gets +" + buffVal + " Atk/Spd from being within 2 spaces of an cavalry or flying ally with " + skillName + ".<br>";
 			}
 
 			//Owl Tomes
