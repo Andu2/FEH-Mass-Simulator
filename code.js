@@ -5698,7 +5698,7 @@ function activeHero(hero){
 				skillName = data.skills[this.weaponIndex].name;
 				this.combatSpur.atk += buffVal;
 				this.combatSpur.spd += buffVal;
-				boostText += this.name + " gets +" + buffVal + " Atk/Spd from being within 2 spaces of an cavalry or flying ally with " + skillName + ".<br>";
+				boostText += this.name + " gets +" + buffVal + " Atk/Spd from being within 2 spaces of an magic or staff ally with " + skillName + ".<br>";
 			}
 
 			//Owl Tomes
