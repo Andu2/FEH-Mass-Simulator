@@ -5443,6 +5443,18 @@ function activeHero(hero){
 			}
 		}
 		
+		//Adjacent skills
+		if (this.adjacent > 0){
+			if (this.has("Ardent Service")){
+				buffVal.atk = Math.max(buffVal.atk, 4);
+				skillNames.push(data.skills[this.weaponIndex].name);
+			}
+			if (this.has("Fresh Bouquet")){
+				buffVal.spd = Math.max(buffVal.spd, 4);
+				skillNames.push(data.skills[this.weaponIndex].name);
+			}
+		}
+		
 		if(skillNames.length > 0){
 			var statChanges = [];
 			for(var stat in buffVal){
