@@ -7158,6 +7158,28 @@ function activeHero(hero){
 			if (effectiveBonus > 1 ){
 				damageText += this.name + "'s attack is increased by " + (effectiveBonus * 100 - 100) + "% from weapon effectiveness.<br>";
 			}
+			
+			//Flat damage
+			//*** Is Light Brand damage bonus flat damage or bonus attack? ***
+			if (this.hasExactly("Light Brand")){
+				if (enemy.combatStat.def >= enemy.combatStat.res + 5){
+					dmgBoostFlat += 7;
+					damageText += this.name + " gains 7 damage from Light Brand.<br>";
+				}
+			}
+			if(this.hasExactly("Vassal's Blade") || this.hasExactly("Giga Excalibur")){
+				var damageBonus = Math.min((this.combatStat.spd + (this.has("Phantom Spd") ? (2 + this.has("Phantom Spd") * 3) : 0) - enemy.combatStat.spd) * 0.7 | 0, 7);
+				if(damageBonus > 0){
+					dmgBoostFlat += damageBonus;
+					damageText += this.name + " gains " + damageBonus + " damage from " + data.skills[this.weaponIndex].name + ".<br>";
+				}
+			}
+			//Release charged damage
+			if (this.chargedDamage > 0){
+				dmgBoostFlat += this.chargedDamage;
+				damageText += this.name + " gains " + this.chargedDamage + " damage from releasing stored energy.<br>";
+				this.chargedDamage = 0;
+			}
 
 			//Class modifier
 			var weaponModifier = 1;
@@ -7293,29 +7315,6 @@ function activeHero(hero){
 			//Absorb check
 			if (this.has("Absorb")){
 				absorbPct = 0.5;
-			}
-
-			//Flat damage
-			//*** Is Light Brand damage bonus flat damage or bonus attack? ***
-			if (this.hasExactly("Light Brand")){
-				if (enemy.combatStat.def >= enemy.combatStat.res + 5){
-					dmgBoostFlat += 7;
-					damageText += this.name + " gains 7 damage from Light Brand.<br>";
-				}
-			}
-			if(this.hasExactly("Vassal's Blade") || this.hasExactly("Giga Excalibur")){
-				var damageBonus = Math.min((this.combatStat.spd + (this.has("Phantom Spd") ? (2 + this.has("Phantom Spd") * 3) : 0) - enemy.combatStat.spd) * 0.7 | 0, 7);
-				if(damageBonus > 0){
-					dmgBoostFlat += damageBonus;
-					damageText += this.name + " gains " + damageBonus + " damage from " + data.skills[this.weaponIndex].name + ".<br>";
-				}
-			}
-
-			//Release charged damage
-			if (this.chargedDamage > 0){
-				dmgBoostFlat += this.chargedDamage;
-				damageText += this.name + " gains " + this.chargedDamage + " damage from releasing stored energy.<br>";
-				this.chargedDamage = 0;
 			}
 
 			//Defensive Terrain
