@@ -5490,5 +5490,22 @@
 		"weapontype": "redtome",
 		"movetype": "flying",
 		"minrarity": 5
+	}, {
+		"hero_id": 266,
+		"name": "Hector (Marquess of Ostia)",
+		"basehp": 23,
+		"baseatk": 10,
+		"basespd": 6,
+		"basedef": 12,
+		"baseres": 4,
+		"hpgrowth": 7,
+		"atkgrowth": 10,
+		"spdgrowth": 4,
+		"defgrowth": 8,
+		"resgrowth": 6,
+		"color": "green",
+		"weapontype": "axe",
+		"movetype": "armored",
+		"minrarity": 5
 	}
 ]

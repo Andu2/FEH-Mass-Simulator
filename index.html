@@ -156,8 +156,57 @@
 									<option value="res">Res</option>
 								</select>
 							</div>
-							<div class="misc_row">Adjacent Allies:
-								<input type="number" id="challenger_adjacent" data-var="challenger.adjacent" class="misc_input smallnuminput" value=1 min=0 max=4 />
+							<div class="misc_row">Adj. Allies:
+								<select class="misc_input_small_center" data-var="challenger.adjacent" id="challenger_adjacent">
+									<option value="adj" disabled>Within 1 Space</option>
+									<option value="0">0</option>
+									<option value="1">1</option>
+									<option value="2">2</option>
+									<option value="3">3</option>
+									<option value="4">4</option>
+								</select>
+								<select class="misc_input_small_right" data-var="challenger.adjacent2" id="challenger_adjacent2">
+									<option value="adj" disabled>Within 2 Spaces</option>
+									<option value="0">0</option>
+									<option value="1">1</option>
+									<option value="2">2</option>
+									<option value="3">3</option>
+									<option value="4">4</option>
+									<option value="5">5</option>
+									<option value="6">6</option>
+									<option value="7">7</option>
+									<option value="8">8</option>
+									<option value="9">9</option>
+									<option value="10">10</option>
+									<option value="11">11</option>
+									<option value="12">12</option>
+								</select>								
+							</div>
+							<div class="misc_row">Adj. Foes:
+								<select class="misc_input_small_center" data-var="challenger.adjacent_foe" id="challenger_adjacent_foe">
+									<option value="adj" disabled>Within 1 Space</option>
+									<option value="0">0</option>
+									<option value="1">1</option>
+									<option value="2">2</option>
+									<option value="3">3</option>
+									<option value="4">4</option>
+								</select>
+								<select class="misc_input_small_right" data-var="challenger.adjacent2_foe" id="challenger_adjacent2_foe">
+									<option value="adj" disabled>Within 2 Spaces</option>
+									<option value="0">0</option>
+									<option value="1">1</option>
+									<option value="2">2</option>
+									<option value="3">3</option>
+									<option value="4">4</option>
+									<option value="5">5</option>
+									<option value="6">6</option>
+									<option value="7">7</option>
+									<option value="8">8</option>
+									<option value="9">9</option>
+									<option value="10">10</option>
+									<option value="11">11</option>
+									<option value="12">12</option>
+								</select>								
 							</div>
 							<div class="misc_row">Health:
 								<input id="challenger_currenthp" data-var="challenger.currenthp" class="misc_input_left smallnuminput" type="number" value=0 min=0 max=99 />
@@ -208,14 +257,19 @@
 					<div class="status_enemy"><input type="checkbox" data-var="options.chilled_enemy" id="chilled_enemy"/></div>
 				</div>
 				<div class="adj_status">
+					<div class="status_challenger"><input type="checkbox" data-var="options.harsh_command_challenger" id="harsh_command_challenger"/></div>
+					<div class="status_title">Harsh Command</div>
+					<div class="status_enemy"><input type="checkbox" data-var="options.harsh_command_enemy" id="harsh_command_enemy"/></div>
+				</div>
+				<div class="adj_status">
 					<div class="status_challenger"><input type="checkbox" data-var="options.rush_challenger" id="rush_challenger"/></div>
 					<div class="status_title">Infantry Rush</div>
 					<div class="status_enemy"><input type="checkbox" data-var="options.rush_enemy" id="rush_enemy"/></div>
 				</div>
 				<div class="adj_status">
-					<div class="status_challenger"><input type="checkbox" data-var="options.harsh_command_challenger" id="harsh_command_challenger"/></div>
-					<div class="status_title">Harsh Command</div>
-					<div class="status_enemy"><input type="checkbox" data-var="options.harsh_command_enemy" id="harsh_command_enemy"/></div>
+					<div class="status_challenger"><input type="checkbox" data-var="options.pulse_challenger" id="pulse_challenger"/></div>
+					<div class="status_title">Ostia's Pulse</div>
+					<div class="status_enemy"><input type="checkbox" data-var="options.pulse_enemy" id="pulse_enemy"/></div>
 				</div>
 				<div style="line-height:40%;"><br></div>
 				<div id="adj_title">Mechanics:</div>
@@ -603,8 +657,57 @@
 									<option value="res">Res</option>
 								</select>
 							</div>
-							<div class="misc_row">Adjacent Allies:
-								<input type="number" id="enemies_adjacent" data-var="enemies.fl.adjacent" class="misc_input smallnuminput" value=1 min=0 max=4 />
+							<div class="misc_row">Adj. Allies:
+								<select class="misc_input_small_center" data-var="enemies.fl.adjacent" id="enemies_adjacent">
+									<option value="adj" disabled>Within 1 Space</option>
+									<option value="0">0</option>
+									<option value="1">1</option>
+									<option value="2">2</option>
+									<option value="3">3</option>
+									<option value="4">4</option>
+								</select>
+								<select class="misc_input_small_right" data-var="enemies.fl.adjacent2" id="enemies_adjacent2">
+									<option value="adj" disabled>Within 2 Spaces</option>
+									<option value="0">0</option>
+									<option value="1">1</option>
+									<option value="2">2</option>
+									<option value="3">3</option>
+									<option value="4">4</option>
+									<option value="5">5</option>
+									<option value="6">6</option>
+									<option value="7">7</option>
+									<option value="8">8</option>
+									<option value="9">9</option>
+									<option value="10">10</option>
+									<option value="11">11</option>
+									<option value="12">12</option>
+								</select>								
+							</div>
+							<div class="misc_row">Adj. Foes:
+								<select class="misc_input_small_center" data-var="enemies.fl.adjacent_foe" id="enemies_adjacent_foe">
+									<option value="adj" disabled>Within 1 Space</option>
+									<option value="0">0</option>
+									<option value="1">1</option>
+									<option value="2">2</option>
+									<option value="3">3</option>
+									<option value="4">4</option>
+								</select>
+								<select class="misc_input_small_right" data-var="enemies.fl.adjacent2_foe" id="enemies_adjacent2_foe">
+									<option value="adj" disabled>Within 2 Spaces</option>
+									<option value="0">0</option>
+									<option value="1">1</option>
+									<option value="2">2</option>
+									<option value="3">3</option>
+									<option value="4">4</option>
+									<option value="5">5</option>
+									<option value="6">6</option>
+									<option value="7">7</option>
+									<option value="8">8</option>
+									<option value="9">9</option>
+									<option value="10">10</option>
+									<option value="11">11</option>
+									<option value="12">12</option>
+								</select>								
 							</div>
 							<div class="misc_row">Damage taken: <input id="enemies_damage" data-var="enemies.fl.damage" class="misc_input smallnuminput" type="number" value=0 min=0 max=99 /></div>
 							<div class="misc_row">Pre-charge: <input type="number" id="enemies_precharge" data-var="enemies.fl.precharge" class="misc_input smallnuminput" value=0 min=0 max=6 /></div>
@@ -708,8 +811,57 @@
 										<option value="res">Res</option>
 									</select>
 								</div>
-								<div class="misc_row">Adjacent Allies:
-									<input type="number" id="cl_enemies_adjacent" data-var="enemies.cl.list.adjacent" class="misc_input smallnuminput" value=1 min=0 max=4 />
+								<div class="misc_row">Adj. Allies:
+									<select class="misc_input_small_center" data-var="enemies.cl.list.adjacent" id="cl_enemy_adjacent">
+										<option value="adj" disabled>Within 1 Space</option>
+										<option value="0">0</option>
+										<option value="1">1</option>
+										<option value="2">2</option>
+										<option value="3">3</option>
+										<option value="4">4</option>
+									</select>
+									<select class="misc_input_small_right" data-var="enemies.cl.list.adjacent2" id="cl_enemy_adjacent2">
+										<option value="adj" disabled>Within 2 Spaces</option>
+										<option value="0">0</option>
+										<option value="1">1</option>
+										<option value="2">2</option>
+										<option value="3">3</option>
+										<option value="4">4</option>
+										<option value="5">5</option>
+										<option value="6">6</option>
+										<option value="7">7</option>
+										<option value="8">8</option>
+										<option value="9">9</option>
+										<option value="10">10</option>
+										<option value="11">11</option>
+										<option value="12">12</option>
+									</select>								
+								</div>
+								<div class="misc_row">Adj. Foes:
+									<select class="misc_input_small_center" data-var="enemies.cl.list.adjacent_foe" id="cl_enemy_adjacent_foe">
+										<option value="adj" disabled>Within 1 Space</option>
+										<option value="0">0</option>
+										<option value="1">1</option>
+										<option value="2">2</option>
+										<option value="3">3</option>
+										<option value="4">4</option>
+									</select>
+									<select class="misc_input_small_right" data-var="enemies.cl.list.adjacent2_foe" id="cl_enemy_adjacent2_foe">
+										<option value="adj" disabled>Within 2 Spaces</option>
+										<option value="0">0</option>
+										<option value="1">1</option>
+										<option value="2">2</option>
+										<option value="3">3</option>
+										<option value="4">4</option>
+										<option value="5">5</option>
+										<option value="6">6</option>
+										<option value="7">7</option>
+										<option value="8">8</option>
+										<option value="9">9</option>
+										<option value="10">10</option>
+										<option value="11">11</option>
+										<option value="12">12</option>
+									</select>								
 								</div>
 								<div class="misc_row">Health:
 									<input id="cl_enemy_currenthp" data-var="enemies.cl.list.currenthp" class="misc_input_left smallnuminput" type="number" value=0 min=0 max=99 />

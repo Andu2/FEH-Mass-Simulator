@@ -15217,5 +15217,33 @@
 		"charge": 0,
 		"inheritrule": "",
 		"affectsduel": 1
+	}, {
+		"skill_id": 1088,
+		"name": "Thunder Armads",
+		"slot": "weapon",
+		"sp": 400,
+		"description": "Grants Def+3. If the number of allies within 2 spaces (excluding unit) > the number of foes within 2 spaces (excluding target), foe cannot make a follow-up attack.",
+		"hp": 0,
+		"atk": 16,
+		"spd": 0,
+		"def": 3,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "unique",
+		"affectsduel": 1
+	}, {
+		"skill_id": 1089,
+		"name": "Ostia's Pulse",
+		"slot": "c",
+		"sp": 300,
+		"description": "At the start of turn 1, grants Special cooldown count-1 to all allies. Granted only if number of those allies' movement types on current team <= 2.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "unique",
+		"affectsduel": 0
 	}
 ]
