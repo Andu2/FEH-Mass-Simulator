@@ -1132,7 +1132,7 @@ function getCDChange(skill, slot){
 			|| skillName.indexOf("Mystletainn") != -1		|| skillName.indexOf("Hauteclere") != -1		|| skillName.indexOf("Urvan") != -1
 			|| skillName.indexOf("Audhulma") != -1			|| skillName.indexOf("Kagami Mochi") != -1		|| skillName.indexOf("Basilikos") != -1
 			|| skillName.indexOf("Berserk Armads") != -1    || skillName.indexOf("Nameless Blade") != -1	|| skillName.indexOf("Barb Shuriken") != -1
-			|| skillName.indexOf("Mjolnir") != -1			|| skillName.indexOf("Vassal's Blade") != -1
+			|| skillName.indexOf("Mjolnir") != -1			|| skillName.indexOf("Vassal's Blade") != -1	|| skillName.indexOf("Dauntless Lance") != -1
 			){
 				return -1;
         }
@@ -5187,6 +5187,11 @@ function activeHero(hero){
 					threatDebuffs.spd = Math.min(threatDebuffs.spd, -5);
 					skillNames.push(data.skills[this.weaponIndex].name);
 				}
+				if (this.hasExactly("Reese's Ploy")){
+					threatDebuffs.spd = Math.min(threatDebuffs.spd, -4);
+					threatDebuffs.res = Math.min(threatDebuffs.res, -4);
+					skillNames.push("Reese's Ploy");
+				}
 				//Passive C Skills
 				if(this.hasAtIndex("Atk Ploy", this.cIndex)){
 					threatDebuffs.atk = Math.min(threatDebuffs.atk,-this.hasAtIndex("Atk Ploy", this.cIndex)-2);
@@ -5870,7 +5875,7 @@ function activeHero(hero){
 			}
 
 			//Owl Tomes
-			if (this.has("Blarowl") || this.has("Gronnowl") || this.has("Raudrowl") || this.hasExactly("Nidhogg")){
+			if (this.has("Blarowl") || this.has("Gronnowl") || this.has("Raudrowl") || this.hasExactly("Nidhogg") || this.hasExactly("Reese's Tome")){
 				buffVal = this.adjacent * 2;
 				skillName = data.skills[this.weaponIndex].name;
 				this.combatSpur.atk += buffVal;
@@ -6196,6 +6201,11 @@ function activeHero(hero){
 				this.combatSpur.atk += 4;
 				this.combatSpur.def += 4;
 				boostText += this.name + " gets +4 Atk/Def while defending with " + data.skills[this.weaponIndex].name + ".<br>";
+			}
+			if(this.has("Dauntless Stance")){
+				this.combatSpur.spd += 4;
+				this.combatSpur.def += 4;
+				boostText += this.name + " gets +4 Spd/Def while defending with " + data.skills[this.weaponIndex].name + " (Refined).<br>";
 			}
 			if(this.has("Water Breath")){
 				this.combatSpur.def += 4;
@@ -7095,12 +7105,14 @@ function activeHero(hero){
 			*/
 
 			var extraWeaponAdvantage = 0;
-
+			var thisHasGemWeapon = (this.has("Ruby Sword") || this.has("Sapphire Lance") || this.has("Emerald Axe") || this.has("Draconic Poleax")) ? true : false;
+			var enemyHasGemWeapon = ( enemy.has("Ruby Sword") || enemy.has("Sapphire Lance") || enemy.has("Emerald Axe") || enemy.has("Draconic Poleax")) ? true : false;
+			
 			//If weapon advantage is not neutral, and Attacker and Defender do not both have Cancel Affinity
 			if (weaponAdvantage !=0 && !(this.has("Cancel Affinity") && enemy.has("Cancel Affinity"))){
 
 				//Calculate base weapon advantage bonus
-				if(this.has("Ruby Sword") || this.has("Sapphire Lance") || this.has("Emerald Axe") || enemy.has("Ruby Sword") || enemy.has("Sapphire Lance") || enemy.has("Emerald Axe")){
+				if(thisHasGemWeapon || enemyHasGemWeapon){
 					extraWeaponAdvantage = 0.2;
 				}
 				else{
@@ -7116,18 +7128,18 @@ function activeHero(hero){
 				if (this.has("Cancel Affinity")){
 
 					//Attacker with Gem Weapon or Triangle Adept: No extra advantage or disadvantage
-					if(this.has("Ruby Sword") || this.has("Sapphire Lance") || this.has("Emerald Axe") || this.has("Triangle Adept")){
+					if(thisHasGemWeapon || this.has("Triangle Adept")){
 						extraWeaponAdvantage = 0;
 					}
 
 					//Defender with Gem Weapon or Triangle Adept
-					if (enemy.has("Ruby Sword") || enemy.has("Sapphire Lance") || enemy.has("Emerald Axe") || enemy.has("Triangle Adept")){
+					if (enemyHasGemWeapon || enemy.has("Triangle Adept")){
 						//Defender at disadvantage: Cancel Affinity 1 = negate, Cancel Affinity 2 = keep, Cancel Affinity 3 = keep
 						if (weaponAdvantage == 1){
 							if (this.has("Cancel Affinity 1")){
 								extraWeaponAdvantage = 0;
 							} else{
-								if (enemy.has("Ruby Sword") || enemy.has("Sapphire Lance") || enemy.has("Emerald Axe")){
+								if (enemyHasGemWeapon){
 									extraWeaponAdvantage = 0.2;
 								} else{
 									extraWeaponAdvantage = 0.05 + 0.05 * enemy.has("Triangle Adept");
@@ -7138,7 +7150,7 @@ function activeHero(hero){
 						//***Note the double negative for weaponAdvantageBonus formula***
 						else{
 							if (this.has("Cancel Affinity 3")){
-								if (enemy.has("Ruby Sword") || enemy.has("Sapphire Lance") || enemy.has("Emerald Axe")){
+								if (enemyHasGemWeapon){
 									extraWeaponAdvantage = -0.2;
 								} else{
 									extraWeaponAdvantage = (0.05 + 0.05 * enemy.has("Triangle Adept")) * -1;
@@ -7153,16 +7165,16 @@ function activeHero(hero){
 				else if (enemy.has("Cancel Affinity")){
 
 					//Defender with Gem Weapon or Triangle Adept: No extra advantage or disadvantage
-					if(enemy.has("Ruby Sword") || enemy.has("Sapphire Lance") || enemy.has("Emerald Axe") || enemy.has("Triangle Adept")){
+					if(enemyHasGemWeapon || enemy.has("Triangle Adept")){
 						extraWeaponAdvantage = 0;
 					}
 
 					//Attacker with Gem Weapon or Triangle Adept
-					if(this.has("Ruby Sword") || this.has("Sapphire Lance") || this.has("Emerald Axe") || this.has("Triangle Adept")){
+					if(thisHasGemWeapon || this.has("Triangle Adept")){
 						//Attacker at advantage: Cancel Affinity 1 = negate, Cancel Affinity 2 = negate, Cancel Affinity 3 = reverse
 						if (weaponAdvantage == 1){
 							if (enemy.has("Cancel Affinity 3")){
-								if (this.has("Ruby Sword") || this.has("Sapphire Lance") || this.has("Emerald Axe")){
+								if (thisHasGemWeapon){
 									extraWeaponAdvantage = -0.2;
 								} else{
 									extraWeaponAdvantage = (0.05 + 0.05 * this.has("Triangle Adept")) * -1;
@@ -7176,7 +7188,7 @@ function activeHero(hero){
 							if (enemy.has("Cancel Affinity 1")){
 								extraWeaponAdvantage = 0;
 							} else{
-								if (this.has("Ruby Sword") || this.has("Sapphire Lance") || this.has("Emerald Axe")){
+								if (thisHasGemWeapon){
 									extraWeaponAdvantage = 0.2;
 								} else{
 									extraWeaponAdvantage = 0.05 + 0.05 * this.has("Triangle Adept");
@@ -7220,7 +7232,7 @@ function activeHero(hero){
 			if (enemy.moveType == "armored"
 				&& (this.has("Hammer") 						|| this.has("Slaying Hammer")	|| this.has("Armorslayer") 	|| this.has("Armorsmasher")
 					|| this.has("Heavy Spear") 				|| this.has("Slaying Spear")	|| this.hasExactly("Thani")	|| this.hasExactly("Winged Sword")
-					|| this.hasExactly("Warrior Princess")	|| this.hasExactly("Rhomphaia")
+					|| this.hasExactly("Warrior Princess")	|| this.hasExactly("Rhomphaia")	|| this.hasExactly("Dauntless Lance")
 				)
 			){
 				effectiveBonus = (enemy.has("Svalinn Shield")) ? 1 : 1.5;
