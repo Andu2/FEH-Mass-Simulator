@@ -7574,6 +7574,12 @@ function activeHero(hero){
 						skillNames.push(data.skills[this.aIndex].name);
 					}
 				}
+				if (this.hasAtIndex("Flashing Blade", this.sIndex)){
+					if (this.combatStat.spd + (this.has("Phantom Spd") ? (2 + this.has("Phantom Spd") * 3) : 0) - enemy.combatStat.spd >= 7 - (this.hasAtIndex("Flashing Blade", this.sIndex) * 2)){
+						gainCharge = Math.max(gainCharge, 1);
+						skillNames.push(data.skills[this.sIndex].name);
+					}
+				}
 				if (this.hasAtRefineIndex("Flashing Blade", this.refineIndex)){
 					if (this.combatStat.spd + (this.has("Phantom Spd") ? (2 + this.has("Phantom Spd") * 3) : 0) - enemy.combatStat.spd >= 1){
 						gainCharge = Math.max(gainCharge, 1);
