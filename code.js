@@ -7256,9 +7256,9 @@ function activeHero(hero){
 				effectiveBonus = (enemy.has("Grani's Shield")) ? 1 : 1.5;
 			}
 			else if ((enemy.weaponType == "dragon" || enemy.hasExactly("Loptous"))
-				&& (this.hasExactly("Falchion") || this.hasExactly("Sealed Falchion")
-					|| this.hasExactly("Naga") 	|| this.hasExactly("Divine Naga")
-					|| this.hasExactly("Breath of Fog")
+				&& (this.hasExactly("Falchion") 		|| this.hasExactly("Sealed Falchion")
+					|| this.hasExactly("Naga") 			|| this.hasExactly("Divine Naga")
+					|| this.hasExactly("Breath of Fog")	|| this.hasExactly("Summer's Breath")
 					|| (this.hasExactly("Binding Blade") && this.refineIndex != -1)
 				)
 			){
