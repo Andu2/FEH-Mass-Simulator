@@ -210,6 +210,8 @@ function initOptions(){
 	options.threaten_enemy = false;
 	options.galeforce_challenger = true;
 	options.galeforce_enemy = true;
+	options.sweep_challenger = true;
+	options.sweep_enemy = true;
 	options.odd_buff_challenger = true;
 	options.odd_buff_enemy = true;
 
@@ -4459,6 +4461,8 @@ function exportCalc(){
 			csvString += options.debuffstartTurn + ",";
 			csvString += options.galeforce_challenger + ",";
 			csvString += options.galeforce_enemy + ",";
+			csvString += options.sweep_challenger + ",";
+			csvString += options.sweep_enemy + ",";
 			for(var rnd = 0; rnd < 4;rnd++){
 				if(!!options.roundInitiators[rnd]){
 					csvString += options.roundInitiators[rnd].substring(0,options.roundInitiators[rnd].length-10) + ",";
@@ -7900,29 +7904,37 @@ function activeHero(hero){
 		var firesweep = false;
 		var windsweep = 0;
 		var watersweep = 0;
-
-		if(this.has("Firesweep") || enemy.has("Firesweep")){
-			firesweep = true;
-		}
-		if(this.has("Windsweep")){
-			windsweep = (this.has("Windsweep") * -2) + 7;
-			if(this.has("Phantom Spd")){
-				windsweep += -2 + (this.has("Phantom Spd") * -3);
+		
+		//Sweep Effects are toggable through menu options
+		if (this.challenger ? options.sweep_challenger : options.sweep_enemy){
+			if(this.has("Firesweep")){
+				firesweep = true;
 			}
-		}
-		if(this.has("Watersweep")){
-			watersweep = (this.has("Watersweep") * -2) + 7;
-			if(this.has("Phantom Spd")){
-				watersweep += -2 + (this.has("Phantom Spd") * -3);
+			if(this.has("Windsweep")){
+				windsweep = (this.has("Windsweep") * -2) + 7;
+				if(this.has("Phantom Spd")){
+					windsweep += -2 + (this.has("Phantom Spd") * -3);
+				}
 			}
-		}
-		if(windsweep){
-			thisAttackRank--;
-			thisAttackRankChanged = true;
-		}
-		if(watersweep){
-			thisAttackRank--;
-			thisAttackRankChanged = true;
+			if(this.has("Watersweep")){
+				watersweep = (this.has("Watersweep") * -2) + 7;
+				if(this.has("Phantom Spd")){
+					watersweep += -2 + (this.has("Phantom Spd") * -3);
+				}
+			}
+			if(windsweep){
+				thisAttackRank--;
+				thisAttackRankChanged = true;
+			}
+			if(watersweep){
+				thisAttackRank--;
+				thisAttackRankChanged = true;
+			}
+		}		
+		if (enemy.challenger ? options.sweep_challenger : options.sweep_enemy){
+			if(enemy.has("Firesweep")){
+				firesweep = true;
+			}
 		}
 
 		//Check for any-distance counterattack
