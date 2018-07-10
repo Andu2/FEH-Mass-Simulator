@@ -5491,6 +5491,18 @@ function activeHero(hero){
 				buffVal.atk = Math.max(buffVal.atk, this.has("Odd Atk Wave") * 2);
 				skillNames.push(data.skills[this.cIndex].name);
 			}
+			if(this.has("Odd Spd Wave")){
+				buffVal.spd = Math.max(buffVal.atk, this.has("Odd Spd Wave") * 2);
+				skillNames.push(data.skills[this.cIndex].name);
+			}
+			if(this.has("Odd def Wave")){
+				buffVal.def = Math.max(buffVal.atk, this.has("Odd Def Wave") * 2);
+				skillNames.push(data.skills[this.cIndex].name);
+			}
+			if(this.has("Odd Res Wave")){
+				buffVal.res = Math.max(buffVal.atk, this.has("Odd Res Wave") * 2);
+				skillNames.push(data.skills[this.cIndex].name);
+			}
 			if(this.hasExactly("Byleistr")){
 				buffVal.atk = Math.max(buffVal.atk, 4);
 				buffVal.spd = Math.max(buffVal.spd, 4);
@@ -6597,10 +6609,12 @@ function activeHero(hero){
 			}
 
 			//Daggers
-			if (this.hasExactly("Deathly Dagger") || this.has("Lethal Carrot")){
+			if (this.hasExactly("Deathly Dagger")){
 				sealStats(data.skills[this.weaponIndex].name, ["def","res"], [-7]);
 			}
-			if (this.has("Silver Dagger") || this.has("Seashell") || this.has("Dancer's Fan") || this.has("Kagami Mochi") || this.has("Barb Shuriken") || this.has("Felicia's Plate")){
+			if (this.has("Silver Dagger") 		|| this.has("Seashell") 		|| this.has("Dancer's Fan") 	|| this.has("Kagami Mochi") 
+				|| this.has("Barb Shuriken") 	|| this.has("Felicia's Plate")	|| this.has("Lethal Carrot")	|| this.has("Starfish")
+				){
 				sealStats(data.skills[this.weaponIndex].name, ["def","res"], [-5, -7]);
 			}
 			if (this.has("Kitty Paddle") && (enemy.weaponType == "redtome" || enemy.weaponType == "bluetome" || enemy.weaponType == "greentome")){
@@ -6799,8 +6813,8 @@ function activeHero(hero){
 			return true;
 		}
 		if (enemy.range == "ranged"){
-			if (this.hasExactly("Great Flame")	|| this.hasExactly("Expiration")
-				|| this.has("Water Breath")		|| this.hasExactly("Breath of Fog")
+			if (this.hasExactly("Great Flame")		|| this.hasExactly("Expiration")	|| this.has("Water Breath")
+				|| this.hasExactly("Breath of Fog")	|| this.hasExactly("Summer's Breath")
 			){
 				return true;
 			}
@@ -7489,6 +7503,10 @@ function activeHero(hero){
 				var skillNames = [];
 
 				//-Breath: Initiator has
+				if (!this.initiator && this.has("Summer's Breath")){
+					gainCharge = Math.max(gainCharge, 1);
+					skillNames.push(data.skills[this.weaponIndex].name);
+				}
 				if (!this.initiator && this.has("Steady Breath")){
 					gainCharge = Math.max(gainCharge, 1);
 					skillNames.push(data.skills[this.aIndex].name);
@@ -7497,18 +7515,18 @@ function activeHero(hero){
 					gainCharge = Math.max(gainCharge, 1);
 					skillNames.push(data.skills[this.aIndex].name);
 				}
-				if (this.initiator && this.has("Bold Fighter")){
-					if (this.hasAtIndex("Bold Fighter", this.bIndex) == 3 || this.combatStartHp / this.maxHp >= 1.0 / this.hasAtIndex("Bold Fighter", this.bIndex)){
-						gainCharge = Math.max(gainCharge, 1);
-						skillNames.push(data.skills[this.bIndex].name);
-					}
-				}
 				if (!this.initiator && this.has("Vengeful Fighter")){
 					if (this.combatStartHp / this.maxHp >= (1.0 - (this.hasAtIndex("Vengeful Fighter", this.bIndex) * 0.1) - ((this.hasAtIndex("Vengeful Fighter", this.bIndex) - 1) * 0.1))){
 						gainCharge = Math.max(gainCharge, 1);
 						skillNames.push(data.skills[this.bIndex].name);
 					}
-				}
+				}				
+				if (this.initiator && this.has("Bold Fighter")){
+					if (this.hasAtIndex("Bold Fighter", this.bIndex) == 3 || this.combatStartHp / this.maxHp >= 1.0 / this.hasAtIndex("Bold Fighter", this.bIndex)){
+						gainCharge = Math.max(gainCharge, 1);
+						skillNames.push(data.skills[this.bIndex].name);
+					}
+				}				
 				//TODO: Change Rush skill name to a generic name
 				if (this.rushed){
 					if (this.combatStat.atk - enemy.combatStat.atk >= 1){
@@ -7835,7 +7853,7 @@ function activeHero(hero){
 		//Check for Desperation
 		//***Does Desperation + Sol Katti override Hardy Bearing?***
 		var desperation = false;
-		if(this.has("Desperation")){
+		if (this.has("Desperation")){
 			if(this.hp/this.maxHp <= .25 * this.has("Desperation")){
 				desperation = true;
 			}
@@ -7844,6 +7862,11 @@ function activeHero(hero){
 			if (this.refineIndex != -1 && this.hp/this.maxHp <= .75){
 				desperation = true;
 			} else if (this.hp/this.maxHp <= .5){
+				desperation = true;
+			}
+		}
+		if (this.has("Juicy Wave") || this.has("Starfish") || this.has("Fishie Bow")){
+			if(this.hp/this.maxHp <= .75 ){
 				desperation = true;
 			}
 		}
