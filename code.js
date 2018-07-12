@@ -7629,6 +7629,10 @@ function activeHero(hero){
 				var skillNames = [];
 
 				//-Breath: Enemy has
+				if(this.initiator && enemy.has("Summer's Breath")){
+					gainCharge = Math.max(gainCharge, 1);
+					skillNames.push(data.skills[enemy.weaponIndex].name);
+				}
 				if(this.initiator && enemy.has("Steady Breath")){
 					gainCharge = Math.max(gainCharge, 1);
 					skillNames.push(data.skills[enemy.aIndex].name);
