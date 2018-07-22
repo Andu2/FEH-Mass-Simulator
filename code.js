@@ -5034,10 +5034,11 @@ function activeHero(hero){
 	this.charge = 0;
 	this.initiator = false;
 	this.lit = false;
+	this.triangled = false;
 	this.panicked = false;
 	this.rushed = false;
 	this.pulsed = this.challenger ? options.pulse_challenger : options.pulse_enemy;
-	this.harshed = false;	
+	this.harshed = false;
 	this.didAttack = false;
 
 	this.has = function(skill){
@@ -6191,6 +6192,10 @@ function activeHero(hero){
 				this.combatSpur.def += 4;
 				boostText += this.name + " gets +4 Def in combat from " + data.skills[this.weaponIndex].name + " with <= 50% health.<br>";
 			}
+			if(this.has("Reprisal Lance")){
+				this.combatSpur.atk += 6;
+				boostText += this.name + " gets +6 Atk from defending with " + data.skills[this.weaponIndex].name + ".<br>";
+			}
 			if(this.has("Berkut's Lance")){
 				if(this.hasExactly("Berkut's Lance+") && this.refineIndex != -1){
 					this.combatSpur.res += 7;
@@ -6284,6 +6289,12 @@ function activeHero(hero){
 				this.combatSpur.atk += buffVal;
 				this.combatSpur.spd += buffVal;
 				boostText += this.name + " gets +" + buffVal + " Atk/Spd from defending with " + data.skills[this.aIndex].name + ".<br>";
+			}
+			if(this.has("Bracing Stance")){
+				buffVal = this.has("Bracing Stance") * 2;
+				this.combatSpur.def += buffVal;
+				this.combatSpur.res += buffVal;
+				boostText += this.name + " gets +" + buffVal + " Def/Res from defending with " + data.skills[this.aIndex].name + ".<br>";
 			}
 			if(this.has("Dragonskin")){
 				buffVal = 4;
@@ -6848,7 +6859,7 @@ function activeHero(hero){
 		//Weapons
 		if(this.has("Wo Dao") 						|| this.has("Giant Spoon") 				|| this.has("Lethal Carrot")
 			|| this.hasExactly("Dark Excalibur") 	|| this.hasExactly("Resolute Blade")	|| this.has("Harmonic Lance")
-			|| this.has("Special Damage")
+			|| this.has("Special Damage")			|| this.has("Wo Gun")
 			|| (this.has("Berserk Armads") && (this.hp / this.maxHp <= .75))
 		){
 			damage += 10;
@@ -7109,8 +7120,8 @@ function activeHero(hero){
 			*/
 
 			var extraWeaponAdvantage = 0;
-			var thisHasGemWeapon = (this.has("Ruby Sword") || this.has("Sapphire Lance") || this.has("Emerald Axe") || this.has("Draconic Poleax")) ? true : false;
-			var enemyHasGemWeapon = ( enemy.has("Ruby Sword") || enemy.has("Sapphire Lance") || enemy.has("Emerald Axe") || enemy.has("Draconic Poleax")) ? true : false;
+			var thisHasGemWeapon = (this.triangled || this.has("Ruby Sword") || this.has("Sapphire Lance") || this.has("Emerald Axe") || this.has("Draconic Poleax")) ? true : false;
+			var enemyHasGemWeapon = (enemy.triangled || enemy.has("Ruby Sword") || enemy.has("Sapphire Lance") || enemy.has("Emerald Axe") || enemy.has("Draconic Poleax")) ? true : false;
 			
 			//If weapon advantage is not neutral, and Attacker and Defender do not both have Cancel Affinity
 			if (weaponAdvantage !=0 && !(this.has("Cancel Affinity") && enemy.has("Cancel Affinity"))){
@@ -7760,6 +7771,12 @@ function activeHero(hero){
 				if(options.candlelight_enemy){
 					enemy.challenger ? this.lit = true : enemy.lit = true;
 				}
+				if(options.triangled_challenger){
+					this.challenger ? this.triangled = true : enemy.triangled = true;
+				}
+				if(options.triangled_enemy){
+					enemy.challenger ? this.triangled = true : enemy.triangled = true;
+				}
 				if(this.challenger ? options.threaten_enemy : options.threaten_challenger){
 					roundText += enemy.threaten(this);
 				}
@@ -8289,6 +8306,7 @@ function activeHero(hero){
 		this.combatDebuffs = {"atk":0,"spd":0,"def":0,"res":0};
 		this.panicked = false;
 		this.lit = false;
+		this.triangled = false;
 
 		//Post-Combat Buffs
 		//Rogue dagger works on enemy turn, but buffs are reset at beginning of player turn,
@@ -8329,7 +8347,17 @@ function activeHero(hero){
 				this.lit = true;
 				roundText += enemy.name + " inflicts " + this.name + " with an inability to make counterattacks.<br>";
 			}
-
+			
+			//Trilemma
+			if(this.has("Trilemma")){
+				enemy.triangled = true;
+				roundText += this.name + " inflicts " + enemy.name + " with a boost to triangle affinity.<br>";
+			}
+			if(enemy.has("Trilemma")){
+				this.triangled = true;
+				roundText += enemy.name + " inflicts " + this.name + " with a boost to triangle affinity.<br>";
+			}
+			
 			//Finally, Galeforce!
 			//***Check if this works with Dark Mystletainn***
 			if(!galeforce && this.has("Galeforce") && data.skills[this.specialIndex].charge <= this.charge && (this.challenger ? options.galeforce_challenger : options.galeforce_enemy)){

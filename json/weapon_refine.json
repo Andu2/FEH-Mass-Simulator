@@ -9,7 +9,7 @@
 		"spd": 0,
 		"def": 0,
 		"res": 0,
-		"prereq": "Silver Sword+,Silver Axe+,Silver Lance+,Wo Dao+,Giant Spoon+,Harmonic Lance+",
+		"prereq": "Silver Sword+,Silver Axe+,Silver Lance+,Wo Dao+,Wo Gun+,Giant Spoon+,Harmonic Lance+",
 		"exclusive": ""
 	},	{
 		"category": "Standard Melee",
@@ -21,7 +21,7 @@
 		"spd": 3,
 		"def": 0,
 		"res": 0,
-		"prereq": "Silver Sword+,Silver Axe+,Silver Lance+,Wo Dao+,Giant Spoon+,Harmonic Lance+",
+		"prereq": "Silver Sword+,Silver Axe+,Silver Lance+,Wo Dao+,Wo Gun+,Giant Spoon+,Harmonic Lance+",
 		"exclusive": ""
 	},	{
 		"category": "Standard Melee",
@@ -33,7 +33,7 @@
 		"spd": 0,
 		"def": 4,
 		"res": 0,
-		"prereq": "Silver Sword+,Silver Axe+,Silver Lance+,Wo Dao+,Giant Spoon+,Harmonic Lance+",
+		"prereq": "Silver Sword+,Silver Axe+,Silver Lance+,Wo Dao+,Wo Gun+,Giant Spoon+,Harmonic Lance+",
 		"exclusive": ""
 	},	{
 		"category": "Standard Melee",
@@ -45,7 +45,7 @@
 		"spd": 0,
 		"def": 0,
 		"res": 4,
-		"prereq": "Silver Sword+,Silver Axe+,Silver Lance+,Wo Dao+,Giant Spoon+,Harmonic Lance+",
+		"prereq": "Silver Sword+,Silver Axe+,Silver Lance+,Wo Dao+,Wo Gun+,Giant Spoon+,Harmonic Lance+",
 		"exclusive": ""
 	},	{
 		"category": "Spring Melee",
@@ -369,7 +369,7 @@
 		"spd": 0,
 		"def": 0,
 		"res": 0,
-		"prereq": "Slaying Edge+,Slaying Lance+,Slaying Axe+,Deft Harpoon+,Melon Crusher+,Lilith Floatie+,Sack o' Gifts+,Handbell+,Tannenboom!+,Hagoita+,Kadomatsu+,Basilikos,Hauteclere,Hinoka's Spear,Mystletainn,Winged Sword,Casa Blanca+,Nameless Blade,Water Breath+,Safeguard+,Camilla's Axe,Rhomphaia,Ardent Service+,Breath of Fog,Shell Lance+,Beach Banner+,Dauntless Lance,Draconic Poleax",
+		"prereq": "Reprisal Lance,Slaying Edge+,Slaying Lance+,Slaying Axe+,Deft Harpoon+,Melon Crusher+,Lilith Floatie+,Sack o' Gifts+,Handbell+,Tannenboom!+,Hagoita+,Kadomatsu+,Basilikos,Hauteclere,Hinoka's Spear,Mystletainn,Winged Sword,Casa Blanca+,Nameless Blade,Water Breath+,Safeguard+,Camilla's Axe,Rhomphaia,Ardent Service+,Breath of Fog,Shell Lance+,Beach Banner+,Dauntless Lance,Draconic Poleax",
 		"exclusive": ""
 	},	{
 		"category": "Advanced Melee",
@@ -381,7 +381,7 @@
 		"spd": 3,
 		"def": 0,
 		"res": 0,
-		"prereq": "Slaying Edge+,Slaying Lance+,Slaying Axe+,Deft Harpoon+,Melon Crusher+,Lilith Floatie+,Sack o' Gifts+,Handbell+,Tannenboom!+,Hagoita+,Kadomatsu+,Basilikos,Hauteclere,Hinoka's Spear,Mystletainn,Winged Sword,Casa Blanca+,Nameless Blade,Water Breath+,Safeguard+,Camilla's Axe,Rhomphaia,Ardent Service+,Breath of Fog,Shell Lance+,Beach Banner+,Dauntless Lance,Draconic Poleax",
+		"prereq": "Reprisal Lance,Slaying Edge+,Slaying Lance+,Slaying Axe+,Deft Harpoon+,Melon Crusher+,Lilith Floatie+,Sack o' Gifts+,Handbell+,Tannenboom!+,Hagoita+,Kadomatsu+,Basilikos,Hauteclere,Hinoka's Spear,Mystletainn,Winged Sword,Casa Blanca+,Nameless Blade,Water Breath+,Safeguard+,Camilla's Axe,Rhomphaia,Ardent Service+,Breath of Fog,Shell Lance+,Beach Banner+,Dauntless Lance,Draconic Poleax",
 		"exclusive": ""
 	},	{
 		"category": "Advanced Melee",
@@ -393,7 +393,7 @@
 		"spd": 0,
 		"def": 4,
 		"res": 0,
-		"prereq": "Slaying Edge+,Slaying Lance+,Slaying Axe+,Deft Harpoon+,Melon Crusher+,Lilith Floatie+,Sack o' Gifts+,Handbell+,Tannenboom!+,Hagoita+,Kadomatsu+,Basilikos,Hauteclere,Hinoka's Spear,Mystletainn,Winged Sword,Casa Blanca+,Nameless Blade,Water Breath+,Safeguard+,Camilla's Axe,Rhomphaia,Ardent Service+,Breath of Fog,Shell Lance+,Beach Banner+,Dauntless Lance,Draconic Poleax",
+		"prereq": "Reprisal Lance,Slaying Edge+,Slaying Lance+,Slaying Axe+,Deft Harpoon+,Melon Crusher+,Lilith Floatie+,Sack o' Gifts+,Handbell+,Tannenboom!+,Hagoita+,Kadomatsu+,Basilikos,Hauteclere,Hinoka's Spear,Mystletainn,Winged Sword,Casa Blanca+,Nameless Blade,Water Breath+,Safeguard+,Camilla's Axe,Rhomphaia,Ardent Service+,Breath of Fog,Shell Lance+,Beach Banner+,Dauntless Lance,Draconic Poleax",
 		"exclusive": ""
 	},	{
 		"category": "Advanced Melee",
@@ -405,7 +405,7 @@
 		"spd": 0,
 		"def": 0,
 		"res": 4,
-		"prereq": "Slaying Edge+,Slaying Lance+,Slaying Axe+,Deft Harpoon+,Melon Crusher+,Lilith Floatie+,Sack o' Gifts+,Handbell+,Tannenboom!+,Hagoita+,Kadomatsu+,Basilikos,Hauteclere,Hinoka's Spear,Mystletainn,Winged Sword,Casa Blanca+,Nameless Blade,Water Breath+,Safeguard+,Camilla's Axe,Rhomphaia,Ardent Service+,Breath of Fog,Shell Lance+,Beach Banner+,Dauntless Lance,Draconic Poleax",
+		"prereq": "Reprisal Lance,Slaying Edge+,Slaying Lance+,Slaying Axe+,Deft Harpoon+,Melon Crusher+,Lilith Floatie+,Sack o' Gifts+,Handbell+,Tannenboom!+,Hagoita+,Kadomatsu+,Basilikos,Hauteclere,Hinoka's Spear,Mystletainn,Winged Sword,Casa Blanca+,Nameless Blade,Water Breath+,Safeguard+,Camilla's Axe,Rhomphaia,Ardent Service+,Breath of Fog,Shell Lance+,Beach Banner+,Dauntless Lance,Draconic Poleax",
 		"exclusive": ""
 	},	{
 		"category": "Wedding Melee",
@@ -1389,7 +1389,7 @@
 		"spd": 0,
 		"def": 0,
 		"res": 0,
-		"prereq": "Absorb+,Fear+,Slow+,Gravity+,Pain+,Panic+,Candlelight+",
+		"prereq": "Absorb+,Fear+,Slow+,Gravity+,Pain+,Panic+,Candlelight+,Trilemma+",
 		"exclusive": ""
 	},	{
 		"category": "Staves",
@@ -1401,7 +1401,7 @@
 		"spd": 0,
 		"def": 0,
 		"res": 0,
-		"prereq": "Absorb+,Fear+,Slow+,Gravity+,Pain+,Panic+,Candlelight+",
+		"prereq": "Absorb+,Fear+,Slow+,Gravity+,Pain+,Panic+,Candlelight+,Trilemma+",
 		"exclusive": ""
 	},	{
 		"category": "Dragonstone",
