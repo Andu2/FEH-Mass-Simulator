@@ -690,12 +690,12 @@ $(document).ready(function(){
 			if (endsWith(dataVar, ".currenthp") && hero){
 				updateHealth(newVal, hero);
 			}
-			
+
 			//Update adjacent units values
 			if (endsWith(dataVar, ".adjacent") || endsWith(dataVar, ".adjacent2") || endsWith(dataVar, ".adjacent_foe") || endsWith(dataVar, ".adjacent2_foe")){
 				updateAdjacentValues(dataVar, hero);
 			}
-			
+
 			//Update special charge
 			if (endsWith(dataVar, ".pulse_challenger") && challenger){
 				updateChallengerUI();
@@ -1877,7 +1877,7 @@ function resetHero(hero,blockInit){//also resets fl, despite singular name - pas
 	hero.adjacent2 = 1;
 	hero.adjacent_foe = 1;
 	hero.adjacent2_foe = 1;
-	
+
 	hero.damage = 0;
 	hero.precharge = 0;
 	hero.buffs = {"hp":0,"atk":0,"spd":0,"def":0,"res":0};
@@ -2264,8 +2264,8 @@ function matchStartSkills(params, data) {
 		return null;
     }
 
-	//If search term appears in the beginning of data's text
-	if (data.text.toUpperCase().indexOf(params.term.toUpperCase()) == 0) {
+	//If search term appears in the data's text
+	if (data.text.toUpperCase().indexOf(params.term.toUpperCase()) > -1){
 		return data;
 	}
 
@@ -2293,7 +2293,7 @@ function matchStartRefine(params, data) {
     }
 
 	//If search term appears in the beginning of data's text
-	if (data.text.toUpperCase().indexOf(params.term.toUpperCase()) == 0) {
+	if (data.text.toUpperCase().indexOf(params.term.toUpperCase()) > -1) {
 		return data;
 	}
 
@@ -2565,16 +2565,16 @@ function updateHeroUI(hero){
 			//Weapon Skill
 			if(hero.weapon != -1){
 				specialCharge += getCDChange(data.skills[hero.weapon], "weapon");
-			}			
+			}
 			//Refine bonus
 			if(hero.refine != -1){
 				specialCharge += getCDChange(data.refine[hero.refine], "refine");
-			}			
+			}
 			//Assist Skill
 			if(hero.assist != -1){
 				specialCharge += getCDChange(data.skills[hero.assist], "assist");
 			}
-			
+
 			//Precharge
 			//TODO: Combine this from hero intialization
 			//B Skill
@@ -5125,7 +5125,7 @@ function activeHero(hero){
 			return false;
 		}
 	}
-	
+
 	//Calculate current special charge held
 	//***This is separate from the UI update that is done to show correct UI values***
 	this.resetCharge = function(){
@@ -5155,7 +5155,7 @@ function activeHero(hero){
 			}
 		}
 		//Other Pulse skills
-		if (this.pulsed){			
+		if (this.pulsed){
 			this.precharge++;
 		}
 	}
@@ -5164,7 +5164,7 @@ function activeHero(hero){
 	this.resetCharge();
 	this.resetPrecharge();
 	this.charge += this.precharge;
-	
+
 	this.threaten = function(enemy){
 		//Thhhhhhhhrreats!
 		var threatenText = "";
@@ -5492,7 +5492,7 @@ function activeHero(hero){
 		var buffText = "";
 		var skillNames = [];
 		var buffVal = {"atk":0,"spd":0,"def":0,"res":0};
-		
+
 		//Odd/Even turn buffs
 		if ((this.challenger && options.odd_buff_challenger) || (!this.challenger && options.odd_buff_enemy)){
 			//Odd
@@ -5524,7 +5524,7 @@ function activeHero(hero){
 				buffVal.spd = Math.max(buffVal.atk, this.has("Even Spd Wave") * 2);
 				skillNames.push(data.skills[this.cIndex].name);
 			}
-		}		
+		}
 
 		//All defiant skills trigger at or below 50% HP
 		if(this.hp / this.maxHp <= 0.5){
@@ -5549,7 +5549,7 @@ function activeHero(hero){
 				skillNames.push(data.skills[this.aIndex].name);
 			}
 		}
-		
+
 		//Adjacent skills
 		if (this.adjacent > 0){
 			if (this.has("Ardent Service")){
@@ -5561,7 +5561,7 @@ function activeHero(hero){
 				skillNames.push(data.skills[this.weaponIndex].name);
 			}
 		}
-		
+
 		if(skillNames.length > 0){
 			var statChanges = [];
 			for(var stat in buffVal){
@@ -5718,7 +5718,7 @@ function activeHero(hero){
 				this.combatSpur.def += 2;
 				this.combatSpur.res += 2;
 				boostText += this.name + " gets +2 Atk/Spd/Def/Res from being at full health with " + data.skills[this.weaponIndex].name + ".<br>";
-			}			
+			}
 			if(this.has("Atk Spd Push")){
 				statBonus = this.has("Atk Spd Push") + 2;
 				this.combatSpur.atk += statBonus;
@@ -5822,7 +5822,7 @@ function activeHero(hero){
 		if (this.adjacent > 0){
 			var skillName = "";
 			var buffVal = 0;
-			
+
 			//Comparative Adjacent Skills
 			if (this.hasAtIndex("Swift Mulagir", this.weaponIndex) && this.adjacent2 > this.adjacent2_foe){
 				buffVal = 5;
@@ -5831,7 +5831,7 @@ function activeHero(hero){
 				this.combatSpur.spd += buffVal;
 				boostText += this.name + " gets +" + buffVal + " Atk/Spd from having more adjacent allies with " + skillName + ".<br>";
 			}
-			
+
 			//Weapons
 			if (this.hasExactly("Hinoka's Spear")){
 				buffVal = 4;
@@ -6376,7 +6376,7 @@ function activeHero(hero){
 			var atkbonus = -1 * (enemy.combatDebuffs.atk + enemy.combatDebuffs.spd + enemy.combatDebuffs.def + enemy.combatDebuffs.res);
 			this.combatStat.atk += atkbonus;
 			if (atkbonus != 0){statText += this.name + " gains +" + atkbonus + " Atk from enemy penalties with " + data.skills[this.weaponIndex].name + ".<br>";}
-		}		
+		}
 		//Cleaner bonus
 		if (this.has("The Cleaner")){
 			var atkbonus = enemy.combatBuffs.atk + enemy.combatBuffs.spd + enemy.combatBuffs.def + enemy.combatBuffs.res;
@@ -6497,7 +6497,7 @@ function activeHero(hero){
 					damageText += this.name + " takes " + damage + " damage after combat from attacking with " + skillName + ".<br>";
 					totalDamage += damage;
 				}
-				
+
 				//Push Skills
 				if(this.hasAtIndex("Atk Spd Push", this.aIndex) || this.hasAtIndex("Atk Def Push", this.aIndex) || this.hasAtIndex("Atk Res Push", this.aIndex)
 					|| this.hasAtIndex("Spd Def Push", this.aIndex) || this.hasAtIndex("Spd Res Push", this.aIndex) || this.hasAtIndex("Def Res Push", this.aIndex)){
@@ -6636,7 +6636,7 @@ function activeHero(hero){
 			if (this.hasExactly("Deathly Dagger")){
 				sealStats(data.skills[this.weaponIndex].name, ["def","res"], [-7]);
 			}
-			if (this.has("Silver Dagger") 		|| this.has("Seashell") 		|| this.has("Dancer's Fan") 	|| this.has("Kagami Mochi") 
+			if (this.has("Silver Dagger") 		|| this.has("Seashell") 		|| this.has("Dancer's Fan") 	|| this.has("Kagami Mochi")
 				|| this.has("Barb Shuriken") 	|| this.has("Felicia's Plate")	|| this.has("Lethal Carrot")	|| this.has("Starfish")
 				){
 				sealStats(data.skills[this.weaponIndex].name, ["def","res"], [-5, -7]);
@@ -6850,10 +6850,10 @@ function activeHero(hero){
 		//Hero does not have adaptive attack
 		return false;
 	}
-	
+
 	this.getBonusDamage = function(){
 		var damage = 0;
-		var skillNames = [];		
+		var skillNames = [];
 
 		//Weapons
 		if(this.has("Wo Dao") 						|| this.has("Giant Spoon") 				|| this.has("Lethal Carrot")
@@ -6871,7 +6871,7 @@ function activeHero(hero){
 			damage += 10;
 			skillNames.push(data.skills[this.bIndex].name);
 		}
-		
+
 		return {"damage":damage, "skillNames":skillNames.join(", ").replace(/,(?!.*,)/gmi, ', and')};
 	}
 
@@ -6918,7 +6918,7 @@ function activeHero(hero){
 
 				if(AOEActivated){
 					this.resetCharge();
-					
+
 					//Bonus Special Damage
 					var bonusDamage = this.getBonusDamage();
 
@@ -6926,7 +6926,7 @@ function activeHero(hero){
 						AOEDamage += bonusDamage.damage;
 						damageText += this.name + " gains " + bonusDamage.damage + " damage from " + bonusDamage.skillNames + ".<br>";
 					}
-					
+
 					//Bonus Flat Damage
 					//TODO: Merge duplicate flat damage code into one function
 					if (this.hasExactly("Light Brand")){
@@ -6942,7 +6942,7 @@ function activeHero(hero){
 							damageText += this.name + " gains " + damageBonus + " damage from " + data.skills[this.weaponIndex].name + ".<br>";
 						}
 					}
-					
+
 					if(enemy.has("Embla's Ward")){
 						AOEDamage = 0;
 					}
@@ -7031,7 +7031,7 @@ function activeHero(hero){
 			if(offensiveSpecialActivated){
 				this.resetCharge();
 				damageText += this.name + " activates " + data.skills[this.specialIndex].name + ".<br>";
-				
+
 				//Bonus Special Damage
 				var bonusDamage = this.getBonusDamage();
 
@@ -7039,7 +7039,7 @@ function activeHero(hero){
 					dmgBoostFlat += bonusDamage.damage;
 					damageText += this.name + " gains " + bonusDamage.damage + " damage from " + bonusDamage.skillNames + ".<br>";
 				}
-				
+
 				//Solar Brace
 				//***Does it activate with defensive specials? Does it stack with Absorb?***
 				if (!AOE && this.hasExactly("Solar Brace")){
@@ -7121,7 +7121,7 @@ function activeHero(hero){
 			var extraWeaponAdvantage = 0;
 			var thisHasGemWeapon = (this.triangled || this.has("Ruby Sword") || this.has("Sapphire Lance") || this.has("Emerald Axe") || this.has("Draconic Poleax")) ? true : false;
 			var enemyHasGemWeapon = (enemy.triangled || enemy.has("Ruby Sword") || enemy.has("Sapphire Lance") || enemy.has("Emerald Axe") || enemy.has("Draconic Poleax")) ? true : false;
-			
+
 			//If weapon advantage is not neutral, and Attacker and Defender do not both have Cancel Affinity
 			if (weaponAdvantage !=0 && !(this.has("Cancel Affinity") && enemy.has("Cancel Affinity"))){
 
@@ -7281,7 +7281,7 @@ function activeHero(hero){
 			if (effectiveBonus > 1 ){
 				damageText += this.name + "'s attack is increased by " + (effectiveBonus * 100 - 100) + "% from weapon effectiveness.<br>";
 			}
-			
+
 			//Flat damage
 			//*** Is Light Brand damage bonus flat damage or bonus attack? ***
 			if (this.hasExactly("Light Brand")){
@@ -7546,13 +7546,13 @@ function activeHero(hero){
 						gainCharge = Math.max(gainCharge, 1);
 						skillNames.push(data.skills[this.bIndex].name);
 					}
-				}				
+				}
 				if (this.initiator && this.has("Bold Fighter")){
 					if (this.hasAtIndex("Bold Fighter", this.bIndex) == 3 || this.combatStartHp / this.maxHp >= 1.0 / this.hasAtIndex("Bold Fighter", this.bIndex)){
 						gainCharge = Math.max(gainCharge, 1);
 						skillNames.push(data.skills[this.bIndex].name);
 					}
-				}				
+				}
 				//TODO: Change Rush skill name to a generic name
 				if (this.rushed){
 					if (this.combatStat.atk - enemy.combatStat.atk >= 1){
@@ -7930,7 +7930,7 @@ function activeHero(hero){
 		var firesweep = false;
 		var windsweep = 0;
 		var watersweep = 0;
-		
+
 		//Sweep Effects are toggable through menu options
 		if (this.challenger ? options.sweep_challenger : options.sweep_enemy){
 			if(this.has("Firesweep")){
@@ -7956,7 +7956,7 @@ function activeHero(hero){
 				thisAttackRank--;
 				thisAttackRankChanged = true;
 			}
-		}		
+		}
 		if (enemy.challenger ? options.sweep_challenger : options.sweep_enemy){
 			if(enemy.has("Firesweep")){
 				firesweep = true;
@@ -8128,11 +8128,11 @@ function activeHero(hero){
 		}
 		if (this.hasExactly("Thunder Armads") && this.adjacent2 > this.adjacent2_foe){
 			enemyAttackRank--;
-			enemyAttackRankChanged = true;			
+			enemyAttackRankChanged = true;
 		}
 		if (enemy.hasExactly("Thunder Armads") && enemy.adjacent2 > enemy.adjacent2_foe){
 			thisAttackRank--;
-			thisAttackRankChanged = true;		
+			thisAttackRankChanged = true;
 		}
 		if (this.hasAtRefineIndex("Wary Ranged", this.refineIndex) && enemy.range == "ranged" && this.combatStat.def >= enemy.combatStat.def + 1){
 			enemyAttackRank--;
@@ -8346,7 +8346,7 @@ function activeHero(hero){
 				this.lit = true;
 				roundText += enemy.name + " inflicts " + this.name + " with an inability to make counterattacks.<br>";
 			}
-			
+
 			//Trilemma
 			if(this.has("Trilemma")){
 				enemy.triangled = true;
@@ -8356,7 +8356,7 @@ function activeHero(hero){
 				this.triangled = true;
 				roundText += enemy.name + " inflicts " + this.name + " with a boost to triangle affinity.<br>";
 			}
-			
+
 			//Finally, Galeforce!
 			//***Check if this works with Dark Mystletainn***
 			if(!galeforce && this.has("Galeforce") && data.skills[this.specialIndex].charge <= this.charge && (this.challenger ? options.galeforce_challenger : options.galeforce_enemy)){
