@@ -3080,7 +3080,6 @@ function importText(side, customList){
 	function parseHero(lines,firstLine){
 		//challenger will pass first line because it needs to parse it to see if it's a challenger
 		firstLine = firstLine || parseFirstLine(lines[0]);
-
 		var hero;
 		if(importMode == "challenger"){
 			hero = challenger;
@@ -3157,8 +3156,8 @@ function importText(side, customList){
 
 	function parseFirstLine(line){
 		var dataFound = {};
-		//Try all lengths up to 20 characters to find hero name
-		for(var tryLength = 2; tryLength <= 30; tryLength++){
+		//Try all lengths up to 50 characters to find hero name
+		for(var tryLength = 2; tryLength <= 50; tryLength++){
 			var tryString = removeEdgeJunk(line.slice(0,tryLength));
 			var tryIndex = getIndexFromName(tryString,data.heroes);
 			if(tryIndex != -1){
