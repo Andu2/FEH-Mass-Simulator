@@ -5643,5 +5643,22 @@
 		"weapontype": "lance",
 		"movetype": "flying",
 		"minrarity": 5
+	}, {
+		"hero_id": 275,
+		"name": "Walhart",
+		"basehp": 19,
+		"baseatk": 11,
+		"basespd": 5,
+		"basedef": 8,
+		"baseres": 3,
+		"hpgrowth": 6,
+		"atkgrowth": 8,
+		"spdgrowth": 6,
+		"defgrowth": 9,
+		"resgrowth": 2,
+		"color": "green",
+		"weapontype": "axe",
+		"movetype": "cavalry",
+		"minrarity": 3
 	}
 ]

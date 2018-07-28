@@ -15861,5 +15861,19 @@
 		"charge": 0,
 		"inheritrule": "",
 		"affectsduel": 0
+	}, {
+		"skill_id": 1134,
+		"name": "Wolf Berg",
+		"slot": "weapon",
+		"sp": 400,
+		"description": "Grants Def+3. If the number of foes within 2 spaces (excluding target) >= the number of allies within 2 spaces (excluding unit), grants Atk\/Spd\/Def\/Res+4 during combat.",
+		"hp": 0,
+		"atk": 16,
+		"spd": 0,
+		"def": 3,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "unique",
+		"affectsduel": 1
 	}
 ]

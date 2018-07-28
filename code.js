@@ -5817,7 +5817,18 @@ function activeHero(hero){
 				boostText += this.name + " gets +" + buffVal + " Res from having >=3 more hp than " + enemy.name + " with " + skillName + ".<br>";
 			}
 		}
-
+		
+		//Adjacent Foe Buffs
+		if (this.adjacent2_foe - 1 >= this.adjacent2){
+			var buffVal = 4;
+			var skillName = data.skills[this.weaponIndex].name;
+			this.combatSpur.atk += buffVal;
+			this.combatSpur.spd += buffVal;
+			this.combatSpur.def += buffVal;
+			this.combatSpur.res += buffVal;
+			boostText += this.name + " gets +" + buffVal + " Atk/Spd/Def/Res from having more adjacent foes with " + skillName + ".<br>";
+		}
+		
 		//Adjacent Buffs
 		if (this.adjacent > 0){
 			var skillName = "";
