@@ -1197,6 +1197,17 @@ function getPrechargeChange(skill, slot){
 	return 0;
 }
 
+function isDragonEffective(hero){
+	if (hero.hasExactly("Falchion") 		|| hero.hasExactly("Sealed Falchion")
+		|| hero.hasExactly("Naga") 			|| hero.hasExactly("Divine Naga")
+		|| hero.hasExactly("Breath of Fog")	|| hero.hasExactly("Summer's Breath")
+		|| (hero.hasExactly("Binding Blade") && hero.refineIndex != -1)
+		){
+		return true;
+	}
+	return false;
+}
+
 //Return type of special skill
 function getSpecialType(skill){
 
@@ -5641,12 +5652,7 @@ function activeHero(hero){
 		}
 
 		//Combat debuff ***does this stack like spurs? does negative combatSpur work correctly?***
-		if (enemy.hasExactly("Loptous")
-			&& !(this.hasExactly("Falchion")	|| this.hasExactly("Sealed Falchion")
-				|| this.hasExactly("Naga")		|| this.hasExactly("Divine Naga")
-				|| (this.hasExactly("Binding Blade") && this.refineIndex != -1)
-			)
-		){
+		if (enemy.hasExactly("Loptous")	&& !isDragonEffective(this)){
 			this.combatSpur.atk -= 6;
 			boostText += this.name + " gets -6 Atk from not having an \"effective against dragons\" skill against the opponent's " + data.skills[enemy.weaponIndex].name + ".<br>";
 		}
@@ -7276,13 +7282,7 @@ function activeHero(hero){
 			){
 				effectiveBonus = (enemy.has("Grani's Shield")) ? 1 : 1.5;
 			}
-			else if ((enemy.weaponType == "dragon" || enemy.hasExactly("Loptous"))
-				&& (this.hasExactly("Falchion") 		|| this.hasExactly("Sealed Falchion")
-					|| this.hasExactly("Naga") 			|| this.hasExactly("Divine Naga")
-					|| this.hasExactly("Breath of Fog")	|| this.hasExactly("Summer's Breath")
-					|| (this.hasExactly("Binding Blade") && this.refineIndex != -1)
-				)
-			){
+			else if ((enemy.weaponType == "dragon" || enemy.hasExactly("Loptous")) && isDragonEffective(this)){
 				effectiveBonus = 1.5;
 			}
 			else if ((enemy.weaponType == "redtome" || enemy.weaponType == "bluetome" || enemy.weaponType == "greentome") && (this.has("Kitty Paddle"))){
