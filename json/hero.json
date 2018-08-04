@@ -5660,5 +5660,22 @@
 		"weapontype": "axe",
 		"movetype": "cavalry",
 		"minrarity": 3
+	}, {
+		"hero_id": 276,
+		"name": "Lucina (Glorious Archer)",
+		"basehp": 17,
+		"baseatk": 8,
+		"basespd": 9,
+		"basedef": 6,
+		"baseres": 5,
+		"hpgrowth": 5,
+		"atkgrowth": 8,
+		"spdgrowth": 8,
+		"defgrowth": 5,
+		"resgrowth": 3,
+		"color": "blue",
+		"weapontype": "bow",
+		"movetype": "infantry",
+		"minrarity": 5
 	}
 ]

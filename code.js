@@ -1199,7 +1199,7 @@ function getPrechargeChange(skill, slot){
 
 function isDragonEffective(hero){
 	if (hero.hasExactly("Falchion") 		|| hero.hasExactly("Sealed Falchion")
-		|| hero.hasExactly("Naga") 			|| hero.hasExactly("Divine Naga")
+		|| hero.hasExactly("Naga")			|| hero.hasExactly("Divine Naga")
 		|| hero.hasExactly("Breath of Fog")	|| hero.hasExactly("Summer's Breath")
 		|| (hero.hasExactly("Binding Blade") && hero.refineIndex != -1)
 		){
@@ -5989,9 +5989,21 @@ function activeHero(hero){
 				this.combatSpur.res += 2;
 				boostText += this.name + " gets +2 Atk/Spd/Def/Res from initiating with " + data.skills[this.weaponIndex].name + ".<br>";
 			}
+			if(this.has("Thogn") && enemy.range == "melee"){
+				this.combatSpur.atk += 4;
+				this.combatSpur.spd += 4;
+				this.combatSpur.def += 4;
+				this.combatSpur.res += 4;
+				boostText += this.name + " gets +4 Atk/Spd/Def/Res from initiating with " + data.skills[this.weaponIndex].name + " against a melee opponent.<br>";
+			}
 			if(this.hasExactly("Durandal")){
 				this.combatSpur.atk += 4;
 				boostText += this.name + " gets +4 Atk from initiating with " + data.skills[this.weaponIndex].name + ".<br>"
+			}
+			if(this.hasExactly("Dark Greatsword")){
+				this.combatSpur.atk += 4;
+				this.combatSpur.spd += 4;
+				boostText += this.name + " gets +4 Atk/Spd from initiating with " + data.skills[this.weaponIndex].name + ".<br>";
 			}
 			if(this.hasExactly("Yato") && this.refineIndex == -1){
 				this.combatSpur.spd += 4;
@@ -6008,12 +6020,7 @@ function activeHero(hero){
 			if(this.hasExactly("Parthia") && this.refineIndex == -1){
 				this.combatSpur.res += 4;
 				boostText += this.name + " gets +4 Res from initiating with " + data.skills[this.weaponIndex].name + ".<br>";
-			}
-			if(this.hasExactly("Dark Greatsword")){
-				this.combatSpur.atk += 4;
-				this.combatSpur.spd += 4;
-				boostText += this.name + " gets +4 Atk/Spd from initiating with " + data.skills[this.weaponIndex].name + ".<br>";
-			}
+			}			
 			if (this.hasAtRefineIndex("Death Blow", this.refineIndex)){
 				this.combatSpur.atk += 6;
 				boostText += this.name + " gets +6 Atk from initiating with " + data.skills[this.weaponIndex].name + " (Refined).<br>"
