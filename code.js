@@ -7164,14 +7164,14 @@ function activeHero(hero){
 			*/
 
 			var extraWeaponAdvantage = 0;
-			var thisHasGemWeapon = (this.triangled || this.has("Ruby Sword") || this.has("Sapphire Lance") || this.has("Emerald Axe") || this.has("Draconic Poleax")) ? true : false;
-			var enemyHasGemWeapon = (enemy.triangled || enemy.has("Ruby Sword") || enemy.has("Sapphire Lance") || enemy.has("Emerald Axe") || enemy.has("Draconic Poleax")) ? true : false;
+			var thisHasGemWeapon = (this.triangled || this.hasAtRefineIndex("Triangle Adept", this.refineIndex) || this.has("Ruby Sword") || this.has("Sapphire Lance") || this.has("Emerald Axe") || this.has("Draconic Poleax")) ? true : false;
+			var enemyHasGemWeapon = (enemy.triangled || enemy.hasAtRefineIndex("Triangle Adept", enemy.refineIndex) || enemy.has("Ruby Sword") || enemy.has("Sapphire Lance") || enemy.has("Emerald Axe") || enemy.has("Draconic Poleax")) ? true : false;
 
 			//If weapon advantage is not neutral, and Attacker and Defender do not both have Cancel Affinity
 			if (weaponAdvantage !=0 && !(this.has("Cancel Affinity") && enemy.has("Cancel Affinity"))){
 
 				//Calculate base weapon advantage bonus (Assume 0.2 is max.)
-				if (thisHasGemWeapon || enemyHasGemWeapon || this.hasAtRefineIndex("Triangle Adept", this.refineIndex) || enemy.hasAtRefineIndex("Triangle Adept", enemy.refineIndex)){
+				if (thisHasGemWeapon || enemyHasGemWeapon){
 					extraWeaponAdvantage = 0.2;
 				}
 				else{
