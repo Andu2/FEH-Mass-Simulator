@@ -7178,8 +7178,8 @@ function activeHero(hero){
 					if (this.hasAtIndex("Triangle Adept", this.aIndex)){
 						extraWeaponAdvantage = 0.05 + 0.05 * this.hasAtIndex("Triangle Adept", this.aIndex);
 					}
-					if (enemy.hasAtIndex("Triangle Adept", this.aIndex)){
-						extraWeaponAdvantage = Math.max(extraWeaponAdvantage, 0.05 + 0.05 * enemy.hasAtIndex("Triangle Adept", this.aIndex));
+					if (enemy.hasAtIndex("Triangle Adept", enemy.aIndex)){
+						extraWeaponAdvantage = Math.max(extraWeaponAdvantage, 0.05 + 0.05 * enemy.hasAtIndex("Triangle Adept", enemy.aIndex));
 					}
 				}
 
@@ -7201,7 +7201,7 @@ function activeHero(hero){
 								if (enemyHasGemWeapon){
 									extraWeaponAdvantage = 0.2;
 								} else{
-									extraWeaponAdvantage = 0.05 + 0.05 * enemy.has("Triangle Adept");
+									extraWeaponAdvantage = 0.05 + 0.05 * enemy.hasAtIndex("Triangle Adept", enemy.aIndex);
 								}
 							}
 						}
@@ -7212,7 +7212,7 @@ function activeHero(hero){
 								if (enemyHasGemWeapon){
 									extraWeaponAdvantage = -0.2;
 								} else{
-									extraWeaponAdvantage = (0.05 + 0.05 * enemy.has("Triangle Adept")) * -1;
+									extraWeaponAdvantage = (0.05 + 0.05 * enemy.hasAtIndex("Triangle Adept", enemy.aIndex)) * -1;
 								}
 							} else{
 								extraWeaponAdvantage = 0;
@@ -7319,7 +7319,7 @@ function activeHero(hero){
 				effectiveBonus = 1.5;
 			}
 
-			if (effectiveBonus > 1 ){
+			if (effectiveBonus > 1){
 				damageText += this.name + "'s attack is increased by " + (effectiveBonus * 100 - 100) + "% from weapon effectiveness.<br>";
 			}
 
