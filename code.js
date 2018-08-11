@@ -5295,7 +5295,7 @@ function activeHero(hero){
 		}
 
 		//Weapons
-		if (this.has("Fensalir")){
+		if (this.has("Fensalir") && hero.refineIndex == -1){
 			threatDebuffs.atk = Math.min(threatDebuffs.atk, -4);
 			skillNames.push("Fensalir");
 		}
@@ -5544,27 +5544,32 @@ function activeHero(hero){
 		}
 
 		//All defiant skills trigger at or below 50% HP
-		if(this.hp / this.maxHp <= 0.5){
-			if(this.has("Folkvangr")){
+		if (this.hp / this.maxHp <= 0.5){
+			if (this.has("Folkvangr") && this.refineIndex == -1){
 				buffVal.atk = Math.max(buffVal.atk, 5);
 				skillNames.push(data.skills[this.weaponIndex].name);
 			}
-			if(this.has("Defiant Atk")){
+			if (this.has("Defiant Atk")){
 				buffVal.atk = Math.max(buffVal.atk, this.has("Defiant Atk") * 2 + 1);
 				skillNames.push(data.skills[this.aIndex].name);
 			}
-			if(this.has("Defiant Spd")){
+			if (this.has("Defiant Spd")){
 				buffVal.spd = Math.max(buffVal.spd, this.has("Defiant Spd") * 2 + 1);
 				skillNames.push(data.skills[this.aIndex].name);
 			}
-			if(this.has("Defiant Def")){
+			if (this.has("Defiant Def")){
 				buffVal.def = Math.max(buffVal.def, this.has("Defiant Def") * 2 + 1);
 				skillNames.push(data.skills[this.aIndex].name);
 			}
-			if(this.has("Defiant Res")){
+			if (this.has("Defiant Res")){
 				buffVal.res = Math.max(buffVal.res, this.has("Defiant Res") * 2 + 1);
 				skillNames.push(data.skills[this.aIndex].name);
 			}
+		}
+		if (this.has("Folkvangr") && this.refineIndex != -1 && this.hp / this.maxHp <= 0.8){
+			buffVal.atk = Math.max(buffVal.atk, 7);
+			buffVal.def = Math.max(buffVal.def, 7);
+			skillNames.push(data.skills[this.weaponIndex].name + " (Refined)");
 		}
 
 		//Adjacent skills
@@ -5970,6 +5975,13 @@ function activeHero(hero){
 				this.combatSpur.atk += buffVal;
 				this.combatSpur.res += buffVal;
 				boostText += this.name + " gets +" + buffVal + " Atk/Res from being adjacent to a flying ally with " + skillName + " (Refined).<br>";
+			}
+			if (this.hasAtRefineIndex("Spd Def Bond", this.refineIndex)){
+				buffVal = 5;
+				skillName = "Spd Def Bond";
+				this.combatSpur.spd += buffVal;
+				this.combatSpur.def += buffVal;
+				boostText += this.name + " gets +" + buffVal + " Spd/Def from being adjacent an ally with " + skillName + " (Refined).<br>";
 			}
 			if (this.hasAtRefineIndex("Magic All Bond", this.refineIndex)){
 				buffVal = 3;
@@ -6824,10 +6836,12 @@ function activeHero(hero){
 	//Checks if hero's buffs are cancelled by opponent
 	function isBuffCancelled(hero, opponent){
 		//Weapon
-		if (opponent.hasExactly("Divine Naga")){
+		if (opponent.hasExactly("Divine Naga") 
+			|| (opponent.hasExactly("Fensalir") && opponent.refineIndex != -1)
+			){
 			return true;
 		}
-		if ((opponent.has("Casa Blanca") || opponent.has("Green Gift") || opponent.has("Blue Gift") || opponent.has("Gratia"))&& hero.range == "ranged"){
+		if ((opponent.has("Casa Blanca") || opponent.has("Green Gift") || opponent.has("Blue Gift") || opponent.has("Gratia")) && hero.range == "ranged"){
 			return true;
 		}
 		//Refinement
@@ -7156,16 +7170,16 @@ function activeHero(hero){
 			//If weapon advantage is not neutral, and Attacker and Defender do not both have Cancel Affinity
 			if (weaponAdvantage !=0 && !(this.has("Cancel Affinity") && enemy.has("Cancel Affinity"))){
 
-				//Calculate base weapon advantage bonus
-				if(thisHasGemWeapon || enemyHasGemWeapon){
+				//Calculate base weapon advantage bonus (Assume 0.2 is max.)
+				if (thisHasGemWeapon || enemyHasGemWeapon || this.hasAtRefineIndex("Triangle Adept", this.refineIndex) || enemy.hasAtRefineIndex("Triangle Adept", enemy.refineIndex)){
 					extraWeaponAdvantage = 0.2;
 				}
 				else{
-					if(this.has("Triangle Adept")){
-						extraWeaponAdvantage = 0.05 + 0.05 * this.has("Triangle Adept");
+					if (this.hasAtIndex("Triangle Adept", this.aIndex)){
+						extraWeaponAdvantage = 0.05 + 0.05 * this.hasAtIndex("Triangle Adept", this.aIndex);
 					}
-					if(enemy.has("Triangle Adept")){
-						extraWeaponAdvantage = Math.max(extraWeaponAdvantage, 0.05 + 0.05 * enemy.has("Triangle Adept"));
+					if (enemy.hasAtIndex("Triangle Adept", this.aIndex)){
+						extraWeaponAdvantage = Math.max(extraWeaponAdvantage, 0.05 + 0.05 * enemy.hasAtIndex("Triangle Adept", this.aIndex));
 					}
 				}
 
