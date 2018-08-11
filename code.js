@@ -5566,11 +5566,6 @@ function activeHero(hero){
 				skillNames.push(data.skills[this.aIndex].name);
 			}
 		}
-		if (this.has("Folkvangr") && this.refineIndex != -1 && this.hp / this.maxHp <= 0.8){
-			buffVal.atk = Math.max(buffVal.atk, 7);
-			buffVal.def = Math.max(buffVal.def, 7);
-			skillNames.push(data.skills[this.weaponIndex].name + " (Refined)");
-		}
 
 		//Adjacent skills
 		if (this.adjacent > 0){
@@ -5670,6 +5665,13 @@ function activeHero(hero){
 
 		//Brazen Skills
 		if(this.combatStartHp / this.maxHp <= 0.8){
+			if (this.has("Folkvangr") && this.refineIndex != -1){
+				statBonus = 7;
+				this.combatSpur.atk += statBonus;
+				this.combatSpur.def += statBonus;
+				skillName = data.skills[this.weaponIndex].name + " (Refined)";
+				boostText += this.name + " activates " + skillName + " and gets +" + statBonus + " Atk/Def.<br>";
+			}
 			if(this.has("Brazen Atk Spd")){
 				statBonus = 1 + 2 * this.has("Brazen Atk Spd");
 				this.combatSpur.atk += statBonus;
