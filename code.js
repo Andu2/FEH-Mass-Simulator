@@ -90,10 +90,10 @@ data.lists = loadJSON('json/custom_lists.json')
 
 var debug = false;
 
-data.weaponTypes = ["sword","lance","axe","redtome","bluetome","greentome","dragon","redbow","bluebow","greenbow","graybow","bow","dagger","staff"];
-data.rangedWeapons = ["redtome","bluetome","greentome","redbow","bluebow","greenbow","graybow","bow","dagger","staff"];
+data.weaponTypes = ["sword","lance","axe","redtome","bluetome","greentome","dragon","redbow","bluebow","greenbow","graybow","bow","reddagger","bluedagger","greendagger","graydagger","dagger","staff"];
+data.rangedWeapons = ["redtome","bluetome","greentome","redbow","bluebow","greenbow","graybow","bow","reddagger","bluedagger","greendagger","graydagger","dagger","staff"];
 data.meleeWeapons = ["sword","lance","axe","dragon"];
-data.physicalWeapons = ["sword","lance","axe","redbow","bluebow","greenbow","graybow","bow","dagger"];
+data.physicalWeapons = ["sword","lance","axe","redbow","bluebow","greenbow","graybow","bow","reddagger","bluedagger","greendagger","graydagger","dagger"];
 data.magicalWeapons = ["redtome","bluetome","greentome","dragon","staff"];
 data.moveTypes = ["infantry","armored","flying","cavalry","mounted"];
 data.colors = ["red","blue","green","gray"];
@@ -1201,6 +1201,7 @@ function isDragonEffective(hero){
 	if (hero.hasExactly("Falchion") 		|| hero.hasExactly("Sealed Falchion")
 		|| hero.hasExactly("Naga")			|| hero.hasExactly("Divine Naga")
 		|| hero.hasExactly("Breath of Fog")	|| hero.hasExactly("Summer's Breath")
+		|| hero.has("Cloud Maiougi")
 		|| (hero.hasExactly("Binding Blade") && hero.refineIndex != -1)
 		){
 		return true;
@@ -2559,7 +2560,7 @@ function updateHeroUI(hero){
 		}
 
 		//Weapon and movement icons
-		if(data.heroes[hero.index].weapontype == "dragon" || data.heroes[hero.index].weapontype == "bow" ){
+		if(data.heroes[hero.index].weapontype == "dragon" || data.heroes[hero.index].weapontype == "bow" || data.heroes[hero.index].weapontype == "dagger"){
 			$("#" + htmlPrefix + "weapon_icon").attr("src","weapons/" + data.heroes[hero.index].color + data.heroes[hero.index].weapontype + ".png");
 		}
 		else{
@@ -3953,6 +3954,11 @@ function fight(enemyIndex,resultIndex){
 	if (weaponTypeName == "bow"){
 		weaponTypeName = ahEnemy.color + "bow";
 	}
+	
+	//Set weapon icon name for dagger
+	if (weaponTypeName == "dagger"){
+		weaponTypeName = ahEnemy.color + "dagger";
+	}
 
 	if(typeof enemyList[enemyIndex].lastFightResult == "undefined"){
 		enemyList[enemyIndex].lastFightResult = "";
@@ -3962,11 +3968,11 @@ function fight(enemyIndex,resultIndex){
 	passFilters.push(outcome);
 
 	//Filter Color
-	if (weaponTypeName == "sword" || weaponTypeName == "redtome" || weaponTypeName == "redbow" ||weaponTypeName == "reddragon"){
+	if (weaponTypeName == "sword" || weaponTypeName == "redtome" || weaponTypeName == "redbow" || weaponTypeName == "reddagger" ||weaponTypeName == "reddragon"){
 		passFilters.push("red");
-	}else if (weaponTypeName == "lance" || weaponTypeName == "bluetome" || weaponTypeName == "bluebow" ||weaponTypeName == "bluedragon"){
+	}else if (weaponTypeName == "lance" || weaponTypeName == "bluetome" || weaponTypeName == "bluebow" || weaponTypeName == "bluedagger" ||weaponTypeName == "bluedragon"){
 		passFilters.push("blue");
-	}else if (weaponTypeName == "axe" || weaponTypeName == "greentome" || weaponTypeName == "greenbow" ||weaponTypeName == "greendragon"){
+	}else if (weaponTypeName == "axe" || weaponTypeName == "greentome" || weaponTypeName == "greenbow" || weaponTypeName == "greendagger" ||weaponTypeName == "greendragon"){
 		passFilters.push("green");
 	}else{
 		passFilters.push("gray");
@@ -5515,7 +5521,7 @@ function activeHero(hero){
 				buffVal.spd = Math.max(buffVal.atk, this.has("Odd Spd Wave") * 2);
 				skillNames.push(data.skills[this.cIndex].name);
 			}
-			if(this.has("Odd def Wave")){
+			if(this.has("Odd Def Wave")){
 				buffVal.def = Math.max(buffVal.atk, this.has("Odd Def Wave") * 2);
 				skillNames.push(data.skills[this.cIndex].name);
 			}
@@ -5825,7 +5831,7 @@ function activeHero(hero){
 		}
 		
 		//Adjacent Foe Buffs
-		if (this.adjacent2_foe - 1 >= this.adjacent2){
+		if (this.hasExactly("Wolf Berg") && this.adjacent2_foe - 1 >= this.adjacent2){
 			var buffVal = 4;
 			var skillName = data.skills[this.weaponIndex].name;
 			this.combatSpur.atk += buffVal;
@@ -6662,6 +6668,7 @@ function activeHero(hero){
 			}
 			if (this.has("Silver Dagger") 		|| this.has("Seashell") 		|| this.has("Dancer's Fan") 	|| this.has("Kagami Mochi")
 				|| this.has("Barb Shuriken") 	|| this.has("Felicia's Plate")	|| this.has("Lethal Carrot")	|| this.has("Starfish")
+				|| this.has("Cloud Maiougi")	|| this.has("Sky Maiougi")		|| this.has("Dusk Uchiwa")
 				){
 				sealStats(data.skills[this.weaponIndex].name, ["def","res"], [-5, -7]);
 			}
@@ -7268,9 +7275,10 @@ function activeHero(hero){
 			//Check weapon effective against
 			var effectiveBonus = 1;
 			if (enemy.moveType == "armored"
-				&& (this.has("Hammer") 						|| this.has("Slaying Hammer")	|| this.has("Armorslayer") 	|| this.has("Armorsmasher")
-					|| this.has("Heavy Spear") 				|| this.has("Slaying Spear")	|| this.hasExactly("Thani")	|| this.hasExactly("Winged Sword")
-					|| this.hasExactly("Warrior Princess")	|| this.hasExactly("Rhomphaia")	|| this.hasExactly("Dauntless Lance")
+				&& (this.has("Hammer") 						|| this.has("Slaying Hammer")	|| this.has("Armorslayer") 				|| this.has("Armorsmasher")
+					|| this.has("Heavy Spear") 				|| this.has("Slaying Spear")	|| this.hasExactly("Thani")				|| this.hasExactly("Winged Sword")
+					|| this.hasExactly("Warrior Princess")	|| this.hasExactly("Rhomphaia")	|| this.hasExactly("Dauntless Lance")	|| this.hasExactly("Dawn Suzu")
+					|| this.has("Sky Maiougi")
 				)
 			){
 				effectiveBonus = (enemy.has("Svalinn Shield")) ? 1 : 1.5;
@@ -7282,9 +7290,10 @@ function activeHero(hero){
 				effectiveBonus = 1.5;
 			}
 			else if (enemy.moveType == "cavalry"
-				&& (this.has("Zanbato") 		|| this.has("Ridersbane")			|| this.has("Poleaxe")
-					|| this.has("Raudrwolf") 	|| this.has("Blarwolf") 			|| this.has("Gronnwolf")
-					|| this.hasExactly("Thani")	|| this.hasExactly("Winged Sword")	|| this.hasExactly("Rhomphaia")
+				&& (this.has("Zanbato") 			|| this.has("Ridersbane")			|| this.has("Poleaxe")
+					|| this.has("Raudrwolf") 		|| this.has("Blarwolf") 			|| this.has("Gronnwolf")
+					|| this.hasExactly("Thani")		|| this.hasExactly("Winged Sword")	|| this.hasExactly("Rhomphaia")
+					|| this.hasExactly("Dawn Suzu")	|| this.has("Dusk Uchiwa")
 				)
 			){
 				effectiveBonus = (enemy.has("Grani's Shield")) ? 1 : 1.5;
@@ -7931,9 +7940,20 @@ function activeHero(hero){
 			}
 		}
 
-		//Check for Hardy Bearing, affects all skills that change attack priority
-		if(this.has("Hardy Bearing") || (enemy.has("Hardy Bearing") && (enemy.combatStartHp / enemy.maxHp >= (1.5 - enemy.has("Hardy Bearing") * 0.5)))){
+		//Check for skills that disable change in attack priority
+		if (this.has("Hardy Bearing") 		|| (enemy.has("Hardy Bearing") && (enemy.combatStartHp / enemy.maxHp >= (1.5 - enemy.has("Hardy Bearing") * 0.5)))
+			|| this.has("Cloud Maiougi") 	|| enemy.has("Cloud Maiougi")
+			|| this.hasExactly("Dawn Suzu")	|| enemy.hasExactly("Dawn Suzu")
+			|| this.has("Sky Maiougi") 		|| enemy.has("Sky Maiougi")
+			|| this.has("Dusk Uchiwa") 		|| enemy.has("Dusk Uchiwa")
+			){
+			if (vantage){
+				roundText += enemy.name + "'s skills with vantage effects are disabled.<br>";
+			}
 			vantage = false;
+			if (desperation){
+				roundText += this.name + "'s skills with desperation effects are disabled.<br>";
+			}
 			desperation = false;
 		}
 
@@ -8184,7 +8204,7 @@ function activeHero(hero){
 		else if(this.weaponType=="bow" && this.color=="gray" && enemy.has("Bowbreaker")){
 			thisBreakLevel = 1.1 - enemy.has("Bowbreaker") * 0.2;
 		}
-		else if(this.weaponType=="dagger" && enemy.has("Daggerbreaker")){
+		else if(this.weaponType=="dagger" && this.color=="gray" && enemy.has("Daggerbreaker")){
 			thisBreakLevel = 1.1 - enemy.has("Daggerbreaker") * 0.2;
 		}
 		var enemyBreakLevel = 2; // hp threshold
@@ -8209,7 +8229,7 @@ function activeHero(hero){
 		else if(enemy.weaponType=="bow" && enemy.color=="gray" && this.has("Bowbreaker")){
 			enemyBreakLevel = 1.1 - this.has("Bowbreaker") * 0.2;
 		}
-		else if(enemy.weaponType=="dagger" && this.has("Daggerbreaker")){
+		else if(enemy.weaponType=="dagger" && enemy.color=="gray" && this.has("Daggerbreaker")){
 			enemyBreakLevel = 1.1 - this.has("Daggerbreaker") * 0.2;
 		}
 		if(enemy.hp / enemy.maxHp >= thisBreakLevel){
