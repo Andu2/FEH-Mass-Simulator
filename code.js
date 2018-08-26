@@ -200,12 +200,18 @@ function initOptions(){
 	options.rush_enemy = false;
 	options.pulse_challenger = false;
 	options.pulse_enemy = false;
+	options.movement_challenger = false;
+	options.movement_enemy = false;
 	options.harsh_command_challenger = false;
 	options.harsh_command_enemy = false;
 	options.candlelight_challenger = false;
 	options.candlelight_enemy = false;
 	options.defensive_challenger = false;
 	options.defensive_enemy = false;
+	options.close_def_challenger = false;
+	options.close_def_enemy = false;
+	options.distant_def_challenger = false;
+	options.distant_def_enemy = false;
 	options.threaten_challenger = false;
 	options.threaten_enemy = false;
 	options.galeforce_challenger = true;
@@ -1135,6 +1141,7 @@ function getCDChange(skill, slot){
 			|| skillName.indexOf("Audhulma") != -1			|| skillName.indexOf("Kagami Mochi") != -1		|| skillName.indexOf("Basilikos") != -1
 			|| skillName.indexOf("Berserk Armads") != -1    || skillName.indexOf("Nameless Blade") != -1	|| skillName.indexOf("Barb Shuriken") != -1
 			|| skillName.indexOf("Mjolnir") != -1			|| skillName.indexOf("Vassal's Blade") != -1	|| skillName.indexOf("Dauntless Lance") != -1
+			|| skillName.indexOf("Maltet") != -1
 			){
 				return -1;
         }
@@ -1238,11 +1245,11 @@ function getSpecialType(skill){
 
 //Return true if hero can counter any range
 function canCounterAnyRange(hero){
-	if(hero.has("Close Counter")	|| hero.has("Distant Counter")	|| hero.has("Lightning Breath")
-		|| hero.has("Raijinto")			|| hero.has("Siegfried")				|| hero.has("Ragnell")
-		|| hero.has("Gradivus")			|| hero.has("Alondite")					|| hero.has("Stout Tomahawk")
-		|| hero.has("Leiptr")				|| hero.has("Expiration")
-	){
+	if(hero.has("Close Counter")		|| hero.has("Distant Counter")	|| hero.has("Ostian Counter")
+		|| hero.has("Lightning Breath")	|| hero.has("Raijinto")			|| hero.has("Siegfried")
+		|| hero.has("Ragnell")			|| hero.has("Gradivus")			|| hero.has("Alondite")
+		|| hero.has("Stout Tomahawk")	|| hero.has("Leiptr")			|| hero.has("Expiration")
+		){
 		return true;
 	}
 	return false;
@@ -5055,6 +5062,9 @@ function activeHero(hero){
 	this.rushed = false;
 	this.pulsed = this.challenger ? options.pulse_challenger : options.pulse_enemy;
 	this.harshed = false;
+	this.close_defed = false;
+	this.distant_defed = false;
+	this.moveBuffed = false;
 	this.didAttack = false;
 
 	this.has = function(skill){
@@ -5518,15 +5528,15 @@ function activeHero(hero){
 				skillNames.push(data.skills[this.cIndex].name);
 			}
 			if(this.has("Odd Spd Wave")){
-				buffVal.spd = Math.max(buffVal.atk, this.has("Odd Spd Wave") * 2);
+				buffVal.spd = Math.max(buffVal.spd, this.has("Odd Spd Wave") * 2);
 				skillNames.push(data.skills[this.cIndex].name);
 			}
 			if(this.has("Odd Def Wave")){
-				buffVal.def = Math.max(buffVal.atk, this.has("Odd Def Wave") * 2);
+				buffVal.def = Math.max(buffVal.def, this.has("Odd Def Wave") * 2);
 				skillNames.push(data.skills[this.cIndex].name);
 			}
 			if(this.has("Odd Res Wave")){
-				buffVal.res = Math.max(buffVal.atk, this.has("Odd Res Wave") * 2);
+				buffVal.res = Math.max(buffVal.res, this.has("Odd Res Wave") * 2);
 				skillNames.push(data.skills[this.cIndex].name);
 			}
 			if(this.hasExactly("Byleistr")){
@@ -5537,8 +5547,20 @@ function activeHero(hero){
 				skillNames.push(data.skills[this.weaponIndex].name);
 			}
 			//Even
+			if(this.has("Even Atk Wave")){
+				buffVal.spd = Math.max(buffVal.atk, this.has("Even Atk Wave") * 2);
+				skillNames.push(data.skills[this.cIndex].name);
+			}
 			if(this.has("Even Spd Wave")){
-				buffVal.spd = Math.max(buffVal.atk, this.has("Even Spd Wave") * 2);
+				buffVal.spd = Math.max(buffVal.spd, this.has("Even Spd Wave") * 2);
+				skillNames.push(data.skills[this.cIndex].name);
+			}
+			if(this.has("Even Def Wave")){
+				buffVal.def = Math.max(buffVal.def, this.has("Even Def Wave") * 2);
+				skillNames.push(data.skills[this.cIndex].name);
+			}
+			if(this.has("Even Res Wave")){
+				buffVal.res = Math.max(buffVal.res, this.has("Even Res Wave") * 2);
 				skillNames.push(data.skills[this.cIndex].name);
 			}
 		}
@@ -6046,7 +6068,7 @@ function activeHero(hero){
 				boostText += this.name + " gets +6 Atk from initiating with " + data.skills[this.weaponIndex].name + " (Refined).<br>"
 			}
 
-			//Skills
+			//Skills			
 			//TODO: Combine skills with separated parts such as Swift Sparrow into one if statement
 			//TODO: Add checks for possible overlapping buffs with future skills
 			if(this.hasAtIndex("Death Blow", this.aIndex)){
@@ -6169,6 +6191,12 @@ function activeHero(hero){
 
 			//Close/Distant Def
 			if(enemy.range == "ranged"){
+				if (this.distant_defed){
+					buffVal = 4;
+					this.combatSpur.def += buffVal;
+					this.combatSpur.res += buffVal;
+					boostText += this.name + " gets +" + buffVal + " Def/Res from being attacked from range with Distant Guard 3.<br>";
+				}
 				if(this.hasAtIndex("Distant Def", this.aIndex)){
 					buffVal = this.hasAtIndex("Distant Def", this.aIndex) * 2;
 					this.combatSpur.def += buffVal;
@@ -6188,14 +6216,20 @@ function activeHero(hero){
 					boostText += this.name + " gets +" + buffVal + " Def/Res from being attacked from range with " + data.skills[this.weaponIndex].name + " (Refined).<br>";
 				}
 			}
-			if(enemy.range == "melee"){
-				if(this.hasAtIndex("Close Def", this.aIndex)){
+			if (enemy.range == "melee"){
+				if (this.close_defed){
+					buffVal = 4;
+					this.combatSpur.def += buffVal;
+					this.combatSpur.res += buffVal;
+					boostText += this.name + " gets +" + buffVal + " Def/Res from being attacked from melee with Close Guard 3.<br>";
+				}
+				if (this.hasAtIndex("Close Def", this.aIndex)){
 					buffVal = this.hasAtIndex("Close Def", this.aIndex) * 2;
 					this.combatSpur.def += buffVal;
 					this.combatSpur.res += buffVal;
 					boostText += this.name + " gets +" + buffVal + " Def/Res from being attacked from melee with " + data.skills[this.aIndex].name + ".<br>";
 				}
-				if(this.hasAtIndex("Close Def", this.sIndex)){
+				if (this.hasAtIndex("Close Def", this.sIndex)){
 					buffVal = this.hasAtIndex("Close Def", this.sIndex) * 2;
 					this.combatSpur.def += buffVal;
 					this.combatSpur.res += buffVal;
@@ -6344,6 +6378,12 @@ function activeHero(hero){
 				this.combatSpur.def += buffVal;
 				this.combatSpur.res += buffVal;
 				boostText += this.name + " gets +" + buffVal + " Def/Res from defending with " + data.skills[this.aIndex].name + ".<br>";
+			}
+			if(this.hasExactly("Ostian Counter")){
+				buffVal = 4;
+				this.combatSpur.atk += buffVal;
+				this.combatSpur.def += buffVal;
+				boostText += this.name + " gets +" + buffVal + " Atk/Def from defending with " + data.skills[this.aIndex].name + ".<br>";
 			}
 
 			return boostText;
@@ -6542,12 +6582,19 @@ function activeHero(hero){
 					totalDamage += damage;
 				}
 
-				//Push Skills
-				if(this.hasAtIndex("Atk Spd Push", this.aIndex) || this.hasAtIndex("Atk Def Push", this.aIndex) || this.hasAtIndex("Atk Res Push", this.aIndex)
-					|| this.hasAtIndex("Spd Def Push", this.aIndex) || this.hasAtIndex("Spd Res Push", this.aIndex) || this.hasAtIndex("Def Res Push", this.aIndex)){
-					damage = 1;
+				//Skills
+				damage = 0;
+				if(this.hasAtIndex("Atk Spd Push", this.aIndex) 	|| this.hasAtIndex("Atk Def Push", this.aIndex) || this.hasAtIndex("Atk Res Push", this.aIndex)
+					|| this.hasAtIndex("Spd Def Push", this.aIndex) || this.hasAtIndex("Spd Res Push", this.aIndex) || this.hasAtIndex("Def Res Push", this.aIndex)){					
 					skillName = data.skills[this.aIndex].name;
-					damageText += this.name + " takes " + damage + " damage after combat from " + data.skills[this.aIndex].name + ".<br>";
+					damage = 1;
+				}
+				if (this.hasExactly("Double Lion") && this.initiator){
+					skillName = data.skills[this.bIndex].name;
+					damage = 1;
+				}
+				if (damage != 0){					
+					damageText += this.name + " takes " + damage + " damage after combat from attacking with " + skillName + ".<br>";
 					totalDamage += damage;
 				}
 
@@ -6718,6 +6765,9 @@ function activeHero(hero){
 			if (this.hasExactly("Dark Breath+") && this.refineIndex != -1){
 				sealStats(data.skills[this.weaponIndex].name, ["atk","spd"], [-7]);
 			}
+			if (this.hasExactly("Hlidskjalf")){
+				sealStats(data.skills[this.weaponIndex].name, ["atk","spd","def","res"], [-4]);
+			}
 		}
 
 		//Set debuff values
@@ -6758,25 +6808,28 @@ function activeHero(hero){
 		}
 
 		//Daggers only take effect if the unit performed an attack
-		if(this.didAttack){
-			if(this.hasExactly("Rogue Dagger+")){
+		if (this.didAttack){
+			if (this.hasExactly("Rogue Dagger+")){
 				buffStat(data.skills[this.weaponIndex].name, ["def", "res"], 5);
 			}
-			else if(this.hasExactly("Rogue Dagger")){
+			else if (this.hasExactly("Rogue Dagger")){
 				buffStat(data.skills[this.weaponIndex].name, ["def", "res"], 3);
 			}
 
-			if((this.hasExactly("First Bite+") || this.hasExactly("Cupid's Arrow+") || this.hasExactly("Blessed Bouquet+")) && this.refineIndex != -1){
+			if ((this.hasExactly("First Bite+") || this.hasExactly("Cupid's Arrow+") || this.hasExactly("Blessed Bouquet+")) && this.refineIndex != -1){
 				buffStat(data.skills[this.weaponIndex].name + " (Refined)", ["def", "res"], 5);
 			}
 
-			if(this.hasExactly("Grima's Truth")){
+			if (this.hasExactly("Grima's Truth")){
 				buffStat(data.skills[this.weaponIndex].name, ["atk", "spd"], 5);
 			}
 			if (this.hasExactly("Peshkatz")){
 				buffStat(data.skills[this.weaponIndex].name, ["atk","spd","def","res"], 4);
 			}
-			if((this.hasExactly("Light Breath+")) && this.refineIndex != -1){
+			if (this.hasExactly("Hlidskjalf")){
+				buffStat(data.skills[this.weaponIndex].name, ["atk","spd","def","res"], 4);
+			}
+			if ((this.hasExactly("Light Breath+")) && this.refineIndex != -1){
 				buffStat(data.skills[this.weaponIndex].name + " (Refined)", ["atk", "spd", "def", "res"], 5);
 			}
 		}
@@ -7645,10 +7698,20 @@ function activeHero(hero){
 						skillNames.push(data.skills[this.weaponIndex].name);
 					}
 				}
+				if (this.hasExactly("Royal Sword") && this.adjacent > 0){
+					gainCharge = Math.max(gainCharge, 1);
+					skillNames.push(data.skills[this.weaponIndex].name);
+				}
 				if (this.hasAtRefineIndex("Magic Absorption", this.refineIndex)){
 					if (enemy.weaponType == "redtome" || enemy.weaponType == "bluetome" || enemy.weaponType == "greentome"){
 						gainCharge = Math.max(gainCharge, 1);
 						skillNames.push(data.skills[this.weaponIndex].name + " (Refined)");
+					}
+				}
+				if (this.has("Special Fighter")){
+					if (this.combatStartHp/this.maxHp >= 1.1 - this.has("Special Fighter") * 0.2){
+						gainCharge = Math.max(gainCharge, 1);
+						skillNames.push(data.skills[this.bIndex].name);
 					}
 				}
 
@@ -7662,6 +7725,12 @@ function activeHero(hero){
 
 				if (enemy.hasAtIndex("Guard", enemy.bIndex)){
 					if (enemy.combatStartHp / enemy.maxHp >= 1.1 - enemy.hasAtIndex("Guard", enemy.bIndex) * 0.1){
+						loseCharge = Math.max(loseCharge, 1);
+						skillNames.push(data.skills[enemy.bIndex].name);
+					}
+				}
+				if (enemy.has("Special Fighter")){
+					if (enemy.combatStartHp/enemy.maxHp >= 1.1 - enemy.has("Special Fighter") * 0.2){
 						loseCharge = Math.max(loseCharge, 1);
 						skillNames.push(data.skills[enemy.bIndex].name);
 					}
@@ -7700,6 +7769,13 @@ function activeHero(hero){
 						skillNames.push(data.skills[enemy.weaponIndex].name + " (Refined)");
 					}
 				}
+				if (enemy.has("Special Fighter")){
+					if (enemy.combatStartHp/enemy.maxHp >= 1.1 - enemy.has("Special Fighter") * 0.2){
+						gainCharge = Math.max(gainCharge, 1);
+						skillNames.push(data.skills[enemy.bIndex].name);
+					}
+				}				
+				
 				if (gainCharge > 0){
 					enemy.charge += gainCharge;
 					damageText += enemy.name + " gains " + gainCharge + " charge with " + skillNames.join(", ") + ".<br>";
@@ -7714,6 +7790,12 @@ function activeHero(hero){
 						skillNames.push(data.skills[this.bIndex].name);
 					}
 				}
+				if (this.has("Special Fighter")){
+					if (this.combatStartHp/this.maxHp >= 1.1 - this.has("Special Fighter") * 0.2){
+						loseCharge = Math.max(loseCharge, 1);
+						skillNames.push(data.skills[this.bIndex].name);
+					}
+				}	
 
 				if (loseCharge > 0){
 					enemy.charge -= loseCharge;
@@ -7806,6 +7888,24 @@ function activeHero(hero){
 				}
 				if(options.harsh_command_enemy){
 					enemy.challenger ? this.harshed = true : enemy.harshed = true;
+				}
+				if(options.close_def_challenger){
+					this.challenger ? this.close_defed = true : enemy.close_defed = true;
+				}
+				if(options.close_def_enemy){
+					enemy.challenger ? this.close_defed = true : enemy.close_defed = true;
+				}
+				if(options.distant_def_challenger){
+					this.challenger ? this.distant_defed = true : enemy.distant_defed = true;
+				}
+				if(options.distant_def_enemy){
+					enemy.challenger ? this.distant_defed = true : enemy.distant_defed = true;
+				}
+				if(options.movement_challenger){
+					this.challenger ? this.moveBuffed = true : enemy.moveBuffed = true;
+				}
+				if(options.movement_enemy){
+					enemy.challenger ? this.moveBuffed = true : enemy.moveBuffed = true;
 				}
 				if(options.candlelight_challenger){
 					this.challenger ? this.lit = true : enemy.lit = true;
@@ -7912,6 +8012,9 @@ function activeHero(hero){
 		var doubleCounter = false;
 		if (this.has("Brave Sword") || this.has("Brave Lance") || this.has("Brave Axe") || this.has("Brave Bow")
 			|| this.hasExactly("Dire Thunder") || this.hasExactly("Amiti") || this.hasExactly("Meisterschwert")){
+			doubleInitiate = true;
+		}
+		if (this.hasExactly("Double Lion") && this.hp/this.maxHp == 1){
 			doubleInitiate = true;
 		}
 		if (this.hasAtRefineIndex("Brave Falchion", this.refineIndex) && (this.combatStartHp / this.maxHp == 1)){
@@ -8042,26 +8145,30 @@ function activeHero(hero){
 			enemyCanCounter = false;
 			roundText += enemy.name + " cannot counterattack because of Watersweep effect.<br>";
 		}
-		if(this.has("Dazzling Staff") && enemyCanCounter){
+		if (this.has("Dazzling Staff") && enemyCanCounter){
 			if(this.combatStartHp / this.maxHp >= 1.5 + this.has("Dazzling Staff") * -0.5){
 				roundText += enemy.name + " cannot counterattack because of Dazzling Staff.<br>";
 				enemyCanCounter = false;
 			}
 		}
-		if(this.hasExactly("Dazzling") && enemyCanCounter){
+		if (this.hasExactly("Dazzling") && enemyCanCounter){
 			roundText += enemy.name + " cannot counterattack because of Dazzling effect.<br>";
 			enemyCanCounter = false;
 		}
-		if(enemy.lit && enemyCanCounter){
+		if (enemy.lit && enemyCanCounter){
 			roundText += enemy.name + " cannot counterattack because of Candlelight debuff.<br>";
 			enemyCanCounter = false;
 		}
-		if(this.has("Sacae's Blessing") && (enemy.weaponType == "axe" || enemy.weaponType == "sword" ||enemy.weaponType == "lance")){
+		if (this.has("Sacae's Blessing") && (enemy.weaponType == "axe" || enemy.weaponType == "sword" ||enemy.weaponType == "lance")){
 			roundText += enemy.name + " cannot counterattack because of Sacae's Blessing.<br>";
 			enemyCanCounter = false;
 		}
-		if(this.has("Magic Suppression") && (enemy.weaponType == "redtome" || enemy.weaponType == "bluetome" ||enemy.weaponType == "greentome")){
+		if (this.has("Magic Suppression") && (enemy.weaponType == "redtome" || enemy.weaponType == "bluetome" ||enemy.weaponType == "greentome")){
 			roundText += enemy.name + " cannot counterattack because of " + data.skills[this.weaponIndex].name + " (Refined).<br>";
+			enemyCanCounter = false;
+		}
+		if (this.hasExactly("Hlidskjalf")){
+			roundText += enemy.name + " cannot counterattack because of Hlidskjalf.<br>";
 			enemyCanCounter = false;
 		}
 
@@ -8110,6 +8217,15 @@ function activeHero(hero){
 				thisAttackRankChanged = true;
 			}
 		}
+		if (this.hasExactly("Garm")){
+			if (this.buffs.atk != 0 || this.buffs.spd != 0 || this.buffs.def != 0 || this.buffs.res != 0
+				|| (this.hasExactly("Armored Boots") && this.combatStartHp/this.maxHp == 1)
+				|| this.moveBuffed
+				){
+				thisAttackRank++;
+				thisAttackRankChanged = true;
+			}
+		}
 
 		//Check for auto follow-up counters
 		if(enemy.hasAtIndex("Quick Riposte", enemy.bIndex)){
@@ -8136,14 +8252,20 @@ function activeHero(hero){
 				enemyAttackRankChanged = true;
 			}
 		}
+		if (enemy.hasExactly("Maltet")){
+			if (enemy.combatStartHp/enemy.maxHp >= 0.5){
+				enemyAttackRank++;
+				enemyAttackRankChanged = true;
+			}
+		}
 		if (enemy.hasExactly("Armads")){
-			if (enemy.combatStartHp/enemy.maxHp >= .8){
+			if (enemy.combatStartHp/enemy.maxHp >= 0.8){
 				enemyAttackRank++;
 				enemyAttackRankChanged = true;
 			}
 		}
 		if (enemy.has("Follow-Up Ring")){
-			if (enemy.combatStartHp/enemy.maxHp >= .5){
+			if (enemy.combatStartHp/enemy.maxHp >= 0.5){
 				enemyAttackRank++;
 				enemyAttackRankChanged = true;
 			}
