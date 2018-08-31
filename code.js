@@ -8276,6 +8276,15 @@ function activeHero(hero){
 				enemyAttackRankChanged = true;
 			}
 		}
+		if (enemy.hasExactly("Garm")){
+			if (enemy.buffs.atk != 0 || enemy.buffs.spd != 0 || enemy.buffs.def != 0 || enemy.buffs.res != 0
+				|| (enemy.hasExactly("Armored Boots") && enemy.combatStartHp/enemy.maxHp == 1)
+				|| enemy.moveBuffed
+				){
+				enemyAttackRank++;
+				enemyAttackRankChanged = true;
+			}
+		}
 
 		//Check for Wary Fighter
 		if (this.has("Wary Fighter")){
