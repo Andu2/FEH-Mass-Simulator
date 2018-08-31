@@ -198,6 +198,8 @@ function initOptions(){
 	options.panic_enemy = false;
 	options.rush_challenger = false;
 	options.rush_enemy = false;
+	options.flash_challenger = false;
+	options.flash_enemy = false;
 	options.pulse_challenger = false;
 	options.pulse_enemy = false;
 	options.movement_challenger = false;
@@ -1205,7 +1207,7 @@ function getPrechargeChange(skill, slot){
 }
 
 function isDragonEffective(hero){
-	if (hero.hasExactly("Falchion") 		|| hero.hasExactly("Sealed Falchion")
+	if (hero.hasExactly("Falchion") 		|| hero.hasExactly("Sealed Falchion")	|| hero.has("Exalted Falchion")
 		|| hero.hasExactly("Naga")			|| hero.hasExactly("Divine Naga")
 		|| hero.hasExactly("Breath of Fog")	|| hero.hasExactly("Summer's Breath")
 		|| hero.has("Cloud Maiougi")
@@ -5060,6 +5062,7 @@ function activeHero(hero){
 	this.triangled = false;
 	this.panicked = false;
 	this.rushed = false;
+	this.flashed = false;
 	this.pulsed = this.challenger ? options.pulse_challenger : options.pulse_enemy;
 	this.harshed = false;
 	this.close_defed = false;
@@ -5677,6 +5680,27 @@ function activeHero(hero){
 		if (this.hasAtRefineIndex("Distant Atk", this.refineIndex) && enemy.range == "ranged"){
 			this.combatSpur.atk += 6;
 			boostText += this.name + " gets +6 Atk from " + data.refine[this.refineIndex].name + " (Refined) against a ranged opponent.<br>";
+		}
+		if (this.hasExactly("Exalted Falchion") && (this.buffs.atk > 0 || this.buffs.spd > 0 || this.buffs.def > 0 || this.buffs.res > 0)){
+			boostText += this.name + " gets ";
+			if (this.buffs.atk > 0){
+				boostText += "+" + this.buffs.atk + " Atk,";
+				this.combatSpur.atk += this.buffs.atk;
+			}
+			if (this.buffs.spd > 0){
+				boostText += "+" + this.buffs.spd + " Spd,";
+				this.combatSpur.spd += this.buffs.spd;
+			}
+			if (this.buffs.def > 0){
+				boostText += "+" + this.buffs.def + " Def,";
+				this.combatSpur.def += this.buffs.def;
+			}
+			if (this.buffs.res > 0){
+				boostText += "+" + this.buffs.res + " Res,";
+				this.combatSpur.res += this.buffs.res;
+			}
+			boostText = boostText.substring(0, boostText.length - 1);
+			boostText += " from " + data.skills[this.weaponIndex].name + ".<br>";			
 		}
 
 		//Combat debuff ***does this stack like spurs? does negative combatSpur work correctly?***
@@ -6832,6 +6856,9 @@ function activeHero(hero){
 			if ((this.hasExactly("Light Breath+")) && this.refineIndex != -1){
 				buffStat(data.skills[this.weaponIndex].name + " (Refined)", ["atk", "spd", "def", "res"], 5);
 			}
+			if (this.hasExactly("Fire Emblem") && this.triggered){
+				buffStat(data.skills[this.specialIndex].name, ["atk","spd","def","res"], 4);
+			}
 		}
 
 		//Set buff values
@@ -7107,6 +7134,10 @@ function activeHero(hero){
 				}
 				else if(this.hasExactly("Glacies")){
 					dmgBoost += this.combatStat.res * 0.8;
+					offensiveSpecialActivated = true;
+				}
+				else if(this.hasExactly("Fire Emblem")){
+					dmgBoost += this.combatStat.spd * 0.3;
 					offensiveSpecialActivated = true;
 				}
 				else if(this.hasExactly("Regnal Astra")){
@@ -7674,6 +7705,12 @@ function activeHero(hero){
 						skillNames.push(data.skills[this.weaponIndex].name);
 					}
 				}
+				if (this.flashed && this.moveType == "infantry"){
+					if (this.combatStat.spd + (this.has("Phantom Spd") ? (2 + this.has("Phantom Spd") * 3) : 0) - enemy.combatStat.spd >= 1){
+						gainCharge = Math.max(gainCharge, 1);
+						skillNames.push("Infantry Flash 3");
+					}
+				}
 				if (this.hasAtIndex("Flashing Blade", this.aIndex)){
 					if (this.combatStat.spd + (this.has("Phantom Spd") ? (2 + this.has("Phantom Spd") * 3) : 0) - enemy.combatStat.spd >= 7 - (this.hasAtIndex("Flashing Blade", this.aIndex) * 2)){
 						gainCharge = Math.max(gainCharge, 1);
@@ -7882,6 +7919,12 @@ function activeHero(hero){
 				}
 				if(options.rush_enemy){
 					enemy.challenger ? this.rushed = true : enemy.rushed = true;
+				}
+				if(options.flash_challenger){
+					this.challenger ? this.flashed = true : enemy.flashed = true;
+				}
+				if(options.flash_enemy){
+					enemy.challenger ? this.flashed = true : enemy.flashed = true;
 				}
 				if(options.harsh_command_challenger){
 					this.challenger ? this.harshed = true : enemy.harshed = true;
@@ -8171,6 +8214,10 @@ function activeHero(hero){
 			roundText += enemy.name + " cannot counterattack because of Hlidskjalf.<br>";
 			enemyCanCounter = false;
 		}
+		if (this.hasExactly("Binding Shield") && enemy.weaponType == "dragon" && enemyCanCounter){
+			roundText += enemy.name + " cannot counterattack because of Binding Shield.<br>";
+			enemyCanCounter = false;
+		}
 
 		//Check for auto follow-up skills
 		if (enemyCanCounter){
@@ -8225,6 +8272,10 @@ function activeHero(hero){
 				thisAttackRank++;
 				thisAttackRankChanged = true;
 			}
+		}
+		if (this.hasExactly("Binding Shield") && enemy.weaponType == "dragon"){
+			thisAttackRank++;
+			thisAttackRankChanged = true;
 		}
 
 		//Check for auto follow-up counters
@@ -8285,6 +8336,10 @@ function activeHero(hero){
 				enemyAttackRankChanged = true;
 			}
 		}
+		if (enemy.hasExactly("Binding Shield") && this.weaponType == "dragon"){
+			enemyAttackRank++;
+			enemyAttackRankChanged = true;
+		}
 
 		//Check for Wary Fighter
 		if (this.has("Wary Fighter")){
@@ -8324,6 +8379,10 @@ function activeHero(hero){
 			enemyAttackRankChanged = true;
 		}
 		if (enemy.hasAtRefineIndex("Wary Ranged", enemy.refineIndex) && this.range == "ranged" && enemy.combatStat.def >= this.combatStat.def + 1){
+			thisAttackRank--;
+			thisAttackRankChanged = true;
+		}
+		if (enemy.hasExactly("Binding Shield") && this.weaponType == "dragon"){
 			thisAttackRank--;
 			thisAttackRankChanged = true;
 		}

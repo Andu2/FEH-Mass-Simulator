@@ -6017,5 +6017,39 @@
 		"weapontype": "staff",
 		"movetype": "cavalry",
 		"minrarity": 5
+	}, {
+		"hero_id": 285,
+		"name": "Marth (Hero-King)",
+		"basehp": 18,
+		"baseatk": 8,
+		"basespd": 10,
+		"basedef": 8,
+		"baseres": 4,
+		"hpgrowth": 6,
+		"atkgrowth": 8,
+		"spdgrowth": 8,
+		"defgrowth": 7,
+		"resgrowth": 4,
+		"color": "red",
+		"weapontype": "sword",
+		"movetype": "infantry",
+		"minrarity": 5
+	}, {
+		"hero_id": 286,
+		"name": "Jamke",
+		"basehp": 16,
+		"baseatk": 8,
+		"basespd": 10,
+		"basedef": 7,
+		"baseres": 4,
+		"hpgrowth": 6,
+		"atkgrowth": 9,
+		"spdgrowth": 6,
+		"defgrowth": 6,
+		"resgrowth": 2,
+		"color": "gray",
+		"weapontype": "bow",
+		"movetype": "infantry",
+		"minrarity": 3
 	}
 ]
