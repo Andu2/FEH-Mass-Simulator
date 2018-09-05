@@ -8265,7 +8265,7 @@ function activeHero(hero){
 			}
 		}
 		if (this.hasExactly("Garm")){
-			if (this.buffs.atk != 0 || this.buffs.spd != 0 || this.buffs.def != 0 || this.buffs.res != 0
+			if (this.combatBuffs.atk != 0 || this.combatBuffs.spd != 0 || this.combatBuffs.def != 0 || this.combatBuffs.res != 0
 				|| (this.hasExactly("Armored Boots") && this.combatStartHp/this.maxHp == 1)
 				|| this.moveBuffed
 				){
@@ -8328,7 +8328,7 @@ function activeHero(hero){
 			}
 		}
 		if (enemy.hasExactly("Garm")){
-			if (enemy.buffs.atk != 0 || enemy.buffs.spd != 0 || enemy.buffs.def != 0 || enemy.buffs.res != 0
+			if (enemy.combatBuffs.atk != 0 || enemy.combatBuffs.spd != 0 || enemy.combatBuffs.def != 0 || enemy.combatBuffs.res != 0
 				|| (enemy.hasExactly("Armored Boots") && enemy.combatStartHp/enemy.maxHp == 1)
 				|| enemy.moveBuffed
 				){
