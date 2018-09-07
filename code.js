@@ -6752,10 +6752,13 @@ function activeHero(hero){
 				sealStats(data.skills[this.weaponIndex].name, ["def","res"], [-7]);
 			}
 			if (this.has("Silver Dagger") 		|| this.has("Seashell") 		|| this.has("Dancer's Fan") 	|| this.has("Kagami Mochi")
-				|| this.has("Barb Shuriken") 	|| this.has("Felicia's Plate")	|| this.has("Lethal Carrot")	|| this.has("Starfish")
+				|| this.has("Barb Shuriken") 	|| this.has("Lethal Carrot")		|| this.has("Starfish")
 				|| this.has("Cloud Maiougi")	|| this.has("Sky Maiougi")		|| this.has("Dusk Uchiwa")
 				){
 				sealStats(data.skills[this.weaponIndex].name, ["def","res"], [-5, -7]);
+			}
+			if (this.has("Felicia's Plate")){
+				sealStats(data.skills[this.weaponIndex].name, ["def","res"], [-7]);
 			}
 			if (this.has("Kitty Paddle") && (enemy.weaponType == "redtome" || enemy.weaponType == "bluetome" || enemy.weaponType == "greentome")){
 				sealStats(data.skills[this.weaponIndex].name, ["def","res"], [-5, -7]);
