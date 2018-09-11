@@ -5271,6 +5271,11 @@ function activeHero(hero){
 				enemy.panicked = true;
 				threatenText += this.name + " activates " + data.skills[this.sIndex].name + " (Seal), inflicting panic on " + enemy.name + ".<br>";
 			}
+			//Panic Ploy Refinement
+			if(this.hasAtRefineIndex("Panic Ploy", this.refineIndex) && this.hp > enemy.hp){
+				enemy.panicked = true;
+				threatenText += this.name + " activates " + data.skills[this.weaponIndex].name + " (Refined), inflicting panic on " + enemy.name + ".<br>";
+			}
 		}
 
 		//Skills
@@ -5723,42 +5728,49 @@ function activeHero(hero){
 				skillName = data.skills[this.weaponIndex].name + " (Refined)";
 				boostText += this.name + " activates " + skillName + " and gets +" + statBonus + " Atk/Def.<br>";
 			}
-			if(this.has("Brazen Atk Spd")){
+			if (this.hasAtRefineIndex("Brazen Atk Spd", this.refineIndex)){
+				statBonus = 7;
+				this.combatSpur.atk += statBonus;
+				this.combatSpur.spd += statBonus;
+				skillName = data.skills[this.weaponIndex].name;
+				boostText += this.name + " activates " + skillName + " (Refined) and gets +" + statBonus + " Atk/Spd.<br>";
+			}
+			if (this.hasAtIndex("Brazen Atk Spd", this.aIndex)){
 				statBonus = 1 + 2 * this.has("Brazen Atk Spd");
 				this.combatSpur.atk += statBonus;
 				this.combatSpur.spd += statBonus;
 				skillName = data.skills[this.aIndex].name;
 				boostText += this.name + " activates " + skillName + " and gets +" + statBonus + " Atk/Spd.<br>";
 			}
-			if(this.has("Brazen Atk Def")){
+			if (this.has("Brazen Atk Def")){
 				statBonus = 1 + 2 * this.has("Brazen Atk Def");
 				this.combatSpur.atk += statBonus;
 				this.combatSpur.def += statBonus;
 				skillName = data.skills[this.aIndex].name;
 				boostText += this.name + " activates " + skillName + " and gets +" + statBonus + " Atk/Def.<br>";
 			}
-			if(this.has("Brazen Atk Res")){
+			if (this.has("Brazen Atk Res")){
 				statBonus = 1 + 2 * this.has("Brazen Atk Res");
 				this.combatSpur.atk += statBonus;
 				this.combatSpur.res += statBonus;
 				skillName = data.skills[this.aIndex].name;
 				boostText += this.name + " activates " + skillName + " and gets +" + statBonus + " Atk/Res.<br>";
 			}
-			if(this.has("Brazen Spd Def")){
+			if (this.has("Brazen Spd Def")){
 				statBonus = 1 + 2 * this.has("Brazen Spd Def");
 				this.combatSpur.spd += statBonus;
 				this.combatSpur.def += statBonus;
 				skillName = data.skills[this.aIndex].name;
 				boostText += this.name + " activates " + skillName + " and gets +" + statBonus + " Spd/Def.<br>";
 			}
-			if(this.has("Brazen Spd Res")){
+			if (this.has("Brazen Spd Res")){
 				statBonus = 1 + 2 * this.has("Brazen Spd Res");
 				this.combatSpur.spd += statBonus;
 				this.combatSpur.res += statBonus;
 				skillName = data.skills[this.aIndex].name;
 				boostText += this.name + " activates " + skillName + " and gets +" + statBonus + " Spd/Res.<br>";
 			}
-				if(this.has("Brazen Def Res")){
+			if (this.has("Brazen Def Res")){
 				statBonus = 1 + 2 * this.has("Brazen Def Res");
 				this.combatSpur.def += statBonus;
 				this.combatSpur.res += statBonus;
@@ -6346,8 +6358,7 @@ function activeHero(hero){
 				buffVal = 1 + 3*this.has("Barrier Blade");
 				this.combatSpur.res += buffVal;
 				boostText += this.name + " gets +" + buffVal + " Res from defending with " + data.skills[this.weaponIndex].name + ".<br>";
-			}
-			
+			}			
 
 			//Skills
 			if(this.has("Steady Breath")){
@@ -6491,7 +6502,7 @@ function activeHero(hero){
 		this.combatStat.res = Math.max(0, this.combatStat.res + this.spur.res + this.combatSpur.res);
 
 		//Bladetome bonus
-		if (this.has("Raudrblade") || this.has("Blarblade") || this.has("Gronnblade") || this.hasExactly("Thunderhead")){
+		if (this.has("Raudrblade") || this.has("Blarblade") || this.has("Gronnblade") || this.hasExactly("Thunderhead") || this.hasExactly("Odin's Grimoire")){
 			var atkbonus = this.combatBuffs.atk + this.combatBuffs.spd + this.combatBuffs.def + this.combatBuffs.res;
 			this.combatStat.atk += atkbonus;
 			if (atkbonus != 0){statText += this.name + " gains +" + atkbonus + " Atk from buffs with " + data.skills[this.weaponIndex].name + ".<br>";}
@@ -6908,8 +6919,7 @@ function activeHero(hero){
 			}
 			if (this.has("Special Spiral")){
 				if (this.has("Special Spiral") != 1){
-					gainValue = this.has("Special Spiral") - 1;
-					
+					gainValue = this.has("Special Spiral") - 1;					
 				}else if (this.challenger){
 					gainValue = 1;					
 				}
@@ -8084,8 +8094,9 @@ function activeHero(hero){
 		//Check for Brave weapons, brave will be passed to this.doDamage
 		var doubleInitiate = false;
 		var doubleCounter = false;
-		if (this.has("Brave Sword") || this.has("Brave Lance") || this.has("Brave Axe") || this.has("Brave Bow")
-			|| this.hasExactly("Dire Thunder") || this.hasExactly("Amiti") || this.hasExactly("Meisterschwert")){
+		if (this.has("Brave Sword") 			|| this.has("Brave Lance") 	|| this.has("Brave Axe") 				|| this.has("Brave Bow")
+			|| this.hasExactly("Dire Thunder") 	|| this.hasExactly("Amiti") || this.hasExactly("Meisterschwert") 	|| this.hasExactly("Cherche's Axe")
+		){
 			doubleInitiate = true;
 		}
 		if (this.hasExactly("Double Lion") && this.hp/this.maxHp == 1){
