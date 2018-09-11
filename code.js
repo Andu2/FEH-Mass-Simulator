@@ -5702,6 +5702,11 @@ function activeHero(hero){
 			boostText = boostText.substring(0, boostText.length - 1);
 			boostText += " from " + data.skills[this.weaponIndex].name + ".<br>";			
 		}
+		if (this.hasExactly("Gae Bolg") && enemy.moveType != "flying"){
+			this.combatSpur.atk += 5;
+			this.combatSpur.def += 5;
+			boostText += this.name + " gets +5 Atk/Def from " + data.skills[this.weaponIndex].name + " against a non-flying opponent.<br>";
+		}
 
 		//Combat debuff ***does this stack like spurs? does negative combatSpur work correctly?***
 		if (enemy.hasExactly("Loptous")	&& !isDragonEffective(this)){
@@ -6378,6 +6383,12 @@ function activeHero(hero){
 				this.combatSpur.atk += buffVal;
 				this.combatSpur.res += buffVal;
 				boostText += this.name + " gets +" + buffVal + " Atk/Res from defending with " + data.skills[this.aIndex].name + ".<br>";
+			}
+			if(this.has("Steady Posture")){
+				buffVal = this.has("Steady Posture") * 2;
+				this.combatSpur.spd += buffVal;
+				this.combatSpur.def += buffVal;
+				boostText += this.name + " gets +" + buffVal + " Spd/Def from defending with " + data.skills[this.aIndex].name + ".<br>";
 			}
 			if(this.has("Swift Stance")){
 				buffVal = this.has("Swift Stance") * 2;

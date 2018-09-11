@@ -16561,5 +16561,61 @@
 		"charge": 0,
 		"inheritrule": "noncavalry,nonflying",
 		"affectsduel": 1
+	}, {
+		"skill_id": 1184,
+		"name": "Gae Bolg",
+		"slot": "weapon",
+		"sp": 400,
+		"description": "In combat against an infantry, armored or cavalry foe, grants Atk/Def+5 during combat.",
+		"hp": 0,
+		"atk": 16,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "unique",
+		"affectsduel": 1
+	}, {
+		"skill_id": 1185,
+		"name": "Rally Speed Defense+",
+		"slot": "assist",
+		"sp": 400,
+		"description": "Grants Spd\/Def+6 to an adjacent ally until the end of the turn.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "nonstaff",
+		"affectsduel": 0
+	}, {
+		"skill_id": 1186,
+		"name": "Steady Posture 1",
+		"slot": "a",
+		"sp": 120,
+		"description": "If foe initiates combat, grants Spd/Def+2 during combat.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 1
+	}, {
+		"skill_id": 1187,
+		"name": "Steady Posture 2",
+		"slot": "a",
+		"sp": 240,
+		"description": "If foe initiates combat, grants Spd/Def+4 during combat.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 1
 	}
 ]
