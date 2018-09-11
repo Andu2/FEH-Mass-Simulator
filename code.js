@@ -6636,7 +6636,7 @@ function activeHero(hero){
 				if (this.hasExactly("Beloved Zofia")){
 					damage = 4;
 				}
-				if (this.hasExactly("Ragnarok")){
+				if (this.hasExactly("Ragnarok") && this.refineIndex == -1){
 					damage = 5;
 				}
 				if (damage != 0){
