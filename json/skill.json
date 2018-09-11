@@ -16505,5 +16505,61 @@
 		"charge": 0,
 		"inheritrule": "",
 		"affectsduel": 0
+	}, {
+		"skill_id": 1180,
+		"name": "Forseti",
+		"slot": "weapon",
+		"sp": 400,
+		"description": "Grants Spd+3. If unit's HP >= 50% and unit initiates combat, unit can make a follow-up attack before foe can counterattack.",
+		"hp": 0,
+		"atk": 14,
+		"spd": 3,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "unique",
+		"affectsduel": 1
+	}, {
+		"skill_id": 1181,
+		"name": "Special Spiral 1",
+		"slot": "b",
+		"sp": 60,
+		"description": "If unit initiates combat and unit's Special triggers before or during combat, grants Special cooldown count-1 after combat.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "noncavalry,nonflying",
+		"affectsduel": 1
+	}, {
+		"skill_id": 1182,
+		"name": "Special Spiral 2",
+		"slot": "b",
+		"sp": 120,
+		"description": "If Special triggers before or during combat, grants Special cooldown count-1 after combat.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "noncavalry,nonflying",
+		"affectsduel": 1
+	}, {
+		"skill_id": 1183,
+		"name": "Special Spiral 3",
+		"slot": "b",
+		"sp": 240,
+		"description": "If Special triggers before or during combat, grants Special cooldown count-2 after combat.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "noncavalry,nonflying",
+		"affectsduel": 1
 	}
 ]

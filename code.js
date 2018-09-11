@@ -6883,9 +6883,20 @@ function activeHero(hero){
 
 		//Post-combat buff for special triggered during combat
 		if (this.triggered){
+			var gainValue = 0;
 			if (this.hasExactly("Dark Mystletainn")){
-				this.charge = this.charge + 2;
-				postCombatBuffText += this.name + " gains 2 extra charge from triggering a Special with " + data.skills[this.weaponIndex].name + ".<br>";;
+				gainValue = 2
+				this.charge = this.charge + gainValue;
+				postCombatBuffText += this.name + " gains " + gainValue + " extra charge from triggering a Special with " + data.skills[this.weaponIndex].name + ".<br>";
+			}
+			if (this.has("Special Spiral")){
+				if (this.has("Special Spiral") != 1){
+					gainValue = this.has("Special Spiral") - 1;
+					
+				}else if (this.challenger){
+					gainValue = 1;					
+				}
+				postCombatBuffText += this.name + " gains " + gainValue + " extra charge from triggering a Special with " + data.skills[this.bIndex].name + ".<br>";
 			}
 		}
 		return postCombatBuffText;
@@ -8103,6 +8114,9 @@ function activeHero(hero){
 			if(this.hp/this.maxHp <= .75 ){
 				desperation = true;
 			}
+		}
+		if (this.has("Forseti") && this.hp/this.maxHp >= .5){
+			desperation = true;
 		}
 
 		//Check for skills that disable change in attack priority
