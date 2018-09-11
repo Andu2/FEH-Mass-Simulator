@@ -5712,6 +5712,11 @@ function activeHero(hero){
 			this.combatSpur.def += 5;
 			boostText += this.name + " gets +5 Atk/Def from " + data.skills[this.weaponIndex].name + " against a non-flying opponent.<br>";
 		}
+		if(this.hasExactly("Ragnarok") && this.refineIndex != -1){
+			this.combatSpur.atk += 5;
+			this.combatSpur.spd += 5;
+			boostText += this.name + " gets +5 Atk/Spd from " + data.skills[this.weaponIndex].name + ".<br>";
+		}
 
 		//Combat debuff ***does this stack like spurs? does negative combatSpur work correctly?***
 		if (enemy.hasExactly("Loptous")	&& !isDragonEffective(this)){
@@ -5781,7 +5786,7 @@ function activeHero(hero){
 
 		//Full Health Skills
 		if(this.combatStartHp / this.maxHp >= 1){
-			if(this.hasExactly("Ragnarok")){
+			if(this.hasExactly("Ragnarok") && this.refineIndex == -1){
 				//Does this take effect when defending? Answer: yes
 				this.combatSpur.atk += 5;
 				this.combatSpur.spd += 5;
@@ -6602,6 +6607,12 @@ function activeHero(hero){
 			}
 			if(this.hasAtRefineIndex("Fury", this.refineIndex)){
 				damage = 6;
+				skillName = data.skills[this.weaponIndex].name;
+				damageText += this.name + " takes " + damage + " damage after combat from " + skillName + " (Refined).<br>";
+				totalDamage += damage;
+			}
+			if(this.hasExactly("Ragnarok") && this.refineIndex != -1){
+				damage = 5;
 				skillName = data.skills[this.weaponIndex].name;
 				damageText += this.name + " takes " + damage + " damage after combat from " + skillName + " (Refined).<br>";
 				totalDamage += damage;
