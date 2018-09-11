@@ -6611,7 +6611,7 @@ function activeHero(hero){
 				damageText += this.name + " takes " + damage + " damage after combat from " + skillName + " (Refined).<br>";
 				totalDamage += damage;
 			}
-			if(this.hasExactly("Ragnarok") && this.refineIndex != -1){
+			if(this.didAttack && this.hasExactly("Ragnarok") && this.refineIndex != -1){
 				damage = 5;
 				skillName = data.skills[this.weaponIndex].name;
 				damageText += this.name + " takes " + damage + " damage after combat from " + skillName + " (Refined).<br>";
