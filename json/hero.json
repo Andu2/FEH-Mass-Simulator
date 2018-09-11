@@ -6115,8 +6115,8 @@
 		"spdgrowth": 9,
 		"defgrowth": 2,
 		"resgrowth": 7,
-		"color": "gray",
-		"weapontype": "bow",
+		"color": "red",
+		"weapontype": "sword",
 		"movetype": "infantry",
 		"minrarity": 5
 	}

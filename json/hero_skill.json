@@ -9447,5 +9447,21 @@
 		"hero_id": 289,
 		"skill_id": 524,
 		"rarity": 5
+	}, {
+		"hero_id": 290,
+		"skill_id": 1189,
+		"rarity": 5
+	}, {
+		"hero_id": 290,
+		"skill_id": 152,
+		"rarity": 5
+	}, {
+		"hero_id": 290,
+		"skill_id": 930,
+		"rarity": 5
+	}, {
+		"hero_id": 290,
+		"skill_id": 1191,
+		"rarity": 5
 	}
 ]

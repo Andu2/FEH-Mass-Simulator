@@ -6267,7 +6267,7 @@ function activeHero(hero){
 			}
 
 			//Weapons
-			if(this.hasExactly("Binding Blade")){
+			if (this.hasExactly("Binding Blade")){
 				if (this.refineIndex == -1) {
 					this.combatSpur.def += 2;
 					this.combatSpur.res += 2;
@@ -6278,32 +6278,32 @@ function activeHero(hero){
 				    boostText += this.name + " gets +4 Def/Res while defending with " + data.skills[this.weaponIndex].name + ".<br>";
 				}
 			}
-			if(this.hasExactly("Naga")){
+			if (this.hasExactly("Naga")){
 				this.combatSpur.def += 2;
 				this.combatSpur.res += 2;
 				boostText += this.name + " gets +2 Def/Res while defending with " + data.skills[this.weaponIndex].name + ".<br>";
 			}
-			if(this.has("Sack o' Gifts") || this.has("Handbell") || this.has("Tannenboom!") || this.has("Candelabra")){
+			if (this.has("Sack o' Gifts") || this.has("Handbell") || this.has("Tannenboom!") || this.has("Candelabra")){
 				this.combatSpur.atk += 2;
 				this.combatSpur.spd += 2;
 				this.combatSpur.def += 2;
 				this.combatSpur.res += 2;
 				boostText += this.name + " gets +2 Atk/Spd/Def/Res while defending with " + data.skills[this.weaponIndex].name + ".<br>";
 			}
-			if(this.hasExactly("Vidofnir") && (enemy.weaponType == "sword" || enemy.weaponType == "axe" ||enemy.weaponType == "lance" )){
+			if (this.hasExactly("Vidofnir") && (enemy.weaponType == "sword" || enemy.weaponType == "axe" ||enemy.weaponType == "lance" )){
 				this.combatSpur.def += 7;
 				boostText += this.name + " gets +7 Def while defending with " + data.skills[this.weaponIndex].name + " against sword, axe, or lance.<br>";
 			}
-			if(this.hasExactly("Tyrfing") && this.hp / this.maxHp <= 0.5){
+			if (this.hasExactly("Tyrfing") && this.hp / this.maxHp <= 0.5){
 				this.combatSpur.def += 4;
 				boostText += this.name + " gets +4 Def in combat from " + data.skills[this.weaponIndex].name + " with <= 50% health.<br>";
 			}
-			if(this.has("Reprisal Lance")){
+			if (this.has("Reprisal Lance")){
 				this.combatSpur.atk += 6;
 				boostText += this.name + " gets +6 Atk from defending with " + data.skills[this.weaponIndex].name + ".<br>";
 			}
-			if(this.has("Berkut's Lance")){
-				if(this.hasExactly("Berkut's Lance+") && this.refineIndex != -1){
+			if (this.has("Berkut's Lance")){
+				if (this.hasExactly("Berkut's Lance+") && this.refineIndex != -1){
 					this.combatSpur.res += 7;
 					boostText += this.name + " gets +7 Res while defending with " + data.skills[this.weaponIndex].name + " (Refined).<br>";
 				}
@@ -6312,36 +6312,42 @@ function activeHero(hero){
 					boostText += this.name + " gets +4 Res while defending with " + data.skills[this.weaponIndex].name + ".<br>";
 				}
 			}
-			if(this.hasExactly("Bright Naginata")){
+			if (this.hasExactly("Bright Naginata")){
 				this.combatSpur.atk += 4;
 				this.combatSpur.def += 4;
 				boostText += this.name + " gets +4 Atk/Def while defending with " + data.skills[this.weaponIndex].name + ".<br>";
 			}
-			if(this.has("Dauntless Stance")){
+			if (this.has("Dauntless Stance")){
 				this.combatSpur.spd += 4;
 				this.combatSpur.def += 4;
 				boostText += this.name + " gets +4 Spd/Def while defending with " + data.skills[this.weaponIndex].name + " (Refined).<br>";
 			}
-			if(this.has("Water Breath")){
+			if (this.has("Water Breath")){
 				this.combatSpur.def += 4;
 				this.combatSpur.res += 4;
 				boostText += this.name + " gets +4 Def/Res while defending with " + data.skills[this.weaponIndex].name + ".<br>";
 			}
-			if(this.has("Guard Bow") && enemy.range == "ranged"){
+			if (this.has("Guard Bow") && enemy.range == "ranged"){
 				this.combatSpur.def += 6;
 				this.combatSpur.res += 6;
 				boostText += this.name + " gets +6 Def/Res while defending with " + data.skills[this.weaponIndex].name + " against a ranged opponent.<br>";
 			}
-			if(this.has("Blarserpent") && enemy.range == "ranged"){
+			if (this.has("Blarserpent") && enemy.range == "ranged"){
 				this.combatSpur.def += 6;
 				this.combatSpur.res += 6;
 				boostText += this.name + " gets +6 Def/Res while defending with " + data.skills[this.weaponIndex].name + " against a ranged opponent.<br>";
 			}
-			if(this.has("Safeguard")){
+			if (this.has("Safeguard")){
 				buffVal = 7;
 				this.combatSpur.def += buffVal;
 				boostText += this.name + " gets +" + buffVal + " Def from defending with " + data.skills[this.weaponIndex].name + ".<br>";
 			}
+			if (this.has("Barrier Blade")){
+				buffVal = 1 + 3*this.has("Barrier Blade");
+				this.combatSpur.res += buffVal;
+				boostText += this.name + " gets +" + buffVal + " Res from defending with " + data.skills[this.weaponIndex].name + ".<br>";
+			}
+			
 
 			//Skills
 			if(this.has("Steady Breath")){

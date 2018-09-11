@@ -16617,5 +16617,61 @@
 		"charge": 0,
 		"inheritrule": "",
 		"affectsduel": 1
+	}, {
+		"skill_id": 1188,
+		"name": "Barrier Blade",
+		"slot": "weapon",
+		"sp": 200,
+		"description": "If foe initiates combat, grants Res+4 during combat.",
+		"hp": 0,
+		"atk": 10,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "sword",
+		"affectsduel": 1
+	}, {
+		"skill_id": 1189,
+		"name": "Barrier Blade+",
+		"slot": "weapon",
+		"sp": 300,
+		"description": "If foe initiates combat, grants Res+7 during combat.",
+		"hp": 0,
+		"atk": 14,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "sword",
+		"affectsduel": 1
+	}, {
+		"skill_id": 1190,
+		"name": "Deluge Dance 1",
+		"slot": "b",
+		"sp": 120,
+		"description": "If Sing or Dance is used, grants Spd+2 and Res+3 to target.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "nonstaff",
+		"affectsduel": 0
+	}, {
+		"skill_id": 1191,
+		"name": "Deluge Dance 2",
+		"slot": "b",
+		"sp": 240,
+		"description": "If Sing or Dance is used, grants Spd+3 and Res+4 to target.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "nonstaff",
+		"affectsduel": 0
 	}
 ]
