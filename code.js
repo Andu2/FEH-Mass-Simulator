@@ -5308,7 +5308,7 @@ function activeHero(hero){
 		}
 
 		//Weapons
-		if (this.has("Fensalir") && hero.refineIndex == -1){
+		if (this.has("Fensalir") && this.refineIndex == -1){
 			threatDebuffs.atk = Math.min(threatDebuffs.atk, -4);
 			skillNames.push("Fensalir");
 		}
