@@ -8624,7 +8624,7 @@ function activeHero(hero){
 			roundText += enemy.seal(this);
 
 			//Panic
-			if(this.has("Panic") || this.has("Legion's Axe")
+			if(this.hashasExactly("Panic") || this.hashasExactly("Panic+") || this.has("Legion's Axe")
 				|| ((this.hasExactly("Monstrous Bow+") || this.hasExactly("Spectral Tome+")) && this.refineIndex != -1)
 				){
 				enemy.panicked = true;
