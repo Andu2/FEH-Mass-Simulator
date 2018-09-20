@@ -5403,7 +5403,11 @@ function activeHero(hero){
 
 		//Effects that apply every turn
 		if (this.hasExactly("Recover Ring")){
-			this.hp += 10;
+			if(this.hp + 10 > this.maxHp){
+				this.hp = this.maxHp;
+			} else{
+				this.hp += 10;
+			}
 			startText += this.name + " heals 10 HP due to Recover Ring.<br>";
 		}
 
@@ -8624,15 +8628,15 @@ function activeHero(hero){
 			roundText += enemy.seal(this);
 
 			//Panic
-			if(this.hasExactly("Panic") 	|| this.hasExactly("Panic+") 	|| this.has("Legion's Axe")
-				|| ((this.hasExactly("Monstrous Bow+") 	|| this.hasExactly("Spectral Tome+")) && this.refineIndex != -1)
-				){
+			if(this.attacked && (this.hasExactly("Panic")	|| this.hasExactly("Panic+") 	|| this.has("Legion's Axe")
+				|| ((this.hasExactly("Monstrous Bow+") 		|| this.hasExactly("Spectral Tome+")) && this.refineIndex != -1)
+				)){
 				enemy.panicked = true;
 				roundText += this.name + " panics " + enemy.name + ".<br>";
 			}
-			if(enemy.hasExactly("Panic") 	|| enemy.hasExactly("Panic+") 	|| enemy.has("Legion's Axe")
-				|| ((enemy.hasExactly("Monstrous Bow+") || enemy.hasExactly("Spectral Tome+")) && enemy.refineIndex != -1)
-				){
+			if(enemy.attacked && (enemy.hasExactly("Panic") || enemy.hasExactly("Panic+") 	|| enemy.has("Legion's Axe")
+				|| ((enemy.hasExactly("Monstrous Bow+") 	|| enemy.hasExactly("Spectral Tome+")) && enemy.refineIndex != -1)
+				)){
 				this.panicked = true;
 				roundText += enemy.name + " panics " + this.name + ".<br>";
 			}
