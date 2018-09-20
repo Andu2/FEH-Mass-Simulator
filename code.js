@@ -5271,6 +5271,11 @@ function activeHero(hero){
 				enemy.panicked = true;
 				threatenText += this.name + " activates " + data.skills[this.sIndex].name + " (Seal), inflicting panic on " + enemy.name + ".<br>";
 			}
+			//Panic Ploy Refinement
+			if(this.hasAtRefineIndex("Panic Ploy", this.refineIndex) && this.hp > enemy.hp){
+				enemy.panicked = true;
+				threatenText += this.name + " activates " + data.skills[this.weaponIndex].name + " (Refined), inflicting panic on " + enemy.name + ".<br>";
+			}
 		}
 
 		//Skills
@@ -5308,7 +5313,7 @@ function activeHero(hero){
 		}
 
 		//Weapons
-		if (this.has("Fensalir") && hero.refineIndex == -1){
+		if (this.has("Fensalir") && this.refineIndex == -1){
 			threatDebuffs.atk = Math.min(threatDebuffs.atk, -4);
 			skillNames.push("Fensalir");
 		}
@@ -5702,6 +5707,16 @@ function activeHero(hero){
 			boostText = boostText.substring(0, boostText.length - 1);
 			boostText += " from " + data.skills[this.weaponIndex].name + ".<br>";			
 		}
+		if (this.hasExactly("Gae Bolg") && enemy.moveType != "flying"){
+			this.combatSpur.atk += 5;
+			this.combatSpur.def += 5;
+			boostText += this.name + " gets +5 Atk/Def from " + data.skills[this.weaponIndex].name + " against a non-flying opponent.<br>";
+		}
+		if(this.hasExactly("Ragnarok") && this.refineIndex != -1){
+			this.combatSpur.atk += 5;
+			this.combatSpur.spd += 5;
+			boostText += this.name + " gets +5 Atk/Spd from " + data.skills[this.weaponIndex].name + ".<br>";
+		}
 
 		//Combat debuff ***does this stack like spurs? does negative combatSpur work correctly?***
 		if (enemy.hasExactly("Loptous")	&& !isDragonEffective(this)){
@@ -5718,42 +5733,49 @@ function activeHero(hero){
 				skillName = data.skills[this.weaponIndex].name + " (Refined)";
 				boostText += this.name + " activates " + skillName + " and gets +" + statBonus + " Atk/Def.<br>";
 			}
-			if(this.has("Brazen Atk Spd")){
+			if (this.hasAtRefineIndex("Brazen Atk Spd", this.refineIndex)){
+				statBonus = 7;
+				this.combatSpur.atk += statBonus;
+				this.combatSpur.spd += statBonus;
+				skillName = data.skills[this.weaponIndex].name;
+				boostText += this.name + " activates " + skillName + " (Refined) and gets +" + statBonus + " Atk/Spd.<br>";
+			}
+			if (this.hasAtIndex("Brazen Atk Spd", this.aIndex)){
 				statBonus = 1 + 2 * this.has("Brazen Atk Spd");
 				this.combatSpur.atk += statBonus;
 				this.combatSpur.spd += statBonus;
 				skillName = data.skills[this.aIndex].name;
 				boostText += this.name + " activates " + skillName + " and gets +" + statBonus + " Atk/Spd.<br>";
 			}
-			if(this.has("Brazen Atk Def")){
+			if (this.has("Brazen Atk Def")){
 				statBonus = 1 + 2 * this.has("Brazen Atk Def");
 				this.combatSpur.atk += statBonus;
 				this.combatSpur.def += statBonus;
 				skillName = data.skills[this.aIndex].name;
 				boostText += this.name + " activates " + skillName + " and gets +" + statBonus + " Atk/Def.<br>";
 			}
-			if(this.has("Brazen Atk Res")){
+			if (this.has("Brazen Atk Res")){
 				statBonus = 1 + 2 * this.has("Brazen Atk Res");
 				this.combatSpur.atk += statBonus;
 				this.combatSpur.res += statBonus;
 				skillName = data.skills[this.aIndex].name;
 				boostText += this.name + " activates " + skillName + " and gets +" + statBonus + " Atk/Res.<br>";
 			}
-			if(this.has("Brazen Spd Def")){
+			if (this.has("Brazen Spd Def")){
 				statBonus = 1 + 2 * this.has("Brazen Spd Def");
 				this.combatSpur.spd += statBonus;
 				this.combatSpur.def += statBonus;
 				skillName = data.skills[this.aIndex].name;
 				boostText += this.name + " activates " + skillName + " and gets +" + statBonus + " Spd/Def.<br>";
 			}
-			if(this.has("Brazen Spd Res")){
+			if (this.has("Brazen Spd Res")){
 				statBonus = 1 + 2 * this.has("Brazen Spd Res");
 				this.combatSpur.spd += statBonus;
 				this.combatSpur.res += statBonus;
 				skillName = data.skills[this.aIndex].name;
 				boostText += this.name + " activates " + skillName + " and gets +" + statBonus + " Spd/Res.<br>";
 			}
-				if(this.has("Brazen Def Res")){
+			if (this.has("Brazen Def Res")){
 				statBonus = 1 + 2 * this.has("Brazen Def Res");
 				this.combatSpur.def += statBonus;
 				this.combatSpur.res += statBonus;
@@ -5764,7 +5786,7 @@ function activeHero(hero){
 
 		//Full Health Skills
 		if(this.combatStartHp / this.maxHp >= 1){
-			if(this.hasExactly("Ragnarok")){
+			if(this.hasExactly("Ragnarok") && this.refineIndex == -1){
 				//Does this take effect when defending? Answer: yes
 				this.combatSpur.atk += 5;
 				this.combatSpur.spd += 5;
@@ -6262,7 +6284,7 @@ function activeHero(hero){
 			}
 
 			//Weapons
-			if(this.hasExactly("Binding Blade")){
+			if (this.hasExactly("Binding Blade")){
 				if (this.refineIndex == -1) {
 					this.combatSpur.def += 2;
 					this.combatSpur.res += 2;
@@ -6273,32 +6295,32 @@ function activeHero(hero){
 				    boostText += this.name + " gets +4 Def/Res while defending with " + data.skills[this.weaponIndex].name + ".<br>";
 				}
 			}
-			if(this.hasExactly("Naga")){
+			if (this.hasExactly("Naga")){
 				this.combatSpur.def += 2;
 				this.combatSpur.res += 2;
 				boostText += this.name + " gets +2 Def/Res while defending with " + data.skills[this.weaponIndex].name + ".<br>";
 			}
-			if(this.has("Sack o' Gifts") || this.has("Handbell") || this.has("Tannenboom!") || this.has("Candelabra")){
+			if (this.has("Sack o' Gifts") || this.has("Handbell") || this.has("Tannenboom!") || this.has("Candelabra")){
 				this.combatSpur.atk += 2;
 				this.combatSpur.spd += 2;
 				this.combatSpur.def += 2;
 				this.combatSpur.res += 2;
 				boostText += this.name + " gets +2 Atk/Spd/Def/Res while defending with " + data.skills[this.weaponIndex].name + ".<br>";
 			}
-			if(this.hasExactly("Vidofnir") && (enemy.weaponType == "sword" || enemy.weaponType == "axe" ||enemy.weaponType == "lance" )){
+			if (this.hasExactly("Vidofnir") && (enemy.weaponType == "sword" || enemy.weaponType == "axe" ||enemy.weaponType == "lance" )){
 				this.combatSpur.def += 7;
 				boostText += this.name + " gets +7 Def while defending with " + data.skills[this.weaponIndex].name + " against sword, axe, or lance.<br>";
 			}
-			if(this.hasExactly("Tyrfing") && this.hp / this.maxHp <= 0.5){
+			if (this.hasExactly("Tyrfing") && this.hp / this.maxHp <= 0.5){
 				this.combatSpur.def += 4;
 				boostText += this.name + " gets +4 Def in combat from " + data.skills[this.weaponIndex].name + " with <= 50% health.<br>";
 			}
-			if(this.has("Reprisal Lance")){
+			if (this.has("Reprisal Lance")){
 				this.combatSpur.atk += 6;
 				boostText += this.name + " gets +6 Atk from defending with " + data.skills[this.weaponIndex].name + ".<br>";
 			}
-			if(this.has("Berkut's Lance")){
-				if(this.hasExactly("Berkut's Lance+") && this.refineIndex != -1){
+			if (this.has("Berkut's Lance")){
+				if (this.hasExactly("Berkut's Lance+") && this.refineIndex != -1){
 					this.combatSpur.res += 7;
 					boostText += this.name + " gets +7 Res while defending with " + data.skills[this.weaponIndex].name + " (Refined).<br>";
 				}
@@ -6307,36 +6329,41 @@ function activeHero(hero){
 					boostText += this.name + " gets +4 Res while defending with " + data.skills[this.weaponIndex].name + ".<br>";
 				}
 			}
-			if(this.hasExactly("Bright Naginata")){
+			if (this.hasExactly("Bright Naginata")){
 				this.combatSpur.atk += 4;
 				this.combatSpur.def += 4;
 				boostText += this.name + " gets +4 Atk/Def while defending with " + data.skills[this.weaponIndex].name + ".<br>";
 			}
-			if(this.has("Dauntless Stance")){
+			if (this.has("Dauntless Stance")){
 				this.combatSpur.spd += 4;
 				this.combatSpur.def += 4;
 				boostText += this.name + " gets +4 Spd/Def while defending with " + data.skills[this.weaponIndex].name + " (Refined).<br>";
 			}
-			if(this.has("Water Breath")){
+			if (this.has("Water Breath")){
 				this.combatSpur.def += 4;
 				this.combatSpur.res += 4;
 				boostText += this.name + " gets +4 Def/Res while defending with " + data.skills[this.weaponIndex].name + ".<br>";
 			}
-			if(this.has("Guard Bow") && enemy.range == "ranged"){
+			if (this.has("Guard Bow") && enemy.range == "ranged"){
 				this.combatSpur.def += 6;
 				this.combatSpur.res += 6;
 				boostText += this.name + " gets +6 Def/Res while defending with " + data.skills[this.weaponIndex].name + " against a ranged opponent.<br>";
 			}
-			if(this.has("Blarserpent") && enemy.range == "ranged"){
+			if (this.has("Blarserpent") && enemy.range == "ranged"){
 				this.combatSpur.def += 6;
 				this.combatSpur.res += 6;
 				boostText += this.name + " gets +6 Def/Res while defending with " + data.skills[this.weaponIndex].name + " against a ranged opponent.<br>";
 			}
-			if(this.has("Safeguard")){
+			if (this.has("Safeguard")){
 				buffVal = 7;
 				this.combatSpur.def += buffVal;
 				boostText += this.name + " gets +" + buffVal + " Def from defending with " + data.skills[this.weaponIndex].name + ".<br>";
 			}
+			if (this.has("Barrier Blade")){
+				buffVal = 1 + 3*this.has("Barrier Blade");
+				this.combatSpur.res += buffVal;
+				boostText += this.name + " gets +" + buffVal + " Res from defending with " + data.skills[this.weaponIndex].name + ".<br>";
+			}			
 
 			//Skills
 			if(this.has("Steady Breath")){
@@ -6378,6 +6405,12 @@ function activeHero(hero){
 				this.combatSpur.atk += buffVal;
 				this.combatSpur.res += buffVal;
 				boostText += this.name + " gets +" + buffVal + " Atk/Res from defending with " + data.skills[this.aIndex].name + ".<br>";
+			}
+			if(this.has("Steady Posture")){
+				buffVal = this.has("Steady Posture") * 2;
+				this.combatSpur.spd += buffVal;
+				this.combatSpur.def += buffVal;
+				boostText += this.name + " gets +" + buffVal + " Spd/Def from defending with " + data.skills[this.aIndex].name + ".<br>";
 			}
 			if(this.has("Swift Stance")){
 				buffVal = this.has("Swift Stance") * 2;
@@ -6474,7 +6507,7 @@ function activeHero(hero){
 		this.combatStat.res = Math.max(0, this.combatStat.res + this.spur.res + this.combatSpur.res);
 
 		//Bladetome bonus
-		if (this.has("Raudrblade") || this.has("Blarblade") || this.has("Gronnblade") || this.hasExactly("Thunderhead")){
+		if (this.has("Raudrblade") || this.has("Blarblade") || this.has("Gronnblade") || this.hasExactly("Thunderhead") || this.hasExactly("Odin's Grimoire")){
 			var atkbonus = this.combatBuffs.atk + this.combatBuffs.spd + this.combatBuffs.def + this.combatBuffs.res;
 			this.combatStat.atk += atkbonus;
 			if (atkbonus != 0){statText += this.name + " gains +" + atkbonus + " Atk from buffs with " + data.skills[this.weaponIndex].name + ".<br>";}
@@ -6578,6 +6611,12 @@ function activeHero(hero){
 				damageText += this.name + " takes " + damage + " damage after combat from " + skillName + " (Refined).<br>";
 				totalDamage += damage;
 			}
+			if(this.didAttack && this.hasExactly("Ragnarok") && this.refineIndex != -1){
+				damage = 5;
+				skillName = data.skills[this.weaponIndex].name;
+				damageText += this.name + " takes " + damage + " damage after combat from " + skillName + " (Refined).<br>";
+				totalDamage += damage;
+			}
 
 			//Cursed Lance
 			if(this.has("Cursed Lance")){
@@ -6597,7 +6636,7 @@ function activeHero(hero){
 				if (this.hasExactly("Beloved Zofia")){
 					damage = 4;
 				}
-				if (this.hasExactly("Ragnarok")){
+				if (this.hasExactly("Ragnarok") && this.refineIndex == -1){
 					damage = 5;
 				}
 				if (damage != 0){
@@ -6752,10 +6791,13 @@ function activeHero(hero){
 				sealStats(data.skills[this.weaponIndex].name, ["def","res"], [-7]);
 			}
 			if (this.has("Silver Dagger") 		|| this.has("Seashell") 		|| this.has("Dancer's Fan") 	|| this.has("Kagami Mochi")
-				|| this.has("Barb Shuriken") 	|| this.has("Felicia's Plate")	|| this.has("Lethal Carrot")	|| this.has("Starfish")
+				|| this.has("Barb Shuriken") 	|| this.has("Lethal Carrot")		|| this.has("Starfish")
 				|| this.has("Cloud Maiougi")	|| this.has("Sky Maiougi")		|| this.has("Dusk Uchiwa")
 				){
 				sealStats(data.skills[this.weaponIndex].name, ["def","res"], [-5, -7]);
+			}
+			if (this.has("Felicia's Plate")){
+				sealStats(data.skills[this.weaponIndex].name, ["def","res"], [-7]);
 			}
 			if (this.has("Kitty Paddle") && (enemy.weaponType == "redtome" || enemy.weaponType == "bluetome" || enemy.weaponType == "greentome")){
 				sealStats(data.skills[this.weaponIndex].name, ["def","res"], [-5, -7]);
@@ -6880,9 +6922,19 @@ function activeHero(hero){
 
 		//Post-combat buff for special triggered during combat
 		if (this.triggered){
+			var gainValue = 0;
 			if (this.hasExactly("Dark Mystletainn")){
-				this.charge = this.charge + 2;
-				postCombatBuffText += this.name + " gains 2 extra charge from triggering a Special with " + data.skills[this.weaponIndex].name + ".<br>";;
+				gainValue = 2
+				this.charge = this.charge + gainValue;
+				postCombatBuffText += this.name + " gains " + gainValue + " extra charge from triggering a Special with " + data.skills[this.weaponIndex].name + ".<br>";
+			}
+			if (this.has("Special Spiral")){
+				if (this.has("Special Spiral") != 1){
+					gainValue = this.has("Special Spiral") - 1;					
+				}else if (this.challenger){
+					gainValue = 1;					
+				}
+				postCombatBuffText += this.name + " gains " + gainValue + " extra charge from triggering a Special with " + data.skills[this.bIndex].name + ".<br>";
 			}
 		}
 		return postCombatBuffText;
@@ -8053,8 +8105,9 @@ function activeHero(hero){
 		//Check for Brave weapons, brave will be passed to this.doDamage
 		var doubleInitiate = false;
 		var doubleCounter = false;
-		if (this.has("Brave Sword") || this.has("Brave Lance") || this.has("Brave Axe") || this.has("Brave Bow")
-			|| this.hasExactly("Dire Thunder") || this.hasExactly("Amiti") || this.hasExactly("Meisterschwert")){
+		if (this.has("Brave Sword") 			|| this.has("Brave Lance") 	|| this.has("Brave Axe") 				|| this.has("Brave Bow")
+			|| this.hasExactly("Dire Thunder") 	|| this.hasExactly("Amiti") || this.hasExactly("Meisterschwert") 	|| this.hasExactly("Cherche's Axe")
+		){
 			doubleInitiate = true;
 		}
 		if (this.hasExactly("Double Lion") && this.hp/this.maxHp == 1){
@@ -8100,6 +8153,9 @@ function activeHero(hero){
 			if(this.hp/this.maxHp <= .75 ){
 				desperation = true;
 			}
+		}
+		if (this.has("Forseti") && this.hp/this.maxHp >= .5){
+			desperation = true;
 		}
 
 		//Check for skills that disable change in attack priority
@@ -8568,7 +8624,7 @@ function activeHero(hero){
 			roundText += enemy.seal(this);
 
 			//Panic
-			if(this.has("Panic") || this.has("Legion's Axe")
+			if(this.hasExactly("Panic") || this.hasExactly("Panic+") || this.has("Legion's Axe")
 				|| ((this.hasExactly("Monstrous Bow+") || this.hasExactly("Spectral Tome+")) && this.refineIndex != -1)
 				){
 				enemy.panicked = true;

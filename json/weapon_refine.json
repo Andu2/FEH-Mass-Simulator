@@ -360,6 +360,30 @@
 		"prereq": "Draconic Poleax",
 		"exclusive": ""
 	},	{
+		"category": "Cherche's Axe",
+		"name": "Panic Ploy",
+		"sp": 400,
+		"description": "At start of turn, converts bonuses on foes in cardinal directions with HP < unit's HP into penalties through their next actions.",
+		"hp": 3,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"prereq": "Cherche's Axe",
+		"exclusive": ""
+	},	{
+		"category": "Cherche's Axe",
+		"name": "Atk Bonus",
+		"sp": 400,
+		"description": "",
+		"hp": 5,
+		"atk": 1,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"prereq": "Cherche's Axe",
+		"exclusive": ""
+	},	{
 		"category": "Advanced Melee",
 		"name": "Atk Bonus",
 		"sp": 350,
@@ -369,7 +393,7 @@
 		"spd": 0,
 		"def": 0,
 		"res": 0,
-		"prereq": "Reprisal Lance+,Slaying Edge+,Slaying Lance+,Slaying Axe+,Deft Harpoon+,Melon Crusher+,Lilith Floatie+,Sack o' Gifts+,Handbell+,Tannenboom!+,Hagoita+,Kadomatsu+,Basilikos,Hauteclere,Hinoka's Spear,Mystletainn,Winged Sword,Casa Blanca+,Nameless Blade,Water Breath+,Safeguard+,Camilla's Axe,Rhomphaia,Ardent Service+,Breath of Fog,Shell Lance+,Beach Banner+,Dauntless Lance,Draconic Poleax",
+		"prereq": "Barrier Blade+,Reprisal Lance+,Slaying Edge+,Slaying Lance+,Slaying Axe+,Deft Harpoon+,Melon Crusher+,Lilith Floatie+,Sack o' Gifts+,Handbell+,Tannenboom!+,Hagoita+,Kadomatsu+,Basilikos,Hauteclere,Hinoka's Spear,Mystletainn,Winged Sword,Casa Blanca+,Nameless Blade,Water Breath+,Safeguard+,Camilla's Axe,Rhomphaia,Ardent Service+,Breath of Fog,Shell Lance+,Beach Banner+,Dauntless Lance,Draconic Poleax",
 		"exclusive": ""
 	},	{
 		"category": "Advanced Melee",
@@ -381,7 +405,7 @@
 		"spd": 3,
 		"def": 0,
 		"res": 0,
-		"prereq": "Reprisal Lance+,Slaying Edge+,Slaying Lance+,Slaying Axe+,Deft Harpoon+,Melon Crusher+,Lilith Floatie+,Sack o' Gifts+,Handbell+,Tannenboom!+,Hagoita+,Kadomatsu+,Basilikos,Hauteclere,Hinoka's Spear,Mystletainn,Winged Sword,Casa Blanca+,Nameless Blade,Water Breath+,Safeguard+,Camilla's Axe,Rhomphaia,Ardent Service+,Breath of Fog,Shell Lance+,Beach Banner+,Dauntless Lance,Draconic Poleax",
+		"prereq": "Cherche's Axe,Barrier Blade+,Reprisal Lance+,Slaying Edge+,Slaying Lance+,Slaying Axe+,Deft Harpoon+,Melon Crusher+,Lilith Floatie+,Sack o' Gifts+,Handbell+,Tannenboom!+,Hagoita+,Kadomatsu+,Basilikos,Hauteclere,Hinoka's Spear,Mystletainn,Winged Sword,Casa Blanca+,Nameless Blade,Water Breath+,Safeguard+,Camilla's Axe,Rhomphaia,Ardent Service+,Breath of Fog,Shell Lance+,Beach Banner+,Dauntless Lance,Draconic Poleax",
 		"exclusive": ""
 	},	{
 		"category": "Advanced Melee",
@@ -393,7 +417,7 @@
 		"spd": 0,
 		"def": 4,
 		"res": 0,
-		"prereq": "Reprisal Lance+,Slaying Edge+,Slaying Lance+,Slaying Axe+,Deft Harpoon+,Melon Crusher+,Lilith Floatie+,Sack o' Gifts+,Handbell+,Tannenboom!+,Hagoita+,Kadomatsu+,Basilikos,Hauteclere,Hinoka's Spear,Mystletainn,Winged Sword,Casa Blanca+,Nameless Blade,Water Breath+,Safeguard+,Camilla's Axe,Rhomphaia,Ardent Service+,Breath of Fog,Shell Lance+,Beach Banner+,Dauntless Lance,Draconic Poleax",
+		"prereq": "Cherche's Axe,Barrier Blade+,Reprisal Lance+,Slaying Edge+,Slaying Lance+,Slaying Axe+,Deft Harpoon+,Melon Crusher+,Lilith Floatie+,Sack o' Gifts+,Handbell+,Tannenboom!+,Hagoita+,Kadomatsu+,Basilikos,Hauteclere,Hinoka's Spear,Mystletainn,Winged Sword,Casa Blanca+,Nameless Blade,Water Breath+,Safeguard+,Camilla's Axe,Rhomphaia,Ardent Service+,Breath of Fog,Shell Lance+,Beach Banner+,Dauntless Lance,Draconic Poleax",
 		"exclusive": ""
 	},	{
 		"category": "Advanced Melee",
@@ -405,7 +429,7 @@
 		"spd": 0,
 		"def": 0,
 		"res": 4,
-		"prereq": "Reprisal Lance+,Slaying Edge+,Slaying Lance+,Slaying Axe+,Deft Harpoon+,Melon Crusher+,Lilith Floatie+,Sack o' Gifts+,Handbell+,Tannenboom!+,Hagoita+,Kadomatsu+,Basilikos,Hauteclere,Hinoka's Spear,Mystletainn,Winged Sword,Casa Blanca+,Nameless Blade,Water Breath+,Safeguard+,Camilla's Axe,Rhomphaia,Ardent Service+,Breath of Fog,Shell Lance+,Beach Banner+,Dauntless Lance,Draconic Poleax",
+		"prereq": "Cherche's Axe,Barrier Blade+,Reprisal Lance+,Slaying Edge+,Slaying Lance+,Slaying Axe+,Deft Harpoon+,Melon Crusher+,Lilith Floatie+,Sack o' Gifts+,Handbell+,Tannenboom!+,Hagoita+,Kadomatsu+,Basilikos,Hauteclere,Hinoka's Spear,Mystletainn,Winged Sword,Casa Blanca+,Nameless Blade,Water Breath+,Safeguard+,Camilla's Axe,Rhomphaia,Ardent Service+,Breath of Fog,Shell Lance+,Beach Banner+,Dauntless Lance,Draconic Poleax",
 		"exclusive": ""
 	},	{
 		"category": "Wedding Melee",
@@ -912,6 +936,30 @@
 		"prereq": "Reese's Tome",
 		"exclusive": ""
 	},	{
+		"category": "Ragnarok",
+		"name": "Brazen Atk Spd",
+		"sp": 400,
+		"description": "At start of combat, if unit's HP <= 80%, grants Atk/Spd+7 during combat.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"prereq": "Ragnarok",
+		"exclusive": ""
+	},	{
+		"category": "Odin's Grimoire",
+		"name": "Atk Spd Link",
+		"sp": 400,
+		"description": "If a movement Assist skill (like Reposition, Shove, Pivot, etc.) is used by unit or targets unit, grants Atk/Spd+6 to unit and target ally or unit and targeting ally for 1 turn.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"prereq": "Odin's Grimoire",
+		"exclusive": ""
+	},	{
 		"category": "Advanced Ranged",
 		"name": "Atk Bonus",
 		"sp": 350,
@@ -921,7 +969,7 @@
 		"spd": 0,
 		"def": 0,
 		"res": 0,
-		"prereq": "Dusk Uchiwa+,Sky Maiougi+,Cloud Maiougi+,Slaying Bow+,Refreshing Bolt+,Tomato Tome+,Sealife Tome+,Hibiscus Tome+,Dancer's Score+,Dancer's Ring+,Guard Bow+,Candelabra+,Hama Ya+,Kagami Mochi+,Fujin Yumi,Felicia's Plate,Green Gift+,Blue Gift+,Gratia+,Wind's Brand,Blarserpent+,Lethal Carrot+,Forblaze,Barb Shuriken+,Fresh Bouquet+,The Cleaner+,Cocobow+,Juicy Wave+,Starfish+,Fishie Bow+,Reese's Tome",
+		"prereq": "Odin's Grimoire,Ragnarok,Dusk Uchiwa+,Sky Maiougi+,Cloud Maiougi+,Slaying Bow+,Refreshing Bolt+,Tomato Tome+,Sealife Tome+,Hibiscus Tome+,Dancer's Score+,Dancer's Ring+,Guard Bow+,Candelabra+,Hama Ya+,Kagami Mochi+,Fujin Yumi,Felicia's Plate,Green Gift+,Blue Gift+,Gratia+,Wind's Brand,Blarserpent+,Lethal Carrot+,Forblaze,Barb Shuriken+,Fresh Bouquet+,The Cleaner+,Cocobow+,Juicy Wave+,Starfish+,Fishie Bow+,Reese's Tome",
 		"exclusive": ""
 	},	{
 		"category": "Advanced Ranged",
@@ -933,7 +981,7 @@
 		"spd": 2,
 		"def": 0,
 		"res": 0,
-		"prereq": "Dusk Uchiwa+,Sky Maiougi+,Cloud Maiougi+,Slaying Bow+,Refreshing Bolt+,Tomato Tome+,Sealife Tome+,Hibiscus Tome+,Dancer's Score+,Dancer's Ring+,Guard Bow+,Candelabra+,Hama Ya+,Kagami Mochi+,Fujin Yumi,Felicia's Plate,Green Gift+,Blue Gift+,Gratia+,Wind's Brand,Blarserpent+,Lethal Carrot+,Forblaze,Barb Shuriken+,Fresh Bouquet+,The Cleaner+,Cocobow+,Juicy Wave+,Starfish+,Fishie Bow+,Reese's Tome",
+		"prereq": "Odin's Grimoire,Ragnarok,Dusk Uchiwa+,Sky Maiougi+,Cloud Maiougi+,Slaying Bow+,Refreshing Bolt+,Tomato Tome+,Sealife Tome+,Hibiscus Tome+,Dancer's Score+,Dancer's Ring+,Guard Bow+,Candelabra+,Hama Ya+,Kagami Mochi+,Fujin Yumi,Felicia's Plate,Green Gift+,Blue Gift+,Gratia+,Wind's Brand,Blarserpent+,Lethal Carrot+,Forblaze,Barb Shuriken+,Fresh Bouquet+,The Cleaner+,Cocobow+,Juicy Wave+,Starfish+,Fishie Bow+,Reese's Tome",
 		"exclusive": ""
 	},	{
 		"category": "Advanced Ranged",
@@ -945,7 +993,7 @@
 		"spd": 0,
 		"def": 3,
 		"res": 0,
-		"prereq": "Dusk Uchiwa+,Sky Maiougi+,Cloud Maiougi+,Slaying Bow+,Refreshing Bolt+,Tomato Tome+,Sealife Tome+,Hibiscus Tome+,Dancer's Score+,Dancer's Ring+,Guard Bow+,Candelabra+,Hama Ya+,Kagami Mochi+,Fujin Yumi,Felicia's Plate,Green Gift+,Blue Gift+,Gratia+,Wind's Brand,Blarserpent+,Lethal Carrot+,Forblaze,Barb Shuriken+,Fresh Bouquet+,The Cleaner+,Cocobow+,Juicy Wave+,Starfish+,Fishie Bow+,Reese's Tome",
+		"prereq": "Odin's Grimoire,Ragnarok,Dusk Uchiwa+,Sky Maiougi+,Cloud Maiougi+,Slaying Bow+,Refreshing Bolt+,Tomato Tome+,Sealife Tome+,Hibiscus Tome+,Dancer's Score+,Dancer's Ring+,Guard Bow+,Candelabra+,Hama Ya+,Kagami Mochi+,Fujin Yumi,Felicia's Plate,Green Gift+,Blue Gift+,Gratia+,Wind's Brand,Blarserpent+,Lethal Carrot+,Forblaze,Barb Shuriken+,Fresh Bouquet+,The Cleaner+,Cocobow+,Juicy Wave+,Starfish+,Fishie Bow+,Reese's Tome",
 		"exclusive": ""
 	},	{
 		"category": "Advanced Ranged",
@@ -957,7 +1005,7 @@
 		"spd": 0,
 		"def": 0,
 		"res": 3,
-		"prereq": "Dusk Uchiwa+,Sky Maiougi+,Cloud Maiougi+,Slaying Bow+,Refreshing Bolt+,Tomato Tome+,Sealife Tome+,Hibiscus Tome+,Dancer's Score+,Dancer's Ring+,Guard Bow+,Candelabra+,Hama Ya+,Kagami Mochi+,Fujin Yumi,Felicia's Plate,Green Gift+,Blue Gift+,Gratia+,Wind's Brand,Blarserpent+,Lethal Carrot+,Forblaze,Barb Shuriken+,Fresh Bouquet+,The Cleaner+,Cocobow+,Juicy Wave+,Starfish+,Fishie Bow+,Reese's Tome",
+		"prereq": "Odin's Grimoire,Ragnarok,Dusk Uchiwa+,Sky Maiougi+,Cloud Maiougi+,Slaying Bow+,Refreshing Bolt+,Tomato Tome+,Sealife Tome+,Hibiscus Tome+,Dancer's Score+,Dancer's Ring+,Guard Bow+,Candelabra+,Hama Ya+,Kagami Mochi+,Fujin Yumi,Felicia's Plate,Green Gift+,Blue Gift+,Gratia+,Wind's Brand,Blarserpent+,Lethal Carrot+,Forblaze,Barb Shuriken+,Fresh Bouquet+,The Cleaner+,Cocobow+,Juicy Wave+,Starfish+,Fishie Bow+,Reese's Tome",
 		"exclusive": ""
 	},	{
 		"category": "Dark Ranged",
