@@ -16701,5 +16701,61 @@
 		"charge": 0,
 		"inheritrule": "unique",
 		"affectsduel": 1
+	}, {
+		"skill_id": 1194,
+		"name": "Hoarfrost Knife",
+		"slot": "weapon",
+		"sp": 400,
+		"description": "Accelerates Special trigger (cooldown count-1). If unit initiates combat and foe uses sword, lance, axe, or dragonstone, grants Def+20 during combat, and if foe can counter, unit makes a guaranteed follow-up attack. After combat, if unit attacked, inflicts Def/Res-7 on target and foes within 2 spaces of target through their next actions.",
+		"hp": 0,
+		"atk": 14,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "unique",
+		"affectsduel": 1
+	}, {
+		"skill_id": 1195,
+		"name": "Atk Res Solo 1",
+		"slot": "a",
+		"sp": 60,
+		"description": "If unit is not adjacent to an ally, grants Atk/Res+2 during combat.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 1
+	}, {
+		"skill_id": 1196,
+		"name": "Atk Res Solo 2",
+		"slot": "a",
+		"sp": 120,
+		"description": "If unit is not adjacent to an ally, grants Atk/Res+4 during combat.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 1
+	}, {
+		"skill_id": 1197,
+		"name": "Atk Res Solo 3",
+		"slot": "a",
+		"sp": 240,
+		"description": "If unit is not adjacent to an ally, grants Atk/Res+6 during combat.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 1
 	}
 ]

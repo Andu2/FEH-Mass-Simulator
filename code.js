@@ -1143,7 +1143,7 @@ function getCDChange(skill, slot){
 			|| skillName.indexOf("Audhulma") != -1			|| skillName.indexOf("Kagami Mochi") != -1		|| skillName.indexOf("Basilikos") != -1
 			|| skillName.indexOf("Berserk Armads") != -1    || skillName.indexOf("Nameless Blade") != -1	|| skillName.indexOf("Barb Shuriken") != -1
 			|| skillName.indexOf("Mjolnir") != -1			|| skillName.indexOf("Vassal's Blade") != -1	|| skillName.indexOf("Dauntless Lance") != -1
-			|| skillName.indexOf("Maltet") != -1
+			|| skillName.indexOf("Maltet") != -1			|| skillName.indexOf("Hoarfrost Knife") != -1
 			){
 				return -1;
         }
@@ -5727,9 +5727,55 @@ function activeHero(hero){
 			this.combatSpur.atk -= 6;
 			boostText += this.name + " gets -6 Atk from not having an \"effective against dragons\" skill against the opponent's " + data.skills[enemy.weaponIndex].name + ".<br>";
 		}
-
+		
+		//Solo Skills
+		if (this.adjacent == 0){
+			if (this.has("Atk Spd Solo")){
+				statBonus = this.has("Atk Spd Solo") * 2;
+				this.combatSpur.atk += statBonus;
+				this.combatSpur.spd += statBonus;
+				skillName = data.skills[this.aIndex].name;
+				boostText += this.name + " has no adjacent allies and gets +" + statBonus + " Atk/Spd from " + skillName + ".<br>";
+			}
+			if (this.has("Atk Def Solo")){
+				statBonus = this.has("Atk Def Solo") * 2;
+				this.combatSpur.atk += statBonus;
+				this.combatSpur.def += statBonus;
+				skillName = data.skills[this.aIndex].name;
+				boostText += this.name + " has no adjacent allies and gets +" + statBonus + " Atk/Def from " + skillName + ".<br>";
+			}
+			if (this.has("Atk Res Solo")){
+				statBonus = this.has("Atk Res Solo") * 2;
+				this.combatSpur.atk += statBonus;
+				this.combatSpur.res += statBonus;
+				skillName = data.skills[this.aIndex].name;
+				boostText += this.name + " has no adjacent allies and gets +" + statBonus + " Atk/Res from " + skillName + ".<br>";
+			}
+			if (this.has("Spd Def Solo")){
+				statBonus = this.has("Spd Def Solo") * 2;
+				this.combatSpur.spd += statBonus;
+				this.combatSpur.def += statBonus;
+				skillName = data.skills[this.aIndex].name;
+				boostText += this.name + " has no adjacent allies and gets +" + statBonus + " Spd/Def from " + skillName + ".<br>";
+			}
+			if (this.has("Spd Res Solo")){
+				statBonus = this.has("Spd Res Solo") * 2;
+				this.combatSpur.atk += statBonus;
+				this.combatSpur.res += statBonus;
+				skillName = data.skills[this.aIndex].name;
+				boostText += this.name + " has no adjacent allies and gets +" + statBonus + " Spd/Res from " + skillName + ".<br>";
+			}
+			if (this.has("Def Res Solo")){
+				statBonus = this.has("Def Res Solo") * 2;
+				this.combatSpur.def += statBonus;
+				this.combatSpur.res += statBonus;
+				skillName = data.skills[this.aIndex].name;
+				boostText += this.name + " has no adjacent allies and gets +" + statBonus + " Def/Res from " + skillName + ".<br>";
+			}
+		}
+		
 		//Brazen Skills
-		if(this.combatStartHp / this.maxHp <= 0.8){
+		if (this.combatStartHp / this.maxHp <= 0.8){
 			if (this.has("Folkvangr") && this.refineIndex != -1){
 				statBonus = 7;
 				this.combatSpur.atk += statBonus;
@@ -6116,6 +6162,10 @@ function activeHero(hero){
 			if (this.hasAtRefineIndex("Death Blow", this.refineIndex)){
 				this.combatSpur.atk += 6;
 				boostText += this.name + " gets +6 Atk from initiating with " + data.skills[this.weaponIndex].name + " (Refined).<br>"
+			}
+			if (this.hasExactly("Hoarfrost Knife") && enemy.range == "melee"){
+				this.combatSpur.def += 20;
+				boostText += this.name + " gets +20 Des from initiating with " + data.skills[this.weaponIndex].name + " against a melee opponent.<br>";
 			}
 
 			//Skills			
@@ -6800,7 +6850,7 @@ function activeHero(hero){
 				){
 				sealStats(data.skills[this.weaponIndex].name, ["def","res"], [-5, -7]);
 			}
-			if (this.has("Felicia's Plate")){
+			if (this.has("Felicia's Plate") || this.has("Hoarfrost Knife")){
 				sealStats(data.skills[this.weaponIndex].name, ["def","res"], [-7]);
 			}
 			if (this.has("Kitty Paddle") && (enemy.weaponType == "redtome" || enemy.weaponType == "bluetome" || enemy.weaponType == "greentome")){
@@ -8298,6 +8348,10 @@ function activeHero(hero){
 					thisAttackRank++;
 					thisAttackRankChanged = true;
 				}
+			}
+			if (this.hasExactly("Hoarfrost Knife") && enemy.range == "melee"){
+				thisAttackRank++;
+				thisAttackRankChanged = true;
 			}
 		}
 		if (this.hasAtIndex("Bold Fighter", this.bIndex)){
