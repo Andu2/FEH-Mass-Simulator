@@ -5429,14 +5429,28 @@ function activeHero(hero){
 		var startText = "";
 		var skillName = "";
 		var damage = 0;
-
-		//TODO: Fix round counting for skadi effects
+		var healAmount = 0;
+		
+		//TODO: Fix round counting for skadi/blight effects
 		if (debuffRound == 1){
 			if (this.has("Skadi")){
-				skillName = "Skadi";
+				skillName = data.skills[this.weaponIndex].name;
 				damage = 10;
 				enemy.panicked = true;
-				startText += this.name + " activates " + data.skills[this.weaponIndex].name + ", inflicting panic on " + enemy.name + ".<br>";
+				startText += this.name + " activates " + skillName + ", inflicting panic on " + enemy.name + ".<br>";
+			}
+			if (this.has("Breath of Blight")){
+				skillName = data.skills[this.weaponIndex].name;
+				damage = 10;
+				healAmount = this.adjacent2_foe * 5;
+				if(this.hp + healAmount > this.maxHp){
+					this.hp = this.maxHp;
+				} else{
+					this.hp += healAmount;
+				}	
+				
+				startText += this.name + " activates " + skillName + " and heals " + healAmount + " HP.<br>";
+				
 			}
 		}
 
@@ -7081,8 +7095,8 @@ function activeHero(hero){
 			return true;
 		}
 		if (enemy.range == "ranged"){
-			if (this.hasExactly("Great Flame")		|| this.hasExactly("Expiration")	|| this.has("Water Breath")
-				|| this.hasExactly("Breath of Fog")	|| this.hasExactly("Summer's Breath")
+			if (this.hasExactly("Great Flame")		|| this.hasExactly("Expiration")		|| this.has("Water Breath")
+				|| this.hasExactly("Breath of Fog")	|| this.hasExactly("Summer's Breath")	|| this.hasExactly("Breath of Blight")
 			){
 				return true;
 			}
@@ -7535,7 +7549,7 @@ function activeHero(hero){
 				effectiveBonus = (enemy.has("Grani's Shield")) ? 1 : 1.5;
 			}
 			else if ((enemy.weaponType == "dragon" || enemy.hasExactly("Loptous")) && isDragonEffective(this)){
-				effectiveBonus = 1.5;
+				effectiveBonus = (enemy.has("Breath of Blight")) ? 1 : 1.5;
 			}
 			else if ((enemy.weaponType == "redtome" || enemy.weaponType == "bluetome" || enemy.weaponType == "greentome") && (this.has("Kitty Paddle"))){
 				effectiveBonus = 1.5;

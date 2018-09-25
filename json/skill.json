@@ -16869,5 +16869,61 @@
 		"charge": 0,
 		"inheritrule": "nonstaff",
 		"affectsduel": 0
+	}, {
+		"skill_id": 1206,
+		"name": "Even Def Wave 1",
+		"slot": "c",
+		"sp": 60,
+		"description": "At start of even-numbered turns, grants Def+2 to unit and adjacent allies for 1 turn. (Bonus granted to unit even if no allies are adjacent.)",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 1
+	}, {
+		"skill_id": 1207,
+		"name": "Even Def Wave 2",
+		"slot": "c",
+		"sp": 120,
+		"description": "At start of even-numbered turns, grants Def+4 to unit and adjacent allies for 1 turn. (Bonus granted to unit even if no allies are adjacent.)",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 1
+	}, {
+		"skill_id": 1208,
+		"name": "Even Def Wave 3",
+		"slot": "c",
+		"sp": 240,
+		"description": "At start of even-numbered turns, grants Def+6 to unit and adjacent allies for 1 turn. (Bonus granted to unit even if no allies are adjacent.)",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 1
+	}, {
+		"skill_id": 1209,
+		"name": "Breath of Blight",
+		"slot": "weapon",
+		"sp": 400,
+		"description": "Neutralizes \"effective against dragons\" bonuses. At the start of turn 4, deals 10 damage to foes within 3 spaces, and restores HP to unit = number of foes within 3 spaces × 5. If foe's Range = 2, calculates damage using the lower of foe's Def or Res.",
+		"hp": 0,
+		"atk": 16,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "unique",
+		"affectsduel": 1
 	}
 ]
