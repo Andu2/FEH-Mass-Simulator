@@ -1143,7 +1143,7 @@ function getCDChange(skill, slot){
 			|| skillName.indexOf("Audhulma") != -1			|| skillName.indexOf("Kagami Mochi") != -1		|| skillName.indexOf("Basilikos") != -1
 			|| skillName.indexOf("Berserk Armads") != -1    || skillName.indexOf("Nameless Blade") != -1	|| skillName.indexOf("Barb Shuriken") != -1
 			|| skillName.indexOf("Mjolnir") != -1			|| skillName.indexOf("Vassal's Blade") != -1	|| skillName.indexOf("Dauntless Lance") != -1
-			|| skillName.indexOf("Maltet") != -1			|| skillName.indexOf("Hoarfrost Knife") != -1
+			|| skillName.indexOf("Maltet") != -1			|| skillName.indexOf("Hoarfrost Knife") != -1	|| skillName.indexOf("Missiletainn") != -1
 			){
 				return -1;
         }
@@ -1166,7 +1166,7 @@ function getCDChange(skill, slot){
 	//Assist
 	if (slot == "assist"){
 		//Cooldown increase
-		if (skillName == "Maryyr" || skillName == "Rehabilitate" || skillName == "Recover"){
+		if (skillName == "Martyr" || skillName == "Rehabilitate" || skillName == "Recover"){
 				return 1;
 		}
 	}
@@ -1187,7 +1187,14 @@ function getPrechargeChange(skill, slot){
 	}
 
 	var skillName = skill.name;
-
+	
+	//Weapon Skill
+	if (slot == "weapon"){
+		if (skillName.indexOf("Missiletainn") != -1){
+			return 1;
+		}
+	}
+	
 	//B Skill
 	if (slot == "b"){
 		if(skillName.indexOf("S Drink") != -1){
@@ -2598,6 +2605,10 @@ function updateHeroUI(hero){
 
 			//Precharge
 			//TODO: Combine this from hero intialization
+			//Weapon
+			if (hero.weapon != -1){
+				precharge += getPrechargeChange(data.skills[hero.weapon], "weapon");
+			}
 			//B Skill
 			if(hero.b != -1){
 				var bName = data.skills[hero.b].name;
