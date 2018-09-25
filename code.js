@@ -7084,7 +7084,8 @@ function activeHero(hero){
 		return false;
 	}
 
-	this.getBonusDamage = function(){
+	//Return bonus damage for specials
+	this.getBonusDamage = function(enemy){
 		var damage = 0;
 		var skillNames = [];
 
@@ -7105,6 +7106,32 @@ function activeHero(hero){
 			skillNames.push(data.skills[this.bIndex].name);
 		}
 
+		return {"damage":damage, "skillNames":skillNames.join(", ").replace(/,(?!.*,)/gmi, ', and')};
+	}
+	
+	//Return bonus flat damage
+	this.getFlatBonus = function(enemy){
+		var damage = 0;
+		var skillNames = [];
+		
+		if (this.hasExactly("Light Brand")){
+			if (enemy.combatStat.def >= enemy.combatStat.res + 5){
+				damage += 7;
+				skillNames.push(data.skills[this.weaponIndex].name);
+			}
+		}
+		if (this.hasExactly("Vassal's Blade") || this.hasExactly("Giga Excalibur")){
+			var damageBonus = Math.min((this.combatStat.spd + (this.has("Phantom Spd") ? (2 + this.has("Phantom Spd") * 3) : 0) - enemy.combatStat.spd) * 0.7 | 0, 7);
+			if(damageBonus > 0){
+				damage += damageBonus;
+				skillNames.push(data.skills[this.weaponIndex].name);
+			}
+		}
+		if (this.has("Shining Bow") && (enemy.combatStat.def >= enemy.combatStat.res + 5)){
+			damage += 7;
+			skillNames.push(data.skills[this.weaponIndex].name);
+		}
+		
 		return {"damage":damage, "skillNames":skillNames.join(", ").replace(/,(?!.*,)/gmi, ', and')};
 	}
 
@@ -7153,7 +7180,7 @@ function activeHero(hero){
 					this.resetCharge();
 
 					//Bonus Special Damage
-					var bonusDamage = this.getBonusDamage();
+					var bonusDamage = this.getBonusDamage(enemy);
 
 					if (bonusDamage.damage != 0){
 						AOEDamage += bonusDamage.damage;
@@ -7161,19 +7188,11 @@ function activeHero(hero){
 					}
 
 					//Bonus Flat Damage
-					//TODO: Merge duplicate flat damage code into one function
-					if (this.hasExactly("Light Brand")){
-						if (enemy.combatStat.def >= enemy.combatStat.res + 5){
-							AOEDamage += 7;
-							damageText += this.name + " gains 7 damage from " + data.skills[this.weaponIndex].name + ".<br>";
-						}
-					}
-					if(this.hasExactly("Vassal's Blade") || this.hasExactly("Giga Excalibur")){
-						var damageBonus = Math.min((this.combatStat.spd + (this.has("Phantom Spd") ? (2 + this.has("Phantom Spd") * 3) : 0) - enemy.combatStat.spd) * 0.7 | 0, 7);
-						if(damageBonus > 0){
-							AOEDamage += damageBonus;
-							damageText += this.name + " gains " + damageBonus + " damage from " + data.skills[this.weaponIndex].name + ".<br>";
-						}
+					var bonusFlatDamage = this.getFlatBonus(enemy);
+					
+					if (bonusFlatDamage.damage != 0){
+						AOEDamage += bonusFlatDamage.damage;
+						damageText += this.name + " gains " + bonusFlatDamage.damage + " damage from " + bonusFlatDamage.skillNames + ".<br>";
 					}
 
 					if(enemy.has("Embla's Ward")){
@@ -7270,7 +7289,7 @@ function activeHero(hero){
 				damageText += this.name + " activates " + data.skills[this.specialIndex].name + ".<br>";
 
 				//Bonus Special Damage
-				var bonusDamage = this.getBonusDamage();
+				var bonusDamage = this.getBonusDamage(enemy);
 
 				if (bonusDamage.damage != 0){
 					dmgBoostFlat += bonusDamage.damage;
@@ -7517,19 +7536,13 @@ function activeHero(hero){
 
 			//Flat damage
 			//*** Is Light Brand damage bonus flat damage or bonus attack? ***
-			if (this.hasExactly("Light Brand")){
-				if (enemy.combatStat.def >= enemy.combatStat.res + 5){
-					dmgBoostFlat += 7;
-					damageText += this.name + " gains 7 damage from Light Brand.<br>";
-				}
+			var bonusFlatDamage = this.getFlatBonus(enemy);
+					
+			if (bonusFlatDamage.damage != 0){
+				dmgBoostFlat += bonusFlatDamage.damage;
+				damageText += this.name + " gains " + bonusFlatDamage.damage + " damage from " + bonusFlatDamage.skillNames + ".<br>";
 			}
-			if(this.hasExactly("Vassal's Blade") || this.hasExactly("Giga Excalibur")){
-				var damageBonus = Math.min((this.combatStat.spd + (this.has("Phantom Spd") ? (2 + this.has("Phantom Spd") * 3) : 0) - enemy.combatStat.spd) * 0.7 | 0, 7);
-				if(damageBonus > 0){
-					dmgBoostFlat += damageBonus;
-					damageText += this.name + " gains " + damageBonus + " damage from " + data.skills[this.weaponIndex].name + ".<br>";
-				}
-			}
+			
 			//Release charged damage
 			if (this.chargedDamage > 0){
 				dmgBoostFlat += this.chargedDamage;
