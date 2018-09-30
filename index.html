@@ -17,8 +17,8 @@
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
 	<script src="select2/select2.min.js"></script>
 
-	<link rel="stylesheet" type="text/css" href="style.css?v=201807101545"/>
-	<script type="text/javascript" src="code.js?v=201807101545"></script>
+	<link rel="stylesheet" type="text/css" href="style.css?v=201809301433"/>
+	<script type="text/javascript" src="code.js?v=201809301433"></script>
 
 </head>
 
@@ -235,7 +235,7 @@
 				<div id="rules_bar_top">
 					Settings
 				</div>
-				<div id="adj_title">Status:</div>
+				<div id="adj_title">Buffs:</div>
 				<div class="adj_status">
 					<div class="status_challenger"><input type="checkbox" data-var="options.defensive_challenger" id="defensive_challenger"/></div>
 					<div class="status_title">Defensive Tile</div>
@@ -252,14 +252,36 @@
 					<div class="status_enemy"><input type="checkbox" data-var="options.distant_def_enemy" id="distant_def_enemy"/></div>
 				</div>
 				<div class="adj_status">
-					<div class="status_challenger"><input type="checkbox" data-var="options.candlelight_challenger" id="candlelight_challenger"/></div>
-					<div class="status_title">Candlelight</div>
-					<div class="status_enemy"><input type="checkbox" data-var="options.candlelight_enemy" id="candlelight_enemy"/></div>
+					<div class="status_challenger"><input type="checkbox" data-var="options.rush_challenger" id="rush_challenger"/></div>
+					<div class="status_title">Infantry Rush</div>
+					<div class="status_enemy"><input type="checkbox" data-var="options.rush_enemy" id="rush_enemy"/></div>
+				</div>
+				<div class="adj_status">
+					<div class="status_challenger"><input type="checkbox" data-var="options.flash_challenger" id="flash_challenger"/></div>
+					<div class="status_title">Infantry Flash</div>
+					<div class="status_enemy"><input type="checkbox" data-var="options.flash_enemy" id="flash_enemy"/></div>
 				</div>
 				<div class="adj_status">
 					<div class="status_challenger"><input type="checkbox" data-var="options.triangled_challenger" id="triangled_challenger"/></div>
 					<div class="status_title">Trilemma</div>
 					<div class="status_enemy"><input type="checkbox" data-var="options.triangled_enemy" id="triangled_enemy"/></div>
+				</div>
+				<div class="adj_status">
+					<div class="status_challenger"><input type="checkbox" data-var="options.pulse_challenger" id="pulse_challenger"/></div>
+					<div class="status_title">Ostia's Pulse</div>
+					<div class="status_enemy"><input type="checkbox" data-var="options.pulse_enemy" id="pulse_enemy"/></div>
+				</div>
+				<div class="adj_status">
+					<div class="status_challenger"><input type="checkbox" data-var="options.movement_challenger" id="movement_challenger"/></div>
+					<div class="status_title">Extra Movement</div>
+					<div class="status_enemy"><input type="checkbox" data-var="options.movement_enemy" id="movement_enemy"/></div>
+				</div>
+				<div style="line-height:40%;"><br></div>
+				<div id="adj_title">Debuffs:</div>
+				<div class="adj_status">
+					<div class="status_challenger"><input type="checkbox" data-var="options.candlelight_challenger" id="candlelight_challenger"/></div>
+					<div class="status_title">Candlelight</div>
+					<div class="status_enemy"><input type="checkbox" data-var="options.candlelight_enemy" id="candlelight_enemy"/></div>
 				</div>
 				<div class="adj_status">
 					<div class="status_challenger"><input type="checkbox" data-var="options.panic_challenger" id="panic_challenger"/></div>
@@ -275,26 +297,6 @@
 					<div class="status_challenger"><input type="checkbox" data-var="options.harsh_command_challenger" id="harsh_command_challenger"/></div>
 					<div class="status_title">Harsh Command</div>
 					<div class="status_enemy"><input type="checkbox" data-var="options.harsh_command_enemy" id="harsh_command_enemy"/></div>
-				</div>
-				<div class="adj_status">
-					<div class="status_challenger"><input type="checkbox" data-var="options.rush_challenger" id="rush_challenger"/></div>
-					<div class="status_title">Infantry Rush</div>
-					<div class="status_enemy"><input type="checkbox" data-var="options.rush_enemy" id="rush_enemy"/></div>
-				</div>
-				<div class="adj_status">
-					<div class="status_challenger"><input type="checkbox" data-var="options.flash_challenger" id="flash_challenger"/></div>
-					<div class="status_title">Infantry Flash</div>
-					<div class="status_enemy"><input type="checkbox" data-var="options.flash_enemy" id="flash_enemy"/></div>
-				</div>
-				<div class="adj_status">
-					<div class="status_challenger"><input type="checkbox" data-var="options.pulse_challenger" id="pulse_challenger"/></div>
-					<div class="status_title">Ostia's Pulse</div>
-					<div class="status_enemy"><input type="checkbox" data-var="options.pulse_enemy" id="pulse_enemy"/></div>
-				</div>
-				<div class="adj_status">
-					<div class="status_challenger"><input type="checkbox" data-var="options.movement_challenger" id="movement_challenger"/></div>
-					<div class="status_title">Extra Movement</div>
-					<div class="status_enemy"><input type="checkbox" data-var="options.movement_enemy" id="movement_enemy"/></div>
 				</div>
 				<div style="line-height:40%;"><br></div>
 				<div id="adj_title">Mechanics:</div>
@@ -340,37 +342,6 @@
 					</div>
 				</div>
 				<div style="line-height:40%;"><br></div>
-				<div id="adj_title">Simulator:</div>
-				<div class="adj_status">
-					<div class="status_desc_long">Show only max skills: </div>
-					<div class="status_select_long">
-						<input class="status_select" type="checkbox" data-var="options.showOnlyMaxSkills" id="rules_prereqs" checked="checked" />
-					</div>
-				</div>
-				<div class="adj_status">
-					<div class="status_desc_long">Show only duel skills: </div>
-					<div class="status_select_long">
-						<input class="status_select" type="checkbox" data-var="options.hideUnaffectingSkills" id="rules_hideunaffecting" checked="checked" />
-					</div>
-				</div>
-				<div class="adj_status">
-					<div class="status_desc_long">Auto-calculate: </div>
-					<div class="status_select_long">
-						<input class="status_select" type="checkbox" data-var="options.autoCalculate" id="autocalculate" checked="checked"/>
-					</div>
-				</div>
-				<div class="adj_status">
-					<div class="status_desc_long">Save simulator settings: </div>
-					<div class="status_select_long">
-						<input class="status_select" type="checkbox" data-var="options.saveSettings" id="saveSettings" checked="checked"/>
-					</div>
-				</div>
-				<div class="adj_status">
-					<div class="status_desc_long">Save filter options: </div>
-					<div class="status_select_long">
-						<input class="status_select" type="checkbox" data-var="options.saveFilters" id="saveFilters"/>
-					</div>
-				</div>
 			</div>
 			<div id="frame_adjustments" style="display: none;">
 				<div id="rules_bar_top">
@@ -981,6 +952,38 @@
 						<input type="radio" name="menu" class="menu_button" value="adjustments"> Adjustments<br>
 						<input type="radio" name="menu" class="menu_button" value="statistics"> Statistics<br>
 						<input type="radio" name="menu" class="menu_button" value="close"> Close
+					</div>
+					<div class="menu_settings">
+						<div class="adj_status">
+							<div class="status_desc_long">Show only max skills: </div>
+							<div class="status_select_long">
+								<input class="status_select" type="checkbox" data-var="options.showOnlyMaxSkills" id="rules_prereqs" checked="checked" />
+							</div>
+						</div>
+						<div class="adj_status">
+							<div class="status_desc_long">Show only duel skills: </div>
+							<div class="status_select_long">
+								<input class="status_select" type="checkbox" data-var="options.hideUnaffectingSkills" id="rules_hideunaffecting" checked="checked" />
+							</div>
+						</div>
+						<div class="adj_status">
+							<div class="status_desc_long">Auto-calculate: </div>
+							<div class="status_select_long">
+								<input class="status_select" type="checkbox" data-var="options.autoCalculate" id="autocalculate" checked="checked"/>
+							</div>
+						</div>
+						<div class="adj_status">
+							<div class="status_desc_long">Save sim settings: </div>
+							<div class="status_select_long">
+								<input class="status_select" type="checkbox" data-var="options.saveSettings" id="saveSettings" checked="checked"/>
+							</div>
+						</div>
+						<div class="adj_status">
+							<div class="status_desc_long">Save filter options: </div>
+							<div class="status_select_long">
+								<input class="status_select" type="checkbox" data-var="options.saveFilters" id="saveFilters"/>
+							</div>
+						</div>
 					</div>
 					<div class="menu_filler"></div>
 				</div>

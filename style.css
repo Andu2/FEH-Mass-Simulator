@@ -1107,11 +1107,18 @@ svg > g > g:last-child { pointer-events: none }
 }
 
 .menu_radio{
-	padding-top:2px;
+	padding-top:4px;
 	padding-left:30px;
-	padding-right:10px;
+	padding-right:2px;
 	min-width:120px;
 	min-height:92px;
+}
+
+.menu_settings{
+	padding-top:2px;
+	padding-left:2px;
+	padding-right:10px;
+	min-width:145px;	
 }
 
 #rules_bar_top{

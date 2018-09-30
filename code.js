@@ -7378,7 +7378,7 @@ function activeHero(hero){
 						Cancel Affinity 1 = negate extra disadvantage	(Extra -20% to 0%)		(Total -20%)
 						Cancel Affinity 2 = negate extra disadvantage	(Extra -20% to 0%)		(Total -20%)
 						Cancel Affinity 3 = reverse extra disadvantage	(Extra -20% to +20%)	(Total 0%)
-					Disadvantaged Gem Weapon or Triangle Adept:								(Base +20%)
+					Disadvantaged Gem Weapon or Triangle Adept:									(Base +20%)
 						Cancel Affinity 1 = negate extra advantage		(Extra +20% to 0%)		(Total +20%)
 						Cancel Affinity 2 = keep extra advantage		(Extra +20% to +20%)	(Total +40%)
 						Cancel Affinity 3 = keep extra advantage		(Extra +20% to +20%)	(Total +40%)
