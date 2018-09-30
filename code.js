@@ -1221,7 +1221,7 @@ function getPrechargeChange(skill, slot){
 
 function isDragonEffective(hero){
 	if (hero.hasExactly("Falchion") 		|| hero.hasExactly("Sealed Falchion")	|| hero.has("Exalted Falchion")
-		|| hero.hasExactly("Naga")			|| hero.hasExactly("Divine Naga")
+		|| hero.hasExactly("Naga")			|| hero.hasExactly("Divine Naga")		|| hero.has("Divine Mist")
 		|| hero.hasExactly("Breath of Fog")	|| hero.hasExactly("Summer's Breath")
 		|| hero.has("Cloud Maiougi")
 		|| (hero.hasExactly("Binding Blade") && hero.refineIndex != -1)
@@ -1264,6 +1264,7 @@ function canCounterAnyRange(hero){
 		|| hero.has("Lightning Breath")	|| hero.has("Raijinto")			|| hero.has("Siegfried")
 		|| hero.has("Ragnell")			|| hero.has("Gradivus")			|| hero.has("Alondite")
 		|| hero.has("Stout Tomahawk")	|| hero.has("Leiptr")			|| hero.has("Expiration")
+		|| hero.has("Divine Mist")
 		){
 		return true;
 	}
@@ -5642,6 +5643,11 @@ function activeHero(hero){
 				buffVal.spd = Math.max(buffVal.spd, 4);
 				skillNames.push(data.skills[this.weaponIndex].name);
 			}
+			if (this.hasExactly("With Everyone!")){
+				buffVal.def = Math.max(buffVal.def, 5);
+				buffVal.res = Math.max(buffVal.res, 5);
+				skillNames.push(data.skills[this.cIndex].name);
+			}
 		}
 
 		if(skillNames.length > 0){
@@ -7106,6 +7112,7 @@ function activeHero(hero){
 		if (enemy.range == "ranged"){
 			if (this.hasExactly("Great Flame")		|| this.hasExactly("Expiration")		|| this.has("Water Breath")
 				|| this.hasExactly("Breath of Fog")	|| this.hasExactly("Summer's Breath")	|| this.hasExactly("Breath of Blight")
+				|| this.hasExactly("Divine Mist")
 			){
 				return true;
 			}
