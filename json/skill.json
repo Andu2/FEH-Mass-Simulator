@@ -17038,7 +17038,7 @@
 		"inheritrule": "red,flying",
 		"affectsduel": 1
 	}, {
-		"skill_id": 1215,
+		"skill_id": 1218,
 		"name": "G Duel Infantry 1",
 		"slot": "a",
 		"sp": 70,
@@ -17052,7 +17052,7 @@
 		"inheritrule": "green,infantry",
 		"affectsduel": 1
 	}, {
-		"skill_id": 1216,
+		"skill_id": 1219,
 		"name": "G Duel Infantry 2",
 		"slot": "a",
 		"sp": 150,
@@ -17066,7 +17066,7 @@
 		"inheritrule": "green,infantry",
 		"affectsduel": 1
 	}, {
-		"skill_id": 1217,
+		"skill_id": 1220,
 		"name": "G Duel Infantry 3",
 		"slot": "a",
 		"sp": 300,
@@ -17080,7 +17080,7 @@
 		"inheritrule": "green,infantry",
 		"affectsduel": 1
 	}, {
-		"skill_id": 1218,
+		"skill_id": 1221,
 		"name": "Divine Mist",
 		"slot": "weapon",
 		"sp": 400,
@@ -17094,7 +17094,7 @@
 		"inheritrule": "unique",
 		"affectsduel": 1
 	}, {
-		"skill_id": 1219,
+		"skill_id": 1222,
 		"name": "Fierce Breath",
 		"slot": "a",
 		"sp": 240,
@@ -17108,7 +17108,7 @@
 		"inheritrule": "melee,nonflying,noncavalry",
 		"affectsduel": 1
 	}, {
-		"skill_id": 1220,
+		"skill_id": 1223,
 		"name": "With Everyone!",
 		"slot": "c",
 		"sp": 300,
