@@ -6457,6 +6457,10 @@ function activeHero(hero){
 			}			
 
 			//Skills
+			if(this.has("Fierce Breath")){
+				this.combatSpur.atk += 4;
+				boostText += this.name + " gets +4 Atk from defending with " + data.skills[this.aIndex].name + ".<br>";
+			}
 			if(this.has("Steady Breath")){
 				this.combatSpur.def += 4;
 				boostText += this.name + " gets +4 Def from defending with " + data.skills[this.aIndex].name + ".<br>";
@@ -7808,17 +7812,23 @@ function activeHero(hero){
 			if(absorbHp > 0){
 				damageText += this.name + " absorbs " + absorbHp + " health.<br>";
 			}
-
-			//Special charge does not increase if special was used on this attack
+			
+			//Charge changes for attacker
+			//***Special charge does not increase if special was used on this attack***
+			//TODO: This area is really confusing with duplicate code for !offensiveSpecialActivated, !defenseSpecialActivated, initator, and !initiator.
+			//		Clean or add better annotation.
 			if (!offensiveSpecialActivated){
 				var gainCharge = 0;	//For possible >1 gains
 				var loseCharge = 0;
 				var skillNames = [];
 
-				//-Breath: Initiator has
 				if (!this.initiator && this.has("Summer's Breath")){
 					gainCharge = Math.max(gainCharge, 1);
 					skillNames.push(data.skills[this.weaponIndex].name);
+				}
+				if (!this.initiator && this.has("Fierce Breath")){
+					gainCharge = Math.max(gainCharge, 1);
+					skillNames.push(data.skills[this.aIndex].name);
 				}
 				if (!this.initiator && this.has("Steady Breath")){
 					gainCharge = Math.max(gainCharge, 1);
@@ -7833,10 +7843,6 @@ function activeHero(hero){
 						gainCharge = Math.max(gainCharge, 1);
 						skillNames.push(data.skills[this.bIndex].name);
 					}
-				}
-				if (this.initiator && this.has("Fierce Breath")){
-					gainCharge = Math.max(gainCharge, 1);
-					skillNames.push(data.skills[this.aIndex].name);
 				}
 				if (this.initiator && this.has("Bold Fighter")){
 					if (this.hasAtIndex("Bold Fighter", this.bIndex) == 3 || this.combatStartHp / this.maxHp >= 1.0 / this.hasAtIndex("Bold Fighter", this.bIndex)){
@@ -7942,19 +7948,23 @@ function activeHero(hero){
 					damageText += this.name + " loses " + loseCharge + " charge due to " + skillNames.join(", ") + ".<br>";
 				}
 
-				//Initiator gains a charge after attacking
+				//Attacker gains a charge after attacking
 				this.charge++;
 			}
-
+			
+			//Charge changes for defender
 			if(!defensiveSpecialActivated){
 				var gainCharge = 0;
 				var loseCharge = 0;
 				var skillNames = [];
 
-				//-Breath: Enemy has
 				if(this.initiator && enemy.has("Summer's Breath")){
 					gainCharge = Math.max(gainCharge, 1);
 					skillNames.push(data.skills[enemy.weaponIndex].name);
+				}
+				if(this.initiator && enemy.has("Fierce Breath")){
+					gainCharge = Math.max(gainCharge, 1);
+					skillNames.push(data.skills[enemy.aIndex].name);
 				}
 				if(this.initiator && enemy.has("Steady Breath")){
 					gainCharge = Math.max(gainCharge, 1);
@@ -8003,7 +8013,7 @@ function activeHero(hero){
 					damageText += enemy.name + " loses " + loseCharge + " charge due to " + skillNames.join(", ") + ".<br>";
 				}
 
-				//Enemy gains a charge when attacked
+				//Defender gains a charge when attacked
 				enemy.charge++;
 			}
 
