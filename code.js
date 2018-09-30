@@ -1014,6 +1014,12 @@ function getValidSkills(hero,slot){
 							}
 						}
 					}
+					//inherit if is a certain color
+					else if(data.colors.indexOf(inheritRules[ruleNum])!=-1){
+						if(data.heroes[hero.index].color == inheritRules[ruleNum]){
+							inheritRuleMatches++;
+						}
+					}
 					//inherit if not a certain color
 					else if(data.colors.indexOf(inheritRules[ruleNum].replace("non",""))!=-1){
 						if(data.heroes[hero.index].color!=inheritRules[ruleNum].replace("non","")){
@@ -1319,7 +1325,7 @@ function setStats(hero){
 
 		//Calculate hero BST after IV before merge stat bonuses
 		hero.bst = hero.hp + hero.atk + hero.spd + hero.def + hero.res;
-
+		
 		//Add merge bonuses
 		var mergeBoost = {"hp":0,"atk":0,"spd":0,"def":0,"res":0};
 
@@ -6585,25 +6591,28 @@ function activeHero(hero){
 		this.combatStat.def = Math.max(0, this.combatStat.def + this.spur.def + this.combatSpur.def);
 		this.combatStat.res = Math.max(0, this.combatStat.res + this.spur.res + this.combatSpur.res);
 
-		//Bladetome bonus
-		if (this.has("Raudrblade") || this.has("Blarblade") || this.has("Gronnblade") || this.hasExactly("Thunderhead") || this.hasExactly("Odin's Grimoire")){
+		//Self Buff Atk bonus
+		if (this.has("Raudrblade") 				|| this.has("Blarblade") 				|| this.has("Gronnblade")
+			|| this.hasExactly("Thunderhead") 	|| this.hasExactly("Odin's Grimoire")	|| this.hasExactly("Laevatein")
+		){
 			var atkbonus = this.combatBuffs.atk + this.combatBuffs.spd + this.combatBuffs.def + this.combatBuffs.res;
 			this.combatStat.atk += atkbonus;
 			if (atkbonus != 0){statText += this.name + " gains +" + atkbonus + " Atk from buffs with " + data.skills[this.weaponIndex].name + ".<br>";}
 		}
-		//Blizzard bonus
+		//Enemy Debuff Atk bonus
 		if (this.has("Blizzard")){
 			var atkbonus = -1 * (enemy.combatDebuffs.atk + enemy.combatDebuffs.spd + enemy.combatDebuffs.def + enemy.combatDebuffs.res);
 			this.combatStat.atk += atkbonus;
 			if (atkbonus != 0){statText += this.name + " gains +" + atkbonus + " Atk from enemy penalties with " + data.skills[this.weaponIndex].name + ".<br>";}
 		}
-		//Cleaner bonus
-		if (this.has("The Cleaner")){
+		//Enemy Buff Atk bonus
+		if (this.hasExactly("The Cleaner") || this.hasExactly("Niu")){
 			var atkbonus = enemy.combatBuffs.atk + enemy.combatBuffs.spd + enemy.combatBuffs.def + enemy.combatBuffs.res;
-			this.combatStat.atk += atkbonus;
+			if (this.hasExactly("Niu")){atkbonus = Math.floor(atkbonus/2);}
+			this.combatStat.atk += atkbonus;			
 			if (atkbonus != 0){statText += this.name + " gains +" + atkbonus + " Atk from enemy buffs with " + data.skills[this.weaponIndex].name + ".<br>";}
 		}
-
+		
 		return statText;
 	}
 

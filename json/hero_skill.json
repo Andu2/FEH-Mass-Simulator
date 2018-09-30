@@ -9563,5 +9563,65 @@
 		"hero_id": 295,
 		"skill_id": 493,
 		"rarity": 5
+	}, {
+		"hero_id": 296,
+		"skill_id": 1210,
+		"rarity": 5
+	}, {
+		"hero_id": 296,
+		"skill_id": 144,
+		"rarity": 5
+	}, {
+		"hero_id": 296,
+		"skill_id": 219,
+		"rarity": 5
+	}, {
+		"hero_id": 296,
+		"skill_id": 1133,
+		"rarity": 5
+	}, {
+		"hero_id": 296,
+		"skill_id": 1213,
+		"rarity": 5
+	}, {
+		"hero_id": 297,
+		"skill_id": 1214,
+		"rarity": 5
+	}, {
+		"hero_id": 297,
+		"skill_id": 165,
+		"rarity": 5
+	}, {
+		"hero_id": 297,
+		"skill_id": 1217,
+		"rarity": 5
+	}, {
+		"hero_id": 297,
+		"skill_id": 1029,
+		"rarity": 5
+	}, {
+		"hero_id": 297,
+		"skill_id": 1139,
+		"rarity": 5
+	}, {
+		"hero_id": 298,
+		"skill_id": 1022,
+		"rarity": 5
+	}, {
+		"hero_id": 298,
+		"skill_id": 174,
+		"rarity": 5
+	}, {
+		"hero_id": 298,
+		"skill_id": 1217,
+		"rarity": 5
+	}, {
+		"hero_id": 298,
+		"skill_id": 427,
+		"rarity": 5
+	}, {
+		"hero_id": 298,
+		"skill_id": 566,
+		"rarity": 5
 	}
 ]
