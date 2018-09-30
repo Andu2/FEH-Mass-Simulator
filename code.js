@@ -7834,6 +7834,10 @@ function activeHero(hero){
 						skillNames.push(data.skills[this.bIndex].name);
 					}
 				}
+				if (this.initiator && this.has("Fierce Breath")){
+					gainCharge = Math.max(gainCharge, 1);
+					skillNames.push(data.skills[this.aIndex].name);
+				}
 				if (this.initiator && this.has("Bold Fighter")){
 					if (this.hasAtIndex("Bold Fighter", this.bIndex) == 3 || this.combatStartHp / this.maxHp >= 1.0 / this.hasAtIndex("Bold Fighter", this.bIndex)){
 						gainCharge = Math.max(gainCharge, 1);
