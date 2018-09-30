@@ -5505,17 +5505,17 @@ function activeHero(hero){
 
 		//Chill Debuff
 		if ((enemy.challenger && options.chilled_challenger) || (!enemy.challenger && options.chilled_enemy)){
-			if (this.hasExactly("Huginn's Egg") && this.hp / this.maxHp >= 0.5 ){
+			if (this.hasExactly("Huginn's Egg") && this.hp / this.maxHp >= 0.5){
 				debuffVal.atk = Math.min(debuffVal.atk, -5);
 				debuffVal.def = Math.min(debuffVal.def, -5);
 				skillNames.push("Huginn's Egg");
 			}
-			if (this.hasExactly("Muninn's Egg") && this.hp / this.maxHp >= 0.5 ){
+			if (this.hasExactly("Muninn's Egg") && this.hp / this.maxHp >= 0.5){
 				debuffVal.atk = Math.min(debuffVal.atk, -5);
 				debuffVal.res = Math.min(debuffVal.res, -5);
 				skillNames.push("Muninn's Egg");
 			}
-			if (this.hasExactly("Chilling Seal")){
+			if (this.hasExactly("Chilling Seal") && this.hp / this.maxHp >= 0.5){
 				debuffVal.atk = Math.min(debuffVal.atk, -6);
 				debuffVal.spd = Math.min(debuffVal.spd, -6);
 				skillNames.push("Chilling Seal");
