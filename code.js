@@ -2893,7 +2893,9 @@ function showSkillTooltip(heroType, skillType){
 			tooltipText = "<span class=\"bold\">" + data.skills[skillID].name + "</span>";
 			tooltipText += (skillType == "weapon") ? " Mt: <font color=\"#fefec8\">" + data.skills[skillID].atk + "</font>" : "";
 			tooltipText += (skillType == "special") ? " CD: <font color=\"#fefec8\">" + data.skills[skillID].charge + "</font>" : "";
-			tooltipText += " SP: <font color=\"#fefec8\">" + data.skills[skillID].sp + "</font><br>";
+			tooltipText += " SP: <font color=\"#fefec8\">" + data.skills[skillID].sp + "</font>";
+			tooltipText += (skillType != "weapon" && skillType != "assist" && skillType != "special") ? (data.skills[skillID].affectsduel ? "" : " <font color=\"#dcdcdc\">(non-duel)</font>") : "";
+			tooltipText += "<br>";
 			tooltipText += data.skills[skillID].description;
 		}
 
@@ -5078,6 +5080,7 @@ function activeHero(hero){
 	this.initiator = false;
 	this.lit = false;
 	this.triangled = false;
+	this.bewitched = false;
 	this.panicked = false;
 	this.rushed = false;
 	this.flashed = false;
@@ -5727,6 +5730,18 @@ function activeHero(hero){
 			this.combatSpur.atk += 6;
 			boostText += this.name + " gets +6 Atk from " + data.refine[this.refineIndex].name + " (Refined) against a ranged opponent.<br>";
 		}
+		if (this.close_defed && enemy.range == "melee"){
+					buffVal = 4;
+					this.combatSpur.def += buffVal;
+					this.combatSpur.res += buffVal;
+					boostText += this.name + " gets +" + buffVal + " Def/Res against a melee opponent with Close Guard 3.<br>";
+		}
+		if (this.distant_defed && enemy.range == "ranged"){
+					buffVal = 4;
+					this.combatSpur.def += buffVal;
+					this.combatSpur.res += buffVal;
+					boostText += this.name + " gets +" + buffVal + " Def/Res against a ranged opponent with Distant Guard 3.<br>";
+		}
 		if (this.hasExactly("Exalted Falchion") && (this.buffs.atk > 0 || this.buffs.spd > 0 || this.buffs.def > 0 || this.buffs.res > 0)){
 			boostText += this.name + " gets ";
 			if (this.buffs.atk > 0){
@@ -6328,12 +6343,6 @@ function activeHero(hero){
 
 			//Close/Distant Def
 			if(enemy.range == "ranged"){
-				if (this.distant_defed){
-					buffVal = 4;
-					this.combatSpur.def += buffVal;
-					this.combatSpur.res += buffVal;
-					boostText += this.name + " gets +" + buffVal + " Def/Res from being attacked from range with Distant Guard 3.<br>";
-				}
 				if(this.hasAtIndex("Distant Def", this.aIndex)){
 					buffVal = this.hasAtIndex("Distant Def", this.aIndex) * 2;
 					this.combatSpur.def += buffVal;
@@ -6354,12 +6363,6 @@ function activeHero(hero){
 				}
 			}
 			if (enemy.range == "melee"){
-				if (this.close_defed){
-					buffVal = 4;
-					this.combatSpur.def += buffVal;
-					this.combatSpur.res += buffVal;
-					boostText += this.name + " gets +" + buffVal + " Def/Res from being attacked from melee with Close Guard 3.<br>";
-				}
 				if (this.hasAtIndex("Close Def", this.aIndex)){
 					buffVal = this.hasAtIndex("Close Def", this.aIndex) * 2;
 					this.combatSpur.def += buffVal;
@@ -6889,7 +6892,7 @@ function activeHero(hero){
 				sealStats(data.skills[this.weaponIndex].name, ["def","res"], [-7]);
 			}
 			if (this.has("Silver Dagger") 		|| this.has("Seashell") 		|| this.has("Dancer's Fan") 	|| this.has("Kagami Mochi")
-				|| this.has("Barb Shuriken") 	|| this.has("Lethal Carrot")		|| this.has("Starfish")
+				|| this.has("Barb Shuriken") 	|| this.has("Lethal Carrot")	|| this.has("Starfish")			|| this.has("Bottled Juice")
 				|| this.has("Cloud Maiougi")	|| this.has("Sky Maiougi")		|| this.has("Dusk Uchiwa")
 				){
 				sealStats(data.skills[this.weaponIndex].name, ["def","res"], [-5, -7]);
@@ -7116,7 +7119,7 @@ function activeHero(hero){
 		if (enemy.range == "ranged"){
 			if (this.hasExactly("Great Flame")		|| this.hasExactly("Expiration")		|| this.has("Water Breath")
 				|| this.hasExactly("Breath of Fog")	|| this.hasExactly("Summer's Breath")	|| this.hasExactly("Breath of Blight")
-				|| this.hasExactly("Divine Mist")
+				|| this.hasExactly("Divine Mist")	|| this.hasExactly("Spirit Breath")
 			){
 				return true;
 			}
@@ -7929,12 +7932,16 @@ function activeHero(hero){
 
 				//Reset skillNames
 				skillNames = [];
-
+				
 				if (enemy.hasAtIndex("Guard", enemy.bIndex)){
 					if (enemy.combatStartHp / enemy.maxHp >= 1.1 - enemy.hasAtIndex("Guard", enemy.bIndex) * 0.1){
 						loseCharge = Math.max(loseCharge, 1);
 						skillNames.push(data.skills[enemy.bIndex].name);
 					}
+				}
+				if (enemy.has("Devilish Bow") || enemy.has("Bottled Juice") || enemy.has("Hack-o'-Lantern+")){
+					loseCharge = Math.max(loseCharge, 1);
+					skillNames.push(data.skills[enemy.weaponIndex].name);
 				}
 				if (enemy.has("Special Fighter")){
 					if (enemy.combatStartHp/enemy.maxHp >= 1.1 - enemy.has("Special Fighter") * 0.2){
@@ -7949,7 +7956,11 @@ function activeHero(hero){
 				}
 
 				//Attacker gains a charge after attacking
-				this.charge++;
+				if (!this.bewitched){
+					this.charge++;
+				} else{
+					damageText += this.name + " gains no charge from attacking due to Witchy Wand debuff.<br>";
+				}
 			}
 			
 			//Charge changes for defender
@@ -8001,6 +8012,10 @@ function activeHero(hero){
 						skillNames.push(data.skills[this.bIndex].name);
 					}
 				}
+				if(this.has("Devilish Bow") || this.has("Bottled Juice") || this.has("Hack-o'-Lantern+")){
+					loseCharge = Math.max(loseCharge, 1);
+					skillNames.push(data.skills[this.weaponIndex].name);
+				}
 				if (this.has("Special Fighter")){
 					if (this.combatStartHp/this.maxHp >= 1.1 - this.has("Special Fighter") * 0.2){
 						loseCharge = Math.max(loseCharge, 1);
@@ -8014,7 +8029,11 @@ function activeHero(hero){
 				}
 
 				//Defender gains a charge when attacked
-				enemy.charge++;
+				if (!enemy.bewitched){
+					enemy.charge++;
+				} else{
+					damageText += enemy.name + " gains no charge from defending due to Witchy Wand debuff.<br>";
+				}
 			}
 
 			//Show hp
@@ -8135,6 +8154,12 @@ function activeHero(hero){
 				}
 				if(options.triangled_enemy){
 					enemy.challenger ? this.triangled = true : enemy.triangled = true;
+				}
+				if(options.bewitched_challenger){
+					this.challenger ? this.bewitched = true : enemy.bewitched = true;
+				}
+				if(options.bewitched_enemy){
+					enemy.challenger ? this.bewitched = true : enemy.bewitched = true;
 				}
 				if(this.challenger ? options.threaten_enemy : options.threaten_challenger){
 					roundText += enemy.threaten(this);
@@ -8446,6 +8471,10 @@ function activeHero(hero){
 				thisAttackRankChanged = true;
 			}
 		}
+		if (this.initiate && this.hasExactly("Spirit Breath") && this.combatStat.def >= enemy.combatStat.def + 5){
+			thisAttackRank++;
+			thisAttackRankChanged = true;
+		}
 		if (this.hasExactly("Garm")){
 			if (this.combatBuffs.atk != 0 || this.combatBuffs.spd != 0 || this.combatBuffs.def != 0 || this.combatBuffs.res != 0
 				|| (this.hasExactly("Armored Boots") && this.combatStartHp/this.maxHp == 1)
@@ -8732,6 +8761,7 @@ function activeHero(hero){
 		this.panicked = false;
 		this.lit = false;
 		this.triangled = false;
+		this.bewitched = false;
 
 		//Post-Combat Buffs
 		//Rogue dagger works on enemy turn, but buffs are reset at beginning of player turn,
@@ -8744,43 +8774,59 @@ function activeHero(hero){
 			roundText += enemy.postCombatBuff();
 			roundText += enemy.postCombatHeal();
 		}
+		//Post-combat Debuffs
 		if(this.hp > 0 && enemy.hp > 0){
 			//Apply post-combat debuffs (seal)
 			roundText += this.seal(enemy);
 			roundText += enemy.seal(this);
 
-			//Panic
-			if(this.attacked && (this.hasExactly("Panic")	|| this.hasExactly("Panic+") 	|| this.has("Legion's Axe")
-				|| ((this.hasExactly("Monstrous Bow+") 		|| this.hasExactly("Spectral Tome+")) && this.refineIndex != -1)
-				)){
-				enemy.panicked = true;
-				roundText += this.name + " panics " + enemy.name + ".<br>";
+			//Status
+			//TODO: Refactor skill check for this.attacked and enemy.attacked into one function so that skills don't have to be written twice
+			if (this.didAttack){
+				if (this.hasExactly("Panic")					|| this.hasExactly("Panic+") 	|| this.has("Legion's Axe")
+					|| ((this.hasExactly("Monstrous Bow+") 	|| this.hasExactly("Spectral Tome+")) && this.refineIndex != -1)
+				){
+					enemy.panicked = true;
+					roundText += this.name + " panics " + enemy.name + ".<br>";
+				}
+				if (this.has("Candlelight")){
+					enemy.lit = true;
+					roundText += this.name + " inflicts " + enemy.name + " with an inability to make counterattacks.<br>";
+				}
+				if (this.has("Trilemma")){
+					enemy.triangled = true;
+					roundText += this.name + " inflicts " + enemy.name + " with a boost to triangle affinity.<br>";
+				}
+				if (this.has("Witchy Wand")){
+					enemy.resetCharge;
+					roundText += this.name + " reduces " + enemy.name + "'s charges to zero after combat with " + data.skills[this.weaponIndex].name + ".<br>";
+					enemy.bewitched = true;
+					roundText += this.name + " inflicts " + enemy.name + " with decreased charge gain after attacks.<br>";
+				}
 			}
-			if(enemy.attacked && (enemy.hasExactly("Panic") || enemy.hasExactly("Panic+") 	|| enemy.has("Legion's Axe")
-				|| ((enemy.hasExactly("Monstrous Bow+") 	|| enemy.hasExactly("Spectral Tome+")) && enemy.refineIndex != -1)
-				)){
-				this.panicked = true;
-				roundText += enemy.name + " panics " + this.name + ".<br>";
-			}
-
-			//Candlelight
-			if(this.has("Candlelight")){
-				enemy.lit = true;
-				roundText += this.name + " inflicts " + enemy.name + " with an inability to make counterattacks.<br>";
-			}
-			if(enemy.has("Candlelight")){
-				this.lit = true;
-				roundText += enemy.name + " inflicts " + this.name + " with an inability to make counterattacks.<br>";
-			}
-
-			//Trilemma
-			if(this.has("Trilemma")){
-				enemy.triangled = true;
-				roundText += this.name + " inflicts " + enemy.name + " with a boost to triangle affinity.<br>";
-			}
-			if(enemy.has("Trilemma")){
-				this.triangled = true;
-				roundText += enemy.name + " inflicts " + this.name + " with a boost to triangle affinity.<br>";
+			if (enemy.didAttack){
+				if (enemy.hasExactly("Panic") 				|| enemy.hasExactly("Panic+") 	|| enemy.has("Legion's Axe")
+					|| ((enemy.hasExactly("Monstrous Bow+") || enemy.hasExactly("Spectral Tome+")) && enemy.refineIndex != -1)
+				){
+					this.panicked = true;
+					roundText += enemy.name + " panics " + this.name + ".<br>";
+				}
+				if (enemy.has("Candlelight")){
+					this.lit = true;
+					roundText += enemy.name + " inflicts " + this.name + " with an inability to make counterattacks.<br>";
+				}
+				
+				if (enemy.has("Trilemma")){
+					this.triangled = true;
+					roundText += enemy.name + " inflicts " + this.name + " with a boost to triangle affinity.<br>";
+				}
+				
+				if (enemy.has("Witchy Wand")){
+					this.resetCharge();
+					roundText += enemy.name + " reduces " + this.name + "'s charges to zero after combat with " + data.skills[enemy.weaponIndex].name + ".<br>";
+					this.bewitched = true;
+					roundText += enemy.name + " inflicts " + this.name + " with decreased charge gain after attacks.<br>";
+				}
 			}
 
 			//Finally, Galeforce!
