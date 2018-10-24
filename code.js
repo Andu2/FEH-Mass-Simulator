@@ -6491,10 +6491,15 @@ function activeHero(hero){
 				this.combatSpur.atk += buffVal;
 				boostText += this.name + " gets +" + buffVal + " Atk from defending with " + data.skills[this.aIndex].name + ".<br>";
 			}
-			if(this.has("Darting Stance")){
-				buffVal = this.has("Darting Stance") * 2;
+			if(this.hasAtIndex("Darting Stance", this.aIndex)){
+				buffVal = this.hasAtIndex("Darting Stance", this.aIndex) * 2;
 				this.combatSpur.spd += buffVal;
 				boostText += this.name + " gets +" + buffVal + " Spd from defending with " + data.skills[this.aIndex].name + ".<br>";
+            }
+            if(this.hasAtIndex("Darting Stance", this.sIndex)){
+				buffVal = this.hasAtIndex("Darting Stance", this.sIndex) * 2;
+				this.combatSpur.spd += buffVal;
+				boostText += this.name + " gets +" + buffVal + " Spd from defending with " + data.skills[this.sIndex].name + ".<br>";
 			}
 			if(this.has("Steady Stance")){
 				buffVal = this.has("Steady Stance") * 2;
