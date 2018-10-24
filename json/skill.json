@@ -17359,5 +17359,47 @@
 		"charge": 0,
 		"inheritrule": "axe",
 		"affectsduel": 1
+	}, {
+		"skill_id": 1241,
+		"name": "Darting Stance 1",
+		"slot": "s",
+		"sp": 50,
+		"description": "Grants Spd+2 during combat when this unit is attacked.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "nonstaff",
+		"affectsduel": 1
+	}, {
+		"skill_id": 1242,
+		"name": "Darting Stance 2",
+		"slot": "s",
+		"sp": 100,
+		"description": "Grants Spd+4 during combat when this unit is attacked.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "nonstaff",
+		"affectsduel": 1
+	}, {
+		"skill_id": 1243,
+		"name": "Darting Stance 3",
+		"slot": "s",
+		"sp": 200,
+		"description": "Grants Spd+6 during combat when this unit is attacked.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "nonstaff",
+		"affectsduel": 1
 	}
 ]
