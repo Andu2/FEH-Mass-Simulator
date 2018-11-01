@@ -6217,8 +6217,8 @@ function activeHero(hero){
 				this.combatSpur.def += buffVal;
 				this.combatSpur.res += buffVal;
 				boostText += this.name + " gets +" + buffVal + " Atk/Spd/Def/Res from being adjacent to a infantry magic ally with " + skillName + " (Refined).<br>";
-      }
-      if (this.hasAtRefineIndex("Infantry & Armored Atk Spd Bond", this.refineIndex)){
+			}	
+			if (this.hasAtRefineIndex("Infantry & Armored Atk Spd Bond", this.refineIndex)){
 				buffVal = 4;
 				skillName = "Infantry & Armored Atk Spd Bond";
 				this.combatSpur.atk += buffVal;
@@ -6461,18 +6461,18 @@ function activeHero(hero){
 				this.combatSpur.def += 2;
 				this.combatSpur.res += 2;
 				boostText += this.name + " gets +2 Atk/Spd/Def/Res while defending with " + data.skills[this.weaponIndex].name + ".<br>";
-      }            
-      if (this.hasExactly("Vidofnir")) {
-          let refinedVidofnir = data.refine[this.refineIndex] && data.refine[this.refineIndex].category == 'Vidofnir';
-          if (refinedVidofnir && (enemy.weaponType == "sword" || enemy.weaponType == "axe" || enemy.weaponType == "lance"  || enemy.weaponType == "dragon" )) {
-              this.combatSpur.def += 7;
-              this.combatSpur.res += 7;
-              boostText += this.name + " gets +7 Def/Res while defending with " + data.skills[this.weaponIndex].name + " against sword, axe, lance or dragon stone.<br>";
-          } else if (enemy.weaponType == "sword" || enemy.weaponType == "axe" || enemy.weaponType == "lance" ) {
-              this.combatSpur.def += 7;
-              boostText += this.name + " gets +7 Def while defending with " + data.skills[this.weaponIndex].name + " against sword, axe, or lance.<br>";
-          }
-      }
+			}            
+			if (this.hasExactly("Vidofnir")){
+				let refinedVidofnir = data.refine[this.refineIndex] && data.refine[this.refineIndex].category == 'Vidofnir';
+				if (refinedVidofnir && (enemy.weaponType == "sword" || enemy.weaponType == "axe" || enemy.weaponType == "lance"  || enemy.weaponType == "dragon" )) {
+					this.combatSpur.def += 7;
+					this.combatSpur.res += 7;
+					boostText += this.name + " gets +7 Def/Res while defending with " + data.skills[this.weaponIndex].name + " against sword, axe, lance or dragon stone.<br>";
+				}else if (enemy.weaponType == "sword" || enemy.weaponType == "axe" || enemy.weaponType == "lance" ) {
+					this.combatSpur.def += 7;
+					boostText += this.name + " gets +7 Def while defending with " + data.skills[this.weaponIndex].name + " against sword, axe, or lance.<br>";
+				}
+			}
 			if (this.hasExactly("Tyrfing") && this.hp / this.maxHp <= 0.5){
 				this.combatSpur.def += 4;
 				boostText += this.name + " gets +4 Def in combat from " + data.skills[this.weaponIndex].name + " with <= 50% health.<br>";
