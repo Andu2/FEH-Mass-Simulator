@@ -5221,6 +5221,28 @@ function activeHero(hero){
 			this.precharge++;
 		}
 	}
+	//TODO: Combine this with precharge from UI change
+	this.resetPrecharge = function(){
+		//***Precharge is confusing here: Why is it added into charge first then added again from skills?***
+		if(this.has("Quickened Pulse")){
+			this.precharge++;
+		}
+		if(this.has("S Drink")){
+			this.precharge++;
+		}
+		//Shield Pulse charge at beginning
+		if (getSpecialType(data.skills[this.specialIndex]) == "defensive"){
+			if(this.has("Shield Pulse 3")){
+				this.precharge += 2;
+			} else if(this.has("Shield Pulse 1") || this.has("Shield Pulse 2")){
+				this.precharge++;
+			}
+		}
+		//Other Pulse skills
+		if (this.pulsed){
+			this.precharge++;
+		}
+	}
 
 	//Set charge at beginning
 	this.resetCharge();
@@ -6195,6 +6217,13 @@ function activeHero(hero){
 				this.combatSpur.def += buffVal;
 				this.combatSpur.res += buffVal;
 				boostText += this.name + " gets +" + buffVal + " Atk/Spd/Def/Res from being adjacent to a infantry magic ally with " + skillName + " (Refined).<br>";
+      }
+      if (this.hasAtRefineIndex("Infantry & Armored Atk Spd Bond", this.refineIndex)){
+				buffVal = 4;
+				skillName = "Infantry & Armored Atk Spd Bond";
+				this.combatSpur.atk += buffVal;
+				this.combatSpur.spd += buffVal;
+				boostText += this.name + " gets +" + buffVal + " Atk/Spd from being adjacent to a infantry or armored ally with " + skillName + " (Refined).<br>";
 			}
 		}
 
@@ -6432,11 +6461,18 @@ function activeHero(hero){
 				this.combatSpur.def += 2;
 				this.combatSpur.res += 2;
 				boostText += this.name + " gets +2 Atk/Spd/Def/Res while defending with " + data.skills[this.weaponIndex].name + ".<br>";
-			}
-			if (this.hasExactly("Vidofnir") && (enemy.weaponType == "sword" || enemy.weaponType == "axe" ||enemy.weaponType == "lance" )){
-				this.combatSpur.def += 7;
-				boostText += this.name + " gets +7 Def while defending with " + data.skills[this.weaponIndex].name + " against sword, axe, or lance.<br>";
-			}
+      }            
+      if (this.hasExactly("Vidofnir")) {
+          let refinedVidofnir = data.refine[this.refineIndex] && data.refine[this.refineIndex].category == 'Vidofnir';
+          if (refinedVidofnir && (enemy.weaponType == "sword" || enemy.weaponType == "axe" || enemy.weaponType == "lance"  || enemy.weaponType == "dragon" )) {
+              this.combatSpur.def += 7;
+              this.combatSpur.res += 7;
+              boostText += this.name + " gets +7 Def/Res while defending with " + data.skills[this.weaponIndex].name + " against sword, axe, lance or dragon stone.<br>";
+          } else if (enemy.weaponType == "sword" || enemy.weaponType == "axe" || enemy.weaponType == "lance" ) {
+              this.combatSpur.def += 7;
+              boostText += this.name + " gets +7 Def while defending with " + data.skills[this.weaponIndex].name + " against sword, axe, or lance.<br>";
+          }
+      }
 			if (this.hasExactly("Tyrfing") && this.hp / this.maxHp <= 0.5){
 				this.combatSpur.def += 4;
 				boostText += this.name + " gets +4 Def in combat from " + data.skills[this.weaponIndex].name + " with <= 50% health.<br>";
@@ -6509,10 +6545,15 @@ function activeHero(hero){
 				this.combatSpur.atk += buffVal;
 				boostText += this.name + " gets +" + buffVal + " Atk from defending with " + data.skills[this.aIndex].name + ".<br>";
 			}
-			if(this.has("Darting Stance")){
-				buffVal = this.has("Darting Stance") * 2;
+			if(this.hasAtIndex("Darting Stance", this.aIndex)){
+				buffVal = this.hasAtIndex("Darting Stance", this.aIndex) * 2;
 				this.combatSpur.spd += buffVal;
 				boostText += this.name + " gets +" + buffVal + " Spd from defending with " + data.skills[this.aIndex].name + ".<br>";
+            }
+            if(this.hasAtIndex("Darting Stance", this.sIndex)){
+				buffVal = this.hasAtIndex("Darting Stance", this.sIndex) * 2;
+				this.combatSpur.spd += buffVal;
+				boostText += this.name + " gets +" + buffVal + " Spd from defending with " + data.skills[this.sIndex].name + ".<br>";
 			}
 			if(this.has("Steady Stance")){
 				buffVal = this.has("Steady Stance") * 2;
