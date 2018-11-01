@@ -5221,28 +5221,6 @@ function activeHero(hero){
 			this.precharge++;
 		}
 	}
-	//TODO: Combine this with precharge from UI change
-	this.resetPrecharge = function(){
-		//***Precharge is confusing here: Why is it added into charge first then added again from skills?***
-		if(this.has("Quickened Pulse")){
-			this.precharge++;
-		}
-		if(this.has("S Drink")){
-			this.precharge++;
-		}
-		//Shield Pulse charge at beginning
-		if (getSpecialType(data.skills[this.specialIndex]) == "defensive"){
-			if(this.has("Shield Pulse 3")){
-				this.precharge += 2;
-			} else if(this.has("Shield Pulse 1") || this.has("Shield Pulse 2")){
-				this.precharge++;
-			}
-		}
-		//Other Pulse skills
-		if (this.pulsed){
-			this.precharge++;
-		}
-	}
 
 	//Set charge at beginning
 	this.resetCharge();
