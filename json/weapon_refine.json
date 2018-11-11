@@ -820,27 +820,27 @@
 		"description": "If foe initiates combat and uses sword, lance, axe, or dragonstone, grants Def/Res+7 during combat. If unit is within 2 spaces of an infantry or armored ally, grants Atk/Spd+4 during combat.",
 		"sp": 400, "hp": 3, "atk": 0, "spd": 0, "def": 0, "res": 0,
 		"prereq": "Vidofnir", "exclusive": "Tana"
-  },	{
+	},	{
 		"category": "Vidofnir",	"name": "Atk Bonus",
 		"description": "If foe initiates combat and uses sword, lance, axe, or dragonstone, grants Def/Res+7 during combat.",
 		"sp": 400, "hp": 5, "atk": 2, "spd": 0, "def": 0, "res": 0,
 		"prereq": "Vidofnir", "exclusive": "Tana"
-  },	{
+	},	{
 		"category": "Vidofnir",	"name": "Spd Bonus",
 		"description": "If foe initiates combat and uses sword, lance, axe, or dragonstone, grants Def/Res+7 during combat.",
 		"sp": 400, "hp": 5, "atk": 0, "spd": 3, "def": 0, "res": 0,
 		"prereq": "Vidofnir", "exclusive": "Tana"
-  },	{
+	},	{
 		"category": "Vidofnir",	"name": "Def Bonus",
 		"description": "If foe initiates combat and uses sword, lance, axe, or dragonstone, grants Def/Res+7 during combat.",
 		"sp": 400, "hp": 5, "atk": 0, "spd": 0, "def": 4, "res": 0,
 		"prereq": "Vidofnir", "exclusive": "Tana"
-  },	{
+	},	{
 		"category": "Vidofnir",	"name": "Res Bonus",
 		"description": "If foe initiates combat and uses sword, lance, axe, or dragonstone, grants Def/Res+7 during combat.",
 		"sp": 400, "hp": 5, "atk": 0, "spd": 0, "def": 0, "res": 4,
 		"prereq": "Vidofnir", "exclusive": "Tana"
-  },  {
+	},  {
 		"category": "Eckesachs",
 		"name": "Distant Def",
 		"sp": 400,
@@ -1642,7 +1642,7 @@
 		"spd": 0,
 		"def": 0,
 		"res": 0,
-		"prereq": "Witchy Wand+,Absorb+,Fear+,Slow+,Gravity+,Pain+,Panic+,Candlelight+,Trilemma+",
+		"prereq": "Flash+,Witchy Wand+,Absorb+,Fear+,Slow+,Gravity+,Pain+,Panic+,Candlelight+,Trilemma+",
 		"exclusive": ""
 	},	{
 		"category": "Staves",
@@ -1654,7 +1654,7 @@
 		"spd": 0,
 		"def": 0,
 		"res": 0,
-		"prereq": "Witchy Wand+,Absorb+,Fear+,Slow+,Gravity+,Pain+,Panic+,Candlelight+,Trilemma+",
+		"prereq": "Flash+,Witchy Wand+,Absorb+,Fear+,Slow+,Gravity+,Pain+,Panic+,Candlelight+,Trilemma+",
 		"exclusive": ""
 	},	{
 		"category": "Dragonstone",

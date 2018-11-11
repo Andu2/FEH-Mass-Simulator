@@ -1150,6 +1150,7 @@ function getCDChange(skill, slot){
 			|| skillName.indexOf("Berserk Armads") != -1    || skillName.indexOf("Nameless Blade") != -1	|| skillName.indexOf("Barb Shuriken") != -1
 			|| skillName.indexOf("Mjolnir") != -1			|| skillName.indexOf("Vassal's Blade") != -1	|| skillName.indexOf("Dauntless Lance") != -1
 			|| skillName.indexOf("Maltet") != -1			|| skillName.indexOf("Hoarfrost Knife") != -1	|| skillName.indexOf("Missiletainn") != -1
+			|| skillName.indexOf("Draconic Rage") != -1
 			){
 				return -1;
         }
@@ -5811,6 +5812,16 @@ function activeHero(hero){
 			this.panicked = true;
 			boostText += this.name + " gets -3 Atk/Spd/Def/Res from " + data.skills[enemy.weaponIndex].name + " and is inflicted with panic.<br>";
 		}
+		if ((enemy.hasExactly("Book of Dreams") || enemy.hasExactly("Book of Shadows"))
+			&& (enemy.adjacent > 0)
+			){
+			this.combatSpur.atk -= 4;
+			this.combatSpur.spd -= 4;
+			this.combatSpur.def -= 4;
+			this.combatSpur.res -= 4;
+			this.panicked = true;
+			boostText += this.name + " gets -4 Atk/Spd/Def/Res from " + data.skills[enemy.weaponIndex].name + ".<br>";
+		}
 		
 		//Solo Skills
 		if (this.adjacent == 0){
@@ -6055,37 +6066,7 @@ function activeHero(hero){
 			var skillName = "";
 			var buffVal = 0;
 
-			//Comparative Adjacent Skills
-			if (this.hasAtIndex("Swift Mulagir", this.weaponIndex) && this.adjacent2 > this.adjacent2_foe){
-				buffVal = 5;
-				skillName = data.skills[this.weaponIndex].name;
-				this.combatSpur.atk += buffVal;
-				this.combatSpur.spd += buffVal;
-				boostText += this.name + " gets +" + buffVal + " Atk/Spd from having more adjacent allies with " + skillName + ".<br>";
-			}
-
 			//Weapons
-			if (this.hasExactly("Hinoka's Spear")){
-				buffVal = 4;
-				skillName = data.skills[this.weaponIndex].name;
-				this.combatSpur.atk += buffVal;
-				this.combatSpur.spd += buffVal;
-				boostText += this.name + " gets +" + buffVal + " Atk/Spd from being within 2 spaces of an infantry or flying ally with " + skillName + ".<br>";
-			}
-			if (this.hasExactly("Camilla's Axe")){
-				buffVal = 4;
-				skillName = data.skills[this.weaponIndex].name;
-				this.combatSpur.atk += buffVal;
-				this.combatSpur.spd += buffVal;
-				boostText += this.name + " gets +" + buffVal + " Atk/Spd from being within 2 spaces of an cavalry or flying ally with " + skillName + ".<br>";
-			}
-			if (this.hasExactly("Nifl Frostflowers") || this.hasExactly("Muspell Fireposy")){
-				buffVal = 2 * Math.min(3, this.adjacent2);
-				skillName = data.skills[this.weaponIndex].name;
-				this.combatSpur.atk += buffVal;
-				this.combatSpur.spd += buffVal;
-				boostText += this.name + " gets +" + buffVal + " Atk/Spd for each ally within 2 spaces with " + skillName + " (Maximum +6).<br>";
-			}
 			if (this.hasAtRefineIndex("All Bond", this.refineIndex)){
 				buffVal = 4;
 				skillName = data.skills[this.weaponIndex].name;
@@ -6095,20 +6076,6 @@ function activeHero(hero){
 				this.combatSpur.res += buffVal;
 				boostText += this.name + " gets +" + buffVal + " Atk/Spd/Def/Res from being adjacent to an ally with " + skillName + " (Refined).<br>";
             }
-            if (this.hasAtRefineIndex("Magic & Staff Atk Spd Bond", this.refineIndex)){
-				buffVal = 5;
-				skillName = data.skills[this.weaponIndex].name;
-				this.combatSpur.atk += buffVal;
-				this.combatSpur.spd += buffVal;
-				boostText += this.name + " gets +" + buffVal + " Atk/Spd from being within 2 spaces of a magic or staff ally with " + skillName + " (Refined).<br>";
-			}
-			if (this.hasAtRefineIndex("Dragon & Sword Atk Def Bond", this.refineIndex)){
-				buffVal = 5;
-				skillName = data.skills[this.weaponIndex].name;
-				this.combatSpur.atk += buffVal;
-				this.combatSpur.def += buffVal;
-				boostText += this.name + " gets +" + buffVal + " Atk/Def from being within 2 spaces of a dragon or sword ally with " + skillName + " (Refined).<br>";
-			}
 
 			//Owl Tomes
 			if (this.has("Blarowl") || this.has("Gronnowl") || this.has("Raudrowl") || this.hasExactly("Nidhogg") || this.hasExactly("Reese's Tome")){
@@ -6205,6 +6172,62 @@ function activeHero(hero){
 			}
 		}
 
+		//Adjacent Buffs - Within 2 Spaces
+		if (this.adjacent2 > 0){
+			//Comparative Adjacent Skills
+			if (this.hasAtIndex("Swift Mulagir", this.weaponIndex) && this.adjacent2 > this.adjacent2_foe){
+				buffVal = 5;
+				skillName = data.skills[this.weaponIndex].name;
+				this.combatSpur.atk += buffVal;
+				this.combatSpur.spd += buffVal;
+				boostText += this.name + " gets +" + buffVal + " Atk/Spd from having more adjacent allies than foes with " + skillName + ".<br>";
+			}
+			if (this.hasExactly("Draconic Rage") && this.adjacent2 > this.adjacent2_foe){
+				buffVal = 5;
+				skillName = data.skills[this.weaponIndex].name;
+				this.combatSpur.atk += buffVal;
+				this.combatSpur.spd += buffVal;
+				boostText += this.name + " gets +" + buffVal + " Atk/Spd from having more adjacent allies than foes with " + skillName + ".<br>";
+			}
+			
+			//Weapons
+			if (this.hasExactly("Hinoka's Spear")){
+				buffVal = 4;
+				skillName = data.skills[this.weaponIndex].name;
+				this.combatSpur.atk += buffVal;
+				this.combatSpur.spd += buffVal;
+				boostText += this.name + " gets +" + buffVal + " Atk/Spd from being within 2 spaces of an infantry or flying ally with " + skillName + ".<br>";
+			}
+			if (this.hasExactly("Camilla's Axe")){
+				buffVal = 4;
+				skillName = data.skills[this.weaponIndex].name;
+				this.combatSpur.atk += buffVal;
+				this.combatSpur.spd += buffVal;
+				boostText += this.name + " gets +" + buffVal + " Atk/Spd from being within 2 spaces of an cavalry or flying ally with " + skillName + ".<br>";
+			}
+			if (this.hasExactly("Nifl Frostflowers") || this.hasExactly("Muspell Fireposy")){
+				buffVal = 2 * Math.min(3, this.adjacent2);
+				skillName = data.skills[this.weaponIndex].name;
+				this.combatSpur.atk += buffVal;
+				this.combatSpur.spd += buffVal;
+				boostText += this.name + " gets +" + buffVal + " Atk/Spd for each ally within 2 spaces with " + skillName + " (Maximum +6).<br>";
+			}
+			if (this.hasAtRefineIndex("Magic & Staff Atk Spd Bond", this.refineIndex)){
+				buffVal = 5;
+				skillName = data.skills[this.weaponIndex].name;
+				this.combatSpur.atk += buffVal;
+				this.combatSpur.spd += buffVal;
+				boostText += this.name + " gets +" + buffVal + " Atk/Spd from being within 2 spaces of a magic or staff ally with " + skillName + " (Refined).<br>";
+			}
+			if (this.hasAtRefineIndex("Dragon & Sword Atk Def Bond", this.refineIndex)){
+				buffVal = 5;
+				skillName = data.skills[this.weaponIndex].name;
+				this.combatSpur.atk += buffVal;
+				this.combatSpur.def += buffVal;
+				boostText += this.name + " gets +" + buffVal + " Atk/Def from being within 2 spaces of a dragon or sword ally with " + skillName + " (Refined).<br>";
+			}
+		}
+		
 		//Blow Skills
 		if(this.initiator){
 			var skillName = "";
@@ -7170,7 +7193,7 @@ function activeHero(hero){
 		if (enemy.range == "ranged"){
 			if (this.hasExactly("Great Flame")		|| this.hasExactly("Expiration")		|| this.has("Water Breath")
 				|| this.hasExactly("Breath of Fog")	|| this.hasExactly("Summer's Breath")	|| this.hasExactly("Breath of Blight")
-				|| this.hasExactly("Divine Mist")	|| this.hasExactly("Spirit Breath")
+				|| this.hasExactly("Divine Mist")	|| this.hasExactly("Spirit Breath")		|| this.hasExactly("Draconic Rage")
 			){
 				return true;
 			}
@@ -8459,234 +8482,288 @@ function activeHero(hero){
 			roundText += enemy.name + " cannot counterattack because of Binding Shield.<br>";
 			enemyCanCounter = false;
 		}
-
-		//Check for auto follow-up skills
-		if (enemyCanCounter){
-			if (this.hasAtIndex("Brash Assault", this.bIndex)){
-				if (this.hp/this.maxHp <= .2 +  this.hasAtIndex("Brash Assault", this.bIndex) * 0.1){
-					thisAttackRank++;
-					thisAttackRankChanged = true;
+		
+		//Null Follow-Up
+		//TODO: Reduce redundancy
+		var thisRankSkillNull = false;
+		var enemyRankSkillNull = false;
+		if (this.has("Null Follow Up")){
+			if (this.has("Null Follow Up") < 3){
+				if (this.hp >= this.maxHp/this.has("Null Follow Up")){
+					enemyRankSkillNull = true;
+					roundText += enemy.name + " is prevented from using skills that affect follow-up attacks.<br>";
 				}
+			}else{
+				enemyRankSkillNull = true;
+				roundText += enemy.name + " is prevented from using skills that affect follow-up attacks.<br>";
 			}
-			if (this.hasAtIndex("Brash Assault", this.sIndex)){
-				if (this.hp/this.maxHp <= .2 +  this.hasAtIndex("Brash Assault", this.sIndex) * 0.1){
-					thisAttackRank++;
-					thisAttackRankChanged = true;
+		}
+		if (enemy.has("Null Follow Up")){
+			if (enemy.has("Null Follow Up") < 3){
+				if (enemy.hp >= enemy.maxHp/enemy.has("Null Follow Up")){
+					thisRankSkillNull = true;
+					roundText += this.name + " is prevented from using skills that affect follow-up attacks.<br>";
 				}
-			}
-			if (this.has("Sol Katti") && this.hasAtRefineIndex("Brash Assault", this.refineIndex)){
-				if (this.hp / this.maxHp <= 0.75){
-					thisAttackRank++;
-					thisAttackRankChanged = true;
-				}
-			}
-			if (this.hasExactly("Hoarfrost Knife") && enemy.range == "melee"){
-				thisAttackRank++;
-				thisAttackRankChanged = true;
+			}else{
+				thisRankSkillNull = true;
+				roundText += this.name + " is prevented from using skills that affect follow-up attacks.<br>";
 			}
 		}
-		if (this.hasAtIndex("Bold Fighter", this.bIndex)){
-			if (this.hasAtIndex("Bold Fighter", this.bIndex) == 3 || (this.combatStartHp / this.maxHp >= 1.0 / this.hasAtIndex("Bold Fighter", this.bIndex))){
-				thisAttackRank++;
-				thisAttackRankChanged = true;
-			}
-		}
-		if (this.hasAtRefineIndex("Pursuit", this.refineIndex)){
-			if (this.combatStartHp / this.maxHp >= 0.9){
-				thisAttackRank++;
-				thisAttackRankChanged = true;
-			}
-		}
-		if (this.has("Follow-Up Ring")){
-			if (this.combatStartHp / this.maxHp >= 0.5){
-				thisAttackRank++;
-				thisAttackRankChanged = true;
-			}
-		}
-		if (this.hasExactly("Flame Siegmund")){
-			if (this.adjacent2_foe >= this.adjacent2){
-				thisAttackRank++;
-				thisAttackRankChanged = true;
-			}
-		}
-		if (this.hasExactly("Spirit Breath") && this.combatStat.def >= enemy.combatStat.def + 5){
-			thisAttackRank++;
-			thisAttackRankChanged = true;
-		}
-		if (this.hasExactly("Garm")){
-			if (this.combatBuffs.atk != 0 || this.combatBuffs.spd != 0 || this.combatBuffs.def != 0 || this.combatBuffs.res != 0
-				|| (this.hasExactly("Armored Boots") && this.combatStartHp/this.maxHp == 1)
-				|| this.moveBuffed
-				){
-				thisAttackRank++;
-				thisAttackRankChanged = true;
-			}
-		}
-		if (this.hasExactly("Binding Shield") && enemy.weaponType == "dragon"){
-			thisAttackRank++;
-			thisAttackRankChanged = true;
-		}
-
-		//Check for auto follow-up counters
-		if(enemy.hasAtIndex("Quick Riposte", enemy.bIndex)){
-			if(enemy.combatStartHp/enemy.maxHp >= 1 - 0.1 * enemy.hasAtIndex("Quick Riposte", enemy.bIndex)){
-				enemyAttackRank++;
-				enemyAttackRankChanged = true;
-			}
-		}
-		if(enemy.hasAtIndex("Quick Riposte", enemy.sIndex)){
-			if(enemy.combatStartHp/enemy.maxHp >= 1 - 0.1 * enemy.hasAtIndex("Quick Riposte", enemy.sIndex)){
-				enemyAttackRank++;
-				enemyAttackRankChanged = true;
-			}
-		}
-		if (enemy.hasAtRefineIndex("Quick Riposte", enemy.refineIndex)){
-			if (enemy.combatStartHp/enemy.maxHp >= .5){
-				enemyAttackRank++;
-				enemyAttackRankChanged = true;
-			}
-		}
-		if (enemy.hasAtIndex("Vengeful Fighter", enemy.bIndex)){
-			if (enemy.combatStartHp / enemy.maxHp >= (1.0 - (enemy.hasAtIndex("Vengeful Fighter", enemy.bIndex) * 0.1) - ((enemy.hasAtIndex("Vengeful Fighter", enemy.bIndex) - 1) * 0.1))){
-				enemyAttackRank++;
-				enemyAttackRankChanged = true;
-			}
-		}
-		if (enemy.hasExactly("Maltet")){
-			if (enemy.combatStartHp/enemy.maxHp >= 0.5){
-				enemyAttackRank++;
-				enemyAttackRankChanged = true;
-			}
-		}
-		if (enemy.hasExactly("Armads")){
-			if (enemy.combatStartHp/enemy.maxHp >= 0.8){
-				enemyAttackRank++;
-				enemyAttackRankChanged = true;
-			}
-		}
-		if (enemy.has("Follow-Up Ring")){
-			if (enemy.combatStartHp/enemy.maxHp >= 0.5){
-				enemyAttackRank++;
-				enemyAttackRankChanged = true;
-			}
-		}
-		if (enemy.hasExactly("Flame Siegmund")){
-			if (enemy.adjacent2_foe >= enemy.adjacent2){
-				enemyAttackRank++;
-				enemyAttackRankChanged = true;
-			}
-		}
-		if (enemy.hasExactly("Garm")){
-			if (enemy.combatBuffs.atk != 0 || enemy.combatBuffs.spd != 0 || enemy.combatBuffs.def != 0 || enemy.combatBuffs.res != 0
-				|| (enemy.hasExactly("Armored Boots") && enemy.combatStartHp/enemy.maxHp == 1)
-				|| enemy.moveBuffed
-				){
-				enemyAttackRank++;
-				enemyAttackRankChanged = true;
-			}
-		}
-		if (enemy.hasExactly("Binding Shield") && this.weaponType == "dragon"){
-			enemyAttackRank++;
-			enemyAttackRankChanged = true;
-		}
-
-		//Check for Wary Fighter
-		if (this.has("Wary Fighter")){
-			if (this.hp/this.maxHp >= 1.1 - 0.2 * this.has("Wary Fighter")){
-				thisAttackRank--;
-				enemyAttackRank--;
-				thisAttackRankChanged = true;
-				enemyAttackRankChanged = true;
-			}
-		}
-		if (enemy.has("Wary Fighter")){
-			if (enemy.hp/enemy.maxHp >= 1.1 - 0.2 * enemy.has("Wary Fighter")){
-				thisAttackRank--;
-				enemyAttackRank--;
-				thisAttackRankChanged = true;
-				enemyAttackRankChanged = true;
-			}
-		}
-		if (this.hasExactly("Great Flame") && this.combatStat.def >= enemy.combatStat.def + 5){
-			enemyAttackRank--;
-			enemyAttackRankChanged = true;
-		}
-		if (enemy.hasExactly("Great Flame") && enemy.combatStat.def >= this.combatStat.def + 5){
-			thisAttackRank--;
-			thisAttackRankChanged = true;
-		}
-		if (this.hasExactly("Thunder Armads") && this.adjacent2 > this.adjacent2_foe){
-			enemyAttackRank--;
-			enemyAttackRankChanged = true;
-		}
-		if (enemy.hasExactly("Thunder Armads") && enemy.adjacent2 > enemy.adjacent2_foe){
-			thisAttackRank--;
-			thisAttackRankChanged = true;
-		}
-		if (this.hasAtRefineIndex("Wary Ranged", this.refineIndex) && enemy.range == "ranged" && this.combatStat.def >= enemy.combatStat.def + 1){
-			enemyAttackRank--;
-			enemyAttackRankChanged = true;
-		}
-		if (enemy.hasAtRefineIndex("Wary Ranged", enemy.refineIndex) && this.range == "ranged" && enemy.combatStat.def >= this.combatStat.def + 1){
-			thisAttackRank--;
-			thisAttackRankChanged = true;
-		}
-		if (enemy.hasExactly("Binding Shield") && this.weaponType == "dragon"){
-			thisAttackRank--;
-			thisAttackRankChanged = true;
-		}
-
-		//Check for Breaker skills
 		var thisBreakLevel = 2; // hp threshold
-		if(this.weaponType=="sword" && enemy.has("Swordbreaker")){
-			thisBreakLevel = 1.1 - enemy.has("Swordbreaker") * 0.2;
-		}
-		else if(this.weaponType=="lance" && enemy.has("Lancebreaker")){
-			thisBreakLevel = 1.1 - enemy.has("Lancebreaker") * 0.2;
-		}
-		else if(this.weaponType=="axe" && enemy.has("Axebreaker")){
-			thisBreakLevel = 1.1 - enemy.has("Axebreaker") * 0.2;
-		}
-		else if(this.weaponType=="redtome" && enemy.has("R Tomebreaker")){
-			thisBreakLevel = 1.1 - enemy.has("R Tomebreaker") * 0.2;
-		}
-		else if(this.weaponType=="bluetome" && enemy.has("B Tomebreaker")){
-			thisBreakLevel = 1.1 - enemy.has("B Tomebreaker") * 0.2;
-		}
-		else if(this.weaponType=="greentome" && enemy.has("G Tomebreaker")){
-			thisBreakLevel = 1.1 - enemy.has("G Tomebreaker") * 0.2;
-		}
-		else if(this.weaponType=="bow" && this.color=="gray" && enemy.has("Bowbreaker")){
-			thisBreakLevel = 1.1 - enemy.has("Bowbreaker") * 0.2;
-		}
-		else if(this.weaponType=="dagger" && this.color=="gray" && enemy.has("Daggerbreaker")){
-			thisBreakLevel = 1.1 - enemy.has("Daggerbreaker") * 0.2;
-		}
 		var enemyBreakLevel = 2; // hp threshold
-		if(enemy.weaponType=="sword" && this.has("Swordbreaker")){
-			enemyBreakLevel = 1.1 - this.has("Swordbreaker") * 0.2;
+		
+		//Hero Rank Skills
+		if (!thisRankSkillNull){
+			//Check for auto follow-up skills
+			if (enemyCanCounter){
+				if (this.hasAtIndex("Brash Assault", this.bIndex)){
+					if (this.hp/this.maxHp <= .2 +  this.hasAtIndex("Brash Assault", this.bIndex) * 0.1){
+						thisAttackRank++;
+						thisAttackRankChanged = true;
+					}
+				}
+				if (this.hasAtIndex("Brash Assault", this.sIndex)){
+					if (this.hp/this.maxHp <= .2 +  this.hasAtIndex("Brash Assault", this.sIndex) * 0.1){
+						thisAttackRank++;
+						thisAttackRankChanged = true;
+					}
+				}
+				if (this.has("Sol Katti") && this.hasAtRefineIndex("Brash Assault", this.refineIndex)){
+					if (this.hp / this.maxHp <= 0.75){
+						thisAttackRank++;
+						thisAttackRankChanged = true;
+					}
+				}
+				if (this.hasExactly("Hoarfrost Knife") && enemy.range == "melee"){
+					thisAttackRank++;
+					thisAttackRankChanged = true;
+				}
+			}
+			if (this.hasAtIndex("Bold Fighter", this.bIndex)){
+				if (this.hasAtIndex("Bold Fighter", this.bIndex) == 3 || (this.combatStartHp / this.maxHp >= 1.0 / this.hasAtIndex("Bold Fighter", this.bIndex))){
+					thisAttackRank++;
+					thisAttackRankChanged = true;
+				}
+			}
+			if (this.hasAtRefineIndex("Pursuit", this.refineIndex)){
+				if (this.combatStartHp / this.maxHp >= 0.9){
+					thisAttackRank++;
+					thisAttackRankChanged = true;
+				}
+			}
+			if (this.has("Follow-Up Ring")){
+				if (this.combatStartHp / this.maxHp >= 0.5){
+					thisAttackRank++;
+					thisAttackRankChanged = true;
+				}
+			}
+			if (this.hasExactly("Flame Siegmund")){
+				if (this.adjacent2_foe >= this.adjacent2){
+					thisAttackRank++;
+					thisAttackRankChanged = true;
+				}
+			}
+			if (this.hasExactly("Spirit Breath") && this.combatStat.def >= enemy.combatStat.def + 5){
+				thisAttackRank++;
+				thisAttackRankChanged = true;
+			}
+			if (this.hasExactly("Garm")){
+				if (this.combatBuffs.atk != 0 || this.combatBuffs.spd != 0 || this.combatBuffs.def != 0 || this.combatBuffs.res != 0
+					|| (this.hasExactly("Armored Boots") && this.combatStartHp/this.maxHp == 1)
+					|| this.moveBuffed
+					){
+					thisAttackRank++;
+					thisAttackRankChanged = true;
+				}
+			}
+			if (this.hasExactly("Binding Shield") && enemy.weaponType == "dragon"){
+				thisAttackRank++;
+				thisAttackRankChanged = true;
+			}
+			//Check for Wary Fighter
+			if (this.has("Wary Fighter")){
+				if (this.hp/this.maxHp >= 1.1 - 0.2 * this.has("Wary Fighter")){
+					thisAttackRank--;
+					enemyAttackRank--;
+					thisAttackRankChanged = true;
+					enemyAttackRankChanged = true;
+				}
+			}
+			if (this.hasExactly("Great Flame") && this.combatStat.def >= enemy.combatStat.def + 5){
+				enemyAttackRank--;
+				enemyAttackRankChanged = true;
+			}
+			if (this.hasExactly("Thunder Armads") && this.adjacent2 > this.adjacent2_foe){
+				enemyAttackRank--;
+				enemyAttackRankChanged = true;
+			}
+			if (this.hasAtRefineIndex("Wary Ranged", this.refineIndex) && enemy.range == "ranged" && this.combatStat.def >= enemy.combatStat.def + 1){
+				enemyAttackRank--;
+				enemyAttackRankChanged = true;
+			}
+			
+			//Check for Breaker skills			
+			if(this.weaponType=="sword" && enemy.has("Swordbreaker")){
+				thisBreakLevel = 1.1 - enemy.has("Swordbreaker") * 0.2;
+			}
+			else if(this.weaponType=="lance" && enemy.has("Lancebreaker")){
+				thisBreakLevel = 1.1 - enemy.has("Lancebreaker") * 0.2;
+			}
+			else if(this.weaponType=="axe" && enemy.has("Axebreaker")){
+				thisBreakLevel = 1.1 - enemy.has("Axebreaker") * 0.2;
+			}
+			else if(this.weaponType=="redtome" && enemy.has("R Tomebreaker")){
+				thisBreakLevel = 1.1 - enemy.has("R Tomebreaker") * 0.2;
+			}
+			else if(this.weaponType=="bluetome" && enemy.has("B Tomebreaker")){
+				thisBreakLevel = 1.1 - enemy.has("B Tomebreaker") * 0.2;
+			}
+			else if(this.weaponType=="greentome" && enemy.has("G Tomebreaker")){
+				thisBreakLevel = 1.1 - enemy.has("G Tomebreaker") * 0.2;
+			}
+			else if(this.weaponType=="bow" && this.color=="gray" && enemy.has("Bowbreaker")){
+				thisBreakLevel = 1.1 - enemy.has("Bowbreaker") * 0.2;
+			}
+			else if(this.weaponType=="dagger" && this.color=="gray" && enemy.has("Daggerbreaker")){
+				thisBreakLevel = 1.1 - enemy.has("Daggerbreaker") * 0.2;
+			}
+			
+			//Other Stacking Breaker skills
+			if(this.weaponType=="dagger" && enemy.has("Assassin's Bow")){
+				thisAttackRank--;
+				enemyAttackRank++;
+				thisAttackRankChanged = true;
+				enemyAttackRankChanged = true;
+			}
 		}
-		else if(enemy.weaponType=="lance" && this.has("Lancebreaker")){
-			enemyBreakLevel = 1.1 - this.has("Lancebreaker") * 0.2;
+		
+		//Enemy Rank Skills
+		if (!enemyRankSkillNull){
+			//Check for auto follow-up counters
+			if(enemy.hasAtIndex("Quick Riposte", enemy.bIndex)){
+				if(enemy.combatStartHp/enemy.maxHp >= 1 - 0.1 * enemy.hasAtIndex("Quick Riposte", enemy.bIndex)){
+					enemyAttackRank++;
+					enemyAttackRankChanged = true;
+				}
+			}
+			if(enemy.hasAtIndex("Quick Riposte", enemy.sIndex)){
+				if(enemy.combatStartHp/enemy.maxHp >= 1 - 0.1 * enemy.hasAtIndex("Quick Riposte", enemy.sIndex)){
+					enemyAttackRank++;
+					enemyAttackRankChanged = true;
+				}
+			}
+			if (enemy.hasAtRefineIndex("Quick Riposte", enemy.refineIndex)){
+				if (enemy.combatStartHp/enemy.maxHp >= .5){
+					enemyAttackRank++;
+					enemyAttackRankChanged = true;
+				}
+			}
+			if (enemy.hasAtIndex("Vengeful Fighter", enemy.bIndex)){
+				if (enemy.combatStartHp / enemy.maxHp >= (1.0 - (enemy.hasAtIndex("Vengeful Fighter", enemy.bIndex) * 0.1) - ((enemy.hasAtIndex("Vengeful Fighter", enemy.bIndex) - 1) * 0.1))){
+					enemyAttackRank++;
+					enemyAttackRankChanged = true;
+				}
+			}
+			if (enemy.hasExactly("Maltet")){
+				if (enemy.combatStartHp/enemy.maxHp >= 0.5){
+					enemyAttackRank++;
+					enemyAttackRankChanged = true;
+				}
+			}
+			if (enemy.hasExactly("Armads")){
+				if (enemy.combatStartHp/enemy.maxHp >= 0.8){
+					enemyAttackRank++;
+					enemyAttackRankChanged = true;
+				}
+			}
+			if (enemy.has("Follow-Up Ring")){
+				if (enemy.combatStartHp/enemy.maxHp >= 0.5){
+					enemyAttackRank++;
+					enemyAttackRankChanged = true;
+				}
+			}
+			if (enemy.hasExactly("Flame Siegmund")){
+				if (enemy.adjacent2_foe >= enemy.adjacent2){
+					enemyAttackRank++;
+					enemyAttackRankChanged = true;
+				}
+			}
+			if (enemy.hasExactly("Garm")){
+				if (enemy.combatBuffs.atk != 0 || enemy.combatBuffs.spd != 0 || enemy.combatBuffs.def != 0 || enemy.combatBuffs.res != 0
+					|| (enemy.hasExactly("Armored Boots") && enemy.combatStartHp/enemy.maxHp == 1)
+					|| enemy.moveBuffed
+					){
+					enemyAttackRank++;
+					enemyAttackRankChanged = true;
+				}
+			}
+			if (enemy.hasExactly("Binding Shield") && this.weaponType == "dragon"){
+				enemyAttackRank++;
+				enemyAttackRankChanged = true;
+			}
+			
+			//Check for Wary Fighter
+			if (enemy.has("Wary Fighter")){
+				if (enemy.hp/enemy.maxHp >= 1.1 - 0.2 * enemy.has("Wary Fighter")){
+					thisAttackRank--;
+					enemyAttackRank--;
+					thisAttackRankChanged = true;
+					enemyAttackRankChanged = true;
+				}
+			}			
+			if (enemy.hasExactly("Great Flame") && enemy.combatStat.def >= this.combatStat.def + 5){
+				thisAttackRank--;
+				thisAttackRankChanged = true;
+			}			
+			if (enemy.hasExactly("Thunder Armads") && enemy.adjacent2 > enemy.adjacent2_foe){
+				thisAttackRank--;
+				thisAttackRankChanged = true;
+			}			
+			if (enemy.hasAtRefineIndex("Wary Ranged", enemy.refineIndex) && this.range == "ranged" && enemy.combatStat.def >= this.combatStat.def + 1){
+				thisAttackRank--;
+				thisAttackRankChanged = true;
+			}
+			if (enemy.hasExactly("Binding Shield") && this.weaponType == "dragon"){
+				thisAttackRank--;
+				thisAttackRankChanged = true;
+			}
+			
+			//Check for Breaker skills			
+			if(enemy.weaponType=="sword" && this.has("Swordbreaker")){
+				enemyBreakLevel = 1.1 - this.has("Swordbreaker") * 0.2;
+			}
+			else if(enemy.weaponType=="lance" && this.has("Lancebreaker")){
+				enemyBreakLevel = 1.1 - this.has("Lancebreaker") * 0.2;
+			}
+			else if(enemy.weaponType=="axe" && this.has("Axebreaker")){
+				enemyBreakLevel = 1.1 - this.has("Axebreaker") * 0.2;
+			}
+			else if(enemy.weaponType=="redtome" && this.has("R Tomebreaker")){
+				enemyBreakLevel = 1.1 - this.has("R Tomebreaker") * 0.2;
+			}
+			else if(enemy.weaponType=="bluetome" && this.has("B Tomebreaker")){
+				enemyBreakLevel = 1.1 - this.has("B Tomebreaker") * 0.2;
+			}
+			else if(enemy.weaponType=="greentome" && this.has("G Tomebreaker")){
+				enemyBreakLevel = 1.1 - this.has("G Tomebreaker") * 0.2;
+			}
+			else if(enemy.weaponType=="bow" && enemy.color=="gray" && this.has("Bowbreaker")){
+				enemyBreakLevel = 1.1 - this.has("Bowbreaker") * 0.2;
+			}
+			else if(enemy.weaponType=="dagger" && enemy.color=="gray" && this.has("Daggerbreaker")){
+				enemyBreakLevel = 1.1 - this.has("Daggerbreaker") * 0.2;
+			}
+			
+			//Other Stacking Breaker skills
+			if(enemy.weaponType=="dagger" && this.has("Assassin's Bow")){
+				thisAttackRank++;
+				enemyAttackRank--;
+				thisAttackRankChanged = true;
+				enemyAttackRankChanged = true;
+			}
 		}
-		else if(enemy.weaponType=="axe" && this.has("Axebreaker")){
-			enemyBreakLevel = 1.1 - this.has("Axebreaker") * 0.2;
-		}
-		else if(enemy.weaponType=="redtome" && this.has("R Tomebreaker")){
-			enemyBreakLevel = 1.1 - this.has("R Tomebreaker") * 0.2;
-		}
-		else if(enemy.weaponType=="bluetome" && this.has("B Tomebreaker")){
-			enemyBreakLevel = 1.1 - this.has("B Tomebreaker") * 0.2;
-		}
-		else if(enemy.weaponType=="greentome" && this.has("G Tomebreaker")){
-			enemyBreakLevel = 1.1 - this.has("G Tomebreaker") * 0.2;
-		}
-		else if(enemy.weaponType=="bow" && enemy.color=="gray" && this.has("Bowbreaker")){
-			enemyBreakLevel = 1.1 - this.has("Bowbreaker") * 0.2;
-		}
-		else if(enemy.weaponType=="dagger" && enemy.color=="gray" && this.has("Daggerbreaker")){
-			enemyBreakLevel = 1.1 - this.has("Daggerbreaker") * 0.2;
-		}
+		
+		//Breaker Skill conclusion
 		if(enemy.hp / enemy.maxHp >= thisBreakLevel){
 			thisAttackRank--;
 			enemyAttackRank++;
@@ -8694,19 +8771,6 @@ function activeHero(hero){
 			enemyAttackRankChanged = true;
 		}
 		if(this.hp / this.maxHp >= enemyBreakLevel){
-			thisAttackRank++;
-			enemyAttackRank--;
-			thisAttackRankChanged = true;
-			enemyAttackRankChanged = true;
-		}
-		//Other stacking Breaker skills
-		if(this.weaponType=="dagger" && enemy.has("Assassin's Bow")){
-			thisAttackRank--;
-			enemyAttackRank++;
-			thisAttackRankChanged = true;
-			enemyAttackRankChanged = true;
-		}
-		if(enemy.weaponType=="dagger" && this.has("Assassin's Bow")){
 			thisAttackRank++;
 			enemyAttackRank--;
 			thisAttackRankChanged = true;
@@ -8827,7 +8891,7 @@ function activeHero(hero){
 					enemy.panicked = true;
 					roundText += this.name + " panics " + enemy.name + ".<br>";
 				}
-				if (this.has("Candlelight")){
+				if (this.has("Candlelight") || this.has("Flash")){
 					enemy.lit = true;
 					roundText += this.name + " inflicts " + enemy.name + " with an inability to make counterattacks.<br>";
 				}
