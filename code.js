@@ -5899,12 +5899,19 @@ function activeHero(hero){
 				skillName = data.skills[this.aIndex].name;
 				boostText += this.name + " activates " + skillName + " and gets +" + statBonus + " Atk/Def.<br>";
 			}
-			if (this.has("Brazen Atk Res")){
-				statBonus = 1 + 2 * this.has("Brazen Atk Res");
+			if (this.hasAtIndex("Brazen Atk Res", this.aIndex)){
+				statBonus = 1 + 2 * this.hasAtIndex("Brazen Atk Res", this.aIndex);
 				this.combatSpur.atk += statBonus;
 				this.combatSpur.res += statBonus;
 				skillName = data.skills[this.aIndex].name;
 				boostText += this.name + " activates " + skillName + " and gets +" + statBonus + " Atk/Res.<br>";
+			}
+			if (this.hasAtIndex("Brazen Atk Res", this.sIndex)){
+				statBonus = 1 + 2 * this.hasAtIndex("Brazen Atk Res", this.sIndex);
+				this.combatSpur.atk += statBonus;
+				this.combatSpur.res += statBonus;
+				skillName = data.skills[this.sIndex].name;
+				boostText += this.name + " activates " + skillName + " and gets +" + statBonus + " Atk/Res (Seal).<br>";
 			}
 			if (this.has("Brazen Spd Def")){
 				statBonus = 1 + 2 * this.has("Brazen Spd Def");
