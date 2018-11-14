@@ -8898,7 +8898,7 @@ function activeHero(hero){
 					enemy.panicked = true;
 					roundText += this.name + " panics " + enemy.name + ".<br>";
 				}
-				if (this.has("Candlelight") || this.has("Flash")){
+				if (this.has("Candlelight") || this.hasAtIndex("Flash", this.weaponIndex)){
 					enemy.lit = true;
 					roundText += this.name + " inflicts " + enemy.name + " with an inability to make counterattacks.<br>";
 				}
