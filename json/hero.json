@@ -5588,7 +5588,7 @@
 		"spdgrowth": 9,
 		"defgrowth": 4,
 		"resgrowth": 3,
-		"color": "colorless",
+		"color": "gray",
 		"weapontype": "dagger",
 		"movetype": "infantry",
 		"minrarity": 5
