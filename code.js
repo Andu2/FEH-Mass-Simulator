@@ -6031,27 +6031,51 @@ function activeHero(hero){
 			var skillName = "";
 			var buffVal = 0;
 
-			if(this.has("Earth Boost")){
-				buffVal = this.has("Earth Boost") * 2;
+			if(this.hasAtIndex("Earth Boost", this.aIndex)){
+				buffVal = this.has("Earth Boost", this.aIndex) * 2;
 				skillName = data.skills[this.aIndex].name;
 				this.combatSpur.def += buffVal;
 				boostText += this.name + " gets +" + buffVal + " Def from having >=3 more hp than " + enemy.name + " with " + skillName + ".<br>";
 			}
-			if(this.has("Wind Boost")){
-				buffVal = this.has("Wind Boost") * 2;
+			if(this.hasAtIndex("Earth Boost", this.sIndex)){
+				buffVal = this.has("Earth Boost", this.sIndex) * 2;
+				skillName = data.skills[this.sIndex].name + " (Seal)";
+				this.combatSpur.def += buffVal;
+				boostText += this.name + " gets +" + buffVal + " Def from having >=3 more hp than " + enemy.name + " with " + skillName + ".<br>";
+			}
+			if(this.hasAtIndex("Wind Boost", this.aIndex)){
+				buffVal = this.hasAtIndex("Wind Boost", this.aIndex) * 2;
 				skillName = data.skills[this.aIndex].name;
 				this.combatSpur.spd += buffVal;
 				boostText += this.name + " gets +" + buffVal + " Spd from having >=3 more hp than " + enemy.name + " with " + skillName + ".<br>";
 			}
-			if(this.has("Fire Boost")){
-				buffVal = this.has("Fire Boost") * 2;
+			if(this.hasAtIndex("Wind Boost", this.sIndex)){
+				buffVal = this.hasAtIndex("Wind Boost", this.sIndex) * 2;
+				skillName = data.skills[this.sIndex].name + " (Seal)";
+				this.combatSpur.spd += buffVal;
+				boostText += this.name + " gets +" + buffVal + " Spd from having >=3 more hp than " + enemy.name + " with " + skillName + ".<br>";
+			}
+			if(this.hasAtIndex("Fire Boost", this.aIndex)){
+				buffVal = this.hasAtIndex("Fire Boost", this.aIndex) * 2;
 				skillName = data.skills[this.aIndex].name;
 				this.combatSpur.atk += buffVal;
 				boostText += this.name + " gets +" + buffVal + " Atk from having >=3 more hp than " + enemy.name + " with " + skillName + ".<br>";
 			}
-			if(this.has("Water Boost")){
-				buffVal = this.has("Water Boost") * 2;
+			if(this.hasAtIndex("Fire Boost", this.sIndex)){
+				buffVal = this.hasAtIndex("Fire Boost", this.sIndex) * 2;
+				skillName = data.skills[this.sIndex].name + " (Seal)";
+				this.combatSpur.atk += buffVal;
+				boostText += this.name + " gets +" + buffVal + " Atk from having >=3 more hp than " + enemy.name + " with " + skillName + ".<br>";
+			}
+			if(this.hasAtIndex("Water Boost", this.aIndex)){
+				buffVal = this.hasAtIndex("Water Boost", this.aIndex) * 2;
 				skillName = data.skills[this.aIndex].name;
+				this.combatSpur.res += buffVal;
+				boostText += this.name + " gets +" + buffVal + " Res from having >=3 more hp than " + enemy.name + " with " + skillName + ".<br>";
+			}
+			if(this.hasAtIndex("Water Boost", this.sIndex)){
+				buffVal = this.hasAtIndex("Water Boost", this.sIndex) * 2;
+				skillName = data.skills[this.sIndex].name + " (Seal)";
 				this.combatSpur.res += buffVal;
 				boostText += this.name + " gets +" + buffVal + " Res from having >=3 more hp than " + enemy.name + " with " + skillName + ".<br>";
 			}
@@ -6112,9 +6136,23 @@ function activeHero(hero){
 				this.combatSpur.spd += buffVal;
 				boostText += this.name + " gets +" + buffVal + " Atk/Spd from being adjacent to an ally with " + skillName + ".<br>";
 			}
+			if (this.hasAtIndex("Atk Spd Bond", this.sIndex)){
+				buffVal = this.hasAtIndex("Atk Spd Bond", this.sIndex) + 2;
+				skillName = data.skills[this.sIndex].name + " (Seal)";
+				this.combatSpur.atk += buffVal;
+				this.combatSpur.spd += buffVal;
+				boostText += this.name + " gets +" + buffVal + " Atk/Spd from being adjacent to an ally with " + skillName + ".<br>";
+			}
 			if (this.hasAtIndex("Atk Def Bond", this.aIndex)){
 				buffVal = this.hasAtIndex("Atk Def Bond", this.aIndex) + 2;
 				skillName = data.skills[this.aIndex].name;
+				this.combatSpur.atk += buffVal;
+				this.combatSpur.def += buffVal;
+				boostText += this.name + " gets +" + buffVal + " Atk/Def from being adjacent to an ally with " + skillName + ".<br>";
+			}
+			if (this.hasAtIndex("Atk Def Bond", this.sIndex)){
+				buffVal = this.hasAtIndex("Atk Def Bond", this.sIndex) + 2;
+				skillName = data.skills[this.sIndex].name + " (Seal)";
 				this.combatSpur.atk += buffVal;
 				this.combatSpur.def += buffVal;
 				boostText += this.name + " gets +" + buffVal + " Atk/Def from being adjacent to an ally with " + skillName + ".<br>";
@@ -6126,9 +6164,23 @@ function activeHero(hero){
 				this.combatSpur.res += buffVal;
 				boostText += this.name + " gets +" + buffVal + " Atk/Res from being adjacent to an ally with " + skillName + ".<br>";
 			}
+			if (this.hasAtIndex("Atk Res Bond", this.sIndex)){
+				buffVal = this.hasAtIndex("Atk Res Bond", this.sIndex) + 2;
+				skillName = data.skills[this.sIndex].name + " (Seal)";
+				this.combatSpur.atk += buffVal;
+				this.combatSpur.res += buffVal;
+				boostText += this.name + " gets +" + buffVal + " Atk/Res from being adjacent to an ally with " + skillName + ".<br>";
+			}
 			if (this.hasAtIndex("Spd Def Bond", this.aIndex)){
 				buffVal = this.hasAtIndex("Spd Def Bond", this.aIndex) + 2;
 				skillName = data.skills[this.aIndex].name;
+				this.combatSpur.spd += buffVal;
+				this.combatSpur.def += buffVal;
+				boostText += this.name + " gets +" + buffVal + " Spd/Def from being adjacent to an ally with " + skillName + ".<br>";
+			}
+			if (this.hasAtIndex("Spd Def Bond", this.sIndex)){
+				buffVal = this.hasAtIndex("Spd Def Bond", this.sIndex) + 2;
+				skillName = data.skills[this.sIndex].name + " (Seal)";
 				this.combatSpur.spd += buffVal;
 				this.combatSpur.def += buffVal;
 				boostText += this.name + " gets +" + buffVal + " Spd/Def from being adjacent to an ally with " + skillName + ".<br>";
@@ -6140,6 +6192,13 @@ function activeHero(hero){
 				this.combatSpur.res += buffVal;
 				boostText += this.name + " gets +" + buffVal + " Spd/Res from being adjacent to an ally with " + skillName + ".<br>";
 			}
+			if (this.hasAtIndex("Spd Res Bond", this.sIndex)){
+				buffVal = this.hasAtIndex("Spd Res Bond", this.sIndex) + 2;
+				skillName = data.skills[this.sIndex].name + " (Seal)";
+				this.combatSpur.spd += buffVal;
+				this.combatSpur.res += buffVal;
+				boostText += this.name + " gets +" + buffVal + " Spd/Res from being adjacent to an ally with " + skillName + ".<br>";
+			}
 			if (this.hasAtIndex("Def Res Bond", this.aIndex)){
 				buffVal = this.hasAtIndex("Def Res Bond", this.aIndex) + 2;
 				skillName = data.skills[this.aIndex].name;
@@ -6147,12 +6206,12 @@ function activeHero(hero){
 				this.combatSpur.res += buffVal;
 				boostText += this.name + " gets +" + buffVal + " Def/Res from being adjacent to an ally with " + skillName + ".<br>";
 			}
-			if (this.hasAtRefineIndex("Flying Atk Res Bond", this.refineIndex)){
-				buffVal = 5;
-				skillName = "Flying Atk Res Bond";
-				this.combatSpur.atk += buffVal;
+			if (this.hasAtIndex("Def Res Bond", this.sIndex)){
+				buffVal = this.hasAtIndex("Def Res Bond", this.sIndex) + 2;
+				skillName = data.skills[this.sIndex].name + " (Seal)";
+				this.combatSpur.def += buffVal;
 				this.combatSpur.res += buffVal;
-				boostText += this.name + " gets +" + buffVal + " Atk/Res from being adjacent to a flying ally with " + skillName + " (Refined).<br>";
+				boostText += this.name + " gets +" + buffVal + " Def/Res from being adjacent to an ally with " + skillName + ".<br>";
 			}
 			if (this.hasAtRefineIndex("Spd Def Bond", this.refineIndex)){
 				buffVal = 5;
@@ -6160,6 +6219,20 @@ function activeHero(hero){
 				this.combatSpur.spd += buffVal;
 				this.combatSpur.def += buffVal;
 				boostText += this.name + " gets +" + buffVal + " Spd/Def from being adjacent an ally with " + skillName + " (Refined).<br>";
+			}
+			if (this.hasAtRefineIndex("Spd Def Bond", this.refineIndex)){
+				buffVal = 5;
+				skillName = "Spd Def Bond";
+				this.combatSpur.spd += buffVal;
+				this.combatSpur.def += buffVal;
+				boostText += this.name + " gets +" + buffVal + " Spd/Def from being adjacent an ally with " + skillName + " (Refined).<br>";
+			}
+			if (this.hasAtRefineIndex("Flying Atk Res Bond", this.refineIndex)){
+				buffVal = 5;
+				skillName = "Flying Atk Res Bond";
+				this.combatSpur.atk += buffVal;
+				this.combatSpur.res += buffVal;
+				boostText += this.name + " gets +" + buffVal + " Atk/Res from being adjacent to a flying ally with " + skillName + " (Refined).<br>";
 			}
 			if (this.hasAtRefineIndex("Magic All Bond", this.refineIndex)){
 				buffVal = 3;
