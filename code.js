@@ -6530,7 +6530,7 @@ function activeHero(hero){
 				boostText += this.name + " gets +" + buffVal + " Def from defending with " + data.skills[this.weaponIndex].name + ".<br>";
 			}
 			if (this.has("Barrier Blade")){
-				buffVal = 1 + 3*this.has("Barrier Blade");
+				buffVal = 7;
 				this.combatSpur.res += buffVal;
 				boostText += this.name + " gets +" + buffVal + " Res from defending with " + data.skills[this.weaponIndex].name + ".<br>";
 			}			
