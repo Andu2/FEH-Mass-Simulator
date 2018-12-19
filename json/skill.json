@@ -18129,5 +18129,61 @@
 		"charge": 0,
 		"inheritrule": "",
 		"affectsduel": 1
+	}, {
+		"skill_id": 1296,
+		"name": "Sylgr",
+		"slot": "weapon",
+		"sp": 400,
+		"description": "Grants Spd+3. At start of combat, if unit's Spd > foe's Spd, grants Atk\/Spd+4 during combat. After combat, if unit attacked, inflicts Def\/Res-7 on target and foes within 2 spaces of target through their next actions.",
+		"hp": 0,
+		"atk": 14,
+		"spd": 3,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "unique,dagger",
+		"affectsduel": 1
+	}, {
+		"skill_id": 1297,
+		"name": "Sorcery Blade 1",
+		"slot": "a",
+		"sp": 60,
+		"description": "At start of combat, if unit's HP = 100% and unit is adjacent to a magic ally, calculates damage using the lower of foe's Def or Res.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 1
+	}, {
+		"skill_id": 1298,
+		"name": "Sorcery Blade 2",
+		"slot": "a",
+		"sp": 120,
+		"description": "At start of combat, if unit's HP >= 50% and unit is adjacent to a magic ally, calculates damage using the lower of foe's Def or Res.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 1
+	}, {
+		"skill_id": 1299,
+		"name": "Sorcery Blade 3",
+		"slot": "a",
+		"sp": 240,
+		"description": "At start of combat, if unit is adjacent to a magic ally, calculates damage using the lower of foe's Def or Res.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 1
 	}
 ]

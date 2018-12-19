@@ -6527,5 +6527,22 @@
 		"weapontype": "staff",
 		"movetype": "infantry",
 		"minrarity": 5
+	}, {
+		"hero_id": 315,
+		"name": "Ylgr",
+		"basehp": 16,
+		"baseatk": 7,
+		"basespd": 10,
+		"basedef": 7,
+		"baseres": 5,
+		"hpgrowth": 6,
+		"atkgrowth": 8,
+		"spdgrowth": 9,
+		"defgrowth": 3,
+		"resgrowth": 3,
+		"color": "blue",
+		"weapontype": "dagger",
+		"movetype": "infantry",
+		"minrarity": 5
 	}
 ]
