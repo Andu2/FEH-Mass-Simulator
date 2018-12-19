@@ -5547,6 +5547,11 @@ function activeHero(hero){
 				debuffVal.spd = Math.min(debuffVal.spd, -6);
 				skillNames.push("Chilling Seal");
 			}
+			if (this.hasExactly("Freezing Seal") && this.hp / this.maxHp >= 0.5){
+				debuffVal.atk = Math.min(debuffVal.atk, -6);
+				debuffVal.spd = Math.min(debuffVal.spd, -6);
+				skillNames.push("Freezing Seal");
+			}
 			if (this.has("Chill Atk")){
 				debuffVal.atk = Math.min(debuffVal.atk, -this.hasAtIndex("Chill Atk", this.bIndex) * 2 - 1);
 				skillNames.push("Chill Atk");
@@ -8614,8 +8619,12 @@ function activeHero(hero){
 			roundText += enemy.name + " cannot counterattack because of Hlidskjalf.<br>";
 			enemyCanCounter = false;
 		}
-		if (this.hasExactly("Binding Shield") && enemy.weaponType == "dragon" && enemyCanCounter){
+		if (this.hasExactly("Binding Shield") && enemy.weaponType == "dragon" && enemyCanCounter) {
 			roundText += enemy.name + " cannot counterattack because of Binding Shield.<br>";
+			enemyCanCounter = false;
+		}
+		if (this.hasExactly("Gjoll") && enemy.panicked){
+			roundText += enemy.name + " cannot counterattack because of Gjoll.<br>";
 			enemyCanCounter = false;
 		}
 
@@ -8713,6 +8722,10 @@ function activeHero(hero){
 				}
 			}
 			if (this.hasExactly("Binding Shield") && enemy.weaponType == "dragon"){
+				thisAttackRank++;
+				thisAttackRankChanged = true;
+			}
+			if (this.hasExactly("Gjoll") && enemy.panicked){
 				thisAttackRank++;
 				thisAttackRankChanged = true;
 			}
@@ -8837,6 +8850,10 @@ function activeHero(hero){
 				enemyAttackRank++;
 				enemyAttackRankChanged = true;
 			}
+			if (enemy.hasExactly("Gjoll") && this.panicked){
+				enemyAttackRank++;
+				enemyAttackRankChanged = true;
+			}
 
 			//Check for Wary Fighter
 			if (enemy.has("Wary Fighter")){
@@ -8860,6 +8877,10 @@ function activeHero(hero){
 				thisAttackRankChanged = true;
 			}
 			if (enemy.hasExactly("Binding Shield") && this.weaponType == "dragon"){
+				thisAttackRank--;
+				thisAttackRankChanged = true;
+			}
+			if (enemy.hasExactly("Gjoll") && this.panicked){
 				thisAttackRank--;
 				thisAttackRankChanged = true;
 			}

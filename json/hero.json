@@ -6578,5 +6578,22 @@
 		"weapontype": "redtome",
 		"movetype": "infantry",
 		"minrarity": 3
+	}, {
+		"hero_id": 318,
+		"name": "Hrid",
+		"basehp": 19,
+		"baseatk": 7,
+		"basespd": 4,
+		"basedef": 12,
+		"baseres": 4,
+		"hpgrowth": 6,
+		"atkgrowth": 10,
+		"spdgrowth": 2,
+		"defgrowth": 7,
+		"resgrowth": 6,
+		"color": "red",
+		"weapontype": "sword",
+		"movetype": "cavalry",
+		"minrarity": 5
 	}
 ]
