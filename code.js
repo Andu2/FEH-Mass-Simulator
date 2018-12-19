@@ -5474,6 +5474,12 @@ function activeHero(hero){
 				startText += this.name + " activates " + skillName + " and heals " + healAmount + " HP.<br>";
 
 			}
+			if (this.has("Imhullu")){
+				skillName = data.skills[this.weaponIndex].name;
+				damage = 5;
+				enemy.lit = true;
+				startText += this.name + " activates " + skillName + ", inflicting " + enemy.name + " with an inability to make counterattacks.<br>";
+			}
 		}
 
 		//Poison damage does not kill
