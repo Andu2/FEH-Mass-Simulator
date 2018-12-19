@@ -6544,5 +6544,22 @@
 		"weapontype": "dagger",
 		"movetype": "infantry",
 		"minrarity": 5
+	} {
+		"hero_id": 316,
+		"name": "Surtr",
+		"basehp": 17,
+		"baseatk": 9,
+		"basespd": 4,
+		"basedef": 10,
+		"baseres": 7,
+		"hpgrowth": 11,
+		"atkgrowth": 10,
+		"spdgrowth": 2,
+		"defgrowth": 10,
+		"resgrowth": 8,
+		"color": "green",
+		"weapontype": "axe",
+		"movetype": "armored",
+		"minrarity": 5
 	}
 ]

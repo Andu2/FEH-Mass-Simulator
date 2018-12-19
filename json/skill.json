@@ -18185,5 +18185,47 @@
 		"charge": 0,
 		"inheritrule": "",
 		"affectsduel": 1
+	}, {
+		"skill_id": 1300,
+		"name": "Sinmara",
+		"slot": "weapon",
+		"sp": 400,
+		"description": "Grants Def+3. At start of turn, deals 20 damage to foes within 2 spaces.",
+		"hp": 0,
+		"atk": 16,
+		"spd": 0,
+		"def": 3,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "unique,axe",
+		"affectsduel": 1
+	}, {
+		"skill_id": 1301,
+		"name": "Steady Stance 4",
+		"slot": "a",
+		"sp": 300,
+		"description": "If foe initiates combat, grants Def+8 during combat and inflicts Special cooldown charge -1 on foe per attack. (Only highest value applied. Does not stack.)",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 1
+	}, {
+		"skill_id": 1302,
+		"name": "Surtr's Menace",
+		"slot": "c",
+		"sp": 300,
+		"description": "At start of turn, if unit is within 2 spaces of a foe, grants Atk/Spd/Def/Res+4 for 1 turn and inflicts Atk/Spd/Def/Res-4 on foes within 2 spaces through their next actions.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "unique",
+		"affectsduel": 1
 	}
 ]

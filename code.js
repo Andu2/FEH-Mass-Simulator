@@ -5487,6 +5487,12 @@ function activeHero(hero){
 			startText += enemy.name + " takes " + damage + " damage at start of turn from " + skillName + ".<br>";
 		}
 
+		if (this.hasExactly("Sinmara")){
+			skillName = data.skills[this.weaponIndex].name;
+			enemy.hp -= 20;
+			startText += enemy.name + " takes 20 damage at start of turn from " + skillName + ".<br>";
+		}
+
 		return startText;
 	}
 
@@ -5802,6 +5808,15 @@ function activeHero(hero){
 			this.combatSpur.spd += 4;
 			boostText += this.name + " gets +4 Atk/Spd from " + data.skills[this.weaponIndex].name + ".<br>";
 		}
+		if ((this.hasExactly("Surtr's Menace") && this.adjacent2 > 0)){
+			this.combatSpur.atk += 4;
+			this.combatSpur.spd += 4;
+			this.combatSpur.def += 4;
+			this.combatSpur.res += 4;
+			this.panicked = true;
+			boostText += this.name + " gets +4 Atk/Spd/Def/Res from " + data.skills[this.cIndex].name + ".<br>";
+		}
+
 
 		//Combat debuff ***does this stack like spurs? does negative combatSpur work correctly?***
 		if (enemy.hasExactly("Loptous")	&& !isDragonEffective(this)){
@@ -5826,6 +5841,14 @@ function activeHero(hero){
 			this.combatSpur.res -= 4;
 			this.panicked = true;
 			boostText += this.name + " gets -4 Atk/Spd/Def/Res from " + data.skills[enemy.weaponIndex].name + ".<br>";
+		}
+		if ((enemy.hasExactly("Surtr's Menace") && enemy.adjacent2 > 0)){
+			this.combatSpur.atk -= 4;
+			this.combatSpur.spd -= 4;
+			this.combatSpur.def -= 4;
+			this.combatSpur.res -= 4;
+			this.panicked = true;
+			boostText += this.name + " gets -4 Atk/Spd/Def/Res from " + data.skills[enemy.cIndex].name + ".<br>";
 		}
 
 		//Solo Skills
@@ -8101,6 +8124,10 @@ function activeHero(hero){
 						skillNames.push(data.skills[enemy.bIndex].name);
 					}
 				}
+				if (!enemy.initiator && enemy.hasExactly("Steady Stance 4")){
+					loseCharge = Math.max(loseCharge, 1);
+					skillNames.push(data.skills[enemy.aIndex].name);
+				}
 
 				if (loseCharge > 0){
 					this.charge -= loseCharge;
@@ -8181,6 +8208,10 @@ function activeHero(hero){
 						loseCharge = Math.max(loseCharge, 1);
 						skillNames.push(data.skills[this.bIndex].name);
 					}
+				}
+				if (!this.initiator && this.hasExactly("Steady Stance 4")){
+					loseCharge = Math.max(loseCharge, 1);
+					skillNames.push(data.skills[this.aIndex].name);
 				}
 
 				if (loseCharge > 0){
