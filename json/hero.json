@@ -6612,5 +6612,22 @@
 		"weapontype": "dagger",
 		"movetype": "flying",
 		"minrarity": 5
+	}, {
+		"hero_id": 320,
+		"name": "Fae (Gifts of Winter)",
+		"basehp": 17,
+		"baseatk": 9,
+		"basespd": 4,
+		"basedef": 9,
+		"baseres": 8,
+		"hpgrowth": 9,
+		"atkgrowth": 8,
+		"spdgrowth": 6,
+		"defgrowth": 7,
+		"resgrowth": 11,
+		"color": "green",
+		"weapontype": "dragon",
+		"movetype": "armored",
+		"minrarity": 5
 	}
 ]

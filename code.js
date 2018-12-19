@@ -6234,6 +6234,13 @@ function activeHero(hero){
 				this.combatSpur.res += buffVal;
 				boostText += this.name + " gets +" + buffVal + " Spd/Res from being adjacent to an ally with " + skillName + ".<br>";
 			}
+			if (this.hasAtIndex("Def Res Bond", this.aIndex)){
+				buffVal = this.hasAtIndex("Def Res Bond", this.aIndex) + 2;
+				skillName = data.skills[this.aIndex].name;
+				this.combatSpur.def += buffVal;
+				this.combatSpur.res += buffVal;
+				boostText += this.name + " gets +" + buffVal + " Def/Res from being adjacent to an ally with " + skillName + ".<br>";
+			}
 			if (this.hasAtIndex("Spd Res Bond", this.sIndex)){
 				buffVal = this.hasAtIndex("Spd Res Bond", this.sIndex) + 2;
 				skillName = data.skills[this.sIndex].name + " (Seal)";
@@ -6333,6 +6340,13 @@ function activeHero(hero){
 				this.combatSpur.atk += buffVal;
 				this.combatSpur.spd += buffVal;
 				boostText += this.name + " gets +" + buffVal + " Atk/Spd for each ally within 2 spaces with " + skillName + " (Maximum +6).<br>";
+			}
+			if (this.has("Glittering Breath")){
+				buffVal = 2 * Math.min(3, this.adjacent2);
+				skillName = data.skills[this.weaponIndex].name;
+				this.combatSpur.def += buffVal;
+				this.combatSpur.res += buffVal;
+				boostText += this.name + " gets " + buffVal + "Def/Res for each ally within 2 spaces with " + skillName + " (Maximum +6).<br>";
 			}
 			if (this.hasAtRefineIndex("Magic & Staff Atk Spd Bond", this.refineIndex)){
 				buffVal = 5;
@@ -7344,6 +7358,7 @@ function activeHero(hero){
 			if (this.hasExactly("Great Flame")		|| this.hasExactly("Expiration")		|| this.has("Water Breath")
 				|| this.hasExactly("Breath of Fog")	|| this.hasExactly("Summer's Breath")	|| this.hasExactly("Breath of Blight")
 				|| this.hasExactly("Divine Mist")	|| this.hasExactly("Spirit Breath")		|| this.hasExactly("Draconic Rage")
+				|| this.has("Glittering Breath")
 			){
 				return true;
 			}
