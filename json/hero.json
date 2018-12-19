@@ -6595,5 +6595,22 @@
 		"weapontype": "sword",
 		"movetype": "cavalry",
 		"minrarity": 5
+	}, {
+		"hero_id": 319,
+		"name": "Eir",
+		"basehp": 16,
+		"baseatk": 8,
+		"basespd": 9,
+		"basedef": 4,
+		"baseres": 7,
+		"hpgrowth": 5,
+		"atkgrowth": 7,
+		"spdgrowth": 9,
+		"defgrowth": 1,
+		"resgrowth": 7,
+		"color": "gray",
+		"weapontype": "dagger",
+		"movetype": "flying",
+		"minrarity": 5
 	}
 ]

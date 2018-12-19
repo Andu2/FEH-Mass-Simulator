@@ -5824,10 +5824,13 @@ function activeHero(hero){
 			this.combatSpur.spd += 4;
 			this.combatSpur.def += 4;
 			this.combatSpur.res += 4;
-			this.panicked = true;
 			boostText += this.name + " gets +4 Atk/Spd/Def/Res from " + data.skills[this.cIndex].name + ".<br>";
 		}
-
+		if ((this.hasExactly("Lyfjaberg") && this.hp/this.maxHp >= .5)){
+			this.combatSpur.atk += 4;
+			this.combatSpur.spd += 4;
+			boostText += this.name + " gets +4 Atk/Spd from " + data.skills[this.weaponIndex].name + ".<br>";
+		}
 
 		//Combat debuff ***does this stack like spurs? does negative combatSpur work correctly?***
 		if (enemy.hasExactly("Loptous")	&& !isDragonEffective(this)){
@@ -7117,6 +7120,9 @@ function activeHero(hero){
 			if (this.hasExactly("Sylgr")){
 				sealStats(data.skills[this.weaponIndex].name, ["def","res"], [-7]);
 			}
+			if (this.hasExactly("Lyfjaberg")){
+				sealStats(data.skills[this.weaponIndex].name, ["def","res"], [-7]);
+			}
 
 			//Other
 			if (this.hasExactly("Grima's Truth")){
@@ -7254,6 +7260,17 @@ function activeHero(hero){
 					this.hp += healAmount;
 					postCombatHealText += this.name + " heals " + healAmount + " Hp with " + skillName + ".<br>";
 				}
+			}
+		}
+		if(this.has("Mystic Boost")){
+			skillName = data.skills[this.bIndex].name;
+			healAmount = this.has("Mystic Boost") * 2;
+			if(this.maxHp - this.hp < healAmount) {
+				healAmount = this.maxHp - this.hp;
+			}
+			if(healAmount > 0){
+				this.hp += healAmount;
+				postCombatHealText += this.name + " heals " + healAmount + " Hp with " + skillName + ".<br>";
 			}
 		}
 
