@@ -6349,7 +6349,7 @@ function activeHero(hero){
 				this.combatSpur.spd += buffVal;
 				boostText += this.name + " gets +" + buffVal + " Atk/Spd for each ally within 2 spaces with " + skillName + " (Maximum +6).<br>";
 			}
-			if (this.has("Glittering Breath")){
+			if (this.has("Glittering Breath") || this.has("Goodie Boot")){
 				buffVal = 2 * Math.min(3, this.adjacent2);
 				skillName = data.skills[this.weaponIndex].name;
 				this.combatSpur.def += buffVal;
@@ -7110,8 +7110,8 @@ function activeHero(hero){
 				sealStats(data.skills[this.weaponIndex].name, ["def","res"], [-7]);
 			}
 			if (this.has("Silver Dagger") 		|| this.has("Seashell") 		|| this.has("Dancer's Fan") 	|| this.has("Kagami Mochi")
-				|| this.has("Barb Shuriken") 	|| this.has("Lethal Carrot")	|| this.has("Starfish")			|| this.has("Bottled Juice")
-				|| this.has("Cloud Maiougi")	|| this.has("Sky Maiougi")		|| this.has("Dusk Uchiwa")
+				|| this.has("Barb Shuriken") 	|| this.has("Lethal Carrot")	|| this.has("Starfish")		|| this.has("Bottled Juice")
+				|| this.has("Cloud Maiougi")	|| this.has("Sky Maiougi")		|| this.has("Dusk Uchiwa")		|| this.has("Goodie Boot")
 				){
 				sealStats(data.skills[this.weaponIndex].name, ["def","res"], [-5, -7]);
 			}

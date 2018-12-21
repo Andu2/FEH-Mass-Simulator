@@ -6630,7 +6630,7 @@
 		"movetype": "armored",
 		"minrarity": 5
 	}, {
-		"hero_id": 320,
+		"hero_id": 321,
 		"name": "Ephraim (Gifts of Winter)",
 		"basehp": 21,
 		"baseatk": 11,
@@ -6644,6 +6644,40 @@
 		"resgrowth": 6,
 		"color": "blue",
 		"weapontype": "lance",
+		"movetype": "armored",
+		"minrarity": 5
+	}, {
+		"hero_id": 322,
+		"name": "Eirika (Gifts of Winter)",
+		"basehp": 18,
+		"baseatk": 10,
+		"basespd": 6,
+		"basedef": 8,
+		"baseres": 10,
+		"hpgrowth": 7,
+		"atkgrowth": 8,
+		"spdgrowth": 4,
+		"defgrowth": 6,
+		"resgrowth": 7,
+		"color": "gray",
+		"weapontype": "staff",
+		"movetype": "armored",
+		"minrarity": 5
+	}, {
+		"hero_id": 323,
+		"name": "Cecilia (Gifts of Winter)",
+		"basehp": 19,
+		"baseatk": 11,
+		"basespd": 6,
+		"basedef": 6,
+		"baseres": 10,
+		"hpgrowth": 6,
+		"atkgrowth": 7,
+		"spdgrowth": 4,
+		"defgrowth": 7,
+		"resgrowth": 8,
+		"color": "gray",
+		"weapontype": "dagger",
 		"movetype": "armored",
 		"minrarity": 5
 	}
