@@ -1666,7 +1666,7 @@
 		"spd": 0,
 		"def": 0,
 		"res": 0,
-		"prereq": "Flametongue+,Lightning Breath+",
+		"prereq": "Flametongue+,Lightning Breath+,Glittering Breath+",
 		"exclusive": ""
 	},	{
 		"category": "Dragonstone",
@@ -1678,7 +1678,7 @@
 		"spd": 3,
 		"def": 0,
 		"res": 0,
-		"prereq": "Flametongue+,Lightning Breath+",
+		"prereq": "Flametongue+,Lightning Breath+,Glittering Breath+",
 		"exclusive": ""
 	},	{
 		"category": "Dragonstone",
@@ -1690,7 +1690,7 @@
 		"spd": 0,
 		"def": 4,
 		"res": 0,
-		"prereq": "Flametongue+,Lightning Breath+",
+		"prereq": "Flametongue+,Lightning Breath+,Glittering Breath+",
 		"exclusive": ""
 	},	{
 		"category": "Dragonstone",
@@ -1702,7 +1702,7 @@
 		"spd": 0,
 		"def": 0,
 		"res": 4,
-		"prereq": "Flametongue+,Lightning Breath+",
+		"prereq": "Flametongue+,Lightning Breath+,Glittering Breath+",
 		"exclusive": ""
 	},	{
 		"category": "Light Dragonstone",

@@ -6629,5 +6629,22 @@
 		"weapontype": "dragon",
 		"movetype": "armored",
 		"minrarity": 5
+	}, {
+		"hero_id": 320,
+		"name": "Ephraim (Gifts of Winter)",
+		"basehp": 21,
+		"baseatk": 11,
+		"basespd": 6,
+		"basedef": 10,
+		"baseres": 7,
+		"hpgrowth": 7,
+		"atkgrowth": 10,
+		"spdgrowth": 4,
+		"defgrowth": 8,
+		"resgrowth": 6,
+		"color": "blue",
+		"weapontype": "lance",
+		"movetype": "armored",
+		"minrarity": 5
 	}
 ]

@@ -1150,7 +1150,7 @@ function getCDChange(skill, slot){
 			|| skillName.indexOf("Berserk Armads") != -1    || skillName.indexOf("Nameless Blade") != -1	|| skillName.indexOf("Barb Shuriken") != -1
 			|| skillName.indexOf("Mjolnir") != -1			|| skillName.indexOf("Vassal's Blade") != -1	|| skillName.indexOf("Dauntless Lance") != -1
 			|| skillName.indexOf("Maltet") != -1			|| skillName.indexOf("Hoarfrost Knife") != -1	|| skillName.indexOf("Missiletainn") != -1
-			|| skillName.indexOf("Draconic Rage") != -1
+			|| skillName.indexOf("Draconic Rage") != -1     || skillName.indexOf("Festive Siegmund") != -1
 			){
 				return -1;
         }
@@ -5908,6 +5908,14 @@ function activeHero(hero){
 				this.combatSpur.res += statBonus;
 				skillName = data.skills[this.aIndex].name;
 				boostText += this.name + " has no adjacent allies and gets +" + statBonus + " Def/Res from " + skillName + ".<br>";
+			}
+			if (this.hasExactly("Festive Siegmund")){
+				this.combatSpur.atk += 4;
+				this.combatSpur.spd += 4;
+				this.combatSpur.def += 4;
+				this.combatSpur.res += 4;
+				skillName = data.skills[this.weaponIndex].name;
+				boostText += this.name + " has no adjacent allies and gets +4 Atk/Spd/Def/Res from " + skillName + ".<br>";
 			}
 		}
 
