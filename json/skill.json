@@ -18215,7 +18215,7 @@
 		"affectsduel": 1
 	}, {
 		"skill_id": 1302,
-		"name": "Surtr's Menace",
+		"name": "Surtrs Menace",
 		"slot": "c",
 		"sp": 300,
 		"description": "At start of turn, if unit is within 2 spaces of a foe, grants Atk/Spd/Def/Res+4 for 1 turn and inflicts Atk/Spd/Def/Res-4 on foes within 2 spaces through their next actions.",
@@ -18354,7 +18354,7 @@
 		"inheritrule": "dragon",
 		"affectsduel": 1
 	}, {
-		"skill_id": 1311,
+		"skill_id": 1312,
 		"name": "Glittering Breath+",
 		"slot": "weapon",
 		"sp": 300,
@@ -18368,7 +18368,7 @@
 		"inheritrule": "dragon",
 		"affectsduel": 1
 	}, {
-		"skill_id": 1312,
+		"skill_id": 1313,
 		"name": "Def Res Bond 1",
 		"slot": "a",
 		"sp": 60,
@@ -18382,7 +18382,7 @@
 		"inheritrule": "",
 		"affectsduel": 1
 	}, {
-		"skill_id": 1313,
+		"skill_id": 1314,
 		"name": "Def Res Bond 2",
 		"slot": "a",
 		"sp": 120,
@@ -18396,7 +18396,7 @@
 		"inheritrule": "",
 		"affectsduel": 1
 	}, {
-		"skill_id": 1314,
+		"skill_id": 1315,
 		"name": "Def Res Bond 3",
 		"slot": "a",
 		"sp": 240,
@@ -18408,6 +18408,160 @@
 		"res": 0,
 		"charge": 0,
 		"inheritrule": "",
+		"affectsduel": 1
+	}, {
+		"skill_id": 1316,
+		"name": "Festive Siegmund",
+		"slot": "weapon",
+		"sp": 400,
+		"description": "Accelerates Special trigger (cooldown count-1). If unit is not adjacent to an ally, grants Atk/Spd/Def/Res+4 during combat.",
+		"hp": 0,
+		"atk": 16,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "lance",
+		"affectsduel": 1
+	}, {
+		"skill_id": 1317,
+		"name": "Atk Def Solo 1",
+		"slot": "a",
+		"sp": 60,
+		"description": "If unit is not adjacent to an ally, grants Atk/Def+2 during combat.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 1
+	}, {
+		"skill_id": 1318,
+		"name": "Atk Def Solo 2",
+		"slot": "a",
+		"sp": 120,
+		"description": "If unit is not adjacent to an ally, grants Atk/Def+4 during combat.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 1
+	}, {
+		"skill_id": 1319,
+		"name": "Atk Def Solo 3",
+		"slot": "a",
+		"sp": 240,
+		"description": "If unit is not adjacent to an ally, grants Atk/Def+6 during combat.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 1
+	}, {
+		"skill_id": 1320,
+		"name": "Joyous Lantern",
+		"slot": "weapon",
+		"sp": 200,
+		"description": "At start of turn, grants Def/Res+3 to ally with the highest Atk for 1 turn. (Excludes unit.)",
+		"hp": 0,
+		"atk": 8,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "staff",
+		"affectsduel": 1
+	}, {
+		"skill_id": 1321,
+		"name": "Joyous Lantern+",
+		"slot": "weapon",
+		"sp": 300,
+		"description": "At start of turn, grants Def/Res+5 to ally with the highest Atk for 1 turn. (Excludes unit.)",
+		"hp": 0,
+		"atk": 12,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "staff",
+		"affectsduel": 1
+	}, {
+		"skill_id": 1322,
+		"name": "Atk Opening 1",
+		"slot": "c",
+		"sp": 60,
+		"description": "At start of turn, grants Atk+2 to ally with the highest Atk for 1 turn. (Excludes unit.)",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 1
+	}, {
+		"skill_id": 1323,
+		"name": "Atk Opening 2",
+		"slot": "c",
+		"sp": 120,
+		"description": "At start of turn, grants Atk+4 to ally with the highest Atk for 1 turn. (Excludes unit.)",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 1
+	}, {
+		"skill_id": 1324,
+		"name": "Atk Opening 3",
+		"slot": "c",
+		"sp": 240,
+		"description": "At start of turn, grants Atk+6 to ally with the highest Atk for 1 turn. (Excludes unit.)",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "",
+		"affectsduel": 1
+	}, {
+		"skill_id": 1325,
+		"name": "Goodie Boot",
+		"slot": "weapon",
+		"sp": 200,
+		"description": "During combat, boosts unit's Def/Res by number of allies within 2 spaces x 2. (Maximum bonus of +6 to each stat.) After combat, if unit attacked, inflicts Def/Res-5 on target and foes within 2 spaces of target through their next actions.",
+		"hp": 0,
+		"atk": 8,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "dagger",
+		"affectsduel": 1
+	}, {
+		"skill_id": 1326,
+		"name": "Goodie Boot+",
+		"slot": "weapon",
+		"sp": 300,
+		"description": "During combat, boosts unit's Def/Res by number of allies within 2 spaces x 2. (Maximum bonus of +6 to each stat.) After combat, if unit attacked, inflicts Def/Res-7 on target and foes within 2 spaces of target through their next actions.",
+		"hp": 0,
+		"atk": 12,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "dagger",
 		"affectsduel": 1
 	}
 ]

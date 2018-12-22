@@ -1150,7 +1150,7 @@ function getCDChange(skill, slot){
 			|| skillName.indexOf("Berserk Armads") != -1    || skillName.indexOf("Nameless Blade") != -1	|| skillName.indexOf("Barb Shuriken") != -1
 			|| skillName.indexOf("Mjolnir") != -1			|| skillName.indexOf("Vassal's Blade") != -1	|| skillName.indexOf("Dauntless Lance") != -1
 			|| skillName.indexOf("Maltet") != -1			|| skillName.indexOf("Hoarfrost Knife") != -1	|| skillName.indexOf("Missiletainn") != -1
-			|| skillName.indexOf("Draconic Rage") != -1
+			|| skillName.indexOf("Draconic Rage") != -1     || skillName.indexOf("Festive Siegmund") != -1
 			){
 				return -1;
         }
@@ -5909,6 +5909,14 @@ function activeHero(hero){
 				skillName = data.skills[this.aIndex].name;
 				boostText += this.name + " has no adjacent allies and gets +" + statBonus + " Def/Res from " + skillName + ".<br>";
 			}
+			if (this.hasExactly("Festive Siegmund")){
+				this.combatSpur.atk += 4;
+				this.combatSpur.spd += 4;
+				this.combatSpur.def += 4;
+				this.combatSpur.res += 4;
+				skillName = data.skills[this.weaponIndex].name;
+				boostText += this.name + " has no adjacent allies and gets +4 Atk/Spd/Def/Res from " + skillName + ".<br>";
+			}
 		}
 
 		//Brazen Skills
@@ -6341,7 +6349,7 @@ function activeHero(hero){
 				this.combatSpur.spd += buffVal;
 				boostText += this.name + " gets +" + buffVal + " Atk/Spd for each ally within 2 spaces with " + skillName + " (Maximum +6).<br>";
 			}
-			if (this.has("Glittering Breath")){
+			if (this.has("Glittering Breath") || this.has("Goodie Boot")){
 				buffVal = 2 * Math.min(3, this.adjacent2);
 				skillName = data.skills[this.weaponIndex].name;
 				this.combatSpur.def += buffVal;
@@ -7102,8 +7110,8 @@ function activeHero(hero){
 				sealStats(data.skills[this.weaponIndex].name, ["def","res"], [-7]);
 			}
 			if (this.has("Silver Dagger") 		|| this.has("Seashell") 		|| this.has("Dancer's Fan") 	|| this.has("Kagami Mochi")
-				|| this.has("Barb Shuriken") 	|| this.has("Lethal Carrot")	|| this.has("Starfish")			|| this.has("Bottled Juice")
-				|| this.has("Cloud Maiougi")	|| this.has("Sky Maiougi")		|| this.has("Dusk Uchiwa")
+				|| this.has("Barb Shuriken") 	|| this.has("Lethal Carrot")	|| this.has("Starfish")		|| this.has("Bottled Juice")
+				|| this.has("Cloud Maiougi")	|| this.has("Sky Maiougi")		|| this.has("Dusk Uchiwa")		|| this.has("Goodie Boot")
 				){
 				sealStats(data.skills[this.weaponIndex].name, ["def","res"], [-5, -7]);
 			}
