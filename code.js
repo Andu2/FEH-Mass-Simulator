@@ -1150,7 +1150,8 @@ function getCDChange(skill, slot){
 			|| skillName.indexOf("Berserk Armads") != -1    || skillName.indexOf("Nameless Blade") != -1	|| skillName.indexOf("Barb Shuriken") != -1
 			|| skillName.indexOf("Mjolnir") != -1			|| skillName.indexOf("Vassal's Blade") != -1	|| skillName.indexOf("Dauntless Lance") != -1
 			|| skillName.indexOf("Maltet") != -1			|| skillName.indexOf("Hoarfrost Knife") != -1	|| skillName.indexOf("Missiletainn") != -1
-			|| skillName.indexOf("Draconic Rage") != -1     || skillName.indexOf("Festive Siegmund") != -1
+			|| skillName.indexOf("Draconic Rage") != -1     || skillName.indexOf("Festive Siegmund") != -1　|| skillName.indexOf("Whitewing Lance") != -1
+			|| skillName.indexOf("Scarlet Sword") != -1
 			){
 				return -1;
         }
@@ -1201,6 +1202,13 @@ function getPrechargeChange(skill, slot){
 	}
 
 	var skillName = skill.name;
+
+	//Refine Skill
+	if (slot == "refine"){
+		if (skill.name == 'Quickened Pulse') {
+			return 2;
+		}
+	}
 
 	//Weapon Skill
 	if (slot == "weapon"){
@@ -2624,6 +2632,10 @@ function updateHeroUI(hero){
 
 			//Precharge
 			//TODO: Combine this from hero intialization
+			//Refine
+			if(hero.refine != -1){
+				precharge += getPrechargeChange(data.refine[hero.refine], "refine");
+			}
 			//Weapon
 			if (hero.weapon != -1){
 				precharge += getPrechargeChange(data.skills[hero.weapon], "weapon");
@@ -5203,7 +5215,10 @@ function activeHero(hero){
 	//TODO: Combine this with precharge from UI change
 	this.resetPrecharge = function(){
 		//***Precharge is confusing here: Why is it added into charge first then added again from skills?***
-		if(this.has("Quickened Pulse")){
+		if(this.hasAtRefineIndex("Quickened Pulse", this.refineIndex)){
+			this.precharge += 2;
+		}
+		if(this.hasAtIndex("Quickened Pulse",this.sIndex)){
 			this.precharge++;
 		}
 		if(this.has("S Drink")){
@@ -6284,29 +6299,6 @@ function activeHero(hero){
 				this.combatSpur.def += buffVal;
 				boostText += this.name + " gets +" + buffVal + " Spd/Def from being adjacent an ally with " + skillName + " (Refined).<br>";
 			}
-			if (this.hasAtRefineIndex("Flying Atk Res Bond", this.refineIndex)){
-				buffVal = 5;
-				skillName = "Flying Atk Res Bond";
-				this.combatSpur.atk += buffVal;
-				this.combatSpur.res += buffVal;
-				boostText += this.name + " gets +" + buffVal + " Atk/Res from being adjacent to a flying ally with " + skillName + " (Refined).<br>";
-			}
-			if (this.hasAtRefineIndex("Magic All Bond", this.refineIndex)){
-				buffVal = 3;
-				skillName = "Magic All Bond";
-				this.combatSpur.atk += buffVal;
-				this.combatSpur.spd += buffVal;
-				this.combatSpur.def += buffVal;
-				this.combatSpur.res += buffVal;
-				boostText += this.name + " gets +" + buffVal + " Atk/Spd/Def/Res from being adjacent to a infantry magic ally with " + skillName + " (Refined).<br>";
-			}
-			if (this.hasAtRefineIndex("Infantry & Armored Atk Spd Bond", this.refineIndex)){
-				buffVal = 4;
-				skillName = "Infantry & Armored Atk Spd Bond";
-				this.combatSpur.atk += buffVal;
-				this.combatSpur.spd += buffVal;
-				boostText += this.name + " gets +" + buffVal + " Atk/Spd from being adjacent to a infantry or armored ally with " + skillName + " (Refined).<br>";
-			}
 		}
 
 		//Adjacent Buffs - Within 2 Spaces
@@ -6369,6 +6361,45 @@ function activeHero(hero){
 				this.combatSpur.atk += buffVal;
 				this.combatSpur.def += buffVal;
 				boostText += this.name + " gets +" + buffVal + " Atk/Def from being within 2 spaces of a dragon or sword ally with " + skillName + " (Refined).<br>";
+			}
+			if (this.hasAtRefineIndex("Flying Atk Res Bond", this.refineIndex)){
+				buffVal = 5;
+				skillName = "Flying Atk Res Bond";
+				this.combatSpur.atk += buffVal;
+				this.combatSpur.res += buffVal;
+				boostText += this.name + " gets +" + buffVal + " Atk/Res from being within 2 spaces of a flying ally with " + skillName + " (Refined).<br>";
+			}
+			if (this.hasAtRefineIndex("Magic All Bond", this.refineIndex)){
+				buffVal = 3;
+				skillName = "Magic All Bond";
+				this.combatSpur.atk += buffVal;
+				this.combatSpur.spd += buffVal;
+				this.combatSpur.def += buffVal;
+				this.combatSpur.res += buffVal;
+				boostText += this.name + " gets +" + buffVal + " Atk/Spd/Def/Res from being within 2 spaces of an infantry magic ally with " + skillName + " (Refined).<br>";
+			}
+			if (this.hasAtRefineIndex("Infantry & Armored Atk Spd Bond", this.refineIndex)){
+				buffVal = 4;
+				skillName = "Infantry & Armored Atk Spd Bond";
+				this.combatSpur.atk += buffVal;
+				this.combatSpur.spd += buffVal;
+				boostText += this.name + " gets +" + buffVal + " Atk/Spd from being within 2 spaces of infantry or armored ally with " + skillName + " (Refined).<br>";
+			}
+			if (this.hasAtRefineIndex("Triangle", this.refineIndex)){
+				buffVal = 3;
+				skillName = data.skills[this.weaponIndex].name;
+				this.combatSpur.atk += buffVal;
+				this.combatSpur.spd += buffVal;
+				this.combatSpur.def += buffVal;
+				this.combatSpur.res += buffVal;
+				boostText += this.name + " gets +" + buffVal + " Atk/Spd/Def/Res from being within 2 spaces of 2 flying allies with " + skillName + " (Refined).<br>";
+			}
+			if (this.hasAtRefineIndex("Infantry & Flying Atk Spd Bond", this.refineIndex)){
+				buffVal = 4;
+				skillName = data.skills[this.weaponIndex].name;
+				this.combatSpur.atk += buffVal;
+				this.combatSpur.spd += buffVal;
+				boostText += this.name + " gets +" + buffVal + " Atk/Spd from being within 2 spaces of infantry or flying ally with " + skillName + " (Refined).<br>";
 			}
 		}
 
@@ -7581,13 +7612,13 @@ function activeHero(hero){
 			if ((enemy.color=="green"&&this.color=="red")||(enemy.color=="red"&&this.color=="blue")||(enemy.color=="blue"&&this.color=="green")){
 				weaponAdvantage = 1;
 			}
-			else if (enemy.color=="gray" && (this.has("Raudrraven") || this.has("Blarraven") || this.has("Gronnraven") || this.has("Naglfar"))){
+			else if (enemy.color=="gray" && (this.has("Raudrraven") || this.has("Blarraven") || this.has("Gronnraven") || this.has("Naglfar") || this.has("Tactical Bolt") || this.has("Tactical Gale"))){
 				weaponAdvantage = 1;
 			}
 			else if ((this.color=="green"&&enemy.color=="red")||(this.color=="red"&&enemy.color=="blue")||(this.color=="blue"&&enemy.color=="green")){
 				weaponAdvantage = -1;
 			}
-			else if (this.color=="gray" && (enemy.has("Raudrraven") || enemy.has("Blarraven") || enemy.has("Gronnraven") || enemy.has("Naglfar"))){
+			else if (this.color=="gray" && (enemy.has("Raudrraven") || enemy.has("Blarraven") || enemy.has("Gronnraven") || enemy.has("Naglfar") || enemy.has("Tactical Bolt") || enemy.has("Tactical Gale"))){
 				weaponAdvantage = -1;
 			}
 
@@ -7642,8 +7673,8 @@ function activeHero(hero){
 			*/
 
 			var extraWeaponAdvantage = 0;
-			var thisHasGemWeapon = (this.triangled || this.hasAtRefineIndex("Triangle Adept", this.refineIndex) || this.has("Ruby Sword") || this.has("Sapphire Lance") || this.has("Emerald Axe") || this.has("Draconic Poleax")) ? true : false;
-			var enemyHasGemWeapon = (enemy.triangled || enemy.hasAtRefineIndex("Triangle Adept", enemy.refineIndex) || enemy.has("Ruby Sword") || enemy.has("Sapphire Lance") || enemy.has("Emerald Axe") || enemy.has("Draconic Poleax")) ? true : false;
+			var thisHasGemWeapon = (this.triangled || this.hasAtRefineIndex("Triangle Adept", this.refineIndex) || this.has("Ruby Sword") || this.has("Sapphire Lance") || this.has("Emerald Axe") || this.has("Draconic Poleax") || this.has("Whitewing Blade")) ? true : false;
+			var enemyHasGemWeapon = (enemy.triangled || enemy.hasAtRefineIndex("Triangle Adept", enemy.refineIndex) || enemy.has("Ruby Sword") || enemy.has("Sapphire Lance") || enemy.has("Emerald Axe") || enemy.has("Draconic Poleax") || enemy.has("Whitewing Blade")) ? true : false;
 
 			//If weapon advantage is not neutral, and Attacker and Defender do not both have Cancel Affinity
 			if (weaponAdvantage !=0 && !(this.has("Cancel Affinity") && enemy.has("Cancel Affinity"))){
@@ -7770,7 +7801,7 @@ function activeHero(hero){
 				&& (this.has("Hammer") 						|| this.has("Slaying Hammer")	|| this.has("Armorslayer") 				|| this.has("Armorsmasher")
 					|| this.has("Heavy Spear") 				|| this.has("Slaying Spear")	|| this.hasExactly("Thani")				|| this.hasExactly("Winged Sword")
 					|| this.hasExactly("Warrior Princess")	|| this.hasExactly("Rhomphaia")	|| this.hasExactly("Dauntless Lance")	|| this.hasExactly("Dawn Suzu")
-					|| this.has("Sky Maiougi")
+					|| this.has("Sky Maiougi") 				|| this.hasExactly("Whitewing Spear")
 				)
 			){
 				effectiveBonus = (enemy.has("Svalinn Shield")) ? 1 : 1.5;
@@ -8092,6 +8123,12 @@ function activeHero(hero){
 					if (this.combatStat.atk - enemy.combatStat.atk >= 7 - (this.hasAtIndex("Heavy Blade", this.sIndex) * 2)){
 						gainCharge = Math.max(gainCharge, 1);
 						skillNames.push(data.skills[this.sIndex].name + " (Seal)");
+					}
+				}
+				if (this.hasExactly("Gladiator's Blade")){
+					if (this.combatStat.atk- enemy.combatStat.atk >= 1){
+						gainCharge = Math.max(gainCharge, 1);
+						skillNames.push(data.skills[this.weaponIndex].name);
 					}
 				}
 				if (this.hasExactly("Blazing Durandal")){
@@ -8503,6 +8540,9 @@ function activeHero(hero){
 			doubleInitiate = true;
 		}
 		if (this.hasAtRefineIndex("Brave Falchion", this.refineIndex) && (this.combatStartHp / this.maxHp == 1)){
+			doubleInitiate = true;
+		}
+		if (this.hasAtRefineIndex("Triangle", this.refineIndex) && (this.adjacent + this.adjacent2 >= 2)){
 			doubleInitiate = true;
 		}
 		if (enemy.hasExactly("Meisterschwert")){
