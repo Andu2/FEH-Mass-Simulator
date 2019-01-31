@@ -240,6 +240,18 @@
 		"prereq": "Silver Dagger+",
 		"exclusive": ""
 	},	{
+		"category": "Tyrfing",
+		"name": "Atk Def Bond",
+		"sp": 400,
+		"description": "At start of combat, if unit's HP ≥ 50%, grants: “If unit’s HP > 1 and foe would reduce unit’s HP to 0, unit survives with 1 HP. (Once per combat. Does not stack.)” If unit is adjacent to an ally, grants Atk/Def+5 during combat.",
+		"hp": 3,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"prereq": "Tyrfing",
+		"exclusive": ""	
+	},	{
 		"category": "Golden Dagger",
 		"name": "Unique Range Special Wait",
 		"sp": 400,
@@ -501,7 +513,7 @@
 		"spd": 0,
 		"def": 0,
 		"res": 0,
-		"prereq": "Golden Dagger,Florina's Lance,Shanna's Lance,Axe of Virility,Gladiator's Blade,Scarlet Sword,Whitewing Blade,Whitewing Lance,Whitewing Spear,Hack-o'-Lantern+,Barrier Blade+,Reprisal Lance+,Slaying Edge+,Slaying Lance+,Slaying Axe+,Deft Harpoon+,Melon Crusher+,Lilith Floatie+,Sack o' Gifts+,Handbell+,Tannenboom!+,Hagoita+,Kadomatsu+,Basilikos,Hauteclere,Hinoka's Spear,Mystletainn,Winged Sword,Casa Blanca+,Nameless Blade,Water Breath+,Safeguard+,Camilla's Axe,Rhomphaia,Ardent Service+,Breath of Fog,Shell Lance+,Beach Banner+,Dauntless Lance,Draconic Poleax",
+		"prereq": "Tyrfing,Golden Dagger,Florina's Lance,Shanna's Lance,Axe of Virility,Gladiator's Blade,Scarlet Sword,Whitewing Blade,Whitewing Lance,Whitewing Spear,Hack-o'-Lantern+,Barrier Blade+,Reprisal Lance+,Slaying Edge+,Slaying Lance+,Slaying Axe+,Deft Harpoon+,Melon Crusher+,Lilith Floatie+,Sack o' Gifts+,Handbell+,Tannenboom!+,Hagoita+,Kadomatsu+,Basilikos,Hauteclere,Hinoka's Spear,Mystletainn,Winged Sword,Casa Blanca+,Nameless Blade,Water Breath+,Safeguard+,Camilla's Axe,Rhomphaia,Ardent Service+,Breath of Fog,Shell Lance+,Beach Banner+,Dauntless Lance,Draconic Poleax",
 		"exclusive": ""
 	},	{
 		"category": "Advanced Melee",
@@ -513,7 +525,7 @@
 		"spd": 3,
 		"def": 0,
 		"res": 0,
-		"prereq": "Golden Dagger,Florina's Lance,Shanna's Lance,Axe of Virility,Gladiator's Blade,Scarlet Sword,Whitewing Blade,Whitewing Lance,Whitewing Spear,Hack-o'-Lantern+,Cherche's Axe,Barrier Blade+,Reprisal Lance+,Slaying Edge+,Slaying Lance+,Slaying Axe+,Deft Harpoon+,Melon Crusher+,Lilith Floatie+,Sack o' Gifts+,Handbell+,Tannenboom!+,Hagoita+,Kadomatsu+,Basilikos,Hauteclere,Hinoka's Spear,Mystletainn,Winged Sword,Casa Blanca+,Nameless Blade,Water Breath+,Safeguard+,Camilla's Axe,Rhomphaia,Ardent Service+,Breath of Fog,Shell Lance+,Beach Banner+,Dauntless Lance,Draconic Poleax",
+		"prereq": "Tyrfing,Golden Dagger,Florina's Lance,Shanna's Lance,Axe of Virility,Gladiator's Blade,Scarlet Sword,Whitewing Blade,Whitewing Lance,Whitewing Spear,Hack-o'-Lantern+,Cherche's Axe,Barrier Blade+,Reprisal Lance+,Slaying Edge+,Slaying Lance+,Slaying Axe+,Deft Harpoon+,Melon Crusher+,Lilith Floatie+,Sack o' Gifts+,Handbell+,Tannenboom!+,Hagoita+,Kadomatsu+,Basilikos,Hauteclere,Hinoka's Spear,Mystletainn,Winged Sword,Casa Blanca+,Nameless Blade,Water Breath+,Safeguard+,Camilla's Axe,Rhomphaia,Ardent Service+,Breath of Fog,Shell Lance+,Beach Banner+,Dauntless Lance,Draconic Poleax",
 		"exclusive": ""
 	},	{
 		"category": "Advanced Melee",
@@ -525,7 +537,7 @@
 		"spd": 0,
 		"def": 4,
 		"res": 0,
-		"prereq": "Golden Dagger,Florina's Lance,Shanna's Lance,Axe of Virility,Gladiator's Blade,Scarlet Sword,Whitewing Blade,Whitewing Lance,Whitewing Spear,Hack-o'-Lantern+,Cherche's Axe,Barrier Blade+,Reprisal Lance+,Slaying Edge+,Slaying Lance+,Slaying Axe+,Deft Harpoon+,Melon Crusher+,Lilith Floatie+,Sack o' Gifts+,Handbell+,Tannenboom!+,Hagoita+,Kadomatsu+,Basilikos,Hauteclere,Hinoka's Spear,Mystletainn,Winged Sword,Casa Blanca+,Nameless Blade,Water Breath+,Safeguard+,Camilla's Axe,Rhomphaia,Ardent Service+,Breath of Fog,Shell Lance+,Beach Banner+,Dauntless Lance,Draconic Poleax",
+		"prereq": "Tyrfing,Golden Dagger,Florina's Lance,Shanna's Lance,Axe of Virility,Gladiator's Blade,Scarlet Sword,Whitewing Blade,Whitewing Lance,Whitewing Spear,Hack-o'-Lantern+,Cherche's Axe,Barrier Blade+,Reprisal Lance+,Slaying Edge+,Slaying Lance+,Slaying Axe+,Deft Harpoon+,Melon Crusher+,Lilith Floatie+,Sack o' Gifts+,Handbell+,Tannenboom!+,Hagoita+,Kadomatsu+,Basilikos,Hauteclere,Hinoka's Spear,Mystletainn,Winged Sword,Casa Blanca+,Nameless Blade,Water Breath+,Safeguard+,Camilla's Axe,Rhomphaia,Ardent Service+,Breath of Fog,Shell Lance+,Beach Banner+,Dauntless Lance,Draconic Poleax",
 		"exclusive": ""
 	},	{
 		"category": "Advanced Melee",
@@ -537,7 +549,7 @@
 		"spd": 0,
 		"def": 0,
 		"res": 4,
-		"prereq": "Golden Dagger,Florina's Lance,Shanna's Lance,Axe of Virility,Gladiator's Blade,Scarlet Sword,Whitewing Blade,Whitewing Lance,Whitewing Spear,Hack-o'-Lantern+,Cherche's Axe,Barrier Blade+,Reprisal Lance+,Slaying Edge+,Slaying Lance+,Slaying Axe+,Deft Harpoon+,Melon Crusher+,Lilith Floatie+,Sack o' Gifts+,Handbell+,Tannenboom!+,Hagoita+,Kadomatsu+,Basilikos,Hauteclere,Hinoka's Spear,Mystletainn,Winged Sword,Casa Blanca+,Nameless Blade,Water Breath+,Safeguard+,Camilla's Axe,Rhomphaia,Ardent Service+,Breath of Fog,Shell Lance+,Beach Banner+,Dauntless Lance,Draconic Poleax",
+		"prereq": "Tyrfing,Golden Dagger,Florina's Lance,Shanna's Lance,Axe of Virility,Gladiator's Blade,Scarlet Sword,Whitewing Blade,Whitewing Lance,Whitewing Spear,Hack-o'-Lantern+,Cherche's Axe,Barrier Blade+,Reprisal Lance+,Slaying Edge+,Slaying Lance+,Slaying Axe+,Deft Harpoon+,Melon Crusher+,Lilith Floatie+,Sack o' Gifts+,Handbell+,Tannenboom!+,Hagoita+,Kadomatsu+,Basilikos,Hauteclere,Hinoka's Spear,Mystletainn,Winged Sword,Casa Blanca+,Nameless Blade,Water Breath+,Safeguard+,Camilla's Axe,Rhomphaia,Ardent Service+,Breath of Fog,Shell Lance+,Beach Banner+,Dauntless Lance,Draconic Poleax",
 		"exclusive": ""
 	},	{
 		"category": "Wedding Melee",
@@ -1118,6 +1130,30 @@
 		"prereq": "Tactical Gale",
 		"exclusive": ""
 	},	{
+		"category": "Tome of Thoron",
+		"name": "Darting Blow",
+		"sp": 400,
+		"description": "If unit initiates combat, grants Spd+6 during combat.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"prereq": "Tome of Thoron",
+		"exclusive": ""
+	},	{
+		"category": "Naga",
+		"name": "Unique Range Dragons",
+		"sp": 400,
+		"description": "Effective against dragon foes. If foe initiates combat, grants Def/Res+4 during combat. In combat against a dragon foe, disables foe's skills that calculate damage using the lower of foe's Def or Res and unit can counterattack regardless of foe's range.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"prereq": "Naga",
+		"exclusive": ""
+	},	{
 		"category": "Advanced Ranged",
 		"name": "Atk Bonus",
 		"sp": 350,
@@ -1127,7 +1163,7 @@
 		"spd": 0,
 		"def": 0,
 		"res": 0,
-		"prereq": "Tactical Bolt,Tactical Gale,Bottled Juice+,Devilish Bow+,Shining Bow+,Odin's Grimoire,Ragnarok,Dusk Uchiwa+,Sky Maiougi+,Cloud Maiougi+,Slaying Bow+,Refreshing Bolt+,Tomato Tome+,Sealife Tome+,Hibiscus Tome+,Dancer's Score+,Dancer's Ring+,Guard Bow+,Candelabra+,Hama Ya+,Kagami Mochi+,Fujin Yumi,Felicia's Plate,Green Gift+,Blue Gift+,Gratia+,Wind's Brand,Blarserpent+,Lethal Carrot+,Forblaze,Barb Shuriken+,Fresh Bouquet+,The Cleaner+,Cocobow+,Juicy Wave+,Starfish+,Fishie Bow+,Reese's Tome,Goodie Boot+",
+		"prereq": "Naga,Tome of Thoron,Tactical Bolt,Tactical Gale,Bottled Juice+,Devilish Bow+,Shining Bow+,Odin's Grimoire,Ragnarok,Dusk Uchiwa+,Sky Maiougi+,Cloud Maiougi+,Slaying Bow+,Refreshing Bolt+,Tomato Tome+,Sealife Tome+,Hibiscus Tome+,Dancer's Score+,Dancer's Ring+,Guard Bow+,Candelabra+,Hama Ya+,Kagami Mochi+,Fujin Yumi,Felicia's Plate,Green Gift+,Blue Gift+,Gratia+,Wind's Brand,Blarserpent+,Lethal Carrot+,Forblaze,Barb Shuriken+,Fresh Bouquet+,The Cleaner+,Cocobow+,Juicy Wave+,Starfish+,Fishie Bow+,Reese's Tome,Goodie Boot+",
 		"exclusive": ""
 	},	{
 		"category": "Advanced Ranged",
@@ -1139,7 +1175,7 @@
 		"spd": 2,
 		"def": 0,
 		"res": 0,
-		"prereq": "Tactical Bolt,Tactical Gale,Bottled Juice+,Devilish Bow+,Shining Bow+,Odin's Grimoire,Ragnarok,Dusk Uchiwa+,Sky Maiougi+,Cloud Maiougi+,Slaying Bow+,Refreshing Bolt+,Tomato Tome+,Sealife Tome+,Hibiscus Tome+,Dancer's Score+,Dancer's Ring+,Guard Bow+,Candelabra+,Hama Ya+,Kagami Mochi+,Fujin Yumi,Felicia's Plate,Green Gift+,Blue Gift+,Gratia+,Wind's Brand,Blarserpent+,Lethal Carrot+,Forblaze,Barb Shuriken+,Fresh Bouquet+,The Cleaner+,Cocobow+,Juicy Wave+,Starfish+,Fishie Bow+,Reese's Tome,Goodie Boot+",
+		"prereq": "Naga,Tome of Thoron,Tactical Bolt,Tactical Gale,Bottled Juice+,Devilish Bow+,Shining Bow+,Odin's Grimoire,Ragnarok,Dusk Uchiwa+,Sky Maiougi+,Cloud Maiougi+,Slaying Bow+,Refreshing Bolt+,Tomato Tome+,Sealife Tome+,Hibiscus Tome+,Dancer's Score+,Dancer's Ring+,Guard Bow+,Candelabra+,Hama Ya+,Kagami Mochi+,Fujin Yumi,Felicia's Plate,Green Gift+,Blue Gift+,Gratia+,Wind's Brand,Blarserpent+,Lethal Carrot+,Forblaze,Barb Shuriken+,Fresh Bouquet+,The Cleaner+,Cocobow+,Juicy Wave+,Starfish+,Fishie Bow+,Reese's Tome,Goodie Boot+",
 		"exclusive": ""
 	},	{
 		"category": "Advanced Ranged",
@@ -1151,7 +1187,7 @@
 		"spd": 0,
 		"def": 3,
 		"res": 0,
-		"prereq": "Tactical Bolt,Tactical Gale,Bottled Juice+,Devilish Bow+,Shining Bow+,Odin's Grimoire,Ragnarok,Dusk Uchiwa+,Sky Maiougi+,Cloud Maiougi+,Slaying Bow+,Refreshing Bolt+,Tomato Tome+,Sealife Tome+,Hibiscus Tome+,Dancer's Score+,Dancer's Ring+,Guard Bow+,Candelabra+,Hama Ya+,Kagami Mochi+,Fujin Yumi,Felicia's Plate,Green Gift+,Blue Gift+,Gratia+,Wind's Brand,Blarserpent+,Lethal Carrot+,Forblaze,Barb Shuriken+,Fresh Bouquet+,The Cleaner+,Cocobow+,Juicy Wave+,Starfish+,Fishie Bow+,Reese's Tome,Goodie Boot+",
+		"prereq": "Naga,Tome of Thoron,Tactical Bolt,Tactical Gale,Bottled Juice+,Devilish Bow+,Shining Bow+,Odin's Grimoire,Ragnarok,Dusk Uchiwa+,Sky Maiougi+,Cloud Maiougi+,Slaying Bow+,Refreshing Bolt+,Tomato Tome+,Sealife Tome+,Hibiscus Tome+,Dancer's Score+,Dancer's Ring+,Guard Bow+,Candelabra+,Hama Ya+,Kagami Mochi+,Fujin Yumi,Felicia's Plate,Green Gift+,Blue Gift+,Gratia+,Wind's Brand,Blarserpent+,Lethal Carrot+,Forblaze,Barb Shuriken+,Fresh Bouquet+,The Cleaner+,Cocobow+,Juicy Wave+,Starfish+,Fishie Bow+,Reese's Tome,Goodie Boot+",
 		"exclusive": ""
 	},	{
 		"category": "Advanced Ranged",
@@ -1163,8 +1199,68 @@
 		"spd": 0,
 		"def": 0,
 		"res": 3,
-		"prereq": "Tactical Bolt,Tactical Gale,Bottled Juice+,Devilish Bow+,Shining Bow+,Odin's Grimoire,Ragnarok,Dusk Uchiwa+,Sky Maiougi+,Cloud Maiougi+,Slaying Bow+,Refreshing Bolt+,Tomato Tome+,Sealife Tome+,Hibiscus Tome+,Dancer's Score+,Dancer's Ring+,Guard Bow+,Candelabra+,Hama Ya+,Kagami Mochi+,Fujin Yumi,Felicia's Plate,Green Gift+,Blue Gift+,Gratia+,Wind's Brand,Blarserpent+,Lethal Carrot+,Forblaze,Barb Shuriken+,Fresh Bouquet+,The Cleaner+,Cocobow+,Juicy Wave+,Starfish+,Fishie Bow+,Reese's Tome,Goodie Boot+",
+		"prereq": "Naga,Tome of Thoron,Tactical Bolt,Tactical Gale,Bottled Juice+,Devilish Bow+,Shining Bow+,Odin's Grimoire,Ragnarok,Dusk Uchiwa+,Sky Maiougi+,Cloud Maiougi+,Slaying Bow+,Refreshing Bolt+,Tomato Tome+,Sealife Tome+,Hibiscus Tome+,Dancer's Score+,Dancer's Ring+,Guard Bow+,Candelabra+,Hama Ya+,Kagami Mochi+,Fujin Yumi,Felicia's Plate,Green Gift+,Blue Gift+,Gratia+,Wind's Brand,Blarserpent+,Lethal Carrot+,Forblaze,Barb Shuriken+,Fresh Bouquet+,The Cleaner+,Cocobow+,Juicy Wave+,Starfish+,Fishie Bow+,Reese's Tome,Goodie Boot+",
 		"exclusive": ""
+	},	{
+		"category": "Divine Naga",
+		"name": "Combat Bonuses Resistance Victory",
+		"sp": 400,
+		"description": "Effective against dragon foes. Neutralizes foe's bonuses (from skills like Fortify, Rally, etc.) during combat, and disables foe's skills that calculate damage using the lower of foe's Def or Res.　At start of combat, if unit's Res ≥ foe's Res+3, grants Atk/Spd/Def/Res+3 during combat.",
+		"hp": 0,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"prereq": "Divine Naga",
+		"exclusive": ""
+	},	{
+		"category": "Divine Naga",
+		"name": "Atk Bonus",
+		"sp": 400,
+		"description": "Effective against dragon foes. Neutralizes foe's bonuses (from skills like Fortify, Rally, etc.) during combat, and disables foe's skills that calculate damage using the lower of foe's Def or Res.　",
+		"hp": 2,
+		"atk": 1,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"prereq": "Divine Naga",
+		"exclusive": ""
+	},	{
+		"category": "Divine Naga",
+		"name": "Spd Bonus",
+		"sp": 400,
+		"description": "Effective against dragon foes. Neutralizes foe's bonuses (from skills like Fortify, Rally, etc.) during combat, and disables foe's skills that calculate damage using the lower of foe's Def or Res.　",
+		"hp": 2,
+		"atk": 0,
+		"spd": 2,
+		"def": 0,
+		"res": 0,
+		"prereq": "Divine Naga",
+		"exclusive": ""
+	},	{
+		"category": "Divine Naga",
+		"name": "Def Bonus",
+		"sp": 400,
+		"description": "Effective against dragon foes. Neutralizes foe's bonuses (from skills like Fortify, Rally, etc.) during combat, and disables foe's skills that calculate damage using the lower of foe's Def or Res.　",
+		"hp": 2,
+		"atk": 0,
+		"spd": 0,
+		"def": 3,
+		"res": 0,
+		"prereq": "Divine Naga",
+		"exclusive": ""
+	},	{
+		"category": "Divine Naga",
+		"name": "Res Bonus",
+		"sp": 400,
+		"description": "Effective against dragon foes. Neutralizes foe's bonuses (from skills like Fortify, Rally, etc.) during combat, and disables foe's skills that calculate damage using the lower of foe's Def or Res.　",
+		"hp": 2,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 3,
+		"prereq": "Divine Naga",
+		"exclusive": ""		
 	},	{
 		"category": "Dark Ranged",
 		"name": "Atk Bonus",
