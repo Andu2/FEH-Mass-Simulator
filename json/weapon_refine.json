@@ -240,6 +240,54 @@
 		"prereq": "Silver Dagger+",
 		"exclusive": ""
 	},	{
+		"category": "Golden Dagger",
+		"name": "Unique Range Special Wait",
+		"sp": 400,
+		"description": "If foe initiates combat and uses sword, lance, axe, dragonstone, or beast damage, grants Atk/Spd/Def/Res+4 during combat.",
+		"hp": 3,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"prereq": "Golden Dagger",
+		"exclusive": ""	
+	},	{
+		"category": "Florina's Lance",
+		"name": "Close Stance",
+		"sp": 400,
+		"description": "If foe initiates combat and uses sword, lance, axe, dragonstone, or beast damage, grants Atk/Spd/Def/Res+4 during combat.",
+		"hp": 3,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"prereq": "Florina's Lance",
+		"exclusive": ""	
+	},	{
+		"category": "Shanna's Lance",
+		"name": "Special Damage",
+		"sp": 400,
+		"description": "Deals +10 damage when Special triggers.",
+		"hp": 3,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"prereq": "Shanna's Lance",
+		"exclusive": ""	
+	},	{
+		"category": "Axe of Virility",
+		"name": "Fury",
+		"sp": 400,
+		"description": "Grants Atk/Spd/Def/Res+3. After combat, deals 6 damage to unit.",
+		"hp": 3,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"prereq": "Axe of Virility",
+		"exclusive": ""	
+	},	{
 		"category": "Whitewing Blade",
 		"name": "Triangle",
 		"sp": 400,
@@ -453,7 +501,7 @@
 		"spd": 0,
 		"def": 0,
 		"res": 0,
-		"prereq": "Gladiator's Blade,Scarlet Sword,Whitewing Blade,Whitewing Lance,Whitewing Spear,Hack-o'-Lantern+,Barrier Blade+,Reprisal Lance+,Slaying Edge+,Slaying Lance+,Slaying Axe+,Deft Harpoon+,Melon Crusher+,Lilith Floatie+,Sack o' Gifts+,Handbell+,Tannenboom!+,Hagoita+,Kadomatsu+,Basilikos,Hauteclere,Hinoka's Spear,Mystletainn,Winged Sword,Casa Blanca+,Nameless Blade,Water Breath+,Safeguard+,Camilla's Axe,Rhomphaia,Ardent Service+,Breath of Fog,Shell Lance+,Beach Banner+,Dauntless Lance,Draconic Poleax",
+		"prereq": "Golden Dagger,Florina's Lance,Shanna's Lance,Axe of Virility,Gladiator's Blade,Scarlet Sword,Whitewing Blade,Whitewing Lance,Whitewing Spear,Hack-o'-Lantern+,Barrier Blade+,Reprisal Lance+,Slaying Edge+,Slaying Lance+,Slaying Axe+,Deft Harpoon+,Melon Crusher+,Lilith Floatie+,Sack o' Gifts+,Handbell+,Tannenboom!+,Hagoita+,Kadomatsu+,Basilikos,Hauteclere,Hinoka's Spear,Mystletainn,Winged Sword,Casa Blanca+,Nameless Blade,Water Breath+,Safeguard+,Camilla's Axe,Rhomphaia,Ardent Service+,Breath of Fog,Shell Lance+,Beach Banner+,Dauntless Lance,Draconic Poleax",
 		"exclusive": ""
 	},	{
 		"category": "Advanced Melee",
@@ -465,7 +513,7 @@
 		"spd": 3,
 		"def": 0,
 		"res": 0,
-		"prereq": "Gladiator's Blade,Scarlet Sword,Whitewing Blade,Whitewing Lance,Whitewing Spear,Hack-o'-Lantern+,Cherche's Axe,Barrier Blade+,Reprisal Lance+,Slaying Edge+,Slaying Lance+,Slaying Axe+,Deft Harpoon+,Melon Crusher+,Lilith Floatie+,Sack o' Gifts+,Handbell+,Tannenboom!+,Hagoita+,Kadomatsu+,Basilikos,Hauteclere,Hinoka's Spear,Mystletainn,Winged Sword,Casa Blanca+,Nameless Blade,Water Breath+,Safeguard+,Camilla's Axe,Rhomphaia,Ardent Service+,Breath of Fog,Shell Lance+,Beach Banner+,Dauntless Lance,Draconic Poleax",
+		"prereq": "Golden Dagger,Florina's Lance,Shanna's Lance,Axe of Virility,Gladiator's Blade,Scarlet Sword,Whitewing Blade,Whitewing Lance,Whitewing Spear,Hack-o'-Lantern+,Cherche's Axe,Barrier Blade+,Reprisal Lance+,Slaying Edge+,Slaying Lance+,Slaying Axe+,Deft Harpoon+,Melon Crusher+,Lilith Floatie+,Sack o' Gifts+,Handbell+,Tannenboom!+,Hagoita+,Kadomatsu+,Basilikos,Hauteclere,Hinoka's Spear,Mystletainn,Winged Sword,Casa Blanca+,Nameless Blade,Water Breath+,Safeguard+,Camilla's Axe,Rhomphaia,Ardent Service+,Breath of Fog,Shell Lance+,Beach Banner+,Dauntless Lance,Draconic Poleax",
 		"exclusive": ""
 	},	{
 		"category": "Advanced Melee",
@@ -477,7 +525,7 @@
 		"spd": 0,
 		"def": 4,
 		"res": 0,
-		"prereq": "Gladiator's Blade,Scarlet Sword,Whitewing Blade,Whitewing Lance,Whitewing Spear,Hack-o'-Lantern+,Cherche's Axe,Barrier Blade+,Reprisal Lance+,Slaying Edge+,Slaying Lance+,Slaying Axe+,Deft Harpoon+,Melon Crusher+,Lilith Floatie+,Sack o' Gifts+,Handbell+,Tannenboom!+,Hagoita+,Kadomatsu+,Basilikos,Hauteclere,Hinoka's Spear,Mystletainn,Winged Sword,Casa Blanca+,Nameless Blade,Water Breath+,Safeguard+,Camilla's Axe,Rhomphaia,Ardent Service+,Breath of Fog,Shell Lance+,Beach Banner+,Dauntless Lance,Draconic Poleax",
+		"prereq": "Golden Dagger,Florina's Lance,Shanna's Lance,Axe of Virility,Gladiator's Blade,Scarlet Sword,Whitewing Blade,Whitewing Lance,Whitewing Spear,Hack-o'-Lantern+,Cherche's Axe,Barrier Blade+,Reprisal Lance+,Slaying Edge+,Slaying Lance+,Slaying Axe+,Deft Harpoon+,Melon Crusher+,Lilith Floatie+,Sack o' Gifts+,Handbell+,Tannenboom!+,Hagoita+,Kadomatsu+,Basilikos,Hauteclere,Hinoka's Spear,Mystletainn,Winged Sword,Casa Blanca+,Nameless Blade,Water Breath+,Safeguard+,Camilla's Axe,Rhomphaia,Ardent Service+,Breath of Fog,Shell Lance+,Beach Banner+,Dauntless Lance,Draconic Poleax",
 		"exclusive": ""
 	},	{
 		"category": "Advanced Melee",
@@ -489,7 +537,7 @@
 		"spd": 0,
 		"def": 0,
 		"res": 4,
-		"prereq": "Gladiator's Blade,Scarlet Sword,Whitewing Blade,Whitewing Lance,Whitewing Spear,Hack-o'-Lantern+,Cherche's Axe,Barrier Blade+,Reprisal Lance+,Slaying Edge+,Slaying Lance+,Slaying Axe+,Deft Harpoon+,Melon Crusher+,Lilith Floatie+,Sack o' Gifts+,Handbell+,Tannenboom!+,Hagoita+,Kadomatsu+,Basilikos,Hauteclere,Hinoka's Spear,Mystletainn,Winged Sword,Casa Blanca+,Nameless Blade,Water Breath+,Safeguard+,Camilla's Axe,Rhomphaia,Ardent Service+,Breath of Fog,Shell Lance+,Beach Banner+,Dauntless Lance,Draconic Poleax",
+		"prereq": "Golden Dagger,Florina's Lance,Shanna's Lance,Axe of Virility,Gladiator's Blade,Scarlet Sword,Whitewing Blade,Whitewing Lance,Whitewing Spear,Hack-o'-Lantern+,Cherche's Axe,Barrier Blade+,Reprisal Lance+,Slaying Edge+,Slaying Lance+,Slaying Axe+,Deft Harpoon+,Melon Crusher+,Lilith Floatie+,Sack o' Gifts+,Handbell+,Tannenboom!+,Hagoita+,Kadomatsu+,Basilikos,Hauteclere,Hinoka's Spear,Mystletainn,Winged Sword,Casa Blanca+,Nameless Blade,Water Breath+,Safeguard+,Camilla's Axe,Rhomphaia,Ardent Service+,Breath of Fog,Shell Lance+,Beach Banner+,Dauntless Lance,Draconic Poleax",
 		"exclusive": ""
 	},	{
 		"category": "Wedding Melee",

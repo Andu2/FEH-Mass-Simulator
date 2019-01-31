@@ -18661,5 +18661,61 @@
 		"charge": 0,
 		"inheritrule": "unique",
 		"affectsduel": 1	
+	}, {
+		"skill_id": 1334,
+		"name": "Golden Dagger",
+		"slot": "weapon",
+		"sp": 400,
+		"description": "Accelerates Special trigger (cooldown count-1).",
+		"hp": 0,
+		"atk": 16,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "unique",
+		"affectsduel": 1
+	}, {
+		"skill_id": 1335,
+		"name": "Florina's Lance",
+		"slot": "weapon",
+		"sp": 400,
+		"description": "Effective against armored foes.",
+		"hp": 0,
+		"atk": 16,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "unique",
+		"affectsduel": 1
+	}, {
+		"skill_id": 1336,
+		"name": "Shanna's Lance",
+		"slot": "weapon",
+		"sp": 400,
+		"description": "Accelerates Special trigger (cooldown count-1).",
+		"hp": 0,
+		"atk": 16,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "unique",
+		"affectsduel": 1
+	}, {
+		"skill_id": 1337,
+		"name": "Axe of Virility",
+		"slot": "weapon",
+		"sp": 400,
+		"description": "Effective against armored foes.",
+		"hp": 0,
+		"atk": 16,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "unique",
+		"affectsduel": 1
 	}
 ]

@@ -1151,7 +1151,7 @@ function getCDChange(skill, slot){
 			|| skillName.indexOf("Mjolnir") != -1			|| skillName.indexOf("Vassal's Blade") != -1	|| skillName.indexOf("Dauntless Lance") != -1
 			|| skillName.indexOf("Maltet") != -1			|| skillName.indexOf("Hoarfrost Knife") != -1	|| skillName.indexOf("Missiletainn") != -1
 			|| skillName.indexOf("Draconic Rage") != -1     || skillName.indexOf("Festive Siegmund") != -1　|| skillName.indexOf("Whitewing Lance") != -1
-			|| skillName.indexOf("Scarlet Sword") != -1
+			|| skillName.indexOf("Scarlet Sword") != -1		|| skillName.indexOf("Golden Dagger") != -1		|| skillName.indexOf("Shanna's Lance") != -1
 			){
 				return -1;
         }
@@ -6649,6 +6649,15 @@ function activeHero(hero){
 					boostText += this.name + " gets +7 Def while defending with " + data.skills[this.weaponIndex].name + " against sword, axe, or lance.<br>";
 				}
 			}
+			if (this.hasExactly("Close Stance")) {
+				if (enemy.weaponType == "sword" || enemy.weaponType == "axe" || enemy.weaponType == "lance"  || enemy.weaponType == "dragon" ) {
+					this.combatSpur.atk += 4;
+					this.combatSpur.spf += 4;
+					this.combatSpur.def += 4;
+					this.combatSpur.res += 4;
+					boostText += this.name + " gets +4 Atk/Spd/Def/Res while defending with " + data.skills[this.weaponIndex].name + " (Refined) against sword, axe, or lance or dragon stone.<br>";
+				}
+			}
 			if (this.hasExactly("Tyrfing") && this.hp / this.maxHp <= 0.5){
 				this.combatSpur.def += 4;
 				boostText += this.name + " gets +4 Def in combat from " + data.skills[this.weaponIndex].name + " with <= 50% health.<br>";
@@ -7801,7 +7810,7 @@ function activeHero(hero){
 				&& (this.has("Hammer") 						|| this.has("Slaying Hammer")	|| this.has("Armorslayer") 				|| this.has("Armorsmasher")
 					|| this.has("Heavy Spear") 				|| this.has("Slaying Spear")	|| this.hasExactly("Thani")				|| this.hasExactly("Winged Sword")
 					|| this.hasExactly("Warrior Princess")	|| this.hasExactly("Rhomphaia")	|| this.hasExactly("Dauntless Lance")	|| this.hasExactly("Dawn Suzu")
-					|| this.has("Sky Maiougi") 				|| this.hasExactly("Whitewing Spear")
+					|| this.hasExactly("Florina's Lance")	|| this.has("Sky Maiougi") 		|| this.hasExactly("Whitewing Spear")	|| this.hasExactly("Axe of Virility")
 				)
 			){
 				effectiveBonus = (enemy.has("Svalinn Shield")) ? 1 : 1.5;
@@ -7940,6 +7949,10 @@ function activeHero(hero){
 			if(enemy.specialIndex != -1 && data.skills[enemy.specialIndex].charge <= enemy.charge){
 				//gotta check range
 				var anyRangeCounter = canCounterAnyRange(this);
+
+				if(this.hasExactly("Unique Range Special Wait") && (this.specialIndex != -1 && data.skills[this.specialIndex].charge <= this.charge)){
+					anyRangeCounter = true
+				}
 
 				if(this.range == "melee" || (!this.initiator && enemy.range == "melee" && anyRangeCounter)){
 					if(enemy.has("Buckler") || enemy.has("Escutcheon")){
@@ -8650,6 +8663,10 @@ function activeHero(hero){
 
 		//Check for any-distance counterattack
 		var anyRangeCounter = canCounterAnyRange(enemy);
+
+		if(enemy.hasExactly("Unique Range Special Wait") && (enemy.specialIndex != -1 && data.skills[enemy.specialIndex].charge <= enemy.charge)){
+			anyRangeCounter = true
+		}
 
 		//Check if enemy can counter
 		var enemyCanCounter = true;
