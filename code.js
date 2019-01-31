@@ -1151,7 +1151,7 @@ function getCDChange(skill, slot){
 			|| skillName.indexOf("Mjolnir") != -1			|| skillName.indexOf("Vassal's Blade") != -1	|| skillName.indexOf("Dauntless Lance") != -1
 			|| skillName.indexOf("Maltet") != -1			|| skillName.indexOf("Hoarfrost Knife") != -1	|| skillName.indexOf("Missiletainn") != -1
 			|| skillName.indexOf("Draconic Rage") != -1     || skillName.indexOf("Festive Siegmund") != -1　|| skillName.indexOf("Whitewing Lance") != -1
-			|| skillName.indexOf("Scarlet Sword") != -1
+			|| skillName.indexOf("Scarlet Sword") != -1		|| skillName.indexOf("Golden Dagger") != -1		|| skillName.indexOf("Shanna's Lance") != -1
 			){
 				return -1;
         }
@@ -5529,6 +5529,12 @@ function activeHero(hero){
 				chargingText += this.name + " gains 1 extra charge with " + data.skills[this.weaponIndex].name + ".<br>";
 			}
 		}
+		if (this.hasExactly("Tome of Thoron") && getSpecialType(data.skills[this.specialIndex]) == "offensive"){
+			if(this.hp/this.maxHp <= .75){
+				this.charge++;
+				chargingText += this.name + " gains 1 extra charge with " + data.skills[this.weaponIndex].name + ".<br>";
+			}
+		}
 		//Wrath
 		if (this.has("Wrath") && getSpecialType(data.skills[this.specialIndex]) == "offensive"){
 			if(this.hp/this.maxHp <= .25 * this.has("Wrath")){
@@ -6146,6 +6152,17 @@ function activeHero(hero){
 			}
 		}
 
+		// Skills
+		if(this.hasExactly("Combat Bonuses Resistance Victory") && this.res >= enemy.res + 3){
+			var skillName = data.skills[this.weaponIndex].name;
+			var buffVal = 3;
+			this.combatSpur.atk += buffVal;
+			this.combatSpur.spd += buffVal;
+			this.combatSpur.def += buffVal;
+			this.combatSpur.res += buffVal;
+			boostText += this.name + " gets +" + buffVal + " Atk/Spd/Def/Res from having >=3 more res than " + enemy.name + " with " + skillName + " (Refined).<br>";
+		}
+
 		//Adjacent Foe Buffs
 		if (this.hasExactly("Wolf Berg") && this.adjacent2_foe - 1 >= this.adjacent2){
 			var buffVal = 4;
@@ -6299,6 +6316,13 @@ function activeHero(hero){
 				this.combatSpur.def += buffVal;
 				boostText += this.name + " gets +" + buffVal + " Spd/Def from being adjacent an ally with " + skillName + " (Refined).<br>";
 			}
+			if (this.hasAtRefineIndex("Atk Def Bond", this.refineIndex)){
+				buffVal = 5;
+				skillName = "Atd Def Bond";
+				this.combatSpur.atk += buffVal;
+				this.combatSpur.def += buffVal;
+				boostText += this.name + " gets +" + buffVal + " Atk/Def from being adjacent an ally with " + skillName + " (Refined).<br>";	
+			}
 		}
 
 		//Adjacent Buffs - Within 2 Spaces
@@ -6451,6 +6475,10 @@ function activeHero(hero){
 			if (this.hasAtRefineIndex("Death Blow", this.refineIndex)){
 				this.combatSpur.atk += 6;
 				boostText += this.name + " gets +6 Atk from initiating with " + data.skills[this.weaponIndex].name + " (Refined).<br>"
+			}
+			if(this.hasAtRefineIndex("Darting Blow", this.refineIndex)){
+				this.combatSpur.spd += 6;
+				boostText += this.name + " gets +6 Spd from initiating with " + data.skills[this.weaponIndex].name + " (Refined).<br>"
 			}
 			if (this.hasExactly("Hoarfrost Knife") && enemy.range == "melee"){
 				this.combatSpur.def += 20;
@@ -6647,6 +6675,15 @@ function activeHero(hero){
 				}else if (enemy.weaponType == "sword" || enemy.weaponType == "axe" || enemy.weaponType == "lance" ) {
 					this.combatSpur.def += 7;
 					boostText += this.name + " gets +7 Def while defending with " + data.skills[this.weaponIndex].name + " against sword, axe, or lance.<br>";
+				}
+			}
+			if (this.hasExactly("Close Stance")) {
+				if (enemy.weaponType == "sword" || enemy.weaponType == "axe" || enemy.weaponType == "lance"  || enemy.weaponType == "dragon" ) {
+					this.combatSpur.atk += 4;
+					this.combatSpur.spf += 4;
+					this.combatSpur.def += 4;
+					this.combatSpur.res += 4;
+					boostText += this.name + " gets +4 Atk/Spd/Def/Res while defending with " + data.skills[this.weaponIndex].name + " (Refined) against sword, axe, or lance or dragon stone.<br>";
 				}
 			}
 			if (this.hasExactly("Tyrfing") && this.hp / this.maxHp <= 0.5){
@@ -7379,33 +7416,38 @@ function activeHero(hero){
 
 	//Check if hero has adaptive attack
 	this.isAdaptive = function(enemy){
-		if (this.hasExactly("Felicia's Plate")){
-			return true;
+		if (!(
+			enemy.has("Mystic Boost")
+			|| (enemy.hasExactly("Unique Range Dragons") && this.weaponType == "dragon")
+			|| (enemy.hasExactly("Divine Naga") && enemy.refineIndex != -1)
+			)){
+			if (this.hasExactly("Felicia's Plate")){
+				return true;
+			}
+			if (this.has("Sorcery Blade") && this.adjacent >= 1) { // TODO: add adjacent MAGIC ally to UI and use this instead
+				if (this.hasExactly("Sorcery Blade 1") && this.hp == this.maxHp){
+					return true;
+				}
+				if (this.hasExactly("Sorcery Blade 2") && this.hp/this.maxHp >= .50){
+					return true;
+				}
+				if (this.hasExactly("Sorcery Blade 3")){
+					return true;
+				}
+			}
+			if (enemy.range == "ranged"){
+				if (this.hasExactly("Great Flame")		|| this.hasExactly("Expiration")		|| this.has("Water Breath")
+					|| this.hasExactly("Breath of Fog")	|| this.hasExactly("Summer's Breath")	|| this.hasExactly("Breath of Blight")
+					|| this.hasExactly("Divine Mist")	|| this.hasExactly("Spirit Breath")		|| this.hasExactly("Draconic Rage")
+					|| this.has("Glittering Breath")
+				){
+					return true;
+				}
+				if (this.weaponType == "dragon" && (this.refineIndex != -1)){
+					return true;
+				}
+			}
 		}
-		if (this.has("Sorcery Blade") && this.adjacent >= 1) { // TODO: add adjacent MAGIC ally to UI and use this instead
-			if (this.hasExactly("Sorcery Blade 1") && this.hp == this.maxHp){
-				return true;
-			}
-			if (this.hasExactly("Sorcery Blade 2") && this.hp/this.maxHp >= .50){
-				return true;
-			}
-			if (this.hasExactly("Sorcery Blade 3")){
-				return true;
-			}
-		}
-		if (enemy.range == "ranged"){
-			if (this.hasExactly("Great Flame")		|| this.hasExactly("Expiration")		|| this.has("Water Breath")
-				|| this.hasExactly("Breath of Fog")	|| this.hasExactly("Summer's Breath")	|| this.hasExactly("Breath of Blight")
-				|| this.hasExactly("Divine Mist")	|| this.hasExactly("Spirit Breath")		|| this.hasExactly("Draconic Rage")
-				|| this.has("Glittering Breath")
-			){
-				return true;
-			}
-			if (this.weaponType == "dragon" && (this.refineIndex != -1)){
-				return true;
-			}
-		}
-
 		//Hero does not have adaptive attack
 		return false;
 	}
@@ -7420,6 +7462,7 @@ function activeHero(hero){
 			|| this.hasExactly("Dark Excalibur") 	|| this.hasExactly("Resolute Blade")	|| this.has("Harmonic Lance")
 			|| this.has("Special Damage")			|| this.has("Wo Gun")
 			|| (this.has("Berserk Armads") && (this.hp / this.maxHp <= .75))
+			|| (this.has("Tome of Thoron") && (this.hp / this.maxHp <= .75))
 		){
 			damage += 10;
 			skillNames.push(data.skills[this.weaponIndex].name);
@@ -7801,7 +7844,7 @@ function activeHero(hero){
 				&& (this.has("Hammer") 						|| this.has("Slaying Hammer")	|| this.has("Armorslayer") 				|| this.has("Armorsmasher")
 					|| this.has("Heavy Spear") 				|| this.has("Slaying Spear")	|| this.hasExactly("Thani")				|| this.hasExactly("Winged Sword")
 					|| this.hasExactly("Warrior Princess")	|| this.hasExactly("Rhomphaia")	|| this.hasExactly("Dauntless Lance")	|| this.hasExactly("Dawn Suzu")
-					|| this.has("Sky Maiougi") 				|| this.hasExactly("Whitewing Spear")
+					|| this.hasExactly("Florina's Lance")	|| this.has("Sky Maiougi") 		|| this.hasExactly("Whitewing Spear")	|| this.hasExactly("Axe of Virility")
 				)
 			){
 				effectiveBonus = (enemy.has("Svalinn Shield")) ? 1 : 1.5;
@@ -7941,6 +7984,13 @@ function activeHero(hero){
 				//gotta check range
 				var anyRangeCounter = canCounterAnyRange(this);
 
+				if(this.hasExactly("Unique Range Special Wait") && (this.specialIndex != -1 && data.skills[this.specialIndex].charge <= this.charge)){
+					anyRangeCounter = true
+				}
+				if(this.hasExactly("Unique Range Dragon") && enemy.weaponType == "dragon"){
+					anyRangeCounter = true
+				}
+
 				if(this.range == "melee" || (!this.initiator && enemy.range == "melee" && anyRangeCounter)){
 					if(enemy.has("Buckler") || enemy.has("Escutcheon")){
 						dmgReduction *= 0.7;
@@ -7969,6 +8019,12 @@ function activeHero(hero){
 				if(enemy.has("Miracle") && enemy.hp > 1){
 					miracle = true;
 				}
+			}
+
+			if(enemy.hasExactly("Tyrfing") && enemy.refineIndex != -1){
+				if(enemy.combatStartHp / enemy.maxHp >= 0.5 && enemy.hp > 1){
+					miracle = true;	
+				}				
 			}
 
 			//Before damage defensive special effects
@@ -8650,6 +8706,13 @@ function activeHero(hero){
 
 		//Check for any-distance counterattack
 		var anyRangeCounter = canCounterAnyRange(enemy);
+
+		if(enemy.hasExactly("Unique Range Special Wait") && (enemy.specialIndex != -1 && data.skills[enemy.specialIndex].charge <= enemy.charge)){
+			anyRangeCounter = true
+		}
+		if(enemy.hasExactly("Unique Range Dragons") && this.weaponType == "dragon"){
+			anyRangeCounter = true		
+		}
 
 		//Check if enemy can counter
 		var enemyCanCounter = true;
