@@ -1266,6 +1266,7 @@ function getSpecialType(skill){
 	//Else if special is supportive
 	}else if (skillName.indexOf("Heavenly Light") != -1 || skillName.indexOf("Imbue") != -1				|| skillName.indexOf("Kindled-Fire Balm") != -1
 		|| skillName.indexOf("Solid-Earth Balm") != -1	|| skillName.indexOf("Still-Water Balm") != -1	|| skillName.indexOf("Swift-Winds Balm") != -1
+		|| skillName.indexOf("Windfire Balm") != -1	|| skillName.indexOf("Earthfire Balm") != -1	|| skillName.indexOf("Earthwater Balm") != -1
 		){
 		return "supportive";
 	//Else if special is offensive
@@ -5553,6 +5554,16 @@ function activeHero(hero){
 
 		//Chill Debuff
 		if ((enemy.challenger && options.chilled_challenger) || (!enemy.challenger && options.chilled_enemy)){
+			if (this.hasExactly("Kumade+")){
+				debuffVal.atk = Math.min(debuffVal.atk, -5);
+				debuffVal.spd = Math.min(debuffVal.spd, -5);
+				skillNames.push("Kumade+");
+			}
+			if (this.hasExactly("Kumade")){
+				debuffVal.atk = Math.min(debuffVal.atk, -3);
+				debuffVal.spd = Math.min(debuffVal.spd, -3);
+				skillNames.push("Kumade");
+			}
 			if (this.hasExactly("Huginn's Egg") && this.hp / this.maxHp >= 0.5){
 				debuffVal.atk = Math.min(debuffVal.atk, -5);
 				debuffVal.def = Math.min(debuffVal.def, -5);
@@ -5588,6 +5599,29 @@ function activeHero(hero){
 			if (this.has("Chill Res")){
 				debuffVal.res = Math.min(debuffVal.res, -this.hasAtIndex("Chill Res", this.bIndex) * 2 - 1);
 				skillNames.push("Chill Res");
+			}
+			if(this.hasExactly("Hikami")){
+				debuffVal.atk = Math.min(debuffVal.atk, -4);
+				debuffVal.spd = Math.min(debuffVal.spd, -4);
+				debuffVal.def = Math.min(debuffVal.def, -4);
+				debuffVal.res = Math.min(debuffVal.res, -4);
+				skillNames.push("Hikami");
+			}
+			if(this.hasExactly("Wind's Brand")){
+				debuffVal.atk = Math.min(debuffVal.atk, -7);
+				skillNames.push("Wind's Brand");
+			}
+			if(this.has("Geishun")){
+				debuffVal.atk = Math.min(debuffVal.atk, -7);
+				skillNames.push("Geishun");
+			}
+			if(this.has("Kabura Ya")){
+				debuffVal.spd = Math.min(debuffVal.spd, -7);
+				skillNames.push("Kabura Ya");
+			}
+			if(this.has("Wagasa")){
+				debuffVal.def = Math.min(debuffVal.def, -7);
+				skillNames.push("Wagasa");
 			}
 			if (this.hasExactly("Forblaze")){
 				debuffVal.res = Math.min(debuffVal.res, -7);
@@ -6753,10 +6787,15 @@ function activeHero(hero){
 				this.combatSpur.res += 4;
 				boostText += this.name + " gets +4 Res from defending with " + data.skills[this.aIndex].name + ".<br>";
 			}
-			if(this.has("Fierce Stance")){
-				buffVal = this.has("Fierce Stance") * 2;
+			if(this.hasAtIndex("Fierce Stance", this.aIndex)){
+				buffVal = this.hasAtIndex("Fierce Stance", this.aIndex) * 2;
 				this.combatSpur.atk += buffVal;
 				boostText += this.name + " gets +" + buffVal + " Atk from defending with " + data.skills[this.aIndex].name + ".<br>";
+			}
+			if(this.hasAtIndex("Fierce Stance", this.sIndex)){
+				buffVal = this.hasAtIndex("Fierce Stance", this.sIndex) * 2;
+				this.combatSpur.atk += buffVal;
+				boostText += this.name + " gets +" + buffVal + " Atk from defending with " + data.skills[this.sIndex].name + " (Seal).<br>";
 			}
 			if(this.hasAtIndex("Darting Stance", this.aIndex)){
 				buffVal = this.hasAtIndex("Darting Stance", this.aIndex) * 2;
@@ -6766,7 +6805,7 @@ function activeHero(hero){
             if(this.hasAtIndex("Darting Stance", this.sIndex)){
 				buffVal = this.hasAtIndex("Darting Stance", this.sIndex) * 2;
 				this.combatSpur.spd += buffVal;
-				boostText += this.name + " gets +" + buffVal + " Spd from defending with " + data.skills[this.sIndex].name + ".<br>";
+				boostText += this.name + " gets +" + buffVal + " Spd from defending with " + data.skills[this.sIndex].name + " (Seal).<br>";
 			}
 			if(this.has("Steady Stance")){
 				buffVal = this.has("Steady Stance") * 2;

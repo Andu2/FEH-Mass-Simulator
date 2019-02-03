@@ -2879,5 +2879,50 @@
 	}, {
 		"skill_id": 1324,
 		"required_id": 1323
+	}, {
+		"skill_id": 1342,
+		"required_id": 1341
+	}, {
+		"skill_id": 1343,
+		"required_id": 1342
+	}, {
+		"skill_id": 1345,
+		"required_id": 1344
+	}, {
+		"skill_id": 1347,
+		"required_id": 333
+	}, {
+		"skill_id": 1349,
+		"required_id": 1348
+	}, {
+		"skill_id": 1351,
+		"required_id": 1350
+	}, {
+		"skill_id": 1353,
+		"required_id": 1352
+	}, {
+		"skill_id": 1354,
+		"required_id": 330
+	}, {
+		"skill_id": 1356,
+		"required_id": 1355
+	}, {
+		"skill_id": 1359,
+		"required_id": 1358
+	}, {
+		"skill_id": 1358,
+		"required_id": 1357	
+	}, {
+		"skill_id": 1362,
+		"required_id": 1361
+	}, {
+		"skill_id": 1361,
+		"required_id": 1360
+	}, {
+		"skill_id": 1365,
+		"required_id": 1364
+	}, {
+		"skill_id": 1364,
+		"required_id": 1363	
 	}
 ]
