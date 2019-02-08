@@ -13430,7 +13430,7 @@
 		"name": "Muninn's Egg",
 		"slot": "weapon",
 		"sp": 400,
-		"description": "Grants Res+3. At start of turn, if unit's HP >= 50%, inflicts Atk\/Res-5 on foe on the enemy team with the lowest Res through it's next action.",
+		"description": "Grants Res+3. At start of turn, if unit's HP >= 50%, inflicts Atk\/Res-5 on foe on the enemy team with the lowest Spd through it's next action.",
 		"hp": 0,
 		"atk": 14,
 		"spd": 0,
