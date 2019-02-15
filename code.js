@@ -1324,7 +1324,7 @@ function setStats(hero){
 		if(hero.boon != "none"){
 			growthValMod[hero.boon] += 1;
 		}
-		if(hero.bane != "none"){
+		if(hero.bane != "none" && hero.merge == 0){
 			growthValMod[hero.bane] -= 1;
 		}
 
@@ -1368,6 +1368,11 @@ function setStats(hero){
 		});
 
 		var mergeBoostCount = hero.merge*2;
+		if(hero.boon == "none" && hero.bane == "none" && hero.merge >= 1){
+			mergeBoost[mergeOrder[0]]++;
+			mergeBoost[mergeOrder[1]]++;
+			mergeBoost[mergeOrder[2]]++;
+		}
 		for(var i = 0; i < mergeBoostCount; i++){
 			mergeBoost[mergeOrder[i%5]]++;
 		}
