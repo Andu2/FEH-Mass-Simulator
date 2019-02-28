@@ -8799,7 +8799,11 @@ function activeHero(hero){
 			roundText += enemy.name + " cannot counterattack because of Sacae's Blessing.<br>";
 			enemyCanCounter = false;
 		}
-		if (this.has("Magic Suppression") && (enemy.weaponType == "redtome" || enemy.weaponType == "bluetome" ||enemy.weaponType == "greentome")){
+		if (this.has("Mage Suppression") && (data.magicalWeapons.includes(enemy.weaponType.trim()) && enemy.weaponType != "dragon")){
+			roundText += enemy.name + " cannot counterattack because of " + data.skills[this.weaponIndex].name + " (Refined).<br>";
+			enemyCanCounter = false;
+		}
+		if (this.has("Magic Suppression") && (data.magicalWeapons.includes(enemy.weaponType.trim()))) {
 			roundText += enemy.name + " cannot counterattack because of " + data.skills[this.weaponIndex].name + " (Refined).<br>";
 			enemyCanCounter = false;
 		}

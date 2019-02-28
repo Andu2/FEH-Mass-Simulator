@@ -2295,7 +2295,7 @@
 		"exclusive": ""
 	},	{
 		"category": "Deathly Dagger",
-		"name": "Magic Suppression",
+		"name": "Mage Suppression",
 		"sp": 400,
 		"description": "After combat, deals 10 damage to target and foes within 2 spaces of target. Foes using magic cannot counterattack.",
 		"hp": 0,
@@ -2652,6 +2652,66 @@
 		"def": 0,
 		"res": 4,
 		"prereq": "Solitary Blade",
+		"exclusive": ""
+	},	{
+		"category": "Nidhogg",
+		"name": "Magic Suppression",
+		"sp": 400,
+		"description": "Effective against flying foes. During combat, boosts unit's Atk/Spd/Def/Res by number of adjacent allies × 2. Magic and dragon foes cannot counterattack.",
+		"hp": 3,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"prereq": "Nidhogg",
+		"exclusive": ""
+	},	{
+		"category": "Nidhogg",
+		"name": "Atk Bonus",
+		"sp": 400,
+		"description": "Effective against flying foes. During combat, boosts unit's Atk/Spd/Def/Res by number of adjacent allies × 2.",
+		"hp": 3,
+		"atk": 1,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"prereq": "Nidhogg",
+		"exclusive": ""
+	},	{
+		"category": "Nidhogg",
+		"name": "Spd Bonus",
+		"sp": 400,
+		"description": "Effective against flying foes. During combat, boosts unit's Atk/Spd/Def/Res by number of adjacent allies × 2.",
+		"hp": 3,
+		"atk": 0,
+		"spd": 2,
+		"def": 0,
+		"res": 0,
+		"prereq": "Nidhogg",
+		"exclusive": ""
+	},	{
+		"category": "Nidhogg",
+		"name": "Def Bonus",
+		"sp": 400,
+		"description": "Effective against flying foes. During combat, boosts unit's Atk/Spd/Def/Res by number of adjacent allies × 2.",
+		"hp": 3,
+		"atk": 0,
+		"spd": 0,
+		"def": 3,
+		"res": 0,
+		"prereq": "Nidhogg",
+		"exclusive": ""
+	},	{
+		"category": "Nidhogg",
+		"name": "Res Bonus",
+		"sp": 400,
+		"description": "Effective against flying foes. During combat, boosts unit's Atk/Spd/Def/Res by number of adjacent allies × 2.",
+		"hp": 3,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 3,
+		"prereq": "Nidhogg",
 		"exclusive": ""
 	}
 	
