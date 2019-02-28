@@ -5684,7 +5684,7 @@ function activeHero(hero){
 			}
 			//Even
 			if(this.has("Even Atk Wave")){
-				buffVal.spd = Math.max(buffVal.atk, this.has("Even Atk Wave") * 2);
+				buffVal.atk = Math.max(buffVal.atk, this.has("Even Atk Wave") * 2);
 				skillNames.push(data.skills[this.cIndex].name);
 			}
 			if(this.has("Even Spd Wave")){
