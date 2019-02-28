@@ -1152,6 +1152,7 @@ function getCDChange(skill, slot){
 			|| skillName.indexOf("Maltet") != -1			|| skillName.indexOf("Hoarfrost Knife") != -1	|| skillName.indexOf("Missiletainn") != -1
 			|| skillName.indexOf("Draconic Rage") != -1     || skillName.indexOf("Festive Siegmund") != -1　|| skillName.indexOf("Whitewing Lance") != -1
 			|| skillName.indexOf("Scarlet Sword") != -1		|| skillName.indexOf("Golden Dagger") != -1		|| skillName.indexOf("Shanna's Lance") != -1
+			|| skillName.indexOf("Solitary Blade") != -1
 			){
 				return -1;
         }
@@ -5684,7 +5685,7 @@ function activeHero(hero){
 			}
 			//Even
 			if(this.has("Even Atk Wave")){
-				buffVal.spd = Math.max(buffVal.atk, this.has("Even Atk Wave") * 2);
+				buffVal.atk = Math.max(buffVal.atk, this.has("Even Atk Wave") * 2);
 				skillNames.push(data.skills[this.cIndex].name);
 			}
 			if(this.has("Even Spd Wave")){
@@ -8798,7 +8799,11 @@ function activeHero(hero){
 			roundText += enemy.name + " cannot counterattack because of Sacae's Blessing.<br>";
 			enemyCanCounter = false;
 		}
-		if (this.has("Magic Suppression") && (enemy.weaponType == "redtome" || enemy.weaponType == "bluetome" ||enemy.weaponType == "greentome")){
+		if (this.has("Mage Suppression") && (data.magicalWeapons.includes(enemy.weaponType.trim()) && enemy.weaponType != "dragon")){
+			roundText += enemy.name + " cannot counterattack because of " + data.skills[this.weaponIndex].name + " (Refined).<br>";
+			enemyCanCounter = false;
+		}
+		if (this.has("Magic Suppression") && (data.magicalWeapons.includes(enemy.weaponType.trim()))) {
 			roundText += enemy.name + " cannot counterattack because of " + data.skills[this.weaponIndex].name + " (Refined).<br>";
 			enemyCanCounter = false;
 		}
