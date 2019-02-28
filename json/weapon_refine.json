@@ -2593,5 +2593,66 @@
 		"res": 3,
 		"prereq": "Aura",
 		"exclusive": ""
+	},	{
+		"category": "Solitary Blade",
+		"name": "Life and Death",
+		"sp": 400,
+		"description": "Accelerates Special trigger (cooldown count-1). Grants Atk/Spd+5. Inflicts Def/Res-5",
+		"hp": 3,
+		"atk": 5,
+		"spd": 5,
+		"def": -5,
+		"res": -5,
+		"prereq": "Solitary Blade",
+		"exclusive": ""
+	},	{
+		"category": "Solitary Blade",
+		"name": "Atk Bonus",
+		"sp": 400,
+		"description": "Accelerates Special trigger (cooldown count-1).",
+		"hp": 3,
+		"atk": 2,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"prereq": "Solitary Blade",
+		"exclusive": ""
+	},	{
+		"category": "Solitary Blade",
+		"name": "Spd Bonus",
+		"sp": 400,
+		"description": "Accelerates Special trigger (cooldown count-1).",
+		"hp": 3,
+		"atk": 0,
+		"spd": 3,
+		"def": 0,
+		"res": 0,
+		"prereq": "Solitary Blade",
+		"exclusive": ""
+	},	{
+		"category": "Solitary Blade",
+		"name": "Def Bonus",
+		"sp": 400,
+		"description": "Accelerates Special trigger (cooldown count-1).",
+		"hp": 3,
+		"atk": 0,
+		"spd": 0,
+		"def": 4,
+		"res": 0,
+		"prereq": "Solitary Blade",
+		"exclusive": ""
+	},	{
+		"category": "Solitary Blade",
+		"name": "Res Bonus",
+		"sp": 400,
+		"description": "Accelerates Special trigger (cooldown count-1).",
+		"hp": 3,
+		"atk": 0,
+		"spd": 0,
+		"def": 0,
+		"res": 4,
+		"prereq": "Solitary Blade",
+		"exclusive": ""
 	}
+	
 ]

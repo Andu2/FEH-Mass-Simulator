@@ -19113,5 +19113,19 @@
 		"charge": 0,
 		"inheritrule": "",
 		"affectsduel": 1
+	}, {
+		"skill_id": 1366,
+		"name": "Solitary Blade",
+		"slot": "weapon",
+		"sp": 400,
+		"description": "Accelerates Special trigger (cooldown count-1).",
+		"hp": 0,
+		"atk": 16,
+		"spd": 0,
+		"def": 0,
+		"res": 0,
+		"charge": 0,
+		"inheritrule": "unique",
+		"affectsduel": 1
 	}
 ]
