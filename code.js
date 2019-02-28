@@ -1152,6 +1152,7 @@ function getCDChange(skill, slot){
 			|| skillName.indexOf("Maltet") != -1			|| skillName.indexOf("Hoarfrost Knife") != -1	|| skillName.indexOf("Missiletainn") != -1
 			|| skillName.indexOf("Draconic Rage") != -1     || skillName.indexOf("Festive Siegmund") != -1　|| skillName.indexOf("Whitewing Lance") != -1
 			|| skillName.indexOf("Scarlet Sword") != -1		|| skillName.indexOf("Golden Dagger") != -1		|| skillName.indexOf("Shanna's Lance") != -1
+			|| skillName.indexOf("Solitary Blade") != -1
 			){
 				return -1;
         }
